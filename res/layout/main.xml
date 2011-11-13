@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--Orion Viewer is a pdf viewer for Nook Classic based on mupdf-->
+
+<!--Copyright (C) 2011  Michael Bogdanov-->
+
+<!--This program is free software: you can redistribute it and/or modify-->
+<!--it under the terms of the GNU General Public License as published by-->
+<!--the Free Software Foundation, either version 3 of the License, or-->
+<!--(at your option) any later version.-->
+
+<!--This program is distributed in the hope that it will be useful,-->
+<!--but WITHOUT ANY WARRANTY; without even the implied warranty of-->
+<!--MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the-->
+<!--GNU General Public License for more details.-->
+
+<!--You should have received a copy of the GNU General Public License-->
+<!--along with this program.  If not, see <http://www.gnu.org/licenses/>.-->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+    <com.google.code.orion_viewer.OrionView android:id="@+id/view"
+                                       android:textColor="#FFFFFF"
+                                       android:color="#FFFFFF"
+                                       android:gravity="center"
+                                       android:layout_width="600.0px"
+                                       android:layout_height="760.0px">
+
+    </com.google.code.orion_viewer.OrionView>
+
+    <ViewAnimator android:layout_width="480.0px" android:paddingTop="20.0px"
+                  android:layout_height="144.0px" android:layout_below="@id/view"
+                  android:id="@+id/viewanim">
+
+        <!--main screen/menu-->
+        <LinearLayout android:id="@+id/main_menu"
+                      android:layout_width="fill_parent" android:layout_height="wrap_content"
+                      android:orientation="horizontal" android:gravity="center" android:layout_alignParentBottom="true">
+
+            <ImageButton android:id="@+id/zoom" android:src="@drawable/zoom" android:layout_width="65.0px" android:layout_height="65.0px"/>
+
+            <ImageButton android:id="@+id/switch_page" android:src="@drawable/rotate" android:layout_width="65.0px" android:layout_height="65.0px"/>
+
+            <ImageButton android:id="@+id/crop_menu" android:layout_width="65.0px" android:layout_height="65.0px"
+                         android:src="@drawable/crop"/>
+
+            <ImageButton android:id="@+id/prev_page" android:layout_width="65.0px" android:layout_height="65.0px" android:src="@drawable/prev"/>
+
+            <ImageButton android:id="@+id/next_page" android:layout_width="65.0px" android:layout_height="65.0px"
+                         android:src="@drawable/next"/>
+
+            <ImageButton android:id="@+id/help" android:layout_width="60.0px" android:layout_height="60.0px"
+                         android:src="@drawable/help"/>
+
+            <ImageButton android:id="@+id/exit" android:layout_width="60.0px" android:layout_height="60.0px"
+                         android:src="@drawable/close"/>
+        </LinearLayout>
+
+        <!--page chooser screen-->
+        <LinearLayout android:id="@+id/page_menu"
+                      android:layout_height="wrap_content" android:orientation="vertical"
+                      android:layout_width="fill_parent">
+            <LinearLayout android:orientation="horizontal"
+                          android:layout_width="fill_parent" android:layout_height="wrap_content"
+                          android:gravity="center">
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:src="@drawable/minus" android:id="@+id/page_picker_minus"/>
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content" android:id="@+id/page_picker_message"
+                          android:textSize="30sp"></TextView>
+
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:src="@drawable/plus" android:id="@+id/page_picker_plus"/>
+                <ImageButton android:layout_width="66.0px" android:layout_height="66.0px"
+                             android:src="@drawable/view" android:id="@+id/page_preview"/>
+                <ImageButton android:layout_width="66.0px" android:layout_height="66.0px"
+                             android:src="@drawable/revert" android:id="@+id/page_picker_close"/>
+            </LinearLayout>
+            <SeekBar android:id="@+id/page_picker_seeker"
+                     android:minWidth="100dp" android:layout_height="wrap_content"
+                     android:layout_width="fill_parent" android:layout_margin="5dp"></SeekBar>
+        </LinearLayout>
+
+        <!--zoom chooser screen-->
+        <LinearLayout android:id="@+id/zoom_menu"
+                      android:layout_height="wrap_content" android:orientation="vertical"
+                      android:layout_width="fill_parent">
+            <LinearLayout android:orientation="horizontal"
+                          android:layout_width="fill_parent" android:layout_height="wrap_content"
+                          android:gravity="center">
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:src="@drawable/minus" android:id="@+id/zoom_picker_minus"/>
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content" android:id="@+id/zoom_picker_message"
+                          android:textSize="30sp"></TextView>
+
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:src="@drawable/plus" android:id="@+id/zoom_picker_plus"/>
+                <ImageButton android:layout_width="66.0px" android:layout_height="66.0px"
+                             android:src="@drawable/view" android:id="@+id/zoom_preview"/>
+                <ImageButton android:layout_width="66.0px" android:layout_height="66.0px"
+                             android:src="@drawable/revert" android:id="@+id/zoom_picker_close"/>
+            </LinearLayout>
+            <SeekBar android:id="@+id/zoom_picker_seeker"
+                     android:minWidth="100dp" android:layout_height="wrap_content"
+                     android:layout_width="fill_parent" android:layout_margin="5dp"></SeekBar>
+        </LinearLayout>
+
+        <!--border crop screen-->
+        <LinearLayout android:id="@+id/crop_menu"
+                      android:layout_height="wrap_content" android:orientation="horizontal"
+                      android:scrollbars="horizontal"
+                      android:layout_width="fill_parent" android:gravity="center">
+
+
+            <ListView android:id="@+id/crop_borders"
+                    android:layout_width="300.0px"
+                                  android:layout_height="wrap_content"/>
+
+
+            <ImageButton android:layout_width="66.0px" android:layout_height="66.0px"
+                         android:src="@drawable/view" android:id="@+id/crop_preview"/>
+
+            <ImageButton android:layout_width="66.0px" android:layout_height="66.0px"
+                         android:src="@drawable/revert" android:id="@+id/crop_close"/>
+        </LinearLayout>
+
+    <!--help screen-->
+        <include layout="@layout/help"/>
+
+        <!--file chooser-->
+        <ListView android:id="@+id/file_chooser"
+                    android:layout_width="480.0px"
+                                  android:layout_height="wrap_content"/>
+
+        <!--<LinearLayout android:id="@+id/crop_menu"-->
+                      <!--android:layout_height="wrap_content" android:orientation="horizontal"-->
+                      <!--android:scrollbars="horizontal"-->
+                      <!--android:layout_width="fill_parent" android:gravity="center" android:>-->
+
+
+            <!--<TextView android:layout_width="wrap_content"-->
+                          <!--android:layout_height="wrap_content" android:id="@+id/zoom_picker_message"-->
+                          <!--android:textSize="30sp" android:text=""></TextView>-->
+
+            <!--<ImageButton android:layout_width="66.0px" android:layout_height="66.0px"-->
+                         <!--android:src="@drawable/view" android:id="@+id/help_close"/>-->
+        <!--</LinearLayout>-->
+
+    </ViewAnimator>
+    <RelativeLayout android:id="@+id/top_bar" android:layout_width="fill_parent"
+                    android:layout_height="20.0px" android:layout_below="@id/viewanim"
+                    android:background="@android:color/transparent"
+            >
+        <TextView android:layout_width="400.0px" android:paddingLeft="20.0px"
+                  android:layout_height="20.0px" android:id="@+id/name"
+                  android:background="@android:color/transparent" android:textColor="#FFFFFF"
+                  android:textSize="14sp"></TextView>
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="20.0px" android:background="@android:color/transparent"
+                  android:layout_toRightOf="@id/name" android:id="@+id/page_number_view" android:textColor="#FFFFFF"
+                  android:textSize="14sp"></TextView>
+    </RelativeLayout>
+
+</RelativeLayout>
