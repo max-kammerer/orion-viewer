@@ -1,0 +1,72 @@
+package com.google.code.orion_viewer;
+
+/*Orion Viewer is a pdf viewer for Nook Classic based on mupdf
+
+Copyright (C) 2011  Michael Bogdanov
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
+
+
+/**
+ * User: mike
+ * Date: 15.10.11
+ * Time: 18:49
+ */
+public class LayoutPosition implements Cloneable{
+
+    public int pageNumber;
+
+    public int pageWidth;
+
+    public int pageHeight;
+
+    public int pieceWidth;
+
+    public int pieceHeight;
+
+    public int offsetX;
+
+    public int offsetY;
+
+    //float??
+    public float docZoom;
+
+    public int rotation;
+
+    @Override
+    public LayoutPosition clone() {
+        try {
+            return (LayoutPosition) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return null;//todo new
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        LayoutPosition pos = (LayoutPosition) o;
+        if (pos.pageNumber == pageNumber &&
+                pos.offsetX == offsetX &&
+                pos.offsetY == offsetY &&
+                pos.pieceWidth == pieceWidth &&
+                pos.pieceHeight == pieceHeight &&
+                pos.pageHeight == pageHeight &&
+                pos.pageWidth == pageWidth &&
+                pos.rotation == rotation) {
+            return true;
+        }
+        return false;
+    }
+}
