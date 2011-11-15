@@ -36,6 +36,12 @@ public class NookDevice implements Device {
 
     public final static String UPDATE_TITLE = "com.bravo.intent.UPDATE_TITLE";
 
+    public final static String UPDATE_STATUSBAR = "com.bravo.intent.UPDATE_STATUSBAR";
+
+    public final static String STATUSBAR_ICON = "Statusbar.icon";
+
+    public final static String STATUSBAR_ACTION = "Statusbar.action";
+
     protected static final int NOOK_PAGE_UP_KEY_RIGHT = 98;
 
     protected static final int NOOK_PAGE_DOWN_KEY_RIGHT = 97;
@@ -68,6 +74,20 @@ public class NookDevice implements Device {
             ex.printStackTrace();
         }
     }
+
+    public void updatePageNumber(int current, int max) {
+        try {
+            Intent msg = new Intent(UPDATE_STATUSBAR);
+            msg.putExtra(STATUSBAR_ICON, 7);
+            msg.putExtra(STATUSBAR_ACTION, 1);
+            msg.putExtra("current", current);
+            msg.putExtra("max", max);
+            activity.sendBroadcast(msg);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 
     public boolean onKeyDown(int keyCode, KeyEvent event, OperationHolder holder) {
         switch (keyCode) {
