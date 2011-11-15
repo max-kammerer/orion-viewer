@@ -38,4 +38,6 @@ public interface Device {
     void onResume();
 
     void onUserInteraction();
+
+    void updatePageNumber(int current, int max);
 }

@@ -23,26 +23,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
  * Date: 15.10.11
  * Time: 18:49
  */
-public class LayoutPosition implements Cloneable{
+public class LayoutPosition implements Cloneable {
 
     public int pageNumber;
-
-    public int pageWidth;
-
-    public int pageHeight;
 
     public int pieceWidth;
 
     public int pieceHeight;
 
-    public int offsetX;
+    public int maxX;
 
-    public int offsetY;
+    public int maxY;
+
+    public int cellX;
+
+    public int cellY;
+
+    public int pageWidth;
+
+    public int pageHeight;
 
     //float??
     public float docZoom;
 
-    public int rotation;
+    //public int rotation;
 
     @Override
     public LayoutPosition clone() {
@@ -58,15 +62,15 @@ public class LayoutPosition implements Cloneable{
     public boolean equals(Object o) {
         LayoutPosition pos = (LayoutPosition) o;
         if (pos.pageNumber == pageNumber &&
-                pos.offsetX == offsetX &&
-                pos.offsetY == offsetY &&
-                pos.pieceWidth == pieceWidth &&
-                pos.pieceHeight == pieceHeight &&
-                pos.pageHeight == pageHeight &&
-                pos.pageWidth == pageWidth &&
-                pos.rotation == rotation) {
+                pos.cellX == cellX &&
+                pos.cellY == cellY) {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return pageNumber / 3 + cellX / 3 + cellY / 3;
     }
 }

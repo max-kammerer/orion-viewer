@@ -18,6 +18,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
 
+import android.graphics.Point;
+
 /**
  * User: mike
  * Date: 15.10.11
@@ -44,4 +46,6 @@ public interface LayoutStrategy {
     void init(LastPageInfo info);
 
     void serialize(LastPageInfo info);
+
+    Point convertToPoint(LayoutPosition pos);
 }

@@ -17,6 +17,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
+import android.graphics.Point;
 import android.util.Log;
 
 /**
@@ -45,76 +46,35 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
     }
 
     public void nextPage(LayoutPosition info) {
-        int newX = info.offsetX + info.pieceWidth;
-        int newY = info.offsetY;
-        if (newX >= info.pageWidth) {
-            newX = (int) (info.docZoom * leftMargin);
-            newY = info.offsetY + info.pieceHeight;
-            if (newY >= info.pageHeight) {
-                if (info.pageNumber < doc.getPageCount() - 1) {
-                    //go to next page with default position
-                    reset(info, info.pageNumber + 1);
-                    return;
-                } else {
-                    //last page && last view - do nothing
-                    return;
-                }
-            } else {
-                newY -= OVERLAP;
-            }
+        if (info.cellX < info.maxX) {
+            info.cellX += 1;
+        } else if (info.cellY < info.maxY) {
+            info.cellX = 0;
+            info.cellY += 1;
         } else {
-            newX -= OVERLAP;
+            if (info.pageNumber < doc.getPageCount() - 1) {
+                reset(info, info.pageNumber + 1);
+            }
         }
-
-        info.offsetX = newX;
-        info.offsetY = newY;
+        Log.d(Common.LOGTAG, "new cellX = " + info.cellX + " cellY =" + info.cellY);
     }
 
     public void prevPage(LayoutPosition info) {
-        int offsetX = info.offsetX - info.pieceWidth + OVERLAP;
-        int offsetY = info.offsetY;
-        Log.d(Common.LOGTAG, "new offsetX = " + offsetX + " maxX =" + info.pageWidth);
-
-        if (offsetX < (int)(leftMargin * info.docZoom)) {
-            int t = (info.pageWidth + info.pieceWidth - OVERLAP - OVERLAP) % (info.pieceWidth - OVERLAP);
-            if (t == 0) {
-                offsetX = (int) (info.pageWidth - info.pieceWidth + leftMargin * info.docZoom);
-            } else {
-                offsetX = (int) (info.pageWidth - t - OVERLAP + + leftMargin * info.docZoom);
-            }
-            Log.d(Common.LOGTAG, "new StartX = " + offsetX + " maxX =" + info.pageWidth);
-
-            offsetY = info.offsetY - (rotation == 0 ? HEIGHT : WIDTH) + OVERLAP;
-
-            Log.d(Common.LOGTAG, "new StartY = " + offsetY + " maxY =" + info.pageHeight);
-            if (offsetY < (int) (topMargin * info.docZoom)) {
-                if (info.pageNumber != 0) {
-                    //recalculate with and height
-                    reset(info, info.pageNumber - 1);
-                    info.offsetX = -1;
-                    info.offsetY = 3 * HEIGHT;
-                    prevPage(info); //shift X
-
-                    //offsetY = rotation == 0 ? HEIGHT : WIDTH;
-                    t = (info.pageHeight + info.pieceHeight - OVERLAP - OVERLAP) % (info.pieceHeight - OVERLAP);
-                    if (t == 0) {
-                        offsetY = (int) (info.pageHeight - info.pieceHeight + topMargin * info.docZoom);
-                    } else {
-                        offsetY = (int) (info.pageHeight - t - OVERLAP + + topMargin * info.docZoom);
-                    }
-                    Log.d(Common.LOGTAG, "new StartY = " + offsetY + " maxX =" + info.pageHeight);
-                } else {
-                     reset(info, info.pageNumber);
-                    return;
-                }
-            } else {
-
+        if (info.cellX > 0) {
+            info.cellX -= 1;
+        } else if (info.cellY > 0) {
+            info.cellX = info.maxX;
+            info.cellY -= 1;
+        } else {
+            if (info.pageNumber > 0) {
+                reset(info, info.pageNumber - 1);
+                info.cellX = info.maxX;
+                info.cellY = info.maxY;
             }
         }
 
-        info.offsetX = offsetX;
-        info.offsetY = offsetY;
 
+        Log.d(Common.LOGTAG, "new cellX = " + info.cellX + " maxX =" + info.cellY);
     }
     public boolean changeRotation(int rotation) {
         if (this.rotation != rotation) {
@@ -124,17 +84,8 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         return false;
     }
 
-    private void resetNextPage(LayoutPosition info) {
-        reset(info, info.pageNumber + 1);
-    }
-
-    private void resetPrevPage(LayoutPosition info) {
-        reset(info, info.pageNumber - 1);
-    }
-
     public void reset(LayoutPosition info, int pageNum) {
         info.pageNumber = pageNum;
-        info.rotation = rotation;
         //original width and height without cropped margins
         PageInfo pinfo = doc.getPageInfo(pageNum);
         info.pageWidth = pinfo.width - leftMargin - rightMargin;
@@ -155,8 +106,11 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         info.pageWidth = (int)(info.docZoom * info.pageWidth);
         info.pageHeight = (int) (info.docZoom * info.pageHeight);
 
-        info.offsetX = (int)  (leftMargin * info.docZoom);
-        info.offsetY = (int) (topMargin * info.docZoom);
+        info.maxX = (info.pageWidth - OVERLAP) / (info.pieceWidth - OVERLAP) + ((info.pageWidth - OVERLAP) % (info.pieceWidth - OVERLAP) == 0 ? 0 : 1)  - 1;
+        info.maxY = (info.pageHeight - OVERLAP) / (info.pieceHeight - OVERLAP) + ((info.pageHeight - OVERLAP) % (info.pieceHeight - OVERLAP) == 0 ?  0: 1) -1;
+
+        info.cellX = 0;
+        info.cellY = 0;
     }
 
     public boolean changeZoom(int zoom) {
@@ -200,5 +154,10 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         info.bottomMargin = bottomMargin;
         info.rotation = rotation;
         info.zoom = zoom;
+    }
+
+    public Point convertToPoint(LayoutPosition pos) {
+        return new Point((int)(pos.docZoom * leftMargin + pos.cellX * (pos.pieceWidth - OVERLAP)),
+                (int) (pos.docZoom * topMargin + pos.cellY * (pos.pieceHeight - OVERLAP)));
     }
 }

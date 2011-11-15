@@ -17,13 +17,17 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Point;
+import android.os.AsyncTask;
 import android.os.Debug;
 import android.util.Log;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.concurrent.ExecutionException;
 
 /**
  * User: mike
@@ -60,34 +64,23 @@ public class RenderThread extends Thread {
 
     private boolean paused;
 
-    public RenderThread(OrionView view, LayoutStrategy layout, DocumentWrapper doc) {
+    private Activity activity;
+
+    public RenderThread(Activity activity, OrionView view, LayoutStrategy layout, DocumentWrapper doc) {
         this.view = view;
         this.layout = layout;
         this.doc = doc;
         rotationShift = 80;
+        this.activity = activity;
     }
-
 
     public void invalidateCache() {
         synchronized (this) {
-            //if(clearCache) {
-              //  clearCache = false;
-                for (Iterator<CacheInfo> iterator = cachedBitmaps.iterator(); iterator.hasNext(); ) {
-                    CacheInfo next = iterator.next();
-                    next.bitmap.recycle();
-                    next.bitmap = null;
-                }
-
-                Log.d(Common.LOGTAG, "Clean cache");
-                Log.d(Common.LOGTAG, "Allocated heap size " + (Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()));
-                Log.d(Common.LOGTAG, "Total free memory " + Runtime.getRuntime().freeMemory());
-                cachedBitmaps.clear();
-                Log.d(Common.LOGTAG, "Cache is cleared!");
-            //}
-
-
-            currentPosition = null;
-            //clearCache = true;
+            for (Iterator<CacheInfo> iterator = cachedBitmaps.iterator(); iterator.hasNext(); ) {
+                CacheInfo next = iterator.next();
+                next.setValid(false);
+            }
+            Log.d(Common.LOGTAG, "Cache invalidated");
         }
     }
 
@@ -147,6 +140,7 @@ public class RenderThread extends Thread {
             Log.d(Common.LOGTAG, "Total free memory1 " + Runtime.getRuntime().freeMemory());
 
             int rotation = 0;
+            CacheInfo resultEntry = null;
             synchronized (this) {
                 if (paused) {
                     try {
@@ -187,11 +181,10 @@ public class RenderThread extends Thread {
             }
 
             if (curPos != null) {
-                CacheInfo resultEntry = null;
                 //try to find result in cache
                 for (Iterator<CacheInfo> iterator = cachedBitmaps.iterator(); iterator.hasNext(); ) {
                     CacheInfo cacheInfo =  iterator.next();
-                    if (cacheInfo.info.equals(curPos)) {
+                    if (cacheInfo.isValid() && cacheInfo.info.equals(curPos)) {
                         resultEntry = cacheInfo;
                         //relocate info to end of cache
                         iterator.remove();
@@ -209,6 +202,8 @@ public class RenderThread extends Thread {
                     Bitmap bitmap = null;
                     if (cachedBitmaps.size() >= CACHE_SIZE) {
                         CacheInfo info = cachedBitmaps.removeFirst();
+                        info.setValid(true);
+
                         if (width == info.bitmap.getWidth() && height == info.bitmap.getHeight() || rotation != 0 && width == info.bitmap.getHeight() && height == info.bitmap.getWidth()) {
                             bitmap = info.bitmap;
                         } else {
@@ -231,7 +226,10 @@ public class RenderThread extends Thread {
                         cacheCanvas.translate(-rotation * rotationShift, -rotation * rotationShift);
                     }
 
-                    int [] data = doc.renderPage(curPos.pageNumber, curPos.docZoom, width, height, curPos.offsetX, curPos.offsetY, curPos.offsetX + width, curPos.offsetY + height);                    cacheCanvas.setBitmap(bitmap);
+                    Point leftTopCorner = layout.convertToPoint(curPos);
+                    System.out.println("point " + leftTopCorner.x + " " + leftTopCorner.y);
+                    int [] data = doc.renderPage(curPos.pageNumber, curPos.docZoom, width, height, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + width, leftTopCorner.y + height);
+                    cacheCanvas.setBitmap(bitmap);
 
                     cacheCanvas.drawBitmap(data, 0, width, 0, 0, width, height, true, null);
 
@@ -239,16 +237,21 @@ public class RenderThread extends Thread {
 
                     cachedBitmaps.add(resultEntry);
                 }
-
-                if (futureIndex == 0) {
-                    //redraw view
-                    //TODO send event from ui thread
-                    view.setData(resultEntry.bitmap);
-                    view.postInvalidate();
-                }
-
-                futureIndex++;
             }
+
+            if (futureIndex == 0) {
+                final Bitmap bitmap = resultEntry.bitmap;
+
+                activity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        view.setData(bitmap);
+                        view.invalidate();
+                    }
+                });
+
+            }
+
+            futureIndex++;
         }
     }
 
@@ -270,7 +273,7 @@ public class RenderThread extends Thread {
         private LayoutPosition info;
         private Bitmap bitmap;
 
-        private boolean valid;
+        private boolean valid = true;
 
         public LayoutPosition getInfo() {
             return info;
@@ -280,5 +283,12 @@ public class RenderThread extends Thread {
             return bitmap;
         }
 
+        public boolean isValid() {
+            return valid;
+        }
+
+        public void setValid(boolean valid) {
+            this.valid = valid;
+        }
     }
 }

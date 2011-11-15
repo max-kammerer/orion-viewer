@@ -34,7 +34,7 @@ public class OrionView extends View {
 
     public Bitmap bitmap;
 
-    private int rotation;
+//    private int rotation;
 
     public OrionView(Context context) {
         super(context);
@@ -52,9 +52,8 @@ public class OrionView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        synchronized (this) {
-            if (bitmap != null && !bitmap.isRecycled()) {
-                long start = new Date().getTime();
+        if (bitmap != null && !bitmap.isRecycled()) {
+            long start = new Date().getTime();
 
 //                if (rotation != 0) {
 //                    canvas.rotate(-rotation * 90, (getHeight()) / 2, getWidth() / 2);
@@ -63,24 +62,20 @@ public class OrionView extends View {
 //                Paint paint = new Paint();
 //                ColorFilter filter = new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
 //                paint.setColorFilter(filter);
-                canvas.drawBitmap(bitmap, 0, 0, null);
+            canvas.drawBitmap(bitmap, 0, 0, null);
 
-                Log.d(Common.LOGTAG, "OrionView drawn bitmap at " + (new Date().getTime() - start) * 0.001f + " ms");
-            }
+            Log.d(Common.LOGTAG, "OrionView drawn bitmap at " + (new Date().getTime() - start) * 0.001f + " ms");
         }
-
     }
 
     public void setData(Bitmap bitmap) {
-        synchronized (this) {
-            this.bitmap = bitmap;
-        }
+        this.bitmap = bitmap;
     }
 
-   public void setRotation(int rotation) {
-       synchronized (this) {
-        this.rotation = rotation;
-       }
-    }
+//   public void setRotation(int rotation) {
+//       synchronized (this) {
+//        this.rotation = rotation;
+//       }
+//    }
 
 }

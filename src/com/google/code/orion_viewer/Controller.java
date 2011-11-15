@@ -17,6 +17,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
+import android.app.Activity;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * User: mike
  * Date: 15.10.11
@@ -34,12 +39,23 @@ public class Controller {
 
     private RenderThread renderer;
 
-    public Controller(DocumentWrapper doc, LayoutStrategy layout, OrionView view) {
+    private int lastPage = -1;
+
+    private List<DocumentViewListener> listeners = new ArrayList<DocumentViewListener>();
+
+    public Controller(Activity activity, DocumentWrapper doc, LayoutStrategy layout, OrionView view) {
         this.doc = doc;
         this.layout = layout;
         this.view = view;
-        renderer = new RenderThread(view, layout, doc);
+        renderer = new RenderThread(activity, view, layout, doc);
         renderer.start();
+
+        addDocListeners(new  DocumentViewAdapter() {
+            public void viewParametersChanged() {
+                renderer.invalidateCache();
+            }
+        });
+
     }
 
     public void drawPage(int page) {
@@ -48,7 +64,9 @@ public class Controller {
     }
 
     public void drawPage() {
-        renderPage(layoutInfo);
+        sendPageChangedNotification();
+
+        renderer.render(layoutInfo);
     }
 
     public void drawNext() {
@@ -61,14 +79,13 @@ public class Controller {
         drawPage();
     }
 
-    private void renderPage(LayoutPosition info) {
-        renderer.render(info);
-    }
-
     public void changeZoom(int zoom) {
         if (layout.changeZoom(zoom)) {
             layout.reset(layoutInfo, layoutInfo.pageNumber);
-            renderPage(layoutInfo);
+
+            sendViewChangeNotification();
+
+            drawPage();
         }
     }
 
@@ -80,6 +97,9 @@ public class Controller {
     public void changeMargins(int leftMargin, int topMargin, int rightMargin, int bottomMargin) {
         if (layout.changeMargins(leftMargin, topMargin, rightMargin, bottomMargin)) {
             layout.reset(layoutInfo, layoutInfo.pageNumber);
+
+            sendViewChangeNotification();
+
             drawPage();
         }
     }
@@ -107,8 +127,10 @@ public class Controller {
     public void setRotation(int rotation) {
         if (layout.changeRotation(rotation)) {
             layout.reset(layoutInfo, layoutInfo.pageNumber);
-            view.setRotation(rotation);
-            renderPage(layoutInfo);
+            //view.setRotation(rotation);
+            sendViewChangeNotification();
+
+            drawPage();
         }
     }
 
@@ -130,20 +152,39 @@ public class Controller {
         layoutInfo = new LayoutPosition();
         layout.reset(layoutInfo, info.pageNumber);
         if (info.offsetX != 0) {
-            layoutInfo.offsetX = info.offsetX;
+            layoutInfo.cellX = info.offsetX;
         }
         if (info.offsetY != 0) {
-            layoutInfo.offsetY = info.offsetY;
+            layoutInfo.cellY = info.offsetY;
         }
-        view.setRotation(layout.getRotation());
+        //view.setRotation(layout.getRotation());
     }
 
     public void serialize(LastPageInfo info) {
         layout.serialize(info);
-        info.offsetX = layoutInfo.offsetX;
-        info.offsetY = layoutInfo.offsetY;
+        info.offsetX = layoutInfo.cellX;
+        info.offsetY = layoutInfo.cellY;
         info.pageNumber = layoutInfo.pageNumber;
     }
 
+    public void addDocListeners(DocumentViewListener listeners) {
+        this.listeners.add(listeners);
+    }
 
+    public void sendViewChangeNotification() {
+        for (int i = 0; i < listeners.size(); i++) {
+            DocumentViewListener documentListener =  listeners.get(i);
+            documentListener.viewParametersChanged();
+        }
+    }
+
+    public void sendPageChangedNotification() {
+        if (lastPage != layoutInfo.pageNumber) {
+            lastPage = layoutInfo.pageNumber;
+            for (int i = 0; i < listeners.size(); i++) {
+                DocumentViewListener documentListener =  listeners.get(i);
+                documentListener.pageChanged(lastPage, doc.getPageCount());
+            }
+        }
+    }
 }

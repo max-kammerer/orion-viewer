@@ -18,7 +18,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -37,8 +36,6 @@ import com.google.code.orion_viewer.pdf.PdfDocument;
 import java.io.*;
 
 public class OrionViewerActivity extends Activity {
-
-    private static String LOGTAG = "com.google.code.orion_viewer.OrionViewerActivity";
 
     private static final int MAIN_SCREEN = 0;
 
@@ -82,10 +79,6 @@ public class OrionViewerActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-        ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
-        activityManager.getMemoryInfo(memoryInfo);
-
         device.onCreate(this);
 
         setContentView(R.layout.main);
@@ -109,13 +102,11 @@ public class OrionViewerActivity extends Activity {
             }
         });
 
-        view = (ListView) findViewById(R.id.file_chooser);
         view.setAdapter(new FileChooser(this, Environment.getRootDirectory()));
 
         onNewIntent(intent);
 
         initButtons();
-//        initListener();
 
         cropBorders = new int[4];
 
@@ -215,7 +206,7 @@ public class OrionViewerActivity extends Activity {
             int idx = file.lastIndexOf('/');
             file = file.substring(idx + 1) + ".userData";
 
-            controller = new Controller(doc, str, view);
+            controller = new Controller(this, doc, str, view);
             try {
                 ObjectInputStream inp = new ObjectInputStream(openFileInput(file));
                 pageInfo = (LastPageInfo) inp.readObject();
@@ -227,6 +218,15 @@ public class OrionViewerActivity extends Activity {
             controller.init(pageInfo);
             updateLabels();
             animator.setDisplayedChild(MAIN_SCREEN);
+            controller.addDocListeners(new DocumentViewAdapter() {
+                public void pageChanged(final int newPage, final int pageCount) {
+//                    new Thread(new Runnable() {
+//                        public void run() {
+//                            device.updatePageNumber(newPage, pageCount);
+//                        }
+//                    }).start();
+                }
+            });
             controller.drawPage();
         } catch (Exception e) {
             if (doc != null) {
@@ -507,7 +507,7 @@ public class OrionViewerActivity extends Activity {
                 out.writeObject(pageInfo);
                 out.close();
             } catch (Exception ex) {
-                Log.e(LOGTAG, ex.getMessage(), ex);
+                Log.e(Common.LOGTAG, ex.getMessage(), ex);
             }
        }
     }
