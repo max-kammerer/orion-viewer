@@ -144,7 +144,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
     public void init(LastPageInfo info) {
         changeMargins(info.leftMargin, info.topMargin, info.rightMargin, info.bottomMargin);
         changeRotation(info.rotation);
-        changeZoom(zoom);
+        changeZoom(info.zoom);
     }
 
     public void serialize(LastPageInfo info) {
