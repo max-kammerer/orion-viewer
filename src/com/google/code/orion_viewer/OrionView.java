@@ -58,6 +58,7 @@ public class OrionView extends View {
         if (bitmap != null && !bitmap.isRecycled()) {
             long start = new Date().getTime();
             Log.d(Common.LOGTAG, "Start drawing bitmap ");
+
 //                if (rotation != 0) {
 //                    canvas.rotate(-rotation * 90, (getHeight()) / 2, getWidth() / 2);
 //                    canvas.translate(- rotation * 80, - rotation * 80);
@@ -67,7 +68,7 @@ public class OrionView extends View {
 //                paint.setColorFilter(filter);
             canvas.drawBitmap(bitmap, 0, 0, null);
 
-            Log.d(Common.LOGTAG, "OrionView drawn bitmap at " + (new Date().getTime() - start) * 0.001f + " ms");
+            Log.d(Common.LOGTAG, "OrionView drawn bitmap at " + 0.001f * (new Date().getTime() - start) + " s");
         }
         if (latch != null) {
             latch.countDown();
