@@ -220,11 +220,8 @@ public class OrionViewerActivity extends Activity {
             animator.setDisplayedChild(MAIN_SCREEN);
             controller.addDocListeners(new DocumentViewAdapter() {
                 public void pageChanged(final int newPage, final int pageCount) {
-//                    new Thread(new Runnable() {
-//                        public void run() {
-//                            device.updatePageNumber(newPage, pageCount);
-//                        }
-//                    }).start();
+                    TextView tv = (TextView) findViewById(R.id.page_number_view);
+                    tv.setText(newPage + 1 + "/" + pageCount);
                 }
             });
             controller.drawPage();

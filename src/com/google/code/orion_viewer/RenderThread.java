@@ -27,7 +27,7 @@ import android.util.Log;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.*;
 
 /**
  * User: mike
@@ -65,6 +65,7 @@ public class RenderThread extends Thread {
     private boolean paused;
 
     private Activity activity;
+
 
     public RenderThread(Activity activity, OrionView view, LayoutStrategy layout, DocumentWrapper doc) {
         this.view = view;
@@ -241,16 +242,22 @@ public class RenderThread extends Thread {
 
             if (futureIndex == 0) {
                 final Bitmap bitmap = resultEntry.bitmap;
+                Log.d(Common.LOGTAG, "Sending Bitmap");
+                final CountDownLatch  mutex = new CountDownLatch(1);
 
                 activity.runOnUiThread(new Runnable() {
                     public void run() {
-                        view.setData(bitmap);
+                        view.setData(bitmap, mutex);
                         view.invalidate();
                     }
                 });
 
+                try {
+                    mutex.await(2, TimeUnit.SECONDS);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-
             futureIndex++;
         }
     }

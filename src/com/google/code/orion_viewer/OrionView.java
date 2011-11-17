@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.View;
 
 import java.util.Date;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * User: mike
@@ -33,6 +34,8 @@ import java.util.Date;
 public class OrionView extends View {
 
     public Bitmap bitmap;
+
+    private CountDownLatch latch;
 
 //    private int rotation;
 
@@ -54,7 +57,7 @@ public class OrionView extends View {
     protected void onDraw(Canvas canvas) {
         if (bitmap != null && !bitmap.isRecycled()) {
             long start = new Date().getTime();
-
+            Log.d(Common.LOGTAG, "Start drawing bitmap ");
 //                if (rotation != 0) {
 //                    canvas.rotate(-rotation * 90, (getHeight()) / 2, getWidth() / 2);
 //                    canvas.translate(- rotation * 80, - rotation * 80);
@@ -66,10 +69,14 @@ public class OrionView extends View {
 
             Log.d(Common.LOGTAG, "OrionView drawn bitmap at " + (new Date().getTime() - start) * 0.001f + " ms");
         }
+        if (latch != null) {
+            latch.countDown();
+        }
     }
 
-    public void setData(Bitmap bitmap) {
+    public void setData(Bitmap bitmap, CountDownLatch latch) {
         this.bitmap = bitmap;
+        this.latch = latch;
     }
 
 //   public void setRotation(int rotation) {
