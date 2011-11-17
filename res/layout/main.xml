@@ -29,38 +29,78 @@
 
     </com.google.code.orion_viewer.OrionView>
 
-    <ViewAnimator android:layout_width="480.0px" android:paddingTop="20.0px"
+    <ViewAnimator android:layout_width="480.0px"
                   android:layout_height="144.0px" android:layout_below="@id/view"
                   android:id="@+id/viewanim">
 
         <!--main screen/menu-->
         <LinearLayout android:id="@+id/main_menu"
+                      android:layout_width="fill_parent" android:layout_height="fill_parent"
+                      android:orientation="horizontal">
+
+            <LinearLayout
                       android:layout_width="fill_parent" android:layout_height="wrap_content"
-                      android:orientation="horizontal" android:gravity="center" android:layout_alignParentBottom="true">
+                      android:orientation="vertical" android:gravity="right" android:layout_weight="0.8">
+            </LinearLayout>
 
-            <ImageButton android:id="@+id/zoom" android:src="@drawable/zoom" android:layout_width="65.0px" android:layout_height="65.0px"/>
 
-            <ImageButton android:id="@+id/switch_page" android:src="@drawable/rotate" android:layout_width="65.0px" android:layout_height="65.0px"/>
+            <LinearLayout
+                      android:layout_width="fill_parent" android:layout_height="wrap_content"
+                      android:orientation="vertical" android:gravity="center" android:layout_weight="0.2">
 
-            <ImageButton android:id="@+id/crop_menu" android:layout_width="65.0px" android:layout_height="65.0px"
-                         android:src="@drawable/crop"/>
+                <LinearLayout
+                          android:layout_width="fill_parent" android:layout_height="124.0px"
+                          android:orientation="horizontal" android:layout_gravity="center" android:gravity="center">
 
-            <ImageButton android:id="@+id/prev_page" android:layout_width="65.0px" android:layout_height="65.0px" android:src="@drawable/prev"/>
+                    <ImageButton android:id="@+id/zoom" android:src="@drawable/zoom" android:layout_width="65.0px" android:layout_height="65.0px"/>
 
-            <ImageButton android:id="@+id/next_page" android:layout_width="65.0px" android:layout_height="65.0px"
-                         android:src="@drawable/next"/>
+                    <ImageButton android:id="@+id/switch_page" android:src="@drawable/rotate" android:layout_width="65.0px" android:layout_height="65.0px"/>
 
-            <ImageButton android:id="@+id/help" android:layout_width="60.0px" android:layout_height="60.0px"
-                         android:src="@drawable/help"/>
+                    <ImageButton android:id="@+id/prev_page" android:layout_width="65.0px" android:layout_height="65.0px" android:src="@drawable/prev"/>
 
-            <ImageButton android:id="@+id/exit" android:layout_width="60.0px" android:layout_height="60.0px"
-                         android:src="@drawable/close"/>
+                    <ImageButton android:id="@+id/next_page" android:layout_width="65.0px" android:layout_height="65.0px"
+                                 android:src="@drawable/next"/>
+
+                    <ImageButton android:id="@+id/crop_menu" android:layout_width="65.0px" android:layout_height="65.0px"
+                                 android:src="@drawable/crop"/>
+                </LinearLayout>
+
+                <LinearLayout
+                      android:layout_width="fill_parent" android:layout_height="wrap_content"
+                      android:orientation="horizontal" android:gravity="center" >
+
+                    <TextView android:layout_width="wrap_content"
+                          android:layout_height="16.0px" android:background="@android:color/transparent"
+                          android:id="@+id/page_number_view" android:textColor="#FFFFFF"
+                          android:textSize="14sp"></TextView>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                      android:layout_width="fill_parent" android:layout_height="fill_parent"
+                      android:orientation="vertical" android:gravity="right|center_vertical" android:layout_weight="0.8">
+
+                <ImageButton android:id="@+id/exit" android:layout_width="45.0px" android:layout_height="45.0px"
+                             android:src="@drawable/close"/>
+
+                <ImageButton android:id="@+id/help" android:layout_width="45.0px" android:layout_height="45.0px"
+                             android:src="@drawable/help"/>
+
+                <ImageButton android:id="@+id/options" android:layout_width="45.0px" android:layout_height="45.0px"
+                             android:src="@drawable/options"/>
+
+            </LinearLayout>
+
+
         </LinearLayout>
 
         <!--page chooser screen-->
         <LinearLayout android:id="@+id/page_menu"
-                      android:layout_height="wrap_content" android:orientation="vertical"
-                      android:layout_width="fill_parent">
+                      android:layout_height="fill_parent" android:orientation="vertical"
+                      android:layout_width="fill_parent" android:gravity="center">
             <LinearLayout android:orientation="horizontal"
                           android:layout_width="fill_parent" android:layout_height="wrap_content"
                           android:gravity="center">
@@ -84,8 +124,8 @@
 
         <!--zoom chooser screen-->
         <LinearLayout android:id="@+id/zoom_menu"
-                      android:layout_height="wrap_content" android:orientation="vertical"
-                      android:layout_width="fill_parent">
+                      android:layout_height="fill_parent" android:orientation="vertical"
+                      android:layout_width="fill_parent" android:gravity="center">
             <LinearLayout android:orientation="horizontal"
                           android:layout_width="fill_parent" android:layout_height="wrap_content"
                           android:gravity="center">
@@ -149,19 +189,19 @@
         <!--</LinearLayout>-->
 
     </ViewAnimator>
-    <RelativeLayout android:id="@+id/top_bar" android:layout_width="fill_parent"
-                    android:layout_height="20.0px" android:layout_below="@id/viewanim"
-                    android:background="@android:color/transparent"
-            >
-        <TextView android:layout_width="400.0px" android:paddingLeft="20.0px"
-                  android:layout_height="20.0px" android:id="@+id/name"
-                  android:background="@android:color/transparent" android:textColor="#FFFFFF"
-                  android:textSize="14sp"></TextView>
+    <!--<RelativeLayout android:id="@+id/top_bar" android:layout_width="fill_parent"-->
+                    <!--android:layout_height="20.0px" android:layout_below="@id/viewanim"-->
+                    <!--android:background="@android:color/transparent"-->
+            <!-->-->
+        <!--<TextView android:layout_width="400.0px" android:paddingLeft="20.0px"-->
+                  <!--android:layout_height="20.0px" android:id="@+id/name"-->
+                  <!--android:background="@android:color/transparent" android:textColor="#FFFFFF"-->
+                  <!--android:textSize="14sp"></TextView>-->
 
-        <TextView android:layout_width="wrap_content"
-                  android:layout_height="20.0px" android:background="@android:color/transparent"
-                  android:layout_toRightOf="@id/name" android:id="@+id/page_number_view" android:textColor="#FFFFFF"
-                  android:textSize="14sp"></TextView>
-    </RelativeLayout>
+        <!--<TextView android:layout_width="wrap_content"-->
+                  <!--android:layout_height="20.0px" android:background="@android:color/transparent"-->
+                  <!--android:layout_toRightOf="@id/name" android:id="@+id/page_number_view" android:textColor="#FFFFFF"-->
+                  <!--android:textSize="14sp"></TextView>-->
+    <!--</RelativeLayout>-->
 
 </RelativeLayout>
