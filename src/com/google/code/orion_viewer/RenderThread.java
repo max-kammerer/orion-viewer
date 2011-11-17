@@ -18,13 +18,18 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Debug;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.WindowManager;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.*;
@@ -54,7 +59,7 @@ public class RenderThread extends Thread {
 
     private Canvas cacheCanvas = new Canvas();
 
-    private Bitmap.Config bitmapConfig = Bitmap.Config.ARGB_8888;
+    private Bitmap.Config bitmapConfig;
 
     private boolean clearCache;
 
@@ -73,6 +78,32 @@ public class RenderThread extends Thread {
         this.doc = doc;
         rotationShift = 80;
         this.activity = activity;
+
+        WindowManager manager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
+        if (manager == null) {
+            bitmapConfig = Bitmap.Config.ARGB_8888;
+            return;
+        }
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        manager.getDefaultDisplay().getMetrics(metrics);
+
+        switch (manager.getDefaultDisplay().getPixelFormat()) {
+            case PixelFormat.A_8:
+                bitmapConfig = Bitmap.Config.ALPHA_8;
+                break;
+            case PixelFormat.RGB_565:
+                bitmapConfig = Bitmap.Config.RGB_565;
+                break;
+            case PixelFormat.RGBA_4444:
+                bitmapConfig = Bitmap.Config.ARGB_4444;
+                break;
+            case PixelFormat.RGBA_8888:
+                bitmapConfig = Bitmap.Config.ARGB_8888;
+                break;
+        }
+
+        //System.out.println("PixelFormat is " +  manager.getDefaultDisplay().getPixelFormat());
     }
 
     public void invalidateCache() {
@@ -96,9 +127,7 @@ public class RenderThread extends Thread {
                     next.bitmap = null;
                 }
 
-                Log.d(Common.LOGTAG, "Clean cache");
                 Log.d(Common.LOGTAG, "Allocated heap size " + (Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()));
-                Log.d(Common.LOGTAG, "Total free memory " + Runtime.getRuntime().freeMemory());
                 cachedBitmaps.clear();
                 Log.d(Common.LOGTAG, "Cache is cleared!");
             //}
@@ -136,9 +165,7 @@ public class RenderThread extends Thread {
 
         while (!stopped) {
 
-            Log.d(Common.LOGTAG, "Allocated heap size1 " + (Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()));
-            Log.d(Common.LOGTAG, "Total appliication memory1 " + Runtime.getRuntime().totalMemory());
-            Log.d(Common.LOGTAG, "Total free memory1 " + Runtime.getRuntime().freeMemory());
+            Log.d(Common.LOGTAG, "Allocated heap size " + (Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()));
 
             int rotation = 0;
             CacheInfo resultEntry = null;
@@ -230,9 +257,12 @@ public class RenderThread extends Thread {
                     Point leftTopCorner = layout.convertToPoint(curPos);
                     System.out.println("point " + leftTopCorner.x + " " + leftTopCorner.y);
                     int [] data = doc.renderPage(curPos.pageNumber, curPos.docZoom, width, height, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + width, leftTopCorner.y + height);
-                    cacheCanvas.setBitmap(bitmap);
 
+                    Date date = new Date();
+                    cacheCanvas.setBitmap(bitmap);
                     cacheCanvas.drawBitmap(data, 0, width, 0, 0, width, height, true, null);
+                    Date date2 = new Date();
+                    Log.d(Common.LOGTAG, "Drawing bitmap in cache " + 0.001 * (date2.getTime() - date.getTime()) + " s");
 
                     resultEntry = new CacheInfo(curPos, bitmap);
 
