@@ -31,6 +31,7 @@ import com.google.code.orion_viewer.OrionViewerActivity;
  * User: mike
  * Date: 18.10.11
  * Time: 11:14
+ * Nook specific features obtained from nookCommon at http://code.google.com/p/nookdevs/
  */
 public class NookDevice implements Device {
 
