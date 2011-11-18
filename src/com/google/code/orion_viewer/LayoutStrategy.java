@@ -48,4 +48,12 @@ public interface LayoutStrategy {
     void serialize(LastPageInfo info);
 
     Point convertToPoint(LayoutPosition pos);
+
+    int getLayout();
+
+    int getDirection();
+
+    boolean changeNavigation(int navigation);
+
+    boolean changePageLayout(int navigation);
 }

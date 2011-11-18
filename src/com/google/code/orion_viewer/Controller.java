@@ -53,6 +53,7 @@ public class Controller {
         addDocListeners(new  DocumentViewAdapter() {
             public void viewParametersChanged() {
                 renderer.invalidateCache();
+                drawPage();
             }
         });
 
@@ -82,10 +83,7 @@ public class Controller {
     public void changeZoom(int zoom) {
         if (layout.changeZoom(zoom)) {
             layout.reset(layoutInfo, layoutInfo.pageNumber);
-
             sendViewChangeNotification();
-
-            drawPage();
         }
     }
 
@@ -97,10 +95,7 @@ public class Controller {
     public void changeMargins(int leftMargin, int topMargin, int rightMargin, int bottomMargin) {
         if (layout.changeMargins(leftMargin, topMargin, rightMargin, bottomMargin)) {
             layout.reset(layoutInfo, layoutInfo.pageNumber);
-
             sendViewChangeNotification();
-
-            drawPage();
         }
     }
 
@@ -129,8 +124,6 @@ public class Controller {
             layout.reset(layoutInfo, layoutInfo.pageNumber);
             //view.setRotation(rotation);
             sendViewChangeNotification();
-
-            drawPage();
         }
     }
 
@@ -185,6 +178,20 @@ public class Controller {
                 DocumentViewListener documentListener =  listeners.get(i);
                 documentListener.pageChanged(lastPage, doc.getPageCount());
             }
+        }
+    }
+
+    public int getDirection() {
+        return layout.getDirection();
+    }
+
+    public int getLayout() {
+        return layout.getLayout();
+    }
+
+    public void setDirectionAndLayout(int navigation, int pageLayout) {
+        if (layout.changeNavigation(navigation) | layout.changePageLayout(pageLayout)) {
+            sendViewChangeNotification();
         }
     }
 }

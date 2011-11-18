@@ -166,7 +166,7 @@
                          android:src="@drawable/revert" android:id="@+id/crop_close"/>
         </LinearLayout>
 
-    <!--help screen-->
+        <!--help screen-->
         <include layout="@layout/help"/>
 
         <!--file chooser-->
@@ -174,34 +174,9 @@
                     android:layout_width="480.0px"
                                   android:layout_height="wrap_content"/>
 
-        <!--<LinearLayout android:id="@+id/crop_menu"-->
-                      <!--android:layout_height="wrap_content" android:orientation="horizontal"-->
-                      <!--android:scrollbars="horizontal"-->
-                      <!--android:layout_width="fill_parent" android:gravity="center" android:>-->
+        <!--options-->
+        <include layout="@layout/options"/>
 
-
-            <!--<TextView android:layout_width="wrap_content"-->
-                          <!--android:layout_height="wrap_content" android:id="@+id/zoom_picker_message"-->
-                          <!--android:textSize="30sp" android:text=""></TextView>-->
-
-            <!--<ImageButton android:layout_width="66.0px" android:layout_height="66.0px"-->
-                         <!--android:src="@drawable/view" android:id="@+id/help_close"/>-->
-        <!--</LinearLayout>-->
 
     </ViewAnimator>
-    <!--<RelativeLayout android:id="@+id/top_bar" android:layout_width="fill_parent"-->
-                    <!--android:layout_height="20.0px" android:layout_below="@id/viewanim"-->
-                    <!--android:background="@android:color/transparent"-->
-            <!-->-->
-        <!--<TextView android:layout_width="400.0px" android:paddingLeft="20.0px"-->
-                  <!--android:layout_height="20.0px" android:id="@+id/name"-->
-                  <!--android:background="@android:color/transparent" android:textColor="#FFFFFF"-->
-                  <!--android:textSize="14sp"></TextView>-->
-
-        <!--<TextView android:layout_width="wrap_content"-->
-                  <!--android:layout_height="20.0px" android:background="@android:color/transparent"-->
-                  <!--android:layout_toRightOf="@id/name" android:id="@+id/page_number_view" android:textColor="#FFFFFF"-->
-                  <!--android:textSize="14sp"></TextView>-->
-    <!--</RelativeLayout>-->
-
 </RelativeLayout>

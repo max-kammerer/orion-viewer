@@ -41,38 +41,69 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     private int rotation;
 
+    private int direction;
+
+    private int layout;
+
     public SimpleLayoutStrategy(DocumentWrapper doc) {
         this.doc = doc;
     }
 
     public void nextPage(LayoutPosition info) {
-        if (info.cellX < info.maxX) {
-            info.cellX += 1;
-        } else if (info.cellY < info.maxY) {
-            info.cellX = 0;
-            info.cellY += 1;
+        if (getDirection() == 0) {
+            if (info.cellX < info.maxX) {
+                info.cellX += 1;
+            } else if (info.cellY < info.maxY) {
+                info.cellX = 0;
+                info.cellY += 1;
+            } else {
+                if (info.pageNumber < doc.getPageCount() - 1) {
+                    reset(info, info.pageNumber + 1);
+                }
+            }
         } else {
-            if (info.pageNumber < doc.getPageCount() - 1) {
-                reset(info, info.pageNumber + 1);
+            if (info.cellY < info.maxY) {
+                info.cellY += 1;
+            } else if (info.cellX < info.maxX) {
+                info.cellY = 0;
+                info.cellX += 1;
+            } else {
+                if (info.pageNumber < doc.getPageCount() - 1) {
+                    reset(info, info.pageNumber + 1);
+                }
             }
         }
         Log.d(Common.LOGTAG, "new cellX = " + info.cellX + " cellY =" + info.cellY);
     }
 
     public void prevPage(LayoutPosition info) {
-        if (info.cellX > 0) {
-            info.cellX -= 1;
-        } else if (info.cellY > 0) {
-            info.cellX = info.maxX;
-            info.cellY -= 1;
-        } else {
-            if (info.pageNumber > 0) {
-                reset(info, info.pageNumber - 1);
+        if (getDirection() == 0) {
+            if (info.cellX > 0) {
+                info.cellX -= 1;
+            } else if (info.cellY > 0) {
                 info.cellX = info.maxX;
+                info.cellY -= 1;
+            } else {
+                if (info.pageNumber > 0) {
+                    reset(info, info.pageNumber - 1);
+                    info.cellX = info.maxX;
+                    info.cellY = info.maxY;
+                }
+            }
+        } else {
+            if (info.cellY > 0) {
+                info.cellY -= 1;
+            } else if (info.cellX > 0) {
                 info.cellY = info.maxY;
+                info.cellX -= 1;
+            } else {
+                if (info.pageNumber > 0) {
+                    reset(info, info.pageNumber - 1);
+                    info.cellX = info.maxX;
+                    info.cellY = info.maxY;
+                }
             }
         }
-
 
         Log.d(Common.LOGTAG, "new cellX = " + info.cellX + " maxX =" + info.cellY);
     }
@@ -121,6 +152,22 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         return false;
     }
 
+    public boolean changeNavigation(int navigation) {
+        if (this.direction != navigation) {
+            this.direction = navigation;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean changePageLayout(int navigation) {
+        if (this.layout != navigation) {
+            this.layout = navigation;
+            return true;
+        }
+        return false;
+    }
+
     public int getZoom() {
         return zoom;
     }
@@ -145,6 +192,8 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         changeMargins(info.leftMargin, info.topMargin, info.rightMargin, info.bottomMargin);
         changeRotation(info.rotation);
         changeZoom(info.zoom);
+        changeNavigation(info.navigation);
+        changePageLayout(info.pageLayout);
     }
 
     public void serialize(LastPageInfo info) {
@@ -154,10 +203,25 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         info.bottomMargin = bottomMargin;
         info.rotation = rotation;
         info.zoom = zoom;
+        info.navigation = direction;
+        info.pageLayout = layout;
     }
 
     public Point convertToPoint(LayoutPosition pos) {
-        return new Point((int)(pos.docZoom * leftMargin + pos.cellX * (pos.pieceWidth - OVERLAP)),
-                (int) (pos.docZoom * topMargin + pos.cellY * (pos.pieceHeight - OVERLAP)));
+        int layout  = getLayout();
+
+        int x = pos.cellX == 0 || pos.cellX != pos.maxX || layout == 0 ?  (int)(pos.docZoom * leftMargin + pos.cellX * (pos.pieceWidth - OVERLAP)) : (int) (pos.docZoom * leftMargin + pos.pageWidth - pos.pieceWidth);
+        int y = pos.cellY == 0 || pos.cellY != pos.maxY || layout != 1 ? (int) (pos.docZoom * topMargin + pos.cellY * (pos.pieceHeight - OVERLAP)) : (int) (pos.docZoom * topMargin + pos.pageHeight - pos.pieceHeight);
+
+        return new Point(x, y);
     }
+
+    public int getLayout() {
+        return layout;
+    }
+
+    public int getDirection() {
+        return direction;
+    }
+
 }

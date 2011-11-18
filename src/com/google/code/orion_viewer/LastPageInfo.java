@@ -38,5 +38,8 @@ class LastPageInfo implements Serializable {
     int topMargin = 0;
     int bottomMargin = 0;
 
+    int navigation = 0;
+    int pageLayout = 0;
+
     transient String fileName;
 }

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Orion Viewer is a pdf viewer for Nook Classic based on mupdf-->
+
+<!--Copyright (C) 2011  Michael Bogdanov-->
+
+<!--This program is free software: you can redistribute it and/or modify-->
+<!--it under the terms of the GNU General Public License as published by-->
+<!--the Free Software Foundation, either version 3 of the License, or-->
+<!--(at your option) any later version.-->
+
+<!--This program is distributed in the hope that it will be useful,-->
+<!--but WITHOUT ANY WARRANTY; without even the implied warranty of-->
+<!--MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the-->
+<!--GNU General Public License for more details.-->
+
+<!--You should have received a copy of the GNU General Public License-->
+<!--along with this program.  If not, see <http://www.gnu.org/licenses/>.-->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" android:orientation="vertical" android:gravity="center"
+            android:scrollbars="vertical">
+
+    <LinearLayout android:layout_height="fill_parent" android:orientation="vertical"
+                  android:layout_width="fill_parent" android:gravity="center">
+
+        <RadioGroup android:id="@+id/layoutGroup" android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="horizontal" android:gravity="center">
+
+            <RadioButton android:id="@+id/layout1"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"/>
+
+            <ImageButton android:id="@+id/ilayout1"
+                         android:layout_width="wrap_content" android:layout_height="wrap_content"
+                         android:src="@drawable/navigation1" android:layout_gravity="center"/>
+
+            <RadioButton android:id="@+id/layout2"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"/>
+
+            <ImageButton android:id="@+id/ilayout2"
+                         android:layout_width="wrap_content" android:layout_height="wrap_content"
+                         android:clickable="false"
+                         android:src="@drawable/navigation2"/>
+
+            <RadioButton android:id="@+id/layout3"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"/>
+
+            <ImageButton android:id="@+id/ilayout3"
+                         android:layout_width="wrap_content" android:layout_height="wrap_content"
+                         android:clickable="false"
+                         android:src="@drawable/navigation3"/>
+        </RadioGroup>
+
+
+        <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
+                      android:layout_width="fill_parent" android:gravity="center">
+
+
+            <RadioGroup android:id="@+id/directionGroup" android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:gravity="center"
+                        android:layout_gravity="left|center_vertical" android:layout_weight="0.2" >
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content" android:id="@+id/zoom_picker_message"
+                          android:text="Navigation:" android:textSize="20px" android:layout_marginRight="20.0px" android:layout_gravity="left|center_vertical"/>
+
+                <RadioButton android:id="@+id/direction1"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content" android:text="A, B, C, D" android:layout_marginRight="10.0px"/>
+
+
+                <RadioButton android:id="@+id/direction2"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content" android:text="A, C, B, D"/>
+            </RadioGroup>
+
+            <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
+                          android:layout_width="fill_parent" android:gravity="center" android:layout_weight="0.8">
+                <ImageButton android:layout_width="60.0px" android:layout_height="60.0px"
+                             android:src="@drawable/revert" android:id="@+id/options_close"
+                             android:layout_gravity="right"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

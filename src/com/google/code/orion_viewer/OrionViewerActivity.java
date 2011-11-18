@@ -49,6 +49,8 @@ public class OrionViewerActivity extends Activity {
 
     private static final int FILE_SCREEN = 5;
 
+    private static final int OPTIONS = 6;
+
     private OrionView view;
 
     private ViewAnimator animator;
@@ -165,6 +167,8 @@ public class OrionViewerActivity extends Activity {
         initZoomScreen();
 
         initCropScreen();
+
+        initOptions();
     }
 
     public void updateLabels() {
@@ -172,6 +176,11 @@ public class OrionViewerActivity extends Activity {
         pageSeek.setMax(controller.getPageCount() - 1);
         zoomText = (TextView) findViewById(R.id.zoom_picker_message);
         zoomText.setText("" + controller.getZoomFactor());
+
+        int did = controller.getDirection();
+        int lid = controller.getLayout();
+        ((RadioGroup) findViewById(R.id.layoutGroup)).check(lid == 0 ? R.id.layout1 : lid == 1 ? R.id.layout2 : R.id.layout3);
+        ((RadioGroup) findViewById(R.id.directionGroup)).check(did == 0 ? R.id.direction1 : R.id.direction2);
     }
 
     protected void onNewIntent(Intent intent) {
@@ -222,6 +231,10 @@ public class OrionViewerActivity extends Activity {
                 public void pageChanged(final int newPage, final int pageCount) {
                     TextView tv = (TextView) findViewById(R.id.page_number_view);
                     tv.setText(newPage + 1 + "/" + pageCount);
+
+                    if (animator.getDisplayedChild() == PAGE_SCREEN) {
+                        pageSeek.setProgress(newPage);
+                    }
                 }
             });
             controller.drawPage();
@@ -297,6 +310,21 @@ public class OrionViewerActivity extends Activity {
             }
         });
     }
+
+
+    public void initOptions() {
+        ImageButton close = (ImageButton) findViewById(R.id.options_close);
+        close.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                int did = ((RadioGroup) findViewById(R.id.directionGroup)).getCheckedRadioButtonId();
+                int lid = ((RadioGroup) findViewById(R.id.layoutGroup)).getCheckedRadioButtonId();
+                controller.setDirectionAndLayout(did == R.id.direction1 ? 0 : 1, lid == R.id.layout1 ? 0 : lid == R.id.layout2 ? 1 : 2);
+                //main menu
+                animator.setDisplayedChild(MAIN_SCREEN);
+            }
+        });
+    }
+
 
 
     public void initCropScreen() {
@@ -471,6 +499,13 @@ public class OrionViewerActivity extends Activity {
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 animator.setDisplayedChild(MAIN_SCREEN);
+            }
+        });
+
+        btn = (ImageButton) findViewById(R.id.options);
+        btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                animator.setDisplayedChild(OPTIONS);
             }
         });
 
