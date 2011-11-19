@@ -148,15 +148,13 @@
         </LinearLayout>
 
         <!--border crop screen-->
-        <LinearLayout android:id="@+id/crop_menu"
-                      android:layout_height="wrap_content" android:orientation="horizontal"
-                      android:scrollbars="horizontal"
+        <LinearLayout android:layout_height="fill_parent" android:orientation="horizontal"
                       android:layout_width="fill_parent" android:gravity="center">
 
 
             <ListView android:id="@+id/crop_borders"
                     android:layout_width="300.0px"
-                                  android:layout_height="wrap_content"/>
+                                  android:layout_height="fill_parent"/>
 
 
             <ImageButton android:layout_width="66.0px" android:layout_height="66.0px"
