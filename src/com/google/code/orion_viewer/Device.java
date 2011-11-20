@@ -27,6 +27,12 @@ import android.view.KeyEvent;
  */
 public interface Device {
 
+    final int NEXT = 1;
+
+    final int PREV = -1;
+
+    final int ESC = 10;
+
     void updateTitle(String title);
 
     boolean onKeyDown(int keyCode, KeyEvent event, OperationHolder operation);
@@ -40,4 +46,6 @@ public interface Device {
     void onUserInteraction();
 
     void updatePageNumber(int current, int max);
+
+    void flush();
 }

@@ -94,17 +94,17 @@ public class NookDevice implements Device {
         switch (keyCode) {
             case NOOK_PAGE_UP_KEY_LEFT:
             case NOOK_PAGE_UP_KEY_RIGHT:
-                holder.value = -1;
+                holder.value = PREV;
                 break;
             case NOOK_PAGE_DOWN_KEY_LEFT:
             case NOOK_PAGE_DOWN_KEY_RIGHT:
-                holder.value = 1;
+                holder.value = NEXT;
                 break;
             case NOOK_PAGE_UP_SWIPE:
-                holder.value = -1;
+                holder.value = PREV;
                 break;
             case NOOK_PAGE_DOWN_SWIPE:
-                holder.value = 1;
+                holder.value = NEXT;
                 break;
             default:
                 return false;
@@ -135,4 +135,7 @@ public class NookDevice implements Device {
         }
     }
 
+    public void flush() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

@@ -43,7 +43,7 @@ public class Controller {
 
     private List<DocumentViewListener> listeners = new ArrayList<DocumentViewListener>();
 
-    public Controller(Activity activity, DocumentWrapper doc, LayoutStrategy layout, OrionView view) {
+    public Controller(OrionViewerActivity activity, DocumentWrapper doc, LayoutStrategy layout, OrionView view) {
         this.doc = doc;
         this.layout = layout;
         this.view = view;
