@@ -54,7 +54,7 @@ public class OrionViewerActivity extends Activity {
 
     private static final String GLOBAL_OPTIONS_FILE = "OrionViewer.options";
 
-    private static final int CROP_RESTRICTION = -10;
+    private static final int CROP_RESTRICTION = -20;
 
     private OrionView view;
 
