@@ -1,0 +1,5 @@
+
+===== 0.16.0 (Nov 26, 2011) =====
+
+* FileManager keeps last opened folder on start
+* Recent opened files view added to FileManager
