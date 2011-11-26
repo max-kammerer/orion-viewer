@@ -1,5 +1,7 @@
-
 ===== 0.16.0 (Nov 26, 2011) =====
 
-* FileManager keeps last opened folder on start
-* Recent opened files view added to FileManager
+* FileManager keeps last opened folder on startup
+* Recently opened files view added to FileManager
+* Fixed issue with refreshing crop screen
+* Added Russian localization
+* Added negative cropping (add additional borders)
