@@ -26,6 +26,7 @@ import android.view.KeyEvent;
 import com.google.code.orion_viewer.Device;
 import com.google.code.orion_viewer.OperationHolder;
 import com.google.code.orion_viewer.OrionViewerActivity;
+import com.google.code.orion_viewer.R;
 
 /**
  * User: mike
@@ -137,5 +138,13 @@ public class NookDevice implements Device {
 
     public void flush() {
         //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public int getLayoutId() {
+        return R.layout.main;
+    }
+
+    public String getDefaultDirectory() {
+        return "/system/media/sdcard";
     }
 }

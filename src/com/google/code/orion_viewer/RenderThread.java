@@ -19,10 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.PixelFormat;
-import android.graphics.Point;
+import android.graphics.*;
 import android.os.AsyncTask;
 import android.os.Debug;
 import android.util.DisplayMetrics;
@@ -69,10 +66,10 @@ public class RenderThread extends Thread {
 
     private boolean paused;
 
-    private Activity activity;
+    private OrionViewerActivity activity;
 
 
-    public RenderThread(Activity activity, OrionView view, LayoutStrategy layout, DocumentWrapper doc) {
+    public RenderThread(OrionViewerActivity activity, OrionView view, LayoutStrategy layout, DocumentWrapper doc) {
         this.view = view;
         this.layout = layout;
         this.doc = doc;
@@ -103,7 +100,7 @@ public class RenderThread extends Thread {
                 break;
         }
 
-        //System.out.println("PixelFormat is " +  manager.getDefaultDisplay().getPixelFormat());
+        System.out.println("PixelFormat is " +  manager.getDefaultDisplay().getPixelFormat());
     }
 
     public void invalidateCache() {
@@ -260,6 +257,12 @@ public class RenderThread extends Thread {
 
                     Date date = new Date();
                     cacheCanvas.setBitmap(bitmap);
+
+//                    Paint p = new Paint();
+//                    ColorFilter filter = new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+//                    p.setColorFilter(filter);
+//                     p.setRasterizer()
+
                     cacheCanvas.drawBitmap(data, 0, width, 0, 0, width, height, true, null);
                     Date date2 = new Date();
                     Log.d(Common.LOGTAG, "Drawing bitmap in cache " + 0.001 * (date2.getTime() - date.getTime()) + " s");
@@ -279,6 +282,7 @@ public class RenderThread extends Thread {
                     public void run() {
                         view.setData(bitmap, mutex);
                         view.invalidate();
+                        activity.getDevice().flush();
                     }
                 });
 

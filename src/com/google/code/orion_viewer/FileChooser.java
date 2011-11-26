@@ -29,10 +29,10 @@ import java.io.FilenameFilter;
 import java.util.*;
 
 /**
-* User: mike
-* Date: 19.10.11
-* Time: 13:02
-*/
+ * User: mike
+ * Date: 19.10.11
+ * Time: 13:02
+ */
 public class FileChooser extends ArrayAdapter {
 
     private List currentList;
@@ -43,14 +43,24 @@ public class FileChooser extends ArrayAdapter {
 
     private FilenameFilter filter = new FilenameFilter() {
         public boolean accept(File dir, String filename) {
-            return new File(dir, filename).isDirectory() || filename.toLowerCase().endsWith(".pdf");
+            if (new File(dir, filename).isDirectory()) {
+                return true;
+            }
+            String name = filename.toLowerCase();
+            return name.endsWith(".pdf") /*|| name.endsWith("djvu") || name.endsWith("djv")*/;
         }
     };
 
-    public FileChooser(Context context, File folder) {
+    public FileChooser(Context context, String folder) {
         super(context, R.layout.file, R.id.fileName);
         currentList = new ArrayList();
-        changeFolder(folder);
+        changeFolder(new File(folder));
+    }
+
+    public FileChooser(Context context, List<GlobalOptions.RecentEntry> enties) {
+        super(context, R.layout.file, R.id.fileName);
+        currentList = new ArrayList();
+        currentList.addAll(enties);
     }
 
     public void changeFolder(File file) {
@@ -86,16 +96,27 @@ public class FileChooser extends ArrayAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-           convertView = super.getView(position, convertView, parent);
+        convertView = super.getView(position, convertView, parent);
+        Object item = getItem(position);
+        boolean isDirectory = false;
+        String name = item.toString();
+        if (item != null) {
+            if (item instanceof File) {
+                File data = (File) getItem(position);
+                isDirectory = data.isDirectory();
+                name = data.getName();
+            } else if (item instanceof GlobalOptions.RecentEntry) {
+                name = ((GlobalOptions.RecentEntry) item).getLastPathElement();
+            }
 
-           File data = (File)getItem(position);
-           if (data != null) {
-               ImageView fileIcon = (ImageView) convertView.findViewById(R.id.fileImage);
-               fileIcon.setImageResource(data.isDirectory() ? R.drawable.folder : R.drawable.book);
-               TextView fileName = (TextView) convertView.findViewById(R.id.fileName);
-               fileName.setText(data.getName());
-           }
-           return convertView;
+
+            ImageView fileIcon = (ImageView) convertView.findViewById(R.id.fileImage);
+            fileIcon.setImageResource(isDirectory ? R.drawable.folder : R.drawable.book);
+            TextView fileName = (TextView) convertView.findViewById(R.id.fileName);
+            fileName.setText(name);
+        }
+
+        return convertView;
     }
 
     public Object getItem(int position) {

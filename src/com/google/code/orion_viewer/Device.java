@@ -48,4 +48,8 @@ public interface Device {
     void updatePageNumber(int current, int max);
 
     void flush();
+
+    public int getLayoutId();
+
+    public String getDefaultDirectory();
 }
