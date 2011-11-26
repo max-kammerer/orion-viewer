@@ -14,7 +14,6 @@ public class MuPDFCore
 	}
 
 	/* Readable members */
-	public int pageNum;
 	public int numPages;
     public int lastPage = -1;
 
@@ -34,7 +33,6 @@ public class MuPDFCore
 		if (numPages <= 0) {
 			throw new Exception("Failed to open " + filename);
 		}
-		pageNum = 0;
 	}
 
 	private synchronized void gotoPage(int page) {
@@ -49,7 +47,6 @@ public class MuPDFCore
 
             Date date2 = new Date();
 
-            this.pageNum = page;
             lastPage = page;
             Log.d(Common.LOGTAG, "Change page time " + page + " = " + 0.001 * (date2.getTime() - date.getTime()));
         }
