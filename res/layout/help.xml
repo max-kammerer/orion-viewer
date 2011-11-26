@@ -37,7 +37,7 @@
                     android:src="@drawable/zoom"/>
             <TextView android:textSize="20sp"
                      android:layout_width="fill_parent" android:layout_height="wrap_content"
-                    android:text="Open zoom dialog. Zero zoom value means zooming by width."
+                    android:text="@string/zoom"
                     android:layout_gravity="center_vertical"
                     android:gravity="left"/>
         </TableRow>
@@ -48,7 +48,7 @@
                     android:src="@drawable/rotate"/>
 
             <TextView  android:layout_width="fill_parent" android:layout_height="wrap_content" android:textSize="20sp"
-                    android:text="Rotates document to the left. Long click rotates to the right."
+                    android:text="@string/rotation"
                     android:layout_gravity="center_vertical"
                     android:gravity="left"/>
         </TableRow>
@@ -59,7 +59,7 @@
                     android:src="@drawable/crop"/>
 
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="20sp"
-                    android:text="Opens borders crop dialog. Long click for plus or minus in this dialog changes crop value for 30."
+                    android:text="@string/crop"
                     android:layout_gravity="center_vertical"
                     android:gravity="left"/>
         </TableRow>
@@ -70,7 +70,7 @@
                     android:src="@drawable/next"/>
 
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="20sp"
-                    android:text="Go to next page. On long click opens page chooser dialog."
+                    android:text="@string/next_page"
                     android:layout_gravity="center_vertical"
                     android:gravity="left"/>
         </TableRow>
@@ -81,18 +81,7 @@
                     android:src="@drawable/prev"/>
 
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="20sp"
-                    android:text="Go to prev page. On long click opens page chooser dialog."
-                    android:layout_gravity="center_vertical"
-                    android:gravity="left"/>
-        </TableRow>
-
-        <TableRow>
-            <ImageView android:layout_column="0"
-                    android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:src="@drawable/revert"/>
-
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="20sp"
-                    android:text="Save changes and go to main page."
+                    android:text="@string/prev_page"
                     android:layout_gravity="center_vertical"
                     android:gravity="left"/>
         </TableRow>
@@ -103,7 +92,18 @@
                     android:src="@drawable/view"/>
 
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="20sp"
-                    android:text="Preview current changes."
+                    android:text="@string/apply"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="left"/>
+        </TableRow>
+
+        <TableRow>
+            <ImageView android:layout_column="0"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:src="@drawable/revert"/>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="20sp"
+                    android:text="@string/escape"
                     android:layout_gravity="center_vertical"
                     android:gravity="left"/>
         </TableRow>
