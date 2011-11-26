@@ -183,6 +183,13 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         return false;
     }
 
+    public void getMargins(int [] margins) {
+        margins[0] = leftMargin;
+        margins[1] = rightMargin;
+        margins[2] = topMargin;
+        margins[3] = bottomMargin;
+    }
+
     public int getRotation() {
         return rotation;
     }

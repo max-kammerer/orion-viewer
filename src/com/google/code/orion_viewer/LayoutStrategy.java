@@ -43,6 +43,8 @@ public interface LayoutStrategy {
 
     boolean changeMargins(int leftMargin, int topMargin, int rightMargin, int bottomMargin);
 
+    void getMargins(int [] cropMargins);
+
     void init(LastPageInfo info);
 
     void serialize(LastPageInfo info);

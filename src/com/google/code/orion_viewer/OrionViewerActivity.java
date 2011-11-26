@@ -50,9 +50,11 @@ public class OrionViewerActivity extends Activity {
 
     private static final int FILE_SCREEN = 5;
 
-    private static final int OPTIONS = 6;
+    private static final int OPTIONS_SCREEN = 6;
 
     private static final String GLOBAL_OPTIONS_FILE = "OrionViewer.options";
+
+    private static final int CROP_RESTRICTION = -10;
 
     private OrionView view;
 
@@ -72,7 +74,7 @@ public class OrionViewerActivity extends Activity {
     private LastPageInfo pageInfo;
 
     //left, right, top, bottom
-    private int [] cropBorders;
+    private int [] cropBorders = new int[4];
 
     private Controller controller;
 
@@ -101,8 +103,6 @@ public class OrionViewerActivity extends Activity {
         onNewIntent(getIntent());
 
         initButtons();
-
-        cropBorders = new int[4];
 
         //page chooser
         pageSeek = (SeekBar) findViewById(R.id.page_picker_seeker);
@@ -143,7 +143,7 @@ public class OrionViewerActivity extends Activity {
 
         closePagePeeker.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                controller.drawPage(Integer.valueOf(pageNumberText.getText().toString()) - 1);
+                //controller.drawPage(Integer.valueOf(pageNumberText.getText().toString()) - 1);
                 //main menu
                 animator.setDisplayedChild(MAIN_SCREEN);
             }
@@ -227,7 +227,16 @@ public class OrionViewerActivity extends Activity {
         pageSeek.setMax(controller.getPageCount() - 1);
         zoomText = (TextView) findViewById(R.id.zoom_picker_message);
         zoomText.setText(controller.getZoomFactor() + "%");
+        updateOptions();
+        updateCrops();
+    }
 
+    public void updateCrops() {
+        controller.getMargins(cropBorders);
+        ((ArrayAdapter)((ListView)findViewById(R.id.crop_borders)).getAdapter()).notifyDataSetChanged();
+    }
+
+    public void updateOptions() {
         int did = controller.getDirection();
         int lid = controller.getLayout();
         ((RadioGroup) findViewById(R.id.layoutGroup)).check(lid == 0 ? R.id.layout1 : lid == 1 ? R.id.layout2 : R.id.layout3);
@@ -354,7 +363,7 @@ public class OrionViewerActivity extends Activity {
         ImageButton closeZoomPeeker = (ImageButton) findViewById(R.id.zoom_picker_close);
         closeZoomPeeker.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                controller.changeZoom(zoomSeek.getProgress());
+                //controller.changeZoom(zoomSeek.getProgress());
                 //main menu
                 animator.setDisplayedChild(MAIN_SCREEN);
             }
@@ -373,11 +382,21 @@ public class OrionViewerActivity extends Activity {
         ImageButton close = (ImageButton) findViewById(R.id.options_close);
         close.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+//                int did = ((RadioGroup) findViewById(R.id.directionGroup)).getCheckedRadioButtonId();
+//                int lid = ((RadioGroup) findViewById(R.id.layoutGroup)).getCheckedRadioButtonId();
+//                controller.setDirectionAndLayout(did == R.id.direction1 ? 0 : 1, lid == R.id.layout1 ? 0 : lid == R.id.layout2 ? 1 : 2);
+                //main menu
+                animator.setDisplayedChild(MAIN_SCREEN);
+            }
+        });
+
+
+        ImageButton view = (ImageButton) findViewById(R.id.options_apply);
+        view.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
                 int did = ((RadioGroup) findViewById(R.id.directionGroup)).getCheckedRadioButtonId();
                 int lid = ((RadioGroup) findViewById(R.id.layoutGroup)).getCheckedRadioButtonId();
                 controller.setDirectionAndLayout(did == R.id.direction1 ? 0 : 1, lid == R.id.layout1 ? 0 : lid == R.id.layout2 ? 1 : 2);
-                //main menu
-                animator.setDisplayedChild(MAIN_SCREEN);
             }
         });
     }
@@ -424,7 +443,7 @@ public class OrionViewerActivity extends Activity {
         close.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //main menu
-                controller.changeMargins(cropBorders[0], cropBorders[2], cropBorders[1], cropBorders[3]);
+                //controller.changeMargins(cropBorders[0], cropBorders[2], cropBorders[1], cropBorders[3]);
                 animator.setDisplayedChild(MAIN_SCREEN);
             }
         });
@@ -434,7 +453,7 @@ public class OrionViewerActivity extends Activity {
         minus.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //main menu
-                if (cropBorders[cropIndex] != 0) {
+                if (cropBorders[cropIndex] != CROP_RESTRICTION) {
                     cropBorders[cropIndex] = cropBorders[cropIndex] - 1;
                     text.setText("" + cropBorders[cropIndex]);
                 }
@@ -444,8 +463,8 @@ public class OrionViewerActivity extends Activity {
         minus.setOnLongClickListener(new View.OnLongClickListener() {
             public boolean onLongClick(View v) {
                 cropBorders[cropIndex] = cropBorders[cropIndex] - 30;
-                if (cropBorders[cropIndex] < 0) {
-                    cropBorders[cropIndex] = 0;
+                if (cropBorders[cropIndex] < CROP_RESTRICTION) {
+                    cropBorders[cropIndex] = CROP_RESTRICTION;
                 }
                 text.setText("" + cropBorders[cropIndex]);
                 return true;
@@ -534,6 +553,7 @@ public class OrionViewerActivity extends Activity {
         btn = (ImageButton) findViewById(R.id.crop_menu);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                updateCrops();
                 animator.setDisplayedChild(CROP_SCREEN);
             }
         });
@@ -555,7 +575,8 @@ public class OrionViewerActivity extends Activity {
         btn = (ImageButton) findViewById(R.id.options);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                animator.setDisplayedChild(OPTIONS);
+                updateOptions();
+                animator.setDisplayedChild(OPTIONS_SCREEN);
             }
         });
 

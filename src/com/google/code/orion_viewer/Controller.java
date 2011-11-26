@@ -99,6 +99,10 @@ public class Controller {
         }
     }
 
+    public void getMargins(int [] cropMargins) {
+        layout.getMargins(cropMargins);
+    }
+
     public void destroy() {
         if (renderer != null) {
             renderer.stopRenderer();
