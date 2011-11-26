@@ -1,0 +1,2 @@
+New BSD License
+see http://code.google.com/p/themissingtabwidget/
