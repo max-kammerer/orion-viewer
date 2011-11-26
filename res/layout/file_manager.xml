@@ -1,0 +1,27 @@
+<pl.polidea.customwidget.TheMissingTabHost xmlns:android="http://schemas.android.com/apk/res/android"
+                                           android:id="@+id/tabhost"
+                                           android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+    <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent"
+                  android:layout_height="fill_parent">
+
+        <pl.polidea.customwidget.TheMissingTabWidget android:id="@android:id/tabs" android:layout_width="wrap_content"
+                                                     android:layout_height="wrap_content" />
+
+
+        <FrameLayout android:id="@android:id/tabcontent"
+                     android:layout_width="fill_parent"
+                     android:layout_height="fill_parent" android:layout_weight="0.2">
+
+            <ListView android:id="@+id/file_chooser"
+                      android:layout_width="fill_parent"
+                      android:layout_height="fill_parent"/>
+
+            <ListView android:id="@+id/recent_list"
+                      android:layout_width="fill_parent"
+                      android:layout_height="fill_parent"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+</pl.polidea.customwidget.TheMissingTabHost>
