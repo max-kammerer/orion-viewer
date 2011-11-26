@@ -8,5 +8,5 @@
     <string name="prev_page">Go to prev page. On long click opens page chooser screen.</string>
 
     <string name="apply">Apply current options.</string>
-    <string name="escape">Return/Escape</string>
+    <string name="escape">Return/Escape.</string>
 </resources>
