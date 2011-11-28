@@ -68,6 +68,15 @@ public class FileChooser extends ArrayAdapter {
         this.notifyDataSetChanged();
     }
 
+    public void goToParent() {
+        if (!currentList.isEmpty()) {
+            if (currentList.get(0) == parentFile) {
+                changeFolder(parentFile);
+            }
+        }
+        this.notifyDataSetChanged();
+    }
+
     private void changeFolderInner(File file) {
         currentList.clear();
 

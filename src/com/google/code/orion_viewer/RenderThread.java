@@ -100,7 +100,7 @@ public class RenderThread extends Thread {
                 break;
         }
 
-        System.out.println("PixelFormat is " +  manager.getDefaultDisplay().getPixelFormat());
+        Common.d("PixelFormat is " +  manager.getDefaultDisplay().getPixelFormat());
     }
 
     public void invalidateCache() {
@@ -109,7 +109,7 @@ public class RenderThread extends Thread {
                 CacheInfo next = iterator.next();
                 next.setValid(false);
             }
-            Log.d(Common.LOGTAG, "Cache invalidated");
+            Common.d("Cache invalidated");
         }
     }
 
@@ -124,9 +124,9 @@ public class RenderThread extends Thread {
                     next.bitmap = null;
                 }
 
-                Log.d(Common.LOGTAG, "Allocated heap size " + (Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()));
+                Common.d("Allocated heap size " + (Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()));
                 cachedBitmaps.clear();
-                Log.d(Common.LOGTAG, "Cache is cleared!");
+                Common.d("Cache is cleared!");
             //}
 
 
@@ -144,9 +144,9 @@ public class RenderThread extends Thread {
     }
 
     public void onPause() {
-        synchronized (this) {
-            paused = true;
-        }
+//        synchronized (this) {
+//            paused = true;
+//        }
     }
 
     public void onResume() {
@@ -162,7 +162,7 @@ public class RenderThread extends Thread {
 
         while (!stopped) {
 
-            Log.d(Common.LOGTAG, "Allocated heap size " + (Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()));
+            Common.d("Allocated heap size " + (Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()));
 
             int rotation = 0;
             CacheInfo resultEntry = null;
@@ -171,7 +171,7 @@ public class RenderThread extends Thread {
                     try {
                         wait();
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        Common.d(e);
                     }
                     continue;
                 }
@@ -188,16 +188,16 @@ public class RenderThread extends Thread {
 
                 if (currentPosition == null || futureIndex > FUTURE_COUNT) {
                     try {
-                        Log.d(Common.LOGTAG, "WAITING...");
+                        Common.d("WAITING...");
                         wait();
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        Common.d(e);
                     }
-                    Log.d(Common.LOGTAG, "AWAKENING!!!");
+                    Common.d("AWAKENING!!!");
                     continue;
                 } else {
                     //will cache next page
-                    Log.d(Common.LOGTAG, "Future index is " + futureIndex);
+                    Common.d("Future index is " + futureIndex);
                     if (futureIndex != 0) {
                         curPos = curPos.clone();
                         layout.nextPage(curPos);
@@ -238,7 +238,7 @@ public class RenderThread extends Thread {
                     }
                     if (bitmap == null) {
 //                        try {
-                            Log.d(Common.LOGTAG, "CREATING BITMAP!!!");
+                            Common.d("CREATING BITMAP!!!");
                             bitmap = Bitmap.createBitmap(SimpleLayoutStrategy.WIDTH, SimpleLayoutStrategy.HEIGHT, bitmapConfig);
 //                        } catch (OutOfMemoryError e) {
 //                            System.gc();
@@ -252,7 +252,7 @@ public class RenderThread extends Thread {
                     }
 
                     Point leftTopCorner = layout.convertToPoint(curPos);
-                    System.out.println("point " + leftTopCorner.x + " " + leftTopCorner.y);
+                    Common.d("Point " + leftTopCorner.x + " " + leftTopCorner.y);
                     int [] data = doc.renderPage(curPos.pageNumber, curPos.docZoom, width, height, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + width, leftTopCorner.y + height);
 
                     Date date = new Date();
@@ -265,7 +265,7 @@ public class RenderThread extends Thread {
 
                     cacheCanvas.drawBitmap(data, 0, width, 0, 0, width, height, true, null);
                     Date date2 = new Date();
-                    Log.d(Common.LOGTAG, "Drawing bitmap in cache " + 0.001 * (date2.getTime() - date.getTime()) + " s");
+                    Common.d("Drawing bitmap in cache " + 0.001 * (date2.getTime() - date.getTime()) + " s");
 
                     resultEntry = new CacheInfo(curPos, bitmap);
 
@@ -275,21 +275,21 @@ public class RenderThread extends Thread {
 
             if (futureIndex == 0) {
                 final Bitmap bitmap = resultEntry.bitmap;
-                Log.d(Common.LOGTAG, "Sending Bitmap");
+                Common.d("Sending Bitmap");
                 final CountDownLatch  mutex = new CountDownLatch(1);
 
                 activity.runOnUiThread(new Runnable() {
                     public void run() {
                         view.setData(bitmap, mutex);
-                        view.invalidate();
+                        //view.invalidate();
                         activity.getDevice().flush();
                     }
                 });
 
                 try {
-                    mutex.await(2, TimeUnit.SECONDS);
+                    mutex.await(1, TimeUnit.SECONDS);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Common.d(e);
                 }
             }
             futureIndex++;

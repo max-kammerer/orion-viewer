@@ -37,7 +37,7 @@ public class MuPDFCore
 
 	private synchronized void gotoPage(int page) {
         if(lastPage != page) {
-            Log.d(Common.LOGTAG, "Changing page...");
+            Common.d("Changing page...");
             Date date = new Date();
             if (page > numPages-1)
                 page = numPages-1;
@@ -48,12 +48,12 @@ public class MuPDFCore
             Date date2 = new Date();
 
             lastPage = page;
-            Log.d(Common.LOGTAG, "Change page time " + page + " = " + 0.001 * (date2.getTime() - date.getTime()));
+            Common.d("Change page time " + page + " = " + 0.001 * (date2.getTime() - date.getTime()));
         }
 	}
 
     public synchronized int[] renderPage(int n, float zoom, int left, int top, int w, int h) {
-        Log.d(Common.LOGTAG, "MuPDFCore start rendering...");
+        Common.d("MuPDFCore starts rendering...");
         gotoPage(n);
 
         Date date = new Date();
@@ -61,7 +61,7 @@ public class MuPDFCore
         int [] res =  drawPage((int) (zoom * 1000), w, h, left, top, w, h);
 
         Date date2 = new Date();
-        Log.d(Common.LOGTAG, "MuPDFCore render time " + n + " = " + 0.001 * (date2.getTime() - date.getTime()) + " s");
+        Common.d("MuPDFCore render time takes " + n + " = " + 0.001 * (date2.getTime() - date.getTime()) + " s");
         return res;
     }
 

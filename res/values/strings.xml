@@ -19,4 +19,5 @@
 
 <resources>
     <string name="app_name">Orion Viewer</string>
+    <string name="version_name">0.16.2</string>
 </resources>

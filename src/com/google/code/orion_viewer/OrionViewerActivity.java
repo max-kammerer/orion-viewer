@@ -30,7 +30,7 @@ import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
-import com.google.code.orion_viewer.device.NookDevice;
+import com.google.code.orion_viewer.device.AlexDevice;
 import com.google.code.orion_viewer.pdf.PdfDocument;
 import pl.polidea.customwidget.TheMissingTabHost;
 
@@ -78,7 +78,7 @@ public class OrionViewerActivity extends Activity {
 
     private Controller controller;
 
-    private Device device = new NookDevice(this);
+    private Device device = new AlexDevice(this);
 
     private OperationHolder operation = new OperationHolder();
 
@@ -99,8 +99,6 @@ public class OrionViewerActivity extends Activity {
         animator = (ViewAnimator) findViewById(R.id.viewanim);
 
         initFileManager();
-
-        onNewIntent(getIntent());
 
         initButtons();
 
@@ -161,6 +159,10 @@ public class OrionViewerActivity extends Activity {
         initCropScreen();
 
         initOptions();
+
+        initHelp();
+
+        onNewIntent(getIntent());
     }
 
     private void initFileManager() {
@@ -177,6 +179,24 @@ public class OrionViewerActivity extends Activity {
             TheMissingTabHost.TheMissingTabSpec recent = host.newTabSpec("recentTab");
             recent.setContent(R.id.recent_list);
             recent.setIndicator("", getResources().getDrawable(R.drawable.book));
+            host.addTab(recent);
+            host.setCurrentTab(0);
+    }
+
+
+    private void initHelp() {
+            TheMissingTabHost host = (TheMissingTabHost) findViewById(R.id.helptab);
+
+            host.setup();
+
+//            host.addView(view);
+            TheMissingTabHost.TheMissingTabSpec spec = host.newTabSpec("general_help");
+            spec.setContent(R.id.general_help);
+            spec.setIndicator("", getResources().getDrawable(R.drawable.help));
+            host.addTab(spec);
+            TheMissingTabHost.TheMissingTabSpec recent = host.newTabSpec("app_info");
+            recent.setContent(R.id.app_info);
+            recent.setIndicator("", getResources().getDrawable(R.drawable.info));
             host.addTab(recent);
             host.setCurrentTab(0);
     }
@@ -203,9 +223,9 @@ public class OrionViewerActivity extends Activity {
                 defaultDirectory = globalOptions.getDefaultDirectory();
             } else {
                 defaultDirectory = globalOptions.getDefaultDirectory();
-                System.out.println(defaultDirectory);
             }
         }
+        Common.d("defaultDirectory" + defaultDirectory);
 
         view.setAdapter(new FileChooser(this, defaultDirectory));
 
@@ -244,9 +264,9 @@ public class OrionViewerActivity extends Activity {
     }
 
     protected void onNewIntent(Intent intent) {
-        Log.d(Common.LOGTAG,  "Runtime.getRuntime().totalMemory() = " + Runtime.getRuntime().totalMemory());
-        Log.d(Common.LOGTAG, "Debug.getNativeHeapSize() = " + Debug.getNativeHeapSize());
-
+        Common.d( "Runtime.getRuntime().totalMemory() = " + Runtime.getRuntime().totalMemory());
+        Common.d("Debug.getNativeHeapSize() = " + Debug.getNativeHeapSize());
+        Common.stopLogger();
         if (controller != null) {
             controller.destroy();
             controller = null;
@@ -266,6 +286,7 @@ public class OrionViewerActivity extends Activity {
 
     public void openFile(String filePath) {
         DocumentWrapper doc = null;
+        Common.startLogger(filePath + ".trace");
         try {
             if (filePath.toLowerCase().endsWith("pdf")) {
                 doc = new PdfDocument(filePath);
@@ -305,6 +326,7 @@ public class OrionViewerActivity extends Activity {
             controller.drawPage();
             globalOptions.addRecentEntry(new GlobalOptions.RecentEntry(new File(filePath).getAbsolutePath()));
         } catch (Exception e) {
+            Common.d(e);
             if (doc != null) {
                 doc.destroy();
             }
@@ -572,6 +594,13 @@ public class OrionViewerActivity extends Activity {
             }
         });
 
+        btn = (ImageButton) findViewById(R.id.info_close);
+        btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                animator.setDisplayedChild(MAIN_SCREEN);
+            }
+        });
+
         btn = (ImageButton) findViewById(R.id.options);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -588,7 +617,7 @@ public class OrionViewerActivity extends Activity {
         super.onResume();
         device.onResume();
         if (controller != null) {
-            Log.d(Common.LOGTAG, "on RESUME");
+            Common.d("onResume");
             controller.onStart();
             controller.drawPage();
         }
@@ -596,7 +625,8 @@ public class OrionViewerActivity extends Activity {
 
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(Common.LOGTAG, "on DESTROY");
+        Common.d("onDestroy");
+        Common.stopLogger();
         if (controller != null) {
             controller.destroy();
         }
@@ -619,6 +649,17 @@ public class OrionViewerActivity extends Activity {
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (animator.getDisplayedChild() == FILE_SCREEN) {
+                if (((TheMissingTabHost)findViewById(R.id.tabhost)).getCurrentTab() == 0) {
+                    ((FileChooser)((ListView)findViewById(R.id.file_chooser)).getAdapter()).goToParent();
+                }
+            } else if (animator.getDisplayedChild() != MAIN_SCREEN) {
+                animator.setDisplayedChild(MAIN_SCREEN);
+            }
+            return true;
+        }
+
         if (device.onKeyDown(keyCode, event, operation)) {
             changePage(operation.value);
             return true;
@@ -660,7 +701,7 @@ public class OrionViewerActivity extends Activity {
 
         public void onScanCompleted(String path, Uri arg1) {
             if (path.equals(mPath)) {
-                Log.d(Common.LOGTAG, "On Scan completed" + path + "  " + arg1);
+                Common.d("onScanCompleted " + path + "  " + arg1);
                 String[] columns = {
                     "title", "authors"
                 };
@@ -694,7 +735,7 @@ public class OrionViewerActivity extends Activity {
                 try {
                     inp.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Common.d(e);
                 }
             }
         }
@@ -715,10 +756,13 @@ public class OrionViewerActivity extends Activity {
                 try {
                     out.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Common.d(e);
                 }
             }
         }
     }
 
+    public OrionView getView() {
+        return view;
+    }
 }

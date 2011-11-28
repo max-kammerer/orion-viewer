@@ -23,10 +23,7 @@ import android.content.Intent;
 import android.os.PowerManager;
 import android.util.Log;
 import android.view.KeyEvent;
-import com.google.code.orion_viewer.Device;
-import com.google.code.orion_viewer.OperationHolder;
-import com.google.code.orion_viewer.OrionViewerActivity;
-import com.google.code.orion_viewer.R;
+import com.google.code.orion_viewer.*;
 
 /**
  * User: mike
@@ -73,7 +70,7 @@ public class NookDevice implements Device {
             intent.putExtra(key, title);
             activity.sendBroadcast(intent);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Common.d(ex);
         }
     }
 
@@ -86,7 +83,7 @@ public class NookDevice implements Device {
             msg.putExtra("max", max);
             activity.sendBroadcast(msg);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Common.d(ex);
         }
     }
 
@@ -137,7 +134,7 @@ public class NookDevice implements Device {
     }
 
     public void flush() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        activity.getView().invalidate();
     }
 
     public int getLayoutId() {

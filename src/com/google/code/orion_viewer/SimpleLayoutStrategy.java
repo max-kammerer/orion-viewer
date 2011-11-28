@@ -73,7 +73,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
                 }
             }
         }
-        Log.d(Common.LOGTAG, "new cellX = " + info.cellX + " cellY =" + info.cellY);
+        Common.d("new cellX = " + info.cellX + " cellY = " + info.cellY);
     }
 
     public void prevPage(LayoutPosition info) {
@@ -105,7 +105,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
             }
         }
 
-        Log.d(Common.LOGTAG, "new cellX = " + info.cellX + " maxX =" + info.cellY);
+        Common.d("new cellX = " + info.cellX + " maxX = " + info.cellY);
     }
     public boolean changeRotation(int rotation) {
         if (this.rotation != rotation) {

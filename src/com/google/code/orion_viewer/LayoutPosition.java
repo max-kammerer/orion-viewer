@@ -53,7 +53,7 @@ public class LayoutPosition implements Cloneable {
         try {
             return (LayoutPosition) super.clone();
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            Common.d(e);
         }
         return null;//todo new
     }

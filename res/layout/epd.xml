@@ -12,7 +12,9 @@
                                        android:color="#FFFFFF"
                                        android:gravity="center"
                                        android:layout_width="600px"
-                                       android:layout_height="760px" />
+                                       android:layout_height="760px"
+        android:focusable="false"
+		android:scrollbars="none"/>
 
 </LinearLayout>
 </merge>
