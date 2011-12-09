@@ -18,7 +18,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
 import android.graphics.Point;
-import android.util.Log;
 
 /**
  * User: mike
@@ -27,9 +26,9 @@ import android.util.Log;
  */
 public class SimpleLayoutStrategy implements LayoutStrategy {
 
-    public static final int WIDTH = 600;
+    public int viewWidth;
 
-    public static final int HEIGHT = 760;
+    public int viewHeight;
 
     public static final int OVERLAP = 15;
 
@@ -45,8 +44,10 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     private int layout;
 
-    public SimpleLayoutStrategy(DocumentWrapper doc) {
+    public SimpleLayoutStrategy(DocumentWrapper doc, int viewWidth, int viewHeight) {
         this.doc = doc;
+        this.viewWidth = viewWidth;
+        this.viewHeight = viewHeight;
     }
 
     public void nextPage(LayoutPosition info) {
@@ -122,8 +123,8 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         info.pageWidth = pinfo.width - leftMargin - rightMargin;
         info.pageHeight = pinfo.height - topMargin - bottomMargin;
 
-        info.pieceWidth = rotation == 0 ? WIDTH : HEIGHT;
-        info.pieceHeight = rotation == 0 ? HEIGHT : WIDTH;
+        info.pieceWidth = rotation == 0 ? viewWidth : viewHeight;
+        info.pieceHeight = rotation == 0 ? viewHeight : viewWidth;
 
         //calc zoom
         if (zoom <= 0) {
@@ -231,4 +232,11 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         return direction;
     }
 
+    public int getViewWidth() {
+        return viewWidth;
+    }
+
+    public int getViewHeight() {
+        return viewHeight;
+    }
 }

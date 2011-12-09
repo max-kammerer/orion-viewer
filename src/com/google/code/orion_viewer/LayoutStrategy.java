@@ -58,4 +58,8 @@ public interface LayoutStrategy {
     boolean changeNavigation(int navigation);
 
     boolean changePageLayout(int navigation);
+
+    int getViewWidth();
+
+    int getViewHeight();
 }

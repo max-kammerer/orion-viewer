@@ -4,7 +4,7 @@
     android:id="@+id/epdLayout"
     android:orientation="vertical"
     android:layout_width="600px"
-    android:layout_height="760px"
+    android:layout_height="772px"
     android:visibility="invisible">
 
 <com.google.code.orion_viewer.OrionView android:id="@+id/view"
@@ -12,9 +12,50 @@
                                        android:color="#FFFFFF"
                                        android:gravity="center"
                                        android:layout_width="600px"
-                                       android:layout_height="760px"
+                                       android:layout_height="772px"
         android:focusable="false"
 		android:scrollbars="none"/>
 
+	<LinearLayout
+		android:id="@+id/statusbar"
+		android:layout_width="336px"
+		android:layout_height="28px"
+		android:background="#888"
+		android:orientation="horizontal"
+        android:paddingTop="1px"
+
+	>
+	<LinearLayout
+		android:id="@+id/statusbar"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:background="#ccc"
+		android:orientation="horizontal"
+            android:paddingLeft="12px">
+
+        <TextView
+			android:id="@+id/statusbar_title"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:singleLine="true"
+			android:textColor="#000000"
+			android:textSize="16px"
+            android:layout_gravity="left"
+            android:layout_weight="0.8"
+            />
+
+		<TextView
+			android:id="@+id/statusbar_page_number"
+            android:layout_weight="0.2"
+			android:layout_width="100px"
+			android:layout_height="fill_parent"
+			android:singleLine="true"
+			android:textColor="#000000"
+			android:textSize="16px"
+            android:layout_gravity="right"
+            android:gravity="right"
+            />
+	</LinearLayout>
+        </LinearLayout>
 </LinearLayout>
 </merge>

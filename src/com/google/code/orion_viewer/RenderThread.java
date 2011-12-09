@@ -17,13 +17,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.*;
-import android.os.AsyncTask;
 import android.os.Debug;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.WindowManager;
 
 import java.util.Date;
@@ -73,7 +70,7 @@ public class RenderThread extends Thread {
         this.view = view;
         this.layout = layout;
         this.doc = doc;
-        rotationShift = 80;
+        rotationShift = (layout.getViewHeight() - layout.getViewWidth()) / 2;
         this.activity = activity;
 
         WindowManager manager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
@@ -239,7 +236,7 @@ public class RenderThread extends Thread {
                     if (bitmap == null) {
 //                        try {
                             Common.d("CREATING BITMAP!!!");
-                            bitmap = Bitmap.createBitmap(SimpleLayoutStrategy.WIDTH, SimpleLayoutStrategy.HEIGHT, bitmapConfig);
+                            bitmap = Bitmap.createBitmap(layout.getViewWidth(), layout.getViewHeight(), bitmapConfig);
 //                        } catch (OutOfMemoryError e) {
 //                            System.gc();
 //                        }

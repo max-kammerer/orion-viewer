@@ -52,4 +52,8 @@ public interface Device {
     public int getLayoutId();
 
     public String getDefaultDirectory();
+
+    public int getViewWidth();
+
+    public int getViewHeight();
 }

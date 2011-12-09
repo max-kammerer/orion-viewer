@@ -1,20 +1,11 @@
 package com.google.code.orion_viewer.device;
 
 import android.app.Activity;
-import android.content.Context;
-import android.os.Handler;
-import android.os.PowerManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
 import android.widget.EpdRender;
-import com.google.code.orion_viewer.Common;
-import com.google.code.orion_viewer.Device;
-import com.google.code.orion_viewer.OperationHolder;
-import com.google.code.orion_viewer.R;
-
-import java.security.Key;
+import android.widget.TextView;
+import com.google.code.orion_viewer.*;
 
 /**
  * User: mike
@@ -23,9 +14,15 @@ import java.security.Key;
  */
 public class AlexDevice extends EpdRender implements Device {
 
-    private Activity activity;
+    private OrionViewerActivity activity;
 
-    public AlexDevice(Activity activity) {
+    private TextView pageTextView;
+
+    private TextView titleTextView;
+
+    private String title;
+
+    public AlexDevice(OrionViewerActivity activity) {
         this.activity = activity;
     }
 
@@ -40,6 +37,8 @@ public class AlexDevice extends EpdRender implements Device {
 
     public void onCreate(Activity activity) {
         bindLayout((ViewGroup) activity.findViewById(R.id.epdLayout));
+        pageTextView = (TextView) activity.findViewById(R.id.statusbar_page_number);
+        titleTextView = (TextView) activity.findViewById(R.id.statusbar_title);
     }
 
     public void onPause() {
@@ -58,14 +57,18 @@ public class AlexDevice extends EpdRender implements Device {
     }
 
     public void updatePageNumber(int current, int max) {
-
+        pageTextView.setText(current + "/" + max);
+        //flushed on page draw
     }
 
     public void updateTitle(String title) {
-
+        this.title = title;
+        if (this.title == null) {
+            this.title = "";
+        }
+        titleTextView.setText(title);
     }
 
-    @Override
     public void executeKeyEvent(int what, int arg1, int arg2) {
         Common.d("Execute key event " + Thread.currentThread().getName() + Thread.currentThread().getId());
         super.executeKeyEvent(what, arg1, arg2);
@@ -87,9 +90,9 @@ public class AlexDevice extends EpdRender implements Device {
        // return true;
     }
 
+    //called from ui thread
     public void flush() {
         updateEpdView();
-        //handler.sendEmptyMessage(0);
     }
 
     public int getLayoutId() {
@@ -100,5 +103,12 @@ public class AlexDevice extends EpdRender implements Device {
         return "/sdcard/ebooks";
     }
 
+    public int getViewWidth() {
+        return activity.getView().getLayoutParams().width;
+    }
+
+    public int getViewHeight() {
+        return activity.getView().getLayoutParams().height;
+    }
 
 }

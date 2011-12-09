@@ -75,16 +75,16 @@ public class NookDevice implements Device {
     }
 
     public void updatePageNumber(int current, int max) {
-        try {
-            Intent msg = new Intent(UPDATE_STATUSBAR);
-            msg.putExtra(STATUSBAR_ICON, 7);
-            msg.putExtra(STATUSBAR_ACTION, 1);
-            msg.putExtra("current", current);
-            msg.putExtra("max", max);
-            activity.sendBroadcast(msg);
-        } catch (Exception ex) {
-            Common.d(ex);
-        }
+//        try {
+//            Intent msg = new Intent(UPDATE_STATUSBAR);
+//            msg.putExtra(STATUSBAR_ICON, 7);
+//            msg.putExtra(STATUSBAR_ACTION, 1);
+//            msg.putExtra("current", current);
+    //            msg.putExtra("max", max);
+//            activity.sendBroadcast(msg);
+//        } catch (Exception ex) {
+//            Common.d(ex);
+//        }
     }
 
 
@@ -114,6 +114,9 @@ public class NookDevice implements Device {
         PowerManager power = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
         screenLock = power.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "OrionViewer" + hashCode());
         screenLock.setReferenceCounted(false);
+
+
+        Common.d("View size " + this.activity.getView().getLayoutParams().width + " " + this.activity.getView().getHeight());
     }
 
     public void onPause() {
@@ -143,5 +146,13 @@ public class NookDevice implements Device {
 
     public String getDefaultDirectory() {
         return "/system/media/sdcard";
+    }
+
+    public int getViewWidth() {
+        return activity.getView().getLayoutParams().width;
+    }
+
+    public int getViewHeight() {
+        return activity.getView().getLayoutParams().height;
     }
 }

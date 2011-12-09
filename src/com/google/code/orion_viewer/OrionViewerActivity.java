@@ -31,6 +31,7 @@ import android.view.*;
 import android.widget.*;
 
 import com.google.code.orion_viewer.device.AlexDevice;
+import com.google.code.orion_viewer.device.NookDevice;
 import com.google.code.orion_viewer.pdf.PdfDocument;
 import pl.polidea.customwidget.TheMissingTabHost;
 
@@ -92,9 +93,10 @@ public class OrionViewerActivity extends Activity {
 
         loadGlobalOptions();
 
-        device.onCreate(this);
-
+        //init view before device.onCreate
         view = (OrionView) findViewById(R.id.view);
+
+        device.onCreate(this);
 
         animator = (ViewAnimator) findViewById(R.id.viewanim);
 
@@ -296,7 +298,7 @@ public class OrionViewerActivity extends Activity {
 
             new MediaScannerNotifier(filePath);
 
-            LayoutStrategy str = new SimpleLayoutStrategy(doc);
+            LayoutStrategy str = new SimpleLayoutStrategy(doc, device.getViewWidth(), device.getViewHeight());
 
             int idx = filePath.lastIndexOf('/');
             String fileData = filePath.substring(idx + 1) + ".userData";
@@ -321,9 +323,14 @@ public class OrionViewerActivity extends Activity {
                     if (animator.getDisplayedChild() == PAGE_SCREEN) {
                         pageSeek.setProgress(newPage);
                     }
+                    device.updatePageNumber(newPage + 1, pageCount);
                 }
             });
             controller.drawPage();
+
+            String title = filePath.substring(idx + 1);
+            title = title.substring(0, title.lastIndexOf("."));
+            device.updateTitle(title);
             globalOptions.addRecentEntry(new GlobalOptions.RecentEntry(new File(filePath).getAbsolutePath()));
         } catch (Exception e) {
             Common.d(e);
@@ -709,7 +716,9 @@ public class OrionViewerActivity extends Activity {
                 dbCursor.moveToFirst();
                 m_Handler.post(new Runnable() {
                     public void run() {
-                        device.updateTitle(dbCursor.getString(0));
+                        String title = dbCursor.getString(0);
+                        Common.d("onScanTitle " + title);
+                        device.updateTitle(title);
                         dbCursor.close();
                     }
                 });
