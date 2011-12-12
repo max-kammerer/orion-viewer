@@ -199,6 +199,11 @@
 
                     <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
                                       android:textSize="20sp"
+                                      android:text="DjVuLibre"
+                                      android:gravity="center" />
+
+                    <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                                      android:textSize="20sp"
                                       android:text="apdfViewer for nook"
                                       android:gravity="center" />
 

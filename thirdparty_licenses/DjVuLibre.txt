@@ -1,0 +1,5 @@
+http://djvu.sourceforge.net/
+
+The DjVu Reference Library 3.5 was released by Lizardtech under the GNU General Public License version 2.
+DjVuLibre-3.5 was developed by Leon Bottou and others as a "Derived Work" of the DjVu Reference Library 3.5.
+As such, it is also subject to the GNU General Public License version 2.

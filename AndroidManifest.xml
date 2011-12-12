@@ -30,16 +30,14 @@
             <intent-filter>
                 <action android:name="com.bravo.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
-                <data android:scheme="file"/>
-                <data android:scheme="content"/>
-                <data android:mimeType="application/pdf"/>
-            </intent-filter>
-
-            <intent-filter>
-                <action android:name="com.bravo.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:scheme="file"/>
-                <data android:mimeType="application/djvu"/>
+                <data android:scheme="file" android:mimeType="application/pdf"/>
+                <data android:scheme="content" android:mimeType="application/pdf"/>
+                <data android:scheme="file" android:mimeType="application/djvu"/>
+                <data android:scheme="content" android:mimeType="application/djvu"/>
+                <data android:scheme="file" android:mimeType="image/x-djvu"/>
+                <data android:scheme="content" android:mimeType="image/x-djvu"/>
+                <data android:scheme="file" android:mimeType="image/vnd.djvu"/>
+                <data android:scheme="content" android:mimeType="image/vnd.djvu"/>
             </intent-filter>
 
             <intent-filter>
@@ -54,11 +52,36 @@
                 <data android:scheme="content"/>
 				<data android:mimeType="application/pdf"/>
 			</intent-filter>
+
             <intent-filter>
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<data android:host="" android:scheme="file" />
 				<data android:pathPattern=".*\\.pdf" />
+			</intent-filter>
+
+            <intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="file"/>
+                <data android:scheme="content"/>
+				<data android:mimeType="application/djvu"/>
+			</intent-filter>
+
+            <intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="file"/>
+                <data android:scheme="content"/>
+				<data android:mimeType="image/vnd.djvu"/>
+                <data android:mimeType="image/x-djvu"/>
+			</intent-filter>
+
+            <intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:host="" android:scheme="file" />
+				<data android:pathPattern=".*\\.djvu" />
 			</intent-filter>
         </activity>
     </application>

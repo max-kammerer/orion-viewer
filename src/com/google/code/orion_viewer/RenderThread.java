@@ -252,15 +252,16 @@ public class RenderThread extends Thread {
                     Common.d("Point " + leftTopCorner.x + " " + leftTopCorner.y);
                     int [] data = doc.renderPage(curPos.pageNumber, curPos.docZoom, width, height, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + width, leftTopCorner.y + height);
 
+                    Common.d("data rendered  " + data .length);
                     Date date = new Date();
                     cacheCanvas.setBitmap(bitmap);
 
 //                    Paint p = new Paint();
-//                    ColorFilter filter = new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+//                    ColorFilter filter = new PorterDuffColor=Filter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
 //                    p.setColorFilter(filter);
 //                     p.setRasterizer()
 
-                    cacheCanvas.drawBitmap(data, 0, width, 0, 0, width, height, true, null);
+                    cacheCanvas.drawBitmap(data, 0, width, 0, 0, width, height, false, null);
                     Date date2 = new Date();
                     Common.d("Drawing bitmap in cache " + 0.001 * (date2.getTime() - date.getTime()) + " s");
 

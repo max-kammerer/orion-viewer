@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,7 @@ public class FileChooser extends ArrayAdapter {
                 return true;
             }
             String name = filename.toLowerCase();
-            return name.endsWith(".pdf") /*|| name.endsWith("djvu") || name.endsWith("djv")*/;
+            return name.endsWith(".pdf") || name.endsWith("djvu") || name.endsWith("djv");
         }
     };
 
@@ -120,7 +121,7 @@ public class FileChooser extends ArrayAdapter {
 
 
             ImageView fileIcon = (ImageView) convertView.findViewById(R.id.fileImage);
-            fileIcon.setImageResource(isDirectory ? R.drawable.folder : R.drawable.book);
+            fileIcon.setImageResource(isDirectory ? R.drawable.folder : name.toLowerCase().endsWith("pdf") ? R.drawable.book : R.drawable.djvu);
             TextView fileName = (TextView) convertView.findViewById(R.id.fileName);
             fileName.setText(name);
         }

@@ -30,8 +30,9 @@ import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
-import com.google.code.orion_viewer.device.AlexDevice;
+
 import com.google.code.orion_viewer.device.NookDevice;
+import com.google.code.orion_viewer.djvu.DjvuDocument;
 import com.google.code.orion_viewer.pdf.PdfDocument;
 import pl.polidea.customwidget.TheMissingTabHost;
 
@@ -79,7 +80,7 @@ public class OrionViewerActivity extends Activity {
 
     private Controller controller;
 
-    private Device device = new AlexDevice(this);
+    private Device device = new NookDevice(this);
 
     private OperationHolder operation = new OperationHolder();
 
@@ -211,6 +212,11 @@ public class OrionViewerActivity extends Activity {
                 if (file.isDirectory()) {
                     ((FileChooser) parent.getAdapter()).changeFolder(file);
                 } else {
+//                    Intent in = new Intent(Intent.ACTION_VIEW);
+//                    in.setData(Uri.fromFile(file));
+//                    in.addCategory(Intent.CATEGORY_DEFAULT);
+//                    startActivity(in);
+
                     openFile(file.getAbsolutePath());
                     globalOptions.setLastOpenedDirectory(file.getParentFile().getAbsolutePath());
                 }
@@ -276,7 +282,7 @@ public class OrionViewerActivity extends Activity {
 
         if (intent.getData() != null) {
             Uri uri = intent.getData();
-
+            Common.d("File URI  = " + uri.toString());
             String file = uri.getPath();
 
             openFile(file);
@@ -288,12 +294,13 @@ public class OrionViewerActivity extends Activity {
 
     public void openFile(String filePath) {
         DocumentWrapper doc = null;
+        Common.d("File URI  = " + filePath);
         Common.startLogger(filePath + ".trace");
         try {
             if (filePath.toLowerCase().endsWith("pdf")) {
                 doc = new PdfDocument(filePath);
             } else {
-//                doc = new DjvuDocument(file);
+                doc = new DjvuDocument(filePath);
             }
 
             new MediaScannerNotifier(filePath);
