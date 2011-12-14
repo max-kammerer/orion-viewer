@@ -640,10 +640,7 @@ public class OrionViewerActivity extends Activity {
                 animator.setDisplayedChild(OPTIONS_SCREEN);
             }
         });
-
     }
-
-
 
     protected void onResume() {
         super.onResume();

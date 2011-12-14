@@ -280,7 +280,7 @@ public class RenderThread extends Thread {
                     public void run() {
                         view.setData(bitmap, mutex);
                         //view.invalidate();
-                        activity.getDevice().flush();
+                        activity.getDevice().flushBitmap();
                     }
                 });
 

@@ -91,7 +91,7 @@ public class AlexDevice extends EpdRender implements Device {
     }
 
     //called from ui thread
-    public void flush() {
+    public void flushBitmap() {
         updateEpdView();
     }
 
@@ -100,7 +100,7 @@ public class AlexDevice extends EpdRender implements Device {
     }
 
     public String getDefaultDirectory() {
-        return "/sdcard/ebooks";
+        return "ebooks";
     }
 
     public int getViewWidth() {

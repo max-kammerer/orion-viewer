@@ -64,9 +64,10 @@ public class FileChooser extends ArrayAdapter {
         currentList.addAll(enties);
     }
 
-    public void changeFolder(File file) {
-        changeFolderInner(file);
+    public File changeFolder(File file) {
+        File newFolder = changeFolderInner(file);
         this.notifyDataSetChanged();
+        return newFolder;
     }
 
     public void goToParent() {
@@ -78,7 +79,7 @@ public class FileChooser extends ArrayAdapter {
         this.notifyDataSetChanged();
     }
 
-    private void changeFolderInner(File file) {
+    private File changeFolderInner(File file) {
         currentList.clear();
 
         if (file == parentFile) {
@@ -89,8 +90,10 @@ public class FileChooser extends ArrayAdapter {
         if (file.getParent() != null) {
             currentList.add(parentFile);
         }
-
-        currentList.addAll(Arrays.asList(file.listFiles(filter)));
+        File [] files = file.listFiles(filter);
+        if (files != null) {
+            currentList.addAll(Arrays.asList(files));
+        }
         Collections.sort(currentList, new Comparator<File>() {
             public int compare(File f1, File f2) {
                 if (f1.isDirectory() && !f2.isDirectory() || !f1.isDirectory() && f2.isDirectory()) {
@@ -99,6 +102,7 @@ public class FileChooser extends ArrayAdapter {
                 return f1.getName().compareTo(f2.getName());
             }
         });
+        return currentFolder;
     }
 
     public int getCount() {

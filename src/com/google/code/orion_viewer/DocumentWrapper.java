@@ -34,4 +34,5 @@ public interface DocumentWrapper {
 
 	void destroy();
 
+    String getTitle();
 }

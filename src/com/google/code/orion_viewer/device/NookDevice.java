@@ -136,7 +136,7 @@ public class NookDevice implements Device {
         }
     }
 
-    public void flush() {
+    public void flushBitmap() {
         activity.getView().invalidate();
     }
 
@@ -145,7 +145,7 @@ public class NookDevice implements Device {
     }
 
     public String getDefaultDirectory() {
-        return "/system/media/sdcard";
+        return "my documents";
     }
 
     public int getViewWidth() {

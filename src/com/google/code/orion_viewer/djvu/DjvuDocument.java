@@ -63,10 +63,9 @@ public class DjvuDocument implements DocumentWrapper {
             Date date2 = new Date();
 
             lastPage = page;
-            Common.d("Change page time " + page + " = " + 0.001 * (date2.getTime() - date.getTime()));
+            Common.d("Page changing takes " + page + " = " + 0.001 * (date2.getTime() - date.getTime()));
         }
 	}
-
 
     private static native int openFile(String filename);
 	private static native void gotoPageInternal(int localActionPageNum);
@@ -76,4 +75,8 @@ public class DjvuDocument implements DocumentWrapper {
 			int patchX, int patchY,
 			int patchW, int patchH);
 	public static native void destroying();
+
+    public String getTitle() {
+        return null;
+    }
 }

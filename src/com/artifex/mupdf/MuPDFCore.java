@@ -1,7 +1,7 @@
 package com.artifex.mupdf;
 
-import android.util.Log;
 import com.google.code.orion_viewer.Common;
+import com.google.code.orion_viewer.DocInfo;
 import com.google.code.orion_viewer.PageInfo;
 
 import java.util.Date;
@@ -16,9 +16,10 @@ public class MuPDFCore
 	/* Readable members */
 	public int numPages;
     public int lastPage = -1;
+    private DocInfo info;
 
 	/* The native functions */
-	private static native int openFile(String filename);
+	private static native void openFile(String filename, DocInfo info);
 	private static native void gotoPageInternal(int localActionPageNum);
 	private static native int getPageInfo(int pageNum, PageInfo info);
 
@@ -29,7 +30,9 @@ public class MuPDFCore
 
 	public MuPDFCore(String filename) throws Exception
 	{
-		numPages = openFile(filename);
+        info = new DocInfo();
+        openFile(filename, info);
+        numPages = info.pageCount;
 		if (numPages <= 0) {
 			throw new Exception("Failed to open " + filename);
 		}
@@ -48,18 +51,16 @@ public class MuPDFCore
             Date date2 = new Date();
 
             lastPage = page;
-            Common.d("Change page time " + page + " = " + 0.001 * (date2.getTime() - date.getTime()));
+            Common.d("Page changing takes " + page + " = " + 0.001 * (date2.getTime() - date.getTime()) + " s");
         }
 	}
 
     public synchronized int[] renderPage(int n, float zoom, int left, int top, int w, int h) {
-        Common.d("MuPDFCore starts rendering...");
         gotoPage(n);
 
+        Common.d("MuPDFCore starts rendering...");
         Date date = new Date();
-
         int [] res =  drawPage((int) (zoom * 1000), w, h, left, top, w, h);
-
         Date date2 = new Date();
         Common.d("MuPDFCore render time takes " + n + " = " + 0.001 * (date2.getTime() - date.getTime()) + " s");
         return res;
@@ -81,5 +82,9 @@ public class MuPDFCore
 
     public void freeMemory() {
         onDestroy();
+    }
+
+    public DocInfo getInfo() {
+        return info;
     }
 }

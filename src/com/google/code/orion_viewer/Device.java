@@ -47,7 +47,7 @@ public interface Device {
 
     void updatePageNumber(int current, int max);
 
-    void flush();
+    void flushBitmap();
 
     public int getLayoutId();
 
