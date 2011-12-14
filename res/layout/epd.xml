@@ -8,7 +8,7 @@
     android:visibility="invisible">
 
 <com.google.code.orion_viewer.OrionView android:id="@+id/view"
-                                       android:textColor="#FFFFFF"
+                                       android:textColor="#000000"
                                        android:color="#FFFFFF"
                                        android:gravity="center"
                                        android:layout_width="600px"
