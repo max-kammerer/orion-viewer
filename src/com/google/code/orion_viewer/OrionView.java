@@ -37,6 +37,10 @@ public class OrionView extends View {
 
     private CountDownLatch latch;
 
+    private String path;
+
+    private Paint pathColor = new Paint();
+
 //    private int rotation;
 
     public OrionView(Context context) {
@@ -69,6 +73,10 @@ public class OrionView extends View {
             canvas.drawBitmap(bitmap, 0, 0, null);
 
             Common.d("OrionView drawn bitmap at " + 0.001f * (new Date().getTime() - start) + " s");
+        } else if (path != null) {
+            //pathColor.setColor(Color.BLACK);
+            pathColor.setTextSize(22);
+            canvas.drawText(path, 10, 20, pathColor);
         }
         if (latch != null) {
             latch.countDown();
@@ -78,6 +86,12 @@ public class OrionView extends View {
     public void setData(Bitmap bitmap, CountDownLatch latch) {
         this.bitmap = bitmap;
         this.latch = latch;
+        path = null;
+    }
+
+    public void setPath(String path) {
+        bitmap = null;
+        this.path = path;
     }
 
 //   public void setRotation(int rotation) {
@@ -85,5 +99,7 @@ public class OrionView extends View {
 //        this.rotation = rotation;
 //       }
 //    }
+
+
 
 }

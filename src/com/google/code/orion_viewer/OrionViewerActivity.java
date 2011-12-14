@@ -31,6 +31,7 @@ import android.view.*;
 import android.widget.*;
 
 
+
 import com.google.code.orion_viewer.device.NookDevice;
 import com.google.code.orion_viewer.djvu.DjvuDocument;
 import com.google.code.orion_viewer.pdf.PdfDocument;
@@ -210,7 +211,8 @@ public class OrionViewerActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 File file = (File) parent.getItemAtPosition(position);
                 if (file.isDirectory()) {
-                    ((FileChooser) parent.getAdapter()).changeFolder(file);
+                    File newFolder = ((FileChooser) parent.getAdapter()).changeFolder(file);
+                    redrawPath(newFolder.getAbsolutePath());
                 } else {
 //                    Intent in = new Intent(Intent.ACTION_VIEW);
 //                    in.setData(Uri.fromFile(file));
@@ -227,15 +229,20 @@ public class OrionViewerActivity extends Activity {
         if (globalOptions.getLastOpenedDirectory() != null && new File(globalOptions.getLastOpenedDirectory()).exists()) {
             defaultDirectory = globalOptions.getLastOpenedDirectory();
         } else {
-            if (new File(device.getDefaultDirectory()).exists()) {
-                defaultDirectory = globalOptions.getDefaultDirectory();
+            if (new File("/sdcard/" + device.getDefaultDirectory()).exists()) {
+                defaultDirectory = "/sdcard/" + device.getDefaultDirectory();
+            } else if (new File("/system/media/sdcard/" + device.getDefaultDirectory()).exists()) {
+                defaultDirectory = "/system/media/sdcard/" + device.getDefaultDirectory();
             } else {
                 defaultDirectory = globalOptions.getDefaultDirectory();
             }
         }
-        Common.d("defaultDirectory" + defaultDirectory);
+        Common.d("defaultDirectory is " + defaultDirectory);
 
         view.setAdapter(new FileChooser(this, defaultDirectory));
+
+        //redraw path
+        redrawPath(defaultDirectory);
 
         ListView recent = (ListView) findViewById(R.id.recent_list);
         recent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -247,6 +254,11 @@ public class OrionViewerActivity extends Activity {
             }
         });
         recent.setAdapter(new FileChooser(this, globalOptions.getRecentFiles()));
+    }
+
+    public void redrawPath(String path) {
+        getView().setPath(path);
+        device.flushBitmap();
     }
 
 
@@ -303,7 +315,7 @@ public class OrionViewerActivity extends Activity {
                 doc = new DjvuDocument(filePath);
             }
 
-            new MediaScannerNotifier(filePath);
+            //new MediaScannerNotifier(filePath);
 
             LayoutStrategy str = new SimpleLayoutStrategy(doc, device.getViewWidth(), device.getViewHeight());
 
@@ -335,8 +347,14 @@ public class OrionViewerActivity extends Activity {
             });
             controller.drawPage();
 
-            String title = filePath.substring(idx + 1);
-            title = title.substring(0, title.lastIndexOf("."));
+            String title = doc.getTitle();
+            if (title == null) {
+                title = filePath.substring(idx + 1);
+                title = title.substring(0, title.lastIndexOf("."));
+            } else {
+                title += "my";
+            }
+
             device.updateTitle(title);
             globalOptions.addRecentEntry(new GlobalOptions.RecentEntry(new File(filePath).getAbsolutePath()));
         } catch (Exception e) {
@@ -630,10 +648,13 @@ public class OrionViewerActivity extends Activity {
     protected void onResume() {
         super.onResume();
         device.onResume();
+        Common.d("onResume");
+
         if (controller != null) {
-            Common.d("onResume");
             controller.onStart();
             controller.drawPage();
+        } else {
+            device.flushBitmap();
         }
     }
 
@@ -691,48 +712,48 @@ public class OrionViewerActivity extends Activity {
         }
     }
 
-    class MediaScannerNotifier implements MediaScannerConnection.MediaScannerConnectionClient {
-        private MediaScannerConnection mConnection;
-        private String mPath;
-
-        public synchronized void scanFile(String path) {
-            if (path == null) { return; }
-            String mime = "ebook/";
-            String ext = path.substring(path.lastIndexOf(".") + 1).toLowerCase();
-            mime += ext;
-            mConnection.scanFile(path, mime);
-        }
-
-        public MediaScannerNotifier(String path) {
-            mConnection = new MediaScannerConnection(OrionViewerActivity.this, this);
-            mConnection.connect();
-            mPath = path;
-        }
-
-        public void onMediaScannerConnected() {
-            scanFile(mPath);
-        }
-
-        public void onScanCompleted(String path, Uri arg1) {
-            if (path.equals(mPath)) {
-                Common.d("onScanCompleted " + path + "  " + arg1);
-                String[] columns = {
-                    "title", "authors"
-                };
-                final Cursor dbCursor = getContentResolver().query(arg1, columns, null, null, null);
-                dbCursor.moveToFirst();
-                m_Handler.post(new Runnable() {
-                    public void run() {
-                        String title = dbCursor.getString(0);
-                        Common.d("onScanTitle " + title);
-                        device.updateTitle(title);
-                        dbCursor.close();
-                    }
-                });
-                mConnection.disconnect();
-            }
-        }
-    }
+//    class MediaScannerNotifier implements MediaScannerConnection.MediaScannerConnectionClient {
+//        private MediaScannerConnection mConnection;
+//        private String mPath;
+//
+//        public synchronized void scanFile(String path) {
+//            if (path == null) { return; }
+//            String mime = "ebook/";
+//            String ext = path.substring(path.lastIndexOf(".") + 1).toLowerCase();
+//            mime += ext;
+//            mConnection.scanFile(path, mime);
+//        }
+//
+//        public MediaScannerNotifier(String path) {
+//            mConnection = new MediaScannerConnection(OrionViewerActivity.this, this);
+//            mConnection.connect();
+//            mPath = path;
+//        }
+//
+//        public void onMediaScannerConnected() {
+//            scanFile(mPath);
+//        }
+//
+//        public void onScanCompleted(String path, Uri arg1) {
+//            if (path.equals(mPath)) {
+//                Common.d("onScanCompleted " + path + "  " + arg1);
+//                String[] columns = {
+//                    "title", "authors"
+//                };
+//                final Cursor dbCursor = getContentResolver().query(arg1, columns, null, null, null);
+//                dbCursor.moveToFirst();
+//                m_Handler.post(new Runnable() {
+//                    public void run() {
+//                        String title = dbCursor.getString(0);
+//                        Common.d("onScanTitle " + title);
+//                        device.updateTitle(title);
+//                        dbCursor.close();
+//                    }
+//                });
+//                mConnection.disconnect();
+//            }
+//        }
+//    }
 
     public Device getDevice() {
         return device;
