@@ -1,6 +1,7 @@
 package com.google.code.orion_viewer.device;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.widget.EpdRender;
@@ -13,6 +14,8 @@ import com.google.code.orion_viewer.*;
  * Time: 10:24
  */
 public class AlexDevice extends EpdRender implements Device {
+
+    private final static String ALEX_TITLE = "org.highscreen.launcher.UPDATE_TITLE";
 
     private OrionViewerActivity activity;
 
@@ -67,6 +70,15 @@ public class AlexDevice extends EpdRender implements Device {
             this.title = "";
         }
         titleTextView.setText(title);
+
+        try {
+            Intent intent = new Intent(ALEX_TITLE);
+            String key = "apptitle";
+            intent.putExtra(key, title);
+            activity.sendBroadcast(intent);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void executeKeyEvent(int what, int arg1, int arg2) {
@@ -91,8 +103,12 @@ public class AlexDevice extends EpdRender implements Device {
     }
 
     //called from ui thread
-    public void flushBitmap() {
-        updateEpdView();
+    public void flushBitmap(int delay) {
+        if (delay == 0) {
+            updateEpdView();
+        } else {
+            updateEpdViewDelay(delay);
+        }
     }
 
     public int getLayoutId() {

@@ -21,7 +21,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import com.google.code.orion_viewer.*;
 
@@ -136,7 +135,7 @@ public class NookDevice implements Device {
         }
     }
 
-    public void flushBitmap() {
+    public void flushBitmap(int delay) {
         activity.getView().invalidate();
     }
 

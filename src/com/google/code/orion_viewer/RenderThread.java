@@ -59,6 +59,10 @@ public class RenderThread extends Thread {
 
     private int rotationShift;
 
+    private int myWidth;
+
+    private int myHeigh;
+
     private boolean stopped;
 
     private boolean paused;
@@ -70,6 +74,8 @@ public class RenderThread extends Thread {
         this.view = view;
         this.layout = layout;
         this.doc = doc;
+        myWidth = layout.getViewWidth();
+        myHeigh = layout.getViewHeight();
         rotationShift = (layout.getViewHeight() - layout.getViewWidth()) / 2;
         this.activity = activity;
 
@@ -201,7 +207,7 @@ public class RenderThread extends Thread {
                     }
                 }
             }
-
+            Common.d("rotation = " + rotation);
             if (curPos != null) {
                 //try to find result in cache
                 for (Iterator<CacheInfo> iterator = cachedBitmaps.iterator(); iterator.hasNext(); ) {
@@ -244,7 +250,7 @@ public class RenderThread extends Thread {
 
                     cacheCanvas.setMatrix(null);
                     if (rotation != 0) {
-                        cacheCanvas.rotate(-rotation * 90, (view.getHeight()) / 2, view.getWidth() / 2);
+                        cacheCanvas.rotate(-rotation * 90, (myHeigh) / 2, myWidth / 2);
                         cacheCanvas.translate(-rotation * rotationShift, -rotation * rotationShift);
                     }
 
@@ -280,7 +286,7 @@ public class RenderThread extends Thread {
                     public void run() {
                         view.setData(bitmap, mutex);
                         //view.invalidate();
-                        activity.getDevice().flushBitmap();
+                        activity.getDevice().flushBitmap(0);
                     }
                 });
 

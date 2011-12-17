@@ -20,16 +20,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
-import android.os.Handler;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
-
 
 
 import com.google.code.orion_viewer.device.NookDevice;
@@ -57,7 +53,7 @@ public class OrionViewerActivity extends Activity {
 
     private static final String GLOBAL_OPTIONS_FILE = "OrionViewer.options";
 
-    private static final int CROP_RESTRICTION = -20;
+    private static final int CROP_RESTRICTION = -30;
 
     private OrionView view;
 
@@ -72,8 +68,6 @@ public class OrionViewerActivity extends Activity {
     private  TextView zoomText;
     // TextView m_name;
 
-    private Handler m_Handler = new Handler();
-
     private LastPageInfo pageInfo;
 
     //left, right, top, bottom
@@ -87,6 +81,7 @@ public class OrionViewerActivity extends Activity {
 
     private GlobalOptions globalOptions;
 
+    private Intent myIntent;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,7 +161,7 @@ public class OrionViewerActivity extends Activity {
 
         initHelp();
 
-        onNewIntent(getIntent());
+        myIntent = getIntent();
     }
 
     private void initFileManager() {
@@ -241,9 +236,6 @@ public class OrionViewerActivity extends Activity {
 
         view.setAdapter(new FileChooser(this, defaultDirectory));
 
-        //redraw path
-        redrawPath(defaultDirectory);
-
         ListView recent = (ListView) findViewById(R.id.recent_list);
         recent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -254,11 +246,13 @@ public class OrionViewerActivity extends Activity {
             }
         });
         recent.setAdapter(new FileChooser(this, globalOptions.getRecentFiles()));
+
+        getView().setPath(defaultDirectory);
     }
 
     public void redrawPath(String path) {
         getView().setPath(path);
-        device.flushBitmap();
+        device.flushBitmap(100);
     }
 
 
@@ -348,11 +342,9 @@ public class OrionViewerActivity extends Activity {
             controller.drawPage();
 
             String title = doc.getTitle();
-            if (title == null) {
+            if (title == null || "".equals(title)) {
                 title = filePath.substring(idx + 1);
                 title = title.substring(0, title.lastIndexOf("."));
-            } else {
-                title += "my";
             }
 
             device.updateTitle(title);
@@ -645,13 +637,19 @@ public class OrionViewerActivity extends Activity {
     protected void onResume() {
         super.onResume();
         device.onResume();
-        Common.d("onResume");
 
-        if (controller != null) {
-            controller.onStart();
-            controller.drawPage();
+        Common.d("onResume");
+        if (myIntent != null) {
+            //starting creation intent
+            onNewIntent(myIntent);
+            myIntent = null;
         } else {
-            device.flushBitmap();
+            if (controller != null) {
+                controller.onStart();
+                controller.drawPage();
+            } else {
+                device.flushBitmap(0);
+            }
         }
     }
 
@@ -708,49 +706,6 @@ public class OrionViewerActivity extends Activity {
             }
         }
     }
-
-//    class MediaScannerNotifier implements MediaScannerConnection.MediaScannerConnectionClient {
-//        private MediaScannerConnection mConnection;
-//        private String mPath;
-//
-//        public synchronized void scanFile(String path) {
-//            if (path == null) { return; }
-//            String mime = "ebook/";
-//            String ext = path.substring(path.lastIndexOf(".") + 1).toLowerCase();
-//            mime += ext;
-//            mConnection.scanFile(path, mime);
-//        }
-//
-//        public MediaScannerNotifier(String path) {
-//            mConnection = new MediaScannerConnection(OrionViewerActivity.this, this);
-//            mConnection.connect();
-//            mPath = path;
-//        }
-//
-//        public void onMediaScannerConnected() {
-//            scanFile(mPath);
-//        }
-//
-//        public void onScanCompleted(String path, Uri arg1) {
-//            if (path.equals(mPath)) {
-//                Common.d("onScanCompleted " + path + "  " + arg1);
-//                String[] columns = {
-//                    "title", "authors"
-//                };
-//                final Cursor dbCursor = getContentResolver().query(arg1, columns, null, null, null);
-//                dbCursor.moveToFirst();
-//                m_Handler.post(new Runnable() {
-//                    public void run() {
-//                        String title = dbCursor.getString(0);
-//                        Common.d("onScanTitle " + title);
-//                        device.updateTitle(title);
-//                        dbCursor.close();
-//                    }
-//                });
-//                mConnection.disconnect();
-//            }
-//        }
-//    }
 
     public Device getDevice() {
         return device;

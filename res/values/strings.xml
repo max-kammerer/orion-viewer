@@ -19,5 +19,5 @@
 
 <resources>
     <string name="app_name">Orion Viewer</string>
-    <string name="version_name">0.24.0</string>
+    <string name="version_name">0.24.1</string>
 </resources>

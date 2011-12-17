@@ -75,7 +75,7 @@ public class OrionView extends View {
             Common.d("OrionView drawn bitmap at " + 0.001f * (new Date().getTime() - start) + " s");
         } else if (path != null) {
             //pathColor.setColor(Color.BLACK);
-            pathColor.setTextSize(22);
+            pathColor.setTextSize(18);
             canvas.drawText(path, 10, 20, pathColor);
         }
         if (latch != null) {

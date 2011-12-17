@@ -47,6 +47,14 @@
                     <TableLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
                                  android:shrinkColumns="1">
 
+
+                        <TextView android:textSize="20sp"
+                                      android:layout_width="fill_parent" android:layout_height="wrap_content"
+                                      android:text="@string/general_usage"
+                                      android:layout_gravity="center_vertical"
+                                      android:gravity="left" android:paddingLeft="10px" android:paddingRight="10px"/>
+
+
                         <TableRow>
                             <ImageView android:layout_column="0"
                                        android:layout_width="wrap_content" android:layout_height="wrap_content"
