@@ -167,8 +167,8 @@
         <!--help screen-->
         <include layout="@layout/help"/>
 
-        <!--file chooser-->
-        <include layout="@layout/file_manager"/>
+        <!--&lt;!&ndash;file chooser&ndash;&gt;-->
+        <!--<include layout="@layout/file_manager"/>-->
 
 
         <!--options-->

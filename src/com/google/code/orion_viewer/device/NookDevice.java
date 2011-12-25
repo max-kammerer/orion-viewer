@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.PowerManager;
 import android.view.KeyEvent;
 import com.google.code.orion_viewer.*;
@@ -54,12 +55,12 @@ public class NookDevice implements Device {
 
     private PowerManager.WakeLock screenLock;
 
-    private OrionViewerActivity activity;
+    private OrionBaseActivity activity;
 
     private int DELAY = 600000;
 
-    public NookDevice(OrionViewerActivity activity) {
-        this.activity = activity;
+    public NookDevice() {
+
     }
 
     public void updateTitle(String title) {
@@ -109,13 +110,11 @@ public class NookDevice implements Device {
         return true;
     }
 
-    public void onCreate(Activity activity) {
+    public void onCreate(OrionBaseActivity activity) {
+        this.activity = activity;
         PowerManager power = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
         screenLock = power.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "OrionViewer" + hashCode());
         screenLock.setReferenceCounted(false);
-
-
-        Common.d("View size " + this.activity.getView().getLayoutParams().width + " " + this.activity.getView().getHeight());
     }
 
     public void onPause() {
@@ -136,7 +135,9 @@ public class NookDevice implements Device {
     }
 
     public void flushBitmap(int delay) {
-        activity.getView().invalidate();
+        if (activity.getView() != null) {
+            activity.getView().invalidate();
+        }
     }
 
     public int getLayoutId() {
@@ -153,5 +154,9 @@ public class NookDevice implements Device {
 
     public int getViewHeight() {
         return activity.getView().getLayoutParams().height;
+    }
+
+    public int getFileManagerLayoutId() {
+        return R.layout.nook_file_manager;
     }
 }

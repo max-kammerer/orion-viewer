@@ -28,14 +28,18 @@ import android.view.*;
 import android.widget.*;
 
 
-import com.google.code.orion_viewer.device.NookDevice;
 import com.google.code.orion_viewer.djvu.DjvuDocument;
 import com.google.code.orion_viewer.pdf.PdfDocument;
 import pl.polidea.customwidget.TheMissingTabHost;
 
 import java.io.*;
 
-public class OrionViewerActivity extends Activity {
+public class OrionViewerActivity extends OrionBaseActivity {
+
+    @Override
+    public void openContextMenu(View view) {
+        super.openContextMenu(view);    //To change body of overridden methods use File | Settings | File Templates.
+    }
 
     private static final int MAIN_SCREEN = 0;
 
@@ -47,11 +51,7 @@ public class OrionViewerActivity extends Activity {
 
     private static final int HELP_SCREEN = 4;
 
-    private static final int FILE_SCREEN = 5;
-
-    private static final int OPTIONS_SCREEN = 6;
-
-    private static final String GLOBAL_OPTIONS_FILE = "OrionViewer.options";
+    private static final int OPTIONS_SCREEN = 5;
 
     private static final int CROP_RESTRICTION = -30;
 
@@ -75,8 +75,6 @@ public class OrionViewerActivity extends Activity {
 
     private Controller controller;
 
-    private Device device = new NookDevice(this);
-
     private OperationHolder operation = new OperationHolder();
 
     private GlobalOptions globalOptions;
@@ -84,20 +82,18 @@ public class OrionViewerActivity extends Activity {
     private Intent myIntent;
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setContentView(device.getLayoutId());
         super.onCreate(savedInstanceState);
 
-        setContentView(device.getLayoutId());
+
+
 
         loadGlobalOptions();
 
         //init view before device.onCreate
         view = (OrionView) findViewById(R.id.view);
 
-        device.onCreate(this);
-
         animator = (ViewAnimator) findViewById(R.id.viewanim);
-
-        initFileManager();
 
         initButtons();
 
@@ -164,23 +160,6 @@ public class OrionViewerActivity extends Activity {
         myIntent = getIntent();
     }
 
-    private void initFileManager() {
-
-            TheMissingTabHost host = (TheMissingTabHost) findViewById(R.id.tabhost);
-
-            host.setup();
-
-//            host.addView(view);
-            TheMissingTabHost.TheMissingTabSpec spec = host.newTabSpec("fileTab");
-            spec.setContent(R.id.file_chooser);
-            spec.setIndicator("", getResources().getDrawable(R.drawable.folder));
-            host.addTab(spec);
-            TheMissingTabHost.TheMissingTabSpec recent = host.newTabSpec("recentTab");
-            recent.setContent(R.id.recent_list);
-            recent.setIndicator("", getResources().getDrawable(R.drawable.book));
-            host.addTab(recent);
-            host.setCurrentTab(0);
-    }
 
 
     private void initHelp() {
@@ -199,62 +178,6 @@ public class OrionViewerActivity extends Activity {
             host.addTab(recent);
             host.setCurrentTab(0);
     }
-
-    public void updateFileManager() {
-        ListView view = (ListView) findViewById(R.id.file_chooser);
-        view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                File file = (File) parent.getItemAtPosition(position);
-                if (file.isDirectory()) {
-                    File newFolder = ((FileChooser) parent.getAdapter()).changeFolder(file);
-                    redrawPath(newFolder.getAbsolutePath());
-                } else {
-//                    Intent in = new Intent(Intent.ACTION_VIEW);
-//                    in.setData(Uri.fromFile(file));
-//                    in.addCategory(Intent.CATEGORY_DEFAULT);
-//                    startActivity(in);
-
-                    openFile(file.getAbsolutePath());
-                    globalOptions.setLastOpenedDirectory(file.getParentFile().getAbsolutePath());
-                }
-            }
-        });
-
-        String defaultDirectory = null;
-        if (globalOptions.getLastOpenedDirectory() != null && new File(globalOptions.getLastOpenedDirectory()).exists()) {
-            defaultDirectory = globalOptions.getLastOpenedDirectory();
-        } else {
-            if (new File("/sdcard/" + device.getDefaultDirectory()).exists()) {
-                defaultDirectory = "/sdcard/" + device.getDefaultDirectory();
-            } else if (new File("/system/media/sdcard/" + device.getDefaultDirectory()).exists()) {
-                defaultDirectory = "/system/media/sdcard/" + device.getDefaultDirectory();
-            } else {
-                defaultDirectory = globalOptions.getDefaultDirectory();
-            }
-        }
-        Common.d("defaultDirectory is " + defaultDirectory);
-
-        view.setAdapter(new FileChooser(this, defaultDirectory));
-
-        ListView recent = (ListView) findViewById(R.id.recent_list);
-        recent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                GlobalOptions.RecentEntry entry = (GlobalOptions.RecentEntry) parent.getItemAtPosition(position);
-                if (new File(entry.getPath()).exists()) {
-                    openFile(entry.getPath());
-                }
-            }
-        });
-        recent.setAdapter(new FileChooser(this, globalOptions.getRecentFiles()));
-
-        getView().setPath(defaultDirectory);
-    }
-
-    public void redrawPath(String path) {
-        getView().setPath(path);
-        device.flushBitmap(100);
-    }
-
 
     public void updateLabels() {
         pageSeek = (SeekBar) findViewById(R.id.page_picker_seeker);
@@ -293,8 +216,7 @@ public class OrionViewerActivity extends Activity {
 
             openFile(file);
         } else /*if (intent.getAction().endsWith("MAIN"))*/ {
-            updateFileManager();
-            animator.setDisplayedChild(FILE_SCREEN);
+            //TODO error
         }
     }
 
@@ -308,8 +230,6 @@ public class OrionViewerActivity extends Activity {
             } else {
                 doc = new DjvuDocument(filePath);
             }
-
-            //new MediaScannerNotifier(filePath);
 
             LayoutStrategy str = new SimpleLayoutStrategy(doc, device.getViewWidth(), device.getViewHeight());
 
@@ -360,17 +280,12 @@ public class OrionViewerActivity extends Activity {
 
     public void onPause() {
         super.onPause();
-        device.onPause();
         if (controller != null) {
             controller.onPause();
             saveData();
         }
     }
 
-    public void onUserInteraction() {
-        super.onUserInteraction();
-        device.onUserInteraction();
-    }
 
     public void initZoomScreen() {
         //zoom screen
@@ -636,7 +551,6 @@ public class OrionViewerActivity extends Activity {
 
     protected void onResume() {
         super.onResume();
-        device.onResume();
 
         Common.d("onResume");
         if (myIntent != null) {
@@ -647,8 +561,6 @@ public class OrionViewerActivity extends Activity {
             if (controller != null) {
                 controller.onStart();
                 controller.drawPage();
-            } else {
-                device.flushBitmap(0);
             }
         }
     }
@@ -680,11 +592,7 @@ public class OrionViewerActivity extends Activity {
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (animator.getDisplayedChild() == FILE_SCREEN) {
-                if (((TheMissingTabHost)findViewById(R.id.tabhost)).getCurrentTab() == 0) {
-                    ((FileChooser)((ListView)findViewById(R.id.file_chooser)).getAdapter()).goToParent();
-                }
-            } else if (animator.getDisplayedChild() != MAIN_SCREEN) {
+            if (animator.getDisplayedChild() != MAIN_SCREEN) {
                 animator.setDisplayedChild(MAIN_SCREEN);
             }
             return true;
@@ -707,48 +615,29 @@ public class OrionViewerActivity extends Activity {
         }
     }
 
-    public Device getDevice() {
-        return device;
-    }
-
-
     public void loadGlobalOptions() {
-        ObjectInputStream inp = null;
-        try {
-            inp = new ObjectInputStream(openFileInput(GLOBAL_OPTIONS_FILE));
-            globalOptions = (GlobalOptions) inp.readObject();
-        } catch (Exception e) {
-            globalOptions = new GlobalOptions();
-        } finally {
-            if (inp != null) {
-                try {
-                    inp.close();
-                } catch (IOException e) {
-                    Common.d(e);
-                }
-            }
-        }
+        globalOptions = new GlobalOptions(this);
     }
-
 
     public void saveGlobalOptions() {
-        ObjectOutputStream out = null;
-        try {
-            out = new ObjectOutputStream(OrionViewerActivity.this.openFileOutput(GLOBAL_OPTIONS_FILE,
-                    Context.MODE_PRIVATE));
-            out.writeObject(globalOptions);
-            out.close();
-        } catch (Exception ex) {
-            Log.e(Common.LOGTAG, ex.getMessage(), ex);
-        } finally {
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    Common.d(e);
-                }
-            }
-        }
+//        ObjectOutputStream out = null;
+//        try {
+//            out = new ObjectOutputStream(OrionViewerActivity.this.openFileOutput(GLOBAL_OPTIONS_FILE,
+//                    Context.MODE_PRIVATE));
+//            out.writeObject(globalOptions);
+//            out.close();
+//        } catch (Exception ex) {
+//            Log.e(Common.LOGTAG, ex.getMessage(), ex);
+//        } finally {
+//            if (out != null) {
+//                try {
+//                    out.close();
+//                } catch (IOException e) {
+//                    Common.d(e);
+//                }
+//            }
+//        }
+        globalOptions.saveRecents();
     }
 
     public OrionView getView() {

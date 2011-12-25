@@ -231,6 +231,11 @@
                                       android:text="ArtDesigner.lv"
                                       android:gravity="center" />
 
+                    <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                                      android:textSize="20sp"
+                                      android:text="Oxygen  "
+                                      android:gravity="center" />
+
                     <ImageButton android:layout_width="66.0px" android:layout_height="66.0px"
                                  android:src="@drawable/revert"
                                  android:id="@+id/info_close" android:layout_gravity="right" />

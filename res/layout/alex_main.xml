@@ -13,7 +13,6 @@
                   android:layout_height="260.0px"
                   android:id="@+id/viewanim" android:gravity="center">
 
-
         <!--main screen/menu-->
         <LinearLayout android:id="@+id/main_menu"
                       android:layout_width="fill_parent" android:layout_height="fill_parent"
@@ -46,8 +45,6 @@
                                  android:src="@drawable/next"/>
 
                 </LinearLayout>
-
-
 
             </LinearLayout>
 
@@ -138,12 +135,8 @@
         <!--help screen-->
         <include layout="@layout/help"/>
 
-        <!--file chooser-->
-        <include layout="@layout/file_manager"/>
-
         <!--options-->
         <include layout="@layout/options"/>
-
 
     </ViewAnimator>
 

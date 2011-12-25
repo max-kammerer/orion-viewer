@@ -37,7 +37,7 @@ public interface Device {
 
     boolean onKeyDown(int keyCode, KeyEvent event, OperationHolder operation);
 
-    void onCreate(Activity activity);
+    void onCreate(OrionBaseActivity activity);
 
     void onPause();
 
@@ -50,6 +50,8 @@ public interface Device {
     void flushBitmap(int delay);
 
     public int getLayoutId();
+
+    public int getFileManagerLayoutId();
 
     public String getDefaultDirectory();
 

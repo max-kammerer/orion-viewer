@@ -1,6 +1,8 @@
 package com.google.code.orion_viewer;
 
 import android.util.Log;
+import com.google.code.orion_viewer.device.AlexDevice;
+import com.google.code.orion_viewer.device.NookDevice;
 
 import java.io.*;
 
@@ -10,6 +12,12 @@ import java.io.*;
  * Time: 11:54
  */
 public class Common {
+
+    public static Device createDevice() {
+         return new AlexDevice();
+    }
+
+    public static final String LAST_OPENED_DIRECTORY = "LAST_OPENED_DIR";
 
     public static final String LOGTAG = "Orion_Viewer";
 

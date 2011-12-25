@@ -1,7 +1,7 @@
 package com.google.code.orion_viewer.device;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.widget.EpdRender;
@@ -15,9 +15,7 @@ import com.google.code.orion_viewer.*;
  */
 public class AlexDevice extends EpdRender implements Device {
 
-    private final static String ALEX_TITLE = "org.highscreen.launcher.UPDATE_TITLE";
-
-    private OrionViewerActivity activity;
+    private OrionBaseActivity activity;
 
     private TextView pageTextView;
 
@@ -25,8 +23,8 @@ public class AlexDevice extends EpdRender implements Device {
 
     private String title;
 
-    public AlexDevice(OrionViewerActivity activity) {
-        this.activity = activity;
+    public AlexDevice() {
+
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event, OperationHolder operation) {
@@ -38,7 +36,8 @@ public class AlexDevice extends EpdRender implements Device {
         return false;
     }
 
-    public void onCreate(Activity activity) {
+    public void onCreate(OrionBaseActivity activity) {
+        this.activity = activity;
         bindLayout((ViewGroup) activity.findViewById(R.id.epdLayout));
         pageTextView = (TextView) activity.findViewById(R.id.statusbar_page_number);
         titleTextView = (TextView) activity.findViewById(R.id.statusbar_title);
@@ -70,15 +69,6 @@ public class AlexDevice extends EpdRender implements Device {
             this.title = "";
         }
         titleTextView.setText(title);
-
-        try {
-            Intent intent = new Intent(ALEX_TITLE);
-            String key = "apptitle";
-            intent.putExtra(key, title);
-            activity.sendBroadcast(intent);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     public void executeKeyEvent(int what, int arg1, int arg2) {
@@ -127,4 +117,8 @@ public class AlexDevice extends EpdRender implements Device {
         return activity.getView().getLayoutParams().height;
     }
 
+
+    public int getFileManagerLayoutId() {
+        return R.layout.alex_file_manager;
+    }
 }

@@ -1,12 +1,12 @@
 package com.google.code.orion_viewer;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: mike
@@ -15,13 +15,29 @@ import java.util.List;
  */
 public class GlobalOptions implements Serializable {
 
+    public static final int MAX_RECENT_ENTRIES = 10;
+
+    private static final String RECENT_PREFIX = "recent_";
+
     private String lastOpenedDirectory;
 
     private LinkedList<RecentEntry> recentFiles;
 
-    public GlobalOptions() {
+    private SharedPreferences prefs;
+
+    public GlobalOptions(Activity activity) {
+        prefs = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
+        lastOpenedDirectory = prefs.getString(Common.LAST_OPENED_DIRECTORY, null);
+
         recentFiles = new LinkedList<RecentEntry>();
-        lastOpenedDirectory = null;
+        for (int i = 0; i < MAX_RECENT_ENTRIES; i++) {
+            String entry = prefs.getString(RECENT_PREFIX + i, null);
+            if (entry == null) {
+                break;
+            } else {
+                recentFiles.add(new RecentEntry(entry));
+            }
+        }
     }
 
     public String getLastOpenedDirectory() {
@@ -43,9 +59,23 @@ public class GlobalOptions implements Serializable {
 
         recentFiles.add(0, newEntry);
 
-        if (recentFiles.size() > 10) {
+        if (recentFiles.size() > MAX_RECENT_ENTRIES) {
             recentFiles.removeLast();
         }
+    }
+
+    public void saveDirectory() {
+        //TODO
+    }
+
+    public void saveRecents() {
+        int i = 0;
+        SharedPreferences.Editor editor = prefs.edit();
+        for (Iterator<RecentEntry> iterator = recentFiles.iterator(); iterator.hasNext(); i++) {
+            RecentEntry next =  iterator.next();
+            editor.putString(RECENT_PREFIX  + i, next.getPath());
+        }
+        editor.commit();
     }
 
     public static class RecentEntry implements Serializable{
@@ -79,4 +109,5 @@ public class GlobalOptions implements Serializable {
     public LinkedList<RecentEntry> getRecentFiles() {
         return recentFiles;
     }
+
 }

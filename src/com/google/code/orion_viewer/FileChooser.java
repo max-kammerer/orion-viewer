@@ -17,8 +17,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
 import android.content.Context;
-import android.graphics.Color;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -53,13 +51,13 @@ public class FileChooser extends ArrayAdapter {
     };
 
     public FileChooser(Context context, String folder) {
-        super(context, R.layout.file, R.id.fileName);
+        super(context, R.layout.file_entry, R.id.fileName);
         currentList = new ArrayList();
         changeFolder(new File(folder));
     }
 
     public FileChooser(Context context, List<GlobalOptions.RecentEntry> enties) {
-        super(context, R.layout.file, R.id.fileName);
+        super(context, R.layout.file_entry, R.id.fileName);
         currentList = new ArrayList();
         currentList.addAll(enties);
     }
@@ -125,7 +123,7 @@ public class FileChooser extends ArrayAdapter {
 
 
             ImageView fileIcon = (ImageView) convertView.findViewById(R.id.fileImage);
-            fileIcon.setImageResource(isDirectory ? R.drawable.folder : name.toLowerCase().endsWith("pdf") ? R.drawable.book : R.drawable.djvu);
+            fileIcon.setImageResource(isDirectory ? R.drawable.folder : name.toLowerCase().endsWith("pdf") ? R.drawable.pdf : R.drawable.djvu);
             TextView fileName = (TextView) convertView.findViewById(R.id.fileName);
             fileName.setText(name);
         }
