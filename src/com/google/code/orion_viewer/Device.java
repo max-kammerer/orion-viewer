@@ -55,7 +55,5 @@ public interface Device {
 
     public String getDefaultDirectory();
 
-    public int getViewWidth();
-
-    public int getViewHeight();
+    public boolean optionViaDialog();
 }

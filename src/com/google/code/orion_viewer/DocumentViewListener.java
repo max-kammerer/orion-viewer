@@ -7,7 +7,7 @@ package com.google.code.orion_viewer;
  */
 public interface DocumentViewListener {
 
-    public void documentOpened();
+    public void documentOpened(Controller controller);
 
     public void documentClosed();
 

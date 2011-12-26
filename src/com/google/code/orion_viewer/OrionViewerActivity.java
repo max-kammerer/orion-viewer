@@ -17,7 +17,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -36,10 +36,7 @@ import java.io.*;
 
 public class OrionViewerActivity extends OrionBaseActivity {
 
-    @Override
-    public void openContextMenu(View view) {
-        super.openContextMenu(view);    //To change body of overridden methods use File | Settings | File Templates.
-    }
+    private Dialog dialog;
 
     private static final int MAIN_SCREEN = 0;
 
@@ -55,18 +52,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private static final int CROP_RESTRICTION = -30;
 
+    private final SubscriptionManager manager = new SubscriptionManager();
+
     private OrionView view;
 
     private ViewAnimator animator;
-
-    private SeekBar pageSeek;
-
-    private SeekBar zoomSeek;
-
-    private TextView pageNumberText;
-
-    private  TextView zoomText;
-    // TextView m_name;
 
     private LastPageInfo pageInfo;
 
@@ -83,71 +73,23 @@ public class OrionViewerActivity extends OrionBaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setContentView(device.getLayoutId());
+
         super.onCreate(savedInstanceState);
-
-
-
 
         loadGlobalOptions();
 
         //init view before device.onCreate
         view = (OrionView) findViewById(R.id.view);
 
-        animator = (ViewAnimator) findViewById(R.id.viewanim);
-
-        initButtons();
+        if (!device.optionViaDialog()) {
+            initAnimator();
+            initButtons();
+        } else {
+            initOptionDialog();
+        }
 
         //page chooser
-        pageSeek = (SeekBar) findViewById(R.id.page_picker_seeker);
-
-        pageNumberText = (TextView) findViewById(R.id.page_picker_message);
-        //initial state
-        pageNumberText.setText("" + 1);
-
-        pageSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                pageNumberText.setText("" + (progress + 1));
-            }
-
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
-
-        ImageButton closePagePeeker = (ImageButton) findViewById(R.id.page_picker_close);
-
-        ImageButton plus = (ImageButton) findViewById(R.id.page_picker_plus);
-        plus.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                pageSeek.incrementProgressBy(1);
-            }
-        });
-
-        ImageButton minus = (ImageButton) findViewById(R.id.page_picker_minus);
-        minus.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (pageSeek.getProgress() != 0) {
-                    pageSeek.incrementProgressBy(-1);
-                }
-            }
-        });
-
-        closePagePeeker.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //controller.drawPage(Integer.valueOf(pageNumberText.getText().toString()) - 1);
-                //main menu
-                animator.setDisplayedChild(MAIN_SCREEN);
-            }
-        });
-
-        ImageButton page_preview = (ImageButton) findViewById(R.id.page_preview);
-        page_preview.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                controller.drawPage(Integer.valueOf(pageNumberText.getText().toString()) -1);
-            }
-        });
+        initPagePeekerScreen();
 
         initZoomScreen();
 
@@ -160,44 +102,37 @@ public class OrionViewerActivity extends OrionBaseActivity {
         myIntent = getIntent();
     }
 
-
-
     private void initHelp() {
-            TheMissingTabHost host = (TheMissingTabHost) findViewById(R.id.helptab);
+        TheMissingTabHost host = (TheMissingTabHost) findMyViewById(R.id.helptab);
 
-            host.setup();
+        host.setup();
 
-//            host.addView(view);
-            TheMissingTabHost.TheMissingTabSpec spec = host.newTabSpec("general_help");
-            spec.setContent(R.id.general_help);
-            spec.setIndicator("", getResources().getDrawable(R.drawable.help));
-            host.addTab(spec);
-            TheMissingTabHost.TheMissingTabSpec recent = host.newTabSpec("app_info");
-            recent.setContent(R.id.app_info);
-            recent.setIndicator("", getResources().getDrawable(R.drawable.info));
-            host.addTab(recent);
-            host.setCurrentTab(0);
+        TheMissingTabHost.TheMissingTabSpec spec = host.newTabSpec("general_help");
+        spec.setContent(R.id.general_help);
+        spec.setIndicator("", getResources().getDrawable(R.drawable.help));
+        host.addTab(spec);
+        TheMissingTabHost.TheMissingTabSpec recent = host.newTabSpec("app_info");
+        recent.setContent(R.id.app_info);
+        recent.setIndicator("", getResources().getDrawable(R.drawable.info));
+        host.addTab(recent);
+        host.setCurrentTab(0);
     }
 
     public void updateLabels() {
-        pageSeek = (SeekBar) findViewById(R.id.page_picker_seeker);
-        pageSeek.setMax(controller.getPageCount() - 1);
-        zoomText = (TextView) findViewById(R.id.zoom_picker_message);
-        zoomText.setText(controller.getZoomFactor() + "%");
-        updateOptions();
-        updateCrops();
+//        updateOptions();
+//        updateCrops();
     }
 
     public void updateCrops() {
         controller.getMargins(cropBorders);
-        ((ArrayAdapter)((ListView)findViewById(R.id.crop_borders)).getAdapter()).notifyDataSetChanged();
+        ((ArrayAdapter)((ListView)findMyViewById(R.id.crop_borders)).getAdapter()).notifyDataSetChanged();
     }
 
     public void updateOptions() {
         int did = controller.getDirection();
         int lid = controller.getLayout();
-        ((RadioGroup) findViewById(R.id.layoutGroup)).check(lid == 0 ? R.id.layout1 : lid == 1 ? R.id.layout2 : R.id.layout3);
-        ((RadioGroup) findViewById(R.id.directionGroup)).check(did == 0 ? R.id.direction1 : R.id.direction2);
+        ((RadioGroup) findMyViewById(R.id.layoutGroup)).check(lid == 0 ? R.id.layout1 : lid == 1 ? R.id.layout2 : R.id.layout3);
+        ((RadioGroup) findMyViewById(R.id.directionGroup)).check(did == 0 ? R.id.direction1 : R.id.direction2);
     }
 
     protected void onNewIntent(Intent intent) {
@@ -231,7 +166,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 doc = new DjvuDocument(filePath);
             }
 
-            LayoutStrategy str = new SimpleLayoutStrategy(doc, device.getViewWidth(), device.getViewHeight());
+            LayoutStrategy str = new SimpleLayoutStrategy(doc);
 
             int idx = filePath.lastIndexOf('/');
             String fileData = filePath.substring(idx + 1) + ".userData";
@@ -246,21 +181,15 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
             pageInfo.fileName = fileData;
             controller.init(pageInfo);
+            //TODO
             updateLabels();
-            animator.setDisplayedChild(MAIN_SCREEN);
-            controller.addDocListeners(new DocumentViewAdapter() {
-                public void pageChanged(final int newPage, final int pageCount) {
-                    TextView tv = (TextView) findViewById(R.id.page_number_view);
-                    tv.setText(newPage + 1 + "/" + pageCount);
 
-                    if (animator.getDisplayedChild() == PAGE_SCREEN) {
-                        pageSeek.setProgress(newPage);
-                    }
-                    device.updatePageNumber(newPage + 1, pageCount);
-                }
-            });
+
+            getSubscriptionManager().sendDocOpenedNotification(controller);
+
             controller.drawPage();
 
+            getView().setController(controller);
             String title = doc.getTitle();
             if (title == null || "".equals(title)) {
                 title = filePath.substring(idx + 1);
@@ -286,12 +215,79 @@ public class OrionViewerActivity extends OrionBaseActivity {
         }
     }
 
+    public void initPagePeekerScreen() {
+        final SeekBar pageSeek = (SeekBar) findMyViewById(R.id.page_picker_seeker);
+
+        getSubscriptionManager().addDocListeners(new DocumentViewAdapter() {
+            @Override
+            public void documentOpened(Controller controller) {
+                pageSeek.setProgress(controller.getCurrentPage());
+                pageSeek.setMax(controller.getPageCount() - 1);
+            }
+
+            @Override
+            public void pageChanged(int newPage, int pageCount) {
+                pageSeek.setProgress(newPage);
+            }
+        });
+
+
+        final TextView pageNumberText = (TextView) findMyViewById(R.id.page_picker_message);
+        //initial state
+        pageNumberText.setText("" + 1);
+
+        pageSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                pageNumberText.setText("" + (progress + 1));
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        ImageButton closePagePeeker = (ImageButton) findMyViewById(R.id.page_picker_close);
+
+        ImageButton plus = (ImageButton) findMyViewById(R.id.page_picker_plus);
+        plus.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                pageSeek.incrementProgressBy(1);
+            }
+        });
+
+        ImageButton minus = (ImageButton) findMyViewById(R.id.page_picker_minus);
+        minus.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (pageSeek.getProgress() != 0) {
+                    pageSeek.incrementProgressBy(-1);
+                }
+            }
+        });
+
+        closePagePeeker.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //controller.drawPage(Integer.valueOf(pageNumberText.getText().toString()) - 1);
+                //main menu
+                onAnimatorCancel();
+                //animator.setDisplayedChild(MAIN_SCREEN);
+            }
+        });
+
+        ImageButton page_preview = (ImageButton) findMyViewById(R.id.page_preview);
+        page_preview.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                controller.drawPage(Integer.valueOf(pageNumberText.getText().toString()) -1);
+            }
+        });
+    }
 
     public void initZoomScreen() {
         //zoom screen
-        zoomText = (TextView) findViewById(R.id.zoom_picker_message);
+        final TextView zoomText = (TextView) findMyViewById(R.id.zoom_picker_message);
 
-        zoomSeek = (SeekBar) findViewById(R.id.zoom_picker_seeker);
+        final SeekBar zoomSeek = (SeekBar) findMyViewById(R.id.zoom_picker_seeker);
         zoomSeek.setMax(300);
         zoomSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -305,14 +301,21 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
         });
 
-        ImageButton zplus = (ImageButton) findViewById(R.id.zoom_picker_plus);
+        getSubscriptionManager().addDocListeners(new DocumentViewAdapter(){
+            @Override
+            public void documentOpened(Controller controller) {
+                zoomText.setText(controller.getZoomFactor() + "%");
+            }
+        });
+
+        ImageButton zplus = (ImageButton) findMyViewById(R.id.zoom_picker_plus);
         zplus.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 zoomSeek.incrementProgressBy(1);
             }
         });
 
-        ImageButton zminus = (ImageButton) findViewById(R.id.zoom_picker_minus);
+        ImageButton zminus = (ImageButton) findMyViewById(R.id.zoom_picker_minus);
         zminus.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (zoomSeek.getProgress() != 0) {
@@ -321,16 +324,17 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
         });
 
-        ImageButton closeZoomPeeker = (ImageButton) findViewById(R.id.zoom_picker_close);
+        ImageButton closeZoomPeeker = (ImageButton) findMyViewById(R.id.zoom_picker_close);
         closeZoomPeeker.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //controller.changeZoom(zoomSeek.getProgress());
                 //main menu
-                animator.setDisplayedChild(MAIN_SCREEN);
+                onAnimatorCancel();
+                //animator.setDisplayedChild(MAIN_SCREEN);
             }
         });
 
-        ImageButton zoom_preview = (ImageButton) findViewById(R.id.zoom_preview);
+        ImageButton zoom_preview = (ImageButton) findMyViewById(R.id.zoom_preview);
         zoom_preview.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 controller.changeZoom(zoomSeek.getProgress());
@@ -340,32 +344,46 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
 
     public void initOptions() {
-        ImageButton close = (ImageButton) findViewById(R.id.options_close);
+        ImageButton close = (ImageButton) findMyViewById(R.id.options_close);
         close.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-//                int did = ((RadioGroup) findViewById(R.id.directionGroup)).getCheckedRadioButtonId();
-//                int lid = ((RadioGroup) findViewById(R.id.layoutGroup)).getCheckedRadioButtonId();
+//                int did = ((RadioGroup) findMyViewById(R.id.directionGroup)).getCheckedRadioButtonId();
+//                int lid = ((RadioGroup) findMyViewById(R.id.layoutGroup)).getCheckedRadioButtonId();
 //                controller.setDirectionAndLayout(did == R.id.direction1 ? 0 : 1, lid == R.id.layout1 ? 0 : lid == R.id.layout2 ? 1 : 2);
                 //main menu
-                animator.setDisplayedChild(MAIN_SCREEN);
+                onAnimatorCancel();
+                //animator.setDisplayedChild(MAIN_SCREEN);
             }
         });
 
 
-        ImageButton view = (ImageButton) findViewById(R.id.options_apply);
+        ImageButton view = (ImageButton) findMyViewById(R.id.options_apply);
         view.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                int did = ((RadioGroup) findViewById(R.id.directionGroup)).getCheckedRadioButtonId();
-                int lid = ((RadioGroup) findViewById(R.id.layoutGroup)).getCheckedRadioButtonId();
+                int did = ((RadioGroup) findMyViewById(R.id.directionGroup)).getCheckedRadioButtonId();
+                int lid = ((RadioGroup) findMyViewById(R.id.layoutGroup)).getCheckedRadioButtonId();
                 controller.setDirectionAndLayout(did == R.id.direction1 ? 0 : 1, lid == R.id.layout1 ? 0 : lid == R.id.layout2 ? 1 : 2);
+            }
+        });
+
+        getSubscriptionManager().addDocListeners(new DocumentViewAdapter() {
+            public void documentOpened(Controller controller) {
+                updateOptions();
             }
         });
     }
 
 
-
     public void initCropScreen() {
-        ListView cropList = (ListView) findViewById(R.id.crop_borders);
+        ListView cropList = (ListView) findMyViewById(R.id.crop_borders);
+
+        getSubscriptionManager().addDocListeners(new DocumentViewAdapter(){
+            @Override
+            public void documentOpened(Controller controller) {
+                updateCrops();
+            }
+        });
+
         cropList.setAdapter(new ArrayAdapter(this, R.layout.crop, new String[] {"Left", "Right", "Top", "Bottom"}) {
 
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -393,19 +411,20 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
         });
 
-        ImageButton preview = (ImageButton) findViewById(R.id.crop_preview);
+        ImageButton preview = (ImageButton) findMyViewById(R.id.crop_preview);
         preview.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 controller.changeMargins(cropBorders[0], cropBorders[2], cropBorders[1], cropBorders[3]);
             }
         });
 
-        ImageButton close = (ImageButton) findViewById(R.id.crop_close);
+        ImageButton close = (ImageButton) findMyViewById(R.id.crop_close);
         close.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //main menu
                 //controller.changeMargins(cropBorders[0], cropBorders[2], cropBorders[1], cropBorders[3]);
-                animator.setDisplayedChild(MAIN_SCREEN);
+                //animator.setDisplayedChild(MAIN_SCREEN);
+                onAnimatorCancel();
             }
         });
     }
@@ -451,30 +470,30 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     private void initButtons() {
-        ImageButton btn = (ImageButton) findViewById(R.id.exit);
+        ImageButton btn = (ImageButton) findMyViewById(R.id.exit);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //controller.destroy();
                 finish();
             }
         });
-        btn = (ImageButton) findViewById(R.id.prev_page);
+        btn = (ImageButton) findMyViewById(R.id.prev_page);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 changePage(-1);
             }
         });
+
         btn.setOnLongClickListener(new View.OnLongClickListener() {
 
             public boolean onLongClick(View v) {
-                pageSeek.setProgress(controller.getCurrentPage());
                 //page seeker
                 animator.setDisplayedChild(PAGE_SCREEN);
                 return true;
             }
         });
 
-        btn = (ImageButton) findViewById(R.id.next_page);
+        btn = (ImageButton) findMyViewById(R.id.next_page);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 changePage(1);
@@ -483,14 +502,13 @@ public class OrionViewerActivity extends OrionBaseActivity {
         btn.setOnLongClickListener(new View.OnLongClickListener() {
 
             public boolean onLongClick(View v) {
-                pageSeek.setProgress(controller.getCurrentPage());
                 //page seeker
                 animator.setDisplayedChild(PAGE_SCREEN);
                 return true;
             }
         });
 
-        btn = (ImageButton) findViewById(R.id.switch_page);
+        btn = (ImageButton) findMyViewById(R.id.switch_page);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 controller.setRotation((controller.getRotation() - 1) % 2);
@@ -503,15 +521,14 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
         });
 
-        btn = (ImageButton) findViewById(R.id.zoom);
+        btn = (ImageButton) findMyViewById(R.id.zoom);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                zoomSeek.setProgress(controller.getZoomFactor());
                 animator.setDisplayedChild(ZOOM_SCREEN);
             }
         });
 
-        btn = (ImageButton) findViewById(R.id.crop_menu);
+        btn = (ImageButton) findMyViewById(R.id.crop_menu);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 updateCrops();
@@ -519,28 +536,30 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
         });
 
-        btn = (ImageButton) findViewById(R.id.help);
+        btn = (ImageButton) findMyViewById(R.id.help);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 animator.setDisplayedChild(HELP_SCREEN);
             }
         });
 
-        btn = (ImageButton) findViewById(R.id.help_close);
+        btn = (ImageButton) findMyViewById(R.id.help_close);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                animator.setDisplayedChild(MAIN_SCREEN);
+                //animator.setDisplayedChild(MAIN_SCREEN);
+                onAnimatorCancel();
             }
         });
 
-        btn = (ImageButton) findViewById(R.id.info_close);
+        btn = (ImageButton) findMyViewById(R.id.info_close);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                animator.setDisplayedChild(MAIN_SCREEN);
+                onAnimatorCancel();
+                //animator.setDisplayedChild(MAIN_SCREEN);
             }
         });
 
-        btn = (ImageButton) findViewById(R.id.options);
+        btn = (ImageButton) findMyViewById(R.id.options);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 updateOptions();
@@ -559,7 +578,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             myIntent = null;
         } else {
             if (controller != null) {
-                controller.onStart();
+                //controller.startRenderer();
                 controller.drawPage();
             }
         }
@@ -571,6 +590,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
         Common.stopLogger();
         if (controller != null) {
             controller.destroy();
+        }
+        if (dialog != null) {
+            dialog.dismiss();
         }
     }
 
@@ -591,9 +613,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        System.out.println("key " + keyCode);
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (animator.getDisplayedChild() != MAIN_SCREEN) {
-                animator.setDisplayedChild(MAIN_SCREEN);
+            if (!device.optionViaDialog() && animator.getDisplayedChild() != MAIN_SCREEN) {
+                onAnimatorCancel();
             }
             return true;
         }
@@ -637,10 +661,84 @@ public class OrionViewerActivity extends OrionBaseActivity {
 //                }
 //            }
 //        }
+        Common.d("Saving global options...");
         globalOptions.saveRecents();
+        Common.d("Done!");
     }
 
     public OrionView getView() {
         return view;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        boolean result = super.onCreateOptionsMenu(menu);
+        if (result) {
+            getMenuInflater().inflate(R.menu.menu, menu);
+        }
+
+        return result;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int screenId = 1;
+        switch (item.getItemId()) {
+            case R.id.exit_menu_item:
+                finish();
+                return true;
+            case R.id.crop_menu_item: screenId = CROP_SCREEN; break;
+            case R.id.zoom_menu_item: screenId = ZOOM_SCREEN; break;
+            case R.id.goto_menu_item: screenId = PAGE_SCREEN; break;
+            case R.id.options_menu_item: screenId = OPTIONS_SCREEN; break;
+            default: screenId = HELP_SCREEN; break;
+        }
+
+        animator.setDisplayedChild(screenId - 1);
+        dialog.show();
+        return true;
+    }
+
+    public void initAnimator() {
+        animator = (ViewAnimator) findMyViewById(R.id.viewanim);
+        getSubscriptionManager().addDocListeners(new DocumentViewAdapter() {
+            @Override
+            public void documentOpened(Controller controller) {
+                animator.setDisplayedChild(MAIN_SCREEN);
+            }
+
+            public void pageChanged(final int newPage, final int pageCount) {
+                TextView tv = (TextView) findMyViewById(R.id.page_number_view);
+                tv.setText(newPage + 1 + "/" + pageCount);
+                device.updatePageNumber(newPage + 1, pageCount);
+            }
+        });
+
+    }
+
+    public SubscriptionManager getSubscriptionManager() {
+        return manager;
+    }
+
+    public void initOptionDialog() {
+        dialog = new Dialog(this);
+        dialog.setContentView(R.layout.android_dialog);
+        animator = ((ViewAnimator)dialog.findViewById(R.id.viewanim));
+    }
+
+    private View findMyViewById(int id) {
+        if (device.optionViaDialog()) {
+            return dialog.findViewById(id);
+        } else {
+            return findViewById(id);
+        }
+    }
+
+    public void onAnimatorCancel() {
+        if (!device.optionViaDialog()){
+            animator.setDisplayedChild(MAIN_SCREEN);
+        } else {
+            dialog.cancel();
+        }
     }
 }

@@ -66,8 +66,10 @@ public class MuPDFCore
         return res;
     }
 
-	public void onDestroy() {
+	public synchronized void onDestroy() {
+        Common.d("Destroying document...");
 		destroying();
+        Common.d("Document destoyed!");
 	}
 
     public int getPageCount() {

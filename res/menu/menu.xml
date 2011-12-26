@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+      <item android:id="@+id/zoom_menu_item"
+          android:title="Zoom"
+          android:icon="@drawable/zoom"/>
+
+    <item android:id="@+id/goto_menu_item"
+          android:title="Goto"
+          android:icon="@drawable/next"/>
+
+    <item android:id="@+id/rotation_menu_item"
+          android:title="Rotation"
+          android:icon="@drawable/rotate"/>
+
+    <item android:id="@+id/crop_menu_item"
+          android:title="Crop"
+          android:icon="@drawable/crop"/>
+
+    <item android:id="@+id/options_menu_item"
+          android:title="Options"
+          android:icon="@drawable/options"/>
+
+    <item android:id="@+id/help_menu_item"
+          android:title="Help"
+          android:icon="@drawable/help"/>
+
+    <item android:id="@+id/exit_menu_item"
+          android:title="Exit"
+          android:icon="@drawable/close"/>
+</menu>

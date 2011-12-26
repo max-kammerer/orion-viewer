@@ -59,7 +59,6 @@ public interface LayoutStrategy {
 
     boolean changePageLayout(int navigation);
 
-    int getViewWidth();
+    void setDimension(int width, int height);
 
-    int getViewHeight();
 }

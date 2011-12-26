@@ -148,15 +148,11 @@ public class NookDevice implements Device {
         return "my documents";
     }
 
-    public int getViewWidth() {
-        return activity.getView().getLayoutParams().width;
-    }
-
-    public int getViewHeight() {
-        return activity.getView().getLayoutParams().height;
-    }
-
     public int getFileManagerLayoutId() {
         return R.layout.nook_file_manager;
+    }
+
+    public boolean optionViaDialog() {
+        return false;
     }
 }

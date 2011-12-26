@@ -61,7 +61,7 @@ public class RenderThread extends Thread {
 
     private int myWidth;
 
-    private int myHeigh;
+    private int myHeight;
 
     private boolean stopped;
 
@@ -74,9 +74,6 @@ public class RenderThread extends Thread {
         this.view = view;
         this.layout = layout;
         this.doc = doc;
-        myWidth = layout.getViewWidth();
-        myHeigh = layout.getViewHeight();
-        rotationShift = (layout.getViewHeight() - layout.getViewWidth()) / 2;
         this.activity = activity;
 
         WindowManager manager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
@@ -154,6 +151,10 @@ public class RenderThread extends Thread {
 
     public void onResume() {
         synchronized (this) {
+            myWidth = activity.getView().getWidth();
+            myHeight = activity.getView().getHeight();
+            rotationShift = Math.abs(myHeight - myWidth) / 2;
+
             paused = false;
             notify();
         }
@@ -240,17 +241,21 @@ public class RenderThread extends Thread {
                         }
                     }
                     if (bitmap == null) {
-//                        try {
-                            Common.d("CREATING BITMAP!!!");
-                            bitmap = Bitmap.createBitmap(layout.getViewWidth(), layout.getViewHeight(), bitmapConfig);
-//                        } catch (OutOfMemoryError e) {
-//                            System.gc();
-//                        }
+                        try {
+                            Common.d("Creating Bitmap...");
+                            bitmap = Bitmap.createBitmap(myWidth, myHeight, bitmapConfig);
+                        } catch (NullPointerException e) {
+                            //it occurs on my phone)))
+                            Common.d("NPE on bitmap creation!!!");
+                            bitmapConfig = Bitmap.Config.RGB_565;
+                            bitmap = Bitmap.createBitmap(myWidth, myHeight, bitmapConfig);
+                            //System.gc();
+                        }
                     }
 
                     cacheCanvas.setMatrix(null);
                     if (rotation != 0) {
-                        cacheCanvas.rotate(-rotation * 90, (myHeigh) / 2, myWidth / 2);
+                        cacheCanvas.rotate(-rotation * 90, myHeight / 2, myWidth / 2);
                         cacheCanvas.translate(-rotation * rotationShift, -rotation * rotationShift);
                     }
 
@@ -266,6 +271,10 @@ public class RenderThread extends Thread {
 //                    ColorFilter filter = new PorterDuffColor=Filter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
 //                    p.setColorFilter(filter);
 //                     p.setRasterizer()
+//                    Paint p = new Paint();
+//                    ColorFilter filter = new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+//                    p.setColorFilter(filter);
+
 
                     cacheCanvas.drawBitmap(data, 0, width, 0, 0, width, height, false, null);
                     Date date2 = new Date();

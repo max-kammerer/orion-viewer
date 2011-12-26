@@ -44,10 +44,9 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     private int layout;
 
-    public SimpleLayoutStrategy(DocumentWrapper doc, int viewWidth, int viewHeight) {
+    public SimpleLayoutStrategy(DocumentWrapper doc) {
         this.doc = doc;
-        this.viewWidth = viewWidth;
-        this.viewHeight = viewHeight;
+
     }
 
     public void nextPage(LayoutPosition info) {
@@ -232,11 +231,8 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         return direction;
     }
 
-    public int getViewWidth() {
-        return viewWidth;
-    }
-
-    public int getViewHeight() {
-        return viewHeight;
+    public void setDimension(int width, int height) {
+        viewWidth = width;
+        viewHeight = height;
     }
 }

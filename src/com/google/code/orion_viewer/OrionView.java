@@ -20,7 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 import android.content.Context;
 import android.graphics.*;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import java.util.Date;
@@ -36,6 +35,10 @@ public class OrionView extends View {
     public Bitmap bitmap;
 
     private CountDownLatch latch;
+
+    private boolean startRenderer;
+
+    private Controller controller;
 
     public OrionView(Context context) {
         super(context);
@@ -53,6 +56,10 @@ public class OrionView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        if (!startRenderer && controller != null) {
+            startRenderer = true;
+            controller.startRenderer();
+        }
         if (bitmap != null && !bitmap.isRecycled()) {
             long start = new Date().getTime();
             Common.d("Start drawing bitmap");
@@ -86,8 +93,7 @@ public class OrionView extends View {
 //    }
 
 
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);    //To change body of overridden methods use File | Settings | File Templates.
+    public void setController(Controller controller) {
+        this.controller = controller;
     }
 }

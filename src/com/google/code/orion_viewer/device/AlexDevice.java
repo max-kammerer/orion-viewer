@@ -121,4 +121,8 @@ public class AlexDevice extends EpdRender implements Device {
     public int getFileManagerLayoutId() {
         return R.layout.alex_file_manager;
     }
+
+    public boolean optionViaDialog() {
+        return false;
+    }
 }

@@ -37,20 +37,21 @@ public class Controller {
 
     private OrionView view;
 
+    private OrionViewerActivity activity;
+
     private RenderThread renderer;
 
     private int lastPage = -1;
 
-    private List<DocumentViewListener> listeners = new ArrayList<DocumentViewListener>();
 
     public Controller(OrionViewerActivity activity, DocumentWrapper doc, LayoutStrategy layout, OrionView view) {
+        this.activity = activity;
         this.doc = doc;
         this.layout = layout;
         this.view = view;
         renderer = new RenderThread(activity, view, layout, doc);
-        renderer.start();
 
-        addDocListeners(new  DocumentViewAdapter() {
+        activity.getSubscriptionManager().addDocListeners(new  DocumentViewAdapter() {
             public void viewParametersChanged() {
                 renderer.invalidateCache();
                 drawPage();
@@ -66,7 +67,6 @@ public class Controller {
 
     public void drawPage() {
         sendPageChangedNotification();
-
         renderer.render(layoutInfo);
     }
 
@@ -115,8 +115,17 @@ public class Controller {
         System.gc();
     }
 
-    public void onStart() {
+    public void startRenderer() {
+        int oldX = layoutInfo.cellX;
+        int oldY = layoutInfo.cellY;
+        layout.setDimension(view.getWidth(), view.getHeight());
+        layout.reset(layoutInfo, layoutInfo.pageNumber);
+
+        layoutInfo.cellX = oldX;
+        layoutInfo.cellY = oldY;
+        drawPage();
         renderer.onResume();
+        renderer.start();
     }
 
     public void onPause() {
@@ -148,13 +157,10 @@ public class Controller {
         layout.init(info);
         layoutInfo = new LayoutPosition();
         layout.reset(layoutInfo, info.pageNumber);
-        if (info.offsetX != 0) {
-            layoutInfo.cellX = info.offsetX;
-        }
-        if (info.offsetY != 0) {
-            layoutInfo.cellY = info.offsetY;
-        }
-        //view.setRotation(layout.getRotation());
+        layoutInfo.cellX = info.offsetX;
+        layoutInfo.cellY = info.offsetY;
+
+
     }
 
     public void serialize(LastPageInfo info) {
@@ -164,24 +170,14 @@ public class Controller {
         info.pageNumber = layoutInfo.pageNumber;
     }
 
-    public void addDocListeners(DocumentViewListener listeners) {
-        this.listeners.add(listeners);
-    }
-
     public void sendViewChangeNotification() {
-        for (int i = 0; i < listeners.size(); i++) {
-            DocumentViewListener documentListener =  listeners.get(i);
-            documentListener.viewParametersChanged();
-        }
+        activity.getSubscriptionManager().sendViewChangeNotification();
     }
 
     public void sendPageChangedNotification() {
         if (lastPage != layoutInfo.pageNumber) {
             lastPage = layoutInfo.pageNumber;
-            for (int i = 0; i < listeners.size(); i++) {
-                DocumentViewListener documentListener =  listeners.get(i);
-                documentListener.pageChanged(lastPage, doc.getPageCount());
-            }
+            activity.getSubscriptionManager().sendPageChangedNotification(lastPage, doc.getPageCount());
         }
     }
 
