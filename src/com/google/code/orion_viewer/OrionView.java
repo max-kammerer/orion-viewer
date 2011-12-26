@@ -94,6 +94,7 @@ public class OrionView extends View {
 
 
     public void setController(Controller controller) {
+        startRenderer = false;
         this.controller = controller;
     }
 }

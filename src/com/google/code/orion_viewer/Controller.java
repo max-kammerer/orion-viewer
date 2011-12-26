@@ -43,6 +43,7 @@ public class Controller {
 
     private int lastPage = -1;
 
+    private DocumentViewAdapter listener;
 
     public Controller(OrionViewerActivity activity, DocumentWrapper doc, LayoutStrategy layout, OrionView view) {
         this.activity = activity;
@@ -51,12 +52,14 @@ public class Controller {
         this.view = view;
         renderer = new RenderThread(activity, view, layout, doc);
 
-        activity.getSubscriptionManager().addDocListeners(new  DocumentViewAdapter() {
+        listener = new  DocumentViewAdapter() {
             public void viewParametersChanged() {
                 renderer.invalidateCache();
                 drawPage();
             }
-        });
+        };
+
+        activity.getSubscriptionManager().addDocListeners(listener);
 
     }
 
@@ -104,6 +107,8 @@ public class Controller {
     }
 
     public void destroy() {
+        activity.getSubscriptionManager().unSubscribe(listener);
+
         if (renderer != null) {
             renderer.stopRenderer();
             renderer = null;

@@ -83,7 +83,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         if (!device.optionViaDialog()) {
             initAnimator();
-            initButtons();
+            initMainScreen();
         } else {
             initOptionDialog();
         }
@@ -97,12 +97,12 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         initOptions();
 
-        initHelp();
+        initHelpScreen();
 
         myIntent = getIntent();
     }
 
-    private void initHelp() {
+    private void initHelpScreen() {
         TheMissingTabHost host = (TheMissingTabHost) findMyViewById(R.id.helptab);
 
         host.setup();
@@ -116,6 +116,22 @@ public class OrionViewerActivity extends OrionBaseActivity {
         recent.setIndicator("", getResources().getDrawable(R.drawable.info));
         host.addTab(recent);
         host.setCurrentTab(0);
+
+        ImageButton btn = (ImageButton) findMyViewById(R.id.help_close);
+        btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //animator.setDisplayedChild(MAIN_SCREEN);
+                onAnimatorCancel();
+            }
+        });
+
+        btn = (ImageButton) findMyViewById(R.id.info_close);
+        btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                onAnimatorCancel();
+                //animator.setDisplayedChild(MAIN_SCREEN);
+            }
+        });
     }
 
     public void updateLabels() {
@@ -469,7 +485,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         });
     }
 
-    private void initButtons() {
+    private void initMainScreen() {
         ImageButton btn = (ImageButton) findMyViewById(R.id.exit);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -543,21 +559,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
         });
 
-        btn = (ImageButton) findMyViewById(R.id.help_close);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //animator.setDisplayedChild(MAIN_SCREEN);
-                onAnimatorCancel();
-            }
-        });
-
-        btn = (ImageButton) findMyViewById(R.id.info_close);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                onAnimatorCancel();
-                //animator.setDisplayedChild(MAIN_SCREEN);
-            }
-        });
 
         btn = (ImageButton) findMyViewById(R.id.options);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -713,7 +714,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 device.updatePageNumber(newPage + 1, pageCount);
             }
         });
-
     }
 
     public SubscriptionManager getSubscriptionManager() {
@@ -722,6 +722,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     public void initOptionDialog() {
         dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.android_dialog);
         animator = ((ViewAnimator)dialog.findViewById(R.id.viewanim));
     }

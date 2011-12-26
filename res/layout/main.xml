@@ -165,7 +165,7 @@
         </LinearLayout>
 
         <!--help screen-->
-        <include layout="@layout/help"/>
+        <include layout="@layout/android_help"/>
 
         <!--&lt;!&ndash;file chooser&ndash;&gt;-->
         <!--<include layout="@layout/file_manager"/>-->

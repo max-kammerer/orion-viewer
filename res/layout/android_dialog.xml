@@ -12,12 +12,7 @@
         <!--page chooser screen-->
 
     <ScrollView android:layout_width="fill_parent"
-                  android:layout_height="fill_parent"
-                  android:isScrollContainer="true"
-                        android:scrollbarAlwaysDrawVerticalTrack="true"
-                        android:scrollbarAlwaysDrawHorizontalTrack="true"
-                        android:scrollbars="vertical|horizontal"
-                        android:orientation="vertical">
+                  android:layout_height="fill_parent">
         <LinearLayout android:id="@+id/page_menu"
                       android:layout_height="fill_parent" android:orientation="vertical"
                       android:layout_width="fill_parent" android:gravity="center">
@@ -68,24 +63,26 @@
         </LinearLayout>
 
         <!--border crop screen-->
-        <LinearLayout android:layout_height="fill_parent" android:orientation="horizontal"
+        <LinearLayout android:layout_height="fill_parent" android:orientation="vertical"
                       android:layout_width="fill_parent" android:gravity="center">
 
 
             <ListView android:id="@+id/crop_borders"
-                    android:layout_width="300.0px"
-                                  android:layout_height="fill_parent"/>
+                    android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content" android:layout_gravity="center"/>
 
+            <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
+                      android:layout_width="fill_parent" android:gravity="right">
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:src="@drawable/view" android:id="@+id/crop_preview"/>
 
-            <ImageButton android:layout_width="66.0px" android:layout_height="66.0px"
-                         android:src="@drawable/view" android:id="@+id/crop_preview"/>
-
-            <ImageButton android:layout_width="66.0px" android:layout_height="66.0px"
-                         android:src="@drawable/revert" android:id="@+id/crop_close"/>
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:src="@drawable/revert" android:id="@+id/crop_close"/>
+            </LinearLayout>
         </LinearLayout>
 
         <!--help screen-->
-        <include layout="@layout/help"/>
+        <include layout="@layout/android_help"/>
 
         <!--&lt;!&ndash;file chooser&ndash;&gt;-->
         <!--<include layout="@layout/file_manager"/>-->

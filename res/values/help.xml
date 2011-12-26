@@ -9,8 +9,21 @@
 
     <string name="apply">Apply current options.</string>
     <string name="escape">Return/Escape.</string>
-    <string name="general_usage">How to use: open document (zoom by width by default);
-        select appropriate orientation: portrait or landscape;
-        crop borders, text size will be change accordingly to changing borders (if zoom by width specified).
-        Enjoy reading!</string>
+
+    <string name="general_usage">How to use:</string>
+
+    <string name="general_usage_step1">1. Open document (zoom by width by default)
+        </string>
+
+    <string name="general_usage_step2">
+        2. Select appropriate orientation: portrait or landscape
+        </string>
+
+    <string name="general_usage_step3">
+        3. Crop borders, text size will be change accordingly to changing borders (if zoom by width specified)
+        </string>
+
+    <string name="general_usage_step4">
+        4. Enjoy reading!</string>
+
 </resources>

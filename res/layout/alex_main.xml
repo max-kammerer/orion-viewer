@@ -133,7 +133,7 @@
         </LinearLayout>
 
         <!--help screen-->
-        <include layout="@layout/help"/>
+        <include layout="@layout/android_help"/>
 
         <!--options-->
         <include layout="@layout/options"/>

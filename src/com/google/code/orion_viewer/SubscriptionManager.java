@@ -37,4 +37,8 @@ public class SubscriptionManager {
             documentListener.documentOpened(controller);
         }
     }
+
+    public void unSubscribe(DocumentViewListener listener) {
+        listeners.remove(listener);
+    }
 }

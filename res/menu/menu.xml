@@ -18,7 +18,7 @@
           android:icon="@drawable/crop"/>
 
     <item android:id="@+id/options_menu_item"
-          android:title="Options"
+          android:title="Navigation"
           android:icon="@drawable/options"/>
 
     <item android:id="@+id/help_menu_item"

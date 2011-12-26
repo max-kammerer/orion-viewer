@@ -109,15 +109,6 @@ public class AlexDevice extends EpdRender implements Device {
         return "ebooks";
     }
 
-    public int getViewWidth() {
-        return activity.getView().getLayoutParams().width;
-    }
-
-    public int getViewHeight() {
-        return activity.getView().getLayoutParams().height;
-    }
-
-
     public int getFileManagerLayoutId() {
         return R.layout.alex_file_manager;
     }

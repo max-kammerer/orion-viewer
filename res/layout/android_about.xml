@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/app_info"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:isScrollContainer="true"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbarStyle="outsideInset"
+            android:scrollbars="vertical"
+            android:orientation="vertical">
+
+    <LinearLayout android:layout_width="fill_parent"
+                  android:layout_height="fill_parent" android:orientation="vertical">
+
+        <LinearLayout android:layout_width="fill_parent"
+                  android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center" android:layout_marginBottom="10px" android:layout_marginTop="10px">
+
+            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                     android:src="@drawable/orion" android:layout_marginRight="10px"/>
+
+            <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" android:orientation="vertical" android:gravity="left">
+
+                <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="left">
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                  android:textSize="20sp"
+                                  android:text="Orion Viewer v." android:layout_marginRight="10px"/>
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                  android:textSize="20sp"
+                                  android:text="@string/version_name" android:layout_marginRight="10px"/>
+                </LinearLayout>
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                          android:textSize="20sp"
+                          android:text="Author: Michael Bogdanov"
+                          android:gravity="left"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                          android:textSize="20sp"
+                          android:text="New versions could be obtained from \n  http://code.google.com/p/orion-viewer/"
+                          android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
+                          <!--android:text="&lt;html&gt;New versions could be obtained from \n  &lt;a href=''&gt;http://code.google.com/p/orion-viewer/&lt;/a&gt;&lt;/html&gt;"-->
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                          android:textSize="20sp"
+                          android:text="Third party libraries:"
+                          android:gravity="center" android:layout_marginTop="20px"/>
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                          android:textSize="20sp"
+                          android:text="mupdf"
+                          android:gravity="center" />
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                          android:textSize="20sp"
+                          android:text="DjVuLibre"
+                          android:gravity="center" />
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                          android:textSize="20sp"
+                          android:text="apdfViewer for nook"
+                          android:gravity="center" />
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                          android:textSize="20sp"
+                          android:text="themissingtabwidget"
+                          android:gravity="center" />
+
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                          android:textSize="20sp"
+                          android:text="Third party icons:"
+                          android:gravity="center" android:layout_marginTop="20px"/>
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                          android:textSize="20sp"
+                          android:text="ArtDesigner.lv"
+                          android:gravity="center" />
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                          android:textSize="20sp"
+                          android:text="Oxygen  "
+                          android:gravity="center" />
+
+        <ImageButton android:layout_width="66.0px" android:layout_height="66.0px"
+                     android:src="@drawable/revert"
+                     android:id="@+id/info_close" android:layout_gravity="right" />
+
+    </LinearLayout>
+
+</ScrollView>
