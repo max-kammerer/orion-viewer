@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -130,6 +132,24 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
         recent.setIndicator("", getResources().getDrawable(R.drawable.book));
         host.addTab(recent);
         host.setCurrentTab(0);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        boolean result = super.onCreateOptionsMenu(menu);
+        if (result) {
+            getMenuInflater().inflate(R.menu.file_manager_menu, menu);
+        }
+        return result;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.exit_menu_item:
+                finish();
+                return true;
+        }
+        return false;
     }
 
 

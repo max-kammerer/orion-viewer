@@ -133,7 +133,7 @@
 
         </TableLayout>
 
-        <ImageButton android:layout_width="66.0px" android:layout_height="66.0px"
+        <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                      android:src="@drawable/revert"
                      android:id="@+id/help_close" android:layout_gravity="right"/>
 

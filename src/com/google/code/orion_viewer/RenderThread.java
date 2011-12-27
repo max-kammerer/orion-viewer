@@ -85,6 +85,8 @@ public class RenderThread extends Thread {
         DisplayMetrics metrics = new DisplayMetrics();
         manager.getDefaultDisplay().getMetrics(metrics);
 
+        Common.d("PixelFormat is " +  manager.getDefaultDisplay().getPixelFormat());
+
         switch (manager.getDefaultDisplay().getPixelFormat()) {
             case PixelFormat.A_8:
                 bitmapConfig = Bitmap.Config.ALPHA_8;
@@ -98,9 +100,15 @@ public class RenderThread extends Thread {
             case PixelFormat.RGBA_8888:
                 bitmapConfig = Bitmap.Config.ARGB_8888;
                 break;
+            case 5:
+                //this value in my  phone
+                bitmapConfig = Bitmap.Config.ARGB_8888;
+                break;
+            default:
+                bitmapConfig = Bitmap.Config.ARGB_8888;
         }
 
-        Common.d("PixelFormat is " +  manager.getDefaultDisplay().getPixelFormat());
+        Common.d("BitmapConfig is " +  bitmapConfig);
     }
 
     public void invalidateCache() {
@@ -153,7 +161,7 @@ public class RenderThread extends Thread {
         synchronized (this) {
             myWidth = activity.getView().getWidth();
             myHeight = activity.getView().getHeight();
-            rotationShift = Math.abs(myHeight - myWidth) / 2;
+            rotationShift = (myHeight - myWidth) / 2;
 
             paused = false;
             notify();
@@ -241,16 +249,8 @@ public class RenderThread extends Thread {
                         }
                     }
                     if (bitmap == null) {
-                        try {
-                            Common.d("Creating Bitmap...");
-                            bitmap = Bitmap.createBitmap(myWidth, myHeight, bitmapConfig);
-                        } catch (NullPointerException e) {
-                            //it occurs on my phone)))
-                            Common.d("NPE on bitmap creation!!!");
-                            bitmapConfig = Bitmap.Config.RGB_565;
-                            bitmap = Bitmap.createBitmap(myWidth, myHeight, bitmapConfig);
-                            //System.gc();
-                        }
+                        Common.d("Creating Bitmap...");
+                        bitmap = Bitmap.createBitmap(myWidth, myHeight, bitmapConfig);
                     }
 
                     cacheCanvas.setMatrix(null);
@@ -266,14 +266,6 @@ public class RenderThread extends Thread {
                     Common.d("data rendered  " + data .length);
                     Date date = new Date();
                     cacheCanvas.setBitmap(bitmap);
-
-//                    Paint p = new Paint();
-//                    ColorFilter filter = new PorterDuffColor=Filter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
-//                    p.setColorFilter(filter);
-//                     p.setRasterizer()
-//                    Paint p = new Paint();
-//                    ColorFilter filter = new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
-//                    p.setColorFilter(filter);
 
 
                     cacheCanvas.drawBitmap(data, 0, width, 0, 0, width, height, false, null);

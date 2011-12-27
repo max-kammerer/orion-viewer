@@ -38,6 +38,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private Dialog dialog;
 
+    private static final int ROTATION_SCREEN = 0;
+
     private static final int MAIN_SCREEN = 0;
 
     private static final int PAGE_SCREEN = 1;
@@ -72,20 +74,21 @@ public class OrionViewerActivity extends OrionBaseActivity {
     private Intent myIntent;
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        setContentView(device.getLayoutId());
+
 
         super.onCreate(savedInstanceState);
-
+        setContentView(device.getLayoutId());
         loadGlobalOptions();
 
         //init view before device.onCreate
-        view = (OrionView) findViewById(R.id.view);
+        view = (OrionView) findViewById(R.id.view2);
 
         if (!device.optionViaDialog()) {
             initAnimator();
             initMainScreen();
         } else {
             initOptionDialog();
+            initRotationScreen();
         }
 
         //page chooser
@@ -95,7 +98,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         initCropScreen();
 
-        initOptions();
+        initOptionsScreen();
 
         initHelpScreen();
 
@@ -237,8 +240,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
         getSubscriptionManager().addDocListeners(new DocumentViewAdapter() {
             @Override
             public void documentOpened(Controller controller) {
-                pageSeek.setProgress(controller.getCurrentPage());
                 pageSeek.setMax(controller.getPageCount() - 1);
+                pageSeek.setProgress(controller.getCurrentPage());
             }
 
             @Override
@@ -287,6 +290,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 //controller.drawPage(Integer.valueOf(pageNumberText.getText().toString()) - 1);
                 //main menu
                 onAnimatorCancel();
+                updatePageSeeker();
                 //animator.setDisplayedChild(MAIN_SCREEN);
             }
         });
@@ -297,6 +301,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 controller.drawPage(Integer.valueOf(pageNumberText.getText().toString()) -1);
             }
         });
+    }
+
+    public void updatePageSeeker() {
+        SeekBar pageSeek = (SeekBar) findMyViewById(R.id.page_picker_seeker);
+        pageSeek.setProgress(controller.getCurrentPage());
     }
 
     public void initZoomScreen() {
@@ -321,6 +330,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             @Override
             public void documentOpened(Controller controller) {
                 zoomText.setText(controller.getZoomFactor() + "%");
+                zoomSeek.setProgress(controller.getZoomFactor());
             }
         });
 
@@ -346,6 +356,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 //controller.changeZoom(zoomSeek.getProgress());
                 //main menu
                 onAnimatorCancel();
+                updateZoom();
                 //animator.setDisplayedChild(MAIN_SCREEN);
             }
         });
@@ -358,8 +369,13 @@ public class OrionViewerActivity extends OrionBaseActivity {
         });
     }
 
+    public void updateZoom() {
+        SeekBar zoomSeek = (SeekBar) findMyViewById(R.id.zoom_picker_seeker);
+        zoomSeek.setProgress(controller.getZoomFactor());
+    }
 
-    public void initOptions() {
+
+    public void initOptionsScreen() {
         ImageButton close = (ImageButton) findMyViewById(R.id.options_close);
         close.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -368,6 +384,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 //                controller.setDirectionAndLayout(did == R.id.direction1 ? 0 : 1, lid == R.id.layout1 ? 0 : lid == R.id.layout2 ? 1 : 2);
                 //main menu
                 onAnimatorCancel();
+                updateOptions();
                 //animator.setDisplayedChild(MAIN_SCREEN);
             }
         });
@@ -400,7 +417,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
         });
 
-        cropList.setAdapter(new ArrayAdapter(this, R.layout.crop, new String[] {"Left", "Right", "Top", "Bottom"}) {
+        cropList.setAdapter(new ArrayAdapter(this, R.layout.crop, new String[] {"Left  ", "Right ", "Top   ", "Bottom"}) {
 
             public View getView(int position, View convertView, ViewGroup parent) {
                 View v = convertView;
@@ -441,6 +458,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 //controller.changeMargins(cropBorders[0], cropBorders[2], cropBorders[1], cropBorders[3]);
                 //animator.setDisplayedChild(MAIN_SCREEN);
                 onAnimatorCancel();
+                //reset if canceled
+                updateCrops();
             }
         });
     }
@@ -677,13 +696,12 @@ public class OrionViewerActivity extends OrionBaseActivity {
         if (result) {
             getMenuInflater().inflate(R.menu.menu, menu);
         }
-
         return result;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int screenId = 1;
+        int screenId = HELP_SCREEN;
         switch (item.getItemId()) {
             case R.id.exit_menu_item:
                 finish();
@@ -692,10 +710,15 @@ public class OrionViewerActivity extends OrionBaseActivity {
             case R.id.zoom_menu_item: screenId = ZOOM_SCREEN; break;
             case R.id.goto_menu_item: screenId = PAGE_SCREEN; break;
             case R.id.options_menu_item: screenId = OPTIONS_SCREEN; break;
-            default: screenId = HELP_SCREEN; break;
+            case R.id.rotation_menu_item: screenId = ROTATION_SCREEN; break;
         }
 
-        animator.setDisplayedChild(screenId - 1);
+        updateRotation();
+        updateCrops();
+        updateOptions();
+        updatePageSeeker();
+
+        animator.setDisplayedChild(screenId);
         dialog.show();
         return true;
     }
@@ -725,6 +748,25 @@ public class OrionViewerActivity extends OrionBaseActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.android_dialog);
         animator = ((ViewAnimator)dialog.findViewById(R.id.viewanim));
+
+        getView().setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                controller.drawNext();
+            }
+        });
+
+        getView().setOnLongClickListener(new View.OnLongClickListener(){
+            public boolean onLongClick(View v) {
+                controller.drawPrev();
+                return true;
+            }
+        });
+
+//        getView().setOnTouchListener(new View.OnTouchListener() {
+//            public boolean onTouch(View v, MotionEvent event) {
+//
+//            }
+//        });
     }
 
     private View findMyViewById(int id) {
@@ -741,5 +783,40 @@ public class OrionViewerActivity extends OrionBaseActivity {
         } else {
             dialog.cancel();
         }
+    }
+
+    public void initRotationScreen() {
+        final RadioGroup rotationGroup = (RadioGroup) findMyViewById(R.id.rotationGroup);
+
+        rotationGroup.check(R.id.rotate0);
+
+        getSubscriptionManager().addDocListeners(new DocumentViewAdapter() {
+            @Override
+            public void documentOpened(Controller controller) {
+                updateRotation();
+            }
+        });
+
+
+        ImageButton apply = (ImageButton) findMyViewById(R.id.rotation_apply);
+        apply.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                int id = rotationGroup.getCheckedRadioButtonId();
+                controller.setRotation(id == R.id.rotate0 ? 0 : id == R.id.rotate90 ? -1 : 1);
+            }
+        });
+
+        ImageButton cancel = (ImageButton) findMyViewById(R.id.rotation_close);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                onAnimatorCancel();
+                updateRotation();
+            }
+        });
+    }
+
+    void updateRotation() {
+        RadioGroup rotationGroup = (RadioGroup) findMyViewById(R.id.rotationGroup);
+        rotationGroup.check(controller.getRotation() == 0 ? R.id.rotate0 : controller.getRotation() == -1 ? R.id.rotate90 : R.id.rotate270);
     }
 }

@@ -17,12 +17,12 @@
 <!--along with this program.  If not, see <http://www.gnu.org/licenses/>.-->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="wrap_content"
+              android:layout_width="fill_parent"
               android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center">
 
-    <TextView android:layout_width="100.0px"
+    <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:textSize="25sp" android:id="@+id/crop_text" android:gravity="left" android:paddingLeft="5px"/>
+              android:textSize="25sp" android:id="@+id/crop_text" android:gravity="left"/>
 
     <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                  android:src="@drawable/minus" android:id="@+id/crop_minus"/>
