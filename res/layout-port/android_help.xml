@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<pl.polidea.customwidget.TheMissingTabHost xmlns:android="http://schemas.android.com/apk/res/android"
+                                           android:id="@+id/helptab"
+                                           android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+    <LinearLayout android:orientation="vertical"
+		android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+		<pl.polidea.customwidget.TheMissingTabWidget
+			android:id="@android:id/tabs" android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:layout_weight="0" />
+
+        <FrameLayout android:id="@android:id/tabcontent"
+			android:layout_width="fill_parent" android:layout_height="0dip"
+			android:layout_weight="1" android:paddingLeft="5px">
+
+            <include layout="@layout/android_general_help"/>
+
+            <include layout="@layout/android_about"/>
+
+        </FrameLayout>
+    </LinearLayout>
+</pl.polidea.customwidget.TheMissingTabHost>
+
