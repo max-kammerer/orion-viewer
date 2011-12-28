@@ -72,6 +72,31 @@
                           android:text="themissingtabwidget"
                           android:gravity="center" />
 
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                          android:textSize="20sp"
+                          android:text="freetype"
+                          android:gravity="center" />
+
+                <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                          android:textSize="20sp"
+                          android:text="jbig2dec"
+                          android:gravity="center" />
+
+                <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                          android:textSize="20sp"
+                          android:text="jpeg"
+                          android:gravity="center" />
+
+                <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                          android:textSize="20sp"
+                          android:text="openjpeg"
+                          android:gravity="center" />
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                          android:textSize="20sp"
+                          android:text="zlib"
+                          android:gravity="center" />
+
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
                           android:textSize="20sp"
@@ -88,9 +113,21 @@
                           android:text="Oxygen  "
                           android:gravity="center" />
 
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:textSize="20sp"
+                  android:text="hubblesite.org"
+                  android:gravity="center" />
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:textSize="20sp"
+                  android:text="Android Icons"
+                  android:gravity="center" />
+
         <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                      android:src="@drawable/revert"
                      android:id="@+id/info_close" android:layout_gravity="right" />
+
 
     </LinearLayout>
 
