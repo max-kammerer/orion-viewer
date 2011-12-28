@@ -829,4 +829,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
         RadioGroup rotationGroup = (RadioGroup) findMyViewById(R.id.rotationGroup);
         rotationGroup.check(controller.getRotation() == 0 ? R.id.rotate0 : controller.getRotation() == -1 ? R.id.rotate90 : R.id.rotate270);
     }
+
+    @Override
+    public int getViewerType() {
+        return Device.VIEWER_ACTIVITY;
+    }
 }

@@ -1,7 +1,6 @@
 package com.google.code.orion_viewer.device;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.PowerManager;
 import android.view.KeyEvent;
 import com.google.code.orion_viewer.*;
@@ -17,7 +16,11 @@ public class AndroidDevice implements Device {
 
     private OrionBaseActivity activity;
 
-    private int DELAY = 600000;
+    private static int DELAY = 60000;
+
+    private static int VIEWER_DELAY = 600000;
+
+    private static int delay = DELAY;
 
     private int nextKey;
 
@@ -63,6 +66,9 @@ public class AndroidDevice implements Device {
     }
 
     public void onCreate(OrionBaseActivity activity) {
+        if (activity.getViewerType() == VIEWER_ACTIVITY) {
+            delay = VIEWER_DELAY;
+        }
         this.activity = activity;
         PowerManager power = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
         screenLock = power.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "OrionViewer" + hashCode());
@@ -77,7 +83,7 @@ public class AndroidDevice implements Device {
 
     public void onResume() {
         if (screenLock != null) {
-            screenLock.acquire(DELAY);
+            screenLock.acquire(delay);
         }
         GlobalOptions options = new GlobalOptions(activity);
         nextKey = options.getNextKey();
@@ -87,7 +93,7 @@ public class AndroidDevice implements Device {
 
     public void onUserInteraction() {
         if (screenLock != null) {
-            screenLock.acquire(DELAY);
+            screenLock.acquire(delay);
         }
     }
 

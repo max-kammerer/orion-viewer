@@ -33,6 +33,10 @@ public interface Device {
 
     final int ESC = 10;
 
+    final int DEFAULT_ACTIVITY = 0;
+
+    final int VIEWER_ACTIVITY = 1;
+
     void updateTitle(String title);
 
     boolean onKeyDown(int keyCode, KeyEvent event, OperationHolder operation);

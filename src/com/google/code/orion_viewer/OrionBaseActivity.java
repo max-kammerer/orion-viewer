@@ -3,7 +3,6 @@ package com.google.code.orion_viewer;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import com.google.code.orion_viewer.device.NookDevice;
 
 /**
  * User: mike
@@ -44,5 +43,9 @@ public class OrionBaseActivity extends Activity {
 
     public View getView() {
         return null;
+    }
+
+    public int getViewerType() {
+        return Device.DEFAULT_ACTIVITY;
     }
 }
