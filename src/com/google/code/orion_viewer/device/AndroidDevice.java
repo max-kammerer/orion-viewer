@@ -19,6 +19,10 @@ public class AndroidDevice implements Device {
 
     private int DELAY = 600000;
 
+    private int nextKey;
+
+    private int prevKey;
+
     public AndroidDevice() {
 
     }
@@ -32,6 +36,16 @@ public class AndroidDevice implements Device {
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event, OperationHolder holder) {
+        if (keyCode == nextKey) {
+            holder.value = NEXT;
+            return true;
+        }
+
+        if (keyCode == prevKey) {
+            holder.value = PREV;
+            return true;
+        }
+
         if (keyCode == KeyEvent.KEYCODE_SOFT_LEFT || keyCode == KeyEvent.KEYCODE_SOFT_RIGHT) {
             holder.value = keyCode == KeyEvent.KEYCODE_SOFT_LEFT ? PREV : NEXT;
             return true;
@@ -65,6 +79,9 @@ public class AndroidDevice implements Device {
         if (screenLock != null) {
             screenLock.acquire(DELAY);
         }
+        GlobalOptions options = new GlobalOptions(activity);
+        nextKey = options.getNextKey();
+        prevKey = options.getPrevKey();
     }
 
 
@@ -86,14 +103,6 @@ public class AndroidDevice implements Device {
 
     public String getDefaultDirectory() {
         return "";
-    }
-
-    public int getViewWidth() {
-        return activity.getView().getLayoutParams().width;
-    }
-
-    public int getViewHeight() {
-        return activity.getView().getLayoutParams().height;
     }
 
     public int getFileManagerLayoutId() {

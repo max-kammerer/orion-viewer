@@ -17,6 +17,10 @@ public class GlobalOptions implements Serializable {
 
     public static final int MAX_RECENT_ENTRIES = 10;
 
+    public static final String NEXT_KEY = "next_key_keycode";
+
+    public static final String PREV_KEY = "prev_key_keycode";
+
     private static final String RECENT_PREFIX = "recent_";
 
     private String lastOpenedDirectory;
@@ -24,6 +28,11 @@ public class GlobalOptions implements Serializable {
     private LinkedList<RecentEntry> recentFiles;
 
     private SharedPreferences prefs;
+
+    private int nextKey;
+
+    private int prevKey;
+
 
     public GlobalOptions(Activity activity) {
         prefs = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
@@ -38,6 +47,9 @@ public class GlobalOptions implements Serializable {
                 recentFiles.add(new RecentEntry(entry));
             }
         }
+
+        nextKey = prefs.getInt(NEXT_KEY, 0);
+        prevKey = prefs.getInt(PREV_KEY, 0);
     }
 
     public String getLastOpenedDirectory() {
@@ -110,4 +122,11 @@ public class GlobalOptions implements Serializable {
         return recentFiles;
     }
 
+    public int getPrevKey() {
+        return prevKey;
+    }
+
+    public int getNextKey() {
+        return nextKey;
+    }
 }

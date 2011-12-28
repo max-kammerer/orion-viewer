@@ -92,6 +92,19 @@
             </intent-filter>
 
         </activity>
+
+        <activity android:name=".OrionKeyBinderActivity"
+                  android:label="@string/app_name"
+                  android:theme="@android:style/Theme.NoTitleBar"
+                  android:launchMode="singleInstance"
+                  android:icon="@drawable/orion">
+
+            <intent-filter>
+                <action android:name="com.code.otion_viewer.KEY_BINDER" />
+				<category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+        </activity>
     </application>
     <uses-sdk android:minSdkVersion="3"/>
     <uses-sdk android:targetSdkVersion="7"/>

@@ -25,6 +25,10 @@
           android:title="Help"
           android:icon="@drawable/help"/>
 
+    <item android:id="@+id/keybinder_menu_item"
+          android:title="Key Binder"
+          android:icon="@drawable/help"/>
+
     <item android:id="@+id/exit_menu_item"
           android:title="Exit"
           android:icon="@drawable/close"/>

@@ -638,12 +638,17 @@ public class OrionViewerActivity extends OrionBaseActivity {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (!device.optionViaDialog() && animator.getDisplayedChild() != MAIN_SCREEN) {
                 onAnimatorCancel();
+                return true;
             }
-            return true;
         }
 
         if (device.onKeyDown(keyCode, event, operation)) {
             changePage(operation.value);
+            return true;
+        }
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            finish();
             return true;
         }
         return false;
@@ -711,6 +716,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
             case R.id.goto_menu_item: screenId = PAGE_SCREEN; break;
             case R.id.options_menu_item: screenId = OPTIONS_SCREEN; break;
             case R.id.rotation_menu_item: screenId = ROTATION_SCREEN; break;
+            case R.id.keybinder_menu_item:
+                Intent in = new Intent("com.code.otion_viewer.KEY_BINDER");
+                in.setClass(getApplicationContext(), OrionKeyBinderActivity.class);
+                startActivity(in);
+                return true;
         }
 
         updateRotation();
