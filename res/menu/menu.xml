@@ -2,34 +2,34 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
       <item android:id="@+id/zoom_menu_item"
-          android:title="Zoom"
+          android:title="@string/menu_zoom_text"
           android:icon="@drawable/zoom"/>
 
     <item android:id="@+id/goto_menu_item"
-          android:title="Goto"
+          android:title="@string/menu_goto_text"
           android:icon="@drawable/next"/>
 
     <item android:id="@+id/rotation_menu_item"
-          android:title="Rotation"
+          android:title="@string/menu_rotation_text"
           android:icon="@drawable/rotate"/>
 
     <item android:id="@+id/crop_menu_item"
-          android:title="Crop"
+          android:title="@string/menu_crop_text"
           android:icon="@drawable/crop"/>
 
     <item android:id="@+id/options_menu_item"
-          android:title="Navigation"
+          android:title="@string/menu_navigation_text"
           android:icon="@drawable/options"/>
 
     <item android:id="@+id/help_menu_item"
-          android:title="Help"
+          android:title="@string/menu_help_text"
           android:icon="@drawable/help"/>
 
     <item android:id="@+id/keybinder_menu_item"
-          android:title="Key Binder"
+          android:title="@string/menu_key_binder_text"
           android:icon="@drawable/help"/>
 
     <item android:id="@+id/exit_menu_item"
-          android:title="Exit"
+          android:title="@string/menu_exit_text"
           android:icon="@drawable/close"/>
 </menu>

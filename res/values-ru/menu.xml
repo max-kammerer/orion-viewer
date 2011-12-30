@@ -1,0 +1,10 @@
+<resources>
+    <string name="menu_zoom_text">Масштаб</string>
+    <string name="menu_crop_text">Обрезка</string>
+    <string name="menu_goto_text">Перейти</string>
+    <string name="menu_rotation_text">Поворот</string>
+    <string name="menu_navigation_text">Навигация</string>
+    <string name="menu_help_text">Помощь</string>
+    <string name="menu_exit_text">Закрыть</string>
+    <string name="menu_key_binder_text">Назначение клавиш</string>
+</resources>

@@ -105,6 +105,13 @@
             </intent-filter>
 
         </activity>
+
+        <activity android:name=".OrionHelpActivity"
+                  android:label="@string/app_name"
+                  android:theme="@android:style/Theme.NoTitleBar"
+                  android:launchMode="singleInstance"
+                  android:icon="@drawable/orion">
+        </activity>
     </application>
     <uses-sdk android:minSdkVersion="3"/>
     <uses-sdk android:targetSdkVersion="7"/>

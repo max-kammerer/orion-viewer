@@ -164,8 +164,6 @@
                          android:src="@drawable/revert" android:id="@+id/crop_close"/>
         </LinearLayout>
 
-        <!--help screen-->
-        <include layout="@layout/android_help"/>
 
         <!--&lt;!&ndash;file chooser&ndash;&gt;-->
         <!--<include layout="@layout/file_manager"/>-->
@@ -173,6 +171,9 @@
 
         <!--options-->
         <include layout="@layout/options"/>
+
+        <!--help screen-->
+        <include layout="@layout/android_help"/>
 
 
     </ViewAnimator>

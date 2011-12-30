@@ -29,4 +29,7 @@
     <string name="general_usage_step4">
         4. Приятного чтения!</string>
 
+    <string name="help_clicks">
+        При клике по экрану - переход вперед, при долгом клике - назад.</string>
+
 </resources>

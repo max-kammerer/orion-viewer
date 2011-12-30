@@ -14,120 +14,127 @@
                   android:layout_height="fill_parent" android:orientation="vertical">
 
         <LinearLayout android:layout_width="fill_parent"
-                  android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center" android:layout_marginBottom="10px" android:layout_marginTop="10px">
+                      android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center"
+                      android:layout_marginBottom="10px" android:layout_marginTop="10px">
 
             <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                     android:src="@drawable/orion" android:layout_marginRight="10px"/>
+                       android:src="@drawable/orion" android:layout_marginRight="10px"/>
 
             <LinearLayout android:layout_width="wrap_content"
-                  android:layout_height="wrap_content" android:orientation="vertical" android:gravity="left">
+                          android:layout_height="wrap_content" android:orientation="vertical" android:gravity="left">
 
                 <LinearLayout android:layout_width="wrap_content"
-                  android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="left">
+                              android:layout_height="wrap_content" android:orientation="horizontal"
+                              android:gravity="left">
 
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                  android:textSize="20sp"
-                                  android:text="Orion Viewer v." android:layout_marginRight="10px"/>
+
+                              android:text="Orion Viewer v." android:layout_marginRight="10px"/>
 
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                  android:textSize="20sp"
-                                  android:text="@string/version_name" android:layout_marginRight="10px"/>
+
+                              android:text="@string/version_name" android:layout_marginRight="10px"/>
                 </LinearLayout>
 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                          android:textSize="20sp"
+
                           android:text="Author: Michael Bogdanov"
                           android:gravity="left"/>
             </LinearLayout>
         </LinearLayout>
 
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:text="e-mail: mikhael.bogdanov@gmail.com"
+                  android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                          android:textSize="20sp"
-                          android:text="New versions could be obtained from \n  http://code.google.com/p/orion-viewer/"
-                          android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
-                          <!--android:text="&lt;html&gt;New versions could be obtained from \n  &lt;a href=''&gt;http://code.google.com/p/orion-viewer/&lt;/a&gt;&lt;/html&gt;"-->
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                          android:textSize="20sp"
-                          android:text="Third party libraries:"
-                          android:gravity="center" android:layout_marginTop="20px"/>
+                  android:text="New versions could be obtained from \n http://code.google.com/p/orion-viewer/"
+                  android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                          android:textSize="20sp"
-                          android:text="mupdf"
-                          android:gravity="center" />
+                  android:text="You could report any bugs at \n http://code.google.com/p/orion-viewer/issues/list"
+                  android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
+
+        <!--android:text="&lt;html&gt;New versions could be obtained from \n  &lt;a href=''&gt;http://code.google.com/p/orion-viewer/&lt;/a&gt;&lt;/html&gt;"-->
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:text="Third party libraries:"
+                  android:gravity="center" android:layout_marginTop="20px"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                          android:textSize="20sp"
-                          android:text="DjVuLibre"
-                          android:gravity="center" />
+
+                  android:text="mupdf"
+                  android:gravity="center"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                          android:textSize="20sp"
-                          android:text="apdfViewer for nook"
-                          android:gravity="center" />
+
+                  android:text="DjVuLibre"
+                  android:gravity="center"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                          android:textSize="20sp"
-                          android:text="themissingtabwidget"
-                          android:gravity="center" />
+
+                  android:text="apdfViewer for nook"
+                  android:gravity="center"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                          android:textSize="20sp"
-                          android:text="freetype"
-                          android:gravity="center" />
 
-                <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                          android:textSize="20sp"
-                          android:text="jbig2dec"
-                          android:gravity="center" />
-
-                <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                          android:textSize="20sp"
-                          android:text="jpeg"
-                          android:gravity="center" />
-
-                <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                          android:textSize="20sp"
-                          android:text="openjpeg"
-                          android:gravity="center" />
+                  android:text="themissingtabwidget"
+                  android:gravity="center"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                          android:textSize="20sp"
-                          android:text="zlib"
-                          android:gravity="center" />
 
-
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                          android:textSize="20sp"
-                          android:text="Third party icons:"
-                          android:gravity="center" android:layout_marginTop="20px"/>
+                  android:text="freetype"
+                  android:gravity="center"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                          android:textSize="20sp"
-                          android:text="ArtDesigner.lv"
-                          android:gravity="center" />
+
+                  android:text="jbig2dec"
+                  android:gravity="center"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                          android:textSize="20sp"
-                          android:text="Oxygen  "
-                          android:gravity="center" />
+
+                  android:text="jpeg"
+                  android:gravity="center"/>
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+
+                  android:text="openjpeg"
+                  android:gravity="center"/>
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+
+                  android:text="zlib"
+                  android:gravity="center"/>
 
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:textSize="20sp"
-                  android:text="hubblesite.org"
-                  android:gravity="center" />
+
+                  android:text="Third party icons:"
+                  android:gravity="center" android:layout_marginTop="20px"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:textSize="20sp"
+
+                  android:text="ArtDesigner.lv"
+                  android:gravity="center"/>
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+
+                  android:text="Oxygen  "
+                  android:gravity="center"/>
+
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+
+                  android:text="Space Telescope Science Institute"
+                  android:gravity="center"/>
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+
                   android:text="Android Icons"
-                  android:gravity="center" />
+                  android:gravity="center"/>
 
         <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                      android:src="@drawable/revert"
-                     android:id="@+id/info_close" android:layout_gravity="right" />
-
+                     android:id="@+id/info_close" android:layout_gravity="right"/>
 
     </LinearLayout>
 

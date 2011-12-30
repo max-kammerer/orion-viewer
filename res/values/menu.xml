@@ -1,0 +1,11 @@
+<resources>
+    <string name="menu_zoom_text">Zoom</string>
+    <string name="menu_crop_text">Crop</string>
+    <string name="menu_goto_text">Go To</string>
+    <string name="menu_rotation_text">Rotation</string>
+    <string name="menu_navigation_text">Navigation</string>
+    <string name="menu_navigation_text">Navigation</string>
+    <string name="menu_help_text">Help</string>
+    <string name="menu_exit_text">Close</string>
+    <string name="menu_key_binder_text">Key Binder</string>
+</resources>
