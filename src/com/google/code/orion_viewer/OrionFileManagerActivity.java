@@ -108,16 +108,16 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
         startActivity(in);
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (((TheMissingTabHost) findViewById(R.id.tabhost)).getCurrentTab() == 0) {
-                ((FileChooser) ((ListView) findViewById(R.id.file_chooser)).getAdapter()).goToParent();
-            }
-            return true;
-        }
-        return false;
-    }
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (keyCode == KeyEvent.KEYCODE_BACK) {
+//            if (((TheMissingTabHost) findViewById(R.id.tabhost)).getCurrentTab() == 0) {
+//                ((FileChooser) ((ListView) findViewById(R.id.file_chooser)).getAdapter()).goToParent();
+//            }
+//            return true;
+//        }
+//        return false;
+//    }
 
     private void initFileManager() {
         TheMissingTabHost host = (TheMissingTabHost) findViewById(R.id.tabhost);

@@ -249,7 +249,7 @@ public class RenderThread extends Thread {
                         }
                     }
                     if (bitmap == null) {
-                        Common.d("Creating Bitmap...");
+                        Common.d("Creating Bitmap " + bitmapConfig + "...");
                         bitmap = Bitmap.createBitmap(myWidth, myHeight, bitmapConfig);
                     }
 
@@ -260,10 +260,9 @@ public class RenderThread extends Thread {
                     }
 
                     Point leftTopCorner = layout.convertToPoint(curPos);
-                    Common.d("Point " + leftTopCorner.x + " " + leftTopCorner.y);
+
                     int [] data = doc.renderPage(curPos.pageNumber, curPos.docZoom, width, height, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + width, leftTopCorner.y + height);
 
-                    Common.d("data rendered  " + data .length);
                     Date date = new Date();
                     cacheCanvas.setBitmap(bitmap);
 

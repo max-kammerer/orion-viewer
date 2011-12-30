@@ -92,12 +92,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
             return true;
         }
 
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            finish();
-            return true;
-        }
-
-        return false;
+        return super.onKeyDown(keyCode, event);
     }
 
 

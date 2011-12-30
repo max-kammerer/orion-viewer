@@ -48,9 +48,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private static final int CROP_SCREEN = 3;
 
-    private static final int HELP_SCREEN = 4;
+    private static final int OPTIONS_SCREEN = 4;
 
-    private static final int OPTIONS_SCREEN = 5;
+    private static final int HELP_SCREEN = 5;
 
     private static final int CROP_RESTRICTION = -30;
 
@@ -75,7 +75,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-
         super.onCreate(savedInstanceState);
         setContentView(device.getLayoutId());
         loadGlobalOptions();
@@ -86,6 +85,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         if (!device.optionViaDialog()) {
             initAnimator();
             initMainScreen();
+            initHelpScreen();
         } else {
             initOptionDialog();
             initRotationScreen();
@@ -100,12 +100,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         initOptionsScreen();
 
-        initHelpScreen();
-
         myIntent = getIntent();
     }
 
-    private void initHelpScreen() {
+    protected void initHelpScreen() {
         TheMissingTabHost host = (TheMissingTabHost) findMyViewById(R.id.helptab);
 
         host.setup();
@@ -633,7 +631,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-
         System.out.println("key " + keyCode);
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (!device.optionViaDialog() && animator.getDisplayedChild() != MAIN_SCREEN) {
@@ -647,11 +644,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             return true;
         }
 
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            finish();
-            return true;
-        }
-        return false;
+        return super.onKeyDown(keyCode,  event);
     }
 
     public void changePage(int operation) {
@@ -723,13 +716,18 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 return true;
         }
 
-        updateRotation();
-        updateCrops();
-        updateOptions();
-        updatePageSeeker();
-
-        animator.setDisplayedChild(screenId);
-        dialog.show();
+        if (screenId != HELP_SCREEN) {
+            updateRotation();
+            updateCrops();
+            updateOptions();
+            updatePageSeeker();
+            animator.setDisplayedChild(screenId);
+            dialog.show();
+        } else {
+            Intent intent = new Intent();
+            intent.setClass(this, OrionHelpActivity.class);
+            startActivity(intent);
+        }
         return true;
     }
 
@@ -779,7 +777,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 //        });
     }
 
-    private View findMyViewById(int id) {
+    protected View findMyViewById(int id) {
         if (device.optionViaDialog()) {
             return dialog.findViewById(id);
         } else {
