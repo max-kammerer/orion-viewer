@@ -74,13 +74,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
     private Intent myIntent;
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(device.getLayoutId());
         loadGlobalOptions();
 
-        //init view before device.onCreate
-        view = (OrionView) findViewById(R.id.view2);
+        view = (OrionView) findViewById(R.id.view);
 
         if (!device.optionViaDialog()) {
             initAnimator();
