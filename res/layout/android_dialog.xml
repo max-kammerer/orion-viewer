@@ -112,10 +112,7 @@
         <LinearLayout android:layout_height="fill_parent" android:orientation="vertical"
                       android:layout_width="fill_parent" android:gravity="center">
 
-
-            <ListView android:id="@+id/crop_borders"
-                    android:layout_width="fill_parent"
-                                  android:layout_height="wrap_content" android:layout_gravity="center" android:gravity="center" android:scrollbars="vertical"/>
+            <include layout="@layout/crops"/>
 
             <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
                       android:layout_width="fill_parent" android:gravity="right" android:layout_margin="10dp">
@@ -135,7 +132,7 @@
 
 
         <!--options-->
-        <include layout="@layout/options"/>
+        <include layout="@layout/navigation"/>
 
 
     </ViewAnimator>

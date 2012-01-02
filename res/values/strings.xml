@@ -19,5 +19,10 @@
 
 <resources>
     <string name="app_name">Orion Viewer</string>
-    <string name="version_name">0.24.1</string>
+    <string name="navigation">Navigation</string>
+    <string name="version_name">0.24.0</string>
+    <string name="crop_left">Left</string>
+    <string name="crop_right">Right</string>
+    <string name="crop_top">Top</string>
+    <string name="crop_bottom">Bottom</string>
 </resources>

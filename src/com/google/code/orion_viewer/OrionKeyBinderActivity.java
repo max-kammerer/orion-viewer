@@ -27,8 +27,8 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.key_binder);
+        super.onCreate(savedInstanceState);
 
         Button button = (Button) findViewById(R.id.next_bind);
         button.setOnClickListener(new View.OnClickListener() {

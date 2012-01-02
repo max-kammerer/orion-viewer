@@ -31,7 +31,6 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(device.getFileManagerLayoutId());
-
         super.onCreate(savedInstanceState);
         prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         globalOptions = new GlobalOptions(this);

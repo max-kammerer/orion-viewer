@@ -74,8 +74,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
     private Intent myIntent;
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(device.getLayoutId());
+        super.onCreate(savedInstanceState);
         loadGlobalOptions();
 
         view = (OrionView) findViewById(R.id.view);
@@ -140,7 +140,12 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     public void updateCrops() {
         controller.getMargins(cropBorders);
-        ((ArrayAdapter)((ListView)findMyViewById(R.id.crop_borders)).getAdapter()).notifyDataSetChanged();
+        TableLayout cropTable = (TableLayout) findMyViewById(R.id.crop_borders);
+        for (int i = 0; i < cropTable.getChildCount(); i++) {
+            TableRow row = (TableRow) cropTable.getChildAt(i);
+            TextView valueView = (TextView) row.findViewById(R.id.crop_value);
+            valueView.setText("" + cropBorders[i]);
+        }
     }
 
     public void updateOptions() {
@@ -196,9 +201,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
             pageInfo.fileName = fileData;
             controller.init(pageInfo);
-            //TODO
-            updateLabels();
-
 
             getSubscriptionManager().sendDocOpenedNotification(controller);
 
@@ -404,7 +406,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
 
     public void initCropScreen() {
-        ListView cropList = (ListView) findMyViewById(R.id.crop_borders);
+        TableLayout cropTable = (TableLayout) findMyViewById(R.id.crop_borders);
+
 
         getSubscriptionManager().addDocListeners(new DocumentViewAdapter(){
             @Override
@@ -412,33 +415,43 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 updateCrops();
             }
         });
+        for (int i = 0; i < cropTable.getChildCount(); i++) {
+            TableRow row = (TableRow) cropTable.getChildAt(i);
+            row.findViewById(R.id.crop_plus);
 
-        cropList.setAdapter(new ArrayAdapter(this, R.layout.crop, new String[] {"Left  ", "Right ", "Top   ", "Bottom"}) {
+            TextView valueView = (TextView) row.findViewById(R.id.crop_value);
+            ImageButton plus = (ImageButton) row.findViewById(R.id.crop_plus);
+            ImageButton minus = (ImageButton) row.findViewById(R.id.crop_minus);
+            linkCropButtonsAndText(minus, plus, valueView, i);
+        }
 
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View v = convertView;
-                if (v == null) {
-                    LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    v = vi.inflate(R.layout.crop, null);
-                }
 
-                String cropHeader = (String) getItem(position);
-
-                //crop header
-                TextView header = (TextView) v.findViewById(R.id.crop_text);
-                header.setText(cropHeader);
-
-                TextView valueView = (TextView) v.findViewById(R.id.crop_value);
-
-                valueView.setText("" + cropBorders[position]);
-
-                ImageButton plus = (ImageButton) v.findViewById(R.id.crop_plus);
-                ImageButton minus = (ImageButton) v.findViewById(R.id.crop_minus);
-                linkCropButtonsAndText(minus, plus, (TextView) v.findViewById(R.id.crop_value), position);
-
-                return v;
-            }
-        });
+//        cropList.setAdapter(new ArrayAdapter(this, R.layout.crop, new String[] {"Left  ", "Right ", "Top   ", "Bottom"}) {
+//
+//            public View getView(int position, View convertView, ViewGroup parent) {
+//                View v = convertView;
+//                if (v == null) {
+//                    LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//                    v = vi.inflate(R.layout.crop, null);
+//                }
+//
+//                String cropHeader = (String) getItem(position);
+//
+//                //crop header
+//                TextView header = (TextView) v.findViewById(R.id.crop_text);
+//                header.setText(cropHeader);
+//
+//                TextView valueView = (TextView) v.findViewById(R.id.crop_value);
+//
+//                valueView.setText("" + cropBorders[position]);
+//
+//                ImageButton plus = (ImageButton) v.findViewById(R.id.crop_plus);
+//                ImageButton minus = (ImageButton) v.findViewById(R.id.crop_minus);
+//                linkCropButtonsAndText(minus, plus, (TextView) v.findViewById(R.id.crop_value), position);
+//
+//                return v;
+//            }
+//        });
 
         ImageButton preview = (ImageButton) findMyViewById(R.id.crop_preview);
         preview.setOnClickListener(new View.OnClickListener() {

@@ -58,17 +58,16 @@
 
 
         <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
-                      android:layout_width="fill_parent" android:gravity="center">
-
+                      android:layout_width="fill_parent" android:gravity="left">
 
             <RadioGroup android:id="@+id/directionGroup" android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_gravity="center" android:layout_weight="0.4" android:gravity="center">
+                        android:layout_gravity="left" android:gravity="center">
 
                 <TextView android:layout_width="wrap_content"
                           android:layout_height="wrap_content" android:id="@+id/zoom_picker_message"
-                          android:text="Navigation:" android:textSize="25px" android:layout_marginRight="20.0px" android:layout_gravity="center"/>
+                          android:text="@string/navigation" android:textSize="22px" android:layout_marginRight="5dp" android:layout_gravity="center"/>
 
                 <RadioButton android:id="@+id/direction1"
                              android:layout_width="wrap_content"
@@ -80,15 +79,16 @@
                              android:layout_height="wrap_content" android:text="A, C, B, D"/>
             </RadioGroup>
 
-            <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
-                          android:layout_width="fill_parent" android:gravity="center" android:layout_weight="0.8">
+        </LinearLayout>
+
+        <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
+                          android:layout_width="fill_parent" android:gravity="right">
                 <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                              android:src="@drawable/view" android:id="@+id/options_apply"
                              android:layout_gravity="right"/>
                 <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                              android:src="@drawable/revert" android:id="@+id/options_close"
                              android:layout_gravity="right"/>
-            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>

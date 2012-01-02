@@ -52,16 +52,16 @@
                           android:layout_width="fill_parent" android:layout_height="124.0px"
                           android:orientation="horizontal" android:layout_gravity="center" android:gravity="center">
 
-                    <ImageButton android:id="@+id/zoom" android:src="@drawable/zoom" android:layout_width="65.0px" android:layout_height="65.0px"/>
+                    <ImageButton android:id="@+id/zoom" android:src="@drawable/zoom" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
 
-                    <ImageButton android:id="@+id/switch_page" android:src="@drawable/rotate" android:layout_width="65.0px" android:layout_height="65.0px"/>
+                    <ImageButton android:id="@+id/switch_page" android:src="@drawable/rotate" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
 
-                    <ImageButton android:id="@+id/prev_page" android:layout_width="65.0px" android:layout_height="65.0px" android:src="@drawable/prev"/>
+                    <ImageButton android:id="@+id/prev_page" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/prev"/>
 
-                    <ImageButton android:id="@+id/next_page" android:layout_width="65.0px" android:layout_height="65.0px"
+                    <ImageButton android:id="@+id/next_page" android:layout_width="wrap_content" android:layout_height="wrap_content"
                                  android:src="@drawable/next"/>
 
-                    <ImageButton android:id="@+id/crop_menu" android:layout_width="65.0px" android:layout_height="65.0px"
+                    <ImageButton android:id="@+id/crop_menu" android:layout_width="wrap_content" android:layout_height="wrap_content"
                                  android:src="@drawable/crop"/>
                 </LinearLayout>
 
@@ -112,14 +112,14 @@
 
                 <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                              android:src="@drawable/plus" android:id="@+id/page_picker_plus"/>
-                <ImageButton android:layout_width="66.0px" android:layout_height="66.0px"
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                              android:src="@drawable/view" android:id="@+id/page_preview"/>
-                <ImageButton android:layout_width="66.0px" android:layout_height="66.0px"
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                              android:src="@drawable/revert" android:id="@+id/page_picker_close"/>
             </LinearLayout>
             <SeekBar android:id="@+id/page_picker_seeker"
                      android:minWidth="100dp" android:layout_height="wrap_content"
-                     android:layout_width="fill_parent" android:layout_margin="5dp"></SeekBar>
+                     android:layout_width="fill_parent" android:padding="5dp"></SeekBar>
         </LinearLayout>
 
         <!--zoom chooser screen-->
@@ -137,30 +137,26 @@
 
                 <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                              android:src="@drawable/plus" android:id="@+id/zoom_picker_plus"/>
-                <ImageButton android:layout_width="66.0px" android:layout_height="66.0px"
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                              android:src="@drawable/view" android:id="@+id/zoom_preview"/>
-                <ImageButton android:layout_width="66.0px" android:layout_height="66.0px"
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                              android:src="@drawable/revert" android:id="@+id/zoom_picker_close"/>
             </LinearLayout>
             <SeekBar android:id="@+id/zoom_picker_seeker"
                      android:minWidth="100dp" android:layout_height="wrap_content"
-                     android:layout_width="fill_parent" android:layout_margin="5dp"></SeekBar>
+                     android:layout_width="fill_parent" android:padding="5dp"></SeekBar>
         </LinearLayout>
 
         <!--border crop screen-->
         <LinearLayout android:layout_height="fill_parent" android:orientation="horizontal"
                       android:layout_width="fill_parent" android:gravity="center">
 
+            <include layout="@layout/crops"/>
 
-            <ListView android:id="@+id/crop_borders"
-                    android:layout_width="300.0px"
-                                  android:layout_height="fill_parent"/>
-
-
-            <ImageButton android:layout_width="66.0px" android:layout_height="66.0px"
+            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                          android:src="@drawable/view" android:id="@+id/crop_preview"/>
 
-            <ImageButton android:layout_width="66.0px" android:layout_height="66.0px"
+            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                          android:src="@drawable/revert" android:id="@+id/crop_close"/>
         </LinearLayout>
 
@@ -170,10 +166,10 @@
 
 
         <!--options-->
-        <include layout="@layout/options"/>
+        <include layout="@layout/navigation"/>
 
         <!--help screen-->
-        <include layout="@layout/android_help"/>
+        <include layout="@layout/nook_help"/>
 
 
     </ViewAnimator>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Orion Viewer is a pdf viewer for Nook Classic based on mupdf-->
+
+<!--Copyright (C) 2011  Michael Bogdanov-->
+
+<!--This program is free software: you can redistribute it and/or modify-->
+<!--it under the terms of the GNU General Public License as published by-->
+<!--the Free Software Foundation, either version 3 of the License, or-->
+<!--(at your option) any later version.-->
+
+<!--This program is distributed in the hope that it will be useful,-->
+<!--but WITHOUT ANY WARRANTY; without even the implied warranty of-->
+<!--MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the-->
+<!--GNU General Public License for more details.-->
+
+<!--You should have received a copy of the GNU General Public License-->
+<!--along with this program.  If not, see <http://www.gnu.org/licenses/>.-->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/general_help"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:isScrollContainer="true"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbarStyle="outsideInset"
+            android:scrollbars="vertical"
+            android:orientation="vertical" android:layout_weight="0.4" >
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center">
+
+        <TableLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+                     android:shrinkColumns="1" android:id="@+id/crop_borders" android:gravity="center">
+
+            <TableRow android:gravity="center">
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:textSize="25sp" android:gravity="left|center_vertical" android:text="@string/crop_left"/>
+
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:src="@drawable/minus" android:id="@+id/crop_minus" />
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content" android:id="@+id/crop_value"
+                          android:textSize="25sp" android:gravity="center" />
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:src="@drawable/plus" android:id="@+id/crop_plus"/>
+            </TableRow>
+
+            <TableRow android:gravity="center">
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:textSize="25sp" android:gravity="left|center_vertical" android:text="@string/crop_right"/>
+
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:src="@drawable/minus" android:id="@+id/crop_minus"/>
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content" android:id="@+id/crop_value"
+                          android:textSize="25sp" android:gravity="center"/>
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:src="@drawable/plus" android:id="@+id/crop_plus"/>
+            </TableRow>
+
+            <TableRow android:gravity="center">
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:textSize="25sp" android:gravity="left|center_vertical" android:text="@string/crop_top"/>
+
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:src="@drawable/minus" android:id="@+id/crop_minus"/>
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content" android:id="@+id/crop_value"
+                          android:textSize="25sp" android:gravity="center"/>
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:src="@drawable/plus" android:id="@+id/crop_plus"/>
+            </TableRow>
+
+            <TableRow android:gravity="center">
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:textSize="25sp" android:gravity="left|center_vertical" android:text="@string/crop_bottom"/>
+
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:src="@drawable/minus" android:id="@+id/crop_minus"/>
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content" android:id="@+id/crop_value"
+                          android:textSize="25sp" android:gravity="center"/>
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:src="@drawable/plus" android:id="@+id/crop_plus"/>
+            </TableRow>
+
+        </TableLayout>
+
+    </LinearLayout>
+</ScrollView>
