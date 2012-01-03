@@ -21,74 +21,86 @@
             android:layout_height="fill_parent" android:orientation="vertical" android:gravity="center"
             android:scrollbars="vertical" android:fillViewport="true">
 
+
     <LinearLayout android:layout_height="fill_parent" android:orientation="vertical"
                   android:layout_width="fill_parent" android:gravity="center">
 
-        <RadioGroup android:id="@+id/layoutGroup" android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" android:gravity="center">
+        <HorizontalScrollView android:layout_height="wrap_content" android:layout_width="fill_parent">
 
-            <RadioButton android:id="@+id/layout1"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"/>
+            <LinearLayout android:layout_height="fill_parent" android:orientation="vertical"
+                          android:layout_width="fill_parent" android:gravity="center">
 
-            <ImageButton android:id="@+id/ilayout1"
-                         android:layout_width="wrap_content" android:layout_height="wrap_content"
-                         android:clickable="false"
-                         android:src="@drawable/navigation1" android:layout_gravity="center"/>
+                <RadioGroup android:id="@+id/layoutGroup" android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal" android:gravity="center">
 
-            <RadioButton android:id="@+id/layout2"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"/>
+                    <RadioButton android:id="@+id/layout1"
+                                 android:layout_width="wrap_content"
+                                 android:layout_height="wrap_content"/>
 
-            <ImageButton android:id="@+id/ilayout2"
-                         android:layout_width="wrap_content" android:layout_height="wrap_content"
-                         android:clickable="false"
-                         android:src="@drawable/navigation2"/>
+                    <ImageButton android:id="@+id/ilayout1"
+                                 android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                 android:clickable="false"
+                                 android:src="@drawable/navigation1" android:layout_gravity="center"/>
 
-            <RadioButton android:id="@+id/layout3"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"/>
+                    <RadioButton android:id="@+id/layout2"
+                                 android:layout_width="wrap_content"
+                                 android:layout_height="wrap_content"/>
 
-            <ImageButton android:id="@+id/ilayout3"
-                         android:layout_width="wrap_content" android:layout_height="wrap_content"
-                         android:clickable="false"
-                         android:src="@drawable/navigation3"/>
-        </RadioGroup>
+                    <ImageButton android:id="@+id/ilayout2"
+                                 android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                 android:clickable="false"
+                                 android:src="@drawable/navigation2"/>
 
+                    <RadioButton android:id="@+id/layout3"
+                                 android:layout_width="wrap_content"
+                                 android:layout_height="wrap_content"/>
+
+                    <ImageButton android:id="@+id/ilayout3"
+                                 android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                 android:clickable="false"
+                                 android:src="@drawable/navigation3"/>
+                </RadioGroup>
+
+
+                <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
+                              android:layout_width="fill_parent" android:gravity="left">
+
+                    <RadioGroup android:id="@+id/directionGroup" android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_gravity="left" android:gravity="center">
+
+                        <TextView android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content" android:id="@+id/zoom_picker_message"
+                                  android:text="@string/navigation" android:textSize="22px"
+                                  android:layout_marginRight="5dp" android:layout_gravity="center"/>
+
+                        <RadioButton android:id="@+id/direction1"
+                                     android:layout_width="wrap_content"
+                                     android:layout_height="wrap_content" android:text="A, B, C, D"
+                                     android:layout_marginRight="10.0px"/>
+
+
+                        <RadioButton android:id="@+id/direction2"
+                                     android:layout_width="wrap_content"
+                                     android:layout_height="wrap_content" android:text="A, C, B, D"/>
+                    </RadioGroup>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
 
         <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
-                      android:layout_width="fill_parent" android:gravity="left">
-
-            <RadioGroup android:id="@+id/directionGroup" android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_gravity="left" android:gravity="center">
-
-                <TextView android:layout_width="wrap_content"
-                          android:layout_height="wrap_content" android:id="@+id/zoom_picker_message"
-                          android:text="@string/navigation" android:textSize="22px" android:layout_marginRight="5dp" android:layout_gravity="center"/>
-
-                <RadioButton android:id="@+id/direction1"
-                             android:layout_width="wrap_content"
-                             android:layout_height="wrap_content" android:text="A, B, C, D" android:layout_marginRight="10.0px"/>
-
-
-                <RadioButton android:id="@+id/direction2"
-                             android:layout_width="wrap_content"
-                             android:layout_height="wrap_content" android:text="A, C, B, D"/>
-            </RadioGroup>
-
-        </LinearLayout>
-
-        <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
-                          android:layout_width="fill_parent" android:gravity="right">
-                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                             android:src="@drawable/view" android:id="@+id/options_apply"
-                             android:layout_gravity="right"/>
-                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                             android:src="@drawable/revert" android:id="@+id/options_close"
-                             android:layout_gravity="right"/>
+                      android:layout_width="fill_parent" android:gravity="right">
+            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                         android:src="@drawable/view" android:id="@+id/options_apply"
+                         android:layout_gravity="right"/>
+            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                         android:src="@drawable/revert" android:id="@+id/options_close"
+                         android:layout_gravity="right"/>
         </LinearLayout>
 
     </LinearLayout>

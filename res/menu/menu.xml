@@ -19,7 +19,7 @@
 
     <item android:id="@+id/navigation_menu_item"
           android:title="@string/menu_navigation_text"
-          android:icon="@drawable/options"/>
+          android:icon="@drawable/navigation"/>
 
     <item android:id="@+id/options_menu_item"
           android:title="@string/menu_options_text"
