@@ -99,7 +99,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         initCropScreen();
 
-        initOptionsScreen();
+        initNavigationScreen();
 
         myIntent = getIntent();
     }
@@ -389,7 +389,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
 
-    public void initOptionsScreen() {
+    public void initNavigationScreen() {
         ImageButton close = (ImageButton) findMyViewById(R.id.options_close);
         close.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -606,11 +606,19 @@ public class OrionViewerActivity extends OrionBaseActivity {
         });
 
 
-        btn = (ImageButton) findMyViewById(R.id.options);
+        btn = (ImageButton) findMyViewById(R.id.navigation);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 updateOptions();
                 animator.setDisplayedChild(NAVIGATION_SCREEN);
+            }
+        });
+
+        btn = (ImageButton) findMyViewById(R.id.options);
+        btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent in = new Intent(OrionViewerActivity.this, OrionPreferenceActivity.class);
+                startActivity(in);
             }
         });
     }

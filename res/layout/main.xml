@@ -41,6 +41,10 @@
             <LinearLayout
                       android:layout_width="fill_parent" android:layout_height="wrap_content"
                       android:orientation="vertical" android:gravity="right" android:layout_weight="0.8">
+
+                <ImageButton android:id="@+id/navigation" android:layout_width="45.0px" android:layout_height="45.0px"
+                             android:src="@drawable/navigation"/>
+
             </LinearLayout>
 
 
@@ -90,7 +94,7 @@
                              android:src="@drawable/help"/>
 
                 <ImageButton android:id="@+id/options" android:layout_width="45.0px" android:layout_height="45.0px"
-                             android:src="@drawable/navigation"/>
+                             android:src="@drawable/options"/>
 
             </LinearLayout>
 

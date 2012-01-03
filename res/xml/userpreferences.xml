@@ -21,8 +21,8 @@
 
         <ListPreference
                 android:key="DEFAULT_ORIENTATION"
-                android:title="Document default orientation"
-                android:summary="Rotate new document on opening"
+                android:title="Book default orientation"
+                android:summary="Rotate new book on opening"
                 android:entries="@array/orientation_desc"
                 android:entryValues="@array/orientation"
                 android:dialogTitle="Rotation"
