@@ -97,21 +97,17 @@
                   android:label="@string/app_name"
                   android:theme="@android:style/Theme.NoTitleBar"
                   android:launchMode="singleInstance"
-                  android:icon="@drawable/orion">
-
-            <intent-filter>
-                <action android:name="com.code.otion_viewer.KEY_BINDER" />
-				<category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-
-        </activity>
+                  android:icon="@drawable/orion"/>
 
         <activity android:name=".OrionHelpActivity"
                   android:label="@string/app_name"
                   android:theme="@android:style/Theme.NoTitleBar"
                   android:launchMode="singleInstance"
-                  android:icon="@drawable/orion">
-        </activity>
+                  android:icon="@drawable/orion"/>
+
+        <activity android:name=".OrionPreferenceActivity"
+          android:label="My Preferences"/>
+
     </application>
     <uses-sdk android:minSdkVersion="3"/>
     <uses-sdk android:targetSdkVersion="7"/>

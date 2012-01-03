@@ -48,9 +48,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private static final int CROP_SCREEN = 3;
 
-    private static final int OPTIONS_SCREEN = 4;
+    private static final int NAVIGATION_SCREEN = 4;
 
     private static final int HELP_SCREEN = 5;
+
+    private static final int OPTIONS_SCREEN = 6;
 
     private static final int CROP_RESTRICTION = -30;
 
@@ -72,6 +74,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     private GlobalOptions globalOptions;
 
     private Intent myIntent;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setContentView(device.getLayoutId());
@@ -100,6 +103,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         myIntent = getIntent();
     }
+
+
 
     protected void initHelpScreen() {
         TheMissingTabHost host = (TheMissingTabHost) findMyViewById(R.id.helptab);
@@ -198,7 +203,16 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 inp.close();
             } catch (Exception e) {
                 pageInfo = new LastPageInfo();
+
+                int defaultRotation = globalOptions.getDefaultOrientation();
+                switch (defaultRotation) {
+                    case 90: defaultRotation = -1; break;
+                    case 270: defaultRotation = 1; break;
+                    default: defaultRotation = 0; break;
+                }
+                pageInfo.rotation = defaultRotation;
             }
+
             pageInfo.fileName = fileData;
             controller.init(pageInfo);
 
@@ -592,7 +606,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 updateOptions();
-                animator.setDisplayedChild(OPTIONS_SCREEN);
+                animator.setDisplayedChild(NAVIGATION_SCREEN);
             }
         });
     }
@@ -623,6 +637,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         if (dialog != null) {
             dialog.dismiss();
         }
+        globalOptions.onDestroy(this);
     }
 
     private void saveData() {
@@ -659,8 +674,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public void changePage(int operation) {
+        boolean swapKeys = globalOptions.isSwapKeys();
         if (controller != null) {
-            if (operation == 1 && controller.getRotation() != -1 || operation == - 1 && controller.getRotation() == -1) {
+            if (operation == Device.NEXT && !swapKeys || swapKeys && operation == 1 && controller.getRotation() != -1 || swapKeys && operation == - 1 && controller.getRotation() == -1) {
                 controller.drawNext();
             } else {
                 controller.drawPrev();
@@ -669,7 +685,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public void loadGlobalOptions() {
-        globalOptions = new GlobalOptions(this);
+        globalOptions = new GlobalOptions(this, device);
+        device.updateOptions(globalOptions);
     }
 
     public void saveGlobalOptions() {
@@ -718,12 +735,15 @@ public class OrionViewerActivity extends OrionBaseActivity {
             case R.id.crop_menu_item: screenId = CROP_SCREEN; break;
             case R.id.zoom_menu_item: screenId = ZOOM_SCREEN; break;
             case R.id.goto_menu_item: screenId = PAGE_SCREEN; break;
-            case R.id.options_menu_item: screenId = OPTIONS_SCREEN; break;
+            case R.id.navigation_menu_item: screenId = NAVIGATION_SCREEN; break;
             case R.id.rotation_menu_item: screenId = ROTATION_SCREEN; break;
             case R.id.keybinder_menu_item:
-                Intent in = new Intent("com.code.otion_viewer.KEY_BINDER");
-                in.setClass(getApplicationContext(), OrionKeyBinderActivity.class);
+                Intent in = new Intent(this, OrionKeyBinderActivity.class);
                 startActivity(in);
+                return true;
+            case R.id.options_menu_item:
+                Intent intent = new Intent(this, OrionPreferenceActivity.class);
+                startActivity(intent);
                 return true;
         }
 

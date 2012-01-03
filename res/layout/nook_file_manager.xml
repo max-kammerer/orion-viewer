@@ -35,8 +35,6 @@
                   android:layout_height="144.0px">
         <!--file manager-->
 
-
-
        <pl.polidea.customwidget.TheMissingTabHost xmlns:orion="http://schemas.android.com/apk/res/com.google.code.orion_viewer"
                                            android:id="@+id/tabhost"
                                            android:layout_width="fill_parent" android:layout_height="fill_parent" orion:always_landscape="true">

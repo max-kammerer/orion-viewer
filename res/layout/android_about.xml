@@ -54,7 +54,7 @@
                           <!--android:text="&lt;html&gt;New versions could be obtained from \n  &lt;a href=''&gt;http://code.google.com/p/orion-viewer/&lt;/a&gt;&lt;/html&gt;"-->
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:text="You could report any bugs at \n http://code.google.com/p/orion-viewer/issues/list" android:textSize="20sp"
+                  android:text="You could report any bug at \n http://code.google.com/p/orion-viewer/issues/list" android:textSize="20sp"
                   android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"

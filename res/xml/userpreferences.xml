@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+            android:title="Key Manager">
+        <CheckBoxPreference
+                android:key="SWAP_KEYS"
+                android:title="Swap prev/next keys"
+                android:summary="Swap prev/next keys on 90 degree rotation"
+                android:defaultValue="false"/>
+
+        <CheckBoxPreference
+                android:key="USE_NOOK_KEYS"
+                android:title="Use Nook2 keys"
+                android:summary="Use Nook2 next and prev keys"
+                android:defaultValue="false"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            android:title="Layout">
+
+        <ListPreference
+                android:key="DEFAULT_ORIENTATION"
+                android:title="Document default orientation"
+                android:summary="Rotate new document on opening"
+                android:entries="@array/orientation_desc"
+                android:entryValues="@array/orientation"
+                android:dialogTitle="Rotation"
+                android:defaultValue="0"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

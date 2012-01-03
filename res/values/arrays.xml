@@ -1,0 +1,12 @@
+<resources>
+    <string-array name="orientation">
+        <item>0</item>
+        <item>90</item>
+        <item>270</item>
+  </string-array>
+    <string-array name="orientation_desc">
+        <item>0 degree</item>
+        <item>90 degree</item>
+        <item>270 degree</item>
+  </string-array>
+</resources>

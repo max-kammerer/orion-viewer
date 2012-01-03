@@ -199,4 +199,8 @@ public class Controller {
             sendViewChangeNotification();
         }
     }
+
+    public OrionViewerActivity getActivity() {
+        return activity;
+    }
 }

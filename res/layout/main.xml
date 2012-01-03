@@ -165,7 +165,7 @@
         <!--<include layout="@layout/file_manager"/>-->
 
 
-        <!--options-->
+        <!--navigation-->
         <include layout="@layout/navigation"/>
 
         <!--help screen-->

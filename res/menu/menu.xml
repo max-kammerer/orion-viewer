@@ -17,16 +17,20 @@
           android:title="@string/menu_crop_text"
           android:icon="@drawable/crop"/>
 
-    <item android:id="@+id/options_menu_item"
+    <item android:id="@+id/navigation_menu_item"
           android:title="@string/menu_navigation_text"
           android:icon="@drawable/options"/>
 
-    <item android:id="@+id/help_menu_item"
-          android:title="@string/menu_help_text"
-          android:icon="@drawable/help"/>
+    <item android:id="@+id/options_menu_item"
+          android:title="@string/menu_options_text"
+          android:icon="@drawable/options"/>
 
     <item android:id="@+id/keybinder_menu_item"
           android:title="@string/menu_key_binder_text"
+          android:icon="@drawable/help"/>
+
+    <item android:id="@+id/help_menu_item"
+          android:title="@string/menu_help_text"
           android:icon="@drawable/help"/>
 
     <item android:id="@+id/exit_menu_item"

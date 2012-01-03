@@ -153,4 +153,12 @@ public class NookDevice implements Device {
     public boolean optionViaDialog() {
         return false;
     }
+
+    public void updateOptions(GlobalOptions options) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public boolean initSizeOnSizeChanged() {
+        return false;
+    }
 }

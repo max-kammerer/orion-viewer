@@ -56,10 +56,10 @@ public class OrionView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-//        if (!startRenderer && controller != null) {
-//            startRenderer = true;
-//            controller.startRenderer();
-//        }
+        if (!startRenderer && controller != null) {
+            startRenderer = true;
+            controller.startRenderer();
+        }
         if (bitmap != null && !bitmap.isRecycled()) {
             long start = new Date().getTime();
             Common.d("Start drawing bitmap");
@@ -100,11 +100,14 @@ public class OrionView extends View {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        //for alex initialization
         super.onSizeChanged(w, h, oldw, oldh);
-        Common.d("onSizeChanged " + w + " " +h);
-        if (!startRenderer && controller != null) {
-            startRenderer = true;
-            controller.startRenderer();
+        if (!startRenderer) {
+            Common.d("onSizeChanged " + w + " " +h);
+            if (controller != null && controller.getActivity().getDevice().initSizeOnSizeChanged()) {
+                startRenderer = true;
+                controller.startRenderer();
+            }
         }
     }
 }

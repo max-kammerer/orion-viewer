@@ -1,6 +1,7 @@
 package com.google.code.orion_viewer.device;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.PowerManager;
 import android.view.KeyEvent;
 import com.google.code.orion_viewer.*;
@@ -12,6 +13,14 @@ import com.google.code.orion_viewer.*;
  */
 public class AndroidDevice implements Device {
 
+    protected static final int NOOK_PAGE_UP_KEY_RIGHT = 95;
+
+    protected static final int NOOK_PAGE_DOWN_KEY_RIGHT = 94;
+
+    protected static final int NOOK_PAGE_UP_KEY_LEFT = 93;
+
+    protected static final int NOOK_PAGE_DOWN_KEY_LEFT = 92;
+
     private PowerManager.WakeLock screenLock;
 
     private OrionBaseActivity activity;
@@ -22,9 +31,7 @@ public class AndroidDevice implements Device {
 
     private static int delay = DELAY;
 
-    private int nextKey;
-
-    private int prevKey;
+    public GlobalOptions options;
 
     public AndroidDevice() {
 
@@ -39,14 +46,31 @@ public class AndroidDevice implements Device {
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event, OperationHolder holder) {
-        if (keyCode == nextKey) {
-            holder.value = NEXT;
-            return true;
-        }
+        //check mapped keys
+        if (options != null) {
+            if (keyCode == options.getNextKey()) {
+                holder.value = NEXT;
+                return true;
+            }
 
-        if (keyCode == prevKey) {
-            holder.value = PREV;
-            return true;
+            if (keyCode == options.getPrevKey()) {
+                holder.value = PREV;
+                return true;
+            }
+
+            //than check options
+            if (options.isUseNookKeys()) {
+                switch (keyCode) {
+                    case NOOK_PAGE_UP_KEY_LEFT:
+                    case NOOK_PAGE_UP_KEY_RIGHT:
+                        holder.value = PREV;
+                        return true;
+                    case NOOK_PAGE_DOWN_KEY_LEFT:
+                    case NOOK_PAGE_DOWN_KEY_RIGHT:
+                        holder.value = NEXT;
+                        return true;
+                    }
+            }
         }
 
         if (keyCode == KeyEvent.KEYCODE_SOFT_LEFT || keyCode == KeyEvent.KEYCODE_SOFT_RIGHT) {
@@ -85,9 +109,6 @@ public class AndroidDevice implements Device {
         if (screenLock != null) {
             screenLock.acquire(delay);
         }
-        GlobalOptions options = new GlobalOptions(activity);
-        nextKey = options.getNextKey();
-        prevKey = options.getPrevKey();
     }
 
 
@@ -117,5 +138,14 @@ public class AndroidDevice implements Device {
 
     public boolean optionViaDialog() {
         return true;
+    }
+
+
+    public void updateOptions(GlobalOptions options) {
+        this.options = options;
+    }
+
+    public boolean initSizeOnSizeChanged() {
+        return false;
     }
 }

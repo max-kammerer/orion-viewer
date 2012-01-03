@@ -7,4 +7,5 @@
     <string name="menu_help_text">Помощь</string>
     <string name="menu_exit_text">Закрыть</string>
     <string name="menu_key_binder_text">Назначение клавиш</string>
+    <string name="menu_options_text">Настройки</string>
 </resources>

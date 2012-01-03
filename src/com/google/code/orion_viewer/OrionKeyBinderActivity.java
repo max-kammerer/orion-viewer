@@ -43,6 +43,19 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
                 startBinding((Button) view);
             }
         });
+
+        button = (Button) findViewById(R.id.reset_bind);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.remove(GlobalOptions.NEXT_KEY);
+                editor.remove(GlobalOptions.PREV_KEY);
+                editor.commit();
+                updateButtons();
+            }
+        });
+
         statusText = (TextView) findViewById(R.id.press_button);
         statusText.setTextColor(Color.RED);
     }
@@ -50,16 +63,23 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        GlobalOptions options = new GlobalOptions(this);
+        updateButtons();
+    }
+
+    public void updateButtons() {
+        binding = false;
+        button = null;
 
         Button button = (Button) findViewById(R.id.next_bind);
-        button.setText(options.getNextKey()==0 ? "Not bind" : "Binded to " + options.getNextKey());
+        GlobalOptions options = new GlobalOptions(this);
+        button.setText(options.getNextKey()==0 ? "Not binded" : "Binded to " + options.getNextKey());
 
         button = (Button) findViewById(R.id.prev_bind);
-        button.setText(options.getPrevKey()==0 ? "Not bind" : "Binded to " + options.getPrevKey());
+        button.setText(options.getPrevKey()==0 ? "Not binded" : "Binded to " + options.getPrevKey());
 
         statusText.setText("");
     }
+
 
     @Override
     protected void onPause() {

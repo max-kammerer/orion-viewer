@@ -10,12 +10,8 @@
             android:scrollbars="vertical"
             android:orientation="vertical">
 
-    <LinearLayout android:layout_width="fill_parent"
-                  android:layout_height="fill_parent" android:orientation="vertical">
-
         <TableLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
                      android:shrinkColumns="1">
-
 
             <TextView android:textSize="20sp"
                       android:layout_width="fill_parent" android:layout_height="wrap_content"
@@ -137,12 +133,12 @@
                           android:gravity="left"/>
             </TableRow>
 
+            <LinearLayout android:layout_height="fill_parent" android:orientation="horizontal"
+                      android:layout_width="fill_parent" android:gravity="right">
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                         android:src="@drawable/revert"
+                         android:id="@+id/help_close" android:layout_gravity="right"/>
+            </LinearLayout>
         </TableLayout>
-
-        <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                     android:src="@drawable/revert"
-                     android:id="@+id/help_close" android:layout_gravity="right"/>
-
-    </LinearLayout>
 
 </ScrollView>

@@ -67,14 +67,14 @@ public class DjvuDocument implements DocumentWrapper {
         }
 	}
 
-    private static native int openFile(String filename);
-	private static native void gotoPageInternal(int localActionPageNum);
-	private static native int getPageInfo(int pageNum, PageInfo info);
+    private static synchronized native int openFile(String filename);
+	private static synchronized  native void gotoPageInternal(int localActionPageNum);
+	private static synchronized  native int getPageInfo(int pageNum, PageInfo info);
 
-	public static native int [] drawPage(int zoom1000, int pageW, int pageH,
+	public static synchronized  native int [] drawPage(int zoom1000, int pageW, int pageH,
 			int patchX, int patchY,
 			int patchW, int patchH);
-	public static native void destroying();
+	public static synchronized  native void destroying();
 
     public String getTitle() {
         return null;

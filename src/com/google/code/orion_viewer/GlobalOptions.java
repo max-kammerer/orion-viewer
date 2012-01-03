@@ -2,6 +2,7 @@ package com.google.code.orion_viewer;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.location.GpsStatus;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 
@@ -23,6 +24,12 @@ public class GlobalOptions implements Serializable {
 
     private static final String RECENT_PREFIX = "recent_";
 
+    public final static String SWAP_KEYS = "SWAP_KEYS";
+
+    public final static String USE_NOOK_KEYS = "USE_NOOK_KEYS";
+
+    public final static String DEFAULT_ORIENTATION = "DEFAULT_ORIENTATION";
+
     private String lastOpenedDirectory;
 
     private LinkedList<RecentEntry> recentFiles;
@@ -33,8 +40,19 @@ public class GlobalOptions implements Serializable {
 
     private int prevKey;
 
+    private boolean swapKeys;
+
+    private boolean useNookKeys;
+
+    private int defaultOrientation;
+
+    private SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener;
 
     public GlobalOptions(Activity activity) {
+        this(activity, null);
+    }
+
+    public GlobalOptions(Activity activity, final Device device) {
         prefs = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
         lastOpenedDirectory = prefs.getString(Common.LAST_OPENED_DIRECTORY, null);
 
@@ -50,6 +68,31 @@ public class GlobalOptions implements Serializable {
 
         nextKey = prefs.getInt(NEXT_KEY, 0);
         prevKey = prefs.getInt(PREV_KEY, 0);
+
+        swapKeys = prefs.getBoolean(SWAP_KEYS, false);
+        useNookKeys = prefs.getBoolean(USE_NOOK_KEYS, false);
+        defaultOrientation = Integer.parseInt(prefs.getString(DEFAULT_ORIENTATION, "0"));
+        if (device != null) {
+            onSharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+                public void onSharedPreferenceChanged(SharedPreferences preferences, String s) {
+                    Common.d("onSharedPreferenceChanged " + s);
+                    if (NEXT_KEY.equals(s)) {
+                        nextKey = preferences.getInt(NEXT_KEY, 0);
+                    } else if (PREV_KEY.equals(s)) {
+                        prevKey = preferences.getInt(PREV_KEY, 0);
+                    } else if (SWAP_KEYS.equals(s)) {
+                        swapKeys = preferences.getBoolean(SWAP_KEYS, false);
+                    } else if (USE_NOOK_KEYS.equals(s)) {
+                        useNookKeys = preferences.getBoolean(USE_NOOK_KEYS, false);
+                    } else if (DEFAULT_ORIENTATION.equals(s)) {
+                        defaultOrientation = Integer.parseInt(preferences.getString(DEFAULT_ORIENTATION, "0"));
+                    }
+                    device.updateOptions(GlobalOptions.this);
+                }
+            };
+
+            PreferenceManager.getDefaultSharedPreferences(activity).registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
+        }
     }
 
     public String getLastOpenedDirectory() {
@@ -128,5 +171,23 @@ public class GlobalOptions implements Serializable {
 
     public int getNextKey() {
         return nextKey;
+    }
+
+    public void onDestroy(Activity activity) {
+        if (onSharedPreferenceChangeListener != null) {
+            PreferenceManager.getDefaultSharedPreferences(activity).unregisterOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
+        }
+    }
+
+    public boolean isSwapKeys() {
+        return swapKeys;
+    }
+
+    public boolean isUseNookKeys() {
+        return useNookKeys;
+    }
+
+    public int getDefaultOrientation() {
+        return defaultOrientation;
     }
 }

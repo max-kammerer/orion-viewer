@@ -1,8 +1,9 @@
 package com.google.code.orion_viewer;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.KeyEvent;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ImageButton;
 import pl.polidea.customwidget.TheMissingTabHost;
@@ -16,10 +17,16 @@ public class OrionBaseActivity extends Activity {
 
     protected Device device = Common.createDevice();
 
+    protected SharedPreferences.OnSharedPreferenceChangeListener listener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         device.onCreate(this);
+        listener = createPreferenceListener();
+        if (listener != null) {
+            registerPreferenceListener(listener);
+        }
     }
 
     @Override
@@ -52,6 +59,17 @@ public class OrionBaseActivity extends Activity {
         return Device.DEFAULT_ACTIVITY;
     }
 
+    public SharedPreferences.OnSharedPreferenceChangeListener createPreferenceListener() {
+        return null;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();    //To change body of overridden methods use File | Settings | File Templates.
+        if (listener != null) {
+            unregisterPreferenceListener(listener);
+        }
+    }
 
     protected void initHelpScreen() {
         TheMissingTabHost host = (TheMissingTabHost) findMyViewById(R.id.helptab);
@@ -91,5 +109,13 @@ public class OrionBaseActivity extends Activity {
 
     protected void onAnimatorCancel() {
 
+    }
+
+    protected void registerPreferenceListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(listener);
+    }
+
+    protected  void unregisterPreferenceListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(listener);
     }
 }

@@ -4,6 +4,7 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent" android:gravity="center" android:orientation="vertical">
     <TableLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="5px">
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/reset_bind" android:text="Reset All"/>
         <TableRow android:layout_width="fill_parent" android:layout_height="fill_parent">
             <TextView android:layout_width="fill_parent" android:layout_height="fill_parent" android:text="Next Button" android:textSize="30px" android:gravity="center"/>
             <Button android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/next_bind"/>
