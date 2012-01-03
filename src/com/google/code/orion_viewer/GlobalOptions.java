@@ -30,6 +30,8 @@ public class GlobalOptions implements Serializable {
 
     public final static String DEFAULT_ORIENTATION = "DEFAULT_ORIENTATION";
 
+    public final static String APPLY_AND_CLOSE = "APPLY_AND_CLOSE";
+
     private String lastOpenedDirectory;
 
     private LinkedList<RecentEntry> recentFiles;
@@ -45,6 +47,8 @@ public class GlobalOptions implements Serializable {
     private boolean useNookKeys;
 
     private int defaultOrientation;
+
+    private boolean applyAndClose;
 
     private SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener;
 
@@ -72,20 +76,24 @@ public class GlobalOptions implements Serializable {
         swapKeys = prefs.getBoolean(SWAP_KEYS, false);
         useNookKeys = prefs.getBoolean(USE_NOOK_KEYS, false);
         defaultOrientation = Integer.parseInt(prefs.getString(DEFAULT_ORIENTATION, "0"));
+        applyAndClose = prefs.getBoolean(APPLY_AND_CLOSE, false);
+
         if (device != null) {
             onSharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-                public void onSharedPreferenceChanged(SharedPreferences preferences, String s) {
-                    Common.d("onSharedPreferenceChanged " + s);
-                    if (NEXT_KEY.equals(s)) {
+                public void onSharedPreferenceChanged(SharedPreferences preferences, String name) {
+                    Common.d("onSharedPreferenceChanged " + name);
+                    if (NEXT_KEY.equals(name)) {
                         nextKey = preferences.getInt(NEXT_KEY, 0);
-                    } else if (PREV_KEY.equals(s)) {
+                    } else if (PREV_KEY.equals(name)) {
                         prevKey = preferences.getInt(PREV_KEY, 0);
-                    } else if (SWAP_KEYS.equals(s)) {
+                    } else if (SWAP_KEYS.equals(name)) {
                         swapKeys = preferences.getBoolean(SWAP_KEYS, false);
-                    } else if (USE_NOOK_KEYS.equals(s)) {
+                    } else if (USE_NOOK_KEYS.equals(name)) {
                         useNookKeys = preferences.getBoolean(USE_NOOK_KEYS, false);
-                    } else if (DEFAULT_ORIENTATION.equals(s)) {
+                    } else if (DEFAULT_ORIENTATION.equals(name)) {
                         defaultOrientation = Integer.parseInt(preferences.getString(DEFAULT_ORIENTATION, "0"));
+                    } else if (APPLY_AND_CLOSE.equals(name)) {
+                        applyAndClose = prefs.getBoolean(APPLY_AND_CLOSE, false);
                     }
                     device.updateOptions(GlobalOptions.this);
                 }
@@ -189,5 +197,9 @@ public class GlobalOptions implements Serializable {
 
     public int getDefaultOrientation() {
         return defaultOrientation;
+    }
+
+    public boolean isApplyAndClose() {
+        return applyAndClose;
     }
 }

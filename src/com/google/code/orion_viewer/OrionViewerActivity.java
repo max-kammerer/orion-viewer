@@ -310,6 +310,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         ImageButton page_preview = (ImageButton) findMyViewById(R.id.page_preview);
         page_preview.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                onApplyAction();
                 controller.drawPage(Integer.valueOf(pageNumberText.getText().toString()) -1);
             }
         });
@@ -376,6 +377,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         ImageButton zoom_preview = (ImageButton) findMyViewById(R.id.zoom_preview);
         zoom_preview.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                onApplyAction();
                 controller.changeZoom(zoomSeek.getProgress());
             }
         });
@@ -405,6 +407,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         ImageButton view = (ImageButton) findMyViewById(R.id.options_apply);
         view.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                onApplyAction();
                 int did = ((RadioGroup) findMyViewById(R.id.directionGroup)).getCheckedRadioButtonId();
                 int lid = ((RadioGroup) findMyViewById(R.id.layoutGroup)).getCheckedRadioButtonId();
                 controller.setDirectionAndLayout(did == R.id.direction1 ? 0 : 1, lid == R.id.layout1 ? 0 : lid == R.id.layout2 ? 1 : 2);
@@ -470,6 +473,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         ImageButton preview = (ImageButton) findMyViewById(R.id.crop_preview);
         preview.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                onApplyAction();
                 controller.changeMargins(cropBorders[0], cropBorders[2], cropBorders[1], cropBorders[3]);
             }
         });
@@ -824,6 +828,13 @@ public class OrionViewerActivity extends OrionBaseActivity {
         }
     }
 
+    @Override
+    protected void onApplyAction() {
+        if (globalOptions.isApplyAndClose()) {
+            onAnimatorCancel();
+        }
+    }
+
     public void initRotationScreen() {
         final RadioGroup rotationGroup = (RadioGroup) findMyViewById(R.id.rotationGroup);
 
@@ -840,6 +851,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         ImageButton apply = (ImageButton) findMyViewById(R.id.rotation_apply);
         apply.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                onApplyAction();
                 int id = rotationGroup.getCheckedRadioButtonId();
                 controller.setRotation(id == R.id.rotate0 ? 0 : id == R.id.rotate90 ? -1 : 1);
             }

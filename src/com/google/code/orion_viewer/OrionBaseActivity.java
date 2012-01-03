@@ -111,6 +111,10 @@ public class OrionBaseActivity extends Activity {
 
     }
 
+    protected void onApplyAction() {
+
+    }
+
     protected void registerPreferenceListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(listener);
     }

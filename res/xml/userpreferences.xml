@@ -29,4 +29,14 @@
                 android:defaultValue="0"/>
     </PreferenceCategory>
 
+    <PreferenceCategory
+            android:title="General">
+
+        <CheckBoxPreference
+                android:key="APPLY_AND_CLOSE"
+                android:title="Close dialog on apply"
+                android:summary="Close page option dialog on apply"
+                android:defaultValue="false"/>
+    </PreferenceCategory>
+
 </PreferenceScreen>
