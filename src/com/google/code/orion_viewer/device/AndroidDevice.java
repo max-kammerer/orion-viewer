@@ -149,8 +149,4 @@ public class AndroidDevice implements Device {
         this.options = options;
     }
 
-    public boolean initSizeOnSizeChanged() {
-        return false;
-    }
-
 }

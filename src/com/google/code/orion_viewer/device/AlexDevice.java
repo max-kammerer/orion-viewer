@@ -89,7 +89,7 @@ public class AlexDevice extends EpdRender implements Device {
         //uiThread
         //handler.sendEmptyMessage(NEXT);
         return activity.onKeyDown(KeyEvent.KEYCODE_SOFT_RIGHT, null);
-       // return true;
+        // return true;
     }
 
     //called from ui thread
@@ -115,5 +115,13 @@ public class AlexDevice extends EpdRender implements Device {
 
     public boolean optionViaDialog() {
         return false;
+    }
+
+    public int getHelpLayoutId() {
+        return R.layout.android_help;
+    }
+
+    public void updateOptions(GlobalOptions options) {
+
     }
 }

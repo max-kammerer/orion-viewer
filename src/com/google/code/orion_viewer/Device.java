@@ -66,6 +66,4 @@ public interface Device {
 
     public void updateOptions(GlobalOptions options);
 
-    public boolean initSizeOnSizeChanged();
-
 }
