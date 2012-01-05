@@ -1,11 +1,11 @@
 <resources>
-    <string name="zoom">Opens zoom screen. Zero zoom value means zooming by width.</string>
+    <string name="zoom">Opens zoom dialog. Zero zoom value means zooming by width.</string>
     <string name="rotation">Rotates document to the 90 degree clockwise. Long click rotates counterclockwise.</string>
 
-    <string name="crop">Opens borders crop screen. Long click for plus or minus in this dialog changes crop value for 30. Negative value add additional borders.</string>
-    <string name="next_page">Go to next page. On long click opens page chooser screen.</string>
+    <string name="crop">Opens borders crop dialog. Values defined relative to page size. Long click for plus or minus in this dialog changes crop value for 10%. Negative value add additional borders.</string>
+    <string name="next_page">Go to next page. On long click opens page chooser dialog.</string>
 
-    <string name="prev_page">Go to prev page. On long click opens page chooser screen.</string>
+    <string name="prev_page">Go to prev page. On long click opens page chooser dialog.</string>
 
     <string name="apply">Apply current options.</string>
     <string name="escape">Return/Escape.</string>
@@ -28,4 +28,10 @@
 
     <string name="help_clicks">
         Click on screen - go to next page, long click - go to prev page.</string>
+
+    <string name="option_help">
+        Application parameters</string>
+
+    <string name="navigation_help">
+        Page navigation parameters</string>
 </resources>

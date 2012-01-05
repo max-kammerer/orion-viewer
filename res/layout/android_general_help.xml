@@ -112,6 +112,30 @@
             <TableRow>
                 <ImageView android:layout_column="0"
                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                           android:src="@drawable/navigation"/>
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                          android:textSize="20sp"
+                          android:text="@string/navigation_help"
+                          android:layout_gravity="center_vertical"
+                          android:gravity="left"/>
+            </TableRow>
+
+            <TableRow>
+                <ImageView android:layout_column="0"
+                           android:layout_width="wrap_content" android:layout_height="wrap_content"
+                           android:src="@drawable/options"/>
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                          android:textSize="20sp"
+                          android:text="@string/option_help"
+                          android:layout_gravity="center_vertical"
+                          android:gravity="left"/>
+            </TableRow>
+
+            <TableRow>
+                <ImageView android:layout_column="0"
+                           android:layout_width="wrap_content" android:layout_height="wrap_content"
                            android:src="@drawable/view"/>
 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
