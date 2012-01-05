@@ -163,8 +163,8 @@
                    android:src="@drawable/orion" android:gravity="center"/>
                 <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
                           android:textSize="20sp"
-                          android:text="Derived on image from Space Telescope Science Institute"
-                          android:gravity="left"/>
+                          android:text="ESO/Igor Chekalin image at http://www.eso.org/public/images/eso1103a/"
+                          android:gravity="left" android:linksClickable="true" android:autoLink="all"/>
             </TableRow>
 
             <TableRow>
