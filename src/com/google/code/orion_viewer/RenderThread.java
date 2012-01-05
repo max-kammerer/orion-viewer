@@ -57,12 +57,6 @@ public class RenderThread extends Thread {
 
     private boolean clearCache;
 
-    private int rotationShift;
-
-    private int myWidth;
-
-    private int myHeight;
-
     private boolean stopped;
 
     private boolean paused;
@@ -159,10 +153,6 @@ public class RenderThread extends Thread {
 
     public void onResume() {
         synchronized (this) {
-            myWidth = activity.getView().getWidth();
-            myHeight = activity.getView().getHeight();
-            rotationShift = (myHeight - myWidth) / 2;
-
             paused = false;
             notify();
         }
@@ -198,7 +188,7 @@ public class RenderThread extends Thread {
                 //keep it here
                 rotation = layout.getRotation();
 
-                if (currentPosition == null || futureIndex > FUTURE_COUNT) {
+                if (currentPosition == null || futureIndex > FUTURE_COUNT || currentPosition.screenWidth == 0 || currentPosition.screenHeight == 0) {
                     try {
                         Common.d("WAITING...");
                         wait();
@@ -216,6 +206,7 @@ public class RenderThread extends Thread {
                     }
                 }
             }
+
             Common.d("rotation = " + rotation);
             if (curPos != null) {
                 //try to find result in cache
@@ -236,12 +227,15 @@ public class RenderThread extends Thread {
                     int width = curPos.pieceWidth;
                     int height = curPos.pieceHeight;
 
+                    int screenWidth = curPos.screenWidth;
+                    int screenHeight = curPos.screenHeight;
+
                     Bitmap bitmap = null;
                     if (cachedBitmaps.size() >= CACHE_SIZE) {
                         CacheInfo info = cachedBitmaps.removeFirst();
                         info.setValid(true);
 
-                        if (width == info.bitmap.getWidth() && height == info.bitmap.getHeight() /*|| rotation != 0 && width == info.bitmap.getHeight() && height == info.bitmap.getWidth()*/) {
+                        if (screenWidth == info.bitmap.getWidth() && screenHeight == info.bitmap.getHeight() /*|| rotation != 0 && width == info.bitmap.getHeight() && height == info.bitmap.getWidth()*/) {
                             bitmap = info.bitmap;
                         } else {
                             info.bitmap.recycle(); //todo recycle from ui
@@ -249,13 +243,14 @@ public class RenderThread extends Thread {
                         }
                     }
                     if (bitmap == null) {
-                        Common.d("Creating Bitmap " + bitmapConfig + "...");
-                        bitmap = Bitmap.createBitmap(myWidth, myHeight, bitmapConfig);
+                        Common.d("Creating Bitmap " + bitmapConfig + " " + screenWidth + "x" + screenHeight + "...");
+                        bitmap = Bitmap.createBitmap(screenWidth, screenHeight, bitmapConfig);
                     }
 
                     cacheCanvas.setMatrix(null);
                     if (rotation != 0) {
-                        cacheCanvas.rotate(-rotation * 90, myHeight / 2, myWidth / 2);
+                        int rotationShift = (screenHeight - screenWidth) / 2;
+                        cacheCanvas.rotate(-rotation * 90, screenHeight / 2, screenWidth / 2);
                         cacheCanvas.translate(-rotation * rotationShift, -rotation * rotationShift);
                     }
 
@@ -266,37 +261,39 @@ public class RenderThread extends Thread {
                     Date date = new Date();
                     cacheCanvas.setBitmap(bitmap);
 
-
                     cacheCanvas.drawBitmap(data, 0, width, 0, 0, width, height, false, null);
                     Date date2 = new Date();
                     Common.d("Drawing bitmap in cache " + 0.001 * (date2.getTime() - date.getTime()) + " s");
 
                     resultEntry = new CacheInfo(curPos, bitmap);
 
-                    cachedBitmaps.add(resultEntry);
-                }
-            }
-
-            if (futureIndex == 0) {
-                final Bitmap bitmap = resultEntry.bitmap;
-                Common.d("Sending Bitmap");
-                final CountDownLatch  mutex = new CountDownLatch(1);
-
-                activity.runOnUiThread(new Runnable() {
-                    public void run() {
-                        view.setData(bitmap, mutex);
-                        //view.invalidate();
-                        activity.getDevice().flushBitmap(0);
+                    synchronized (this) {
+                        cachedBitmaps.add(resultEntry);
                     }
-                });
-
-                try {
-                    mutex.await(1, TimeUnit.SECONDS);
-                } catch (InterruptedException e) {
-                    Common.d(e);
                 }
+
+
+                if (futureIndex == 0) {
+                    final Bitmap bitmap = resultEntry.bitmap;
+                    Common.d("Sending Bitmap");
+                    final CountDownLatch mutex = new CountDownLatch(1);
+
+                    activity.runOnUiThread(new Runnable() {
+                        public void run() {
+                            view.setData(bitmap, mutex);
+                            //view.invalidate();
+                            activity.getDevice().flushBitmap(0);
+                        }
+                    });
+
+                    try {
+                        mutex.await(1, TimeUnit.SECONDS);
+                    } catch (InterruptedException e) {
+                        Common.d(e);
+                    }
+                }
+                futureIndex++;
             }
-            futureIndex++;
         }
     }
 

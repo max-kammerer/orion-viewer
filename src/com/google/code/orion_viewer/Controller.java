@@ -64,7 +64,6 @@ public class Controller {
         };
 
         activity.getSubscriptionManager().addDocListeners(listener);
-
     }
 
     public void drawPage(int page) {
@@ -80,7 +79,16 @@ public class Controller {
     public void screenSizeChanged(int newWidth, int newHeight) {
         Common.d("New screen size " + newWidth + "x" + newHeight);
         layout.setDimension(newWidth, newHeight);
+        int offsetX = layoutInfo.cellX;
+        int offsetY = layoutInfo.cellY;
         layout.reset(layoutInfo, layoutInfo.pageNumber);
+        if (lastScreenSize != null) {
+            if (newWidth == lastScreenSize.x && newHeight == lastScreenSize.y) {
+                layoutInfo.cellX = offsetX;
+                layoutInfo.cellY = offsetY;
+            }
+            lastScreenSize = null;
+        }
         renderer.onResume();
         sendViewChangeNotification();
     }
@@ -133,20 +141,20 @@ public class Controller {
     }
 
     public void startRenderer() {
-        Common.d("Starting renderer " + view.getWidth() + "x" + view.getHeight());
-        int oldX = layoutInfo.cellX;
-        int oldY = layoutInfo.cellY;
-        layout.setDimension(view.getWidth(), view.getHeight());
-        layout.reset(layoutInfo, layoutInfo.pageNumber);
-
-        //reset position on changing screen size
-        if (lastScreenSize.x == view.getWidth() && lastScreenSize.y == view.getHeight()) {
-            layoutInfo.cellX = oldX;
-            layoutInfo.cellY = oldY;
-        }
-        drawPage();
+//        Common.d("Starting renderer " + view.getWidth() + "x" + view.getHeight());
+//        int oldX = layoutInfo.cellX;
+//        int oldY = layoutInfo.cellY;
+//        layout.setDimension(view.getWidth(), view.getHeight());
+//        layout.reset(layoutInfo, layoutInfo.pageNumber);
+//
+//        //reset position on changing screen size
+//        if (lastScreenSize.x == view.getWidth() && lastScreenSize.y == view.getHeight()) {
+//            layoutInfo.cellX = oldX;
+//            layoutInfo.cellY = oldY;
+//        }
+//        drawPage();
         renderer.onResume();
-        renderer.start();
+//        renderer.start();
     }
 
     public void onPause() {

@@ -54,7 +54,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private static final int OPTIONS_SCREEN = 6;
 
-    private static final int CROP_RESTRICTION = -30;
+    private static final int CROP_RESTRICTION_MIN = -10;
+
+    private static final int CROP_DELTA = 10;
+
+    private static final int CROP_RESTRICTION_MAX = 80;
 
     private final SubscriptionManager manager = new SubscriptionManager();
 
@@ -157,7 +161,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         for (int i = 0; i < cropTable.getChildCount(); i++) {
             TableRow row = (TableRow) cropTable.getChildAt(i);
             TextView valueView = (TextView) row.findViewById(R.id.crop_value);
-            valueView.setText("" + cropBorders[i]);
+            valueView.setText(cropBorders[i] + "%");
         }
     }
 
@@ -503,20 +507,20 @@ public class OrionViewerActivity extends OrionBaseActivity {
         minus.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //main menu
-                if (cropBorders[cropIndex] != CROP_RESTRICTION) {
+                if (cropBorders[cropIndex] != CROP_RESTRICTION_MIN) {
                     cropBorders[cropIndex] = cropBorders[cropIndex] - 1;
-                    text.setText("" + cropBorders[cropIndex]);
+                    text.setText(cropBorders[cropIndex] + "%");
                 }
             }
         });
 
         minus.setOnLongClickListener(new View.OnLongClickListener() {
             public boolean onLongClick(View v) {
-                cropBorders[cropIndex] = cropBorders[cropIndex] - 30;
-                if (cropBorders[cropIndex] < CROP_RESTRICTION) {
-                    cropBorders[cropIndex] = CROP_RESTRICTION;
+                cropBorders[cropIndex] = cropBorders[cropIndex] - CROP_DELTA;
+                if (cropBorders[cropIndex] < CROP_RESTRICTION_MIN) {
+                    cropBorders[cropIndex] = CROP_RESTRICTION_MIN;
                 }
-                text.setText("" + cropBorders[cropIndex]);
+                text.setText(cropBorders[cropIndex] + "%");
                 return true;
             }
         });
@@ -526,14 +530,20 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 //main menu
                 //int value = Integer.valueOf(text.getText().toString());
                 cropBorders[cropIndex] = cropBorders[cropIndex] + 1;
-                text.setText("" + cropBorders[cropIndex]);
+                if (cropBorders[cropIndex] > CROP_RESTRICTION_MAX) {
+                    cropBorders[cropIndex] = CROP_RESTRICTION_MAX;
+                }
+                text.setText(cropBorders[cropIndex]  + "%");
             }
         });
 
         plus.setOnLongClickListener(new View.OnLongClickListener() {
             public boolean onLongClick(View v) {
-                cropBorders[cropIndex] = cropBorders[cropIndex] + 30;
-                text.setText("" + cropBorders[cropIndex]);
+                cropBorders[cropIndex] = cropBorders[cropIndex] + CROP_DELTA;
+                if (cropBorders[cropIndex] > CROP_RESTRICTION_MAX) {
+                    cropBorders[cropIndex] = CROP_RESTRICTION_MAX;
+                }
+                text.setText(cropBorders[cropIndex] + "%");
                 return true;
             }
         });
@@ -643,8 +653,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
             } else {
                 getWindow().setFlags(0, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             }
-            getView().requestLayout();
-            controller.screenSizeChanged(getView().getWidth(), getView().getHeight());
             isFullScreen = newFullScreen;
         }
 

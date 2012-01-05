@@ -81,7 +81,7 @@ public class GlobalOptions implements Serializable {
         useNookKeys = prefs.getBoolean(USE_NOOK_KEYS, false);
         defaultOrientation = Integer.parseInt(prefs.getString(DEFAULT_ORIENTATION, "0"));
         applyAndClose = prefs.getBoolean(APPLY_AND_CLOSE, false);
-        fullScreen = prefs.getBoolean(FULL_SCREEN, false);
+        fullScreen = prefs.getBoolean(FULL_SCREEN, true);
 
         if (device != null) {
             onSharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
@@ -100,7 +100,7 @@ public class GlobalOptions implements Serializable {
                     } else if (APPLY_AND_CLOSE.equals(name)) {
                         applyAndClose = preferences.getBoolean(APPLY_AND_CLOSE, false);
                     } else if (FULL_SCREEN.equals(FULL_SCREEN)) {
-                        fullScreen = preferences.getBoolean(FULL_SCREEN, false);
+                        fullScreen = preferences.getBoolean(FULL_SCREEN, true);
                     }
                     device.updateOptions(GlobalOptions.this);
                 }

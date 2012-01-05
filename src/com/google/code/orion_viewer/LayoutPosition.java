@@ -43,6 +43,11 @@ public class LayoutPosition implements Cloneable {
 
     public int pageHeight;
 
+    public int screenWidth;
+
+    public int screenHeight;
+
+
     //float??
     public float docZoom;
 

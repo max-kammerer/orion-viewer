@@ -119,11 +119,14 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         info.pageNumber = pageNum;
         //original width and height without cropped margins
         PageInfo pinfo = doc.getPageInfo(pageNum);
-        info.pageWidth = pinfo.width - leftMargin - rightMargin;
-        info.pageHeight = pinfo.height - topMargin - bottomMargin;
+        info.pageWidth = Math.round(pinfo.width * (1 - 0.01f *(leftMargin + rightMargin)));
+        info.pageHeight = Math.round(pinfo.height * (1- 0.01f *(topMargin + bottomMargin)));
 
         info.pieceWidth = rotation == 0 ? viewWidth : viewHeight;
         info.pieceHeight = rotation == 0 ? viewHeight : viewWidth;
+
+        info.screenWidth = viewWidth;
+        info.screenHeight = viewHeight;
 
         //calc zoom
         if (zoom <= 0) {
@@ -219,9 +222,10 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     public Point convertToPoint(LayoutPosition pos) {
         int layout  = getLayout();
-
-        int x = pos.cellX == 0 || pos.cellX != pos.maxX || layout == 0 ?  (int)(pos.docZoom * leftMargin + pos.cellX * (pos.pieceWidth - OVERLAP)) : (int) (pos.docZoom * leftMargin + pos.pageWidth - pos.pieceWidth);
-        int y = pos.cellY == 0 || pos.cellY != pos.maxY || layout != 1 ? (int) (pos.docZoom * topMargin + pos.cellY * (pos.pieceHeight - OVERLAP)) : (int) (pos.docZoom * topMargin + pos.pageHeight - pos.pieceHeight);
+        int absLeftMargin = (int) (leftMargin * pos.pageWidth * 0.01);
+        int absTopMargin = (int) (topMargin * pos.pageHeight * 0.01);
+        int x = pos.cellX == 0 || pos.cellX != pos.maxX || layout == 0 ?  (int)(absLeftMargin + pos.cellX * (pos.pieceWidth - OVERLAP)) : (int) (absLeftMargin + pos.pageWidth - pos.pieceWidth);
+        int y = pos.cellY == 0 || pos.cellY != pos.maxY || layout != 1 ? (int) (absTopMargin + pos.cellY * (pos.pieceHeight - OVERLAP)) : (int) (absTopMargin + pos.pageHeight - pos.pieceHeight);
 
         return new Point(x, y);
     }
