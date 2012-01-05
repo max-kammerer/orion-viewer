@@ -32,6 +32,8 @@ public class GlobalOptions implements Serializable {
 
     public final static String APPLY_AND_CLOSE = "APPLY_AND_CLOSE";
 
+    public final static String FULL_SCREEN = "FULL_SCREEN";
+
     private String lastOpenedDirectory;
 
     private LinkedList<RecentEntry> recentFiles;
@@ -49,6 +51,8 @@ public class GlobalOptions implements Serializable {
     private int defaultOrientation;
 
     private boolean applyAndClose;
+
+    private boolean fullScreen;
 
     private SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener;
 
@@ -77,6 +81,7 @@ public class GlobalOptions implements Serializable {
         useNookKeys = prefs.getBoolean(USE_NOOK_KEYS, false);
         defaultOrientation = Integer.parseInt(prefs.getString(DEFAULT_ORIENTATION, "0"));
         applyAndClose = prefs.getBoolean(APPLY_AND_CLOSE, false);
+        fullScreen = prefs.getBoolean(FULL_SCREEN, false);
 
         if (device != null) {
             onSharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
@@ -93,7 +98,9 @@ public class GlobalOptions implements Serializable {
                     } else if (DEFAULT_ORIENTATION.equals(name)) {
                         defaultOrientation = Integer.parseInt(preferences.getString(DEFAULT_ORIENTATION, "0"));
                     } else if (APPLY_AND_CLOSE.equals(name)) {
-                        applyAndClose = prefs.getBoolean(APPLY_AND_CLOSE, false);
+                        applyAndClose = preferences.getBoolean(APPLY_AND_CLOSE, false);
+                    } else if (FULL_SCREEN.equals(FULL_SCREEN)) {
+                        fullScreen = preferences.getBoolean(FULL_SCREEN, false);
                     }
                     device.updateOptions(GlobalOptions.this);
                 }
@@ -105,10 +112,6 @@ public class GlobalOptions implements Serializable {
 
     public String getLastOpenedDirectory() {
         return lastOpenedDirectory;
-    }
-
-    public void setLastOpenedDirectory(String lastOpenedDirectory) {
-        this.lastOpenedDirectory = lastOpenedDirectory;
     }
 
     public void addRecentEntry(RecentEntry newEntry) {
@@ -164,11 +167,6 @@ public class GlobalOptions implements Serializable {
         }
     }
 
-    public String getDefaultDirectory() {
-        return Environment.getRootDirectory().getAbsolutePath();
-    }
-
-
     public LinkedList<RecentEntry> getRecentFiles() {
         return recentFiles;
     }
@@ -201,5 +199,9 @@ public class GlobalOptions implements Serializable {
 
     public boolean isApplyAndClose() {
         return applyAndClose;
+    }
+
+    public boolean isFullScreen() {
+        return fullScreen;
     }
 }

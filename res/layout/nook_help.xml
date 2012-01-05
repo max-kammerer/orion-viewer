@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical" android:gravity="bottom">
 
 <pl.polidea.customwidget.TheMissingTabHost xmlns:android="http://schemas.android.com/apk/res/android" xmlns:orion="http://schemas.android.com/apk/res/com.google.code.orion_viewer"
                                            android:id="@+id/helptab"
-                                           android:layout_width="fill_parent" android:layout_height="fill_parent" orion:always_landscape="true">
+                                           android:layout_width="480px" android:layout_height="144px" orion:always_landscape="true">
 
     <LinearLayout android:orientation="horizontal"
 		android:layout_width="fill_parent" android:layout_height="fill_parent">
@@ -22,3 +24,4 @@
     </LinearLayout>
 </pl.polidea.customwidget.TheMissingTabHost>
 
+</LinearLayout>

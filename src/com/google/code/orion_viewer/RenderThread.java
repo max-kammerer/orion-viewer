@@ -241,7 +241,7 @@ public class RenderThread extends Thread {
                         CacheInfo info = cachedBitmaps.removeFirst();
                         info.setValid(true);
 
-                        if (width == info.bitmap.getWidth() && height == info.bitmap.getHeight() || rotation != 0 && width == info.bitmap.getHeight() && height == info.bitmap.getWidth()) {
+                        if (width == info.bitmap.getWidth() && height == info.bitmap.getHeight() /*|| rotation != 0 && width == info.bitmap.getHeight() && height == info.bitmap.getWidth()*/) {
                             bitmap = info.bitmap;
                         } else {
                             info.bitmap.recycle(); //todo recycle from ui

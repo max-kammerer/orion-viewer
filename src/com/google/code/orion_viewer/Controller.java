@@ -18,6 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
 import android.app.Activity;
+import android.graphics.Point;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,12 +46,15 @@ public class Controller {
 
     private DocumentViewAdapter listener;
 
+    private Point lastScreenSize;
+
     public Controller(OrionViewerActivity activity, DocumentWrapper doc, LayoutStrategy layout, OrionView view) {
         this.activity = activity;
         this.doc = doc;
         this.layout = layout;
         this.view = view;
         renderer = new RenderThread(activity, view, layout, doc);
+        renderer.start();
 
         listener = new  DocumentViewAdapter() {
             public void viewParametersChanged() {
@@ -71,6 +75,14 @@ public class Controller {
     public void drawPage() {
         sendPageChangedNotification();
         renderer.render(layoutInfo);
+    }
+
+    public void screenSizeChanged(int newWidth, int newHeight) {
+        Common.d("New screen size " + newWidth + "x" + newHeight);
+        layout.setDimension(newWidth, newHeight);
+        layout.reset(layoutInfo, layoutInfo.pageNumber);
+        renderer.onResume();
+        sendViewChangeNotification();
     }
 
     public void drawNext() {
@@ -121,13 +133,17 @@ public class Controller {
     }
 
     public void startRenderer() {
+        Common.d("Starting renderer " + view.getWidth() + "x" + view.getHeight());
         int oldX = layoutInfo.cellX;
         int oldY = layoutInfo.cellY;
         layout.setDimension(view.getWidth(), view.getHeight());
         layout.reset(layoutInfo, layoutInfo.pageNumber);
 
-        layoutInfo.cellX = oldX;
-        layoutInfo.cellY = oldY;
+        //reset position on changing screen size
+        if (lastScreenSize.x == view.getWidth() && lastScreenSize.y == view.getHeight()) {
+            layoutInfo.cellX = oldX;
+            layoutInfo.cellY = oldY;
+        }
         drawPage();
         renderer.onResume();
         renderer.start();
@@ -165,7 +181,7 @@ public class Controller {
         layoutInfo.cellX = info.offsetX;
         layoutInfo.cellY = info.offsetY;
 
-
+        lastScreenSize = new Point(info.screenWidth, info.screenHeight);
     }
 
     public void serialize(LastPageInfo info) {

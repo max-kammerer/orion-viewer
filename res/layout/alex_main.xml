@@ -28,6 +28,9 @@
 
                     <ImageButton android:id="@+id/crop_menu" android:layout_width="wrap_content" android:layout_height="wrap_content"
                                  android:src="@drawable/crop"/>
+
+                    <ImageButton android:id="@+id/navigation" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                 android:src="@drawable/navigation"/>
             </LinearLayout>
 
 
@@ -60,7 +63,7 @@
                              android:src="@drawable/help"/>
 
                 <ImageButton android:id="@+id/options" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                             android:src="@drawable/navigation"/>
+                             android:src="@drawable/options"/>
 
             </LinearLayout>
 
@@ -134,7 +137,7 @@
         <include layout="@layout/navigation"/>
 
         <!--help screen-->
-        <include layout="@layout/android_help"/>
+        <!--<include layout="@layout/android_help"/>-->
 
     </ViewAnimator>
 

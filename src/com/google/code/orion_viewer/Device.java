@@ -58,6 +58,8 @@ public interface Device {
 
     public int getFileManagerLayoutId();
 
+    public int getHelpLayoutId();
+
     public String getDefaultDirectory();
 
     public boolean optionViaDialog();

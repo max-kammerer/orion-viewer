@@ -63,7 +63,9 @@ public class LayoutPosition implements Cloneable {
         LayoutPosition pos = (LayoutPosition) o;
         if (pos.pageNumber == pageNumber &&
                 pos.cellX == cellX &&
-                pos.cellY == cellY) {
+                pos.cellY == cellY &&
+                pos.pieceWidth == pieceWidth &&
+                pos.pieceHeight == pieceHeight) {
             return true;
         }
         return false;

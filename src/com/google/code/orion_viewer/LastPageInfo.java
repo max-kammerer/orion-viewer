@@ -25,6 +25,10 @@ import java.io.Serializable;
  * Time: 12:19
  */
 class LastPageInfo implements Serializable {
+
+    int screenWidth;
+    int screenHeight;
+
     int pageNumber;
     int rotation;
 

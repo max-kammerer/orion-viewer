@@ -204,6 +204,9 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
     }
 
     public void serialize(LastPageInfo info) {
+        info.screenHeight = viewHeight;
+        info.screenWidth = viewWidth;
+
         info.leftMargin = leftMargin;
         info.rightMargin = rightMargin;
         info.topMargin = topMargin;

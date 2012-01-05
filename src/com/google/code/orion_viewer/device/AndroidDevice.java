@@ -23,7 +23,7 @@ public class AndroidDevice implements Device {
 
     private PowerManager.WakeLock screenLock;
 
-    private OrionBaseActivity activity;
+    protected OrionBaseActivity activity;
 
     private static int DELAY = 60000;
 
@@ -136,6 +136,10 @@ public class AndroidDevice implements Device {
         return R.layout.android_file_manager;
     }
 
+    public int getHelpLayoutId() {
+        return R.layout.android_help;
+    }
+
     public boolean optionViaDialog() {
         return true;
     }
@@ -148,4 +152,5 @@ public class AndroidDevice implements Device {
     public boolean initSizeOnSizeChanged() {
         return false;
     }
+
 }

@@ -2,22 +2,12 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-            android:title="Key Manager">
-        <CheckBoxPreference
-                android:key="SWAP_KEYS"
-                android:title="Swap prev/next keys"
-                android:summary="Swap prev/next keys on 90 degree rotation"
-                android:defaultValue="false"/>
-
-        <CheckBoxPreference
-                android:key="USE_NOOK_KEYS"
-                android:title="Use Nook2 keys"
-                android:summary="Use Nook2 next and prev keys"
-                android:defaultValue="false"/>
-    </PreferenceCategory>
-
-    <PreferenceCategory
             android:title="Layout">
+        <CheckBoxPreference
+                android:key="FULL_SCREEN"
+                android:title="Full screen"
+                android:summary="Full screen"
+                android:defaultValue="true"/>
 
         <ListPreference
                 android:key="DEFAULT_ORIENTATION"
@@ -38,5 +28,18 @@
                 android:summary="Close page option dialog on apply"
                 android:defaultValue="false"/>
     </PreferenceCategory>
+    <PreferenceCategory
+            android:title="Key Manager">
+        <CheckBoxPreference
+                android:key="SWAP_KEYS"
+                android:title="Swap prev/next keys"
+                android:summary="Swap prev/next keys on 90 degree rotation"
+                android:defaultValue="false"/>
 
+        <CheckBoxPreference
+                android:key="USE_NOOK_KEYS"
+                android:title="Use Nook2 keys"
+                android:summary="Use Nook2 next and prev keys"
+                android:defaultValue="false"/>
+    </PreferenceCategory>
 </PreferenceScreen>

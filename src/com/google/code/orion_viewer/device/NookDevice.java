@@ -29,7 +29,7 @@ import com.google.code.orion_viewer.*;
  * Time: 11:14
  * Nook specific features obtained from nookCommon at http://code.google.com/p/nookdevs/
  */
-public class NookDevice implements Device {
+public class NookDevice extends AndroidDevice {
 
     public final static String UPDATE_TITLE = "com.bravo.intent.UPDATE_TITLE";
 
@@ -50,12 +50,6 @@ public class NookDevice implements Device {
     protected static final int NOOK_PAGE_DOWN_SWIPE = 100;
 
     protected static final int NOOK_PAGE_UP_SWIPE = 101;
-
-    private PowerManager.WakeLock screenLock;
-
-    private OrionBaseActivity activity;
-
-    private int DELAY = 600000;
 
     public NookDevice() {
 
@@ -108,36 +102,6 @@ public class NookDevice implements Device {
         return true;
     }
 
-    public void onCreate(OrionBaseActivity activity) {
-        this.activity = activity;
-        PowerManager power = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
-        screenLock = power.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "OrionViewer" + hashCode());
-        screenLock.setReferenceCounted(false);
-    }
-
-    public void onPause() {
-        if (screenLock != null) {
-            screenLock.release();
-        }
-    }
-
-    public void onResume() {
-        onUserInteraction();
-    }
-
-
-    public void onUserInteraction() {
-        if (screenLock != null) {
-            screenLock.acquire(DELAY);
-        }
-    }
-
-    public void flushBitmap(int delay) {
-        if (activity.getView() != null) {
-            activity.getView().invalidate();
-        }
-    }
-
     public int getLayoutId() {
         return R.layout.main;
     }
@@ -154,11 +118,7 @@ public class NookDevice implements Device {
         return false;
     }
 
-    public void updateOptions(GlobalOptions options) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public boolean initSizeOnSizeChanged() {
-        return false;
+    public int getHelpLayoutId() {
+        return R.layout.nook_help;
     }
 }

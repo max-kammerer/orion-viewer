@@ -75,18 +75,26 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private Intent myIntent;
 
+    private boolean isFullScreen;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        setContentView(device.getLayoutId());
-        super.onCreate(savedInstanceState);
         loadGlobalOptions();
+        isFullScreen = globalOptions.isFullScreen();
+        if (isFullScreen) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+
+        setContentView(device.getLayoutId());
+
+        super.onCreate(savedInstanceState);
 
         view = (OrionView) findViewById(R.id.view);
 
         if (!device.optionViaDialog()) {
             initAnimator();
             initMainScreen();
-            initHelpScreen();
+            //initHelpScreen();
         } else {
             initOptionDialog();
             initRotationScreen();
@@ -601,7 +609,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
         btn = (ImageButton) findMyViewById(R.id.help);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                animator.setDisplayedChild(HELP_SCREEN);
+                //animator.setDisplayedChild(HELP_SCREEN);
+                Intent intent = new Intent();
+                intent.setClass(OrionViewerActivity.this, OrionHelpActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -625,6 +636,17 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     protected void onResume() {
         super.onResume();
+        boolean newFullScreen = globalOptions.isFullScreen();
+        if (isFullScreen != newFullScreen) {
+            if (newFullScreen) {
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            } else {
+                getWindow().setFlags(0, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            }
+            getView().requestLayout();
+            controller.screenSizeChanged(getView().getWidth(), getView().getHeight());
+            isFullScreen = newFullScreen;
+        }
 
         Common.d("onResume");
         if (myIntent != null) {
