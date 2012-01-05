@@ -1,3 +1,10 @@
+===== 0.25.0 (Jan 5, 2012) =====
+
+ * Fixed issue with blank page on attempt to render rotated pdf document
+ * Border cropping relative to page size
+ * Added full screen mode (not works on Alex: Is anybody know how support full epd screen on Alex?)
+ * Added new options
+
 ===== 0.24.0 (Dec 12, 2011) =====
 
 * Djvu support
