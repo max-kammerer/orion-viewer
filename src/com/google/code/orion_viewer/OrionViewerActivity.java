@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -30,6 +31,9 @@ import android.widget.*;
 
 import com.google.code.orion_viewer.djvu.DjvuDocument;
 import com.google.code.orion_viewer.pdf.PdfDocument;
+import com.google.code.orion_viewer.prefs.OrionKeyBinderActivity;
+import com.google.code.orion_viewer.prefs.OrionPreferenceActivity;
+import com.google.code.orion_viewer.prefs.OrionTapActivity;
 import pl.polidea.customwidget.TheMissingTabHost;
 
 import java.io.*;
@@ -58,7 +62,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private static final int CROP_DELTA = 10;
 
-    private static final int CROP_RESTRICTION_MAX = 80;
+    private static final int CROP_RESTRICTION_MAX = 40;
 
     private final SubscriptionManager manager = new SubscriptionManager();
 
@@ -787,6 +791,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 Intent intent = new Intent(this, OrionPreferenceActivity.class);
                 startActivity(intent);
                 return true;
+
+            case R.id.tap_menu_item:
+                Intent tap = new Intent(this, OrionTapActivity.class);
+                startActivity(tap);
+                return true;
         }
 
         if (screenId != HELP_SCREEN) {
@@ -830,18 +839,64 @@ public class OrionViewerActivity extends OrionBaseActivity {
         dialog.setContentView(R.layout.android_dialog);
         animator = ((ViewAnimator)dialog.findViewById(R.id.viewanim));
 
-        getView().setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                controller.drawNext();
+        getView().setOnTouchListener(new View.OnTouchListener() {
+            private int lastX = -1;
+            private int lastY = -1;
+            long startTime = 0;
+            private static final long TIME_DELTA = 600;
+            public boolean onTouch(View v, MotionEvent event) {
+//                Common.d("Event " + event.getAction());
+//                System.out.println(SystemClock.uptimeMillis() - startTime);
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    Common.d("DOWN " + event.getAction());
+                    startTime = SystemClock.uptimeMillis();
+                    lastX = (int) event.getX();
+                    lastY = (int) event.getY();
+                    return true;
+                } else {
+//                    Common.d("ev " + event.getAction());
+                    if (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_UP) {
+                        if (event.getAction() == MotionEvent.ACTION_UP) {
+                            Common.d("UP " + event.getAction());
+                            boolean isLongClick = (SystemClock.uptimeMillis() - startTime) > TIME_DELTA;
+
+                            if (lastX != -1 && lastY != -1) {
+                                int width = getView().getWidth();
+                                int height = getView().getHeight();
+
+                                int i = 3 * lastY / height;
+                                int j = 3 * lastX / width;
+
+                                int code = globalOptions.getActionCode(i, j, isLongClick);
+                                doAction(code);
+                            }
+                        }
+                        return true;
+                    }
+
+                    startTime = 0;
+                    lastX = -1;
+                    lastY = -1;
+                }
+
+                return false;
             }
         });
 
-        getView().setOnLongClickListener(new View.OnLongClickListener(){
-            public boolean onLongClick(View v) {
-                controller.drawPrev();
-                return true;
-            }
-        });
+//        getView().setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                v.get
+//                globalOptions.getActionCode()
+//                controller.drawNext();
+//            }
+//        });
+//
+//        getView().setOnLongClickListener(new View.OnLongClickListener(){
+//            public boolean onLongClick(View v) {
+//                controller.drawPrev();
+//                return true;
+//            }
+//        });
 
 //        getView().setOnTouchListener(new View.OnTouchListener() {
 //            public boolean onTouch(View v, MotionEvent event) {
@@ -849,6 +904,51 @@ public class OrionViewerActivity extends OrionBaseActivity {
 //            }
 //        });
     }
+
+    private void doAction(int code) {
+        Action action = Action.getAction(code);
+        doAction(action);
+        Common.d("Code action " + code);
+    }
+
+
+    public void doAction(Action action) {
+        int screenId = -1;
+        switch (action) {
+            case NONE: break;
+            case MENU: openOptionsMenu(); return;
+            case CROP: screenId = CROP_SCREEN; break;
+            case ZOOM: screenId = ZOOM_SCREEN; break;
+            case GOTO: screenId = PAGE_SCREEN; break;
+            case ROTATION: screenId = ROTATION_SCREEN; break;
+            case OPTIONS:
+                Intent intent = new Intent(this, OrionPreferenceActivity.class);
+                startActivity(intent);
+            break;
+            case NEXT:
+                if (controller != null) {
+                    controller.drawNext();
+                }
+                break;
+            case PREV:
+                if (controller != null) {
+                    controller.drawPrev();
+                }
+                break;
+        }
+
+
+
+        if (screenId != -1) {
+            updateRotation();
+            updateCrops();
+            updateOptions();
+            updatePageSeeker();
+            animator.setDisplayedChild(screenId);
+            dialog.show();
+        }
+    }
+
 
     protected View findMyViewById(int id) {
         if (device.optionViaDialog()) {

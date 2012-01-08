@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.location.GpsStatus;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import com.google.code.orion_viewer.prefs.OrionTapActivity;
 
 import java.io.Serializable;
 import java.util.*;
@@ -34,6 +35,8 @@ public class GlobalOptions implements Serializable {
 
     public final static String FULL_SCREEN = "FULL_SCREEN";
 
+    public final static String TAP_ZONE = "TAP_ZONE";
+
     private String lastOpenedDirectory;
 
     private LinkedList<RecentEntry> recentFiles;
@@ -55,6 +58,8 @@ public class GlobalOptions implements Serializable {
     private boolean fullScreen;
 
     private SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener;
+
+    private int [][] tapCodes = new int [9][2];
 
     public GlobalOptions(Activity activity) {
         this(activity, null);
@@ -81,7 +86,8 @@ public class GlobalOptions implements Serializable {
         useNookKeys = prefs.getBoolean(USE_NOOK_KEYS, false);
         defaultOrientation = Integer.parseInt(prefs.getString(DEFAULT_ORIENTATION, "0"));
         applyAndClose = prefs.getBoolean(APPLY_AND_CLOSE, false);
-        fullScreen = prefs.getBoolean(FULL_SCREEN, true);
+        fullScreen = prefs.getBoolean(FULL_SCREEN, false);
+        resetTapCodes();
 
         if (device != null) {
             onSharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
@@ -100,7 +106,9 @@ public class GlobalOptions implements Serializable {
                     } else if (APPLY_AND_CLOSE.equals(name)) {
                         applyAndClose = preferences.getBoolean(APPLY_AND_CLOSE, false);
                     } else if (FULL_SCREEN.equals(FULL_SCREEN)) {
-                        fullScreen = preferences.getBoolean(FULL_SCREEN, true);
+                        fullScreen = preferences.getBoolean(FULL_SCREEN, false);
+                    } else if (name.startsWith(TAP_ZONE)) {
+                        resetTapCodes();
                     }
                     device.updateOptions(GlobalOptions.this);
                 }
@@ -204,4 +212,28 @@ public class GlobalOptions implements Serializable {
     public boolean isFullScreen() {
         return fullScreen;
     }
+
+    public int getActionCode(int i, int j, boolean isLong) {
+        int code = tapCodes[i * 3 + j][isLong ? 1 : 0];
+        if (code == -1) {
+            code = prefs.getInt(OrionTapActivity.getKey(i, j, isLong), -1);
+            if (code == -1) {
+                code = OrionTapActivity.getDefaultAction(i, j, isLong);
+            }
+            tapCodes[i * 3 + j][isLong ? 1 : 0] = code;
+        }
+        return code;
+    }
+
+
+    private void resetTapCodes() {
+        for (int i = 0; i < tapCodes.length; i++) {
+            int[] tapCode = tapCodes[i];
+            for (int j = 0; j < tapCode.length; j++) {
+                tapCode[j] = -1;
+            }
+        }
+    }
+
+
 }

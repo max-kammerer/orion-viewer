@@ -1,4 +1,4 @@
-package com.google.code.orion_viewer;
+package com.google.code.orion_viewer.prefs;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -10,6 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import com.google.code.orion_viewer.GlobalOptions;
+import com.google.code.orion_viewer.OrionBaseActivity;
+import com.google.code.orion_viewer.R;
 
 /**
  * User: mike

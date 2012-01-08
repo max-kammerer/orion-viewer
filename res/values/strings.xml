@@ -28,4 +28,7 @@
     <string name="rotate_0">0 degree</string>
     <string name="rotate_90">90 degree</string>
     <string name="rotate_270">270 degree</string>
+    <string name="long_click">On long click</string>
+    <string name="short_click">On short click</string>
+    <string name="binding_click">On binding</string>
 </resources>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-      <item android:id="@+id/zoom_menu_item"
+    <item android:id="@+id/zoom_menu_item"
           android:title="@string/menu_zoom_text"
           android:icon="@drawable/zoom"/>
 
@@ -23,6 +23,10 @@
 
     <item android:id="@+id/options_menu_item"
           android:title="@string/menu_options_text"
+          android:icon="@drawable/options"/>
+
+    <item android:id="@+id/tap_menu_item"
+          android:title="@string/menu_tap_text"
           android:icon="@drawable/options"/>
 
     <item android:id="@+id/keybinder_menu_item"

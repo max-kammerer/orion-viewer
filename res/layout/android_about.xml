@@ -61,7 +61,7 @@
                   android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:text="You could discuss project at \n https://groups.google.com/group/orionviewer"
+                  android:text="Project discussion group - \n https://groups.google.com/group/orionviewer"
                   android:textSize="20sp"
                   android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
 

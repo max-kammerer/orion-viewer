@@ -7,7 +7,7 @@
                 android:key="FULL_SCREEN"
                 android:title="Full screen"
                 android:summary="Full screen"
-                android:defaultValue="true"/>
+                android:defaultValue="false"/>
 
         <ListPreference
                 android:key="DEFAULT_ORIENTATION"
@@ -42,4 +42,5 @@
                 android:summary="Use Nook2 next and prev keys"
                 android:defaultValue="false"/>
     </PreferenceCategory>
+
 </PreferenceScreen>

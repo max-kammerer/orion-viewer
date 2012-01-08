@@ -1,4 +1,4 @@
-package com.google.code.orion_viewer;
+package com.google.code.orion_viewer.prefs;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,6 +12,8 @@ import android.widget.AbsListView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import com.google.code.orion_viewer.Common;
+import com.google.code.orion_viewer.R;
 import com.google.code.orion_viewer.device.NookDevice;
 
 /**

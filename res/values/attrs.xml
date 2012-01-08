@@ -1,0 +1,18 @@
+<resources>
+
+    <attr name="actionId" format="reference|integer" />
+
+            <!--<p>Must be an integer value, such as "<code>100</code>".-->
+<!--<p>This may also be a reference to a resource (in the form-->
+<!--"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or-->
+<!--theme attribute (in the form-->
+<!--"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")-->
+<!--containing a value of this type.-->
+          <!--@attr name android:actionId-->
+        <!---->
+
+    <declare-styleable name="android.view.View">
+        <attr name="actionId" />
+    </declare-styleable>
+
+</resources>
