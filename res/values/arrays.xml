@@ -9,4 +9,15 @@
         <item>90 degree</item>
         <item>270 degree</item>
   </string-array>
+
+    <string-array name="screen_orientation">
+        <item>DEFAULT</item>
+        <item>PORTRAIT</item>
+        <item>LANDSCAPE</item>
+  </string-array>
+    <string-array name="screen_orientation_desc">
+        <item>DEFAULT</item>
+        <item>PORTRAIT</item>
+        <item>LANDSCAPE</item>
+  </string-array>
 </resources>

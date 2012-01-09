@@ -29,13 +29,15 @@ public class GlobalOptions implements Serializable {
 
     public final static String USE_NOOK_KEYS = "USE_NOOK_KEYS";
 
-    public final static String DEFAULT_ORIENTATION = "DEFAULT_ORIENTATION";
+    public final static String DEFAULT_ORIENTATION = "BOOK_ORIENTATION";
 
     public final static String APPLY_AND_CLOSE = "APPLY_AND_CLOSE";
 
     public final static String FULL_SCREEN = "FULL_SCREEN";
 
     public final static String TAP_ZONE = "TAP_ZONE";
+
+    public final static String SCREEN_ORIENTATION = "SCREEN_ORIENTATION";
 
     private String lastOpenedDirectory;
 
@@ -105,7 +107,7 @@ public class GlobalOptions implements Serializable {
                         defaultOrientation = Integer.parseInt(preferences.getString(DEFAULT_ORIENTATION, "0"));
                     } else if (APPLY_AND_CLOSE.equals(name)) {
                         applyAndClose = preferences.getBoolean(APPLY_AND_CLOSE, false);
-                    } else if (FULL_SCREEN.equals(FULL_SCREEN)) {
+                    } else if (FULL_SCREEN.equals(name)) {
                         fullScreen = preferences.getBoolean(FULL_SCREEN, false);
                     } else if (name.startsWith(TAP_ZONE)) {
                         resetTapCodes();

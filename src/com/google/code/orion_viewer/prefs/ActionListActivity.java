@@ -69,7 +69,6 @@ public class ActionListActivity extends Activity {
         for (int i = 0; i < group.getChildCount(); i++) {
             RadioButton button = (RadioButton) group.getChildAt(i);
             Integer buttone_code = (Integer) button.getTag(R.attr.actionId);
-            System.out.println("code1" + buttone_code);
             if (buttone_code == code) {
                 id = group.getChildAt(i).getId();
                 break;

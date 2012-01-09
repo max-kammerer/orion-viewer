@@ -9,14 +9,25 @@
                 android:summary="Full screen"
                 android:defaultValue="false"/>
 
+        <!--page orientation-->
         <ListPreference
-                android:key="DEFAULT_ORIENTATION"
+                android:key="BOOK_ORIENTATION"
                 android:title="Book default orientation"
                 android:summary="Rotate new book on opening"
                 android:entries="@array/orientation_desc"
                 android:entryValues="@array/orientation"
                 android:dialogTitle="Rotation"
                 android:defaultValue="0"/>
+
+
+        <ListPreference
+                android:key="SCREEN_ORIENTATION"
+                android:title="Screen orientation"
+                android:summary="Rotate screen"
+                android:entries="@array/screen_orientation"
+                android:entryValues="@array/screen_orientation_desc"
+                android:dialogTitle="Rotation"
+                android:defaultValue="DEFAULT"/>
     </PreferenceCategory>
 
     <PreferenceCategory

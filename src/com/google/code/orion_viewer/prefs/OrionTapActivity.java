@@ -9,17 +9,14 @@ import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import com.google.code.orion_viewer.Action;
-import com.google.code.orion_viewer.Common;
-import com.google.code.orion_viewer.GlobalOptions;
-import com.google.code.orion_viewer.R;
+import com.google.code.orion_viewer.*;
 
 /**
  * User: mike
  * Date: 06.01.12
  * Time: 18:03
  */
-public class OrionTapActivity extends Activity {
+public class OrionTapActivity extends OrionBaseActivity {
 
     private View active_view;
     private int index;
@@ -119,8 +116,9 @@ public class OrionTapActivity extends Activity {
         return GlobalOptions.TAP_ZONE +(isLong ? "_LONG_CLICK_" :"_SHORT_CLICK_") + i + "_" + j;
     }
 
-//    @Override
-//    protected boolean isOnSameScreenAsChildren() {
-//        return false;
-//    }
+
+    @Override
+    public boolean supportDevice() {
+        return false;
+    }
 }
