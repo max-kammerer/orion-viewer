@@ -24,8 +24,8 @@
                 android:key="SCREEN_ORIENTATION"
                 android:title="Screen orientation"
                 android:summary="Rotate screen"
-                android:entries="@array/screen_orientation"
-                android:entryValues="@array/screen_orientation_desc"
+                android:entries="@array/screen_orientation_desc"
+                android:entryValues="@array/screen_orientation"
                 android:dialogTitle="Rotation"
                 android:defaultValue="DEFAULT"/>
     </PreferenceCategory>
@@ -52,6 +52,18 @@
                 android:title="Use Nook2 keys"
                 android:summary="Use Nook2 next and prev keys"
                 android:defaultValue="false"/>
+    </PreferenceCategory>
+
+        <PreferenceCategory
+            android:title="Dictionary">
+            <ListPreference
+                    android:key="DICTIONARY"
+                    android:title="Dictionary"
+                    android:summary="Dictionary"
+                    android:entries="@array/dictionaries_desc"
+                    android:entryValues="@array/dictionaries"
+                    android:dialogTitle="Dictionary"
+                    android:defaultValue="FORA"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

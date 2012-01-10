@@ -937,8 +937,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 break;
         }
 
-
-
         if (screenId != -1) {
             updateRotation();
             updateCrops();
@@ -946,6 +944,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
             updatePageSeeker();
             animator.setDisplayedChild(screenId);
             dialog.show();
+        } else {
+            action.doAction(controller, this);
         }
     }
 
@@ -1012,5 +1012,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
     @Override
     public int getViewerType() {
         return Device.VIEWER_ACTIVITY;
+    }
+
+    public GlobalOptions getGlobalOptions() {
+        return globalOptions;
     }
 }

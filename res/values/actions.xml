@@ -8,4 +8,5 @@
     <string name="action_rotation_page">Rotation dialog</string>
     <string name="action_options_page">Options</string>
     <string name="action_goto_page">Go to</string>
+    <string name="action_dictionary">Dictionary</string>
 </resources>

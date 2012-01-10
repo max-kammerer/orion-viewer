@@ -26,8 +26,8 @@
     <string name="general_usage_step4">
         4. Enjoy reading!</string>
 
-    <string name="help_clicks">
-        Click on screen - go to next page, long click - go to prev page.</string>
+    <!--<string name="help_taps">-->
+        <!--Click on screen - go to next page, long click - go to prev page.</string>-->
 
     <string name="option_help">
         Application parameters</string>

@@ -144,7 +144,17 @@
 
                 <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
                           android:textSize="20sp"
-                          android:text="Oxygen"
+                          android:text="Oxygen Team"
+                          android:gravity="left"/>
+            </TableRow>
+
+            <TableRow>
+                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                   android:src="@drawable/view"/>
+
+                <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
+                          android:textSize="20sp"
+                          android:text="Derived on Oxygen Team icon"
                           android:gravity="left"/>
             </TableRow>
 

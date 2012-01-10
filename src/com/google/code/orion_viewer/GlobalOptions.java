@@ -39,6 +39,8 @@ public class GlobalOptions implements Serializable {
 
     public final static String SCREEN_ORIENTATION = "SCREEN_ORIENTATION";
 
+    public final static String DICTIONARY = "DICTIONARY";
+
     private String lastOpenedDirectory;
 
     private LinkedList<RecentEntry> recentFiles;
@@ -58,6 +60,8 @@ public class GlobalOptions implements Serializable {
     private boolean applyAndClose;
 
     private boolean fullScreen;
+
+    private String dictionary;
 
     private SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener;
 
@@ -89,6 +93,7 @@ public class GlobalOptions implements Serializable {
         defaultOrientation = Integer.parseInt(prefs.getString(DEFAULT_ORIENTATION, "0"));
         applyAndClose = prefs.getBoolean(APPLY_AND_CLOSE, false);
         fullScreen = prefs.getBoolean(FULL_SCREEN, false);
+        dictionary = prefs.getString(DICTIONARY, "FORA");
         resetTapCodes();
 
         if (device != null) {
@@ -111,6 +116,8 @@ public class GlobalOptions implements Serializable {
                         fullScreen = preferences.getBoolean(FULL_SCREEN, false);
                     } else if (name.startsWith(TAP_ZONE)) {
                         resetTapCodes();
+                    } else if (DICTIONARY.equals(name)) {
+                        dictionary = preferences.getString(DICTIONARY, "FORA");
                     }
                     device.updateOptions(GlobalOptions.this);
                 }
@@ -238,4 +245,7 @@ public class GlobalOptions implements Serializable {
     }
 
 
+    public String getDictionary() {
+        return dictionary;
+    }
 }

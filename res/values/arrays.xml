@@ -20,4 +20,14 @@
         <item>PORTRAIT</item>
         <item>LANDSCAPE</item>
   </string-array>
+
+
+    <string-array name="dictionaries">
+        <item>FORA</item>
+        <item>COLORDICT</item>
+  </string-array>
+    <string-array name="dictionaries_desc">
+        <item>Fora Dictionary</item>
+        <item>Color Dict</item>
+  </string-array>
 </resources>
