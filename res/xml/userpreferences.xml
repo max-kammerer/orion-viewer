@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:orion="http://schemas.android.com/apk/res/com.google.code.orion_viewer">
     <PreferenceCategory
             android:title="Layout">
         <CheckBoxPreference
@@ -27,7 +27,7 @@
                 android:entries="@array/screen_orientation_desc"
                 android:entryValues="@array/screen_orientation"
                 android:dialogTitle="Rotation"
-                android:defaultValue="DEFAULT"/>
+                android:defaultValue="DEFAULT" orion:justAndroidGeneral="true"/>
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -51,7 +51,7 @@
                 android:key="USE_NOOK_KEYS"
                 android:title="Use Nook2 keys"
                 android:summary="Use Nook2 next and prev keys"
-                android:defaultValue="false"/>
+                android:defaultValue="false" orion:justAndroidGeneral="true"/>
     </PreferenceCategory>
 
         <PreferenceCategory

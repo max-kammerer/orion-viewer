@@ -2,7 +2,9 @@ package com.google.code.orion_viewer.prefs;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceScreen;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +15,9 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import com.google.code.orion_viewer.Common;
+import com.google.code.orion_viewer.Device;
 import com.google.code.orion_viewer.R;
+import com.google.code.orion_viewer.device.AndroidDevice;
 import com.google.code.orion_viewer.device.NookDevice;
 
 /**
@@ -25,9 +29,14 @@ public class OrionPreferenceActivity extends PreferenceActivity {
 
     private boolean isNook;
 
+    private boolean isAndroidGeneral;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        isNook = Common.createDevice() instanceof NookDevice;
+        Device device = Common.createDevice();
+        isNook = device instanceof NookDevice;
+        isAndroidGeneral = device instanceof AndroidDevice && !isNook;
+
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.userpreferences);
         if (isNook) {
@@ -38,7 +47,12 @@ public class OrionPreferenceActivity extends PreferenceActivity {
                 }
             });
         }
+
+        PreferenceScreen screen = getPreferenceScreen();
+        screen.findPreference("USE_NOOK_KEYS").setEnabled(isAndroidGeneral);
+        screen.findPreference("SCREEN_ORIENTATION").setEnabled(isAndroidGeneral);
     }
+
 
 //    @Override
     public void setContentView(int layoutResID) {

@@ -1017,4 +1017,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
     public GlobalOptions getGlobalOptions() {
         return globalOptions;
     }
+
+    public Controller getController() {
+        return controller;
+    }
 }

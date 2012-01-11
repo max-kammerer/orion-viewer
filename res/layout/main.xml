@@ -17,7 +17,7 @@
 <!--You should have received a copy of the GNU General Public License-->
 <!--along with this program.  If not, see <http://www.gnu.org/licenses/>.-->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:orion="http://schemas.android.com/apk/res/com.google.code.orion_viewer"
                 android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical">
 
 
@@ -36,6 +36,9 @@
 
                 <ImageButton android:id="@+id/navigation" android:layout_width="45.0px" android:layout_height="45.0px"
                              android:src="@drawable/navigation"/>
+
+                <com.google.code.orion_viewer.widget.ImageButton android:id="@+id/dictionary" android:layout_width="45.0px" android:layout_height="45.0px"
+                             android:src="@drawable/navigation" orion:actionId="9" />
 
             </LinearLayout>
 

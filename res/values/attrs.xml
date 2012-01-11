@@ -2,6 +2,8 @@
 
     <attr name="actionId" format="reference|integer" />
 
+    <attr name="justAndroidGeneral" format="boolean" />
+
             <!--<p>Must be an integer value, such as "<code>100</code>".-->
 <!--<p>This may also be a reference to a resource (in the form-->
 <!--"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or-->
@@ -13,6 +15,18 @@
 
     <declare-styleable name="android.view.View">
         <attr name="actionId" />
+    </declare-styleable>
+
+    <declare-styleable name="android.preference.ListPreference">
+        <attr name="justAndroidGeneral"/>
+    </declare-styleable>
+
+    <declare-styleable name="android.preference.CheckBoxPreference">
+        <attr name="justAndroidGeneral"/>
+    </declare-styleable>
+
+    <declare-styleable name="com.google.code.orion_viewer.widget.ImageButton">
+        <attr name="actionId"/>
     </declare-styleable>
 
 </resources>
