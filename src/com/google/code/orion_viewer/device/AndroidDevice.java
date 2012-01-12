@@ -59,7 +59,7 @@ public class AndroidDevice implements Device {
             }
 
             //than check options
-            if (options.isUseNookKeys()) {
+            if (Info.NOOK2) {
                 switch (keyCode) {
                     case NOOK_PAGE_UP_KEY_LEFT:
                     case NOOK_PAGE_UP_KEY_RIGHT:

@@ -42,7 +42,7 @@ public class ImageButton extends android.widget.ImageButton {
             a.recycle();
             setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
-                    action.doAction((OrionViewerActivity) getContext());
+                    action.doAction(((OrionViewerActivity) getContext()).getController(), (OrionViewerActivity) getContext());
                 }
             });
         }

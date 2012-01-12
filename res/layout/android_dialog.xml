@@ -19,20 +19,42 @@
                         android:orientation="vertical"
                         android:layout_gravity="center" android:gravity="left">
 
-                <RadioButton android:id="@+id/rotate0"
+                <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
+                          android:layout_width="wrap_content">
+                    <RadioButton android:id="@+id/rotate0"
                              android:layout_width="wrap_content"
-                             android:layout_height="wrap_content" android:text="@string/rotate_0"/>
+                             android:layout_height="wrap_content"/>
 
-                <RadioButton android:id="@+id/rotate90"
-                             android:layout_width="wrap_content"
-                             android:layout_height="wrap_content" android:text="@string/rotate_90"/>
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:text="@string/rotate_0"/>
+                </LinearLayout>
 
-                <RadioButton android:id="@+id/rotate270"
+
+                <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
+                          android:layout_width="wrap_content">
+                    <RadioButton android:id="@+id/rotate90"
                              android:layout_width="wrap_content"
-                             android:layout_height="wrap_content" android:text="@string/rotate_270"/>
+                             android:layout_height="wrap_content"/>
+
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:text="@string/rotate_90"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
+                          android:layout_width="wrap_content">
+                    <RadioButton android:id="@+id/rotate270"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"/>
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:text="@string/rotate_270"/>
+                </LinearLayout>
+
             </RadioGroup>
 
-            <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
+            <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal" android:layout_below="@id/rotationGroup"
                           android:layout_width="fill_parent" android:layout_gravity="center" android:gravity="right" android:layout_margin="10dp">
                 <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                              android:src="@drawable/view" android:id="@+id/rotation_apply"

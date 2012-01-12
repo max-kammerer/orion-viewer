@@ -2,8 +2,6 @@ package com.google.code.orion_viewer;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.location.GpsStatus;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import com.google.code.orion_viewer.prefs.OrionTapActivity;
 
@@ -27,7 +25,7 @@ public class GlobalOptions implements Serializable {
 
     public final static String SWAP_KEYS = "SWAP_KEYS";
 
-    public final static String USE_NOOK_KEYS = "USE_NOOK_KEYS";
+    //public final static String USE_NOOK_KEYS = "USE_NOOK_KEYS";
 
     public final static String DEFAULT_ORIENTATION = "BOOK_ORIENTATION";
 
@@ -38,6 +36,10 @@ public class GlobalOptions implements Serializable {
     public final static String TAP_ZONE = "TAP_ZONE";
 
     public final static String SCREEN_ORIENTATION = "SCREEN_ORIENTATION";
+
+    public final static String EINK_OPTIMIZATION = "EINK_OPTIMIZATION";
+
+    public final static String EINK_TOTAL_AFTER = "EINK_TOTAL_AFTER";
 
     public final static String DICTIONARY = "DICTIONARY";
 
@@ -53,7 +55,7 @@ public class GlobalOptions implements Serializable {
 
     private boolean swapKeys;
 
-    private boolean useNookKeys;
+    //private boolean useNookKeys;
 
     private int defaultOrientation;
 
@@ -62,6 +64,10 @@ public class GlobalOptions implements Serializable {
     private boolean fullScreen;
 
     private String dictionary;
+
+    private boolean einkOptimization;
+
+    private int einkRefresafter;
 
     private SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener;
 
@@ -89,11 +95,13 @@ public class GlobalOptions implements Serializable {
         prevKey = prefs.getInt(PREV_KEY, 0);
 
         swapKeys = prefs.getBoolean(SWAP_KEYS, false);
-        useNookKeys = prefs.getBoolean(USE_NOOK_KEYS, false);
+        //useNookKeys = prefs.getBoolean(USE_NOOK_KEYS, false);
         defaultOrientation = Integer.parseInt(prefs.getString(DEFAULT_ORIENTATION, "0"));
         applyAndClose = prefs.getBoolean(APPLY_AND_CLOSE, false);
         fullScreen = prefs.getBoolean(FULL_SCREEN, false);
         dictionary = prefs.getString(DICTIONARY, "FORA");
+        einkOptimization = prefs.getBoolean(EINK_OPTIMIZATION, false);
+        einkRefresafter = getInt(EINK_TOTAL_AFTER, 10);
         resetTapCodes();
 
         if (device != null) {
@@ -106,8 +114,8 @@ public class GlobalOptions implements Serializable {
                         prevKey = preferences.getInt(PREV_KEY, 0);
                     } else if (SWAP_KEYS.equals(name)) {
                         swapKeys = preferences.getBoolean(SWAP_KEYS, false);
-                    } else if (USE_NOOK_KEYS.equals(name)) {
-                        useNookKeys = preferences.getBoolean(USE_NOOK_KEYS, false);
+//                    } else if (USE_NOOK_KEYS.equals(name)) {
+//                        useNookKeys = preferences.getBoolean(USE_NOOK_KEYS, false);
                     } else if (DEFAULT_ORIENTATION.equals(name)) {
                         defaultOrientation = Integer.parseInt(preferences.getString(DEFAULT_ORIENTATION, "0"));
                     } else if (APPLY_AND_CLOSE.equals(name)) {
@@ -118,7 +126,12 @@ public class GlobalOptions implements Serializable {
                         resetTapCodes();
                     } else if (DICTIONARY.equals(name)) {
                         dictionary = preferences.getString(DICTIONARY, "FORA");
+                    } else if (EINK_OPTIMIZATION.equals(name)) {
+                        einkOptimization = prefs.getBoolean(EINK_OPTIMIZATION, false);
+                    } else if (EINK_TOTAL_AFTER.equals(name)) {
+                        einkRefresafter = getInt(EINK_TOTAL_AFTER, 10);
                     }
+
                     device.updateOptions(GlobalOptions.this);
                 }
             };
@@ -206,9 +219,9 @@ public class GlobalOptions implements Serializable {
         return swapKeys;
     }
 
-    public boolean isUseNookKeys() {
-        return useNookKeys;
-    }
+//    public boolean isUseNookKeys() {
+//        return useNookKeys;
+//    }
 
     public int getDefaultOrientation() {
         return defaultOrientation;
@@ -244,8 +257,23 @@ public class GlobalOptions implements Serializable {
         }
     }
 
-
     public String getDictionary() {
         return dictionary;
+    }
+
+    public int getEinkRefresafter() {
+        return einkRefresafter;
+    }
+
+    public boolean isEinkOptimization() {
+        return einkOptimization;
+    }
+
+    private int getInt(String name, int defaultValue) {
+        String value = prefs.getString(EINK_TOTAL_AFTER, null);
+        if (value == null || "".equals(value)) {
+            return defaultValue;
+        }
+        return Integer.parseInt(value);
     }
 }

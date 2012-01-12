@@ -92,6 +92,11 @@
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
                   android:textSize="20sp"
+                  android:text="DairyKnight"
+                  android:gravity="center"/>
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:textSize="20sp"
                   android:text="freetype"
                   android:gravity="center"/>
 

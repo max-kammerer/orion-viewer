@@ -78,13 +78,17 @@
 
                         <RadioButton android:id="@+id/direction1"
                                      android:layout_width="wrap_content"
-                                     android:layout_height="wrap_content" android:text="A, B, C, D"
-                                     android:layout_marginRight="10.0px"/>
+                                     android:layout_height="wrap_content"/>
 
+                        <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content" android:text="A, B, C, D"/>
 
                         <RadioButton android:id="@+id/direction2"
                                      android:layout_width="wrap_content"
-                                     android:layout_height="wrap_content" android:text="A, C, B, D"/>
+                                     android:layout_height="wrap_content" />
+
+                        <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content" android:text="A, C, B, D"/>
                     </RadioGroup>
 
                 </LinearLayout>

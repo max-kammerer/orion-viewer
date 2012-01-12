@@ -47,11 +47,11 @@
                 android:summary="Swap prev/next keys on 90 degree rotation"
                 android:defaultValue="false"/>
 
-        <CheckBoxPreference
-                android:key="USE_NOOK_KEYS"
-                android:title="Use Nook2 keys"
-                android:summary="Use Nook2 next and prev keys"
-                android:defaultValue="false" orion:justAndroidGeneral="true"/>
+        <!--<CheckBoxPreference-->
+                <!--android:key="USE_NOOK_KEYS"-->
+                <!--android:title="Use Nook2 keys"-->
+                <!--android:summary="Use Nook2 next and prev keys"-->
+                <!--android:defaultValue="false" orion:justAndroidGeneral="true"/>-->
     </PreferenceCategory>
 
         <PreferenceCategory
@@ -64,6 +64,24 @@
                     android:entryValues="@array/dictionaries"
                     android:dialogTitle="Dictionary"
                     android:defaultValue="FORA"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            android:title="E-ink optimization">
+        <CheckBoxPreference
+                android:key="EINK_OPTIMIZATION"
+                android:title="E-ink optimization"
+                android:summary="E-ink fast refresh"
+                android:defaultValue="false"/>
+
+        <EditTextPreference
+          android:dependency="EINK_OPTIMIZATION"
+          android:summary="Total refresh after"
+          android:defaultValue="10"
+          android:title="Total refresh after"
+          android:key="EINK_TOTAL_AFTER"
+          android:numeric="integer"/>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -49,8 +49,9 @@ public class OrionPreferenceActivity extends PreferenceActivity {
         }
 
         PreferenceScreen screen = getPreferenceScreen();
-        screen.findPreference("USE_NOOK_KEYS").setEnabled(isAndroidGeneral);
+
         screen.findPreference("SCREEN_ORIENTATION").setEnabled(isAndroidGeneral);
+        screen.findPreference("EINK_OPTIMIZATION").setEnabled(Device.Info.NOOK2);
     }
 
 

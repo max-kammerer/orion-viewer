@@ -119,6 +119,10 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         info.pageNumber = pageNum;
         //original width and height without cropped margins
         PageInfo pinfo = doc.getPageInfo(pageNum);
+
+        info.marginLeft = (int) (leftMargin * pinfo.width * 0.01);
+        info.marginTop = (int) (topMargin * pinfo.height * 0.01);
+
         info.pageWidth = Math.round(pinfo.width * (1 - 0.01f *(leftMargin + rightMargin)));
         info.pageHeight = Math.round(pinfo.height * (1- 0.01f *(topMargin + bottomMargin)));
 
@@ -222,8 +226,10 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     public Point convertToPoint(LayoutPosition pos) {
         int layout  = getLayout();
-        int absLeftMargin = (int) (leftMargin * pos.pageWidth * 0.01);
-        int absTopMargin = (int) (topMargin * pos.pageHeight * 0.01);
+//        int absLeftMargin = (int) (leftMargin * pos.pageWidth * 0.01);
+//        int absTopMargin = (int) (topMargin * pos.pageHeight * 0.01);
+        int absLeftMargin = (int) pos.marginLeft;
+        int absTopMargin = (int) pos.marginTop;
         int x = pos.cellX == 0 || pos.cellX != pos.maxX || layout == 0 ?  (int)(absLeftMargin + pos.cellX * (pos.pieceWidth - OVERLAP)) : (int) (absLeftMargin + pos.pageWidth - pos.pieceWidth);
         int y = pos.cellY == 0 || pos.cellY != pos.maxY || layout != 1 ? (int) (absTopMargin + pos.cellY * (pos.pieceHeight - OVERLAP)) : (int) (absTopMargin + pos.pageHeight - pos.pieceHeight);
 

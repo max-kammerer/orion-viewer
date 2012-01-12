@@ -845,7 +845,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             long startTime = 0;
             private static final long TIME_DELTA = 600;
             public boolean onTouch(View v, MotionEvent event) {
-//                Common.d("Event " + event.getAction());
+                Common.d("Even/t " + event.getAction());
 //                System.out.println(SystemClock.uptimeMillis() - startTime);
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     Common.d("DOWN " + event.getAction());
@@ -854,10 +854,19 @@ public class OrionViewerActivity extends OrionBaseActivity {
                     lastY = (int) event.getY();
                     return true;
                 } else {
-//                    Common.d("ev " + event.getAction());
+                    Common.d("ev " + event.getAction());
+                    boolean doAction = false;
                     if (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_UP) {
                         if (event.getAction() == MotionEvent.ACTION_UP) {
                             Common.d("UP " + event.getAction());
+                            doAction = true;
+                        } else {
+                            boolean isLongClick = (SystemClock.uptimeMillis() - startTime) > TIME_DELTA;
+                            doAction = isLongClick;
+                        }
+
+                        if (doAction) {
+                            Common.d("Do Action  on " + event.getAction());
                             boolean isLongClick = (SystemClock.uptimeMillis() - startTime) > TIME_DELTA;
 
                             if (lastX != -1 && lastY != -1) {
@@ -869,6 +878,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
                                 int code = globalOptions.getActionCode(i, j, isLongClick);
                                 doAction(code);
+
+                                startTime = 0;
+                                lastX = -1;
+                                lastY = -1;
                             }
                         }
                         return true;

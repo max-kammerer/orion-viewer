@@ -19,6 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.os.Build;
+import android.util.Log;
 import android.view.KeyEvent;
 
 /**
@@ -27,6 +29,31 @@ import android.view.KeyEvent;
  * Time: 11:13
  */
 public interface Device {
+
+    public static class Info {
+        public static String MANUFACTURER;
+        public static String MODEL;
+        public static String DEVICE;
+        public static boolean NOOK2;
+
+        static {
+            MANUFACTURER = getField("MANUFACTURER");
+            MODEL = getField("MODEL");
+            DEVICE = getField("DEVICE");
+            NOOK2 = MANUFACTURER.toLowerCase().contentEquals("barnesandnoble") && MODEL.contentEquals("NOOK") &&
+                    DEVICE.toLowerCase().contentEquals("zoom2");
+        }
+
+        public static String getField(String name) {
+            try {
+                return (String) Build.class.getField(name).get(null);
+            } catch (Exception e) {
+                Common.d("Exception on extracting Build property:" + name);
+                return "";
+            }
+        }
+    }
+
 
     final int NEXT = 1;
 

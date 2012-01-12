@@ -40,6 +40,8 @@ public class OrionView extends View {
 
     private Controller controller;
 
+    private int counter = 0;
+
     public OrionView(Context context) {
         super(context);
 
@@ -56,6 +58,15 @@ public class OrionView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        GlobalOptions options = ((OrionViewerActivity)getContext()).getGlobalOptions();
+        if (options.isEinkOptimization()) {
+            if (counter < options.getEinkRefresafter()) {
+                N2.setGL16Mode();
+            } else {
+                counter = 0;
+            }
+        }
+        //
 //        if (!startRenderer && controller != null) {
 //            startRenderer = true;
 //            controller.startRenderer();
@@ -83,6 +94,7 @@ public class OrionView extends View {
     public void setData(Bitmap bitmap, CountDownLatch latch) {
         this.bitmap = bitmap;
         this.latch = latch;
+        counter++;
     }
 
 
