@@ -25,9 +25,11 @@
     <string-array name="dictionaries">
         <item>FORA</item>
         <item>COLORDICT</item>
+        <item>AARD</item>
   </string-array>
     <string-array name="dictionaries_desc">
         <item>Fora Dictionary</item>
         <item>Color Dict/Golden Dict</item>
+        <item>Aard Dictionary</item>
   </string-array>
 </resources>

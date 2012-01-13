@@ -42,9 +42,15 @@ public enum Action {
                 additional = "HEADWORD";
             } else if ("COLORDICT".equals(dict)) {
                 action = "colordict.intent.action.SEARCH";
+            } else if ("AARD".equals(dict)) {
+                action = Intent.ACTION_MAIN;
+                additional = "aarddict.android.LookupActivity";
             }
             if (action != null) {
                 Intent intent = new Intent(action);
+                if (additional != null) {
+                    intent.setClassName("aarddict.android", additional);
+                }
                 //intent.putExtra(additional, "test");
                 try {
                     activity.startActivity(intent);

@@ -1,3 +1,9 @@
+===== 0.25.3 (Jan 13, 2012) =====
+
+* Tap zones feature in Android build
+* External dictionaries support
+* Fixed bug with relative cropping
+
 ===== 0.25.0 (Jan 5, 2012) =====
 
  * Fixed issue with blank page on attempt to render rotated pdf document
