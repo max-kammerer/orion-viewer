@@ -34,4 +34,7 @@
 
     <string name="navigation_help">
         Page navigation parameters</string>
+
+    <string name="dictionary_help">
+        Opens External Dictionary. You could select appropriate dictionary in Options.</string>
 </resources>

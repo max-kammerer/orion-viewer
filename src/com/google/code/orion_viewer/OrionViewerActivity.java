@@ -991,6 +991,17 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         rotationGroup.check(R.id.rotate0);
 
+        if (Device.Info.NOOK2) {
+            RadioButton r0 = (RadioButton) rotationGroup.findViewById(R.id.rotate0);
+            RadioButton r90 = (RadioButton) rotationGroup.findViewById(R.id.rotate90);
+            RadioButton r270 = (RadioButton) rotationGroup.findViewById(R.id.rotate270);
+            TextView tv = (TextView) findMyViewById(R.id.navigation_title);
+            int color = tv.getTextColors().getDefaultColor();
+            r0.setTextColor(color);
+            r90.setTextColor(color);
+            r270.setTextColor(color);
+        }
+
         getSubscriptionManager().addDocListeners(new DocumentViewAdapter() {
             @Override
             public void documentOpened(Controller controller) {

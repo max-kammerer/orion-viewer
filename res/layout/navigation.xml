@@ -72,7 +72,7 @@
                                 android:layout_gravity="left" android:gravity="center">
 
                         <TextView android:layout_width="wrap_content"
-                                  android:layout_height="wrap_content" android:id="@+id/zoom_picker_message"
+                                  android:layout_height="wrap_content" android:id="@+id/navigation_title"
                                   android:text="@string/navigation" android:textSize="22px"
                                   android:layout_marginRight="5dp" android:layout_gravity="center"/>
 

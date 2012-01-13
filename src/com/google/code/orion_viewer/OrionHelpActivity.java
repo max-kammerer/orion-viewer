@@ -13,7 +13,7 @@ public class OrionHelpActivity extends OrionBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(device.getHelpLayoutId());
+        setContentView(Common.createDevice().getHelpLayoutId());
         super.onCreate(savedInstanceState);
         initHelpScreen();
     }
@@ -38,6 +38,11 @@ public class OrionHelpActivity extends OrionBaseActivity {
                 finish();
                 return true;
         }
+        return false;
+    }
+
+    @Override
+    public boolean supportDevice() {
         return false;
     }
 }

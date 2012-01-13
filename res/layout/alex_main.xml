@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:orion="http://schemas.android.com/apk/res/com.google.code.orion_viewer"
              android:layout_width="fill_parent"
              android:layout_height="fill_parent" android:orientation="vertical">
 
@@ -21,13 +21,52 @@
                       android:layout_above="@id/page_number_view">
 
             <!--main screen/menu-->
-            <LinearLayout android:id="@+id/main_menu"
+            <RelativeLayout android:id="@+id/main_menu"   android:layout_gravity="center"
                           android:layout_width="fill_parent" android:layout_height="fill_parent"
-                          android:orientation="horizontal" android:gravity="center" android:paddingLeft="5dp"
+                          android:orientation="horizontal" android:gravity="center" android:paddingLeft="5dp" android:paddingTop="5dp"
                           android:paddingRight="5dp">
 
-                <LinearLayout
+                <LinearLayout android:id="@+id/main_main"
+                        android:layout_width="fill_parent" android:layout_height="fill_parent"
+                        android:orientation="horizontal" android:gravity="center" android:layout_weight="0.4" android:layout_gravity="center">
+
+                    <!--<LinearLayout-->
+                            <!--android:layout_width="fill_parent" android:layout_height="124.0px"-->
+                            <!--android:orientation="horizontal" android:layout_gravity="center" android:gravity="center">-->
+
+                        <ImageButton android:id="@+id/prev_page" android:layout_width="wrap_content"
+                                     android:layout_height="wrap_content" android:src="@drawable/prev"/>
+
+                        <ImageButton android:id="@+id/next_page" android:layout_width="wrap_content"
+                                     android:layout_height="wrap_content"
+                                     android:src="@drawable/next"/>
+
+                    <!--</LinearLayout>-->
+
+                </LinearLayout>
+
+
+                <LinearLayout android:layout_alignParentTop="true"
                         android:layout_width="fill_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:gravity="right" android:layout_weight="1">
+
+                        <ImageButton android:id="@+id/options"  android:layout_width="50px" android:layout_height="50px"
+                                     android:src="@drawable/options"/>
+
+                        <ImageButton android:id="@+id/help" android:layout_width="50px"
+                                     android:layout_height="50px"
+                                     android:src="@drawable/help"/>
+
+
+                        <ImageButton android:id="@+id/exit" android:layout_width="50px"
+                                     android:layout_height="50px"
+                                     android:src="@drawable/close"/>
+
+                </LinearLayout>
+
+
+                    <LinearLayout   android:layout_alignParentLeft="true"
+                        android:layout_width="wrap_content" android:layout_height="fill_parent"
                         android:orientation="vertical" android:gravity="left|center_vertical"
                         android:layout_weight="0.7">
 
@@ -41,54 +80,27 @@
                                  android:layout_height="wrap_content"
                                  android:src="@drawable/crop"/>
 
-                </LinearLayout>
-
-
-                <LinearLayout
-                        android:layout_width="fill_parent" android:layout_height="wrap_content"
-                        android:orientation="vertical" android:gravity="center" android:layout_weight="0.4">
-
-                    <LinearLayout
-                            android:layout_width="fill_parent" android:layout_height="124.0px"
-                            android:orientation="horizontal" android:layout_gravity="center" android:gravity="center">
-
-                        <ImageButton android:id="@+id/prev_page" android:layout_width="wrap_content"
-                                     android:layout_height="wrap_content" android:src="@drawable/prev"/>
-
-                        <ImageButton android:id="@+id/next_page" android:layout_width="wrap_content"
-                                     android:layout_height="wrap_content"
-                                     android:src="@drawable/next"/>
-
-                    </LinearLayout>
 
                 </LinearLayout>
 
 
-                <LinearLayout
-                        android:layout_width="fill_parent" android:layout_height="fill_parent"
+                <LinearLayout android:layout_alignParentRight="true"
+                        android:layout_width="wrap_content" android:layout_height="fill_parent"
                         android:orientation="vertical" android:gravity="right|center_vertical"
                         android:layout_weight="0.7">
 
-                    <ImageButton android:id="@+id/exit" android:layout_width="50px"
-                                 android:layout_height="50px"
-                                 android:src="@drawable/close"/>
-
-                    <ImageButton android:id="@+id/help" android:layout_width="50px"
-                                 android:layout_height="50px"
-                                 android:src="@drawable/help"/>
-
-                    <ImageButton android:id="@+id/options" android:layout_width="wrap_content"
-                                 android:layout_height="wrap_content"
-                                 android:src="@drawable/options"/>
 
                     <ImageButton android:id="@+id/navigation" android:layout_width="wrap_content"
                                  android:layout_height="wrap_content"
                                  android:src="@drawable/navigation"/>
 
+                    <com.google.code.orion_viewer.widget.ImageButton android:id="@+id/dictionary" android:layout_width="wrap_content"
+                                 android:layout_height="wrap_content"
+                             android:src="@drawable/dictionary" orion:actionId="@integer/action_dictionary" />
                 </LinearLayout>
 
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <!--page chooser screen-->
             <LinearLayout android:id="@+id/page_menu"

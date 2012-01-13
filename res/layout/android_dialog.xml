@@ -19,39 +19,17 @@
                         android:orientation="vertical"
                         android:layout_gravity="center" android:gravity="left">
 
-                <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
-                          android:layout_width="wrap_content">
-                    <RadioButton android:id="@+id/rotate0"
+                <RadioButton android:id="@+id/rotate0"
                              android:layout_width="wrap_content"
-                             android:layout_height="wrap_content"/>
+                             android:layout_height="wrap_content" android:text="@string/rotate_0"/>
 
-                    <TextView android:layout_width="wrap_content"
-                              android:layout_height="wrap_content"
-                              android:text="@string/rotate_0"/>
-                </LinearLayout>
-
-
-                <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
-                          android:layout_width="wrap_content">
-                    <RadioButton android:id="@+id/rotate90"
+                <RadioButton android:id="@+id/rotate90"
                              android:layout_width="wrap_content"
-                             android:layout_height="wrap_content"/>
+                             android:layout_height="wrap_content" android:text="@string/rotate_90"/>
 
-                    <TextView android:layout_width="wrap_content"
-                              android:layout_height="wrap_content"
-                              android:text="@string/rotate_90"/>
-                </LinearLayout>
-
-                <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
-                          android:layout_width="wrap_content">
-                    <RadioButton android:id="@+id/rotate270"
+                <RadioButton android:id="@+id/rotate270"
                              android:layout_width="wrap_content"
-                             android:layout_height="wrap_content"/>
-                    <TextView android:layout_width="wrap_content"
-                              android:layout_height="wrap_content"
-                              android:text="@string/rotate_270"/>
-                </LinearLayout>
-
+                             android:layout_height="wrap_content" android:text="@string/rotate_270"/>
             </RadioGroup>
 
             <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal" android:layout_below="@id/rotationGroup"
