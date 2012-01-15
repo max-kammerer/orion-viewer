@@ -139,6 +139,8 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         } else {
             info.docZoom = 0.01f * zoom;
         }
+        info.marginLeft = (int) (info.docZoom * info.marginLeft);
+        info.marginTop = (int) (info.docZoom * info.marginTop);
 
         //zoomed with and height
         info.pageWidth = (int)(info.docZoom * info.pageWidth);
