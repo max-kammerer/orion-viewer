@@ -21,14 +21,57 @@
                       android:layout_above="@id/page_number_view">
 
             <!--main screen/menu-->
-            <RelativeLayout android:id="@+id/main_menu"   android:layout_gravity="center"
+            <LinearLayout android:id="@+id/main_menu"   android:layout_gravity="center"
                           android:layout_width="fill_parent" android:layout_height="fill_parent"
-                          android:orientation="horizontal" android:gravity="center" android:paddingLeft="5dp" android:paddingTop="5dp"
+                          android:orientation="vertical" android:gravity="center" android:paddingLeft="5dp" android:paddingTop="5dp"
                           android:paddingRight="5dp">
+
+                <LinearLayout
+                        android:layout_width="fill_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:gravity="right" android:layout_weight="0">
+
+                        <ImageButton android:id="@+id/options"  android:layout_width="50px" android:layout_height="50px"
+                                     android:src="@drawable/options"/>
+
+                        <ImageButton android:id="@+id/help" android:layout_width="50px"
+                                     android:layout_height="50px"
+                                     android:src="@drawable/help"/>
+
+
+                        <ImageButton android:id="@+id/exit" android:layout_width="50px"
+                                     android:layout_height="50px"
+                                     android:src="@drawable/close"/>
+
+                </LinearLayout>
+
 
                 <LinearLayout android:id="@+id/main_main"
                         android:layout_width="fill_parent" android:layout_height="fill_parent"
-                        android:orientation="horizontal" android:gravity="center" android:layout_weight="0.4" android:layout_gravity="center">
+                        android:orientation="horizontal" android:gravity="center" android:layout_weight="1" android:layout_gravity="center">
+
+
+                <LinearLayout
+                        android:layout_width="wrap_content" android:layout_height="fill_parent"
+                        android:orientation="vertical" android:gravity="left|top"
+                        android:layout_weight="0">
+
+                    <ImageButton android:id="@+id/zoom" android:src="@drawable/zoom" android:layout_width="wrap_content"
+                                 android:layout_height="wrap_content"/>
+
+                    <ImageButton android:id="@+id/switch_page" android:src="@drawable/rotate"
+                                 android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+                    <ImageButton android:id="@+id/crop_menu" android:layout_width="wrap_content"
+                                 android:layout_height="wrap_content"
+                                 android:src="@drawable/crop"/>
+
+                </LinearLayout>
+
+
+
+                <LinearLayout android:id="@+id/main_main"
+                        android:layout_width="fill_parent" android:layout_height="fill_parent"
+                        android:orientation="horizontal" android:gravity="center" android:layout_weight="1" android:layout_gravity="center">
 
                     <!--<LinearLayout-->
                             <!--android:layout_width="fill_parent" android:layout_height="124.0px"-->
@@ -46,48 +89,10 @@
                 </LinearLayout>
 
 
-                <LinearLayout android:layout_alignParentTop="true"
-                        android:layout_width="fill_parent" android:layout_height="wrap_content"
-                        android:orientation="horizontal" android:gravity="right" android:layout_weight="1">
-
-                        <ImageButton android:id="@+id/options"  android:layout_width="50px" android:layout_height="50px"
-                                     android:src="@drawable/options"/>
-
-                        <ImageButton android:id="@+id/help" android:layout_width="50px"
-                                     android:layout_height="50px"
-                                     android:src="@drawable/help"/>
-
-
-                        <ImageButton android:id="@+id/exit" android:layout_width="50px"
-                                     android:layout_height="50px"
-                                     android:src="@drawable/close"/>
-
-                </LinearLayout>
-
-
-                    <LinearLayout   android:layout_alignParentLeft="true"
-                        android:layout_width="wrap_content" android:layout_height="fill_parent"
-                        android:orientation="vertical" android:gravity="left|center_vertical"
-                        android:layout_weight="0.7">
-
-                    <ImageButton android:id="@+id/zoom" android:src="@drawable/zoom" android:layout_width="wrap_content"
-                                 android:layout_height="wrap_content"/>
-
-                    <ImageButton android:id="@+id/switch_page" android:src="@drawable/rotate"
-                                 android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-
-                    <ImageButton android:id="@+id/crop_menu" android:layout_width="wrap_content"
-                                 android:layout_height="wrap_content"
-                                 android:src="@drawable/crop"/>
-
-
-                </LinearLayout>
-
-
-                <LinearLayout android:layout_alignParentRight="true"
+                <LinearLayout
                         android:layout_width="wrap_content" android:layout_height="fill_parent"
                         android:orientation="vertical" android:gravity="right|center_vertical"
-                        android:layout_weight="0.7">
+                        android:layout_weight="0">
 
 
                     <ImageButton android:id="@+id/navigation" android:layout_width="wrap_content"
@@ -99,8 +104,8 @@
                              android:src="@drawable/dictionary" orion:actionId="@integer/action_dictionary" />
                 </LinearLayout>
 
-
-            </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
 
             <!--page chooser screen-->
             <LinearLayout android:id="@+id/page_menu"
