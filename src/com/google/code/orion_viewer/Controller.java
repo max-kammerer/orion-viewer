@@ -48,6 +48,9 @@ public class Controller {
 
     private Point lastScreenSize;
 
+    public static final int ROTATE_90 = -1;
+    public static final int ROTATE_270 = 1;
+
     public Controller(OrionViewerActivity activity, DocumentWrapper doc, LayoutStrategy layout, OrionView view) {
         this.activity = activity;
         this.doc = doc;
@@ -89,8 +92,8 @@ public class Controller {
             }
             lastScreenSize = null;
         }
-        renderer.onResume();
         sendViewChangeNotification();
+        renderer.onResume();
     }
 
     public void drawNext() {
@@ -114,6 +117,10 @@ public class Controller {
         return layout.getZoom();
     }
 
+    //left, top, right, bottom
+    public void changeMargins(int [] margins) {
+        changeMargins(margins[0], margins[2], margins[1], margins[3]);
+    }
 
     public void changeMargins(int leftMargin, int topMargin, int rightMargin, int bottomMargin) {
         if (layout.changeMargins(leftMargin, topMargin, rightMargin, bottomMargin)) {
@@ -127,6 +134,7 @@ public class Controller {
     }
 
     public void destroy() {
+        Common.d("Destroying controller...");
         activity.getSubscriptionManager().unSubscribe(listener);
 
         if (renderer != null) {
@@ -140,8 +148,8 @@ public class Controller {
         System.gc();
     }
 
-    public void startRenderer() {
-//        Common.d("Starting renderer " + view.getWidth() + "x" + view.getHeight());
+//    public void onResume() {
+//        Common.d("Controller onResume" + view.getWidth() + "x" + view.getHeight());
 //        int oldX = layoutInfo.cellX;
 //        int oldY = layoutInfo.cellY;
 //        layout.setDimension(view.getWidth(), view.getHeight());
@@ -153,9 +161,9 @@ public class Controller {
 //            layoutInfo.cellY = oldY;
 //        }
 //        drawPage();
-        renderer.onResume();
+//        renderer.onResume();
 //        renderer.start();
-    }
+//    }
 
     public void onPause() {
         renderer.onPause();
@@ -190,6 +198,11 @@ public class Controller {
         layoutInfo.cellY = info.offsetY;
 
         lastScreenSize = new Point(info.screenWidth, info.screenHeight);
+
+        if (view.getWidth() != 0 && view.getHeight() != 0) {
+            Common.d("Calling screen size from init...");
+            screenSizeChanged(view.getWidth(), view.getHeight());
+        }
     }
 
     public void serialize(LastPageInfo info) {
@@ -227,4 +240,5 @@ public class Controller {
     public OrionViewerActivity getActivity() {
         return activity;
     }
+
 }

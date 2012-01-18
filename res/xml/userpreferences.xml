@@ -5,15 +5,15 @@
             android:title="Layout">
         <CheckBoxPreference
                 android:key="FULL_SCREEN"
-                android:title="Full screen"
-                android:summary="Full screen"
+                android:title="@string/pref_fullScreen"
+                android:summary="@string/pref_fullScreen"
                 android:defaultValue="false"/>
 
         <!--page orientation-->
         <ListPreference
                 android:key="BOOK_ORIENTATION"
-                android:title="Book default orientation"
-                android:summary="Rotate new book on opening"
+                android:title="@string/pref_bookDefaultOrientation"
+                android:summary="@string/pref_rotate_new_book_on_opening"
                 android:entries="@array/orientation_desc"
                 android:entryValues="@array/orientation"
                 android:dialogTitle="Rotation"
@@ -22,8 +22,8 @@
 
         <ListPreference
                 android:key="SCREEN_ORIENTATION"
-                android:title="Screen orientation"
-                android:summary="Rotate screen"
+                android:title="@string/pref_screen_orientation"
+                android:summary="@string/pref_rotate_screen"
                 android:entries="@array/screen_orientation_desc"
                 android:entryValues="@array/screen_orientation"
                 android:dialogTitle="Rotation"
@@ -35,16 +35,16 @@
 
         <CheckBoxPreference
                 android:key="APPLY_AND_CLOSE"
-                android:title="Close dialog on apply"
-                android:summary="Close page option dialog on apply"
+                android:title="@string/pref_close_dialog_on_apply"
+                android:summary="@string/pref_close_page_option_dialog_on_apply"
                 android:defaultValue="false"/>
     </PreferenceCategory>
     <PreferenceCategory
             android:title="Key Manager">
         <CheckBoxPreference
                 android:key="SWAP_KEYS"
-                android:title="Swap prev/next keys"
-                android:summary="Swap prev/next keys on 90 degree rotation"
+                android:title="@string/pref_swap_prev_next_keys"
+                android:summary="@string/pref_swap_prev_next_keys_on_90_degree_rotation"
                 android:defaultValue="false"/>
 
         <!--<CheckBoxPreference-->
@@ -55,30 +55,30 @@
     </PreferenceCategory>
 
         <PreferenceCategory
-            android:title="Dictionary">
+            android:title="@string/pref_dictionary">
             <ListPreference
                     android:key="DICTIONARY"
-                    android:title="Dictionary"
-                    android:summary="Dictionary"
+                    android:title="@string/pref_dictionary"
+                    android:summary="@string/pref_dictionary"
                     android:entries="@array/dictionaries_desc"
                     android:entryValues="@array/dictionaries"
-                    android:dialogTitle="Dictionary"
+                    android:dialogTitle="@string/pref_dictionary"
                     android:defaultValue="FORA"/>
     </PreferenceCategory>
 
     <PreferenceCategory
-            android:title="E-ink optimization">
+            android:title="@string/pref_e_ink_optimization">
         <CheckBoxPreference
                 android:key="EINK_OPTIMIZATION"
-                android:title="E-ink optimization"
-                android:summary="E-ink fast refresh"
+                android:title="@string/pref_e_ink_fast_refresh"
+                android:summary="@string/pref_e_ink_fast_refresh"
                 android:defaultValue="false"/>
 
         <EditTextPreference
           android:dependency="EINK_OPTIMIZATION"
-          android:summary="Total refresh after"
+          android:summary="@string/pref_total_refresh_after"
           android:defaultValue="10"
-          android:title="Total refresh after"
+          android:title="@string/pref_total_refresh_after"
           android:key="EINK_TOTAL_AFTER"
           android:numeric="integer"/>
 

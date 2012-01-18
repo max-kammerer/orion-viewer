@@ -58,11 +58,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private static final int OPTIONS_SCREEN = 6;
 
-    private static final int CROP_RESTRICTION_MIN = -10;
+    public static final int CROP_RESTRICTION_MIN = -10;
 
     private static final int CROP_DELTA = 10;
 
-    private static final int CROP_RESTRICTION_MAX = 40;
+    public static final int CROP_RESTRICTION_MAX = 40;
 
     private final SubscriptionManager manager = new SubscriptionManager();
 
@@ -154,11 +154,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
         });
     }
 
-    public void updateLabels() {
-//        updateOptions();
-//        updateCrops();
-    }
-
     public void updateCrops() {
         controller.getMargins(cropBorders);
         TableLayout cropTable = (TableLayout) findMyViewById(R.id.crop_borders);
@@ -234,9 +229,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
             getSubscriptionManager().sendDocOpenedNotification(controller);
 
+            getView().setController(controller);
+
             controller.drawPage();
 
-            getView().setController(controller);
             String title = doc.getTitle();
             if (title == null || "".equals(title)) {
                 title = filePath.substring(idx + 1);
@@ -774,6 +770,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int screenId = HELP_SCREEN;
+
         switch (item.getItemId()) {
             case R.id.exit_menu_item:
                 finish();
@@ -795,6 +792,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
             case R.id.tap_menu_item:
                 Intent tap = new Intent(this, OrionTapActivity.class);
                 startActivity(tap);
+                return true;
+            case R.id.open_menu_item:
+                Action.OPEN_BOOK.doAction(controller, this);
                 return true;
         }
 
@@ -845,10 +845,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
             long startTime = 0;
             private static final long TIME_DELTA = 600;
             public boolean onTouch(View v, MotionEvent event) {
-                Common.d("Even/t " + event.getAction());
+                //Common.d("Even/t " + event.getAction());
 //                System.out.println(SystemClock.uptimeMillis() - startTime);
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    Common.d("DOWN " + event.getAction());
+                    //Common.d("DOWN " + event.getAction());
                     startTime = SystemClock.uptimeMillis();
                     lastX = (int) event.getX();
                     lastY = (int) event.getY();
@@ -866,7 +866,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
                         }
 
                         if (doAction) {
-                            Common.d("Do Action  on " + event.getAction());
+                            Common.d("Do Action " + event.getAction());
                             boolean isLongClick = (SystemClock.uptimeMillis() - startTime) > TIME_DELTA;
 
                             if (lastX != -1 && lastY != -1) {

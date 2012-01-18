@@ -22,6 +22,31 @@ public enum Action {
 
     PREV (R.string.action_prev_page, 3),
 
+    NEXT10 (R.string.action_next_10, R.integer.action_next_10) {
+        @Override
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            int page = controller.getCurrentPage() + 10;
+
+            if (page > controller.getPageCount() - 1) {
+                page = controller.getPageCount() - 1;
+            }
+            controller.drawPage(page);
+        }
+    },
+
+
+    PREV10 (R.string.action_prev_10, R.integer.action_prev_10) {
+        @Override
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            int page = controller.getCurrentPage() - 10;
+
+            if (page < 0) {
+                page = 0;
+            }
+            controller.drawPage(page);
+        }
+    },
+
     ZOOM (R.string.action_zoom_page, 4),
 
     CROP (R.string.action_crop_page, 5),
@@ -32,7 +57,21 @@ public enum Action {
 
     ROTATION (R.string.action_rotation_page, 8),
 
-    DICTIONARY (R.string.action_dictionary, 9) {
+    ROTATE_90 (R.string.action_rotate_90, R.integer.action_rotate_90) {
+        @Override
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            controller.setRotation((controller.getRotation() - 1) % 2);
+        }
+    },
+
+    ROTATE_270 (R.string.action_rotate_270, R.integer.action_rotate_270) {
+        @Override
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            controller.setRotation((controller.getRotation() + 1) % 2);
+        }
+    },
+
+    DICTIONARY (R.string.action_dictionary, R.integer.action_dictionary) {
         public void doAction(Controller controller, OrionViewerActivity activity) {
             String dict = activity.getGlobalOptions().getDictionary();
             String action = null;
@@ -59,8 +98,62 @@ public enum Action {
                 }
             }
         }
-    };
+    },
 
+    OPEN_BOOK (R.string.action_open, R.integer.action_open_book) {
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            Intent intent = new Intent(activity, OrionFileManagerActivity.class);
+            activity.startActivity(intent);
+        }
+    },
+
+    CROP_LEFT (R.string.action_crop_left, R.integer.action_crop_left) {
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            updateMargin(controller, +1, 0);
+        }
+    },
+
+    UNCROP_LEFT (R.string.action_uncrop_left, R.integer.action_uncrop_left) {
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            updateMargin(controller, -1, 0);
+        }
+    },
+
+    CROP_RIGHT (R.string.action_crop_right, R.integer.action_crop_right) {
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            updateMargin(controller, +1, 1);
+        }
+    },
+
+    UNCROP_RIGHT (R.string.action_uncrop_right, R.integer.action_uncrop_right) {
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            updateMargin(controller, -1, 1);
+        }
+    },
+
+    CROP_TOP (R.string.action_crop_top, R.integer.action_crop_top) {
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            updateMargin(controller, +1, 2);
+        }
+    },
+
+    UNCROP_TOP (R.string.action_uncrop_top, R.integer.action_uncrop_top) {
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            updateMargin(controller, -1, 2);
+        }
+    },
+
+    CROP_BOTTOM (R.string.action_crop_bottom, R.integer.action_crop_bottom) {
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            updateMargin(controller, +1, 3);
+        }
+    },
+
+    UNCROP_BOTTOM (R.string.action_uncrop_bottom, R.integer.action_uncrop_bottom) {
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            updateMargin(controller, -1, 3);
+        }
+    };
 
     private static final HashMap<Integer, Action> actions = new HashMap<Integer, Action>();
 
@@ -96,5 +189,18 @@ public enum Action {
 
     public void doAction(Controller controller, OrionViewerActivity activity) {
 
+    }
+
+    protected void updateMargin(Controller controller, int delta, int index) {
+        int [] margins = new int[4];
+        controller.getMargins(margins);
+        margins[index] += delta;
+        if (margins[index] > OrionViewerActivity.CROP_RESTRICTION_MAX) {
+            margins[index] = OrionViewerActivity.CROP_RESTRICTION_MAX;
+        }
+        if (margins[index] < OrionViewerActivity.CROP_RESTRICTION_MIN) {
+            margins[index] = OrionViewerActivity.CROP_RESTRICTION_MIN;
+        }
+        controller.changeMargins(margins);
     }
 }

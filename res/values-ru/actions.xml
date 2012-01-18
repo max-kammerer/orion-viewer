@@ -1,0 +1,29 @@
+<resources>
+    <string name="action_none">Нет действия</string>
+    <string name="action_menu">Главное меню</string>
+    <string name="action_next_page">Следующая страница</string>
+    <string name="action_prev_page">Предыдущая страница</string>
+    <string name="action_crop_page">Диалог обрезки полей</string>
+    <string name="action_zoom_page">Диалог масштабирования</string>
+    <string name="action_rotation_page">Диалог поворота</string>
+    <string name="action_options_page">Настройки</string>
+    <string name="action_goto_page">Перейти к ...</string>
+    <string name="action_dictionary">Открыть словарь</string>
+    <string name="action_open">Открыть книгу</string>
+
+    <string name="action_crop_left">Обрезать левое поле</string>
+    <string name="action_crop_right">Обрезать правое поле</string>
+    <string name="action_crop_top">Обрезать верхнее поле</string>
+    <string name="action_crop_bottom">Обрезать нижнее поле</string>
+
+    <string name="action_uncrop_left">Увеличить левое поле</string>
+    <string name="action_uncrop_right">Увеличить правое поле</string>
+    <string name="action_uncrop_top">Увеличить верхнее поле</string>
+    <string name="action_uncrop_bottom">Увеличить нижнее поле</string>
+
+    <string name="action_next_10">Вперед на 10 страниц</string>
+    <string name="action_prev_10">Назад на 10 страниц</string>
+
+    <string name="action_rotate_90">Повернуть на  90/-90 градусов</string>
+    <string name="action_rotate_270">Повернуть на 270/-270 градусов</string>
+</resources>

@@ -1,3 +1,24 @@
 <resources>
     <integer name="action_dictionary">9</integer>
+    <integer name="action_open_book">10</integer>
+
+    <integer name="action_next_10">11</integer>
+    <integer name="action_prev_10">12</integer>
+
+    <integer name="action_rotate_90">13</integer>
+    <integer name="action_rotate_270">14</integer>
+
+
+    <!--crop margins-->
+    <integer name="action_crop_left">31</integer>
+    <integer name="action_crop_right">32</integer>
+    <integer name="action_crop_top">33</integer>
+    <integer name="action_crop_bottom">34</integer>
+
+
+    <!--increase margins-->
+    <integer name="action_uncrop_left">35</integer>
+    <integer name="action_uncrop_right">36</integer>
+    <integer name="action_uncrop_top">37</integer>
+    <integer name="action_uncrop_bottom">38</integer>
 </resources>

@@ -1,6 +1,6 @@
 <resources>
     <string name="action_none">None</string>
-    <string name="action_menu">Menu</string>
+    <string name="action_menu">Main menu</string>
     <string name="action_next_page">Next page</string>
     <string name="action_prev_page">Prev page</string>
     <string name="action_crop_page">Crop dialog</string>
@@ -8,5 +8,21 @@
     <string name="action_rotation_page">Rotation dialog</string>
     <string name="action_options_page">Options</string>
     <string name="action_goto_page">Go to</string>
-    <string name="action_dictionary">Dictionary</string>
+    <string name="action_dictionary">Open Dictionary</string>
+    <string name="action_open">Open Book</string>
+    <string name="action_crop_left">Crop left margin</string>
+    <string name="action_crop_right">Crop right margin</string>
+    <string name="action_crop_top">Crop top margin</string>
+    <string name="action_crop_bottom">Crop bottom margin</string>
+
+    <string name="action_uncrop_left">Increase left margin</string>
+    <string name="action_uncrop_right">Increase right margin</string>
+    <string name="action_uncrop_top">Increase top margin</string>
+    <string name="action_uncrop_bottom">Increase bottom margin</string>
+
+    <string name="action_next_10">Forward 10 pages</string>
+    <string name="action_prev_10">Backward 10 pages</string>
+
+    <string name="action_rotate_90">Rotate 90/-90 degree</string>
+    <string name="action_rotate_270">Rotate 270/-270 degree</string>
 </resources>

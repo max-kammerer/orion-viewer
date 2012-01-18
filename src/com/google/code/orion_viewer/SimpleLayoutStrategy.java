@@ -250,4 +250,20 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         viewWidth = width;
         viewHeight = height;
     }
+
+    public int getLeftMargin() {
+        return leftMargin;
+    }
+
+    public int getTopMargin() {
+        return topMargin;
+    }
+
+    public int getRightMargin() {
+        return rightMargin;
+    }
+
+    public int getBottomMargin() {
+        return bottomMargin;
+    }
 }

@@ -18,17 +18,15 @@
 <!--along with this program.  If not, see <http://www.gnu.org/licenses/>.-->
 
 <resources>
-    <string name="app_name">Orion Viewer</string>
-    <string name="navigation">Walk order</string>
-    <string name="version_name">0.25.5</string>
-    <string name="crop_left">Left</string>
-    <string name="crop_right">Right</string>
-    <string name="crop_top">Top</string>
-    <string name="crop_bottom">Bottom</string>
-    <string name="rotate_0">0 degree</string>
-    <string name="rotate_90">90 degree</string>
-    <string name="rotate_270">270 degree</string>
-    <string name="long_click">On long click</string>
-    <string name="short_click">On short click</string>
-    <string name="binding_click">On binding</string>
+    <string name="navigation">Порядок переходов</string>
+    <string name="crop_left">Левое</string>
+    <string name="crop_right">Правое</string>
+    <string name="crop_top">Верхнее</string>
+    <string name="crop_bottom">Нижнее</string>
+    <string name="rotate_0">0 градусов</string>
+    <string name="rotate_90">90 градусов</string>
+    <string name="rotate_270">270 градусов</string>
+    <string name="long_click">При долгом нажатии</string>
+    <string name="short_click">При коротком нажатии</string>
+    <string name="binding_click">Переназначение</string>
 </resources>

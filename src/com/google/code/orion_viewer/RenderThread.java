@@ -130,8 +130,6 @@ public class RenderThread extends Thread {
                 cachedBitmaps.clear();
                 Common.d("Cache is cleared!");
             //}
-
-
             currentPosition = null;
             //clearCache = true;
         }
@@ -169,14 +167,14 @@ public class RenderThread extends Thread {
             int rotation = 0;
             CacheInfo resultEntry = null;
             synchronized (this) {
-                if (paused) {
-                    try {
-                        wait();
-                    } catch (InterruptedException e) {
-                        Common.d(e);
-                    }
-                    continue;
-                }
+//                if (paused) {
+//                    try {
+//                        wait();
+//                    } catch (InterruptedException e) {
+//                        Common.d(e);
+//                    }
+//                    continue;
+//                }
 
                 if (lastEvent != null) {
                     currentPosition = lastEvent;
