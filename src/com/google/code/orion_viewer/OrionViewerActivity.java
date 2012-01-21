@@ -845,8 +845,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             long startTime = 0;
             private static final long TIME_DELTA = 600;
             public boolean onTouch(View v, MotionEvent event) {
-                //Common.d("Even/t " + event.getAction());
-//                System.out.println(SystemClock.uptimeMillis() - startTime);
+                //Common.d("Event " + event.getAction() + ": "  + (SystemClock.uptimeMillis() - startTime));
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     //Common.d("DOWN " + event.getAction());
                     startTime = SystemClock.uptimeMillis();
@@ -854,19 +853,21 @@ public class OrionViewerActivity extends OrionBaseActivity {
                     lastY = (int) event.getY();
                     return true;
                 } else {
-                    //Common.d("ev " + event.getAction());
+//                    Common.d("ev " + event.getAction());
                     boolean doAction = false;
                     if (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_UP) {
                         if (event.getAction() == MotionEvent.ACTION_UP) {
                             Common.d("UP " + event.getAction());
                             doAction = true;
                         } else {
-                            boolean isLongClick = (SystemClock.uptimeMillis() - startTime) > TIME_DELTA;
-                            doAction = isLongClick;
+                            if (lastX != -1 && lastY != -1) {
+                                boolean isLongClick = (SystemClock.uptimeMillis() - startTime) > TIME_DELTA;
+                                doAction = isLongClick;
+                            }
                         }
 
                         if (doAction) {
-                            Common.d("Do Action " + event.getAction());
+                            Common.d("Check event action " + event.getAction());
                             boolean isLongClick = (SystemClock.uptimeMillis() - startTime) > TIME_DELTA;
 
                             if (lastX != -1 && lastY != -1) {
@@ -883,16 +884,16 @@ public class OrionViewerActivity extends OrionBaseActivity {
                                 lastX = -1;
                                 lastY = -1;
                             }
+
                         }
                         return true;
+                    } else if (event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                        startTime = 0;
+                        lastX = -1;
+                        lastY = -1;
                     }
-
-                    startTime = 0;
-                    lastX = -1;
-                    lastY = -1;
                 }
-
-                return false;
+                return true;
             }
         });
 
