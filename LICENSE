@@ -1,6 +1,6 @@
-Orion Viewer is a pdf viewer for Nook Classic based on mupdf
+Orion - pdf and djvu viewer for e-ink readers based on mupdf and DjVuLibre libraries
 
-Copyright (C) 2011  Michael Bogdanov
+Copyright (C) 2011-2012  Michael Bogdanov
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

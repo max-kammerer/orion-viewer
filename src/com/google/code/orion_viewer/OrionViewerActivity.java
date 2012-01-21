@@ -854,7 +854,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
                     lastY = (int) event.getY();
                     return true;
                 } else {
-                    Common.d("ev " + event.getAction());
+                    //Common.d("ev " + event.getAction());
                     boolean doAction = false;
                     if (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_UP) {
                         if (event.getAction() == MotionEvent.ACTION_UP) {

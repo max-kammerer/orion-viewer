@@ -6,8 +6,8 @@
   </string-array>
     <string-array name="orientation_desc">
         <item>@string/rotate_0</item>
-        <item>string/rotate_90</item>
-        <item>string/rotate_270</item>
+        <item>@string/rotate_90</item>
+        <item>@string/rotate_270</item>
   </string-array>
 
     <string-array name="screen_orientation">

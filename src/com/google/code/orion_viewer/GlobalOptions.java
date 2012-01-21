@@ -49,9 +49,9 @@ public class GlobalOptions implements Serializable {
 
     private SharedPreferences prefs;
 
-    private int nextKey;
+    private int nextKey = -1;
 
-    private int prevKey;
+    private int prevKey = -1;
 
     private boolean swapKeys;
 
@@ -91,8 +91,8 @@ public class GlobalOptions implements Serializable {
             }
         }
 
-        nextKey = prefs.getInt(NEXT_KEY, 0);
-        prevKey = prefs.getInt(PREV_KEY, 0);
+        nextKey = prefs.getInt(NEXT_KEY, -1);
+        prevKey = prefs.getInt(PREV_KEY, -1);
 
         swapKeys = prefs.getBoolean(SWAP_KEYS, false);
         //useNookKeys = prefs.getBoolean(USE_NOOK_KEYS, false);
@@ -109,9 +109,9 @@ public class GlobalOptions implements Serializable {
                 public void onSharedPreferenceChanged(SharedPreferences preferences, String name) {
                     Common.d("onSharedPreferenceChanged " + name);
                     if (NEXT_KEY.equals(name)) {
-                        nextKey = preferences.getInt(NEXT_KEY, 0);
+                        nextKey = preferences.getInt(NEXT_KEY, -1);
                     } else if (PREV_KEY.equals(name)) {
-                        prevKey = preferences.getInt(PREV_KEY, 0);
+                        prevKey = preferences.getInt(PREV_KEY, -1);
                     } else if (SWAP_KEYS.equals(name)) {
                         swapKeys = preferences.getBoolean(SWAP_KEYS, false);
 //                    } else if (USE_NOOK_KEYS.equals(name)) {

@@ -1,7 +1,6 @@
 package com.google.code.orion_viewer.device;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.PowerManager;
 import android.view.KeyEvent;
 import com.google.code.orion_viewer.*;
@@ -58,19 +57,33 @@ public class AndroidDevice implements Device {
                 return true;
             }
 
-            //than check options
-            if (Info.NOOK2) {
-                switch (keyCode) {
-                    case NOOK_PAGE_UP_KEY_LEFT:
-                    case NOOK_PAGE_UP_KEY_RIGHT:
+        }
+
+        if (Info.NOOK2) {
+            switch (keyCode) {
+                case NOOK_PAGE_UP_KEY_LEFT:
+                case NOOK_PAGE_UP_KEY_RIGHT:
+                    holder.value = PREV;
+                    return true;
+                case NOOK_PAGE_DOWN_KEY_LEFT:
+                case NOOK_PAGE_DOWN_KEY_RIGHT:
+                    holder.value = NEXT;
+                    return true;
+                }
+        }
+
+        if (Info.SONY_PRS_T1) {
+            if (keyCode == 0) {
+                 switch (event.getScanCode()) {
+                    case 105:
                         holder.value = PREV;
                         return true;
-                    case NOOK_PAGE_DOWN_KEY_LEFT:
-                    case NOOK_PAGE_DOWN_KEY_RIGHT:
+                    case 106:
                         holder.value = NEXT;
                         return true;
                     }
             }
+
         }
 
         if (keyCode == KeyEvent.KEYCODE_SOFT_LEFT || keyCode == KeyEvent.KEYCODE_SOFT_RIGHT) {

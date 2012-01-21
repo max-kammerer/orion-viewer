@@ -48,22 +48,31 @@
                   android:text="e-mail: mikhael.bogdanov@gmail.com" android:textSize="20sp"
                   android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
 
-
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:textSize="20sp"
-                  android:text="New versions could be obtained from \n  http://code.google.com/p/orion-viewer/"
-                  android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
-        <!--android:text="&lt;html&gt;New versions could be obtained from \n  &lt;a href=''&gt;http://code.google.com/p/orion-viewer/&lt;/a&gt;&lt;/html&gt;"-->
-
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:text="You could report any bug at \n http://code.google.com/p/orion-viewer/issues/list"
-                  android:textSize="20sp"
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_1" android:layout_marginTop="20px"
+                  android:text="Project site: http://code.google.com/p/orion-viewer/" android:textSize="18sp"
                   android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:text="Project discussion group - \n https://groups.google.com/group/orionviewer"
-                  android:textSize="20sp"
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_2" android:textSize="18sp"
+                  android:text="Bug reporting: http://code.google.com/p/orion-viewer/issues/list"
                   android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_3" android:textSize="18sp"
+                  android:text="Discussion group: https://groups.google.com/group/orionviewer"
+                  android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_4" android:textSize="18sp"
+                  android:text="Contribution: http://code.google.com/p/orion-viewer/wiki/Contribution"
+                  android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
+
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:textSize="18sp" android:layout_marginTop="20px"
+                  android:text="Orion Viewer is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version."
+                  android:gravity="center"/>
+
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
                   android:textSize="20sp"
@@ -71,55 +80,54 @@
                   android:gravity="center" android:layout_marginTop="20px"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:textSize="20sp"
+                  android:textSize="18sp"
                   android:text="mupdf"
                   android:gravity="center"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:textSize="20sp"
+                  android:textSize="18sp"
                   android:text="DjVuLibre"
                   android:gravity="center"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:textSize="20sp"
+                  android:textSize="18sp"
                   android:text="apdfViewer for nook"
                   android:gravity="center"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:textSize="20sp"
+                  android:textSize="18sp"
                   android:text="themissingtabwidget"
                   android:gravity="center"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:textSize="20sp"
+                  android:textSize="18sp"
                   android:text="DairyKnight"
                   android:gravity="center"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:textSize="20sp"
+                  android:textSize="18sp"
                   android:text="freetype"
                   android:gravity="center"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:textSize="20sp"
+                  android:textSize="18sp"
                   android:text="jbig2dec"
                   android:gravity="center"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:textSize="20sp"
+                  android:textSize="18sp"
                   android:text="jpeg"
                   android:gravity="center"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:textSize="20sp"
+                  android:textSize="18sp"
                   android:text="openjpeg"
                   android:gravity="center"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:textSize="20sp"
+                  android:textSize="18sp"
                   android:text="zlib"
                   android:gravity="center"/>
-
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
                   android:textSize="20sp"
@@ -139,18 +147,18 @@
                 </LinearLayout>
 
                 <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
-                          android:textSize="20sp"
-                          android:text="ArtDesigner.lv"
-                          android:gravity="left|center_vertical"/>
+                          android:textSize="18sp"
+                          android:text="LazyCrazy - http://www.artdesigner.lv"
+                          android:gravity="left|center_vertical" android:linksClickable="true" android:autoLink="all"/>
             </TableRow>
             <TableRow>
                 <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
                    android:src="@drawable/pdf"/>
 
-                <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
-                          android:textSize="20sp"
-                          android:text="Oxygen Team"
-                          android:gravity="left"/>
+                <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                          android:textSize="18sp"
+                          android:text="Oxygen Team - http://www.oxygen-icons.org"
+                          android:gravity="left|center_vertical" android:linksClickable="true" android:autoLink="all"/>
             </TableRow>
 
             <TableRow>
@@ -158,9 +166,9 @@
                    android:src="@drawable/view"/>
 
                 <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
-                          android:textSize="20sp"
+                          android:textSize="18sp"
                           android:text="Derived on Oxygen Team icon"
-                          android:gravity="left"/>
+                          android:gravity="left|center_vertical"/>
             </TableRow>
 
             <TableRow>
@@ -168,28 +176,28 @@
                    android:src="@drawable/djvu"/>
 
                 <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
-                          android:textSize="20sp"
-                          android:text="DjVuLibre"
-                          android:gravity="left"/>
+                          android:textSize="18sp"
+                          android:text="DjVuLibre - http://djvu.sourceforge.net/"
+                          android:gravity="left|center_vertical" android:linksClickable="true" android:autoLink="all"/>
             </TableRow>
 
             <TableRow>
                 <ImageView android:layout_width="fill_parent" android:layout_height="fill_parent"
                    android:src="@drawable/orion" android:gravity="center"/>
                 <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                          android:textSize="20sp"
+                          android:textSize="18sp"
                           android:text="ESO/Igor Chekalin image at http://www.eso.org/public/images/eso1103a/"
-                          android:gravity="left" android:linksClickable="true" android:autoLink="all"/>
+                          android:gravity="left|center_vertical" android:linksClickable="true" android:autoLink="all"/>
             </TableRow>
 
             <TableRow>
                 <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                          android:textSize="20sp"
+                          android:textSize="18sp"
                           android:text="..." android:gravity="center"/>
                 <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                          android:textSize="20sp"
+                          android:textSize="18sp"
                           android:text="Android Icons"
-                          android:gravity="left"/>
+                          android:gravity="left|center_vertical"/>
             </TableRow>
         </TableLayout>
 

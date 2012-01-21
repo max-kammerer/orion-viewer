@@ -17,10 +17,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
-import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Build;
-import android.util.Log;
 import android.view.KeyEvent;
 
 /**
@@ -35,6 +32,7 @@ public interface Device {
         public static String MODEL;
         public static String DEVICE;
         public static boolean NOOK2;
+        public static boolean SONY_PRS_T1;
 
         static {
             MANUFACTURER = getField("MANUFACTURER");
@@ -42,6 +40,8 @@ public interface Device {
             DEVICE = getField("DEVICE");
             NOOK2 = MANUFACTURER.toLowerCase().contentEquals("barnesandnoble") && MODEL.contentEquals("NOOK") &&
                     DEVICE.toLowerCase().contentEquals("zoom2");
+
+            SONY_PRS_T1 = MANUFACTURER.toLowerCase().contentEquals("sony") && MODEL.contentEquals("PRS-T1");
         }
 
         public static String getField(String name) {

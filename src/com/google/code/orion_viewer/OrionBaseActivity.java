@@ -9,8 +9,8 @@ import android.preference.PreferenceManager;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AbsListView;
-import android.widget.ImageButton;
+import android.widget.*;
+import com.google.code.orion_viewer.device.AndroidDevice;
 import pl.polidea.customwidget.TheMissingTabHost;
 
 /**
@@ -161,6 +161,18 @@ public class OrionBaseActivity extends Activity {
                 //animator.setDisplayedChild(MAIN_SCREEN);
             }
         });
+
+        Device device = this.device != null ? this.device : Common.createDevice();
+        if (AndroidDevice.class.equals(device.getClass())) {
+            TextView tx = (TextView) findViewById(R.id.help_rotation_entry);
+            tx.setText(R.string.rotation_android);
+
+            tx = (TextView) findViewById(R.id.help_next_page_entry);
+            tx.setText(R.string.next_page_android);
+
+            TableRow tr = (TableRow) findViewById(R.id.help_prev_page_row);
+            ((TableLayout)tr.getParent()).removeView(tr);
+        }
     }
 
     protected View findMyViewById(int id) {
