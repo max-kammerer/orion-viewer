@@ -1,4 +1,4 @@
-package com.google.code.orion_viewer.prefs;
+package universe.constellation.orion.viewer.prefs;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +10,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import com.google.code.orion_viewer.*;
+import universe.constellation.orion.viewer.R;
 
 /**
  * User: mike

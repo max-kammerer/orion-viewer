@@ -1,24 +1,17 @@
-package com.google.code.orion_viewer.prefs;
+package universe.constellation.orion.viewer.prefs;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.AbsListView;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import com.google.code.orion_viewer.Common;
 import com.google.code.orion_viewer.Device;
-import com.google.code.orion_viewer.R;
 import com.google.code.orion_viewer.device.AndroidDevice;
 import com.google.code.orion_viewer.device.NookDevice;
+import universe.constellation.orion.viewer.R;
 
 /**
  * User: mike

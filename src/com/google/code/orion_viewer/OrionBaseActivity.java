@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.*;
 import com.google.code.orion_viewer.device.AndroidDevice;
 import pl.polidea.customwidget.TheMissingTabHost;
+import universe.constellation.orion.viewer.R;
 
 /**
  * User: mike

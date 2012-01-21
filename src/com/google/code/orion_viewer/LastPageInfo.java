@@ -24,26 +24,26 @@ import java.io.Serializable;
  * Date: 13.09.11
  * Time: 12:19
  */
-class LastPageInfo implements Serializable {
+public class LastPageInfo implements Serializable {
 
-    int screenWidth;
-    int screenHeight;
+    public int screenWidth;
+    public int screenHeight;
 
-    int pageNumber;
-    int rotation;
+    public int pageNumber;
+    public int rotation;
 
-    int offsetX;
-    int offsetY;
+    public int offsetX;
+    public int offsetY;
 
-    int zoom;
+    public int zoom;
 
-    int leftMargin = 0;
-    int rightMargin = 0;
-    int topMargin = 0;
-    int bottomMargin = 0;
+    public int leftMargin = 0;
+    public int rightMargin = 0;
+    public int topMargin = 0;
+    public int bottomMargin = 0;
 
-    int navigation = 0;
-    int pageLayout = 0;
+    public int navigation = 0;
+    public int pageLayout = 0;
 
-    transient String fileName;
+    public transient String fileName;
 }

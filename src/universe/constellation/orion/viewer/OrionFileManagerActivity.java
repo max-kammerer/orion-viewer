@@ -1,4 +1,4 @@
-package com.google.code.orion_viewer;
+package universe.constellation.orion.viewer;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -6,17 +6,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import com.google.code.orion_viewer.*;
 import pl.polidea.customwidget.TheMissingTabHost;
 
 import java.io.File;
-import java.util.ArrayList;
 
 /**
  * User: mike

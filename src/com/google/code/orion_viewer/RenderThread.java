@@ -22,6 +22,7 @@ import android.graphics.*;
 import android.os.Debug;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
+import universe.constellation.orion.viewer.OrionViewerActivity;
 
 import java.util.Date;
 import java.util.Iterator;

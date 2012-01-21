@@ -5,8 +5,8 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import com.google.code.orion_viewer.Action;
-import com.google.code.orion_viewer.OrionViewerActivity;
-import com.google.code.orion_viewer.R;
+import universe.constellation.orion.viewer.OrionViewerActivity;
+import universe.constellation.orion.viewer.R;
 
 /**
  * User: mike

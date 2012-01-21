@@ -2,9 +2,10 @@ package com.google.code.orion_viewer;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import universe.constellation.orion.viewer.OrionFileManagerActivity;
+import universe.constellation.orion.viewer.OrionViewerActivity;
+import universe.constellation.orion.viewer.R;
 
-import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
 
 /**

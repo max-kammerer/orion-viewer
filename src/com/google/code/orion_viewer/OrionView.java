@@ -21,6 +21,7 @@ import android.content.Context;
 import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.View;
+import universe.constellation.orion.viewer.OrionViewerActivity;
 
 import java.util.Date;
 import java.util.concurrent.CountDownLatch;

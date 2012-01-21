@@ -3,7 +3,7 @@ package com.google.code.orion_viewer;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import com.google.code.orion_viewer.prefs.OrionTapActivity;
+import universe.constellation.orion.viewer.prefs.OrionTapActivity;
 
 import java.io.Serializable;
 import java.util.*;

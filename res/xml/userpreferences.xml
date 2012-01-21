@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:orion="http://schemas.android.com/apk/res/com.google.code.orion_viewer">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:orion="http://schemas.android.com/apk/res/universe.constellation.orion.viewer">
     <PreferenceCategory
             android:title="Layout">
         <CheckBoxPreference

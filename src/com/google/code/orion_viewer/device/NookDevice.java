@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.os.PowerManager;
 import android.view.KeyEvent;
 import com.google.code.orion_viewer.*;
+import universe.constellation.orion.viewer.R;
 
 /**
  * User: mike

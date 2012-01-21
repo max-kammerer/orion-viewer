@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.EpdRender;
 import android.widget.TextView;
 import com.google.code.orion_viewer.*;
+import universe.constellation.orion.viewer.R;
 
 /**
  * User: mike

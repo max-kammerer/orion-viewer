@@ -1,4 +1,4 @@
-package com.google.code.orion_viewer.prefs;
+package universe.constellation.orion.viewer.prefs;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.google.code.orion_viewer.GlobalOptions;
 import com.google.code.orion_viewer.OrionBaseActivity;
-import com.google.code.orion_viewer.R;
+import universe.constellation.orion.viewer.R;
 
 /**
  * User: mike
@@ -75,10 +75,10 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
 
         Button button = (Button) findViewById(R.id.next_bind);
         GlobalOptions options = new GlobalOptions(this);
-        button.setText(options.getNextKey()==0 ? "Not binded" : "Binded to " + options.getNextKey());
+        button.setText(options.getNextKey()== - 1 ? "Not binded" : "Binded to " + options.getNextKey());
 
         button = (Button) findViewById(R.id.prev_bind);
-        button.setText(options.getPrevKey()==0 ? "Not binded" : "Binded to " + options.getPrevKey());
+        button.setText(options.getPrevKey()== -1 ? "Not binded" : "Binded to " + options.getPrevKey());
 
         statusText.setText("");
     }

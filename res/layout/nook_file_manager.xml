@@ -17,7 +17,7 @@
 <!--You should have received a copy of the GNU General Public License-->
 <!--along with this program.  If not, see <http://www.gnu.org/licenses/>.-->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:orion="http://schemas.android.com/apk/res/universe.constellation.orion.viewer"
                 android:layout_width="fill_parent" android:layout_height="fill_parent">
 
     <LinearLayout
@@ -35,13 +35,13 @@
                   android:layout_height="144.0px">
         <!--file manager-->
 
-       <pl.polidea.customwidget.TheMissingTabHost xmlns:orion="http://schemas.android.com/apk/res/com.google.code.orion_viewer"
+       <pl.polidea.customwidget.TheMissingTabHost
                                            android:id="@+id/tabhost"
                                            android:layout_width="fill_parent" android:layout_height="fill_parent" orion:always_landscape="true">
 
     <LinearLayout android:orientation="horizontal"
 		android:layout_width="fill_parent" android:layout_height="fill_parent">
-		<pl.polidea.customwidget.TheMissingTabWidget xmlns:orion="http://schemas.android.com/apk/res/com.google.code.orion_viewer"
+		<pl.polidea.customwidget.TheMissingTabWidget
 			android:id="@android:id/tabs" android:layout_width="wrap_content" orion:always_landscape="true"
 			android:layout_height="fill_parent" android:layout_weight="0"  />
 

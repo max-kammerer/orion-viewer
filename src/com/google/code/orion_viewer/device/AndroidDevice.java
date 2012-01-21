@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.PowerManager;
 import android.view.KeyEvent;
 import com.google.code.orion_viewer.*;
+import universe.constellation.orion.viewer.R;
 
 /**
  * User: mike

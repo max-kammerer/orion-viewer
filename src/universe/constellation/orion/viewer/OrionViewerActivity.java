@@ -1,4 +1,4 @@
-package com.google.code.orion_viewer;
+package universe.constellation.orion.viewer;
 
 /*Orion Viewer is a pdf viewer for Nook Classic based on mupdf
 
@@ -29,11 +29,12 @@ import android.view.*;
 import android.widget.*;
 
 
+import com.google.code.orion_viewer.*;
 import com.google.code.orion_viewer.djvu.DjvuDocument;
 import com.google.code.orion_viewer.pdf.PdfDocument;
-import com.google.code.orion_viewer.prefs.OrionKeyBinderActivity;
-import com.google.code.orion_viewer.prefs.OrionPreferenceActivity;
-import com.google.code.orion_viewer.prefs.OrionTapActivity;
+import universe.constellation.orion.viewer.prefs.OrionKeyBinderActivity;
+import universe.constellation.orion.viewer.prefs.OrionPreferenceActivity;
+import universe.constellation.orion.viewer.prefs.OrionTapActivity;
 import pl.polidea.customwidget.TheMissingTabHost;
 
 import java.io.*;

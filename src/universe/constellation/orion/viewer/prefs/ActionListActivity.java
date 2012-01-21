@@ -1,21 +1,11 @@
-package com.google.code.orion_viewer.prefs;
+package universe.constellation.orion.viewer.prefs;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
-import android.content.res.XmlResourceParser;
 import android.os.Bundle;
-import android.util.Xml;
-import android.view.View;
 import android.widget.*;
 import com.google.code.orion_viewer.Action;
-import com.google.code.orion_viewer.Common;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
 import pl.polidea.demo.R;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * User: mike

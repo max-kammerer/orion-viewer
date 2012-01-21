@@ -1,8 +1,10 @@
-package com.google.code.orion_viewer;
+package universe.constellation.orion.viewer;
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.google.code.orion_viewer.Common;
+import com.google.code.orion_viewer.OrionBaseActivity;
 
 /**
 * User: mike
