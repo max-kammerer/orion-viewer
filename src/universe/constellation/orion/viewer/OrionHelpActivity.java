@@ -15,8 +15,8 @@ public class OrionHelpActivity extends OrionBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(Common.createDevice().getHelpLayoutId());
         super.onCreate(savedInstanceState);
+        setContentView(Common.createDevice().getHelpLayoutId());
         initHelpScreen();
     }
 

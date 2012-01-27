@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.google.code.orion_viewer.*;
 import pl.polidea.customwidget.TheMissingTabHost;
+import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
 import java.io.File;
 
@@ -29,16 +30,16 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
     private GlobalOptions globalOptions;
 
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(device.getFileManagerLayoutId());
         super.onCreate(savedInstanceState);
+        setContentView(device.getFileManagerLayoutId());
         prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        globalOptions = new GlobalOptions(this);
+        globalOptions = getOrionContext().getOptions();
         initFileManager();
     }
 
     protected void onResume() {
         super.onResume();
-        globalOptions = new GlobalOptions(this);
+        //globalOptions = new GlobalOptions(this);
         updateFileManager();
     }
 
@@ -129,7 +130,7 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
         recent.setContent(R.id.recent_list);
         recent.setIndicator("", getResources().getDrawable(R.drawable.book));
         host.addTab(recent);
-        host.setCurrentTab(0);
+        //host.setCurrentTab(0);
     }
 
     @Override
@@ -150,5 +151,8 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
         return false;
     }
 
-
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);    //To change body of overridden methods use File | Settings | File Templates.
+    }
 }

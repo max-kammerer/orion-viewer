@@ -18,6 +18,8 @@ public class ActionListActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getOrionContext().applyTheme(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.actions_selection);
 
@@ -68,4 +70,7 @@ public class ActionListActivity extends Activity {
         populating = false;
     }
 
+    public OrionApplication getOrionContext() {
+        return (OrionApplication) getApplicationContext();
+    }
 }

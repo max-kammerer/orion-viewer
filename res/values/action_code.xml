@@ -21,4 +21,7 @@
     <integer name="action_uncrop_right">36</integer>
     <integer name="action_uncrop_top">37</integer>
     <integer name="action_uncrop_bottom">38</integer>
+
+    <integer name="action_inverse_crop">39</integer>
+    <integer name="action_switch_long_crop">40</integer>
 </resources>

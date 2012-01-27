@@ -18,6 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
 import android.graphics.Point;
+import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
 /**
  * User: mike
@@ -30,7 +31,10 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     public int viewHeight;
 
-    public static final int OVERLAP = 15;
+    private static final int OVERLAP = 15;
+
+    public int VERT_OVERLAP = 3;
+    public int HOR_OVERLAP = 3;
 
     private DocumentWrapper doc;
 
@@ -46,7 +50,6 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     public SimpleLayoutStrategy(DocumentWrapper doc) {
         this.doc = doc;
-
     }
 
     public void nextPage(LayoutPosition info) {
@@ -115,6 +118,15 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         return false;
     }
 
+    public boolean changeOverlapping(int horizontal, int vertical) {
+        if (HOR_OVERLAP != horizontal || VERT_OVERLAP != vertical) {
+            HOR_OVERLAP = horizontal;
+            VERT_OVERLAP = vertical;
+            return true;
+        }
+        return false;
+    }
+
     public void reset(LayoutPosition info, int pageNum) {
         info.pageNumber = pageNum;
         //original width and height without cropped margins
@@ -146,8 +158,13 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         info.pageWidth = (int)(info.docZoom * info.pageWidth);
         info.pageHeight = (int) (info.docZoom * info.pageHeight);
 
-        info.maxX = (info.pageWidth - OVERLAP) / (info.pieceWidth - OVERLAP) + ((info.pageWidth - OVERLAP) % (info.pieceWidth - OVERLAP) == 0 ? 0 : 1)  - 1;
-        info.maxY = (info.pageHeight - OVERLAP) / (info.pieceHeight - OVERLAP) + ((info.pageHeight - OVERLAP) % (info.pieceHeight - OVERLAP) == 0 ?  0: 1) -1;
+        int hOverlap = info.pieceWidth * HOR_OVERLAP / 100;
+        int vOverlap = info.pieceHeight * VERT_OVERLAP / 100;
+        System.out.println("overlap " + hOverlap + " " + vOverlap);
+        if (info.pieceHeight != 0 && info.pieceWidth != 0) {
+            info.maxX = (info.pageWidth - hOverlap) / (info.pieceWidth - hOverlap) + ((info.pageWidth - hOverlap) % (info.pieceWidth - hOverlap) == 0 ? 0 : 1)  - 1;
+            info.maxY = (info.pageHeight - vOverlap) / (info.pieceHeight - vOverlap) + ((info.pageHeight - vOverlap) % (info.pieceHeight - vOverlap) == 0 ?  0: 1) -1;
+        }
 
         info.cellX = 0;
         info.cellY = 0;
@@ -204,12 +221,13 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
     }
 
 
-    public void init(LastPageInfo info) {
+    public void init(LastPageInfo info, GlobalOptions options) {
         changeMargins(info.leftMargin, info.topMargin, info.rightMargin, info.bottomMargin);
         changeRotation(info.rotation);
         changeZoom(info.zoom);
         changeNavigation(info.navigation);
         changePageLayout(info.pageLayout);
+        changeOverlapping(options.getHorizontalOverlapping(), options.getVerticalOverlapping());
     }
 
     public void serialize(LastPageInfo info) {
@@ -232,8 +250,11 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 //        int absTopMargin = (int) (topMargin * pos.pageHeight * 0.01);
         int absLeftMargin = (int) pos.marginLeft;
         int absTopMargin = (int) pos.marginTop;
-        int x = pos.cellX == 0 || pos.cellX != pos.maxX || layout == 0 ?  (int)(absLeftMargin + pos.cellX * (pos.pieceWidth - OVERLAP)) : (int) (absLeftMargin + pos.pageWidth - pos.pieceWidth);
-        int y = pos.cellY == 0 || pos.cellY != pos.maxY || layout != 1 ? (int) (absTopMargin + pos.cellY * (pos.pieceHeight - OVERLAP)) : (int) (absTopMargin + pos.pageHeight - pos.pieceHeight);
+        int hOverlap = pos.pieceWidth * HOR_OVERLAP / 100;
+        int vOverlap = pos.pieceHeight * VERT_OVERLAP / 100;
+
+        int x = pos.cellX == 0 || pos.cellX != pos.maxX || layout == 0 ?  (int)(absLeftMargin + pos.cellX * (pos.pieceWidth - hOverlap)) : (int) (absLeftMargin + pos.pageWidth - pos.pieceWidth);
+        int y = pos.cellY == 0 || pos.cellY != pos.maxY || layout != 1 ? (int) (absTopMargin + pos.cellY * (pos.pieceHeight - vOverlap)) : (int) (absTopMargin + pos.pageHeight - pos.pieceHeight);
 
         return new Point(x, y);
     }

@@ -39,9 +39,6 @@ public class AlexDevice extends EpdRender implements Device {
 
     public void onCreate(OrionBaseActivity activity) {
         this.activity = activity;
-        bindLayout((ViewGroup) activity.findViewById(R.id.epdLayout));
-        pageTextView = (TextView) activity.findViewById(R.id.statusbar_page_number);
-        titleTextView = (TextView) activity.findViewById(R.id.statusbar_title);
     }
 
     public void onPause() {
@@ -122,7 +119,10 @@ public class AlexDevice extends EpdRender implements Device {
         return R.layout.android_help;
     }
 
-    public void updateOptions(GlobalOptions options) {
 
+    public void onSetContentView() {
+        bindLayout((ViewGroup) activity.findViewById(R.id.epdLayout));
+        pageTextView = (TextView) activity.findViewById(R.id.statusbar_page_number);
+        titleTextView = (TextView) activity.findViewById(R.id.statusbar_title);
     }
 }

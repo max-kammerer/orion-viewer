@@ -26,6 +26,7 @@ public class OrionPreferenceActivity extends PreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getOrionContext().applyTheme(this);
         Device device = Common.createDevice();
         isNook = device instanceof NookDevice;
         isAndroidGeneral = device instanceof AndroidDevice && !isNook;
@@ -48,6 +49,7 @@ public class OrionPreferenceActivity extends PreferenceActivity {
     }
 
 
+
 //    @Override
     public void setContentView(int layoutResID) {
         super.setContentView(isNook ? R.layout.nook_preferences : layoutResID);
@@ -58,4 +60,7 @@ public class OrionPreferenceActivity extends PreferenceActivity {
         return super.onCreateView(name, context, attrs);    //To change body of overridden methods use File | Settings | File Templates.
     }
 
+    public OrionApplication getOrionContext() {
+        return (OrionApplication) getApplicationContext();
+    }
 }

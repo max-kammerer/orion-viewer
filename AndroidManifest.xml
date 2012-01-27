@@ -19,12 +19,11 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="universe.constellation.orion.viewer"
-          android:versionCode="4"
+          android:versionCode="5"
           android:versionName="@string/version_name">
-    <application android:label="@string/app_name" android:icon="@drawable/orion">
+    <application android:label="@string/app_name" android:icon="@drawable/orion" android:name=".prefs.OrionApplication">
         <activity android:name=".OrionViewerActivity"
                   android:label="@string/app_name"
-                  android:theme="@android:style/Theme.NoTitleBar"
                   android:launchMode="singleInstance"
                   android:icon="@drawable/orion" android:configChanges="orientation" android:screenOrientation="behind">
             <intent-filter>
@@ -82,7 +81,6 @@
 
         <activity android:name=".OrionFileManagerActivity"
                   android:label="@string/app_name"
-                  android:theme="@android:style/Theme.NoTitleBar"
                   android:launchMode="singleInstance"
                   android:icon="@drawable/orion">
 
@@ -95,13 +93,11 @@
 
         <activity android:name=".prefs.OrionKeyBinderActivity" android:screenOrientation="behind"
                   android:label="@string/app_name"
-                  android:theme="@android:style/Theme.NoTitleBar"
                   android:launchMode="singleInstance"
                   android:icon="@drawable/orion"/>
 
         <activity android:name=".OrionHelpActivity" android:screenOrientation="behind"
                   android:label="@string/app_name"
-                  android:theme="@android:style/Theme.NoTitleBar"
                   android:launchMode="singleInstance"
                   android:icon="@drawable/orion"/>
 

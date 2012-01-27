@@ -2,9 +2,12 @@ package com.google.code.orion_viewer;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.widget.Toast;
 import universe.constellation.orion.viewer.OrionFileManagerActivity;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.R;
+import universe.constellation.orion.viewer.prefs.OrionApplication;
+import universe.constellation.orion.viewer.prefs.TemporaryOptions;
 
 import java.util.HashMap;
 
@@ -96,6 +99,7 @@ public enum Action {
                     activity.startActivity(intent);
                 } catch (ActivityNotFoundException ex) {
                     Common.d(ex);
+                    Toast.makeText(activity, "Couldn't find dictionary: " + action, Toast.LENGTH_SHORT);
                 }
             }
         }
@@ -108,51 +112,70 @@ public enum Action {
         }
     },
 
+    INVERSE_CROP (R.string.action_inverse_crops, R.integer.action_inverse_crop) {
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            TemporaryOptions opts = activity.getOrionContext().getTempOptions();
+            opts.inverseCropping = !opts.inverseCropping;
+
+            String title = activity.getResources().getString(R.string.action_inverse_crops) + ":" +(opts.inverseCropping ? "inverted" : "normal");
+            Toast.makeText(activity.getApplicationContext(), title, Toast.LENGTH_SHORT).show();
+        }
+    },
+
+    SWITCH_CROP (R.string.action_switch_long_crop, R.integer.action_switch_long_crop) {
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            TemporaryOptions opts = activity.getOrionContext().getTempOptions();
+            opts.switchCropping = !opts.switchCropping;
+            String title = activity.getResources().getString(R.string.action_switch_long_crop) + ":" + (opts.switchCropping ?  "big" : "small");
+            Toast.makeText(activity.getApplicationContext(), title, Toast.LENGTH_SHORT).show();
+        }
+    },
+
     CROP_LEFT (R.string.action_crop_left, R.integer.action_crop_left) {
         public void doAction(Controller controller, OrionViewerActivity activity) {
-            updateMargin(controller, +1, 0);
+            updateMargin(controller, true, 0);
         }
     },
 
     UNCROP_LEFT (R.string.action_uncrop_left, R.integer.action_uncrop_left) {
         public void doAction(Controller controller, OrionViewerActivity activity) {
-            updateMargin(controller, -1, 0);
+            updateMargin(controller, false, 0);
         }
     },
 
     CROP_RIGHT (R.string.action_crop_right, R.integer.action_crop_right) {
         public void doAction(Controller controller, OrionViewerActivity activity) {
-            updateMargin(controller, +1, 1);
+            updateMargin(controller, true, 1);
         }
     },
 
     UNCROP_RIGHT (R.string.action_uncrop_right, R.integer.action_uncrop_right) {
         public void doAction(Controller controller, OrionViewerActivity activity) {
-            updateMargin(controller, -1, 1);
+            updateMargin(controller, false, 1);
         }
     },
 
     CROP_TOP (R.string.action_crop_top, R.integer.action_crop_top) {
         public void doAction(Controller controller, OrionViewerActivity activity) {
-            updateMargin(controller, +1, 2);
+            updateMargin(controller, true, 2);
         }
     },
 
     UNCROP_TOP (R.string.action_uncrop_top, R.integer.action_uncrop_top) {
         public void doAction(Controller controller, OrionViewerActivity activity) {
-            updateMargin(controller, -1, 2);
+            updateMargin(controller, false, 2);
         }
     },
 
     CROP_BOTTOM (R.string.action_crop_bottom, R.integer.action_crop_bottom) {
         public void doAction(Controller controller, OrionViewerActivity activity) {
-            updateMargin(controller, +1, 3);
+            updateMargin(controller, true, 3);
         }
     },
 
     UNCROP_BOTTOM (R.string.action_uncrop_bottom, R.integer.action_uncrop_bottom) {
         public void doAction(Controller controller, OrionViewerActivity activity) {
-            updateMargin(controller, -1, 3);
+            updateMargin(controller, false, 3);
         }
     };
 
@@ -192,10 +215,16 @@ public enum Action {
 
     }
 
-    protected void updateMargin(Controller controller, int delta, int index) {
+    protected void updateMargin(Controller controller, boolean isCrop, int index) {
         int [] margins = new int[4];
         controller.getMargins(margins);
-        margins[index] += delta;
+        OrionApplication context = controller.getActivity().getOrionContext();
+        TemporaryOptions tempOpts = context.getTempOptions();
+        if (tempOpts.inverseCropping) {
+            isCrop = !isCrop;
+        }
+        int delta = tempOpts.switchCropping ? context.getOptions().getLongCrop() : 1;
+        margins[index] += isCrop ? delta : -delta;
         if (margins[index] > OrionViewerActivity.CROP_RESTRICTION_MAX) {
             margins[index] = OrionViewerActivity.CROP_RESTRICTION_MAX;
         }

@@ -91,6 +91,6 @@ public interface Device {
 
     public boolean optionViaDialog();
 
-    public void updateOptions(GlobalOptions options);
+    public void onSetContentView();
 
 }

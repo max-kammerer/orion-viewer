@@ -5,6 +5,7 @@ import android.os.PowerManager;
 import android.view.KeyEvent;
 import com.google.code.orion_viewer.*;
 import universe.constellation.orion.viewer.R;
+import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
 /**
  * User: mike
@@ -104,6 +105,7 @@ public class AndroidDevice implements Device {
     }
 
     public void onCreate(OrionBaseActivity activity) {
+        options = activity.getOrionContext().getOptions();
         if (activity.getViewerType() == VIEWER_ACTIVITY) {
             delay = VIEWER_DELAY;
         }
@@ -163,4 +165,7 @@ public class AndroidDevice implements Device {
         this.options = options;
     }
 
+    public void onSetContentView() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

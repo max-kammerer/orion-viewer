@@ -32,4 +32,16 @@
         <item>Color Dict/Golden Dict</item>
         <item>Aard Dictionary</item>
   </string-array>
+
+    <string-array name="application_theme">
+        <item>DEFAULT</item>
+        <item>DARK</item>
+        <item>LIGHT</item>
+  </string-array>
+
+    <string-array name="application_theme_desc">
+        <item>DEFAULT</item>
+        <item>DARK</item>
+        <item>LIGHT</item>
+  </string-array>
 </resources>

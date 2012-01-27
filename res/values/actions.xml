@@ -19,6 +19,8 @@
     <string name="action_uncrop_right">Increase right margin</string>
     <string name="action_uncrop_top">Increase top margin</string>
     <string name="action_uncrop_bottom">Increase bottom margin</string>
+    <string name="action_inverse_crops">Switch crop/increase margin</string>
+    <string name="action_switch_long_crop">Switch small/big cropping</string>
 
     <string name="action_next_10">Forward 10 pages</string>
     <string name="action_prev_10">Backward 10 pages</string>

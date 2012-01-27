@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import com.google.code.orion_viewer.GlobalOptions;
 import com.google.code.orion_viewer.OrionBaseActivity;
 import universe.constellation.orion.viewer.R;
 
@@ -30,8 +29,8 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.key_binder);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.key_binder);
 
         Button button = (Button) findViewById(R.id.next_bind);
         button.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +73,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
         button = null;
 
         Button button = (Button) findViewById(R.id.next_bind);
-        GlobalOptions options = new GlobalOptions(this);
+        GlobalOptions options = getOrionContext().getOptions();
         button.setText(options.getNextKey()== - 1 ? "Not binded" : "Binded to " + options.getNextKey());
 
         button = (Button) findViewById(R.id.prev_bind);

@@ -1,18 +1,18 @@
 package com.google.code.orion_viewer;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.*;
 import com.google.code.orion_viewer.device.AndroidDevice;
 import pl.polidea.customwidget.TheMissingTabHost;
 import universe.constellation.orion.viewer.R;
+import universe.constellation.orion.viewer.prefs.GlobalOptions;
+import universe.constellation.orion.viewer.prefs.OrionApplication;
 
 /**
  * User: mike
@@ -35,6 +35,8 @@ public class OrionBaseActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getOrionContext().applyTheme(this);
+
         String orientation = PreferenceManager.getDefaultSharedPreferences(this).getString(GlobalOptions.SCREEN_ORIENTATION, "DEFAULT");
         screenOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
         if ("LANDSCAPE".equals(orientation)) {
@@ -42,7 +44,6 @@ public class OrionBaseActivity extends Activity {
         } else if ("PORTRAIT".equals(orientation)) {
             screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         }
-
 
 //        Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
         System.out.println("display "+ getRequestedOrientation() + " screenOrientation " + getWindow().getAttributes().screenOrientation);
@@ -56,13 +57,8 @@ public class OrionBaseActivity extends Activity {
 
         super.onCreate(savedInstanceState);
 
-
         if (device != null) {
             device.onCreate(this);
-            listener = createPreferenceListener();
-            if (listener != null) {
-                registerPreferenceListener(listener);
-            }
         }
     }
 
@@ -118,18 +114,6 @@ public class OrionBaseActivity extends Activity {
 
     public int getViewerType() {
         return Device.DEFAULT_ACTIVITY;
-    }
-
-    public SharedPreferences.OnSharedPreferenceChangeListener createPreferenceListener() {
-        return null;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();    //To change body of overridden methods use File | Settings | File Templates.
-        if (listener != null) {
-            unregisterPreferenceListener(listener);
-        }
     }
 
     protected void initHelpScreen() {
@@ -188,16 +172,13 @@ public class OrionBaseActivity extends Activity {
 
     }
 
-    protected void registerPreferenceListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
-        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(listener);
-    }
-
-    protected  void unregisterPreferenceListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
-        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(listener);
-    }
-
     public boolean supportDevice() {
         return true;
     }
+
+    public OrionApplication getOrionContext() {
+        return (OrionApplication) getApplicationContext();
+    }
+
 
 }

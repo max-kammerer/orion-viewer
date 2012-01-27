@@ -19,6 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
 import android.graphics.Point;
 import universe.constellation.orion.viewer.OrionViewerActivity;
+import universe.constellation.orion.viewer.prefs.GlobalOptions;
+import universe.constellation.orion.viewer.prefs.PrefListener;
 
 /**
  * User: mike
@@ -43,6 +45,13 @@ public class Controller {
 
     private DocumentViewAdapter listener;
 
+//    private PrefListener prefListener = new PrefListener() {
+//        @Override
+//        public void onPreferenceChanged(GlobalOptions option, String key, Object oldValue) {
+//            if ("HORIZONTAL")
+//        }
+//    };
+
     private Point lastScreenSize;
 
     public static final int ROTATE_90 = -1;
@@ -63,6 +72,7 @@ public class Controller {
             }
         };
 
+        //activity.getOrionContext().getOptions().subscribe(prefListener);
         activity.getSubscriptionManager().addDocListeners(listener);
     }
 
@@ -79,6 +89,8 @@ public class Controller {
     public void screenSizeChanged(int newWidth, int newHeight) {
         Common.d("New screen size " + newWidth + "x" + newHeight);
         layout.setDimension(newWidth, newHeight);
+        GlobalOptions options = getActivity().getGlobalOptions();
+        layout.changeOverlapping(options.getHorizontalOverlapping(), options.getVerticalOverlapping());
         int offsetX = layoutInfo.cellX;
         int offsetY = layoutInfo.cellY;
         layout.reset(layoutInfo, layoutInfo.pageNumber);
@@ -133,6 +145,7 @@ public class Controller {
     public void destroy() {
         Common.d("Destroying controller...");
         activity.getSubscriptionManager().unSubscribe(listener);
+        //activity.getOrionContext().getOptions().unsubscribe(prefListener);
 
         if (renderer != null) {
             renderer.stopRenderer();
@@ -174,6 +187,14 @@ public class Controller {
         }
     }
 
+    public void changeOverlap(int horizontal, int vertical) {
+        if (layout.changeOverlapping(horizontal, vertical)) {
+            layout.reset(layoutInfo, layoutInfo.pageNumber);
+            //view.setRotation(rotation);
+            sendViewChangeNotification();
+        }
+    }
+
     public int getRotation() {
         return layout.getRotation();
     }
@@ -188,7 +209,7 @@ public class Controller {
 
 
     public void init(LastPageInfo info) {
-        layout.init(info);
+        layout.init(info, getActivity().getGlobalOptions());
         layoutInfo = new LayoutPosition();
         layout.reset(layoutInfo, info.pageNumber);
         layoutInfo.cellX = info.offsetX;

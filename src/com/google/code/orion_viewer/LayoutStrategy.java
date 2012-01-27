@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
 
 import android.graphics.Point;
+import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
 /**
  * User: mike
@@ -35,6 +36,8 @@ public interface LayoutStrategy {
 
     boolean changeRotation(int rotation);
 
+    boolean changeOverlapping(int horizontal, int vertical);
+
     int getRotation();
 
     boolean changeZoom(int zoom);
@@ -45,7 +48,7 @@ public interface LayoutStrategy {
 
     void getMargins(int [] cropMargins);
 
-    void init(LastPageInfo info);
+    void init(LastPageInfo info, GlobalOptions options);
 
     void serialize(LastPageInfo info);
 
@@ -60,7 +63,6 @@ public interface LayoutStrategy {
     boolean changePageLayout(int navigation);
 
     void setDimension(int width, int height);
-
 
     int getLeftMargin();
 

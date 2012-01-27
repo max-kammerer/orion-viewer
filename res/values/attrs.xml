@@ -2,6 +2,14 @@
 
     <attr name="actionId" format="reference|integer" />
 
+    <attr name="minValue" format="integer" />
+
+    <attr name="maxValue" format="integer" />
+
+    <attr name="pattern" format="string" />
+
+    <attr name="notEmpty" format="boolean" />
+
     <attr name="justAndroidGeneral" format="boolean" />
 
             <!--<p>Must be an integer value, such as "<code>100</code>".-->
@@ -29,4 +37,10 @@
         <attr name="actionId"/>
     </declare-styleable>
 
+    <declare-styleable name="universe.constellation.orion.viewer.prefs.OrionEditPreference">
+        <attr name="minValue"/>
+        <attr name="maxValue"/>
+        <attr name="notEmpty"/>
+        <attr name="pattern"/>
+    </declare-styleable>
 </resources>

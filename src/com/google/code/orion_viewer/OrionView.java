@@ -22,6 +22,7 @@ import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.View;
 import universe.constellation.orion.viewer.OrionViewerActivity;
+import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
 import java.util.Date;
 import java.util.concurrent.CountDownLatch;
@@ -61,7 +62,7 @@ public class OrionView extends View {
     protected void onDraw(Canvas canvas) {
         GlobalOptions options = ((OrionViewerActivity)getContext()).getGlobalOptions();
         if (options.isEinkOptimization()) {
-            if (counter < options.getEinkRefresafter()) {
+            if (counter < options.getEinkRefreshAfter()) {
                 N2.setGL16Mode();
             } else {
                 counter = 0;

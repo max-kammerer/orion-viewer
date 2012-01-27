@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import universe.constellation.orion.viewer.R;
+import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -47,7 +48,7 @@ public class FileChooser extends ArrayAdapter {
                 return true;
             }
             String name = filename.toLowerCase();
-            return name.endsWith(".pdf") || name.endsWith("djvu") || name.endsWith("djv");
+            return name.endsWith(".pdf") || name.endsWith("djvu") || name.endsWith("djv") /*|| name.endsWith("xps")*/;
         }
     };
 

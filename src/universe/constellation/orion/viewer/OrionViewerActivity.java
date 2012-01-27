@@ -32,6 +32,7 @@ import android.widget.*;
 import com.google.code.orion_viewer.*;
 import com.google.code.orion_viewer.djvu.DjvuDocument;
 import com.google.code.orion_viewer.pdf.PdfDocument;
+import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionKeyBinderActivity;
 import universe.constellation.orion.viewer.prefs.OrionPreferenceActivity;
 import universe.constellation.orion.viewer.prefs.OrionTapActivity;
@@ -94,9 +95,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
-        setContentView(device.getLayoutId());
-
         super.onCreate(savedInstanceState);
+        setContentView(device.getLayoutId());
 
         view = (OrionView) findViewById(R.id.view);
 
@@ -196,8 +196,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
         DocumentWrapper doc = null;
         Common.d("File URI  = " + filePath);
         Common.startLogger(filePath + ".trace");
+        getOrionContext().onNewBook();
         try {
-            if (filePath.toLowerCase().endsWith("pdf")) {
+            String filePAthLowCase = filePath.toLowerCase();
+            if (filePAthLowCase.endsWith("pdf") || filePAthLowCase.endsWith("xps")) {
                 doc = new PdfDocument(filePath);
             } else {
                 doc = new DjvuDocument(filePath);
@@ -206,7 +208,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
             LayoutStrategy str = new SimpleLayoutStrategy(doc);
 
             int idx = filePath.lastIndexOf('/');
-            String fileData = filePath.substring(idx + 1) + ".userData";
+            File file = new File(filePath);
+            String fileData = filePath.substring(idx + 1) + "." + file.length() + ".userData";
 
             controller = new Controller(this, doc, str, view);
             try {
@@ -247,6 +250,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             if (doc != null) {
                 doc.destroy();
             }
+            finish();
         }
     }
 
@@ -647,6 +651,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     protected void onResume() {
         super.onResume();
+        updateBrightness();
         boolean newFullScreen = globalOptions.isFullScreen();
         if (isFullScreen != newFullScreen) {
             if (newFullScreen) {
@@ -664,6 +669,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             myIntent = null;
         } else {
             if (controller != null) {
+                controller.changeOverlap(globalOptions.getHorizontalOverlapping(), globalOptions.getVerticalOverlapping());
                 //controller.startRenderer();
                 controller.drawPage();
             }
@@ -680,7 +686,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         if (dialog != null) {
             dialog.dismiss();
         }
-        globalOptions.onDestroy(this);
+        //globalOptions.onDestroy(this);
     }
 
     private void saveData() {
@@ -728,28 +734,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public void loadGlobalOptions() {
-        globalOptions = new GlobalOptions(this, device);
-        device.updateOptions(globalOptions);
+        globalOptions = getOrionContext().getOptions();
     }
 
     public void saveGlobalOptions() {
-//        ObjectOutputStream out = null;
-//        try {
-//            out = new ObjectOutputStream(OrionViewerActivity.this.openFileOutput(GLOBAL_OPTIONS_FILE,
-//                    Context.MODE_PRIVATE));
-//            out.writeObject(globalOptions);
-//            out.close();
-//        } catch (Exception ex) {
-//            Log.e(Common.LOGTAG, ex.getMessage(), ex);
-//        } finally {
-//            if (out != null) {
-//                try {
-//                    out.close();
-//                } catch (IOException e) {
-//                    Common.d(e);
-//                }
-//            }
-//        }
         Common.d("Saving global options...");
         globalOptions.saveRecents();
         Common.d("Done!");
@@ -1046,5 +1034,19 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     public Controller getController() {
         return controller;
+    }
+
+    public void updateBrightness() {
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        float oldBrightness = params.screenBrightness;
+        if (globalOptions.isCustomBrightness()) {
+            params.screenBrightness = (float)globalOptions.getBrightness() / 100;
+            getWindow().setAttributes(params);
+        } else  {
+            if (oldBrightness >= 0) {
+                params.screenBrightness = -1;
+                getWindow().setAttributes(params);
+            }
+        }
     }
 }
