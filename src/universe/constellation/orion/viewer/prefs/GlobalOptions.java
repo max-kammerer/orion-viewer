@@ -51,6 +51,7 @@ public class GlobalOptions implements Serializable {
 
     public final static String APPLICATION_THEME = "APPLICATION_THEME";
 
+    public final static String OPEN_RECENT_BOOK = "OPEN_RECENT_BOOK";
 
     private String lastOpenedDirectory;
 
@@ -270,13 +271,6 @@ public class GlobalOptions implements Serializable {
         return (Boolean) prefValues.get(key);
     }
 
-    public int getScreenOverlappingH() {
-        return getIntFromStringProperty(SCREEN_OVERLAPPING_HORIZONTAL, 3);
-    }
-
-    public int getScreenOverlappingV() {
-        return getIntFromStringProperty(SCREEN_OVERLAPPING_VERTICAL, 3);
-    }
 
     public int getLongCrop() {
         return getIntFromStringProperty(LONG_CROP_VALUE, 10);
@@ -297,6 +291,11 @@ public class GlobalOptions implements Serializable {
     public boolean isCustomBrightness() {
         return getBooleanProperty(CUSTOM_BRIGHTNESS, false);
     }
+
+    public boolean isOpenRecentBook() {
+        return getBooleanProperty(OPEN_RECENT_BOOK, false);
+    }
+
 
     public String getApplicationTheme() {
         return getStringProperty(APPLICATION_THEME, "DEFAULT");

@@ -21,6 +21,8 @@ import universe.constellation.orion.viewer.prefs.OrionApplication;
  */
 public class OrionBaseActivity extends Activity {
 
+    public static final String DONT_OPEN_RECENT = "DONT_OPEN_RECENT";
+
     private int screenOrientation;
 
     protected Device device ;

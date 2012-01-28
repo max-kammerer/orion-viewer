@@ -35,6 +35,21 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
         prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         globalOptions = getOrionContext().getOptions();
         initFileManager();
+
+        onNewIntent(getIntent());
+    }
+
+    protected void onNewIntent(Intent intent) {
+        boolean dontStartRecent = intent.getBooleanExtra(DONT_OPEN_RECENT, false);
+        if (!dontStartRecent && globalOptions.isOpenRecentBook()) {
+            if (globalOptions.getRecentFiles().isEmpty() == false) {
+                GlobalOptions.RecentEntry entry = globalOptions.getRecentFiles().get(0);
+                File book = new File(entry.getPath());
+                if (book.exists()) {
+                    openFile(book);
+                }
+            }
+        }
     }
 
     protected void onResume() {

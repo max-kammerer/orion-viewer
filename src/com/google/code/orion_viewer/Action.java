@@ -108,6 +108,7 @@ public enum Action {
     OPEN_BOOK (R.string.action_open, R.integer.action_open_book) {
         public void doAction(Controller controller, OrionViewerActivity activity) {
             Intent intent = new Intent(activity, OrionFileManagerActivity.class);
+            intent.putExtra(OrionBaseActivity.DONT_OPEN_RECENT, true);
             activity.startActivity(intent);
         }
     },

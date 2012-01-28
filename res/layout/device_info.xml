@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:isScrollContainer="true"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbarStyle="outsideInset"
+            android:scrollbars="vertical"
+            android:orientation="vertical" android:layout_weight="0.4" >
+
+
+        <TableLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+                     android:shrinkColumns="1" android:gravity="center">
+
+            <TextView android:layout_width="wrap_content" android:textSize="20sp"
+                                  android:layout_height="wrap_content"
+                                  android:gravity="left|center_vertical" android:text="Please send this info to me on e-mail mikhael.bogdanov@gmail.com to include this device specific build in general one!"
+                    android:autoLink="all" android:linksClickable="true"/>
+
+
+            <TableRow android:gravity="center">
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:textSize="22sp" android:gravity="left|center_vertical" android:text="MANUFACTURER"/>
+
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content" android:id="@+id/MANUFACTURER"
+                          android:textSize="22sp" android:gravity="center" />
+
+            </TableRow>
+
+            <TableRow android:gravity="center">
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:textSize="22sp" android:gravity="left|center_vertical" android:text="MODEL"/>
+
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content" android:id="@+id/MODEL"
+                          android:textSize="22sp" android:gravity="center"/>
+
+            </TableRow>
+
+            <TableRow android:gravity="center">
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:textSize="22sp" android:gravity="left|center_vertical" android:text="DEVICE"/>
+
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content" android:id="@+id/DEVICE"
+                          android:textSize="22sp" android:gravity="center"/>
+
+            </TableRow>
+
+            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                         android:src="@drawable/revert" android:id="@+id/device_info_close"/>
+
+        </TableLayout>
+
+
+</ScrollView>

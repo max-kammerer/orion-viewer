@@ -29,6 +29,6 @@
     <string name="pref_application_theme">Application Theme</string>
     <string name="pref_application_theme_desc">Restart application to apply</string>
 
-    <string name="pref_open_recent_book">Open recent book on start</string>
+    <string name="pref_open_recent_book">Open recent book on start up</string>
 
 </resources>

@@ -45,7 +45,7 @@ public class OrionEditPreference extends EditTextPreference  implements Preferen
 
 
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        System.out.println(pattern);
+        //System.out.println(pattern);
         if (Pattern.compile(pattern).matcher((String) newValue).matches()){
             return true;
         } else {

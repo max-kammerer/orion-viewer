@@ -160,7 +160,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
         int hOverlap = info.pieceWidth * HOR_OVERLAP / 100;
         int vOverlap = info.pieceHeight * VERT_OVERLAP / 100;
-        System.out.println("overlap " + hOverlap + " " + vOverlap);
+        //System.out.println("overlap " + hOverlap + " " + vOverlap);
         if (info.pieceHeight != 0 && info.pieceWidth != 0) {
             info.maxX = (info.pageWidth - hOverlap) / (info.pieceWidth - hOverlap) + ((info.pageWidth - hOverlap) % (info.pieceWidth - hOverlap) == 0 ? 0 : 1)  - 1;
             info.maxY = (info.pageHeight - vOverlap) / (info.pieceHeight - vOverlap) + ((info.pageHeight - vOverlap) % (info.pieceHeight - vOverlap) == 0 ?  0: 1) -1;

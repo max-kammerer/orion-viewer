@@ -102,6 +102,11 @@
                     <com.google.code.orion_viewer.widget.ImageButton android:id="@+id/dictionary" android:layout_width="wrap_content"
                                  android:layout_height="wrap_content"
                              android:src="@drawable/dictionary" orion:actionId="@integer/action_dictionary" />
+
+
+                    <ImageButton android:id="@+id/device_info" android:layout_width="wrap_content"
+                                 android:layout_height="wrap_content"
+                                 android:src="@drawable/device_info"/>
                 </LinearLayout>
 
                 </LinearLayout>
@@ -172,6 +177,8 @@
 
             <!--navigation-->
             <include layout="@layout/navigation"/>
+
+            <include layout="@layout/device_info"/>
 
         </ViewAnimator>
     </RelativeLayout>

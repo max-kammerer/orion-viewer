@@ -72,7 +72,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private ViewAnimator animator;
 
-    private LastPageInfo pageInfo;
+    private LastPageInfo lastPageInfo;
 
     //left, right, top, bottom
     private int [] cropBorders = new int[4];
@@ -173,19 +173,27 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     protected void onNewIntent(Intent intent) {
-        Common.d( "Runtime.getRuntime().totalMemory() = " + Runtime.getRuntime().totalMemory());
+        Common.d("Runtime.getRuntime().totalMemory() = " + Runtime.getRuntime().totalMemory());
         Common.d("Debug.getNativeHeapSize() = " + Debug.getNativeHeapSize());
-        Common.stopLogger();
+        Uri uri = intent.getData();
+        Common.d("File URI  = " + uri.toString());
+        String file = uri.getPath();
+
         if (controller != null) {
+            if (lastPageInfo!= null) {
+                if (lastPageInfo.fileName.equals(file)) {
+                    //keep controller
+                    controller.drawPage();
+                    return;
+                }
+            }
+
             controller.destroy();
             controller = null;
         }
 
         if (intent.getData() != null) {
-            Uri uri = intent.getData();
-            Common.d("File URI  = " + uri.toString());
-            String file = uri.getPath();
-
+            Common.stopLogger();
             openFile(file);
         } else /*if (intent.getAction().endsWith("MAIN"))*/ {
             //TODO error
@@ -214,10 +222,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
             controller = new Controller(this, doc, str, view);
             try {
                 ObjectInputStream inp = new ObjectInputStream(openFileInput(fileData));
-                pageInfo = (LastPageInfo) inp.readObject();
+                lastPageInfo = (LastPageInfo) inp.readObject();
                 inp.close();
             } catch (Exception e) {
-                pageInfo = new LastPageInfo();
+                lastPageInfo = new LastPageInfo();
 
                 int defaultRotation = globalOptions.getDefaultOrientation();
                 switch (defaultRotation) {
@@ -225,11 +233,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
                     case 270: defaultRotation = 1; break;
                     default: defaultRotation = 0; break;
                 }
-                pageInfo.rotation = defaultRotation;
+                lastPageInfo.rotation = defaultRotation;
             }
 
-            pageInfo.fileName = fileData;
-            controller.init(pageInfo);
+            lastPageInfo.fileName = fileData;
+            controller.init(lastPageInfo);
 
             getSubscriptionManager().sendDocOpenedNotification(controller);
 
@@ -647,6 +655,27 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 startActivity(in);
             }
         });
+
+        TextView tv = (TextView) findMyViewById(R.id.MANUFACTURER);
+        tv.setText(Device.Info.MANUFACTURER);
+        tv = (TextView) findMyViewById(R.id.MODEL);
+        tv.setText(Device.Info.MODEL);
+        tv = (TextView) findMyViewById(R.id.DEVICE);
+        tv.setText(Device.Info.DEVICE);
+
+        btn = (ImageButton) findMyViewById(R.id.device_info);
+        btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                animator.setDisplayedChild(NAVIGATION_SCREEN + 1);
+            }
+        });
+
+        btn = (ImageButton) findMyViewById(R.id.device_info_close);
+        btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                animator.setDisplayedChild(MAIN_SCREEN);
+            }
+        });
     }
 
     protected void onResume() {
@@ -692,11 +721,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
     private void saveData() {
        if (controller != null) {
             try {
-                controller.serialize(pageInfo);
+                controller.serialize(lastPageInfo);
                 ObjectOutputStream out =
-                    new ObjectOutputStream(OrionViewerActivity.this.openFileOutput(pageInfo.fileName,
+                    new ObjectOutputStream(OrionViewerActivity.this.openFileOutput(lastPageInfo.fileName,
                         Context.MODE_PRIVATE));
-                out.writeObject(pageInfo);
+                out.writeObject(lastPageInfo);
                 out.close();
             } catch (Exception ex) {
                 Log.e(Common.LOGTAG, ex.getMessage(), ex);
