@@ -1,3 +1,7 @@
+===== 0.26.2 (Feb 4, 2012) =====
+* Fixed dictionary invocation on alex and nook
+* Fixed key binding crash in 0.26.*
+
 ===== 0.26.0 (Jan 27, 2012) =====
 * Customizable screen brightness
 * Custom screen overlapping on page turn
