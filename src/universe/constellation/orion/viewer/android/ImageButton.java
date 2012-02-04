@@ -1,4 +1,4 @@
-package com.google.code.orion_viewer.widget;
+package universe.constellation.orion.viewer.android;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -36,10 +36,11 @@ public class ImageButton extends android.widget.ImageButton {
 
     public void initListener(AttributeSet attrs) {
         if (attrs != null) {
-            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.com_google_code_orion_viewer_widget_ImageButton);
-            actionCode = a.getInt(R.styleable.com_google_code_orion_viewer_widget_ImageButton_actionId, Action.NONE.getCode());
-            action = Action.getAction(actionCode);
+            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.universe_constellation_orion_viewer_android_ImageButton);
+            actionCode = a.getInt(R.styleable.universe_constellation_orion_viewer_android_ImageButton_actionId, 0);;
             a.recycle();
+            action = Action.getAction(actionCode);
+            System.out.println("action code button " + action);
             setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
                     action.doAction(((OrionViewerActivity) getContext()).getController(), (OrionViewerActivity) getContext());
@@ -47,5 +48,4 @@ public class ImageButton extends android.widget.ImageButton {
             });
         }
     }
-
 }

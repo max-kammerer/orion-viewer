@@ -37,7 +37,7 @@
                 <ImageButton android:id="@+id/navigation" android:layout_width="45.0px" android:layout_height="45.0px"
                              android:src="@drawable/navigation"/>
 
-                <com.google.code.orion_viewer.widget.ImageButton android:id="@+id/dictionary" android:layout_width="45.0px" android:layout_height="45.0px"
+                <universe.constellation.orion.viewer.android.ImageButton android:id="@+id/dictionary" android:layout_width="45.0px" android:layout_height="45.0px"
                              android:src="@drawable/dictionary" orion:actionId="@integer/action_dictionary" />
 
                 <ImageButton android:id="@+id/device_info"

@@ -182,5 +182,11 @@ public class OrionBaseActivity extends Activity {
         return (OrionApplication) getApplicationContext();
     }
 
-
+    @Override
+    public void setContentView(int layoutResID) {
+        super.setContentView(layoutResID);
+        if (device != null) {
+            device.onSetContentView();
+        }
+    }
 }

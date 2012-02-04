@@ -181,7 +181,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         if (controller != null) {
             if (lastPageInfo!= null) {
-                if (lastPageInfo.fileName.equals(file)) {
+                if (lastPageInfo.openingFileName.equals(file)) {
                     //keep controller
                     controller.drawPage();
                     return;
@@ -236,7 +236,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 lastPageInfo.rotation = defaultRotation;
             }
 
-            lastPageInfo.fileName = fileData;
+            lastPageInfo.fileData = fileData;
+            lastPageInfo.openingFileName = filePath;
             controller.init(lastPageInfo);
 
             getSubscriptionManager().sendDocOpenedNotification(controller);
@@ -723,7 +724,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             try {
                 controller.serialize(lastPageInfo);
                 ObjectOutputStream out =
-                    new ObjectOutputStream(OrionViewerActivity.this.openFileOutput(lastPageInfo.fileName,
+                    new ObjectOutputStream(OrionViewerActivity.this.openFileOutput(lastPageInfo.fileData,
                         Context.MODE_PRIVATE));
                 out.writeObject(lastPageInfo);
                 out.close();

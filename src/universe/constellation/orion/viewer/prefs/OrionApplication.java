@@ -15,6 +15,14 @@ public class OrionApplication extends Application {
 
     private TemporaryOptions tempOptions;
 
+    public static OrionApplication instance;
+
+
+    public void onCreate() {
+        instance = this;
+        super.onCreate();    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
     public GlobalOptions getOptions() {
         if (options == null) {
             options = new GlobalOptions(this);

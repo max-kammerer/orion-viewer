@@ -1,6 +1,7 @@
 package com.google.code.orion_viewer;
 
 import android.util.Log;
+import com.google.code.orion_viewer.device.AlexDevice;
 import com.google.code.orion_viewer.device.AndroidDevice;
 import com.google.code.orion_viewer.device.NookDevice;
 

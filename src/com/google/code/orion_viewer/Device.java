@@ -33,6 +33,7 @@ public interface Device {
         public static String DEVICE;
         public static boolean NOOK2;
         public static boolean SONY_PRS_T1;
+        public static boolean ALEX;
 
         static {
             MANUFACTURER = getField("MANUFACTURER");
@@ -42,6 +43,8 @@ public interface Device {
                     DEVICE.toLowerCase().contentEquals("zoom2");
 
             SONY_PRS_T1 = MANUFACTURER.toLowerCase().contentEquals("sony") && MODEL.contentEquals("PRS-T1");
+
+            ALEX = MANUFACTURER.toLowerCase().contentEquals("sdi") && MODEL.contentEquals("seleucia") && DEVICE.contentEquals("seleucia");
         }
 
         public static String getField(String name) {

@@ -45,5 +45,7 @@ public class LastPageInfo implements Serializable {
     public int navigation = 0;
     public int pageLayout = 0;
 
-    public transient String fileName;
+    public transient String fileData;
+
+    public transient String openingFileName;
 }

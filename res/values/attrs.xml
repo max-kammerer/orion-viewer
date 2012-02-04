@@ -1,6 +1,6 @@
 <resources>
 
-    <attr name="actionId" format="reference|integer" />
+    <attr name="actionId" format="reference" />
 
     <attr name="minValue" format="integer" />
 
@@ -33,7 +33,7 @@
         <attr name="justAndroidGeneral"/>
     </declare-styleable>
 
-    <declare-styleable name="com.google.code.orion_viewer.widget.ImageButton">
+    <declare-styleable name="universe.constellation.orion.viewer.android.ImageButton">
         <attr name="actionId"/>
     </declare-styleable>
 

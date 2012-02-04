@@ -1,5 +1,6 @@
 package com.google.code.orion_viewer;
 
+import android.app.Application;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.widget.Toast;
@@ -18,13 +19,13 @@ import java.util.HashMap;
  */
 public enum Action {
 
-    NONE (R.string.action_none, 0),
+    NONE (R.string.action_none, R.integer.action_none),
 
-    MENU (R.string.action_menu, 1) ,
+    MENU (R.string.action_menu, R.integer.action_menu) ,
 
-    NEXT (R.string.action_next_page, 2),
+    NEXT (R.string.action_next_page, R.integer.action_next_page),
 
-    PREV (R.string.action_prev_page, 3),
+    PREV (R.string.action_prev_page, R.integer.action_prev_page),
 
     NEXT10 (R.string.action_next_10, R.integer.action_next_10) {
         @Override
@@ -51,15 +52,15 @@ public enum Action {
         }
     },
 
-    ZOOM (R.string.action_zoom_page, 4),
+    ZOOM (R.string.action_zoom_page, R.integer.action_zoom_page),
 
-    CROP (R.string.action_crop_page, 5),
+    CROP (R.string.action_crop_page, R.integer.action_crop_page),
 
-    OPTIONS (R.string.action_options_page, 6),
+    OPTIONS (R.string.action_options_page, R.integer.action_options_page),
 
-    GOTO (R.string.action_goto_page, 7),
+    GOTO (R.string.action_goto_page, R.integer.action_goto_page),
 
-    ROTATION (R.string.action_rotation_page, 8),
+    ROTATION (R.string.action_rotation_page, R.integer.action_rotation_page),
 
     ROTATE_90 (R.string.action_rotate_90, R.integer.action_rotate_90) {
         @Override
@@ -82,7 +83,7 @@ public enum Action {
             String additional = null;
             if ("FORA".equals(dict)) {
                 action = "com.ngc.fora.action.LOOKUP";
-                additional = "HEADWORD";
+                //additional = "HEADWORD";
             } else if ("COLORDICT".equals(dict)) {
                 action = "colordict.intent.action.SEARCH";
             } else if ("AARD".equals(dict)) {
@@ -194,9 +195,10 @@ public enum Action {
 
     private final int code;
 
-    Action(int nameId, int code) {
+
+    Action(int nameId, int resId) {
         this.name = nameId;
-        this.code = code;
+        this.code = OrionApplication.instance.getResources().getInteger(resId);
     }
 
     public int getName() {

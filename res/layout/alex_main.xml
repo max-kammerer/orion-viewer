@@ -99,7 +99,7 @@
                                  android:layout_height="wrap_content"
                                  android:src="@drawable/navigation"/>
 
-                    <com.google.code.orion_viewer.widget.ImageButton android:id="@+id/dictionary" android:layout_width="wrap_content"
+                    <universe.constellation.orion.viewer.android.ImageButton android:id="@+id/dictionary" android:layout_width="wrap_content"
                                  android:layout_height="wrap_content"
                              android:src="@drawable/dictionary" orion:actionId="@integer/action_dictionary" />
 

@@ -1,4 +1,17 @@
 <resources>
+
+
+    <integer name="action_none">0</integer>
+    <integer name="action_menu">1</integer>
+    <integer name="action_next_page">2</integer>
+    <integer name="action_prev_page">3</integer>
+
+    <integer name="action_zoom_page">4</integer>
+    <integer name="action_crop_page">5</integer>
+    <integer name="action_options_page">6</integer>
+    <integer name="action_goto_page">7</integer>
+    <integer name="action_rotation_page">8</integer>
+
     <integer name="action_dictionary">9</integer>
     <integer name="action_open_book">10</integer>
 

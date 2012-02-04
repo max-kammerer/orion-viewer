@@ -152,11 +152,11 @@ public class GlobalOptions implements Serializable {
     }
 
     public int getPrevKey() {
-        return getIntFromStringProperty(PREV_KEY, -1);
+        return getInt(PREV_KEY, -1);
     }
 
     public int getNextKey() {
-        return getIntFromStringProperty(NEXT_KEY, -1);
+        return getInt(NEXT_KEY, -1);
     }
 
 //    public void onDestroy(Context applicationContext) {
