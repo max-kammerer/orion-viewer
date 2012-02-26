@@ -53,8 +53,6 @@ public class GlobalOptions implements Serializable {
 
     public final static String OPEN_RECENT_BOOK = "OPEN_RECENT_BOOK";
 
-    private String lastOpenedDirectory;
-
     private LinkedList<RecentEntry> recentFiles;
 
     private SharedPreferences prefs;
@@ -67,7 +65,6 @@ public class GlobalOptions implements Serializable {
 
     GlobalOptions(Context applicationContext) {
         prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext);
-        lastOpenedDirectory = prefs.getString(Common.LAST_OPENED_DIRECTORY, null);
 
         recentFiles = new LinkedList<RecentEntry>();
         for (int i = 0; i < MAX_RECENT_ENTRIES; i++) {
@@ -91,7 +88,7 @@ public class GlobalOptions implements Serializable {
     }
 
     public String getLastOpenedDirectory() {
-        return lastOpenedDirectory;
+        return getStringProperty(Common.LAST_OPENED_DIRECTORY, null);
     }
 
     public void addRecentEntry(RecentEntry newEntry) {

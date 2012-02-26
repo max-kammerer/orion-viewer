@@ -68,11 +68,7 @@ public class OrionView extends View {
                 counter = 0;
             }
         }
-        //
-//        if (!startRenderer && controller != null) {
-//            startRenderer = true;
-//            controller.startRenderer();
-//        }
+
         if (bitmap != null && !bitmap.isRecycled()) {
             long start = new Date().getTime();
             Common.d("Start drawing bitmap");

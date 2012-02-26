@@ -10,6 +10,9 @@
     <string name="action_goto_page">Go to</string>
     <string name="action_dictionary">Open Dictionary</string>
     <string name="action_open">Open Book</string>
+    <string name="action_add_bookmark">Add Bookmark</string>
+    <string name="action_open_bookmarks">Open Bookmarks</string>
+
     <string name="action_crop_left">Crop left margin</string>
     <string name="action_crop_right">Crop right margin</string>
     <string name="action_crop_top">Crop top margin</string>

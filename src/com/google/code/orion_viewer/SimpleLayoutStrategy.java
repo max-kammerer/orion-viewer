@@ -128,6 +128,10 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
     }
 
     public void reset(LayoutPosition info, int pageNum) {
+        if (doc.getPageCount() - 1 < pageNum) {
+            pageNum = doc.getPageCount() - 1;
+        }
+
         info.pageNumber = pageNum;
         //original width and height without cropped margins
         PageInfo pinfo = doc.getPageInfo(pageNum);

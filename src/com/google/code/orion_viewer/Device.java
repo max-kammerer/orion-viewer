@@ -17,8 +17,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
+import android.content.Context;
 import android.os.Build;
+import android.view.Display;
 import android.view.KeyEvent;
+import android.view.WindowManager;
+import universe.constellation.orion.viewer.prefs.OrionApplication;
 
 /**
  * User: mike
@@ -28,23 +32,30 @@ import android.view.KeyEvent;
 public interface Device {
 
     public static class Info {
-        public static String MANUFACTURER;
-        public static String MODEL;
-        public static String DEVICE;
-        public static boolean NOOK2;
-        public static boolean SONY_PRS_T1;
-        public static boolean ALEX;
+        public final static String MANUFACTURER = getField("MANUFACTURER");
+        public final static String MODEL = getField("MODEL");
+        public final static String DEVICE = getField("DEVICE");
+
+        public final static boolean NOOK2 = "barnesandnoble".equals(MANUFACTURER.toLowerCase()) && "NOOK".equals(MODEL) && "zoom2".equals(DEVICE.toLowerCase());
+
+        public final static boolean SONY_PRS_T1 = "sony".equals(MANUFACTURER.toLowerCase()) && "PRS-T1".equals(MODEL);
+
+        public final static boolean ALEX = "sdi".equals(MANUFACTURER.toLowerCase()) && "seleucia".equals(MODEL.toLowerCase()) && "seleucia".equals(DEVICE.toLowerCase());
+
+        public final static boolean NOOK_CLASSIC;
 
         static {
-            MANUFACTURER = getField("MANUFACTURER");
-            MODEL = getField("MODEL");
-            DEVICE = getField("DEVICE");
-            NOOK2 = MANUFACTURER.toLowerCase().contentEquals("barnesandnoble") && MODEL.contentEquals("NOOK") &&
-                    DEVICE.toLowerCase().contentEquals("zoom2");
+            OrionApplication application = OrionApplication.instance;
+            boolean isNookClassic = false;
 
-            SONY_PRS_T1 = MANUFACTURER.toLowerCase().contentEquals("sony") && MODEL.contentEquals("PRS-T1");
-
-            ALEX = MANUFACTURER.toLowerCase().contentEquals("sdi") && MODEL.contentEquals("seleucia") && DEVICE.contentEquals("seleucia");
+            if ("".equals(MANUFACTURER) && "sec_smdk6410".equals(MODEL.toLowerCase()) && "smdk6410".equals(DEVICE.toLowerCase()) && application != null) {
+                WindowManager manager = (WindowManager) application.getSystemService(Context.WINDOW_SERVICE);
+                if (manager != null) {
+                    Display display = manager.getDefaultDisplay();
+                    isNookClassic =  display.getWidth() == 600 && display.getHeight() == 944;
+                }
+            }
+            NOOK_CLASSIC = isNookClassic;
         }
 
         public static String getField(String name) {

@@ -132,7 +132,9 @@
 
 
         <!--options-->
-        <include layout="@layout/navigation"/>
+        <include layout="@layout/page_layout"/>
+
+        <include layout="@layout/add_bookmark"/>
 
 
     </ViewAnimator>

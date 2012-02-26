@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.widget.Toast;
+import universe.constellation.orion.viewer.OrionBookmarkActivity;
 import universe.constellation.orion.viewer.OrionFileManagerActivity;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.R;
@@ -58,7 +59,13 @@ public enum Action {
 
     OPTIONS (R.string.action_options_page, R.integer.action_options_page),
 
-    GOTO (R.string.action_goto_page, R.integer.action_goto_page),
+    GOTO (R.string.action_goto_page, R.integer.action_goto_page) {
+
+        @Override
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            activity.showOrionDialog(OrionViewerActivity.PAGE_SCREEN, this);
+        }
+    },
 
     ROTATION (R.string.action_rotation_page, R.integer.action_rotation_page),
 
@@ -111,6 +118,20 @@ public enum Action {
             Intent intent = new Intent(activity, OrionFileManagerActivity.class);
             intent.putExtra(OrionBaseActivity.DONT_OPEN_RECENT, true);
             activity.startActivity(intent);
+        }
+    },
+
+    ADD_BOOKMARK (R.string.action_add_bookmark, R.integer.action_add_bookmark) {
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            activity.showOrionDialog(OrionViewerActivity.ADD_BOOKMARK_SCREEN, this);
+        }
+    },
+
+    OPEN_BOOKMARKS (R.string.action_open_bookmarks, R.integer.action_open_bookmarks) {
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            Intent bookmark = new Intent(activity.getApplicationContext(), OrionBookmarkActivity.class);
+            bookmark.putExtra(OrionBookmarkActivity.BOOK_ID, activity.getBookId());
+            activity.startActivityForResult(bookmark, OrionViewerActivity.OPEN_BOOKMARK_ACTIVITY_RESULT);
         }
     },
 

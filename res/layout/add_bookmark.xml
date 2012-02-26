@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content" android:gravity="center" android:layout_gravity="center" android:orientation="vertical">
+
+    <EditText android:layout_width="fill_parent"
+                              android:layout_height="wrap_content"
+                              android:textSize="25sp" android:id="@+id/add_bookmark_text" android:layout_weight="1"/>
+
+    <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
+                      android:layout_width="fill_parent" android:gravity="right" android:layout_weight="0">
+            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                         android:src="@drawable/view" android:id="@+id/add_bookmark_apply"
+                         android:layout_gravity="right"/>
+            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                         android:src="@drawable/revert" android:id="@+id/add_bookmark_close"
+                         android:layout_gravity="right"/>
+        </LinearLayout>
+</LinearLayout>

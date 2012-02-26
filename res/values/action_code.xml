@@ -21,6 +21,8 @@
     <integer name="action_rotate_90">13</integer>
     <integer name="action_rotate_270">14</integer>
 
+    <integer name="action_add_bookmark">15</integer>
+    <integer name="action_open_bookmarks">16</integer>
 
     <!--crop margins-->
     <integer name="action_crop_left">31</integer>

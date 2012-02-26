@@ -2,7 +2,7 @@ package universe.constellation.orion.viewer.prefs;
 
 import android.app.Activity;
 import android.app.Application;
-import pl.polidea.demo.R;
+import universe.constellation.orion.viewer.db.BookmarkAccessor;
 
 /**
  * User: mike
@@ -16,6 +16,8 @@ public class OrionApplication extends Application {
     private TemporaryOptions tempOptions;
 
     public static OrionApplication instance;
+
+    private BookmarkAccessor bookmarkAccessor;
 
 
     public void onCreate() {
@@ -48,5 +50,12 @@ public class OrionApplication extends Application {
             themeId = android.R.style.Theme_Light_NoTitleBar;
         }
         activity.setTheme(themeId);
+    }
+
+    public BookmarkAccessor getBookmarkAccessor() {
+        if (bookmarkAccessor == null) {
+            bookmarkAccessor = new BookmarkAccessor(this);
+        }
+        return bookmarkAccessor;
     }
 }

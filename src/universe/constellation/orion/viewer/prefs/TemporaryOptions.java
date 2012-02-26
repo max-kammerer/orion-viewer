@@ -10,5 +10,7 @@ public class TemporaryOptions {
     public boolean switchCropping;
 
     public boolean inverseCropping;
+
+    public Long bookId;
 }
 

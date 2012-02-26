@@ -54,7 +54,6 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
 
     protected void onResume() {
         super.onResume();
-        //globalOptions = new GlobalOptions(this);
         updateFileManager();
     }
 

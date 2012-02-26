@@ -17,6 +17,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.*/
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -44,21 +45,25 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private Dialog dialog;
 
-    private static final int ROTATION_SCREEN = 0;
+    public static final int OPEN_BOOKMARK_ACTIVITY_RESULT = 1;
 
-    private static final int MAIN_SCREEN = 0;
+    public static final int ROTATION_SCREEN = 0;
 
-    private static final int PAGE_SCREEN = 1;
+    public static final int MAIN_SCREEN = 0;
 
-    private static final int ZOOM_SCREEN = 2;
+    public static final int PAGE_SCREEN = 1;
 
-    private static final int CROP_SCREEN = 3;
+    public static final int ZOOM_SCREEN = 2;
 
-    private static final int NAVIGATION_SCREEN = 4;
+    public static final int CROP_SCREEN = 3;
 
-    private static final int HELP_SCREEN = 5;
+    public static final int PAGE_LAYOUT_SCREEN = 4;
 
-    private static final int OPTIONS_SCREEN = 6;
+    public static final int ADD_BOOKMARK_SCREEN = 5;
+
+    public static final int HELP_SCREEN = 100;
+
+
 
     public static final int CROP_RESTRICTION_MIN = -10;
 
@@ -116,7 +121,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         initCropScreen();
 
-        initNavigationScreen();
+        initPageLayoutScreen();
+
+        initAddBookmarkScreen();
 
         myIntent = getIntent();
     }
@@ -238,6 +245,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
             lastPageInfo.fileData = fileData;
             lastPageInfo.openingFileName = filePath;
+            lastPageInfo.simpleFileName = filePath.substring(idx + 1);
+            lastPageInfo.fileSize = file.length();
             controller.init(lastPageInfo);
 
             getSubscriptionManager().sendDocOpenedNotification(controller);
@@ -415,7 +424,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
 
-    public void initNavigationScreen() {
+    public void initPageLayoutScreen() {
         ImageButton close = (ImageButton) findMyViewById(R.id.options_close);
         close.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -445,6 +454,28 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 updateOptions();
             }
         });
+    }
+
+
+   public void initAddBookmarkScreen() {
+        ImageButton close = (ImageButton) findMyViewById(R.id.add_bookmark_close);
+        close.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //main menu
+                onAnimatorCancel();
+            }
+        });
+
+
+        ImageButton view = (ImageButton) findMyViewById(R.id.add_bookmark_apply);
+        view.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                EditText text = (EditText) findMyViewById(R.id.add_bookmark_text);
+                insertBookmark(controller.getCurrentPage(), text.getText().toString());
+                onApplyAction(true);
+            }
+        });
+
     }
 
 
@@ -645,7 +676,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 updateOptions();
-                animator.setDisplayedChild(NAVIGATION_SCREEN);
+                animator.setDisplayedChild(PAGE_LAYOUT_SCREEN);
             }
         });
 
@@ -657,26 +688,33 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
         });
 
+
         TextView tv = (TextView) findMyViewById(R.id.MANUFACTURER);
-        tv.setText(Device.Info.MANUFACTURER);
-        tv = (TextView) findMyViewById(R.id.MODEL);
-        tv.setText(Device.Info.MODEL);
-        tv = (TextView) findMyViewById(R.id.DEVICE);
-        tv.setText(Device.Info.DEVICE);
+        if (tv != null) {
+            tv.setText(Device.Info.MANUFACTURER);
+            tv = (TextView) findMyViewById(R.id.MODEL);
+            tv.setText(Device.Info.MODEL);
+            tv = (TextView) findMyViewById(R.id.DEVICE);
+            tv.setText(Device.Info.DEVICE);
 
-        btn = (ImageButton) findMyViewById(R.id.device_info);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                animator.setDisplayedChild(NAVIGATION_SCREEN + 1);
-            }
-        });
+            btn = (ImageButton) findMyViewById(R.id.device_info);
 
-        btn = (ImageButton) findMyViewById(R.id.device_info_close);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                animator.setDisplayedChild(MAIN_SCREEN);
-            }
-        });
+            btn.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    animator.setDisplayedChild(PAGE_LAYOUT_SCREEN + 1);
+                }
+            });
+
+
+            btn = (ImageButton) findMyViewById(R.id.device_info_close);
+
+            btn.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    animator.setDisplayedChild(MAIN_SCREEN);
+                }
+            });
+
+        }
     }
 
     protected void onResume() {
@@ -788,42 +826,39 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int screenId = HELP_SCREEN;
+        Action action = Action.NONE; //will open help
 
         switch (item.getItemId()) {
             case R.id.exit_menu_item:
                 finish();
                 return true;
-            case R.id.crop_menu_item: screenId = CROP_SCREEN; break;
-            case R.id.zoom_menu_item: screenId = ZOOM_SCREEN; break;
-            case R.id.goto_menu_item: screenId = PAGE_SCREEN; break;
-            case R.id.navigation_menu_item: screenId = NAVIGATION_SCREEN; break;
-            case R.id.rotation_menu_item: screenId = ROTATION_SCREEN; break;
+            case R.id.crop_menu_item: action = Action.CROP; break;
+            case R.id.zoom_menu_item: action = Action.ZOOM; break;
+            case R.id.add_bookmark_menu_item: action = Action.ADD_BOOKMARK; break;
+            case R.id.goto_menu_item: action = Action.GOTO; break;
+            case R.id.navigation_menu_item:  showOrionDialog(PAGE_LAYOUT_SCREEN, null);
+                return true;
+
+            case R.id.rotation_menu_item: action = Action.ROTATION; break;
+
             case R.id.keybinder_menu_item:
                 Intent in = new Intent(this, OrionKeyBinderActivity.class);
                 startActivity(in);
                 return true;
-            case R.id.options_menu_item:
-                Intent intent = new Intent(this, OrionPreferenceActivity.class);
-                startActivity(intent);
-                return true;
+            case R.id.options_menu_item: action = Action.OPTIONS; break;
 
             case R.id.tap_menu_item:
                 Intent tap = new Intent(this, OrionTapActivity.class);
                 startActivity(tap);
                 return true;
-            case R.id.open_menu_item:
-                Action.OPEN_BOOK.doAction(controller, this);
-                return true;
+
+            case R.id.open_menu_item: action = Action.OPEN_BOOK; break;
+
+            case R.id.bookmarks_menu_item:  action = Action.OPEN_BOOKMARKS; break;
         }
 
-        if (screenId != HELP_SCREEN) {
-            updateRotation();
-            updateCrops();
-            updateOptions();
-            updatePageSeeker();
-            animator.setDisplayedChild(screenId);
-            dialog.show();
+        if (Action.NONE != action) {
+            doAction(action);
         } else {
             Intent intent = new Intent();
             intent.setClass(this, OrionHelpActivity.class);
@@ -952,8 +987,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
             case MENU: openOptionsMenu(); return;
             case CROP: screenId = CROP_SCREEN; break;
             case ZOOM: screenId = ZOOM_SCREEN; break;
-            case GOTO: screenId = PAGE_SCREEN; break;
             case ROTATION: screenId = ROTATION_SCREEN; break;
+
             case OPTIONS:
                 Intent intent = new Intent(this, OrionPreferenceActivity.class);
                 startActivity(intent);
@@ -971,12 +1006,21 @@ public class OrionViewerActivity extends OrionBaseActivity {
         }
 
         if (screenId != -1) {
-            updateRotation();
-            updateCrops();
-            updateOptions();
-            updatePageSeeker();
-            animator.setDisplayedChild(screenId);
-            dialog.show();
+            showOrionDialog(screenId, action);
+//            updateRotation();
+//            updateCrops();
+//            updateOptions();
+//            updatePageSeeker();
+//            animator.setDisplayedChild(screenId);
+//
+//            //TODO move in action
+//            if (action == Action.ADD_BOOKMARK) {
+//                int page = controller.getCurrentPage();
+//                String text = getOrionContext().getBookmarkAccessor().selectExistingBookmark(getBookId(), page);
+//                ((EditText)findMyViewById(R.id.add_bookmark_text)).setText(text);
+//            }
+//
+//            dialog.show();
         } else {
             action.doAction(controller, this);
         }
@@ -1001,7 +1045,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     @Override
     protected void onApplyAction() {
-        if (globalOptions.isApplyAndClose()) {
+        onApplyAction(false);
+    }
+
+    protected void onApplyAction(boolean close) {
+        if (close || globalOptions.isApplyAndClose()) {
             onAnimatorCancel();
         }
     }
@@ -1050,7 +1098,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     void updateRotation() {
         RadioGroup rotationGroup = (RadioGroup) findMyViewById(R.id.rotationGroup);
-        rotationGroup.check(controller.getRotation() == 0 ? R.id.rotate0 : controller.getRotation() == -1 ? R.id.rotate90 : R.id.rotate270);
+        if (rotationGroup != null) { //nook case
+            rotationGroup.check(controller.getRotation() == 0 ? R.id.rotate0 : controller.getRotation() == -1 ? R.id.rotate90 : R.id.rotate270);
+        }
     }
 
     @Override
@@ -1079,4 +1129,70 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
         }
     }
+
+    public long insertOrGetBookId() {
+        LastPageInfo info = lastPageInfo;
+        Long bookId = getOrionContext().getTempOptions().bookId;
+        if (bookId == null || bookId == -1) {
+            bookId = getOrionContext().getBookmarkAccessor().insertOrUpdate(info.fileData, info.fileSize);
+            getOrionContext().getTempOptions().bookId = bookId;
+        }
+        return bookId.intValue();
+    }
+
+    public boolean insertBookmark(int page, String text) {
+        long id = insertOrGetBookId();
+        if (id != -1) {
+            long bokmarkId = getOrionContext().getBookmarkAccessor().insertOrUpdateBookmark(id, page, text);
+            return bokmarkId != -1;
+        }
+        return false;
+    }
+
+    public long getBookId() {
+        LastPageInfo info = lastPageInfo;
+        Long bookId = getOrionContext().getTempOptions().bookId;
+        if (bookId == null) {
+            bookId = getOrionContext().getBookmarkAccessor().selectBookId(info.fileData, info.fileSize);
+            getOrionContext().getTempOptions().bookId = bookId;
+        }
+        return bookId.longValue();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == OPEN_BOOKMARK_ACTIVITY_RESULT && resultCode == Activity.RESULT_OK) {
+            if (controller != null) {
+                int page = data.getIntExtra(OrionBookmarkActivity.OPEN_PAGE, -1);
+                if (page != -1) {
+                    controller.drawPage(page);
+                } else {
+                    doAction(Action.GOTO);
+                }
+            }
+        }
+    }
+
+    public void showOrionDialog(int screenId, Action action) {
+        if (screenId != -1) {
+            updateRotation();
+            updateCrops();
+            updateOptions();
+            updatePageSeeker();
+
+
+            if (action == Action.ADD_BOOKMARK) {
+                int page = controller.getCurrentPage();
+                String text = getOrionContext().getBookmarkAccessor().selectExistingBookmark(getBookId(), page);
+                ((EditText)findMyViewById(R.id.add_bookmark_text)).setText(text);
+            }
+
+            animator.setDisplayedChild(screenId);
+
+            if  (device.optionViaDialog()) {
+                dialog.show();
+            }
+        }
+    }
+
 }

@@ -70,13 +70,13 @@ public class OrionTapActivity extends OrionBaseActivity {
     }
 
     private boolean selectAction(View view, boolean isLong, int index) {
-        Intent inent = new Intent(OrionTapActivity.this, ActionListActivity.class);
-        inent.putExtra("code", myCode[index][isLong ? 1 : 0]);
-        inent.putExtra("type", isLong ? 1 : 0);
+        Intent intent = new Intent(OrionTapActivity.this, ActionListActivity.class);
+        intent.putExtra("code", myCode[index][isLong ? 1 : 0]);
+        intent.putExtra("type", isLong ? 1 : 0);
         active_view = view;
         this.isLong = isLong;
         this.index = index;
-        startActivityForResult(inent, 1);
+        startActivityForResult(intent, 1);
         return true;
     }
 
