@@ -1,3 +1,6 @@
+===== 0.27.1 (Feb 26, 2012) =====
+* Added Bookmarks
+
 ===== 0.26.2 (Feb 4, 2012) =====
 * Fixed dictionary invocation on alex and nook
 * Fixed key binding crash in 0.26.*
