@@ -1,4 +1,4 @@
-package com.google.code.orion_viewer;
+package universe.constellation.orion.viewer.db;
 
 /*
  * Orion Viewer is a pdf and djvu viewer for android devices
@@ -21,9 +21,8 @@ package com.google.code.orion_viewer;
 
 /**
  * User: mike
- * Date: 18.10.11
- * Time: 11:23
+ * Date: 29.02.12
+ * Time: 9:51
  */
-public class OperationHolder {
-    public int value;
+public class NotesXmlParser {
 }
