@@ -2,6 +2,8 @@
     <string name="menu_zoom_text">Масштаб</string>
     <string name="menu_crop_text">Обрезка полей</string>
     <string name="menu_goto_text">Перейти</string>
+    <string name="menu_bookmarks_text">Закладки</string>
+    <string name="menu_add_bookmark_item">Добавить закладку</string>
     <string name="menu_rotation_text">Поворот</string>
     <string name="menu_navigation_text">Раскладка страницы</string>
     <string name="menu_help_text">Помощь</string>

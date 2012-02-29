@@ -10,6 +10,8 @@
     <string name="action_goto_page">Перейти к ...</string>
     <string name="action_dictionary">Открыть словарь</string>
     <string name="action_open">Открыть книгу</string>
+    <string name="action_add_bookmark">Добавить закладку</string>
+    <string name="action_open_bookmarks">Закладки</string>
 
     <string name="action_crop_left">Обрезать левое поле</string>
     <string name="action_crop_right">Обрезать правое поле</string>
@@ -20,6 +22,8 @@
     <string name="action_uncrop_right">Увеличить правое поле</string>
     <string name="action_uncrop_top">Увеличить верхнее поле</string>
     <string name="action_uncrop_bottom">Увеличить нижнее поле</string>
+    <string name="action_inverse_crops">Обрезка/увеличение полей</string>
+    <string name="action_switch_long_crop">Большая/маленькая обрезка</string>
 
     <string name="action_next_10">Вперед на 10 страниц</string>
     <string name="action_prev_10">Назад на 10 страниц</string>
