@@ -213,7 +213,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         DocumentWrapper doc = null;
         Common.d("File URI  = " + filePath);
         Common.startLogger(filePath + ".trace");
-        getOrionContext().onNewBook();
+        getOrionContext().onNewBook(filePath);
         try {
             String filePAthLowCase = filePath.toLowerCase();
             if (filePAthLowCase.endsWith("pdf") || filePAthLowCase.endsWith("xps")) {
@@ -753,9 +753,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
         if (controller != null) {
             controller.destroy();
         }
+
         if (dialog != null) {
             dialog.dismiss();
         }
+        getOrionContext().destroyDb();
         //globalOptions.onDestroy(this);
     }
 
@@ -1136,7 +1138,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         LastPageInfo info = lastPageInfo;
         Long bookId = getOrionContext().getTempOptions().bookId;
         if (bookId == null || bookId == -1) {
-            bookId = getOrionContext().getBookmarkAccessor().insertOrUpdate(info.fileData, info.fileSize);
+            bookId = getOrionContext().getBookmarkAccessor().insertOrUpdate(info.simpleFileName, info.fileSize);
             getOrionContext().getTempOptions().bookId = bookId;
         }
         return bookId.intValue();
@@ -1155,7 +1157,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         LastPageInfo info = lastPageInfo;
         Long bookId = getOrionContext().getTempOptions().bookId;
         if (bookId == null) {
-            bookId = getOrionContext().getBookmarkAccessor().selectBookId(info.fileData, info.fileSize);
+            bookId = getOrionContext().getBookmarkAccessor().selectBookId(info.simpleFileName, info.fileSize);
             getOrionContext().getTempOptions().bookId = bookId;
         }
         return bookId.longValue();

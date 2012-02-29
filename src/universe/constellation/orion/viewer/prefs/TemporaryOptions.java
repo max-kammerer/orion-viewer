@@ -31,5 +31,7 @@ public class TemporaryOptions {
     public boolean inverseCropping;
 
     public Long bookId;
+
+    public String openedFile;
 }
 

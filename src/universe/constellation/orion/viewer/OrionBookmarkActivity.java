@@ -23,6 +23,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -32,9 +34,12 @@ import com.google.code.orion_viewer.FileChooser;
 import com.google.code.orion_viewer.OrionBaseActivity;
 import universe.constellation.orion.viewer.db.Bookmark;
 import universe.constellation.orion.viewer.db.BookmarkAccessor;
+import universe.constellation.orion.viewer.db.BookmarkExporter;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
 import java.io.File;
+import java.io.IOException;
+import java.security.PublicKey;
 import java.util.List;
 
 /**
@@ -46,7 +51,11 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
 
     public static final String OPEN_PAGE = "open_page";
 
+    public static final String OPENED_FILE = "opened_file";
+
     public static final String BOOK_ID = "book_id";
+
+    private long bookId;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +80,7 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
         super.onNewIntent(intent);
 
         BookmarkAccessor accessor = getOrionContext().getBookmarkAccessor();
-        long bookId = intent.getLongExtra(BOOK_ID, -1);
+        bookId = intent.getLongExtra(BOOK_ID, -1);
         List bookmarks = accessor.selectBookmarks(bookId);
         ListView view = (ListView) findMyViewById(R.id.bookmarks);
         view.setAdapter(new ArrayAdapter(this, R.layout.bookmark_entry, R.id.bookmark_entry, bookmarks) {
@@ -89,5 +98,60 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
     @Override
     public boolean supportDevice() {
         return false;
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        boolean result = super.onCreateOptionsMenu(menu);
+        if (result) {
+            getMenuInflater().inflate(R.menu.bookmarks_menu, menu);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean showEmptyResult = false;
+        switch (item.getItemId()) {
+            case R.id.export_bookmarks_menu_item:
+                if (bookId == -1) {
+                    showEmptyResult = true;
+                }
+
+            case R.id.export_all_bookmarks_menu_item:
+                String file = getOrionContext().getTempOptions().openedFile;
+                if (file == null) {
+                    showEmptyResult = true;
+                }
+
+                if (!showEmptyResult) {
+                    long bookId = item.getItemId() == R.id.export_all_bookmarks_menu_item ? -1 : this.bookId;
+                    file = file + "." + (bookId == -1 ? "all_" : "") +  "bookmark.xml";
+                    Common.d("Bookmarks output file: " + file);
+                    BookmarkExporter exporter = new BookmarkExporter(getOrionContext().getBookmarkAccessor(), file);
+                    try {
+                        showEmptyResult = !exporter.export(bookId);
+                    } catch (IOException e) {
+                        Common.d(e);
+                        showError(e);
+                        return true;
+                    }
+
+                }
+
+                if (showEmptyResult) {
+                    Toast.makeText(this, "There is nothing to export!", Toast.LENGTH_LONG).show();;
+                } else {
+                    Toast.makeText(this, "Bookmarks exported to " + file, Toast.LENGTH_LONG).show();
+                }
+                return true;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showError(Exception e) {
+        Toast.makeText(this, "Error " + e.getMessage(), Toast.LENGTH_SHORT).show();;
+        System.out.println("Error " + e.getMessage());
     }
 }

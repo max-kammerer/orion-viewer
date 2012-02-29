@@ -51,8 +51,9 @@ public class OrionApplication extends Application {
         return options;
     }
 
-    public void onNewBook() {
+    public void onNewBook(String fileName) {
         tempOptions = new TemporaryOptions();
+        tempOptions.openedFile = fileName;
     }
 
     public TemporaryOptions getTempOptions() {
@@ -76,5 +77,12 @@ public class OrionApplication extends Application {
             bookmarkAccessor = new BookmarkAccessor(this);
         }
         return bookmarkAccessor;
+    }
+
+    public void destroyDb() {
+        if (bookmarkAccessor != null) {
+            bookmarkAccessor.close();
+            bookmarkAccessor = null;
+        }
     }
 }
