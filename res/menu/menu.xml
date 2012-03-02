@@ -46,6 +46,14 @@
           android:title="@string/menu_open_text"
           android:icon="@drawable/help"/>
 
+    <item android:id="@+id/open_dictionary_menu_item"
+          android:title="@string/menu_open_dictionary_text"
+          android:icon="@drawable/dictionary"/>
+
+    <item android:id="@+id/day_night_menu_item"
+          android:title="@string/menu_day_night_text"
+          android:icon="@drawable/help"/>
+
     <item android:id="@+id/help_menu_item"
           android:title="@string/menu_help_text"
           android:icon="@drawable/help"/>

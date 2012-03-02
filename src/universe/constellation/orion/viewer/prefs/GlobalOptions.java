@@ -72,6 +72,8 @@ public class GlobalOptions implements Serializable {
 
     public final static String OPEN_RECENT_BOOK = "OPEN_RECENT_BOOK";
 
+    public final static String DAY_NIGHT_MODE = "DAY_NIGHT_MODE";
+
     private LinkedList<RecentEntry> recentFiles;
 
     private SharedPreferences prefs;
@@ -128,6 +130,12 @@ public class GlobalOptions implements Serializable {
 
     public void saveDirectory() {
         //TODO
+    }
+
+    public void saveProperty(String property, String value) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(property, value);
+        editor.commit();
     }
 
     public void saveRecents() {

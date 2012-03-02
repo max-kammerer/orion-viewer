@@ -40,5 +40,14 @@
         Opens page layot dialog. On reading comics or viewing books with images you could select appropriate page layout.</string>
 
     <string name="dictionary_help">
-        Opens External Dictionary. You could select appropriate dictionary in Options.</string>
+        Opens External Dictionary. Choose appropriate Dictionary application in Options.</string>
+
+    <string name="tap_help">
+        Tap zones allow user to link different parts of device screen to commonly used commands.
+        There are 3x3 cells where user could define actions for short (top label) and long (bottom label) clicks.</string>
+
+    <string name="bookmarks_export_help">
+        Allow user to export bookmarks (for all books or for current one).
+        Bookmarks are exported to xml file with the name of opened book + [bookmarks.xml or all_bookmarks.xml] suffix.
+        This option is avaliable at Bookmarks screen menu.</string>
 </resources>

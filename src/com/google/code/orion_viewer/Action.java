@@ -154,6 +154,13 @@ public enum Action {
         }
     },
 
+    DAY_NIGHT (R.string.action_day_night_mode, R.integer.action_day_night_mode) {
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            activity.changeDayNightMode();
+        }
+    },
+
+
     INVERSE_CROP (R.string.action_inverse_crops, R.integer.action_inverse_crop) {
         public void doAction(Controller controller, OrionViewerActivity activity) {
             TemporaryOptions opts = activity.getOrionContext().getTempOptions();

@@ -1,13 +1,15 @@
 <resources>
     <string name="menu_zoom_text">Масштаб</string>
     <string name="menu_crop_text">Обрезка полей</string>
-    <string name="menu_goto_text">Перейти</string>
+    <string name="menu_goto_text">Перейти...</string>
     <string name="menu_bookmarks_text">Закладки</string>
     <string name="menu_add_bookmark_item">Добавить закладку</string>
     <string name="menu_rotation_text">Поворот</string>
     <string name="menu_navigation_text">Раскладка страницы</string>
     <string name="menu_help_text">Помощь</string>
     <string name="menu_open_text">Открыть книгу</string>
+    <string name="menu_open_dictionary_text">Открыть словарь</string>
+    <string name="menu_day_night_text">Дневной/Ночной режим</string>
     <string name="menu_exit_text">Закрыть</string>
     <string name="menu_key_binder_text">Назначение клавиш</string>
     <string name="menu_options_text">Настройки</string>

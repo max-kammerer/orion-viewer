@@ -106,6 +106,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
         setContentView(device.getLayoutId());
 
         view = (OrionView) findViewById(R.id.view);
+        String mode = getOrionContext().getOptions().getStringProperty(GlobalOptions.DAY_NIGHT_MODE, "DAY");
+        view.setNightMode("NIGHT".equals(mode));
 
         if (!device.optionViaDialog()) {
             initAnimator();
@@ -857,6 +859,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 return true;
 
             case R.id.open_menu_item: action = Action.OPEN_BOOK; break;
+            case R.id.open_dictionary_menu_item: action = Action.DICTIONARY; break;
+            case R.id.day_night_menu_item:  action = Action.DAY_NIGHT; break;
 
             case R.id.bookmarks_menu_item:  action = Action.OPEN_BOOKMARKS; break;
         }
@@ -1199,4 +1203,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
         }
     }
 
+    public void changeDayNightMode() {
+        boolean newMode = !getView().isNightMode();
+        getOrionContext().getOptions().saveProperty(GlobalOptions.DAY_NIGHT_MODE, newMode ? "NIGHT" : "DAY");
+        getView().setNightMode(newMode);
+        getView().invalidate();
+    }
 }

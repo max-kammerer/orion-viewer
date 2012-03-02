@@ -40,15 +40,22 @@ public class OrionView extends View {
 
     private CountDownLatch latch;
 
-    private boolean startRenderer;
-
     private Controller controller;
 
     private int counter = 0;
 
+    private boolean isNightMode = true;
+
+    private ColorMatrixColorFilter nightMatrix = new ColorMatrixColorFilter(new ColorMatrix(
+            new float[]{
+                    -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+                    0.0f, -1.0f, 0.0f, 1.0f, 1.0f,
+                    0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
+                    0.0f, 0.0f, 0.0f, 1.0f, 0.0f
+            }));
+
     public OrionView(Context context) {
         super(context);
-
     }
 
     public OrionView(Context context, AttributeSet attrs) {
@@ -58,7 +65,6 @@ public class OrionView extends View {
     public OrionView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
-
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -73,18 +79,17 @@ public class OrionView extends View {
 
         if (bitmap != null && !bitmap.isRecycled()) {
             long start = new Date().getTime();
-            Common.d("Start drawing bitmap");
+            Common.d("OrionView: start drawing bitmap");
 
-//                if (rotation != 0) {
-//                    canvas.rotate(-rotation * 90, (getHeight()) / 2, getWidth() / 2);
-//                    canvas.translate(- rotation * 80, - rotation * 80);
-//                }
-//                Paint paint = new Paint();
-//                ColorFilter filter = new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
-//                paint.setColorFilter(filter);
-            canvas.drawBitmap(bitmap, 0, 0, null);
+            Paint paint = null;
+            if (isNightMode) {
+                paint = new Paint();
+                paint.setColorFilter(nightMatrix);
+            }
 
-            Common.d("OrionView drawn bitmap at " + 0.001f * (new Date().getTime() - start) + " s");
+            canvas.drawBitmap(bitmap, 0, 0, paint);
+
+            Common.d("OrionView: draw bitmap for " + 0.001f * (new Date().getTime() - start) + " s");
         }
         if (latch != null) {
             latch.countDown();
@@ -97,28 +102,26 @@ public class OrionView extends View {
         counter++;
     }
 
-
-//   public void setRotation(int rotation) {
-//       synchronized (this) {
-//        this.rotation = rotation;
-//       }
-//    }
-
-
     public void setController(Controller controller) {
-        startRenderer = false;
         this.controller = controller;
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        Common.d("onSizeChanged " + w + " " +h);
-        //for alex initialization
+        Common.d("OrionView: onSizeChanged " + w + "x" + h);
         super.onSizeChanged(w, h, oldw, oldh);
         if (w != 0 && h != 0 && (w != oldw || h != oldh)) {
             if (controller != null ) {
                 controller.screenSizeChanged(w, h);
             }
         }
+    }
+
+    public boolean isNightMode() {
+        return isNightMode;
+    }
+
+    public void setNightMode(boolean nightMode) {
+        this.isNightMode = nightMode;
     }
 }

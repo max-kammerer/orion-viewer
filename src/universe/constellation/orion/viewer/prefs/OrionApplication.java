@@ -63,13 +63,22 @@ public class OrionApplication extends Application {
 
     public void applyTheme(Activity activity) {
         String theme = getOptions().getApplicationTheme();
-        int themeId = android.R.style.Theme_NoTitleBar;
-        if ("DARK".equals(theme)) {
-            themeId = android.R.style.Theme_Black_NoTitleBar;
-        } else if ("LIGHT".equals(theme)) {
-            themeId = android.R.style.Theme_Light_NoTitleBar;
+        if ("DEFAULT".equals(theme)) {
+            return;
         }
-        activity.setTheme(themeId);
+
+        boolean haveTitleBar = false;
+
+        int themeId = -1;
+        if ("DARK".equals(theme)) {
+            themeId =  haveTitleBar ? android.R.style.Theme_Black : android.R.style.Theme_Black_NoTitleBar;
+        } else if ("LIGHT".equals(theme)) {
+            themeId = haveTitleBar ? android.R.style.Theme_Light : android.R.style.Theme_Light_NoTitleBar;
+        }
+
+        if (themeId != -1) {
+            activity.setTheme(themeId);
+        }
     }
 
     public BookmarkAccessor getBookmarkAccessor() {

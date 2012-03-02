@@ -165,6 +165,31 @@
             </TableRow>
 
             <TableRow>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_column="0"
+                          android:text="Taps"
+                          android:gravity="center_horizontal"/>
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                          android:textSize="20sp"
+                          android:text="@string/tap_help"
+                          android:layout_gravity="center_vertical"
+                          android:gravity="left"/>
+            </TableRow>
+
+            <TableRow>
+                <ImageView android:layout_column="0"
+                           android:layout_width="wrap_content" android:layout_height="wrap_content"
+                           android:src="@drawable/export"/>
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                          android:textSize="20sp"
+                          android:text="@string/bookmarks_export_help"
+                          android:layout_gravity="center_vertical"
+                          android:gravity="left"/>
+            </TableRow>
+
+
+            <TableRow>
                 <ImageView android:layout_column="0"
                            android:layout_width="wrap_content" android:layout_height="wrap_content"
                            android:src="@drawable/view"/>
@@ -175,6 +200,7 @@
                           android:layout_gravity="center_vertical"
                           android:gravity="left"/>
             </TableRow>
+
 
             <TableRow>
                 <ImageView android:layout_column="0"

@@ -24,6 +24,8 @@
     <integer name="action_add_bookmark">15</integer>
     <integer name="action_open_bookmarks">16</integer>
 
+    <integer name="action_day_night_mode">17</integer>
+
     <!--crop margins-->
     <integer name="action_crop_left">31</integer>
     <integer name="action_crop_right">32</integer>

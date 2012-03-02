@@ -112,6 +112,9 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean showEmptyResult = false;
         switch (item.getItemId()) {
+            case R.id.close_bookmarks_menu_item:
+                finish();
+                return true;
             case R.id.export_bookmarks_menu_item:
                 if (bookId == -1) {
                     showEmptyResult = true;

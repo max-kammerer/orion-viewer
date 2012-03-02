@@ -12,6 +12,7 @@
     <string name="action_open">Открыть книгу</string>
     <string name="action_add_bookmark">Добавить закладку</string>
     <string name="action_open_bookmarks">Закладки</string>
+    <string name="action_day_night_mode">Дневной/Ночной режим</string>
 
     <string name="action_crop_left">Обрезать левое поле</string>
     <string name="action_crop_right">Обрезать правое поле</string>

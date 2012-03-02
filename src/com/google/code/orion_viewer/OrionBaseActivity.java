@@ -95,11 +95,11 @@ public class OrionBaseActivity extends Activity {
         } else if ("PORTRAIT".equals(orientation)) {
             newScreenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         }
-        System.out.println("onrdisplay "+ getRequestedOrientation() + " screenOrientation " + getWindow().getAttributes().screenOrientation);
-        System.out.println("onrdisplay "+ newScreenOrientation);
+        System.out.println("OrionBaseActivity: onResume display:"+ getRequestedOrientation() + " screenOrientation " + getWindow().getAttributes().screenOrientation);
+        System.out.println("OrionBaseActivity: display: "+ newScreenOrientation);
 
         if (screenOrientation != newScreenOrientation) {
-            System.out.println("Changing display in onresume " + newScreenOrientation);
+            System.out.println("OrionBaseActivity: changing display in onResume " + newScreenOrientation);
             this.screenOrientation = newScreenOrientation;
             setRequestedOrientation(newScreenOrientation);
         }
