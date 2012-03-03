@@ -49,7 +49,7 @@ public class AndroidDevice implements Device {
 
     private static int VIEWER_DELAY = 600000;
 
-    private static int delay = DELAY;
+    private int delay = DELAY;
 
     public GlobalOptions options;
 
