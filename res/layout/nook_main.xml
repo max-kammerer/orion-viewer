@@ -42,8 +42,8 @@
                 <universe.constellation.orion.viewer.android.ImageButton android:id="@+id/dictionary" android:layout_width="45.0px" android:layout_height="45.0px"
                              android:src="@drawable/dictionary" orion:actionId="@integer/action_dictionary" />
 
-                <!--<universe.constellation.orion.viewer.android.ImageButton android:layout_width="45.0px" android:layout_height="45.0px"-->
-                             <!--android:src="@drawable/add_bookmark" orion:actionId="@integer/action_add_bookmark" />-->
+                <universe.constellation.orion.viewer.android.ImageButton android:layout_width="45.0px" android:layout_height="45.0px"
+                             android:src="@drawable/add_bookmark" orion:actionId="@integer/action_add_bookmark" />
 
                 <!--<ImageButton android:id="@+id/device_info"-->
                                  <!--android:src="@drawable/device_info" android:layout_width="45.0px" android:layout_height="45.0px"/>-->
@@ -71,8 +71,6 @@
                     <ImageButton android:id="@+id/crop_menu" android:layout_width="wrap_content" android:layout_height="wrap_content"
                                  android:src="@drawable/crop"/>
 
-                    <!--<universe.constellation.orion.viewer.android.ImageButton android:layout_width="45.0px" android:layout_height="45.0px"-->
-                             <!--android:src="@drawable/bookmarks" orion:actionId="@integer/action_open_bookmarks" />-->
                 </LinearLayout>
 
                 <LinearLayout

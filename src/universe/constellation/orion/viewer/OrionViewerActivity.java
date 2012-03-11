@@ -632,7 +632,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
             public boolean onLongClick(View v) {
                 //page seeker
-                animator.setDisplayedChild(PAGE_SCREEN);
+                Action.OPEN_BOOKMARKS.doAction(controller, OrionViewerActivity.this);
+                //animator.setDisplayedChild(PAGE_SCREEN);
                 return true;
             }
         });
@@ -701,13 +702,13 @@ public class OrionViewerActivity extends OrionBaseActivity {
             tv = (TextView) findMyViewById(R.id.DEVICE);
             tv.setText(Device.Info.DEVICE);
 
-            btn = (ImageButton) findMyViewById(R.id.device_info);
-
-            btn.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    animator.setDisplayedChild(PAGE_LAYOUT_SCREEN + 1);
-                }
-            });
+//            btn = (ImageButton) findMyViewById(R.id.device_info);
+//
+//            btn.setOnClickListener(new View.OnClickListener() {
+//                public void onClick(View v) {
+//                    animator.setDisplayedChild(PAGE_LAYOUT_SCREEN + 1);
+//                }
+//            });
 
 
             btn = (ImageButton) findMyViewById(R.id.device_info_close);

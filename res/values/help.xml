@@ -7,7 +7,7 @@
 
     <string name="next_page_android">Opens go to dialog.</string>
 
-    <string name="next_page">Go to next page. On long click opens page chooser dialog.</string>
+    <string name="next_page">Go to next page. On long click opens bookmark screen.</string>
 
     <string name="prev_page">Go to prev page. On long click opens page chooser dialog.</string>
 

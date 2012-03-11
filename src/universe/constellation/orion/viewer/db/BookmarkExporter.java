@@ -69,6 +69,17 @@ public class BookmarkExporter {
             serializer.attribute(nameSpace, "date", new SimpleDateFormat().format(new Date()));
 
             int bookIdColumn = c.getColumnIndex(BookmarkAccessor.BOOK_ID);
+            //hack
+            if (bookIdColumn == -1) {
+                String [] names = c.getColumnNames();
+                for (int i = 0; i < names.length; i++) {
+                    String name = names[i];
+                    if (name.endsWith("." + BookmarkAccessor.BOOK_ID)) {
+                        bookIdColumn = i;
+                        break;
+                    }
+                }
+            }
             int bookName = c.getColumnIndex(BookmarkAccessor.BOOK_NAME);
             int bookSize = c.getColumnIndex(BookmarkAccessor.BOOK_FILE_SIZE);
             int bookmarkPage = c.getColumnIndex(BookmarkAccessor.BOOKMARK_PAGE);

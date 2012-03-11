@@ -74,6 +74,15 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
                 finish();
             }
         });
+
+        ImageButton menu = (ImageButton) findMyViewById(R.id.nook_bookmarks_menu);
+        if (menu != null) {
+            menu.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v) {
+                    openOptionsMenu();
+                }
+            });
+        }
     }
 
     protected void onNewIntent(Intent intent) {

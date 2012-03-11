@@ -19,9 +19,7 @@ package com.google.code.orion_viewer.device;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import android.content.Context;
 import android.content.Intent;
-import android.os.PowerManager;
 import android.view.KeyEvent;
 import com.google.code.orion_viewer.*;
 import universe.constellation.orion.viewer.R;
@@ -106,7 +104,7 @@ public class NookDevice extends AndroidDevice {
     }
 
     public int getLayoutId() {
-        return R.layout.main;
+        return R.layout.nook_main;
     }
 
     public String getDefaultDirectory() {

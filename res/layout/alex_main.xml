@@ -110,7 +110,7 @@
 
                 <LinearLayout
                         android:layout_width="wrap_content" android:layout_height="fill_parent"
-                        android:orientation="vertical" android:gravity="right|center_vertical"
+                        android:orientation="vertical" android:gravity="right|top"
                         android:layout_weight="0">
 
 
@@ -122,10 +122,12 @@
                                  android:layout_height="wrap_content"
                              android:src="@drawable/dictionary" orion:actionId="@integer/action_dictionary" />
 
+                    <universe.constellation.orion.viewer.android.ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:src="@drawable/add_bookmark" orion:actionId="@integer/action_add_bookmark" />
 
-                    <ImageButton android:id="@+id/device_info" android:layout_width="wrap_content"
-                                 android:layout_height="wrap_content"
-                                 android:src="@drawable/device_info"/>
+                    <!--<ImageButton android:id="@+id/device_info" android:layout_width="wrap_content"-->
+                                 <!--android:layout_height="wrap_content"-->
+                                 <!--android:src="@drawable/device_info"/>-->
                 </LinearLayout>
 
                 </LinearLayout>
@@ -197,7 +199,9 @@
             <!--navigation-->
             <include layout="@layout/page_layout"/>
 
-            <include layout="@layout/device_info"/>
+            <include layout="@layout/add_bookmark"/>
+
+            <!--<include layout="@layout/device_info"/>-->
 
         </ViewAnimator>
     </RelativeLayout>

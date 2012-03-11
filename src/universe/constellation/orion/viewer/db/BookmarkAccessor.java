@@ -44,7 +44,7 @@ public class BookmarkAccessor extends SQLiteOpenHelper {
 
     private static final String BOOKMARKS_TABLE_NAME = "bookmarks";
 
-    private static final String BOOKS_TABLE_NAME = "books";
+    public static final String BOOKS_TABLE_NAME = "books";
 
     private static final String BOOK_REF = "book_id";
 
