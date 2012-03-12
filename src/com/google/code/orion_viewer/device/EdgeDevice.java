@@ -23,6 +23,10 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.widget.HorizontalScrollView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import com.google.code.orion_viewer.Common;
 import com.google.code.orion_viewer.OrionBaseActivity;
 import com.google.code.orion_viewer.OrionView;
@@ -52,10 +56,26 @@ public class EdgeDevice extends AndroidDevice {
         if (fb != null) {
             if (activity.getViewerType() == VIEWER_ACTIVITY) {
                 View view = activity.findViewById(R.id.view);
+                ViewGroup parent = (ViewGroup) view.getParent();
+                parent.removeView(view);
+
+                HorizontalScrollView hsv = new HorizontalScrollView(activity);
+                hsv.setHorizontalFadingEdgeEnabled(false);
+                ViewGroup.LayoutParams lp2 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+                parent.addView(hsv, lp2);
+
+                lp2 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+                ScrollView vsv = new ScrollView(activity);
+                vsv.setVerticalFadingEdgeEnabled(false);
+                hsv.addView(vsv, lp2);
+
                 ViewGroup.LayoutParams lp = view.getLayoutParams();
                 lp.width = fb.getWidth();
                 lp.height = fb.getHeight();
+                view.setMinimumWidth(lp.width);
+                view.setMinimumHeight(lp.height);
                 view.setLayoutParams(lp);
+                vsv.addView(view, lp);
             }
         }
 //        if (activity.getViewerType() == VIEWER_ACTIVITY) {
@@ -112,17 +132,21 @@ public class EdgeDevice extends AndroidDevice {
             width = Integer.parseInt(as[0]);
             height = Integer.parseInt(as[1]);
 
-//            if (rotate == 90 || rotate == 270)
-//                if (width == 800)
-//                    width = 600; // edgejr
-//                else
-//                    width = 825; // edge
-//
-//            if (rotate == 0 || rotate == 180)
-//                if (height == 800)
-//                    height = 600; // edgejr
-//                else
-//                    height = 825; // edge
+            if (rotate == 90 || rotate == 270)
+                if (width == 800)
+                    width = 600; // edgejr
+                else {
+                    width = 825; // edge
+                    height = 1200; // edge
+                }
+
+            if (rotate == 0 || rotate == 180)
+                if (height == 800)
+                    height = 600; // edgejr
+                else {
+                    height = 825; // edge
+                    width = 1200;
+                }
         }
 
         public int getWidth() {
