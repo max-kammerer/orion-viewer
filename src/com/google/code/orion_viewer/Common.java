@@ -22,6 +22,7 @@ package com.google.code.orion_viewer;
 import android.util.Log;
 import com.google.code.orion_viewer.device.AlexDevice;
 import com.google.code.orion_viewer.device.AndroidDevice;
+import com.google.code.orion_viewer.device.EdgeDevice;
 import com.google.code.orion_viewer.device.NookDevice;
 
 import java.io.*;
@@ -34,7 +35,7 @@ import java.io.*;
 public class Common {
 
     public static Device createDevice() {
-         return new AndroidDevice();
+         return new EdgeDevice();
     }
 
     public static final String LAST_OPENED_DIRECTORY = "LAST_OPENED_DIR";

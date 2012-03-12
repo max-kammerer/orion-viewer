@@ -20,6 +20,7 @@ package com.google.code.orion_viewer;
  */
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -207,5 +208,9 @@ public class OrionBaseActivity extends Activity {
         if (device != null) {
             device.onSetContentView();
         }
+    }
+
+    public void showError(String error, Exception ex) {
+        Toast.makeText(this, error + ": " + ex.getMessage(), Toast.LENGTH_SHORT);
     }
 }

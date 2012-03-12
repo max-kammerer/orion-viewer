@@ -350,7 +350,14 @@ public class OrionViewerActivity extends OrionBaseActivity {
         page_preview.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 onApplyAction();
-                controller.drawPage(Integer.valueOf(pageNumberText.getText().toString()) -1);
+                if (!"".equals(pageNumberText.getText())) {
+                    try {
+                        int parsedInput = Integer.valueOf(pageNumberText.getText().toString());
+                        controller.drawPage(parsedInput -1);
+                    } catch (NumberFormatException ex) {
+                        showError("Couldn't parse " + pageNumberText.getText(), ex);
+                    }
+                }
             }
         });
     }
@@ -358,6 +365,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
     public void updatePageSeeker() {
         SeekBar pageSeek = (SeekBar) findMyViewById(R.id.page_picker_seeker);
         pageSeek.setProgress(controller.getCurrentPage());
+        TextView view = (TextView) findMyViewById(R.id.page_picker_message);
+        view.setText("" + (controller.getCurrentPage() + 1));
     }
 
     public void initZoomScreen() {
@@ -1090,7 +1099,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         ImageButton apply = (ImageButton) findMyViewById(R.id.rotation_apply);
         apply.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                onApplyAction();
+                onApplyAction(true);
                 int id = rotationGroup.getCheckedRadioButtonId();
                 controller.setRotation(id == R.id.rotate0 ? 0 : id == R.id.rotate90 ? -1 : 1);
             }

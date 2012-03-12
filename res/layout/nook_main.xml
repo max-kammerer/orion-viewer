@@ -106,29 +106,7 @@
         </LinearLayout>
 
         <!--page chooser screen-->
-        <LinearLayout android:id="@+id/page_menu"
-                      android:layout_height="fill_parent" android:orientation="vertical"
-                      android:layout_width="fill_parent" android:gravity="center">
-            <LinearLayout android:orientation="horizontal"
-                          android:layout_width="fill_parent" android:layout_height="wrap_content"
-                          android:gravity="center">
-                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                             android:src="@drawable/minus" android:id="@+id/page_picker_minus"/>
-                <TextView android:layout_width="wrap_content"
-                          android:layout_height="wrap_content" android:id="@+id/page_picker_message"
-                          android:textSize="30sp"></TextView>
-
-                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                             android:src="@drawable/plus" android:id="@+id/page_picker_plus"/>
-                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                             android:src="@drawable/view" android:id="@+id/page_preview"/>
-                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                             android:src="@drawable/revert" android:id="@+id/page_picker_close"/>
-            </LinearLayout>
-            <SeekBar android:id="@+id/page_picker_seeker"
-                     android:minWidth="100dp" android:layout_height="wrap_content"
-                     android:layout_width="fill_parent" android:padding="5dp"></SeekBar>
-        </LinearLayout>
+        <include layout="@layout/nook_page_seeker"/>
 
         <!--zoom chooser screen-->
         <LinearLayout android:id="@+id/zoom_menu"
@@ -173,7 +151,7 @@
         <!--<include layout="@layout/file_manager"/>-->
 
 
-        <!--navigation-->
+        <!--layout-->
         <include layout="@layout/page_layout"/>
 
         <!--<include layout="@layout/device_info"/>-->

@@ -133,6 +133,9 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         if (doc.getPageCount() - 1 < pageNum) {
             pageNum = doc.getPageCount() - 1;
         }
+        if (pageNum < 0) {
+            pageNum = 0;
+        }
 
         info.pageNumber = pageNum;
         //original width and height without cropped margins

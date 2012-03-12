@@ -73,9 +73,9 @@
                               android:gravity="center">
                     <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                                  android:src="@drawable/minus" android:id="@+id/page_picker_minus"/>
-                    <TextView android:layout_width="wrap_content"
+                    <EditText android:layout_width="wrap_content"
                               android:layout_height="wrap_content" android:id="@+id/page_picker_message"
-                              android:textSize="22sp"></TextView>
+                              android:textSize="22sp" android:maxLength="5" android:inputType="number"/>
 
                     <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                                  android:src="@drawable/plus" android:id="@+id/page_picker_plus"/>

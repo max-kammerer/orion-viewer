@@ -124,4 +124,8 @@ public class OrionView extends View {
     public void setNightMode(boolean nightMode) {
         this.isNightMode = nightMode;
     }
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
 }
