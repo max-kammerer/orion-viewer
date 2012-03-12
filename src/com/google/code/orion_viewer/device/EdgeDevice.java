@@ -70,7 +70,7 @@ public class EdgeDevice extends AndroidDevice {
     @Override
     public void flushBitmap(int delay) {
         if (fb != null && activity.getViewerType() == VIEWER_ACTIVITY) {
-            Bitmap bm = ((OrionView)activity.getView()).getBitmap();
+            Bitmap bm = ((OrionView) activity.getView()).getBitmap();
             if (bm != null && !bm.isRecycled()) {
                 try {
                     fb.transfer(bm, false);
@@ -83,14 +83,13 @@ public class EdgeDevice extends AndroidDevice {
     }
 
 
-
-/*
- * Copyright (C) 2011 vldmr
- *
- *  Class implementing access to entourage edge frame buffer.
- *  Based on "Send to Framebuffer" application by Sven Killig
- *  http://sven.killig.de/android/N1/2.2/usb_host
- */
+    /*
+    * Copyright (C) 2011 vldmr
+    *
+    *  Class implementing access to entourage edge frame buffer.
+    *  Based on "Send to Framebuffer" application by Sven Killig
+    *  http://sven.killig.de/android/N1/2.2/usb_host
+    */
     public class EdgeFB {
 
         private int framebuffer, width, height, rotate, stride;
@@ -113,17 +112,17 @@ public class EdgeDevice extends AndroidDevice {
             width = Integer.parseInt(as[0]);
             height = Integer.parseInt(as[1]);
 
-            if (rotate == 90 || rotate == 270)
-                if (width == 800)
-                    width = 600; // edgejr
-                else
-                    width = 875; // edge
-
-            if (rotate == 0 || rotate == 180)
-                if (height == 800)
-                    height = 600; // edgejr
-                else
-                    height = 875; // edge
+//            if (rotate == 90 || rotate == 270)
+//                if (width == 800)
+//                    width = 600; // edgejr
+//                else
+//                    width = 825; // edge
+//
+//            if (rotate == 0 || rotate == 180)
+//                if (height == 800)
+//                    height = 600; // edgejr
+//                else
+//                    height = 825; // edge
         }
 
         public int getWidth() {
@@ -160,6 +159,19 @@ public class EdgeDevice extends AndroidDevice {
                 }
 
             os.write(buffer);
+            os.close();
+            renew(HEIGHT);
+        }
+
+        public void renew(int height) throws IOException {
+            InputStream fs = new FileInputStream("/dev/graphics/fb" + framebuffer);
+            byte[] buffer = new byte[height * stride];
+            byte[] buffer2 = new byte[500 * stride];
+            fs.read(buffer);
+            fs.close();
+            System.arraycopy(buffer, 0, buffer2, 0, buffer2.length);
+            OutputStream os = new FileOutputStream("/dev/graphics/fb" + framebuffer);
+            os.write(buffer2);
             os.close();
         }
     }
