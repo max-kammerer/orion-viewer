@@ -46,7 +46,7 @@ public interface LayoutStrategy {
 
     int getZoom();
 
-    boolean changeMargins(int leftMargin, int topMargin, int rightMargin, int bottomMargin);
+    boolean changeMargins(int leftMargin, int topMargin, int rightMargin, int bottomMargin, boolean enableEven, int leftEvenMargin, int rightEvenMargin);
 
     void getMargins(int [] cropMargins);
 
@@ -73,4 +73,6 @@ public interface LayoutStrategy {
     int getRightMargin();
 
     int getBottomMargin();
+
+    boolean isEnableEvenCrop();
 }

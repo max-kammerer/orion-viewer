@@ -130,11 +130,11 @@ public class Controller {
 
     //left, top, right, bottom
     public void changeMargins(int [] margins) {
-        changeMargins(margins[0], margins[2], margins[1], margins[3]);
+        changeMargins(margins[0], margins[2], margins[1], margins[3], layout.isEnableEvenCrop(), margins[4], margins[5]);
     }
 
-    public void changeMargins(int leftMargin, int topMargin, int rightMargin, int bottomMargin) {
-        if (layout.changeMargins(leftMargin, topMargin, rightMargin, bottomMargin)) {
+    public void changeMargins(int leftMargin, int topMargin, int rightMargin, int bottomMargin, boolean isEven, int leftEvenMargin, int rightEvenMargin) {
+        if (layout.changeMargins(leftMargin, topMargin, rightMargin, bottomMargin, isEven, leftEvenMargin, rightEvenMargin)) {
             layout.reset(layoutInfo, layoutInfo.pageNumber);
             sendViewChangeNotification();
         }
@@ -142,6 +142,10 @@ public class Controller {
 
     public void getMargins(int [] cropMargins) {
         layout.getMargins(cropMargins);
+    }
+
+    public boolean isEvenCropEnabled() {
+        return layout.isEnableEvenCrop();
     }
 
     public void destroy() {
@@ -261,4 +265,8 @@ public class Controller {
         return activity;
     }
 
+    public boolean isEvenPage() {
+        //zero based
+        return (getCurrentPage() + 1) % 2 == 0;
+    }
 }

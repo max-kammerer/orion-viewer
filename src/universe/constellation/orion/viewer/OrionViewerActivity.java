@@ -82,7 +82,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     private LastPageInfo lastPageInfo;
 
     //left, right, top, bottom
-    private int [] cropBorders = new int[4];
+    private int [] cropBorders = new int[6];
 
     private Controller controller;
 
@@ -174,6 +174,18 @@ public class OrionViewerActivity extends OrionBaseActivity {
             TextView valueView = (TextView) row.findViewById(R.id.crop_value);
             valueView.setText(cropBorders[i] + "%");
         }
+
+        TableLayout cropTable2 = (TableLayout) findMyViewById(R.id.crop_borders_even);
+        int index = 4;
+        for (int i = 0; i < cropTable2.getChildCount(); i++) {
+            if (cropTable2.getChildAt(i) instanceof  TableRow) {
+                TableRow row = (TableRow) cropTable2.getChildAt(i);
+                TextView valueView = (TextView) row.findViewById(R.id.crop_value);
+                valueView.setText(cropBorders[index] + "%");
+                index++;
+            }
+        }
+        ((CheckBox)findMyViewById(R.id.crop_even_flag)).setChecked(controller.isEvenCropEnabled());
     }
 
     public void updateOptions() {
@@ -231,26 +243,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
             String fileData = filePath.substring(idx + 1) + "." + file.length() + ".userData";
 
             controller = new Controller(this, doc, str, view);
-            try {
-                ObjectInputStream inp = new ObjectInputStream(openFileInput(fileData));
-                lastPageInfo = (LastPageInfo) inp.readObject();
-                inp.close();
-            } catch (Exception e) {
-                lastPageInfo = new LastPageInfo();
+            lastPageInfo = LastPageInfo.loadBookParameters(this, filePath);
 
-                int defaultRotation = globalOptions.getDefaultOrientation();
-                switch (defaultRotation) {
-                    case 90: defaultRotation = -1; break;
-                    case 270: defaultRotation = 1; break;
-                    default: defaultRotation = 0; break;
-                }
-                lastPageInfo.rotation = defaultRotation;
-            }
 
-            lastPageInfo.fileData = fileData;
-            lastPageInfo.openingFileName = filePath;
-            lastPageInfo.simpleFileName = filePath.substring(idx + 1);
-            lastPageInfo.fileSize = file.length();
             controller.init(lastPageInfo);
 
             getSubscriptionManager().sendDocOpenedNotification(controller);
@@ -495,13 +490,13 @@ public class OrionViewerActivity extends OrionBaseActivity {
     public void initCropScreen() {
         TableLayout cropTable = (TableLayout) findMyViewById(R.id.crop_borders);
 
-
         getSubscriptionManager().addDocListeners(new DocumentViewAdapter(){
             @Override
             public void documentOpened(Controller controller) {
                 updateCrops();
             }
         });
+
         for (int i = 0; i < cropTable.getChildCount(); i++) {
             TableRow row = (TableRow) cropTable.getChildAt(i);
             row.findViewById(R.id.crop_plus);
@@ -511,6 +506,27 @@ public class OrionViewerActivity extends OrionBaseActivity {
             ImageButton minus = (ImageButton) row.findViewById(R.id.crop_minus);
             linkCropButtonsAndText(minus, plus, valueView, i);
         }
+
+        //even cropping
+        int index = 4;
+        final TableLayout cropTable2 = (TableLayout) findMyViewById(R.id.crop_borders_even);
+        for (int i = 0; i < cropTable2.getChildCount(); i++) {
+            View child = cropTable2.getChildAt(i);
+            if (child instanceof  TableRow) {
+                TableRow row = (TableRow) child;
+                row.findViewById(R.id.crop_plus);
+                TextView valueView = (TextView) row.findViewById(R.id.crop_value);
+                ImageButton plus = (ImageButton) row.findViewById(R.id.crop_plus);
+                ImageButton minus = (ImageButton) row.findViewById(R.id.crop_minus);
+                linkCropButtonsAndText(minus, plus, valueView, index);
+                index++;
+                for (int j = 0; j < row.getChildCount(); j++) {
+                    View v = row.getChildAt(j);
+                    v.setEnabled(false);
+                }
+            }
+        }
+
 
 
 //        cropList.setAdapter(new ArrayAdapter(this, R.layout.crop, new String[] {"Left  ", "Right ", "Top   ", "Bottom"}) {
@@ -540,11 +556,39 @@ public class OrionViewerActivity extends OrionBaseActivity {
 //            }
 //        });
 
+        final ImageButton switchEven = (ImageButton) findMyViewById(R.id.crop_even_button);
+        if (switchEven != null) {
+            final ViewAnimator cropAnim = (ViewAnimator) findMyViewById(R.id.crop_animator);
+            switchEven.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    cropAnim.setDisplayedChild((cropAnim.getDisplayedChild() + 1) % 2);
+                    switchEven.setImageResource(cropAnim.getDisplayedChild() == 0 ? R.drawable.next : R.drawable.prev);
+                }
+            });
+        }
+
+        final CheckBox checkBox = (CheckBox) findMyViewById(R.id.crop_even_flag);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                for (int i = 0; i < cropTable2.getChildCount(); i++) {
+                    View child = cropTable2.getChildAt(i);
+                    if (child instanceof  TableRow) {
+                        TableRow row = (TableRow) child;
+                        for (int j = 0; j < row.getChildCount(); j++) {
+                            View rowChild = row.getChildAt(j);
+                            rowChild.setEnabled(isChecked);
+                        }
+                    }
+                }
+            }
+        });
+
+
         ImageButton preview = (ImageButton) findMyViewById(R.id.crop_preview);
         preview.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 onApplyAction();
-                controller.changeMargins(cropBorders[0], cropBorders[2], cropBorders[1], cropBorders[3]);
+                controller.changeMargins(cropBorders[0], cropBorders[2], cropBorders[1], cropBorders[3], checkBox.isChecked(), cropBorders[4], cropBorders[5]);
             }
         });
 
@@ -777,11 +821,12 @@ public class OrionViewerActivity extends OrionBaseActivity {
        if (controller != null) {
             try {
                 controller.serialize(lastPageInfo);
-                ObjectOutputStream out =
-                    new ObjectOutputStream(OrionViewerActivity.this.openFileOutput(lastPageInfo.fileData,
-                        Context.MODE_PRIVATE));
-                out.writeObject(lastPageInfo);
-                out.close();
+                lastPageInfo.save(this);
+//                ObjectOutputStream out =
+//                    new ObjectOutputStream(OrionViewerActivity.this.openFileOutput(lastPageInfo.fileData,
+//                        Context.MODE_PRIVATE));
+//                out.writeObject(lastPageInfo);
+//                out.close();
             } catch (Exception ex) {
                 Log.e(Common.LOGTAG, ex.getMessage(), ex);
             }

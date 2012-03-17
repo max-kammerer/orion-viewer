@@ -266,7 +266,12 @@ public enum Action {
     }
 
     protected void updateMargin(Controller controller, boolean isCrop, int index) {
-        int [] margins = new int[4];
+        if (controller.isEvenCropEnabled() && controller.isEvenPage()) {
+            if (index == 0 || index == 1) {
+                index += 4;
+            }
+        }
+        int [] margins = new int[6];
         controller.getMargins(margins);
         OrionApplication context = controller.getActivity().getOrionContext();
         TemporaryOptions tempOpts = context.getTempOptions();

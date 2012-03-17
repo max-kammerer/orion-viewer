@@ -35,7 +35,7 @@ import java.io.*;
 public class Common {
 
     public static Device createDevice() {
-         return new EdgeDevice();
+         return new AndroidDevice();
     }
 
     public static final String LAST_OPENED_DIRECTORY = "LAST_OPENED_DIR";

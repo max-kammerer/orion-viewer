@@ -40,7 +40,9 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     private DocumentWrapper doc;
 
-    private int leftMargin, topMargin, rightMargin, bottomMargin;
+    private int leftMargin, topMargin, rightMargin, bottomMargin, leftEvenMargin, rightEvenMargin;
+
+    private boolean enableEvenCrop;
 
     private int zoom;
 
@@ -141,6 +143,10 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         //original width and height without cropped margins
         PageInfo pinfo = doc.getPageInfo(pageNum);
 
+        boolean isEvenPage = (pageNum + 1) % 2 == 0;
+        int leftMargin = enableEvenCrop && isEvenPage ? leftEvenMargin : this.leftMargin;
+        int rightMargin = enableEvenCrop && isEvenPage ? rightEvenMargin : this.rightMargin;
+
         info.marginLeft = (int) (leftMargin * pinfo.width * 0.01);
         info.marginTop = (int) (topMargin * pinfo.height * 0.01);
 
@@ -207,15 +213,24 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         return zoom;
     }
 
-    public boolean changeMargins(int leftMargin, int topMargin, int rightMargin, int bottomMargin) {
-        if (leftMargin != this.leftMargin || rightMargin != this.rightMargin || topMargin != this.topMargin || bottomMargin != this.bottomMargin) {
+    public boolean changeMargins(int leftMargin, int topMargin, int rightMargin, int bottomMargin, boolean enableEven, int leftEvenMargin, int rightEvenMargin) {
+        if (leftMargin != this.leftMargin || rightMargin != this.rightMargin || topMargin != this.topMargin || bottomMargin != this.bottomMargin
+                || leftEvenMargin != this.leftEvenMargin || rightEvenMargin != this.rightEvenMargin || this.enableEvenCrop != enableEven) {
             this.leftMargin = leftMargin;
             this.rightMargin = rightMargin;
             this.topMargin = topMargin;
             this.bottomMargin = bottomMargin;
+            this.leftEvenMargin = leftEvenMargin;
+            this.rightEvenMargin = rightEvenMargin;
+            this.enableEvenCrop = enableEven;
             return true;
         }
         return false;
+    }
+
+
+    public boolean isEnableEvenCrop() {
+        return enableEvenCrop;
     }
 
     public void getMargins(int [] margins) {
@@ -223,6 +238,9 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         margins[1] = rightMargin;
         margins[2] = topMargin;
         margins[3] = bottomMargin;
+
+        margins[4] = leftEvenMargin;
+        margins[5] = rightEvenMargin;
     }
 
     public int getRotation() {
@@ -231,7 +249,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
 
     public void init(LastPageInfo info, GlobalOptions options) {
-        changeMargins(info.leftMargin, info.topMargin, info.rightMargin, info.bottomMargin);
+        changeMargins(info.leftMargin, info.topMargin, info.rightMargin, info.bottomMargin, info.enableEvenCropping, info.leftEvenMargin, info.rightEventMargin);
         changeRotation(info.rotation);
         changeZoom(info.zoom);
         changeNavigation(info.navigation);
@@ -247,6 +265,10 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         info.rightMargin = rightMargin;
         info.topMargin = topMargin;
         info.bottomMargin = bottomMargin;
+        info.leftEvenMargin = leftEvenMargin;
+        info.rightEventMargin = rightEvenMargin;
+        info.enableEvenCropping = enableEvenCrop;
+
         info.rotation = rotation;
         info.zoom = zoom;
         info.navigation = direction;

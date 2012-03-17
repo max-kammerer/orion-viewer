@@ -19,7 +19,15 @@ package com.google.code.orion_viewer;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import java.io.Serializable;
+import android.content.Context;
+import android.util.Xml;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+import org.xmlpull.v1.XmlSerializer;
+
+import java.io.*;
+import java.lang.reflect.Field;
 
 /**
  * User: mike
@@ -27,6 +35,8 @@ import java.io.Serializable;
  * Time: 12:19
  */
 public class LastPageInfo implements Serializable {
+
+    public static final int CURRENT_VERSION = 1;
 
     public int screenWidth;
     public int screenHeight;
@@ -44,6 +54,10 @@ public class LastPageInfo implements Serializable {
     public int topMargin = 0;
     public int bottomMargin = 0;
 
+    public boolean enableEvenCropping = false;
+    public int leftEvenMargin = 0;
+    public int rightEventMargin = 0;
+
     public int navigation = 0;
     public int pageLayout = 0;
 
@@ -55,4 +69,170 @@ public class LastPageInfo implements Serializable {
 
     public transient String openingFileName;
 
+    private LastPageInfo() {
+
+    }
+
+    public static LastPageInfo loadBookParameters(OrionBaseActivity activity, String filePath) {
+        int idx = filePath.lastIndexOf('/');
+        File file = new File(filePath);
+        String fileData = filePath.substring(idx + 1) + "." + file.length() + ".xml";
+        LastPageInfo lastPageInfo = new LastPageInfo();
+
+        boolean successfull = false;
+        try {
+            successfull = lastPageInfo.load(activity, fileData);
+        } catch (Exception e) {
+            Common.d(e);
+        }
+
+        if (!successfull) {
+            //reinit
+            lastPageInfo = new LastPageInfo();
+
+            int defaultRotation = activity.getOrionContext().getOptions().getDefaultOrientation();
+            switch (defaultRotation) {
+                case 90:
+                    defaultRotation = -1;
+                    break;
+                case 270:
+                    defaultRotation = 1;
+                    break;
+                default:
+                    defaultRotation = 0;
+                    break;
+            }
+            lastPageInfo.rotation = defaultRotation;
+        }
+
+        lastPageInfo.fileData = fileData;
+        lastPageInfo.openingFileName = filePath;
+        lastPageInfo.simpleFileName = filePath.substring(idx + 1);
+        lastPageInfo.fileSize = file.length();
+        return lastPageInfo;
+    }
+
+    public void save(OrionBaseActivity activity) {
+        OutputStreamWriter writer = null;
+        try {
+            XmlSerializer serializer = Xml.newSerializer();
+            writer = new OutputStreamWriter(activity.openFileOutput(fileData, Context.MODE_PRIVATE));
+            serializer.setOutput(writer);
+            serializer.startDocument("UTF-8", true);
+            String nameSpace = "";
+            serializer.startTag(nameSpace, "bookParameters");
+            serializer.attribute(nameSpace, "version", "" + CURRENT_VERSION);
+
+            writeValue(serializer, "screenWidth", screenWidth);
+            writeValue(serializer, "screenHeight", screenHeight);
+
+            writeValue(serializer, "pageNumber", pageNumber);
+            writeValue(serializer, "rotation", rotation);
+
+            writeValue(serializer, "offsetX", offsetX);
+            writeValue(serializer, "offsetY", offsetY);
+
+            writeValue(serializer, "zoom", zoom);
+
+            writeValue(serializer, "leftMargin", leftMargin);
+            writeValue(serializer, "rightMargin", rightMargin);
+            writeValue(serializer, "topMargin", topMargin);
+            writeValue(serializer, "bottomMargin", bottomMargin);
+            writeValue(serializer, "leftEvenMargin", leftEvenMargin);
+            writeValue(serializer, "rightEventMargin", rightEventMargin);
+            writeValue(serializer, "enableEvenCropping", enableEvenCropping);
+
+            writeValue(serializer, "navigation", navigation);
+            writeValue(serializer, "pageLayout", pageLayout);
+
+
+            serializer.endTag(nameSpace, "bookParameters");
+            serializer.endDocument();
+        } catch (IOException e) {
+            Common.d(e);
+            activity.showError("Couldn't save book preferences", e);
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    Common.d(e);
+                }
+            }
+        }
+    }
+
+    public static void writeValue(XmlSerializer serializer, String name, int value) throws IOException {
+        writeValue(serializer, name, "" + value);
+    }
+
+    public static void writeValue(XmlSerializer serializer, String name, boolean value) throws IOException {
+        writeValue(serializer, name, "" + Boolean.toString(value));
+    }
+
+    public static void writeValue(XmlSerializer serializer, String name, String value) throws IOException {
+        serializer.startTag("", name);
+        serializer.attribute("", "value", value);
+        serializer.endTag("", name);
+    }
+
+    private boolean load(OrionBaseActivity activity, String filePath) {
+        InputStreamReader reader = null;
+        try {
+            reader = new InputStreamReader(activity.openFileInput(filePath));
+
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            //factory.setNamespaceAware(true);
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(reader);
+
+            int fileVersion = -1;
+            int eventType = xpp.getEventType();
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    String name = xpp.getName();
+
+                    if ("bookParameters".equals(name)) {
+                        fileVersion = Integer.valueOf(xpp.getAttributeValue("", "version"));
+                    } else {
+                        try {
+                            String rawValue = xpp.getAttributeValue("", "value");
+                            Field f = getClass().getField(name);
+                            Object value  = null;
+                            if (f.getType().equals(boolean.class)) {
+                                value = Boolean.valueOf(rawValue);
+                            } else {
+                                value = Integer.valueOf(rawValue);
+                            }
+                            getClass().getField(name).set(this, value);
+                        } catch (IllegalAccessException e) {
+                            Common.d(e);
+                        } catch (NoSuchFieldException e) {
+                            //skip
+                            Common.d(e);
+                        } catch (NumberFormatException e) {
+                            Common.d(e);
+                        }
+                    }
+                }
+                eventType = xpp.next();
+            }
+            return true;
+        } catch (FileNotFoundException e) {
+            //do nothing
+        } catch (XmlPullParserException e) {
+            activity.showError("Couldn't parse book parameters", e);
+        } catch (IOException e) {
+            activity.showError("Couldn't parse book parameters", e);
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+            }
+        }
+        return false;
+    }
 }

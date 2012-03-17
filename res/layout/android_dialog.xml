@@ -131,10 +131,20 @@
         <LinearLayout android:layout_height="fill_parent" android:orientation="vertical"
                       android:layout_width="fill_parent" android:gravity="center">
 
-            <include layout="@layout/crops"/>
+            <ViewAnimator android:layout_width="wrap_content" android:layout_weight="1"
+                  android:layout_height="wrap_content"
+                  android:id="@+id/crop_animator">
+                <include layout="@layout/crops"/>
 
-            <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
+                <include layout="@layout/crops_even"/>
+            </ViewAnimator>
+
+            <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal" android:layout_weight="0"
                       android:layout_width="fill_parent" android:gravity="right" android:layout_margin="10dp">
+
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:src="@drawable/next" android:id="@+id/crop_even_button" android:layout_marginRight="20dp"/>
+
                 <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                              android:src="@drawable/view" android:id="@+id/crop_preview"/>
 
@@ -143,18 +153,10 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!--help screen-->
-        <!--<include layout="@layout/android_help"/>-->
-
-        <!--&lt;!&ndash;file chooser&ndash;&gt;-->
-        <!--<include layout="@layout/file_manager"/>-->
-
-
         <!--options-->
         <include layout="@layout/page_layout"/>
 
         <include layout="@layout/add_bookmark"/>
-
 
     </ViewAnimator>
 
