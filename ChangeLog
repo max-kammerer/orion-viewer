@@ -1,3 +1,6 @@
+===== 0.29.0 (Mar 13, 2012) =====
+* Zoom dialog update: new zoom option - fit width, fit height, fit w&h
+
 ===== 0.28.0 (Mar 17, 2012) =====
 * Even/odd page cropping
 * Installation on sd card
