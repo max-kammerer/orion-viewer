@@ -151,9 +151,9 @@
 
                     <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                                  android:src="@drawable/plus" android:id="@+id/zoom_picker_plus"/>
-                    <ImageButton android:layout_width="66.0px" android:layout_height="66.0px"
+                    <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                                  android:src="@drawable/view" android:id="@+id/zoom_preview"/>
-                    <ImageButton android:layout_width="66.0px" android:layout_height="66.0px"
+                    <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                                  android:src="@drawable/revert" android:id="@+id/zoom_picker_close"/>
                 </LinearLayout>
                 <SeekBar android:id="@+id/zoom_picker_seeker"

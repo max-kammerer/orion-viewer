@@ -124,9 +124,13 @@ public class Controller {
         }
     }
 
-    public int getZoomFactor() {
+    public int getZoom10000Factor() {
         return layout.getZoom();
     }
+
+     public double getCurrentPageZoom() {
+         return layoutInfo.docZoom;
+     }
 
     //left, top, right, bottom
     public void changeMargins(int [] margins) {
@@ -208,6 +212,10 @@ public class Controller {
     public int getCurrentPage() {
         return layoutInfo.pageNumber;
     }
+
+//    public int getZoom10() {
+//        return layoutInfo.docZoom;
+//    }
 
     public int getPageCount() {
         return doc.getPageCount();

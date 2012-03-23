@@ -33,8 +33,6 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     public int viewHeight;
 
-    private static final int OVERLAP = 15;
-
     public int VERT_OVERLAP = 3;
     public int HOR_OVERLAP = 3;
 
@@ -52,8 +50,9 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     private int layout;
 
-    public SimpleLayoutStrategy(DocumentWrapper doc) {
+    public SimpleLayoutStrategy(DocumentWrapper doc, Point deviceSize) {
         this.doc = doc;
+        int zoomNormalization = Math.min(deviceSize.x, deviceSize.y);
     }
 
     public void nextPage(LayoutPosition info) {
@@ -162,9 +161,13 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         //calc zoom
         if (zoom <= 0) {
             //zoom by width
-            info.docZoom = 1.0f * info.pieceWidth / info.pageWidth;
+            switch (zoom) {
+                case 0: info.docZoom = ((double) info.pieceWidth) / info.pageWidth; break;
+                case -1: info.docZoom = ((double)info.pieceHeight) / info.pageHeight; break;
+                case -2: info.docZoom = Math.min(((double ) info.pieceWidth) / info.pageWidth, ((double)info.pieceHeight) / info.pageHeight); break;
+            }
         } else {
-            info.docZoom = 0.01f * zoom;
+            info.docZoom = 0.0001f * zoom;
         }
         info.marginLeft = (int) (info.docZoom * info.marginLeft);
         info.marginTop = (int) (info.docZoom * info.marginTop);

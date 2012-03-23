@@ -21,12 +21,12 @@ package universe.constellation.orion.viewer;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.SystemClock;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -236,15 +236,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 doc = new DjvuDocument(filePath);
             }
 
-            LayoutStrategy str = new SimpleLayoutStrategy(doc);
-
+            LayoutStrategy str = new SimpleLayoutStrategy(doc, device.getDeviceSize());
             int idx = filePath.lastIndexOf('/');
-            File file = new File(filePath);
-            String fileData = filePath.substring(idx + 1) + "." + file.length() + ".userData";
 
             controller = new Controller(this, doc, str, view);
             lastPageInfo = LastPageInfo.loadBookParameters(this, filePath);
-
 
             controller.init(lastPageInfo);
 
@@ -366,38 +362,51 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     public void initZoomScreen() {
         //zoom screen
+
+        final Spinner sp = (Spinner) findMyViewById(R.id.zoom_spinner);
+
         final TextView zoomText = (TextView) findMyViewById(R.id.zoom_picker_message);
 
         final SeekBar zoomSeek = (SeekBar) findMyViewById(R.id.zoom_picker_seeker);
-        zoomSeek.setMax(300);
-        zoomSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                zoomText.setText(progress + "%");
-            }
 
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
+        if (zoomSeek != null) {
+            zoomSeek.setMax(300);
+            zoomSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if (zoomInternal != 1) {
+                        zoomText.setText("" + progress);
+                        if (sp.getSelectedItemPosition() != 0) {
+                            int oldInternal = zoomInternal;
+                            zoomInternal = 2;
+                            sp.setSelection(0);
+                            zoomInternal = oldInternal;
+                        }
+                    }
+                }
 
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                }
+
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                }
+            });
+        }
 
         getSubscriptionManager().addDocListeners(new DocumentViewAdapter(){
             @Override
             public void documentOpened(Controller controller) {
-                zoomText.setText(controller.getZoomFactor() + "%");
-                zoomSeek.setProgress(controller.getZoomFactor());
+                updateZoom();
             }
         });
 
-        ImageButton zplus = (ImageButton) findMyViewById(R.id.zoom_picker_plus);
+        final ImageButton zplus = (ImageButton) findMyViewById(R.id.zoom_picker_plus);
         zplus.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 zoomSeek.incrementProgressBy(1);
             }
         });
 
-        ImageButton zminus = (ImageButton) findMyViewById(R.id.zoom_picker_minus);
+        final ImageButton zminus = (ImageButton) findMyViewById(R.id.zoom_picker_minus);
         zminus.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (zoomSeek.getProgress() != 0) {
@@ -409,11 +418,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
         ImageButton closeZoomPeeker = (ImageButton) findMyViewById(R.id.zoom_picker_close);
         closeZoomPeeker.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //controller.changeZoom(zoomSeek.getProgress());
                 //main menu
                 onAnimatorCancel();
-                updateZoom();
-                //animator.setDisplayedChild(MAIN_SCREEN);
+                //updateZoom();
             }
         });
 
@@ -421,14 +428,70 @@ public class OrionViewerActivity extends OrionBaseActivity {
         zoom_preview.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 onApplyAction();
-                controller.changeZoom(zoomSeek.getProgress());
+                int index = sp.getSelectedItemPosition();
+                controller.changeZoom(index == 0 ? (int)(Float.parseFloat(zoomText.getText().toString()) * 100) : -1 *(index-1));
             }
         });
+
+
+
+        //sp.setAdapter(new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, getResources().getTextArray(R.array.fits)));
+        sp.setAdapter(new MyArrayAdapter());
+//        sp.setAdapter(new MyArrayAdapter(this, R.layout.zoom_spinner, R.id.spinner_text, getResources().getTextArray(R.array.fits)));
+        sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                boolean disable = position != 0;
+                int oldZoomInternal = zoomInternal;
+                if (zoomInternal != 2) {
+                    zoomInternal = 1;
+                    if (disable) {
+                        zoomText.setText((String)parent.getAdapter().getItem(position));
+                    } else {
+                        zoomText.setText("" + ((int) (controller.getCurrentPageZoom() * 10000)) / 100f);
+                        zoomSeek.setProgress((int) (controller.getCurrentPageZoom() * 100));
+                    }
+                    zoomInternal = oldZoomInternal;
+                }
+
+                zminus.setVisibility(disable ? View.GONE : View.VISIBLE);
+                zplus.setVisibility(disable ? View.GONE : View.VISIBLE);
+                zoomText.setFocusable(!disable);
+                zoomText.setFocusableInTouchMode(!disable);
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+        });
+
+        //by width
+        sp.setSelection(1);
+
     }
+
+    private int zoomInternal = 0;
 
     public void updateZoom() {
         SeekBar zoomSeek = (SeekBar) findMyViewById(R.id.zoom_picker_seeker);
-        zoomSeek.setProgress(controller.getZoomFactor());
+        TextView textView = (TextView) findMyViewById(R.id.zoom_picker_message);
+
+        Spinner sp = (Spinner) findMyViewById(R.id.zoom_spinner);
+        int spinnerIndex = sp.getSelectedItemPosition();
+        zoomInternal = 1;
+        try {
+            int zoom = controller.getZoom10000Factor();
+            if (zoom <= 0) {
+                spinnerIndex = -zoom + 1;
+                zoom = (int) (10000 * controller.getCurrentPageZoom());
+            } else {
+                spinnerIndex = 0;
+                textView.setText("" + (zoom /100f));
+            }
+            zoomSeek.setProgress(zoom / 100);
+            sp.setSelection(spinnerIndex);
+        } finally {
+            zoomInternal = 0;
+        }
     }
 
 
@@ -528,34 +591,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
         }
 
 
-
-//        cropList.setAdapter(new ArrayAdapter(this, R.layout.crop, new String[] {"Left  ", "Right ", "Top   ", "Bottom"}) {
-//
-//            public View getView(int position, View convertView, ViewGroup parent) {
-//                View v = convertView;
-//                if (v == null) {
-//                    LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//                    v = vi.inflate(R.layout.crop, null);
-//                }
-//
-//                String cropHeader = (String) getItem(position);
-//
-//                //crop header
-//                TextView header = (TextView) v.findViewById(R.id.crop_text);
-//                header.setText(cropHeader);
-//
-//                TextView valueView = (TextView) v.findViewById(R.id.crop_value);
-//
-//                valueView.setText("" + cropBorders[position]);
-//
-//                ImageButton plus = (ImageButton) v.findViewById(R.id.crop_plus);
-//                ImageButton minus = (ImageButton) v.findViewById(R.id.crop_minus);
-//                linkCropButtonsAndText(minus, plus, (TextView) v.findViewById(R.id.crop_value), position);
-//
-//                return v;
-//            }
-//        });
-
         final ImageButton switchEven = (ImageButton) findMyViewById(R.id.crop_even_button);
         if (switchEven != null) {
             final ViewAnimator cropAnim = (ViewAnimator) findMyViewById(R.id.crop_animator);
@@ -596,8 +631,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
         close.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //main menu
-                //controller.changeMargins(cropBorders[0], cropBorders[2], cropBorders[1], cropBorders[3]);
-                //animator.setDisplayedChild(MAIN_SCREEN);
                 onAnimatorCancel();
                 //reset if canceled
                 updateCrops();
@@ -1242,6 +1275,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             updateCrops();
             updateOptions();
             updatePageSeeker();
+            updateZoom();
 
 
             if (action == Action.ADD_BOOKMARK) {
@@ -1263,5 +1297,24 @@ public class OrionViewerActivity extends OrionBaseActivity {
         getOrionContext().getOptions().saveProperty(GlobalOptions.DAY_NIGHT_MODE, newMode ? "NIGHT" : "DAY");
         getView().setNightMode(newMode);
         getView().invalidate();
+    }
+
+    public class MyArrayAdapter extends ArrayAdapter implements SpinnerAdapter {
+
+        public MyArrayAdapter() {
+            super(OrionViewerActivity.this, android.R.layout.simple_spinner_dropdown_item, OrionViewerActivity.this.getResources().getTextArray(R.array.fits));
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView != null) {
+                return  convertView;
+            } else {
+                TextView view = null;
+                    view = new TextView(OrionViewerActivity.this);
+                    view.setText("%");
+                    return view;
+            }
+        }
     }
 }

@@ -60,9 +60,9 @@ public class DjvuDocument implements DocumentWrapper {
         return info;
     }
 
-    public int[] renderPage(int pageNumber, float zoom, int w, int h, int left, int top, int right, int bottom) {
+    public int[] renderPage(int pageNumber, double zoom, int w, int h, int left, int top, int right, int bottom) {
         gotoPage(pageNumber);
-        return drawPage((int)(zoom*1000), right - left, bottom - top, left, top, right - left, bottom - top);
+        return drawPage((float) zoom, right - left, bottom - top, left, top, right - left, bottom - top);
     }
 
     public void destroy() {
@@ -90,7 +90,7 @@ public class DjvuDocument implements DocumentWrapper {
 	private static synchronized  native void gotoPageInternal(int localActionPageNum);
 	private static synchronized  native int getPageInfo(int pageNum, PageInfo info);
 
-	public static synchronized  native int [] drawPage(int zoom1000, int pageW, int pageH,
+	public static synchronized  native int [] drawPage(float zoom, int pageW, int pageH,
 			int patchX, int patchY,
 			int patchW, int patchH);
 	public static synchronized  native void destroying();

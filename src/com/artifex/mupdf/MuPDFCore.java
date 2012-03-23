@@ -23,7 +23,7 @@ public class MuPDFCore
 	private static native void gotoPageInternal(int localActionPageNum);
 	private static native int getPageInfo(int pageNum, PageInfo info);
 
-	public static native int [] drawPage(int zoom1000, int pageW, int pageH,
+	public static native int [] drawPage(float zoom, int pageW, int pageH,
 			int patchX, int patchY,
 			int patchW, int patchH);
 	public static native void destroying();
@@ -55,12 +55,12 @@ public class MuPDFCore
         }
 	}
 
-    public synchronized int[] renderPage(int n, float zoom, int left, int top, int w, int h) {
+    public synchronized int[] renderPage(int n, double zoom, int left, int top, int w, int h) {
         gotoPage(n);
 
         Common.d("MuPDFCore starts rendering...");
         Date date = new Date();
-        int [] res =  drawPage((int) (zoom * 1000), w, h, left, top, w, h);
+        int [] res =  drawPage((float)zoom, w, h, left, top, w, h);
         Date date2 = new Date();
         Common.d("MuPDFCore render time takes " + n + " = " + 0.001 * (date2.getTime() - date.getTime()) + " s");
         return res;

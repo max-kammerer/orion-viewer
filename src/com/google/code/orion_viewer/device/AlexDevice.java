@@ -20,6 +20,7 @@ package com.google.code.orion_viewer.device;
  */
 
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Build;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
@@ -143,5 +144,9 @@ public class AlexDevice extends EpdRender implements Device {
         bindLayout((ViewGroup) activity.findViewById(R.id.epdLayout));
         pageTextView = (TextView) activity.findViewById(R.id.statusbar_page_number);
         titleTextView = (TextView) activity.findViewById(R.id.statusbar_title);
+    }
+
+    public Point getDeviceSize() {
+        return new Point(800, 600);
     }
 }

@@ -20,8 +20,12 @@ package com.google.code.orion_viewer.device;
  */
 
 import android.content.Context;
+import android.graphics.Point;
 import android.os.PowerManager;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.KeyEvent;
+import android.view.WindowManager;
 import com.google.code.orion_viewer.*;
 import universe.constellation.orion.viewer.R;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
@@ -181,5 +185,11 @@ public class AndroidDevice implements Device {
 
     public void onSetContentView() {
         //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Point getDeviceSize() {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        return new Point(display.getWidth(), display.getHeight());
+
     }
 }

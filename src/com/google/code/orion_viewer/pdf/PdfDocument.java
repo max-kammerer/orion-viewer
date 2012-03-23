@@ -48,7 +48,7 @@ public class PdfDocument implements DocumentWrapper {
         return core.getPageInfo(pageNum);
     }
 
-    public int[] renderPage(int pageNumber, float zoom, int w, int h, int left, int top, int right, int bottom) {
+    public int[] renderPage(int pageNumber, double zoom, int w, int h, int left, int top, int right, int bottom) {
         return core.renderPage(pageNumber, zoom, left, top, right - left, bottom - top);
     }
 

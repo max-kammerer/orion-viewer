@@ -21,6 +21,13 @@
         <item>LANDSCAPE</item>
   </string-array>
 
+    <string-array name="fits">
+        <item>Custom...</item>
+        <item>Fit Width</item>
+        <item>Fit Height</item>
+        <item>Fith Both W&amp;H</item>
+  </string-array>
+
 
     <string-array name="dictionaries">
         <item>FORA</item>

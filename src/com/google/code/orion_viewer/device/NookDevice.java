@@ -20,6 +20,7 @@ package com.google.code.orion_viewer.device;
  */
 
 import android.content.Intent;
+import android.graphics.Point;
 import android.view.KeyEvent;
 import com.google.code.orion_viewer.*;
 import universe.constellation.orion.viewer.R;
@@ -121,5 +122,10 @@ public class NookDevice extends AndroidDevice {
 
     public int getHelpLayoutId() {
         return R.layout.nook_help;
+    }
+
+    @Override
+    public Point getDeviceSize() {
+        return new Point(800, 600);
     }
 }

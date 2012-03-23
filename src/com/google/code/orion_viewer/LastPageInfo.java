@@ -36,7 +36,7 @@ import java.lang.reflect.Field;
  */
 public class LastPageInfo implements Serializable {
 
-    public static final int CURRENT_VERSION = 1;
+    public static final int CURRENT_VERSION = 2;
 
     public int screenWidth;
     public int screenHeight;
@@ -203,6 +203,7 @@ public class LastPageInfo implements Serializable {
                                 value = Boolean.valueOf(rawValue);
                             } else {
                                 value = Integer.valueOf(rawValue);
+                                value = upgrade(fileVersion, name, (Integer) value);
                             }
                             getClass().getField(name).set(this, value);
                         } catch (IllegalAccessException e) {
@@ -234,5 +235,17 @@ public class LastPageInfo implements Serializable {
             }
         }
         return false;
+    }
+
+    public Integer upgrade(int fromVersion, String name, Integer value) {
+        int localVersion = fromVersion;
+        if (localVersion < 2) {
+            if ("zoom".equals(name)) {
+                System.out.println("Property " + name + " upgraded");
+                localVersion = 2;
+                return  0;
+            }
+        }
+        return value;
     }
 }

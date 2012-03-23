@@ -32,7 +32,7 @@ public interface DocumentWrapper {
 
     PageInfo getPageInfo(int pageNum);
 
-    int[] renderPage(int pageNumber, float zoom, int w, int h, int left, int top, int right, int bottom);
+    int[] renderPage(int pageNumber, double zoom, int w, int h, int left, int top, int right, int bottom);
 
 	void destroy();
 

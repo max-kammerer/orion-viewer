@@ -20,6 +20,7 @@ package com.google.code.orion_viewer;
  */
 
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Build;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -32,6 +33,7 @@ import universe.constellation.orion.viewer.prefs.OrionApplication;
  * Time: 11:13
  */
 public interface Device {
+
 
     public static class Info {
         public final static String MANUFACTURER = getField("MANUFACTURER");
@@ -97,16 +99,17 @@ public interface Device {
 
     void flushBitmap(int delay);
 
-    public int getLayoutId();
+    int getLayoutId();
 
-    public int getFileManagerLayoutId();
+    int getFileManagerLayoutId();
 
-    public int getHelpLayoutId();
+    int getHelpLayoutId();
 
-    public String getDefaultDirectory();
+    String getDefaultDirectory();
 
-    public boolean optionViaDialog();
+    boolean optionViaDialog();
 
-    public void onSetContentView();
+    void onSetContentView();
 
+    Point getDeviceSize();
 }
