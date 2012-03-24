@@ -143,9 +143,33 @@
             <ViewAnimator android:layout_width="wrap_content" android:layout_weight="1"
                   android:layout_height="wrap_content"
                   android:id="@+id/crop_animator">
-                <include layout="@layout/crops"/>
 
-                <include layout="@layout/crops_even"/>
+                <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:isScrollContainer="true"
+                    android:scrollbarAlwaysDrawVerticalTrack="true"
+                    android:scrollbarStyle="outsideInset"
+                    android:scrollbars="vertical"
+                    android:orientation="vertical" android:layout_weight="1">
+
+                    <include layout="@layout/crops"/>
+
+                </ScrollView>
+
+                <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:isScrollContainer="true"
+                    android:scrollbarAlwaysDrawVerticalTrack="true"
+                    android:scrollbarStyle="outsideInset"
+                    android:scrollbars="vertical"
+                    android:orientation="vertical" android:layout_weight="1">
+
+
+                    <include layout="@layout/crops_even"/>
+
+                </ScrollView>
             </ViewAnimator>
 
             <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal" android:layout_weight="0"

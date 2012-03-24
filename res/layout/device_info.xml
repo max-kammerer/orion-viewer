@@ -33,12 +33,6 @@
         <TableLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
                      android:shrinkColumns="1" android:gravity="center">
 
-            <TextView android:layout_width="wrap_content" android:textSize="20sp"
-                                  android:layout_height="wrap_content"
-                                  android:gravity="left|center_vertical" android:text="Please send info specified below to my e-mail mikhael.bogdanov@gmail.com, This info is necessary to include this device specific build in general one!"
-                    android:autoLink="all" android:linksClickable="true"/>
-
-
             <TableRow android:gravity="center">
                 <TextView android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
@@ -75,10 +69,6 @@
 
             </TableRow>
 
-            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                         android:src="@drawable/revert" android:id="@+id/device_info_close"/>
-
         </TableLayout>
-
 
 </ScrollView>

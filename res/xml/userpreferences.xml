@@ -146,4 +146,11 @@
 
     </PreferenceCategory>
 
+
+    <universe.constellation.orion.viewer.prefs.DevicePrefInfo android:persistent="false"
+            android:title="Device">
+
+
+    </universe.constellation.orion.viewer.prefs.DevicePrefInfo>
+
 </PreferenceScreen>

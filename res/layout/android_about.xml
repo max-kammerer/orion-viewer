@@ -32,6 +32,9 @@
     <LinearLayout android:layout_width="fill_parent"
                   android:layout_height="fill_parent" android:orientation="vertical">
 
+            <!--<WebView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/webview_about"/>-->
+
+
         <LinearLayout android:layout_width="fill_parent"
                       android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center"
                       android:paddingBottom="10px" android:paddingTop="10px">

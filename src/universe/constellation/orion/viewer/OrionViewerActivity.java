@@ -740,7 +740,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         btn = (ImageButton) findMyViewById(R.id.zoom);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                animator.setDisplayedChild(ZOOM_SCREEN);
+                showOrionDialog(ZOOM_SCREEN, null);
             }
         });
 
@@ -780,32 +780,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
         });
 
 
-        TextView tv = (TextView) findMyViewById(R.id.MANUFACTURER);
-        if (tv != null) {
-            tv.setText(Device.Info.MANUFACTURER);
-            tv = (TextView) findMyViewById(R.id.MODEL);
-            tv.setText(Device.Info.MODEL);
-            tv = (TextView) findMyViewById(R.id.DEVICE);
-            tv.setText(Device.Info.DEVICE);
-
-//            btn = (ImageButton) findMyViewById(R.id.device_info);
-//
-//            btn.setOnClickListener(new View.OnClickListener() {
-//                public void onClick(View v) {
-//                    animator.setDisplayedChild(PAGE_LAYOUT_SCREEN + 1);
-//                }
-//            });
-
-
-            btn = (ImageButton) findMyViewById(R.id.device_info_close);
-
-            btn.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    animator.setDisplayedChild(MAIN_SCREEN);
-                }
-            });
-
-        }
     }
 
     protected void onResume() {

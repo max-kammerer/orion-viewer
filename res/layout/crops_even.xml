@@ -19,53 +19,43 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:isScrollContainer="true"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:scrollbarStyle="outsideInset"
-            android:scrollbars="vertical"
-            android:orientation="vertical" android:layout_weight="1">
+<TableLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+             xmlns:android="http://schemas.android.com/apk/res/android"
+             android:shrinkColumns="1" android:id="@+id/crop_borders_even" android:gravity="center"
+             android:isScrollContainer="true">
 
-    <TableLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
-                 xmlns:android="http://schemas.android.com/apk/res/android"
-                 android:shrinkColumns="1" android:id="@+id/crop_borders_even" android:gravity="center"
-                 android:isScrollContainer="true">
+    <CheckBox android:id="@+id/crop_even_flag" android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textSize="20sp" android:gravity="left|center_vertical" android:text="@string/enable_even_crop"
+              android:layout_marginBottom="10dp"/>
 
-        <CheckBox android:id="@+id/crop_even_flag" android:layout_width="wrap_content"
+    <TableRow android:gravity="center">
+        <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:textSize="20sp" android:gravity="left|center_vertical" android:text="@string/enable_even_crop"
-                  android:layout_marginBottom="10dp"/>
+                  android:textSize="25sp" android:gravity="left|center_vertical" android:text="@string/crop_left"/>
 
-        <TableRow android:gravity="center">
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:textSize="25sp" android:gravity="left|center_vertical" android:text="@string/crop_left"/>
+        <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                     android:src="@drawable/minus" android:id="@+id/crop_minus"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" android:id="@+id/crop_value"
+                  android:textSize="25sp" android:gravity="center"/>
+        <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                     android:src="@drawable/plus" android:id="@+id/crop_plus"/>
+    </TableRow>
 
-            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                         android:src="@drawable/minus" android:id="@+id/crop_minus"/>
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content" android:id="@+id/crop_value"
-                      android:textSize="25sp" android:gravity="center"/>
-            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                         android:src="@drawable/plus" android:id="@+id/crop_plus"/>
-        </TableRow>
+    <TableRow android:gravity="center">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textSize="25sp" android:gravity="left|center_vertical" android:text="@string/crop_right"/>
 
-        <TableRow android:gravity="center">
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:textSize="25sp" android:gravity="left|center_vertical" android:text="@string/crop_right"/>
-
-            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                         android:src="@drawable/minus" android:id="@+id/crop_minus"/>
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content" android:id="@+id/crop_value"
-                      android:textSize="25sp" android:gravity="center"/>
-            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                         android:src="@drawable/plus" android:id="@+id/crop_plus"/>
-        </TableRow>
+        <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                     android:src="@drawable/minus" android:id="@+id/crop_minus"/>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" android:id="@+id/crop_value"
+                  android:textSize="25sp" android:gravity="center"/>
+        <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                     android:src="@drawable/plus" android:id="@+id/crop_plus"/>
+    </TableRow>
 
 
-    </TableLayout>
-</ScrollView>
+</TableLayout>

@@ -120,7 +120,7 @@
 
     </application>
     <uses-sdk android:minSdkVersion="3"/>
-    <uses-sdk android:targetSdkVersion="7"/>
+    <uses-sdk android:targetSdkVersion="8"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-</manifest> 
+</manifest>

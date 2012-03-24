@@ -23,10 +23,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.WebView;
 import android.widget.*;
 import com.google.code.orion_viewer.device.AndroidDevice;
 import pl.polidea.customwidget.TheMissingTabHost;
@@ -147,11 +149,18 @@ public class OrionBaseActivity extends Activity {
         spec.setContent(R.id.general_help);
         spec.setIndicator("", getResources().getDrawable(R.drawable.help));
         host.addTab(spec);
+
         TheMissingTabHost.TheMissingTabSpec recent = host.newTabSpec("app_info");
         recent.setContent(R.id.app_info);
         recent.setIndicator("", getResources().getDrawable(R.drawable.info));
         host.addTab(recent);
         host.setCurrentTab(0);
+
+//        WebView view = (WebView) host.findViewById(R.id.webview_about);
+//
+//        view.getSettings().setJavaScriptEnabled(true);
+//        view.addJavascriptInterface(new Localizer(getResources()), "ls");
+//        view.loadUrl("file:///android_asset/about.html");
 
         ImageButton btn = (ImageButton) findMyViewById(R.id.help_close);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -213,4 +222,21 @@ public class OrionBaseActivity extends Activity {
     public void showError(String error, Exception ex) {
         Toast.makeText(this, error + ": " + ex.getMessage(), Toast.LENGTH_SHORT);
     }
+
+    class Localizer {
+        private Resources res;
+
+        public Localizer(Resources res) {
+            this.res = res;
+        }
+        public String get(String key) {
+            try {
+                int id = res.getIdentifier(key, "string", "universe.constellation.orion.viewer");
+                return res.getString(id);
+            } catch (Exception e) {
+                return key;
+            }
+        }
+    }
+
 }

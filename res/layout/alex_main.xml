@@ -145,12 +145,15 @@
                               android:gravity="center">
                     <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                                  android:src="@drawable/minus" android:id="@+id/zoom_picker_minus"/>
-                    <TextView android:layout_width="wrap_content"
+                    <EditText android:layout_width="wrap_content"
                               android:layout_height="wrap_content" android:id="@+id/zoom_picker_message"
-                              android:textSize="30sp"></TextView>
+                              android:textSize="20sp"/>
 
                     <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                                  android:src="@drawable/plus" android:id="@+id/zoom_picker_plus"/>
+
+                    <Spinner  android:id="@+id/zoom_spinner" android:entries="@array/fits"  android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
                     <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                                  android:src="@drawable/view" android:id="@+id/zoom_preview"/>
                     <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -165,7 +168,23 @@
             <LinearLayout android:layout_height="fill_parent" android:orientation="horizontal"
                           android:layout_width="fill_parent" android:gravity="center" android:paddingTop="10.0px">
 
-                <include layout="@layout/crops"/>
+                <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:isScrollContainer="true"
+                    android:scrollbarAlwaysDrawVerticalTrack="true"
+                    android:scrollbarStyle="outsideInset"
+                    android:scrollbars="vertical"
+                    android:orientation="vertical" android:layout_weight="1">
+
+                    <LinearLayout android:layout_height="fill_parent" android:orientation="vertical"
+                      android:layout_width="fill_parent" android:gravity="center">
+                        <include layout="@layout/crops"/>
+
+                        <include layout="@layout/crops_even"/>
+                    </LinearLayout>
+
+                </ScrollView>
 
                 <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                              android:src="@drawable/view" android:id="@+id/crop_preview" android:layout_weight="0"/>
