@@ -36,13 +36,16 @@ import java.lang.reflect.Field;
  */
 public class LastPageInfo implements Serializable {
 
-    public static final int CURRENT_VERSION = 2;
+    public static final int CURRENT_VERSION = 3;
 
     public int screenWidth;
     public int screenHeight;
 
     public int pageNumber;
     public int rotation;
+
+    //application default
+    public String screenOrientation = "DEFAULT";
 
     public int offsetX;
     public int offsetY;
@@ -89,20 +92,21 @@ public class LastPageInfo implements Serializable {
         if (!successfull) {
             //reinit
             lastPageInfo = new LastPageInfo();
-
-            int defaultRotation = activity.getOrionContext().getOptions().getDefaultOrientation();
-            switch (defaultRotation) {
-                case 90:
-                    defaultRotation = -1;
-                    break;
-                case 270:
-                    defaultRotation = 1;
-                    break;
-                default:
-                    defaultRotation = 0;
-                    break;
+            if (Device.Info.TWO_SCREEN) {
+                int defaultRotation = activity.getOrionContext().getOptions().getDefaultOrientation();
+                switch (defaultRotation) {
+                    case 90:
+                        defaultRotation = -1;
+                        break;
+                    case 270:
+                        defaultRotation = 1;
+                        break;
+                    default:
+                        defaultRotation = 0;
+                        break;
+                }
+                lastPageInfo.rotation = defaultRotation;
             }
-            lastPageInfo.rotation = defaultRotation;
         }
 
         lastPageInfo.fileData = fileData;
@@ -128,6 +132,7 @@ public class LastPageInfo implements Serializable {
 
             writeValue(serializer, "pageNumber", pageNumber);
             writeValue(serializer, "rotation", rotation);
+            writeValue(serializer, "screenOrientation", screenOrientation);
 
             writeValue(serializer, "offsetX", offsetX);
             writeValue(serializer, "offsetY", offsetY);
@@ -199,11 +204,17 @@ public class LastPageInfo implements Serializable {
                             String rawValue = xpp.getAttributeValue("", "value");
                             Field f = getClass().getField(name);
                             Object value  = null;
-                            if (f.getType().equals(boolean.class)) {
-                                value = Boolean.valueOf(rawValue);
-                            } else {
+                            Class type = f.getType();
+                            if (type.equals(int.class)) {
                                 value = Integer.valueOf(rawValue);
                                 value = upgrade(fileVersion, name, (Integer) value);
+                            } else if (type.equals(boolean.class)) {
+                                value = Boolean.valueOf(rawValue);
+                            } else if (type.equals(String.class)) {
+                                value = rawValue;
+                            } else {
+                                Common.d("Error on deserializing field " + name + "=" + rawValue);
+                                continue;
                             }
                             getClass().getField(name).set(this, value);
                         } catch (IllegalAccessException e) {
@@ -243,7 +254,15 @@ public class LastPageInfo implements Serializable {
             if ("zoom".equals(name)) {
                 System.out.println("Property " + name + " upgraded");
                 localVersion = 2;
-                return  0;
+                value = 0;
+            }
+        }
+
+        if (localVersion < 3) {
+            if ("rotation".equals(name)) {
+                System.out.println("Property " + name + " upgraded");
+                localVersion = 3;
+                value = 0;
             }
         }
         return value;

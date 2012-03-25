@@ -32,6 +32,8 @@ import android.webkit.WebView;
 import android.widget.*;
 import com.google.code.orion_viewer.device.AndroidDevice;
 import pl.polidea.customwidget.TheMissingTabHost;
+import universe.constellation.orion.viewer.OrionFileManagerActivity;
+import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.R;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionApplication;
@@ -45,7 +47,7 @@ public class OrionBaseActivity extends Activity {
 
     public static final String DONT_OPEN_RECENT = "DONT_OPEN_RECENT";
 
-    private int screenOrientation;
+    //private int screenOrientation;
 
     protected Device device ;
 
@@ -61,22 +63,9 @@ public class OrionBaseActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         getOrionContext().applyTheme(this);
 
-        String orientation = PreferenceManager.getDefaultSharedPreferences(this).getString(GlobalOptions.SCREEN_ORIENTATION, "DEFAULT");
-        screenOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
-        if ("LANDSCAPE".equals(orientation)) {
-            screenOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-        } else if ("PORTRAIT".equals(orientation)) {
-            screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-        }
-
-//        Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
-        System.out.println("display "+ getRequestedOrientation() + " screenOrientation " + getWindow().getAttributes().screenOrientation);
-        if (getRequestedOrientation() != screenOrientation) {
-            System.out.println("display on create " + screenOrientation);
-            setRequestedOrientation(screenOrientation);
-            WindowManager.LayoutParams params = getWindow().getAttributes();
-            params.screenOrientation = screenOrientation;
-            getWindow().setAttributes(params);
+        if (this instanceof OrionViewerActivity || this instanceof OrionFileManagerActivity) {
+            int screenOrientation = getScreenOrientation(getApplicationDefaulOrientation());
+            changeOrientation(screenOrientation);
         }
 
         super.onCreate(savedInstanceState);
@@ -90,22 +79,8 @@ public class OrionBaseActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
-        String orientation = PreferenceManager.getDefaultSharedPreferences(this).getString(GlobalOptions.SCREEN_ORIENTATION, "DEFAULT");
-        int newScreenOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
-
-        if ("LANDSCAPE".equals(orientation)) {
-            newScreenOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-        } else if ("PORTRAIT".equals(orientation)) {
-            newScreenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-        }
-        System.out.println("OrionBaseActivity: onResume display:"+ getRequestedOrientation() + " screenOrientation " + getWindow().getAttributes().screenOrientation);
-        System.out.println("OrionBaseActivity: display: "+ newScreenOrientation);
-
-        if (screenOrientation != newScreenOrientation) {
-            System.out.println("OrionBaseActivity: changing display in onResume " + newScreenOrientation);
-            this.screenOrientation = newScreenOrientation;
-            setRequestedOrientation(newScreenOrientation);
-        }
+//        String orientation = PreferenceManager.getDefaultSharedPreferences(this).getString(GlobalOptions.SCREEN_ORIENTATION, "DEFAULT");
+//        changeOrientation(getScreenOrientation(orientation));
 
         if (device != null) {
             device.onResume();
@@ -239,4 +214,42 @@ public class OrionBaseActivity extends Activity {
         }
     }
 
+    public void changeOrientation(int orientationId) {
+        System.out.println("Display orientation "+ getRequestedOrientation() + " screenOrientation " + getWindow().getAttributes().screenOrientation);
+        if (getRequestedOrientation() != orientationId) {
+            setRequestedOrientation(orientationId);
+        }
+    }
+
+    public int getScreenOrientation(String id) {
+        int screenOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+        if ("LANDSCAPE".equals(id)) {
+            screenOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+        } else if ("PORTRAIT".equals(id)) {
+            screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+        } else if ("LANDSCAPE_INVERSE".equals(id)) {
+            screenOrientation = getOrionContext().getSdkVersion() < 9 ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : 8;
+        } else if ("PORTRAIT_INVERSE".equals(id)) {
+            screenOrientation = getOrionContext().getSdkVersion() < 9 ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : 9;
+        }
+        return screenOrientation;
+    }
+
+    public int getScreenOrientationItemPos(String id) {
+        int screenOrientation = 0;
+        if ("LANDSCAPE".equals(id)) {
+            screenOrientation = 2;
+        } else if ("PORTRAIT".equals(id)) {
+            screenOrientation = 1;
+        } else if ("LANDSCAPE_INVERSE".equals(id)) {
+            screenOrientation = getOrionContext().getSdkVersion() < 9 ? 2 : 4;
+        } else if ("PORTRAIT_INVERSE".equals(id)) {
+            screenOrientation = getOrionContext().getSdkVersion() < 9 ? 1 : 3;
+        }
+        return screenOrientation;
+    }
+
+    public String getApplicationDefaulOrientation() {
+        return getOrionContext().getOptions().getStringProperty(GlobalOptions.SCREEN_ORIENTATION, "DEFAULT");
+    }
 }

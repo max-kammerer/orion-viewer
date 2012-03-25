@@ -62,6 +62,8 @@ public interface Device {
             NOOK_CLASSIC = isNookClassic;
         }
 
+        public final static boolean TWO_SCREEN = ALEX || NOOK_CLASSIC;
+
         public static String getField(String name) {
             try {
                 return (String) Build.class.getField(name).get(null);

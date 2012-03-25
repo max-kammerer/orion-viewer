@@ -32,6 +32,8 @@
         <LinearLayout android:layout_height="fill_parent" android:orientation="vertical"
                       android:layout_width="fill_parent" android:gravity="center">
 
+            <ListView android:layout_width="fill_parent"
+                        android:layout_height="0px" android:id="@+id/rotationList" android:isScrollContainer="true" android:layout_weight="1"/>
 
             <RadioGroup android:id="@+id/rotationGroup" android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -137,8 +139,8 @@
         </LinearLayout>
 
         <!--border crop screen-->
-        <LinearLayout android:layout_height="fill_parent" android:orientation="vertical"
-                      android:layout_width="fill_parent" android:gravity="center">
+        <LinearLayout android:layout_height="wrap_content" android:orientation="vertical"
+                      android:layout_width="fill_parent" android:gravity="center" android:layout_gravity="center">
 
             <ViewAnimator android:layout_width="wrap_content" android:layout_weight="1"
                   android:layout_height="wrap_content"
@@ -151,7 +153,7 @@
                     android:scrollbarAlwaysDrawVerticalTrack="true"
                     android:scrollbarStyle="outsideInset"
                     android:scrollbars="vertical"
-                    android:orientation="vertical" android:layout_weight="1">
+                    android:orientation="vertical" android:fillViewport="true">
 
                     <include layout="@layout/crops"/>
 
@@ -164,7 +166,7 @@
                     android:scrollbarAlwaysDrawVerticalTrack="true"
                     android:scrollbarStyle="outsideInset"
                     android:scrollbars="vertical"
-                    android:orientation="vertical" android:layout_weight="1">
+                    android:orientation="vertical">
 
 
                     <include layout="@layout/crops_even"/>
@@ -186,7 +188,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!--options-->
         <include layout="@layout/page_layout"/>
 
         <include layout="@layout/add_bookmark"/>

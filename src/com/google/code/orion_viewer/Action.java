@@ -91,14 +91,14 @@ public enum Action {
     ROTATE_90 (R.string.action_rotate_90, R.integer.action_rotate_90) {
         @Override
         public void doAction(Controller controller, OrionViewerActivity activity) {
-            controller.setRotation((controller.getRotation() - 1) % 2);
+            //controller.setRotation((controller.getRotation() - 1) % 2);
         }
     },
 
     ROTATE_270 (R.string.action_rotate_270, R.integer.action_rotate_270) {
         @Override
         public void doAction(Controller controller, OrionViewerActivity activity) {
-            controller.setRotation((controller.getRotation() + 1) % 2);
+            //controller.setRotation((controller.getRotation() + 1) % 2);
         }
     },
 

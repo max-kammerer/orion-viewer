@@ -33,6 +33,7 @@ import android.widget.*;
 
 
 import com.google.code.orion_viewer.*;
+import com.google.code.orion_viewer.device.EdgeDevice;
 import com.google.code.orion_viewer.djvu.DjvuDocument;
 import com.google.code.orion_viewer.pdf.PdfDocument;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
@@ -239,8 +240,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
             LayoutStrategy str = new SimpleLayoutStrategy(doc, device.getDeviceSize());
             int idx = filePath.lastIndexOf('/');
 
-            controller = new Controller(this, doc, str, view);
             lastPageInfo = LastPageInfo.loadBookParameters(this, filePath);
+            controller = new Controller(this, doc, str, view);
+
+            controller.changeOrinatation(lastPageInfo.screenOrientation);
 
             controller.init(lastPageInfo);
 
@@ -1125,51 +1128,106 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public void initRotationScreen() {
-        final RadioGroup rotationGroup = (RadioGroup) findMyViewById(R.id.rotationGroup);
+        if (getDevice() instanceof EdgeDevice) {
+            final RadioGroup rotationGroup = (RadioGroup) findMyViewById(R.id.rotationGroup);
 
-        rotationGroup.check(R.id.rotate0);
+            rotationGroup.check(R.id.rotate0);
 
-        if (Device.Info.NOOK2) {
-            RadioButton r0 = (RadioButton) rotationGroup.findViewById(R.id.rotate0);
-            RadioButton r90 = (RadioButton) rotationGroup.findViewById(R.id.rotate90);
-            RadioButton r270 = (RadioButton) rotationGroup.findViewById(R.id.rotate270);
-            TextView tv = (TextView) findMyViewById(R.id.navigation_title);
-            int color = tv.getTextColors().getDefaultColor();
-            r0.setTextColor(color);
-            r90.setTextColor(color);
-            r270.setTextColor(color);
+            if (Device.Info.NOOK2) {
+                RadioButton r0 = (RadioButton) rotationGroup.findViewById(R.id.rotate0);
+                RadioButton r90 = (RadioButton) rotationGroup.findViewById(R.id.rotate90);
+                RadioButton r270 = (RadioButton) rotationGroup.findViewById(R.id.rotate270);
+                TextView tv = (TextView) findMyViewById(R.id.navigation_title);
+                int color = tv.getTextColors().getDefaultColor();
+                r0.setTextColor(color);
+                r90.setTextColor(color);
+                r270.setTextColor(color);
+            }
+
+            getSubscriptionManager().addDocListeners(new DocumentViewAdapter() {
+                @Override
+                public void documentOpened(Controller controller) {
+                    updateRotation();
+                }
+            });
+
+
+            ImageButton apply = (ImageButton) findMyViewById(R.id.rotation_apply);
+            apply.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    onApplyAction(true);
+                    int id = rotationGroup.getCheckedRadioButtonId();
+                    controller.setRotation(id == R.id.rotate0 ? 0 : id == R.id.rotate90 ? -1 : 1);
+                }
+            });
+
+            ListView list = (ListView) findMyViewById(R.id.rotationList);
+            list.setVisibility(View.GONE);
+        } else {
+            RadioGroup rotationGroup = (RadioGroup) findMyViewById(R.id.rotationGroup);
+            rotationGroup.setVisibility(View.GONE);
+
+            final ListView list = (ListView) findMyViewById(R.id.rotationList);
+
+            //set choices and replace 0 one with Application Default
+            boolean isLevel9 = getOrionContext().getSdkVersion() >= 9;
+            CharSequence[] values = getResources().getTextArray(isLevel9 ? R.array.screen_orientation_full_desc : R.array.screen_orientation_desc);
+            CharSequence[] newValues = new CharSequence[values.length];
+            for (int i = 0; i < values.length; i++) {
+                newValues[i] = values[i];
+            }
+            newValues[0] = getResources().getString(R.string.orientation_default_rotation);
+
+            list.setAdapter(new ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, newValues));
+            list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+            list.setItemChecked(0, true);
+
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    CheckedTextView check = (CheckedTextView)view;
+                    check.setChecked(!check.isChecked());
+                }
+            });
+
+            final CharSequence[] ORIENTATION_ARRAY = getResources().getTextArray(R.array.screen_orientation_full);
+
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    onApplyAction(true);
+                    String orientation = ORIENTATION_ARRAY[position].toString();
+                    controller.changeOrinatation(orientation);
+                }
+            });
+
+
+            ImageButton apply = (ImageButton) findMyViewById(R.id.rotation_apply);
+            apply.setVisibility(View.GONE);
+//            apply.setOnClickListener(new View.OnClickListener() {
+//                public void onClick(View view) {
+//                    onApplyAction(true);
+//                }
+//            });
         }
 
-        getSubscriptionManager().addDocListeners(new DocumentViewAdapter() {
-            @Override
-            public void documentOpened(Controller controller) {
-                updateRotation();
-            }
-        });
-
-
-        ImageButton apply = (ImageButton) findMyViewById(R.id.rotation_apply);
-        apply.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                onApplyAction(true);
-                int id = rotationGroup.getCheckedRadioButtonId();
-                controller.setRotation(id == R.id.rotate0 ? 0 : id == R.id.rotate90 ? -1 : 1);
-            }
-        });
-
         ImageButton cancel = (ImageButton) findMyViewById(R.id.rotation_close);
-        cancel.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                onAnimatorCancel();
-                updateRotation();
-            }
-        });
+            cancel.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    onAnimatorCancel();
+                    updateRotation();
+                }
+            });
     }
 
     void updateRotation() {
         RadioGroup rotationGroup = (RadioGroup) findMyViewById(R.id.rotationGroup);
         if (rotationGroup != null) { //nook case
             rotationGroup.check(controller.getRotation() == 0 ? R.id.rotate0 : controller.getRotation() == -1 ? R.id.rotate90 : R.id.rotate270);
+        }
+        ListView list = (ListView) findMyViewById(R.id.rotationList);
+        if (list != null) {
+            int index = getScreenOrientationItemPos(controller.getScreenOrientation());
+            list.setItemChecked(index, true);
+            list.setSelection(index);
         }
     }
 

@@ -47,6 +47,8 @@ public class Controller {
 
     private DocumentViewAdapter listener;
 
+    private String screenOrientation;
+
 //    private PrefListener prefListener = new PrefListener() {
 //        @Override
 //        public void onPreferenceChanged(GlobalOptions option, String key, Object oldValue) {
@@ -230,6 +232,7 @@ public class Controller {
         layoutInfo.cellY = info.offsetY;
 
         lastScreenSize = new Point(info.screenWidth, info.screenHeight);
+        screenOrientation = info.screenOrientation;
 
         if (view.getWidth() != 0 && view.getHeight() != 0) {
             Common.d("Calling screen size from init...");
@@ -242,6 +245,7 @@ public class Controller {
         info.offsetX = layoutInfo.cellX;
         info.offsetY = layoutInfo.cellY;
         info.pageNumber = layoutInfo.pageNumber;
+        info.screenOrientation = screenOrientation;
     }
 
     public void sendViewChangeNotification() {
@@ -276,5 +280,19 @@ public class Controller {
     public boolean isEvenPage() {
         //zero based
         return (getCurrentPage() + 1) % 2 == 0;
+    }
+
+    public void changeOrinatation(String orientationId) {
+        screenOrientation = orientationId;
+        System.out.println("New orientation " + screenOrientation);
+        String realOrintationId = orientationId;
+        if ("DEFAULT".equals(orientationId)) {
+            realOrintationId = activity.getApplicationDefaulOrientation();
+        }
+        activity.changeOrientation(activity.getScreenOrientation(realOrintationId));
+    }
+
+    public String getScreenOrientation() {
+        return screenOrientation;
     }
 }

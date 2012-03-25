@@ -21,8 +21,7 @@
 
 <TableLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
              xmlns:android="http://schemas.android.com/apk/res/android"
-             android:shrinkColumns="1" android:id="@+id/crop_borders_even" android:gravity="center"
-             android:isScrollContainer="true">
+             android:shrinkColumns="1" android:id="@+id/crop_borders_even" android:gravity="center">
 
     <CheckBox android:id="@+id/crop_even_flag" android:layout_width="wrap_content"
               android:layout_height="wrap_content"

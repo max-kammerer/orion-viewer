@@ -4,7 +4,7 @@
     <string name="menu_goto_text">Перейти...</string>
     <string name="menu_bookmarks_text">Закладки</string>
     <string name="menu_add_bookmark_item">Добавить закладку</string>
-    <string name="menu_rotation_text">Поворот</string>
+    <string name="menu_rotation_text">Ориентация экрана</string>
     <string name="menu_navigation_text">Раскладка страницы</string>
     <string name="menu_help_text">Помощь</string>
     <string name="menu_open_text">Открыть книгу</string>

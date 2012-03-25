@@ -14,12 +14,30 @@
         <item>DEFAULT</item>
         <item>PORTRAIT</item>
         <item>LANDSCAPE</item>
-  </string-array>
-    <string-array name="screen_orientation_desc">
+    </string-array>
+
+    <string-array name="screen_orientation_full">
         <item>DEFAULT</item>
         <item>PORTRAIT</item>
         <item>LANDSCAPE</item>
-  </string-array>
+        <item>PORTRAIT_INVERSE</item>
+        <item>LANDSCAPE_INVERSE</item>
+    </string-array>
+
+
+    <string-array name="screen_orientation_desc">
+        <item>@string/orientation_default</item>
+        <item>@string/orientation_portrait</item>
+        <item>@string/orientation_landscape</item>
+    </string-array>
+
+    <string-array name="screen_orientation_full_desc">
+        <item>@string/orientation_default</item>
+        <item>@string/orientation_portrait</item>
+        <item>@string/orientation_landscape</item>
+        <item>@string/orientation_portrait_inverse</item>
+        <item>@string/orientation_landscape_inverse</item>
+    </string-array>
 
     <string-array name="fits">
         <item>Custom...</item>

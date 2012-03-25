@@ -23,6 +23,8 @@ import android.app.Activity;
 import android.app.Application;
 import universe.constellation.orion.viewer.db.BookmarkAccessor;
 
+import java.lang.reflect.Field;
+
 /**
  * User: mike
  * Date: 23.01.12
@@ -37,6 +39,8 @@ public class OrionApplication extends Application {
     public static OrionApplication instance;
 
     private BookmarkAccessor bookmarkAccessor;
+
+    private int sdk_version = -1;
 
 
     public void onCreate() {
@@ -94,4 +98,19 @@ public class OrionApplication extends Application {
             bookmarkAccessor = null;
         }
     }
+
+    public int getSdkVersion() {
+		if (sdk_version < 0) {
+            sdk_version = 3;
+            Field fld;
+            try {
+                Class<?> cl = android.os.Build.VERSION.class;
+                fld = cl.getField("SDK_INT");
+                sdk_version = fld.getInt(cl);
+            } catch (Exception e) {
+                 //Android 1.5
+            }
+        }
+		return sdk_version;
+	}
 }

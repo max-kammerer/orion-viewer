@@ -2,7 +2,7 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:orion="http://schemas.android.com/apk/res/universe.constellation.orion.viewer">
     <PreferenceCategory
-            android:title="Layout">
+            android:title="Layout" android:key="LAYOUT">
         <CheckBoxPreference
                 android:key="FULL_SCREEN"
                 android:title="@string/pref_fullScreen"

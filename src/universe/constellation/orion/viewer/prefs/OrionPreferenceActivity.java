@@ -21,8 +21,7 @@ package universe.constellation.orion.viewer.prefs;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceScreen;
+import android.preference.*;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageButton;
@@ -63,20 +62,37 @@ public class OrionPreferenceActivity extends PreferenceActivity {
 
         PreferenceScreen screen = getPreferenceScreen();
 
-        screen.findPreference("SCREEN_ORIENTATION").setEnabled(isAndroidGeneral);
         screen.findPreference("EINK_OPTIMIZATION").setEnabled(Device.Info.NOOK2);
+
+        PreferenceCategory LAYOUT = (PreferenceCategory) screen.findPreference("LAYOUT");
+        ListPreference SCREEN_ORIENTATION = (ListPreference) findPreference("SCREEN_ORIENTATION");
+        Preference BOOK_ORIENTATION = screen.findPreference("BOOK_ORIENTATION");
+
+        if (!Device.Info.TWO_SCREEN) {
+            LAYOUT.removePreference(BOOK_ORIENTATION);
+        }
+
+        if (!isAndroidGeneral) {
+            LAYOUT.removePreference(SCREEN_ORIENTATION);
+        } else {
+            if (getOrionContext().getSdkVersion() >= 9) {
+                SCREEN_ORIENTATION.setEntries(getResources().getTextArray(R.array.screen_orientation_full));
+                SCREEN_ORIENTATION.setEntryValues(getResources().getTextArray(R.array.screen_orientation_full_desc));
+            }
+        }
     }
 
-
-
-//    @Override
-    public void setContentView(int layoutResID) {
-        super.setContentView(isNook ? R.layout.nook_preferences : layoutResID);
-    }
 
     @Override
-    public View onCreateView(String name, Context context, AttributeSet attrs) {
-        return super.onCreateView(name, context, attrs);    //To change body of overridden methods use File | Settings | File Templates.
+    public void addPreferencesFromResource(int preferencesResId) {
+
+        super.addPreferencesFromResource(preferencesResId);
+    }
+
+
+
+    public void setContentView(int layoutResID) {
+        super.setContentView(isNook ? R.layout.nook_preferences : layoutResID);
     }
 
     public OrionApplication getOrionContext() {
