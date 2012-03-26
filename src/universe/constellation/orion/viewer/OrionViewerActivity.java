@@ -21,12 +21,12 @@ package universe.constellation.orion.viewer;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.SystemClock;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -863,8 +863,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     public void changePage(int operation) {
         boolean swapKeys = globalOptions.isSwapKeys();
+        int width = getView().getWidth();
+        int height = getView().getHeight();
+        boolean landscape = width > height;
         if (controller != null) {
-            if (operation == Device.NEXT && !swapKeys || swapKeys && operation == 1 && controller.getRotation() != -1 || swapKeys && operation == - 1 && controller.getRotation() == -1) {
+            if (operation == Device.NEXT && (!landscape || !swapKeys) || swapKeys && operation == Device.PREV && landscape) {
                 controller.drawNext();
             } else {
                 controller.drawPrev();
@@ -1178,7 +1181,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
             newValues[0] = getResources().getString(R.string.orientation_default_rotation);
 
-            list.setAdapter(new ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, newValues));
+            list.setAdapter(Device.Info.NOOK2 ?
+                    new Nook2ListAdapter(this, android.R.layout.simple_list_item_single_choice, newValues, (TextView) findMyViewById(R.id.navigation_title)) :
+                    new ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, newValues));
+
             list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
             list.setItemChecked(0, true);
 
@@ -1347,6 +1353,23 @@ public class OrionViewerActivity extends OrionBaseActivity {
                     view.setText("%");
                     return view;
             }
+        }
+    }
+
+    public static class Nook2ListAdapter extends ArrayAdapter  {
+
+        private int color;
+
+        public Nook2ListAdapter(Context context, int textViewResourceId, Object[] objects, TextView view) {
+            super(context, textViewResourceId,  objects);
+            this.color = view.getTextColors().getDefaultColor();
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view = super.getView(position, convertView, parent);
+            ((CheckedTextView)view).setTextColor(color);
+            return view;
         }
     }
 }
