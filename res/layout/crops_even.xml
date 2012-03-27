@@ -25,7 +25,7 @@
 
     <CheckBox android:id="@+id/crop_even_flag" android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:textSize="20sp" android:gravity="left|center_vertical" android:text="@string/enable_even_crop"
+              android:textSize="20sp" android:gravity="left|center_vertical" android:text="@string/enable_even_crop" android:layout_gravity="center"
               android:layout_marginBottom="10dp"/>
 
     <TableRow android:gravity="center">

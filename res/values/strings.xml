@@ -42,4 +42,10 @@
     <string name="orientation_landscape_inverse">Landscape (270)</string>
     <string name="orientation_portrait_inverse">Portrait (180)</string>
 
+
+    <string name="fit_width">Fit Width</string>
+    <string name="fit_height">Fit Height</string>
+    <string name="fit_page">Fit Page</string>
+    <string name="fit_custom">Custom...</string>
+
 </resources>

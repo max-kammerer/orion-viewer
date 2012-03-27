@@ -142,7 +142,7 @@
         <LinearLayout android:layout_height="wrap_content" android:orientation="vertical"
                       android:layout_width="fill_parent" android:gravity="center" android:layout_gravity="center">
 
-            <ViewAnimator android:layout_width="wrap_content" android:layout_weight="1"
+            <ViewAnimator android:layout_width="fill_parent" android:layout_weight="1"
                   android:layout_height="wrap_content"
                   android:id="@+id/crop_animator">
 
@@ -153,7 +153,7 @@
                     android:scrollbarAlwaysDrawVerticalTrack="true"
                     android:scrollbarStyle="outsideInset"
                     android:scrollbars="vertical"
-                    android:orientation="vertical" android:fillViewport="true">
+                    android:orientation="vertical">
 
                     <include layout="@layout/crops"/>
 

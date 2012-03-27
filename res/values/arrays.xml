@@ -40,11 +40,11 @@
     </string-array>
 
     <string-array name="fits">
-        <item>Custom...</item>
-        <item>Fit Width</item>
-        <item>Fit Height</item>
-        <item>Fith Both W&amp;H</item>
-  </string-array>
+        <item>@string/fit_custom</item>
+        <item>@string/fit_width</item>
+        <item>@string/fit_height</item>
+        <item>@string/fit_page</item>
+    </string-array>
 
 
     <string-array name="dictionaries">

@@ -38,4 +38,10 @@
     <string name="orientation_landscape_inverse">Альбомная (270)</string>
     <string name="orientation_portrait_inverse">Книжная (180)</string>
 
+    <string name="fit_width">По ширине</string>
+    <string name="fit_height">По высоте</string>
+    <string name="fit_page">По размеру страницы</string>
+    <string name="fit_custom">Указать масштаб...</string>
+
+
 </resources>
