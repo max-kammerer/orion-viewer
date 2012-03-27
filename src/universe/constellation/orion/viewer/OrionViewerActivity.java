@@ -433,6 +433,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 onApplyAction();
                 int index = sp.getSelectedItemPosition();
                 controller.changeZoom(index == 0 ? (int)(Float.parseFloat(zoomText.getText().toString()) * 100) : -1 *(index-1));
+                updateZoom();
             }
         });
 
