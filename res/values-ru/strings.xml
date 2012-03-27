@@ -31,7 +31,7 @@
     <string name="short_click">При коротком нажатии</string>
     <string name="binding_click">Переназначение</string>
 
-    <string name="orientation_default">Авто</string>
+    <string name="orientation_default">По умолчанию</string>
     <string name="orientation_default_rotation">По умолчанию</string>
     <string name="orientation_landscape">Альбомная</string>
     <string name="orientation_portrait">Книжная</string>

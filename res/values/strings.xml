@@ -35,7 +35,7 @@
 
 
 
-    <string name="orientation_default">Auto</string>
+    <string name="orientation_default">Default</string>
     <string name="orientation_default_rotation">Application Default</string>
     <string name="orientation_landscape">Landscape</string>
     <string name="orientation_portrait">Portrait</string>

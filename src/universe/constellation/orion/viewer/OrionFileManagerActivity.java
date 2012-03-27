@@ -48,6 +48,8 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
 
     private GlobalOptions globalOptions;
 
+    private boolean justCreated;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(device.getFileManagerLayoutId());
@@ -55,7 +57,7 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
         globalOptions = getOrionContext().getOptions();
         initFileManager();
 
-        onNewIntent(getIntent());
+        justCreated = true;
     }
 
     protected void onNewIntent(Intent intent) {
@@ -71,8 +73,19 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
         }
     }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        justCreated = false;
+    }
+
     protected void onResume() {
         super.onResume();
+        if (justCreated) {
+            justCreated = false;
+            onNewIntent(getIntent());
+        }
+
         updateFileManager();
     }
 
