@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Orion Viewer is a pdf and djvu viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2012  Michael Bogdanov
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="zoom">Apre la finestra Zoom. Il valore zero adatta lo zoom alla larghezza di pagina.</string>
+    <string name="rotation">Ruota il documento di 90 gradi in senso orario. Un tap lungo ruota in senso antiorario.</string>
+    <string name="rotation_android">Apre la finestra Rotazione.</string>
+
+    <string name="crop">Apre la finestra Ritaglia Margini. I valori sono relativi alle dimensioni della pagina. Un tap lungo cambia i valori di ritaglio del 10%. Valori negativi aumentano i margini.</string>
+
+    <string name="next_page_android">Apre la finestra Vai A</string>
+
+    <string name="next_page">Va alla pagina successiva. Un tap lungo apre la finestra Segnalibri.</string>
+
+    <string name="prev_page">Va alla pagina precedente. Un tap lungo apre la finestra Vai A.</string>
+
+    <string name="apply">Applica le opzioni correnti.</string>
+    <string name="escape">Chiude l\'applicazione.</string>
+
+    <string name="general_usage">Utilizzo:</string>
+
+    <string name="general_usage_step1">1. Aprire il documento (adatta lo zoom alla larghezza di pagina)
+        </string>
+
+    <string name="general_usage_step2">
+        2. Selezionare il layout di pagina appropriato: orizzontale o verticale
+        </string>
+
+    <string name="general_usage_step3">
+        3. Impostare il ritaglio dei margini. La dimensione del testo sarà modificata automaticamente (in modalità adatta alla larghezza di pagina) 
+    </string>
+
+    <string name="general_usage_step4">
+        4. Buona lettura!</string>
+
+    <!--<string name="help_taps">-->
+        <!--Click on screen - go to next page, long click - go to prev page.</string>-->
+
+    <string name="option_help">
+        Impostazioni Applicazione</string>
+
+    <string name="navigation_help">
+        Apre la finestra Layout Pagina. Utile se si leggono fumetti o libri con immagini.</string>
+
+    <string name="dictionary_help">
+        Apre il Dizionario. Selezionare il dizionario desiderato nelle Opzioni.</string>
+
+    <string name="tap_help">
+        Le Zone Tocco consentono di associare al tocco di una parte delle schermo comandi specifici.
+        Ci sono 3x3 celle; per ciascuna l\'utente può definire l\'azione associata a un tap breve (etichetta in alto) o lungo (etichetta in basso).</string>
+
+    <string name="bookmarks_export_help">
+        Consente all\'utente di esportare i segnalibri per il libro corrente o per tutti i libri.
+        I segnalibri sono esportati in un file XML, chiamato nome_del_libro_corrente + bookmarks.xml
+        oppure all_bookmarks.xml .</string>
+
+</resources>

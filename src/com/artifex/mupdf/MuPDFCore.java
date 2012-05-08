@@ -19,7 +19,7 @@ public class MuPDFCore
     private DocInfo info;
 
 	/* The native functions */
-	private static native void openFile(String filename, DocInfo info);
+	private static native int openFile(String filename, DocInfo info);
 	private static native void gotoPageInternal(int localActionPageNum);
 	private static native int getPageInfo(int pageNum, PageInfo info);
 
@@ -57,7 +57,6 @@ public class MuPDFCore
 
     public synchronized int[] renderPage(int n, double zoom, int left, int top, int w, int h) {
         gotoPage(n);
-
         Common.d("MuPDFCore starts rendering...");
         Date date = new Date();
         int [] res =  drawPage((float)zoom, w, h, left, top, w, h);
@@ -79,6 +78,7 @@ public class MuPDFCore
     public synchronized PageInfo getPageInfo(int page) {
         PageInfo info = new PageInfo();
         getPageInfo(page, info);
+        System.out.println("Page info: " + info.width + "x" + info.height);
         return info;
     }
 

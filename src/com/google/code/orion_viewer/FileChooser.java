@@ -50,7 +50,7 @@ public class FileChooser extends ArrayAdapter {
                 return true;
             }
             String name = filename.toLowerCase();
-            return name.endsWith(".pdf") || name.endsWith("djvu") || name.endsWith("djv") /*|| name.endsWith("xps")*/;
+            return name.endsWith(".pdf") || name.endsWith("djvu") || name.endsWith("djv") || name.endsWith("xps") || name.endsWith("cbz");
         }
     };
 
@@ -127,7 +127,21 @@ public class FileChooser extends ArrayAdapter {
 
 
             ImageView fileIcon = (ImageView) convertView.findViewById(R.id.fileImage);
-            fileIcon.setImageResource(isDirectory ? R.drawable.folder : name.toLowerCase().endsWith("pdf") ? R.drawable.pdf : R.drawable.djvu);
+            int icon = R.drawable.djvu;
+            String extName = name.toLowerCase();
+            if (isDirectory) {
+                icon = R.drawable.folder;
+            } else if (extName.endsWith("pdf")) {
+                icon = R.drawable.pdf;
+            }else if (extName.endsWith("djvu")) {
+                icon = R.drawable.djvu;
+            } else if (extName.endsWith("cbz")) {
+                icon = R.drawable.cbz;
+            } else if (extName.endsWith("xps")) {
+                icon = R.drawable.djvu;
+            }
+
+            fileIcon.setImageResource(icon);
             TextView fileName = (TextView) convertView.findViewById(R.id.fileName);
             fileName.setText(name);
         }

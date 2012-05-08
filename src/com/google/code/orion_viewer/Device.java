@@ -46,6 +46,8 @@ public interface Device {
 
         public final static boolean ALEX = "sdi".equals(MANUFACTURER.toLowerCase()) && "seleucia".equals(MODEL.toLowerCase()) && "seleucia".equals(DEVICE.toLowerCase());
 
+        public final static boolean EDGE = "edge".equals(DEVICE.toLowerCase()) || "edgejr".equals(DEVICE.toLowerCase());
+
         public final static boolean NOOK_CLASSIC;
 
         static {
@@ -62,7 +64,7 @@ public interface Device {
             NOOK_CLASSIC = isNookClassic;
         }
 
-        public final static boolean TWO_SCREEN = ALEX || NOOK_CLASSIC;
+        public final static boolean TWO_SCREEN = ALEX || NOOK_CLASSIC || EDGE;
 
         public static String getField(String name) {
             try {

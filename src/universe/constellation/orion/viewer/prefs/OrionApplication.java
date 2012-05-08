@@ -21,6 +21,7 @@ package universe.constellation.orion.viewer.prefs;
 
 import android.app.Activity;
 import android.app.Application;
+import android.preference.PreferenceManager;
 import universe.constellation.orion.viewer.db.BookmarkAccessor;
 
 import java.lang.reflect.Field;
@@ -33,6 +34,8 @@ import java.lang.reflect.Field;
 public class OrionApplication extends Application {
 
     private GlobalOptions options;
+
+    private GlobalOptions keyBinding;
 
     private TemporaryOptions tempOptions;
 
@@ -50,9 +53,16 @@ public class OrionApplication extends Application {
 
     public GlobalOptions getOptions() {
         if (options == null) {
-            options = new GlobalOptions(this);
+            options = new GlobalOptions(PreferenceManager.getDefaultSharedPreferences(this), true);
         }
         return options;
+    }
+
+    public GlobalOptions getKeyBinding() {
+        if (keyBinding == null) {
+            keyBinding = new GlobalOptions(getSharedPreferences("key_binding", MODE_PRIVATE), false);
+        }
+        return keyBinding;
     }
 
     public void onNewBook(String fileName) {

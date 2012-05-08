@@ -70,6 +70,17 @@
                   android:text="e-mail: mikhael.bogdanov@gmail.com" android:textSize="20sp"
                   android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
 
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:textSize="20sp"
+                  android:text="Contributors:"
+                  android:gravity="center" android:layout_marginTop="20px"/>
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:textSize="20sp"
+                  android:text="Alberto Pettarin - Italian translation"
+                  android:gravity="center"/>
+
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_1" android:layout_marginTop="20px"
                   android:text="Project site: http://code.google.com/p/orion-viewer/" android:textSize="18sp"
                   android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
@@ -87,13 +98,6 @@
                   android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
 
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:textSize="18sp" android:layout_marginTop="20px"
-                  android:text="Orion Viewer is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version."
-                  android:gravity="center"/>
 
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
@@ -166,6 +170,8 @@ the Free Software Foundation, either version 3 of the License, or
                        android:src="@drawable/folder"/>
                     <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
                        android:src="@drawable/book"/>
+                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                       android:src="@drawable/cbz"/>
                 </LinearLayout>
 
                 <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
@@ -221,7 +227,16 @@ the Free Software Foundation, either version 3 of the License, or
                           android:text="Android Icons"
                           android:gravity="left|center_vertical"/>
             </TableRow>
+
+<TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:textSize="18sp" android:layout_marginTop="20px"
+                  android:text="Orion Viewer is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version."
+                  android:gravity="center"/>
         </TableLayout>
+
 
         <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                      android:src="@drawable/revert"

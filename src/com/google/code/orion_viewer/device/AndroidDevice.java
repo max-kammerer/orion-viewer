@@ -57,6 +57,8 @@ public class AndroidDevice implements Device {
 
     public GlobalOptions options;
 
+    public GlobalOptions keyBinding;
+
     public AndroidDevice() {
 
     }
@@ -71,19 +73,6 @@ public class AndroidDevice implements Device {
 
     public boolean onKeyDown(int keyCode, KeyEvent event, OperationHolder holder) {
         //check mapped keys
-        if (options != null) {
-            if (keyCode == options.getNextKey()) {
-                holder.value = NEXT;
-                return true;
-            }
-
-            if (keyCode == options.getPrevKey()) {
-                holder.value = PREV;
-                return true;
-            }
-
-        }
-
         if (Info.NOOK2) {
             switch (keyCode) {
                 case NOOK_PAGE_UP_KEY_LEFT:
@@ -129,6 +118,8 @@ public class AndroidDevice implements Device {
 
     public void onCreate(OrionBaseActivity activity) {
         options = activity.getOrionContext().getOptions();
+        keyBinding = activity.getOrionContext().getKeyBinding();
+
         if (activity.getViewerType() == VIEWER_ACTIVITY) {
             delay = VIEWER_DELAY;
         }

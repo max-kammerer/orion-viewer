@@ -19,10 +19,10 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:orientation="vertical" android:gravity="center"
-            android:scrollbars="vertical" android:fillViewport="true">
+<!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="fill_parent" android:orientation="vertical" android:gravity="center"-->
+            <!--android:scrollbars="vertical" android:fillViewport="true">-->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
@@ -33,12 +33,16 @@
                               android:id="@+id/actions_header"></TextView>
 
 
-    <RadioGroup android:id="@+id/actionsGroup" android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical" android:gravity="left">
+    <ListView android:layout_width="fill_parent"
+                              android:layout_height="wrap_content"
+                              android:id="@+id/actionsGroup" android:gravity="right"></ListView>
 
-    </RadioGroup>
+    <!--<RadioGroup android:id="@+id/actionsGroup" android:layout_width="fill_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:orientation="vertical" android:gravity="left">-->
+
+    <!--</RadioGroup>-->
 
 
 </LinearLayout>
-</ScrollView>
+<!--</ScrollView>-->

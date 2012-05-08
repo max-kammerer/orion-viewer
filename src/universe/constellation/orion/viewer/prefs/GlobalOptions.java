@@ -84,16 +84,18 @@ public class GlobalOptions implements Serializable {
 
     private List<PrefListener> prefListener = new ArrayList<PrefListener>();
 
-    GlobalOptions(Context applicationContext) {
-        prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext);
+    GlobalOptions(SharedPreferences preferences, boolean loadRecents) {
+        prefs = preferences;
 
-        recentFiles = new LinkedList<RecentEntry>();
-        for (int i = 0; i < MAX_RECENT_ENTRIES; i++) {
-            String entry = prefs.getString(RECENT_PREFIX + i, null);
-            if (entry == null) {
-                break;
-            } else {
-                recentFiles.add(new RecentEntry(entry));
+        if (loadRecents) {
+            recentFiles = new LinkedList<RecentEntry>();
+            for (int i = 0; i < MAX_RECENT_ENTRIES; i++) {
+                String entry = prefs.getString(RECENT_PREFIX + i, null);
+                if (entry == null) {
+                    break;
+                } else {
+                    recentFiles.add(new RecentEntry(entry));
+                }
             }
         }
 
@@ -344,6 +346,23 @@ public class GlobalOptions implements Serializable {
 
     public void unsubscribe(PrefListener listener) {
         prefListener.remove(listener);
+    }
+
+    public void removePreference(String name) {
+        prefs.edit().remove(name).commit();
+    }
+
+    public void putIntPreference(String name, int value) {
+        prefs.edit().putInt(name, value).commit();
+    }
+
+    public void removeAll() {
+        prefs.edit().clear().commit();
+        prefValues.clear();
+    }
+
+    public Map<String, ?> getAllProperties() {
+        return (Map<String, ?>) prefs.getAll();
     }
 
 }

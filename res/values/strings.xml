@@ -20,7 +20,7 @@
 <resources>
     <string name="app_name">Orion Viewer</string>
     <string name="navigation">Walk order</string>
-    <string name="version_name">0.29.3</string>
+    <string name="version_name">0.31.0</string>
     <string name="crop_left">Left</string>
     <string name="enable_even_crop">Another cropping for even pages</string>
     <string name="crop_right">Right</string>
@@ -47,5 +47,8 @@
     <string name="fit_height">Fit Height</string>
     <string name="fit_page">Fit Page</string>
     <string name="fit_custom">Custom...</string>
+
+    <string name="key_binder_message">Push any key and select action to bind them!</string>
+    <string name="key_binder_warning">Couldn\'t bind key with zero keycode, try another key!</string>
 
 </resources>

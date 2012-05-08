@@ -129,7 +129,7 @@ public class RenderThread extends Thread {
                     next.bitmap = null;
                 }
 
-                Common.d("Allocated heap size " + (Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()));
+                Common.d("Allocated heap size " + (Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize())/ 1024 / 1024 + "Mb");
                 cachedBitmaps.clear();
                 Common.d("Cache is cleared!");
             //}
@@ -165,7 +165,7 @@ public class RenderThread extends Thread {
 
         while (!stopped) {
 
-            Common.d("Allocated heap size " + (Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()));
+            Common.d("Allocated heap size " + (Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize())/ 1024 / 1024 + "Mb");
 
             int rotation = 0;
             CacheInfo resultEntry = null;

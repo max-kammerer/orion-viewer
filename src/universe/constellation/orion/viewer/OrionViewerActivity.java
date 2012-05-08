@@ -231,7 +231,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         getOrionContext().onNewBook(filePath);
         try {
             String filePAthLowCase = filePath.toLowerCase();
-            if (filePAthLowCase.endsWith("pdf") || filePAthLowCase.endsWith("xps")) {
+            if (filePAthLowCase.endsWith("pdf") || filePAthLowCase.endsWith("xps") || filePAthLowCase.endsWith("cbz")) {
                 doc = new PdfDocument(filePath);
             } else {
                 doc = new DjvuDocument(filePath);
@@ -854,6 +854,16 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
         }
 
+        int actionCode = getOrionContext().getKeyBinding().getInt("" + keyCode, -1);
+        if (actionCode != -1) {
+            Action action = Action.getAction(actionCode);
+            switch (action) {
+                case PREV: case NEXT: changePage(action == Action.PREV ? Device.PREV : Device.NEXT); return true;
+                case NONE: break;
+                default: doAction(action); return true;
+            }
+        }
+
         if (device.onKeyDown(keyCode, event, operation)) {
             changePage(operation.value);
             return true;
@@ -916,10 +926,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
             case R.id.rotation_menu_item: action = Action.ROTATION; break;
 
-            case R.id.keybinder_menu_item:
-                Intent in = new Intent(this, OrionKeyBinderActivity.class);
-                startActivity(in);
-                return true;
+//            case R.id.keybinder_menu_item:
+//                Intent in = new Intent(this, OrionKeyBinderActivity.class);
+//                startActivity(in);
+//                return true;
             case R.id.options_menu_item: action = Action.OPTIONS; break;
 
             case R.id.tap_menu_item:

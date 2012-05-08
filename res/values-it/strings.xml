@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Orion Viewer is a pdf and djvu viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2012  Michael Bogdanov
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--Orion Viewer is a pdf and djvu viewer for android devices-->
+
+<!--This program is free software: you can redistribute it and/or modify-->
+<!--it under the terms of the GNU General Public License as published by-->
+<!--the Free Software Foundation, either version 3 of the License, or-->
+<!--(at your option) any later version.-->
+
+<!--This program is distributed in the hope that it will be useful,-->
+<!--but WITHOUT ANY WARRANTY; without even the implied warranty of-->
+<!--MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the-->
+<!--GNU General Public License for more details.-->
+
+<!--You should have received a copy of the GNU General Public License-->
+<!--along with this program.  If not, see <http://www.gnu.org/licenses/>.-->
+
+<resources>
+    <string name="app_name">Orion Viewer</string>
+    <string name="navigation">Navigazione</string>
+    <string name="version_name">0.29.3</string>
+    <string name="crop_left">Sinistro</string>
+    <string name="enable_even_crop">Ritaglia pagine pari</string>
+    <string name="crop_right">Destro</string>
+    <string name="crop_top">Superiore</string>
+    <string name="crop_bottom">Inferiore</string>
+    <string name="rotate_0">0 gradi</string>
+    <string name="rotate_90">90 gradi</string>
+    <string name="rotate_270">270 gradi</string>
+    <string name="long_click">Tap lungo</string>
+    <string name="short_click">Tap breve</string>
+    <string name="binding_click">Tasto associato</string>
+
+
+
+    <string name="orientation_default">Predefinita</string>
+    <string name="orientation_default_rotation">Rotazione Prefefinita</string>
+    <string name="orientation_landscape">Orizzontale</string>
+    <string name="orientation_portrait">Verticale</string>
+    <string name="orientation_landscape_inverse">Orizzontale (270)</string>
+    <string name="orientation_portrait_inverse">Verticale (180)</string>
+
+
+    <string name="fit_width">Adatta Larghezza</string>
+    <string name="fit_height">Adatta Altezza</string>
+    <string name="fit_page">Adatta Pagina</string>
+    <string name="fit_custom">Personalizzata...</string>
+
+</resources>

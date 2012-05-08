@@ -98,7 +98,12 @@
                   android:label="@string/app_name"
                   android:theme="@android:style/Theme.NoTitleBar"
                   android:launchMode="singleTask"
-                  android:icon="@drawable/orion"/>
+                  android:icon="@drawable/orion">
+            <intent-filter>
+                <action android:name="universe.constellation.orion.viewer.KEY_MANAGER"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <activity android:name=".OrionHelpActivity" android:screenOrientation="behind"
                   android:label="@string/app_name"
