@@ -1,3 +1,9 @@
+===== 0.31.0 (May 8, 2012) =====
+* Mupdf lib updated to version 1.0
+* Xps and cbz file support
+* New key manager/binder dialog (now avaliable from options)
+* Italian translation by Alberto Pettarin
+
 ===== 0.29.3 (Mar 27, 2012) =====
 * New Rotation Dialog
 
