@@ -46,6 +46,11 @@
             unless="sdk.dir"
     />
 
+    <target name="uninstall4">
+        <exec command="G:\android-sdk-windows\platform-tools\adb uninstall universe.constellation.orion.viewer"/>
+        <!--<exec command="G:\Android\android-sdk\platform-tools\adb install E:\progr\projects\android\vv\apdfviewer\out\production\apdfviewer\apdfviewer.apk"/>-->
+    </target>
+
 
 <!-- extension targets. Uncomment the ones where you want to do custom work
      in between standard targets -->

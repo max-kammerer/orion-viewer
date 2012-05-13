@@ -34,8 +34,23 @@ import java.io.*;
  */
 public class Common {
 
+//    public static Device createDevice() {
+//         return new NookDevice();
+//    }
+
     public static Device createDevice() {
-         return new AndroidDevice();
+//        try {
+//             if (Device.Info.NOOK_CLASSIC) {
+//                 return new NookDevice();
+//             } else if (Device.Info.ALEX) {
+//                 return (Device) Class.forName("com.google.code.orion_viewer.device.AlexDevice").newInstance();
+//             } else if (Device.Info.EDGE) {
+//                 return new EdgeDevice();
+//             }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        return new AndroidDevice();
     }
 
     public static final String LAST_OPENED_DIRECTORY = "LAST_OPENED_DIR";
