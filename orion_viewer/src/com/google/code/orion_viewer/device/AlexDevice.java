@@ -35,7 +35,7 @@ import universe.constellation.orion.viewer.R;
  * Time: 10:24
  */
 /* EpdRender is Highscreen/Spring Design Alex specific class,
- * if you are making build not for it just comment this class*/
+ * if you are making build not for Alex just comment this class*/
 public class AlexDevice extends EpdRender implements Device {
 
     private OrionBaseActivity activity;
