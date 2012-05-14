@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+     <declare-styleable name="TheMissingTabWidget">
+        <attr name="pictures_in_landscape_above" format="boolean" />
+         <attr name="always_landscape" format="boolean" />
+    </declare-styleable>
+</resources>
