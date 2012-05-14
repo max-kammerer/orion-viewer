@@ -29,7 +29,7 @@ import android.widget.TextView;
 import com.google.code.orion_viewer.*;
 import universe.constellation.orion.viewer.R;
 
-/**
+/**           just test
  * User: mike
  * Date: 19.11.11
  * Time: 10:24
