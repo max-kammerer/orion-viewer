@@ -22,15 +22,12 @@ package universe.constellation.orion.viewer.prefs;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.google.code.orion_viewer.Action;
-import com.google.code.orion_viewer.Common;
-import pl.polidea.demo.R;
+import universe.constellation.orion.viewer.R;
 
-import java.lang.reflect.Field;
 
 /**
  * User: mike
