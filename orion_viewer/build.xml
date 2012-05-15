@@ -46,9 +46,8 @@
             unless="sdk.dir"
     />
 
-    <target name="uninstall4">
-        <exec command="G:\android-sdk-windows\platform-tools\adb uninstall universe.constellation.orion.viewer"/>
-        <!--<exec command="G:\Android\android-sdk\platform-tools\adb install E:\progr\projects\android\vv\apdfviewer\out\production\apdfviewer\apdfviewer.apk"/>-->
+    <target name="uninstall-orion">
+        <exec command="adb uninstall universe.constellation.orion.viewer"/>
     </target>
 
 
@@ -88,4 +87,82 @@
     <!-- version-tag: 1 -->
       <import file="${sdk.dir}/tools/ant/build.xml" />
 
+      
+     <!-- Redefined to add alex android.jar. -->
+    <target name="-compile" depends="-build-setup, -pre-build, -code-gen, -pre-compile">
+        <do-only-if-manifest-hasCode elseText="hasCode = false. Skipping...">
+            <!-- If android rules are used for a test project, its classpath should include
+                 tested project's location -->
+            <condition property="extensible.classpath"
+                    value="${tested.project.absolute.dir}/bin/classes"
+                    else=".">
+                <isset property="tested.project.absolute.dir" />
+            </condition>
+            <condition property="extensible.libs.classpath"
+                    value="${tested.project.absolute.dir}/${jar.libs.dir}"
+                    else="${jar.libs.dir}">
+                <isset property="tested.project.absolute.dir" />
+            </condition>
+            
+            <javac encoding="${java.encoding}"
+                    source="${java.source}" target="${java.target}"
+                    debug="true" extdirs="" includeantruntime="false"
+                    destdir="${out.classes.absolute.dir}"
+                    bootclasspathref="android.target.classpath"
+                    verbose="${verbose}"
+                    classpath="${extensible.classpath}"
+                    classpathref="project.libraries.jars"
+                    fork="${need.javac.fork}">
+                <src path="${source.absolute.dir}" />
+                <src path="${gen.absolute.dir}" />
+                <classpath>
+                    <fileset dir="${extensible.libs.classpath}" includes="*.jar" />
+		    <!--set there classpath to alex android.jar-->
+		    <fileset dir="../../alex/alex/" includes="*.jar" />
+                </classpath>
+                <compilerarg line="${java.compilerargs}" />
+            </javac>
+            <!-- if the project is a library then we generate a jar file -->
+            <if condition="${project.is.library}">
+                <then>
+                    <echo>Creating library output jar file...</echo>
+                    <property name="out.library.jar.file" location="${out.absolute.dir}/classes.jar" />
+                    <if>
+                        <condition>
+                            <length string="${android.package.excludes}" trim="true" when="greater" length="0" />
+                        </condition>
+                        <then>
+                            <echo>Custom jar packaging exclusion: ${android.package.excludes}</echo>
+                        </then>
+                    </if>
+
+                    <propertybyreplace name="manifest.package.path" input="${manifest.package}" replace="." with="/" />
+
+                    <jar destfile="${out.library.jar.file}">
+                        <fileset dir="${out.classes.absolute.dir}"
+                                includes="**/*.class"
+                                excludes="${manifest.package.path}/R.class ${manifest.package.path}/R$*.class ${manifest.package.path}/Manifest.class ${manifest.package.path}/Manifest$*.class ${manifest.package.path}/BuildConfig.class"/>
+                        <fileset dir="${source.absolute.dir}" excludes="**/*.java ${android.package.excludes}" />
+                    </jar>
+                </then>
+            </if>
+
+            <!-- if the project is instrumented, intrument the classes -->
+            <if condition="${build.is.instrumented}">
+                <then>
+                    <echo>Instrumenting classes from ${out.absolute.dir}/classes...</echo>
+                    <!-- It only instruments class files, not any external libs -->
+                    <emma enabled="true">
+                        <instr verbosity="${verbosity}"
+                               mode="overwrite"
+                               instrpath="${out.absolute.dir}/classes"
+                               outdir="${out.absolute.dir}/classes">
+                            <filter excludes="${manifest.package}.R,${manifest.package}.R$$*,${manifest.package}.BuildConfig" />
+                            <filter value="${emma.filter}" />
+                        </instr>
+                    </emma>
+                </then>
+            </if>
+        </do-only-if-manifest-hasCode>
+    </target>
 </project>
