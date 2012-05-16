@@ -22,15 +22,13 @@ package universe.constellation.orion.viewer.prefs;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.*;
 import android.widget.*;
-import com.google.code.orion_viewer.Action;
-import com.google.code.orion_viewer.Common;
-import com.google.code.orion_viewer.OrionBaseActivity;
+import universe.constellation.orion.viewer.Action;
+import universe.constellation.orion.viewer.Common;
+import universe.constellation.orion.viewer.OrionBaseActivity;
 import universe.constellation.orion.viewer.R;
 
 import java.util.*;

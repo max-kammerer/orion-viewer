@@ -20,7 +20,7 @@ package universe.constellation.orion.viewer.prefs;
  */
 
 import android.view.KeyEvent;
-import com.google.code.orion_viewer.Common;
+import universe.constellation.orion.viewer.Common;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

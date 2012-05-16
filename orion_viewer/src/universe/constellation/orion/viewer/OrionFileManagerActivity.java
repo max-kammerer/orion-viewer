@@ -31,7 +31,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.google.code.orion_viewer.*;
 import pl.polidea.customwidget.TheMissingTabHost;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 

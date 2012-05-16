@@ -1,4 +1,4 @@
-package com.google.code.orion_viewer;
+package universe.constellation.orion.viewer;
 
 /*
  * Orion Viewer is a pdf and djvu viewer for android devices
@@ -20,9 +20,7 @@ package com.google.code.orion_viewer;
  */
 
 import android.graphics.Point;
-import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
-import universe.constellation.orion.viewer.prefs.PrefListener;
 
 /**
  * User: mike
@@ -49,17 +47,8 @@ public class Controller {
 
     private String screenOrientation;
 
-//    private PrefListener prefListener = new PrefListener() {
-//        @Override
-//        public void onPreferenceChanged(GlobalOptions option, String key, Object oldValue) {
-//            if ("HORIZONTAL")
-//        }
-//    };
 
     private Point lastScreenSize;
-
-    public static final int ROTATE_90 = -1;
-    public static final int ROTATE_270 = 1;
 
     public Controller(OrionViewerActivity activity, DocumentWrapper doc, LayoutStrategy layout, OrionView view) {
         this.activity = activity;

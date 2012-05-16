@@ -24,12 +24,8 @@ import android.content.res.TypedArray;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.util.AttributeSet;
-import android.widget.Toast;
-import com.google.code.orion_viewer.Action;
-import com.google.code.orion_viewer.Common;
 import universe.constellation.orion.viewer.R;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**

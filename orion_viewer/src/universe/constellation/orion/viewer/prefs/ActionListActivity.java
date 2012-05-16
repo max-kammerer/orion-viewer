@@ -25,7 +25,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.google.code.orion_viewer.Action;
+import universe.constellation.orion.viewer.Action;
 import universe.constellation.orion.viewer.R;
 
 

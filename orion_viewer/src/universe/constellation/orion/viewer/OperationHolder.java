@@ -1,4 +1,4 @@
-package com.google.code.orion_viewer;
+package universe.constellation.orion.viewer;
 
 /*
  * Orion Viewer is a pdf and djvu viewer for android devices
@@ -21,20 +21,9 @@ package com.google.code.orion_viewer;
 
 /**
  * User: mike
- * Date: 15.10.11
- * Time: 9:53
+ * Date: 18.10.11
+ * Time: 11:23
  */
-public interface DocumentWrapper {
-
-    boolean openDocument(String fileName);
-
-    int getPageCount();
-
-    PageInfo getPageInfo(int pageNum);
-
-    int[] renderPage(int pageNumber, double zoom, int w, int h, int left, int top, int right, int bottom);
-
-	void destroy();
-
-    String getTitle();
+public class OperationHolder {
+    public int value;
 }

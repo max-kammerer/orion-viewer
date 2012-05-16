@@ -1,4 +1,4 @@
-package com.google.code.orion_viewer.djvu;
+package universe.constellation.orion.viewer.djvu;
 
 /*
  * Orion Viewer is a pdf and djvu viewer for android devices
@@ -19,10 +19,9 @@ package com.google.code.orion_viewer.djvu;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import android.util.Log;
-import com.google.code.orion_viewer.Common;
-import com.google.code.orion_viewer.DocumentWrapper;
-import com.google.code.orion_viewer.PageInfo;
+import universe.constellation.orion.viewer.Common;
+import universe.constellation.orion.viewer.DocumentWrapper;
+import universe.constellation.orion.viewer.PageInfo;
 
 import java.util.Date;
 

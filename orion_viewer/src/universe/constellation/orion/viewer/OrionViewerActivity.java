@@ -32,12 +32,10 @@ import android.view.*;
 import android.widget.*;
 
 
-import com.google.code.orion_viewer.*;
-import com.google.code.orion_viewer.device.EdgeDevice;
-import com.google.code.orion_viewer.djvu.DjvuDocument;
-import com.google.code.orion_viewer.pdf.PdfDocument;
+import universe.constellation.orion.viewer.device.EdgeDevice;
+import universe.constellation.orion.viewer.djvu.DjvuDocument;
+import universe.constellation.orion.viewer.pdf.PdfDocument;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
-import universe.constellation.orion.viewer.prefs.OrionKeyBinderActivity;
 import universe.constellation.orion.viewer.prefs.OrionPreferenceActivity;
 import universe.constellation.orion.viewer.prefs.OrionTapActivity;
 import pl.polidea.customwidget.TheMissingTabHost;
@@ -189,7 +187,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         ((CheckBox)findMyViewById(R.id.crop_even_flag)).setChecked(controller.isEvenCropEnabled());
     }
 
-    public void updateOptions() {
+    public void updatePageLayout() {
         int did = controller.getDirection();
         int lid = controller.getLayout();
         ((RadioGroup) findMyViewById(R.id.layoutGroup)).check(lid == 0 ? R.id.layout1 : lid == 1 ? R.id.layout2 : R.id.layout3);
@@ -508,7 +506,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 //                controller.setDirectionAndLayout(did == R.id.direction1 ? 0 : 1, lid == R.id.layout1 ? 0 : lid == R.id.layout2 ? 1 : 2);
                 //main menu
                 onAnimatorCancel();
-                updateOptions();
+                updatePageLayout();
                 //animator.setDisplayedChild(MAIN_SCREEN);
             }
         });
@@ -526,7 +524,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         getSubscriptionManager().addDocListeners(new DocumentViewAdapter() {
             public void documentOpened(Controller controller) {
-                updateOptions();
+                updatePageLayout();
             }
         });
     }
@@ -770,7 +768,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         btn = (ImageButton) findMyViewById(R.id.navigation);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                updateOptions();
+                updatePageLayout();
                 animator.setDisplayedChild(PAGE_LAYOUT_SCREEN);
             }
         });
@@ -1094,20 +1092,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         if (screenId != -1) {
             showOrionDialog(screenId, action);
-//            updateRotation();
-//            updateCrops();
-//            updateOptions();
-//            updatePageSeeker();
-//            animator.setDisplayedChild(screenId);
-//
-//            //TODO move in action
-//            if (action == Action.ADD_BOOKMARK) {
-//                int page = controller.getCurrentPage();
-//                String text = getOrionContext().getBookmarkAccessor().selectExistingBookmark(getBookId(), page);
-//                ((EditText)findMyViewById(R.id.add_bookmark_text)).setText(text);
-//            }
-//
-//            dialog.show();
         } else {
             action.doAction(controller, this);
         }
@@ -1320,12 +1304,13 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     public void showOrionDialog(int screenId, Action action) {
         if (screenId != -1) {
-            updateRotation();
-            updateCrops();
-            updateOptions();
-            updatePageSeeker();
-            updateZoom();
-
+            switch (screenId) {
+                case ROTATION_SCREEN: updateRotation(); break;
+                case CROP_SCREEN: updateCrops(); break;
+                case PAGE_LAYOUT_SCREEN: updatePageLayout();
+                case PAGE_SCREEN: updatePageSeeker(); break;
+                case ZOOM_SCREEN: updateZoom(); break;
+            }
 
             if (action == Action.ADD_BOOKMARK) {
                 int page = controller.getCurrentPage();
@@ -1340,6 +1325,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
         }
     }
+
 
     public void changeDayNightMode() {
         boolean newMode = !getView().isNightMode();

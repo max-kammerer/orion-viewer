@@ -1,4 +1,4 @@
-package com.google.code.orion_viewer;
+package universe.constellation.orion.viewer;
 
 /*
  * Orion Viewer is a pdf and djvu viewer for android devices
@@ -20,10 +20,7 @@ package com.google.code.orion_viewer;
  */
 
 import android.util.Log;
-import com.google.code.orion_viewer.device.AlexDevice;
-import com.google.code.orion_viewer.device.AndroidDevice;
-import com.google.code.orion_viewer.device.EdgeDevice;
-import com.google.code.orion_viewer.device.NookDevice;
+import universe.constellation.orion.viewer.device.AndroidDevice;
 
 import java.io.*;
 
@@ -43,7 +40,7 @@ public class Common {
 //             if (Device.Info.NOOK_CLASSIC) {
 //                 return new NookDevice();
 //             } else if (Device.Info.ALEX) {
-//                 return (Device) Class.forName("com.google.code.orion_viewer.device.AlexDevice").newInstance();
+//                 return (Device) Class.forName("universe.constellation.orion.viewer.device.AlexDevice").newInstance();
 //             } else if (Device.Info.EDGE) {
 //                 return new EdgeDevice();
 //             }

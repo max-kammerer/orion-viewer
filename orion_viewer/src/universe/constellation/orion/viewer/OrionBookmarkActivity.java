@@ -21,25 +21,17 @@ package universe.constellation.orion.viewer;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.google.code.orion_viewer.Common;
-import com.google.code.orion_viewer.Device;
-import com.google.code.orion_viewer.FileChooser;
-import com.google.code.orion_viewer.OrionBaseActivity;
 import universe.constellation.orion.viewer.db.Bookmark;
 import universe.constellation.orion.viewer.db.BookmarkAccessor;
 import universe.constellation.orion.viewer.db.BookmarkExporter;
-import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
-import java.io.File;
 import java.io.IOException;
-import java.security.PublicKey;
 import java.util.List;
 
 /**

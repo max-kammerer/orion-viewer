@@ -1,8 +1,8 @@
 package com.artifex.mupdf;
 
-import com.google.code.orion_viewer.Common;
-import com.google.code.orion_viewer.DocInfo;
-import com.google.code.orion_viewer.PageInfo;
+import universe.constellation.orion.viewer.Common;
+import universe.constellation.orion.viewer.DocInfo;
+import universe.constellation.orion.viewer.PageInfo;
 
 import java.util.Date;
 

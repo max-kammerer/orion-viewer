@@ -26,7 +26,7 @@
     android:layout_height="772px"
     android:visibility="invisible">
 
-<com.google.code.orion_viewer.OrionView android:id="@+id/view"
+<universe.constellation.orion.viewer.OrionView android:id="@+id/view"
                                        android:textColor="#000000"
                                        android:color="#FFFFFF"
                                        android:gravity="center"

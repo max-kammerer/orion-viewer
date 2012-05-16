@@ -19,16 +19,14 @@ package universe.constellation.orion.viewer.prefs;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import android.content.Context;
 import android.os.Bundle;
 import android.preference.*;
-import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageButton;
-import com.google.code.orion_viewer.Common;
-import com.google.code.orion_viewer.Device;
-import com.google.code.orion_viewer.device.AndroidDevice;
-import com.google.code.orion_viewer.device.NookDevice;
+import universe.constellation.orion.viewer.Common;
+import universe.constellation.orion.viewer.Device;
+import universe.constellation.orion.viewer.device.AndroidDevice;
+import universe.constellation.orion.viewer.device.NookDevice;
 import universe.constellation.orion.viewer.R;
 
 /**

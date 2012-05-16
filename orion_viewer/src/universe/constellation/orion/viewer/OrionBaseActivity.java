@@ -1,4 +1,4 @@
-package com.google.code.orion_viewer;
+package universe.constellation.orion.viewer;
 
 /*
  * Orion Viewer is a pdf and djvu viewer for android devices
@@ -20,21 +20,14 @@ package com.google.code.orion_viewer;
  */
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
-import android.view.WindowManager;
-import android.webkit.WebView;
 import android.widget.*;
-import com.google.code.orion_viewer.device.AndroidDevice;
+import universe.constellation.orion.viewer.device.AndroidDevice;
 import pl.polidea.customwidget.TheMissingTabHost;
-import universe.constellation.orion.viewer.OrionFileManagerActivity;
-import universe.constellation.orion.viewer.OrionViewerActivity;
-import universe.constellation.orion.viewer.R;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionApplication;
 

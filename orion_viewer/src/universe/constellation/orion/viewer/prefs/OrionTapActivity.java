@@ -28,7 +28,9 @@ import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import com.google.code.orion_viewer.*;
+import universe.constellation.orion.viewer.Action;
+import universe.constellation.orion.viewer.Common;
+import universe.constellation.orion.viewer.OrionBaseActivity;
 import universe.constellation.orion.viewer.R;
 
 /**
