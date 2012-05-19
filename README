@@ -4,10 +4,10 @@
     orion_viewer/local.properties
     themissingtabwidget-0.2/local.properties
 3.a If you make build NOT for Highscreen/Spring Design Alex comment AlexDevice class 
-    in orion_viewer/src/com/google/code/orion_viewer/device/
+    in orion_viewer/src/universe/constellation/orion/viewer/device/
 3.b Otherwise just select alex target in orion_viewer/project.properties 
     or add 'alex/android.jar' to classpath in orion_viewer/build.xml
 4. Go to orion_viewer folder (there is ant script: build.xml) 
     and run 'ant' commmand with 'release' target:
 	ant release
-5. Compilation will starts!
+5. Project building will starts!
