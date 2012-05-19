@@ -915,20 +915,19 @@ public class OrionViewerActivity extends OrionBaseActivity {
             case R.id.exit_menu_item:
                 finish();
                 return true;
+
             case R.id.crop_menu_item: action = Action.CROP; break;
             case R.id.zoom_menu_item: action = Action.ZOOM; break;
             case R.id.add_bookmark_menu_item: action = Action.ADD_BOOKMARK; break;
             case R.id.goto_menu_item: action = Action.GOTO; break;
-            case R.id.navigation_menu_item:  showOrionDialog(PAGE_LAYOUT_SCREEN, null);
+            case R.id.navigation_menu_item: showOrionDialog(PAGE_LAYOUT_SCREEN, null);
                 return true;
 
             case R.id.rotation_menu_item: action = Action.ROTATION; break;
 
-//            case R.id.keybinder_menu_item:
-//                Intent in = new Intent(this, OrionKeyBinderActivity.class);
-//                startActivity(in);
-//                return true;
             case R.id.options_menu_item: action = Action.OPTIONS; break;
+
+            case R.id.book_options_menu_item: action = Action.OPTIONS; break;
 
             case R.id.tap_menu_item:
                 Intent tap = new Intent(this, OrionTapActivity.class);
@@ -1066,35 +1065,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
 
     public void doAction(Action action) {
-        int screenId = -1;
-        switch (action) {
-            case NONE: break;
-            case MENU: openOptionsMenu(); return;
-            case CROP: screenId = CROP_SCREEN; break;
-            case ZOOM: screenId = ZOOM_SCREEN; break;
-            case ROTATION: screenId = ROTATION_SCREEN; break;
-
-            case OPTIONS:
-                Intent intent = new Intent(this, OrionPreferenceActivity.class);
-                startActivity(intent);
-            break;
-            case NEXT:
-                if (controller != null) {
-                    controller.drawNext();
-                }
-                break;
-            case PREV:
-                if (controller != null) {
-                    controller.drawPrev();
-                }
-                break;
-        }
-
-        if (screenId != -1) {
-            showOrionDialog(screenId, action);
-        } else {
-            action.doAction(controller, this);
-        }
+        action.doAction(controller, this);
     }
 
 
@@ -1126,7 +1097,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public void initRotationScreen() {
-        if (getDevice() instanceof EdgeDevice) {
+        //if (getDevice() instanceof EdgeDevice) {
+        if (false) {
             final RadioGroup rotationGroup = (RadioGroup) findMyViewById(R.id.rotationGroup);
 
             rotationGroup.check(R.id.rotate0);

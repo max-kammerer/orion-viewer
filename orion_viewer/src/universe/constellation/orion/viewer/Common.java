@@ -21,6 +21,8 @@ package universe.constellation.orion.viewer;
 
 import android.util.Log;
 import universe.constellation.orion.viewer.device.AndroidDevice;
+import universe.constellation.orion.viewer.device.EdgeDevice;
+import universe.constellation.orion.viewer.device.NookDevice;
 
 import java.io.*;
 
@@ -36,23 +38,23 @@ public class Common {
 //    }
 
     public static Device createDevice() {
-//        try {
-//             if (Device.Info.NOOK_CLASSIC) {
-//                 return new NookDevice();
-//             } else if (Device.Info.ALEX) {
-//                 return (Device) Class.forName("universe.constellation.orion.viewer.device.AlexDevice").newInstance();
-//             } else if (Device.Info.EDGE) {
-//                 return new EdgeDevice();
-//             }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        try {
+             if (Device.Info.NOOK_CLASSIC) {
+                 return new NookDevice();
+             } else if (Device.Info.ALEX) {
+                 return (Device) Class.forName("universe.constellation.orion.viewer.device.AlexDevice").newInstance();
+             } else if (Device.Info.EDGE) {
+                 return new EdgeDevice();
+             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return new AndroidDevice();
     }
 
     public static final String LAST_OPENED_DIRECTORY = "LAST_OPENED_DIR";
 
-    public static final String LOGTAG = "Orion_Viewer";
+    public static final String LOGTAG = "OrionViewer";
 
     public static PrintWriter writer;
 

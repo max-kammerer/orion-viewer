@@ -28,6 +28,7 @@ import org.xmlpull.v1.XmlSerializer;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 /**
  * User: mike
@@ -63,6 +64,8 @@ public class LastPageInfo implements Serializable {
 
     public int navigation = 0;
     public int pageLayout = 0;
+
+    public int contrast = 100;
 
     public transient String fileData;
 
@@ -127,28 +130,43 @@ public class LastPageInfo implements Serializable {
             serializer.startTag(nameSpace, "bookParameters");
             serializer.attribute(nameSpace, "version", "" + CURRENT_VERSION);
 
-            writeValue(serializer, "screenWidth", screenWidth);
-            writeValue(serializer, "screenHeight", screenHeight);
+            Field [] fields = this.getClass().getDeclaredFields();
+            for (int i = 0; i < fields.length; i++) {
+                Field field = fields[i];
+                try {
+                    int modifiers = field.getModifiers();
+                    if ((modifiers & (Modifier.TRANSIENT | Modifier.STATIC )) == 0) {
+                        System.out.println(field.getName());
+                        writeValue(serializer, field.getName(), field.get(this).toString());
+                    }
+                } catch (IllegalAccessException e) {
+                    Common.d(e);
+                }
+            }
 
-            writeValue(serializer, "pageNumber", pageNumber);
-            writeValue(serializer, "rotation", rotation);
-            writeValue(serializer, "screenOrientation", screenOrientation);
 
-            writeValue(serializer, "offsetX", offsetX);
-            writeValue(serializer, "offsetY", offsetY);
-
-            writeValue(serializer, "zoom", zoom);
-
-            writeValue(serializer, "leftMargin", leftMargin);
-            writeValue(serializer, "rightMargin", rightMargin);
-            writeValue(serializer, "topMargin", topMargin);
-            writeValue(serializer, "bottomMargin", bottomMargin);
-            writeValue(serializer, "leftEvenMargin", leftEvenMargin);
-            writeValue(serializer, "rightEventMargin", rightEventMargin);
-            writeValue(serializer, "enableEvenCropping", enableEvenCropping);
-
-            writeValue(serializer, "navigation", navigation);
-            writeValue(serializer, "pageLayout", pageLayout);
+//            writeValue(serializer, "screenWidth", screenWidth);
+//            writeValue(serializer, "screenHeight", screenHeight);
+//
+//            writeValue(serializer, "pageNumber", pageNumber);
+//            writeValue(serializer, "rotation", rotation);
+//            writeValue(serializer, "screenOrientation", screenOrientation);
+//
+//            writeValue(serializer, "offsetX", offsetX);
+//            writeValue(serializer, "offsetY", offsetY);
+//
+//            writeValue(serializer, "zoom", zoom);
+//
+//            writeValue(serializer, "leftMargin", leftMargin);
+//            writeValue(serializer, "rightMargin", rightMargin);
+//            writeValue(serializer, "topMargin", topMargin);
+//            writeValue(serializer, "bottomMargin", bottomMargin);
+//            writeValue(serializer, "leftEvenMargin", leftEvenMargin);
+//            writeValue(serializer, "rightEventMargin", rightEventMargin);
+//            writeValue(serializer, "enableEvenCropping", enableEvenCropping);
+//
+//            writeValue(serializer, "navigation", navigation);
+//            writeValue(serializer, "pageLayout", pageLayout);
 
 
             serializer.endTag(nameSpace, "bookParameters");
@@ -213,7 +231,7 @@ public class LastPageInfo implements Serializable {
                             } else if (type.equals(String.class)) {
                                 value = rawValue;
                             } else {
-                                Common.d("Error on deserializing field " + name + "=" + rawValue);
+                                Common.d("Error on deserializing field " + name + " = " + rawValue);
                                 continue;
                             }
                             getClass().getField(name).set(this, value);

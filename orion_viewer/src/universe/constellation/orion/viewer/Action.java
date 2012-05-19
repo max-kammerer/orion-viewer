@@ -23,6 +23,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.widget.Toast;
 import universe.constellation.orion.viewer.prefs.OrionApplication;
+import universe.constellation.orion.viewer.prefs.OrionBookPreferences;
+import universe.constellation.orion.viewer.prefs.OrionPreferenceActivity;
 import universe.constellation.orion.viewer.prefs.TemporaryOptions;
 
 import java.util.HashMap;
@@ -34,13 +36,38 @@ import java.util.HashMap;
  */
 public enum Action {
 
-    NONE (R.string.action_none, R.integer.action_none),
+    NONE (R.string.action_none, R.integer.action_none) {
+        @Override
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            //none action
+        }
+    } ,
 
-    MENU (R.string.action_menu, R.integer.action_menu) ,
+    MENU (R.string.action_menu, R.integer.action_menu) {
+        @Override
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            activity.openOptionsMenu();
+        }
+    } ,
 
-    NEXT (R.string.action_next_page, R.integer.action_next_page),
 
-    PREV (R.string.action_prev_page, R.integer.action_prev_page),
+    NEXT (R.string.action_next_page, R.integer.action_next_page) {
+            @Override
+            public void doAction(Controller controller, OrionViewerActivity activity) {
+                if (controller != null) {
+                    controller.drawNext();
+                }
+            }
+        } ,
+
+    PREV (R.string.action_prev_page, R.integer.action_prev_page) {
+                @Override
+                public void doAction(Controller controller, OrionViewerActivity activity) {
+                    if (controller != null) {
+                        controller.drawPrev();
+                    }
+                }
+            } ,
 
     NEXT10 (R.string.action_next_10, R.integer.action_next_10) {
         @Override
@@ -67,11 +94,37 @@ public enum Action {
         }
     },
 
-    ZOOM (R.string.action_zoom_page, R.integer.action_zoom_page),
+    ZOOM (R.string.action_zoom_page, R.integer.action_zoom_page) {
+            @Override
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            activity.showOrionDialog(OrionViewerActivity.ZOOM_SCREEN, null);
+        }
+    },
 
-    CROP (R.string.action_crop_page, R.integer.action_crop_page),
+    CROP (R.string.action_crop_page, R.integer.action_crop_page) {
+            @Override
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            activity.showOrionDialog(OrionViewerActivity.CROP_SCREEN, null);
+        }
+    },
 
-    OPTIONS (R.string.action_options_page, R.integer.action_options_page),
+    OPTIONS (R.string.action_options_page, R.integer.action_options_page) {
+        @Override
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            Intent intent = new Intent(activity, OrionPreferenceActivity.class);
+            activity.startActivity(intent);
+        }
+    },
+
+    BOOK_OPTIONS (R.string.action_book_options, R.integer.action_book_options) {
+        @Override
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            Intent intent = new Intent(activity, OrionBookPreferences.class);
+            activity.startActivity(intent);
+        }
+    },
+
+
 
     GOTO (R.string.action_goto_page, R.integer.action_goto_page) {
 
@@ -81,7 +134,12 @@ public enum Action {
         }
     },
 
-    ROTATION (R.string.action_rotation_page, R.integer.action_rotation_page),
+    ROTATION (R.string.action_rotation_page, R.integer.action_rotation_page)  {
+            @Override
+        public void doAction(Controller controller, OrionViewerActivity activity) {
+            activity.showOrionDialog(OrionViewerActivity.ROTATION_SCREEN, null);
+        }
+    },
 
     ROTATE_90 (R.string.action_rotate_90, R.integer.action_rotate_90) {
         @Override

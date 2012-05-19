@@ -14,13 +14,19 @@
       android:title="@string/menu_zoom_text"
       android:icon="@drawable/zoom"/>
 
-    <item android:id="@+id/rotation_menu_item"
-          android:title="@string/menu_rotation_text"
-          android:icon="@drawable/rotate"/>
 
     <item android:id="@+id/crop_menu_item"
-          android:title="@string/menu_crop_text"
-          android:icon="@drawable/crop"/>
+    android:title="@string/menu_crop_text"
+    android:icon="@drawable/crop"/>
+
+
+    <item android:id="@+id/rotation_menu_item"
+    android:title="@string/menu_rotation_text"
+    android:icon="@drawable/rotate"/>
+
+    <item android:id="@+id/book_options_menu_item"
+          android:title="Book Options"
+          android:icon="@drawable/rotate"/>
 
     <item android:id="@+id/navigation_menu_item"
           android:title="@string/menu_navigation_text"

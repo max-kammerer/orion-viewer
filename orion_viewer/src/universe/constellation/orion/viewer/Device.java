@@ -116,4 +116,6 @@ public interface Device {
     void onSetContentView();
 
     Point getDeviceSize();
+
+    void screenSizeChanged(int width, int height);
 }

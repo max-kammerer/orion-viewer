@@ -183,4 +183,9 @@ public class AndroidDevice implements Device {
         return new Point(display.getWidth(), display.getHeight());
 
     }
+
+    @Override
+    public void screenSizeChanged(int width, int height) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

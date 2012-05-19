@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:orion="http://schemas.android.com/apk/res/universe.constellation.orion.viewer">
+    <PreferenceCategory
+            android:title="Book Preferences" android:key="GENERAL">
+
+        <!--<universe.constellation.orion.viewer.prefs.OrionEditPreference-->
+                  <!--android:summary="Contrast"-->
+                  <!--android:defaultValue="100"-->
+                  <!--android:title="Contrast"-->
+                  <!--android:key="contrast"-->
+                  <!--android:numeric="integer"-->
+                  <!--orion:pattern="1?[0-9]?[0-9]?|200"/>-->
+
+        <!--<ListPreference-->
+            <!--android:key="screenOrientation"-->
+                    <!--android:title="@string/pref_screen_orientation"-->
+                    <!--android:summary="@string/pref_rotate_screen"-->
+                    <!--android:entries="@array/screen_orientation_desc"-->
+                    <!--android:entryValues="@array/screen_orientation"-->
+                    <!--android:dialogTitle="Rotation"-->
+                    <!--android:defaultValue="DEFAULT" orion:justAndroidGeneral="true"/>-->
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

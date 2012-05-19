@@ -148,4 +148,9 @@ public class AlexDevice extends EpdRender implements Device {
     public Point getDeviceSize() {
         return new Point(800, 600);
     }
+
+    @Override
+    public void screenSizeChanged(int width, int height) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 }
