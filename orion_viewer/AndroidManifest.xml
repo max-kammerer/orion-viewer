@@ -114,6 +114,9 @@
         <activity android:name=".prefs.OrionPreferenceActivity" android:screenOrientation="behind"
           android:label="My Preferences"/>
 
+        <activity android:name=".prefs.OrionBookPreferences" android:screenOrientation="behind"
+          android:label="My Preferences"/>
+
         <activity android:name=".prefs.OrionTapActivity" android:screenOrientation="behind"
           android:label="Tap Zones"/>
 

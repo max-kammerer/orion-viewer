@@ -9,6 +9,8 @@
 
     <attr name="pattern" format="string" />
 
+    <attr name="isBook" format="boolean" />
+
     <attr name="notEmpty" format="boolean" />
 
     <attr name="justAndroidGeneral" format="boolean" />
@@ -43,5 +45,6 @@
         <attr name="maxValue"/>
         <attr name="notEmpty"/>
         <attr name="pattern"/>
+        <attr name="isBook"/>
     </declare-styleable>
 </resources>

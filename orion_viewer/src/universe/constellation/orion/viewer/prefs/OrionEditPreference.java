@@ -27,9 +27,12 @@ import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.WindowManager;
 import android.widget.Toast;
+import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.Device;
+import universe.constellation.orion.viewer.LastPageInfo;
 import universe.constellation.orion.viewer.R;
 
+import java.lang.reflect.Field;
 import java.util.regex.Pattern;
 
 /**
@@ -47,6 +50,8 @@ public class OrionEditPreference extends EditTextPreference  implements Preferen
     private String pattern;
 
     private CharSequence originalSummary;
+
+    private boolean isCurrentBookOption;
 
     public OrionEditPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -87,15 +92,88 @@ public class OrionEditPreference extends EditTextPreference  implements Preferen
 
     private void init(AttributeSet attrs) {
         originalSummary = getSummary();
-
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.universe_constellation_orion_viewer_prefs_OrionEditPreference);
         pattern = a.getString(R.styleable.universe_constellation_orion_viewer_prefs_OrionEditPreference_pattern);
+        isCurrentBookOption = a.getBoolean(R.styleable.universe_constellation_orion_viewer_prefs_OrionEditPreference_isBook, false);
         a.recycle();
         if (pattern != null) {
             setOnPreferenceChangeListener(this);
         }
-        //setSummary(originalSummary + ": " + getText());
+    }
+
+    @Override
+    protected boolean persistString(String value) {
+        if (isCurrentBookOption) {
+            return persistValue(value);
+        } else {
+            return super.persistString(value);
+        }
+    }
+
+//    protected boolean persistInt(int value) {
+//        if (isCurrentBookOption) {
+//            return persistValue(value);
+//        } else {
+//            return super.persistInt(value);
+//        }
+//    }
+
+    protected boolean persistValue(String value) {
+        LastPageInfo info = ((OrionApplication) getContext().getApplicationContext()).getCurrentBookParameters();
+        if (info != null) {
+            try {
+                Field f = info.getClass().getDeclaredField(getKey());
+                Class clazz = f.getType();
+                Object resultValue = value;
+                if (int.class.equals(clazz)) {
+                    resultValue = Integer.valueOf(value);
+                }
+                f.set(info, resultValue);
+                ((OrionApplication)getContext().getApplicationContext()).processBookOptionChange(getKey(), resultValue);
+                return true;
+            } catch (Exception e) {
+                Common.d(e);
+            }
+        }
+        return  false;
     }
 
 
+    protected int getPersistedInt(int defaultReturnValue) {
+        if (isCurrentBookOption) {
+            LastPageInfo info = ((OrionApplication) getContext()).getCurrentBookParameters();
+            if (info != null) {
+                try {
+                    Field f = info.getClass().getDeclaredField(getKey());
+                    Integer value = (Integer) f.get(info);
+                    return value;
+                } catch (Exception e) {
+                    Common.d(e);
+                }
+            }
+            return defaultReturnValue;
+        } else {
+            return super.getPersistedInt(defaultReturnValue);
+        }
+    }
+
+
+    @Override
+    protected String getPersistedString(String defaultReturnValue) {
+        if (isCurrentBookOption) {
+            LastPageInfo info = ((OrionApplication) getContext().getApplicationContext()).getCurrentBookParameters();
+            if (info != null) {
+                try {
+                    Field f = info.getClass().getDeclaredField(getKey());
+                    String value = f.get(info).toString();
+                    return value;
+                } catch (Exception e) {
+                    Common.d(e);
+                }
+            }
+            return  defaultReturnValue;
+        } else {
+            return super.getPersistedString(defaultReturnValue);
+        }
+    }
 }

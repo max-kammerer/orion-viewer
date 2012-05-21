@@ -78,7 +78,7 @@ public class OrionView extends View {
 
         if (bitmap != null && !bitmap.isRecycled()) {
             long start = new Date().getTime();
-            Common.d("OrionView: start drawing bitmap");
+            Common.d("OrionView: drawing bitmap on view...");
 
             Paint paint = null;
             if (isNightMode) {
@@ -88,7 +88,7 @@ public class OrionView extends View {
 
             canvas.drawBitmap(bitmap, 0, 0, paint);
 
-            Common.d("OrionView: draw bitmap for " + 0.001f * (new Date().getTime() - start) + " s");
+            Common.d("OrionView:... takes " + 0.001f * (new Date().getTime() - start) + " s");
         }
         if (latch != null) {
             latch.countDown();

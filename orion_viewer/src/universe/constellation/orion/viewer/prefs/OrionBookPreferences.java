@@ -1,9 +1,11 @@
 package universe.constellation.orion.viewer.prefs;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.*;
 import android.view.View;
 import android.widget.ImageButton;
+import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.Device;
 import universe.constellation.orion.viewer.R;
 
@@ -35,27 +37,7 @@ public class OrionBookPreferences extends PreferenceActivity {
             });
         }
 
-        PreferenceScreen screen = getPreferenceScreen();
-
-        screen.findPreference("EINK_OPTIMIZATION").setEnabled(Device.Info.NOOK2);
-
-        PreferenceCategory LAYOUT = (PreferenceCategory) screen.findPreference("LAYOUT");
-        ListPreference SCREEN_ORIENTATION = (ListPreference) findPreference("SCREEN_ORIENTATION");
-        Preference BOOK_ORIENTATION = screen.findPreference("BOOK_ORIENTATION");
-
-
-        if (!isAndroidGeneral) {
-            LAYOUT.removePreference(SCREEN_ORIENTATION);
-        } else {
-            LAYOUT.removePreference(BOOK_ORIENTATION);
-
-            if (getOrionContext().getSdkVersion() >= 9) {
-                SCREEN_ORIENTATION.setEntries(getResources().getTextArray(R.array.screen_orientation_full));
-                SCREEN_ORIENTATION.setEntryValues(getResources().getTextArray(R.array.screen_orientation_full_desc));
-            }
-        }
     }
-
 
     public void setContentView(int layoutResID) {
         super.setContentView(Device.Info.NOOK_CLASSIC ? R.layout.nook_preferences : layoutResID);
@@ -65,8 +47,4 @@ public class OrionBookPreferences extends PreferenceActivity {
         return (OrionApplication) getApplicationContext();
     }
 
-    @Override
-    public void addPreferencesFromResource(int preferencesResId) {
-        super.addPreferencesFromResource(preferencesResId);
-    }
 }

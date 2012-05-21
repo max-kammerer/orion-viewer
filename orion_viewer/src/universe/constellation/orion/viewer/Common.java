@@ -33,10 +33,6 @@ import java.io.*;
  */
 public class Common {
 
-//    public static Device createDevice() {
-//         return new NookDevice();
-//    }
-
     public static Device createDevice() {
         try {
              if (Device.Info.NOOK_CLASSIC) {

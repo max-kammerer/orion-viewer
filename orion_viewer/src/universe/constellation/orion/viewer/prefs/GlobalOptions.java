@@ -21,6 +21,8 @@ package universe.constellation.orion.viewer.prefs;
 
 import android.content.SharedPreferences;
 import universe.constellation.orion.viewer.Common;
+import universe.constellation.orion.viewer.OptionActions;
+import universe.constellation.orion.viewer.OrionViewerActivity;
 
 import java.io.Serializable;
 import java.util.*;
@@ -82,7 +84,7 @@ public class GlobalOptions implements Serializable {
 
     private List<PrefListener> prefListener = new ArrayList<PrefListener>();
 
-    GlobalOptions(SharedPreferences preferences, boolean loadRecents) {
+    GlobalOptions(final OrionApplication context, SharedPreferences preferences, boolean loadRecents) {
         prefs = preferences;
 
         if (loadRecents) {
@@ -101,12 +103,26 @@ public class GlobalOptions implements Serializable {
             public void onSharedPreferenceChanged(SharedPreferences preferences, String name) {
                 Common.d("onSharedPreferenceChanged " + name);
                 Object oldValue = prefValues.remove(name);
-                pushChangePropertyEvent(name, oldValue);
+
+                OrionViewerActivity activity = context.getViewActivity();
+                if (activity != null) {
+                    if (FULL_SCREEN.equals(name)) {
+                        OptionActions.FULL_SCREEN.doAction(activity, false, isFullScreen());
+                    } else if (SCREEN_OVERLAPPING_HORIZONTAL.equals(name)) {
+                        OptionActions.SCREEN_OVERLAPPING_HORIZONTAL.doAction(activity, getHorizontalOverlapping(), getVerticalOverlapping());
+                    } else if (SCREEN_OVERLAPPING_VERTICAL.equals(name)) {
+                        OptionActions.SCREEN_OVERLAPPING_VERTICAL.doAction(activity, getHorizontalOverlapping(), getVerticalOverlapping());
+                    }
+
+                }
+
             }
         };
 
         prefs.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
     }
+
+
 
     public String getLastOpenedDirectory() {
         return getStringProperty(Common.LAST_OPENED_DIRECTORY, null);
@@ -175,14 +191,6 @@ public class GlobalOptions implements Serializable {
         return recentFiles;
     }
 
-    public int getPrevKey() {
-        return getInt(PREV_KEY, -1);
-    }
-
-    public int getNextKey() {
-        return getInt(NEXT_KEY, -1);
-    }
-
 //    public void onDestroy(Context applicationContext) {
 //        if (onSharedPreferenceChangeListener != null) {
 //            PreferenceManager.getDefaultSharedPreferences(applicationContext).unregisterOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
@@ -193,10 +201,6 @@ public class GlobalOptions implements Serializable {
     public boolean isSwapKeys() {
         return getBooleanProperty(SWAP_KEYS, false);
     }
-
-//    public boolean isUseNookKeys() {
-//        return useNookKeys;
-//    }
 
     public int getDefaultOrientation() {
         return getIntFromStringProperty(DEFAULT_ORIENTATION, 0);
@@ -217,19 +221,8 @@ public class GlobalOptions implements Serializable {
             prefValues.remove(key);
             code = getInt(key, OrionTapActivity.getDefaultAction(i, j, isLong));
         }
-//        tapCodes[i * 3 + j][isLong ? 1 : 0] = code;
         return code;
     }
-
-
-//    private void resetTapCodes() {
-//        for (int i = 0; i < tapCodes.length; i++) {
-//            int[] tapCode = tapCodes[i];
-//            for (int j = 0; j < tapCode.length; j++) {
-//                tapCode[j] = -1;
-//            }
-//        }
-//    }
 
     public String getDictionary() {
         return getStringProperty(DICTIONARY, "FORA");
@@ -325,26 +318,26 @@ public class GlobalOptions implements Serializable {
         return getStringProperty(APPLICATION_THEME, "DEFAULT");
     }
 
-    public void subscribe(PrefListener listener) {
-        prefListener.add(listener);
-    }
-
-    private void pushChangePropertyEvent(String key, Object oldValue) {
-        for (int i = 0; i < prefListener.size(); i++) {
-            PrefListener prefListener1 =  prefListener.get(i);
-            try {
-                prefListener1.onPreferenceChanged(this, key, oldValue);
-            } catch (Exception e) {
-                Common.d(e);
-                //TODO show error
-            }
-        }
-    }
-
-
-    public void unsubscribe(PrefListener listener) {
-        prefListener.remove(listener);
-    }
+//    public void subscribe(PrefListener listener) {
+//        prefListener.add(listener);
+//    }
+//
+//    private void pushChangePropertyEvent(String key, Object oldValue) {
+//        for (int i = 0; i < prefListener.size(); i++) {
+//            PrefListener prefListener1 =  prefListener.get(i);
+//            try {
+//                prefListener1.onPreferenceChanged(this, key, oldValue);
+//            } catch (Exception e) {
+//                Common.d(e);
+//                //TODO show error
+//            }
+//        }
+//    }
+//
+//
+//    public void unsubscribe(PrefListener listener) {
+//        prefListener.remove(listener);
+//    }
 
     public void removePreference(String name) {
         prefs.edit().remove(name).commit();

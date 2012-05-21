@@ -4,13 +4,14 @@
     <PreferenceCategory
             android:title="Book Preferences" android:key="GENERAL">
 
-        <!--<universe.constellation.orion.viewer.prefs.OrionEditPreference-->
-                  <!--android:summary="Contrast"-->
-                  <!--android:defaultValue="100"-->
-                  <!--android:title="Contrast"-->
-                  <!--android:key="contrast"-->
-                  <!--android:numeric="integer"-->
-                  <!--orion:pattern="1?[0-9]?[0-9]?|200"/>-->
+        <universe.constellation.orion.viewer.prefs.OrionEditPreference
+                  android:summary="Contrast 1-1000 (default 100)"
+                  android:defaultValue="100"
+                  android:title="Contrast"
+                  android:key="contrast"
+                  android:numeric="integer"
+                  orion:isBook="true"
+                  orion:pattern="[0-9]?[0-9]?[0-9]|1000"/>
 
         <!--<ListPreference-->
             <!--android:key="screenOrientation"-->

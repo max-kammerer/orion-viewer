@@ -22,6 +22,9 @@ package universe.constellation.orion.viewer.prefs;
 import android.app.Activity;
 import android.app.Application;
 import android.preference.PreferenceManager;
+import universe.constellation.orion.viewer.Controller;
+import universe.constellation.orion.viewer.LastPageInfo;
+import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.db.BookmarkAccessor;
 
 import java.lang.reflect.Field;
@@ -45,6 +48,9 @@ public class OrionApplication extends Application {
 
     private int sdk_version = -1;
 
+    private OrionViewerActivity viewActivity;
+
+    private LastPageInfo currentBookParameters;
 
     public void onCreate() {
         instance = this;
@@ -53,14 +59,14 @@ public class OrionApplication extends Application {
 
     public GlobalOptions getOptions() {
         if (options == null) {
-            options = new GlobalOptions(PreferenceManager.getDefaultSharedPreferences(this), true);
+            options = new GlobalOptions(this, PreferenceManager.getDefaultSharedPreferences(this), true);
         }
         return options;
     }
 
     public GlobalOptions getKeyBinding() {
         if (keyBinding == null) {
-            keyBinding = new GlobalOptions(getSharedPreferences("key_binding", MODE_PRIVATE), false);
+            keyBinding = new GlobalOptions(this, getSharedPreferences("key_binding", MODE_PRIVATE), false);
         }
         return keyBinding;
     }
@@ -123,4 +129,33 @@ public class OrionApplication extends Application {
         }
 		return sdk_version;
 	}
+
+    public LastPageInfo getCurrentBookParameters() {
+        return currentBookParameters;
+    }
+
+    public void setCurrentBookParameters(LastPageInfo currentBookParameters) {
+        this.currentBookParameters = currentBookParameters;
+    }
+
+
+    public OrionViewerActivity getViewActivity() {
+        return viewActivity;
+    }
+
+    public void setViewActivity(OrionViewerActivity viewActivity) {
+        this.viewActivity = viewActivity;
+    }
+
+    //temporary hack
+    public void processBookOptionChange(String key, Object value) {
+        if (viewActivity != null) {
+            if ("contrast".equals(key)) {
+                Controller controller = viewActivity.getController();
+                if (controller != null) {
+                    controller.changeContrast((Integer)value);
+                }
+            }
+        }
+    }
 }

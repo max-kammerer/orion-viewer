@@ -32,7 +32,6 @@ import android.view.*;
 import android.widget.*;
 
 
-import universe.constellation.orion.viewer.device.EdgeDevice;
 import universe.constellation.orion.viewer.djvu.DjvuDocument;
 import universe.constellation.orion.viewer.pdf.PdfDocument;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
@@ -91,15 +90,14 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private Intent myIntent;
 
-    private boolean isFullScreen;
+    public boolean isResumed;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         loadGlobalOptions();
-        isFullScreen = globalOptions.isFullScreen();
-        if (isFullScreen) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
+
+        getOrionContext().setViewActivity(this);
+        OptionActions.FULL_SCREEN.doAction(this, !globalOptions.isFullScreen(), globalOptions.isFullScreen());
 
         super.onCreate(savedInstanceState);
         setContentView(device.getLayoutId());
@@ -223,7 +221,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public void openFile(String filePath) {
-        DocumentWrapper doc = null;
+        AbstractDocumentWrapper doc = null;
         Common.d("File URI  = " + filePath);
         Common.startLogger(filePath + ".trace");
         getOrionContext().onNewBook(filePath);
@@ -239,6 +237,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
             int idx = filePath.lastIndexOf('/');
 
             lastPageInfo = LastPageInfo.loadBookParameters(this, filePath);
+            getOrionContext().setCurrentBookParameters(lastPageInfo);
+
             controller = new Controller(this, doc, str, view);
 
             controller.changeOrinatation(lastPageInfo.screenOrientation);
@@ -270,6 +270,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
 
     public void onPause() {
+        isResumed = false;
         super.onPause();
         if (controller != null) {
             controller.onPause();
@@ -785,17 +786,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     protected void onResume() {
+        isResumed = true;
         super.onResume();
         updateBrightness();
-        boolean newFullScreen = globalOptions.isFullScreen();
-        if (isFullScreen != newFullScreen) {
-            if (newFullScreen) {
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            } else {
-                getWindow().setFlags(0, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            }
-            isFullScreen = newFullScreen;
-        }
 
         Common.d("onResume");
         if (myIntent != null) {
@@ -804,7 +797,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             myIntent = null;
         } else {
             if (controller != null) {
-                controller.changeOverlap(globalOptions.getHorizontalOverlapping(), globalOptions.getVerticalOverlapping());
+                controller.processPendingEvents();
                 //controller.startRenderer();
                 controller.drawPage();
             }
@@ -927,7 +920,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
             case R.id.options_menu_item: action = Action.OPTIONS; break;
 
-            case R.id.book_options_menu_item: action = Action.OPTIONS; break;
+            case R.id.book_options_menu_item: action = Action.BOOK_OPTIONS; break;
 
             case R.id.tap_menu_item:
                 Intent tap = new Intent(this, OrionTapActivity.class);

@@ -31,7 +31,7 @@ public class Controller {
 
     private LayoutPosition layoutInfo;
 
-    private DocumentWrapper doc;
+    private AbstractDocumentWrapper doc;
 
     private LayoutStrategy layout;
 
@@ -47,10 +47,13 @@ public class Controller {
 
     private String screenOrientation;
 
-
     private Point lastScreenSize;
 
-    public Controller(OrionViewerActivity activity, DocumentWrapper doc, LayoutStrategy layout, OrionView view) {
+    private int contrast;
+
+    private boolean hasPendingEvents = false;
+
+    public Controller(OrionViewerActivity activity, AbstractDocumentWrapper doc, LayoutStrategy layout, OrionView view) {
         this.activity = activity;
         this.doc = doc;
         this.layout = layout;
@@ -60,8 +63,13 @@ public class Controller {
 
         listener = new  DocumentViewAdapter() {
             public void viewParametersChanged() {
-                renderer.invalidateCache();
-                drawPage();
+                if (Controller.this.activity.isResumed) {
+                    renderer.invalidateCache();
+                    drawPage();
+                    hasPendingEvents = false;
+                } else {
+                    hasPendingEvents = true;
+                }
             }
         };
 
@@ -77,6 +85,14 @@ public class Controller {
     public void drawPage() {
         sendPageChangedNotification();
         renderer.render(layoutInfo);
+    }
+
+    public void processPendingEvents() {
+        if (hasPendingEvents) {
+            Common.d("Processing pending updates...");
+            layout.reset(layoutInfo, layoutInfo.pageNumber);
+            sendViewChangeNotification();
+        }
     }
 
     public void screenSizeChanged(int newWidth, int newHeight) {
@@ -186,7 +202,6 @@ public class Controller {
     public void setRotation(int rotation) {
         if (layout.changeRotation(rotation)) {
             layout.reset(layoutInfo, layoutInfo.pageNumber);
-            //view.setRotation(rotation);
             sendViewChangeNotification();
         }
     }
@@ -194,7 +209,6 @@ public class Controller {
     public void changeOverlap(int horizontal, int vertical) {
         if (layout.changeOverlapping(horizontal, vertical)) {
             layout.reset(layoutInfo, layoutInfo.pageNumber);
-            //view.setRotation(rotation);
             sendViewChangeNotification();
         }
     }
@@ -217,6 +231,8 @@ public class Controller {
 
 
     public void init(LastPageInfo info) {
+        doc.setContrast(info.contrast);
+
         layout.init(info, getActivity().getGlobalOptions());
         layoutInfo = new LayoutPosition();
         layout.reset(layoutInfo, info.pageNumber);
@@ -261,6 +277,14 @@ public class Controller {
 
     public void setDirectionAndLayout(int navigation, int pageLayout) {
         if (layout.changeNavigation(navigation) | layout.changePageLayout(pageLayout)) {
+            sendViewChangeNotification();
+        }
+    }
+
+    public void changeContrast(int contrast) {
+        if (this.contrast != contrast) {
+            this.contrast = contrast;
+            doc.setContrast(contrast);
             sendViewChangeNotification();
         }
     }

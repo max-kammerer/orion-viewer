@@ -136,7 +136,7 @@ public class LastPageInfo implements Serializable {
                 try {
                     int modifiers = field.getModifiers();
                     if ((modifiers & (Modifier.TRANSIENT | Modifier.STATIC )) == 0) {
-                        System.out.println(field.getName());
+                        //System.out.println(field.getName());
                         writeValue(serializer, field.getName(), field.get(this).toString());
                     }
                 } catch (IllegalAccessException e) {
