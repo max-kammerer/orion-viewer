@@ -4,7 +4,7 @@
 
 #include <android/log.h>
 
-#define LOG_TAG "djvulib"
+#define LOG_TAG "orion_bitmap"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 
@@ -27,9 +27,10 @@ JNICALL Java_universe_constellation_orion_viewer_AbstractDocumentWrapper_setCont
 
 void orion_updateContrast(unsigned char * data , int size) {
     if (contrast != DEFAULT_CONTRAST) {
-    LOGI("Update gamma : %i", size);
-	int i;
-    for (i = 0; i < size; i++) {
-        data[i] = orion_gamma[data[i]];
+       LOGI("Update gamma : %i", size);
+	    int i;
+        for (i = 0; i < size; i++) {
+            data[i] = orion_gamma[data[i]];
+        }
     }
 }
