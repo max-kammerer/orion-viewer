@@ -102,6 +102,15 @@ public class OrionEditPreference extends EditTextPreference  implements Preferen
     }
 
     @Override
+    protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
+        if (isCurrentBookOption && !restoreValue) {
+            //for android 1.5
+            restoreValue = true;
+        }
+        super.onSetInitialValue(restoreValue, defaultValue);
+    }
+
+    @Override
     protected boolean persistString(String value) {
         if (isCurrentBookOption) {
             return persistValue(value);

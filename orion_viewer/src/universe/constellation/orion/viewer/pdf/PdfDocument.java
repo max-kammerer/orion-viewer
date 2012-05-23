@@ -20,7 +20,6 @@ package universe.constellation.orion.viewer.pdf;
  */
 
 import com.artifex.mupdf.MuPDFCore;
-import universe.constellation.orion.viewer.AbstractDocumentWrapper;
 import universe.constellation.orion.viewer.DocumentWrapper;
 import universe.constellation.orion.viewer.PageInfo;
 
@@ -29,7 +28,7 @@ import universe.constellation.orion.viewer.PageInfo;
  * Date: 16.10.11
  * Time: 17:57
  */
-public class PdfDocument extends AbstractDocumentWrapper {
+public class PdfDocument implements DocumentWrapper {
 
     private MuPDFCore core;
 
@@ -59,5 +58,10 @@ public class PdfDocument extends AbstractDocumentWrapper {
 
     public String getTitle() {
         return core.getInfo().title;
+    }
+
+
+    public void setContrast(int contrast) {
+        core.setContrast(contrast);
     }
 }

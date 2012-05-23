@@ -89,4 +89,7 @@ public class MuPDFCore
     public DocInfo getInfo() {
         return info;
     }
+
+
+    public native void setContrast(int contrast);
 }

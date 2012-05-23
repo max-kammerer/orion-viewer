@@ -19,7 +19,6 @@ package universe.constellation.orion.viewer.djvu;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import universe.constellation.orion.viewer.AbstractDocumentWrapper;
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.DocumentWrapper;
 import universe.constellation.orion.viewer.PageInfo;
@@ -31,7 +30,7 @@ import java.util.Date;
  * Date: 22.11.11
  * Time: 10:42
  */
-public class DjvuDocument extends AbstractDocumentWrapper {
+public class DjvuDocument implements DocumentWrapper {
 
     static {
 		System.loadLibrary("djvu");
@@ -98,4 +97,6 @@ public class DjvuDocument extends AbstractDocumentWrapper {
     public String getTitle() {
         return null;
     }
+
+    public native void setContrast(int contrast);
 }

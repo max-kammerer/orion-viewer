@@ -37,4 +37,6 @@ public interface DocumentWrapper {
 	void destroy();
 
     String getTitle();
+
+    void setContrast(int contrast);
 }

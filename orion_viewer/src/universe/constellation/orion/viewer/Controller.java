@@ -31,7 +31,7 @@ public class Controller {
 
     private LayoutPosition layoutInfo;
 
-    private AbstractDocumentWrapper doc;
+    private DocumentWrapper doc;
 
     private LayoutStrategy layout;
 
@@ -53,7 +53,7 @@ public class Controller {
 
     private boolean hasPendingEvents = false;
 
-    public Controller(OrionViewerActivity activity, AbstractDocumentWrapper doc, LayoutStrategy layout, OrionView view) {
+    public Controller(OrionViewerActivity activity, DocumentWrapper doc, LayoutStrategy layout, OrionView view) {
         this.activity = activity;
         this.doc = doc;
         this.layout = layout;
@@ -90,7 +90,6 @@ public class Controller {
     public void processPendingEvents() {
         if (hasPendingEvents) {
             Common.d("Processing pending updates...");
-            layout.reset(layoutInfo, layoutInfo.pageNumber);
             sendViewChangeNotification();
         }
     }

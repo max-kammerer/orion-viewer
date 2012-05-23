@@ -221,7 +221,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public void openFile(String filePath) {
-        AbstractDocumentWrapper doc = null;
+        DocumentWrapper doc = null;
         Common.d("File URI  = " + filePath);
         Common.startLogger(filePath + ".trace");
         getOrionContext().onNewBook(filePath);
@@ -688,11 +688,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     private void initMainScreen() {
-        ImageButton btn = (ImageButton) findMyViewById(R.id.exit);
+        ImageButton btn = (ImageButton) findMyViewById(R.id.menu);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //controller.destroy();
-                finish();
+                openOptionsMenu();
             }
         });
         btn = (ImageButton) findMyViewById(R.id.prev_page);
@@ -895,7 +894,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
         if (result) {
-            getMenuInflater().inflate(R.menu.menu, menu);
+            getMenuInflater().inflate(Device.Info.NOOK_CLASSIC ? R.menu.nook_menu : R.menu.menu, menu);
         }
         return result;
     }
