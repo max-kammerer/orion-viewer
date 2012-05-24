@@ -5,9 +5,9 @@
             android:title="Book Preferences" android:key="GENERAL">
 
         <universe.constellation.orion.viewer.prefs.OrionEditPreference
-                  android:summary="Contrast 1-1000 (default 100)"
+                  android:summary="@string/pref_book_contrast_desc"
                   android:defaultValue="100"
-                  android:title="Contrast"
+                  android:title="@string/pref_book_contrast"
                   android:key="contrast"
                   android:numeric="integer"
                   orion:isBook="true"

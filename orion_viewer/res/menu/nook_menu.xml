@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/book_options_menu_item"
+          android:title="Book Options"
+          android:icon="@drawable/book_preferences"/>
+
+    <item android:id="@+id/day_night_menu_item"
+          android:title="@string/menu_day_night_text"
+          android:icon="@drawable/day_night"/>
+
+    <item android:id="@+id/help_menu_item"
+          android:title="@string/menu_help_text"
+          android:icon="@drawable/help"/>
+
+    <item android:id="@+id/exit_menu_item"
+          android:title="@string/menu_exit_text"
+          android:icon="@drawable/close"/>
+</menu>

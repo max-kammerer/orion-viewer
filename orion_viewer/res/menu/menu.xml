@@ -26,7 +26,7 @@
 
     <item android:id="@+id/book_options_menu_item"
           android:title="Book Options"
-          android:icon="@drawable/rotate"/>
+          android:icon="@drawable/book_preferences"/>
 
     <item android:id="@+id/navigation_menu_item"
           android:title="@string/menu_navigation_text"
@@ -58,7 +58,7 @@
 
     <item android:id="@+id/day_night_menu_item"
           android:title="@string/menu_day_night_text"
-          android:icon="@drawable/help"/>
+          android:icon="@drawable/day_night"/>
 
     <item android:id="@+id/help_menu_item"
           android:title="@string/menu_help_text"

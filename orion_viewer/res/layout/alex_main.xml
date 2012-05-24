@@ -49,6 +49,9 @@
                         android:layout_width="fill_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:gravity="right" android:layout_weight="0">
 
+                        <universe.constellation.orion.viewer.android.ImageButton android:id="@+id/book_options" android:layout_width="50.0px" android:layout_height="50.0px"
+                                                                 android:src="@drawable/book_preferences" orion:actionId="@integer/action_book_options" />
+
                         <ImageButton android:id="@+id/options"  android:layout_width="50px" android:layout_height="50px"
                                      android:src="@drawable/options"/>
 

@@ -32,6 +32,7 @@ import android.view.*;
 import android.widget.*;
 
 
+import universe.constellation.orion.viewer.device.EdgeDevice;
 import universe.constellation.orion.viewer.djvu.DjvuDocument;
 import universe.constellation.orion.viewer.pdf.PdfDocument;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
@@ -755,14 +756,16 @@ public class OrionViewerActivity extends OrionBaseActivity {
         });
 
         btn = (ImageButton) findMyViewById(R.id.help);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //animator.setDisplayedChild(HELP_SCREEN);
-                Intent intent = new Intent();
-                intent.setClass(OrionViewerActivity.this, OrionHelpActivity.class);
-                startActivity(intent);
-            }
-        });
+        if (btn != null) {
+            btn.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    //animator.setDisplayedChild(HELP_SCREEN);
+                    Intent intent = new Intent();
+                    intent.setClass(OrionViewerActivity.this, OrionHelpActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
 
 
         btn = (ImageButton) findMyViewById(R.id.navigation);
@@ -1089,8 +1092,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public void initRotationScreen() {
-        //if (getDevice() instanceof EdgeDevice) {
-        if (false) {
+        if (getDevice() instanceof EdgeDevice) {
+        //if (false) {
             final RadioGroup rotationGroup = (RadioGroup) findMyViewById(R.id.rotationGroup);
 
             rotationGroup.check(R.id.rotate0);

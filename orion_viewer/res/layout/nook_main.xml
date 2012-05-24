@@ -94,8 +94,10 @@
                 <ImageButton android:id="@+id/menu" android:layout_width="45.0px" android:layout_height="45.0px"
                              android:src="@drawable/menu"/>
 
-                <ImageButton android:id="@+id/help" android:layout_width="45.0px" android:layout_height="45.0px"
-                             android:src="@drawable/help"/>
+                <!--<ImageButton android:id="@+id/help" android:layout_width="45.0px" android:layout_height="45.0px"-->
+                             <!--android:src="@drawable/help"/>-->
+                <universe.constellation.orion.viewer.android.ImageButton android:id="@+id/book_options" android:layout_width="45.0px" android:layout_height="45.0px"
+                                             android:src="@drawable/book_preferences" orion:actionId="@integer/action_book_options" />
 
                 <ImageButton android:id="@+id/options" android:layout_width="45.0px" android:layout_height="45.0px"
                              android:src="@drawable/options"/>
