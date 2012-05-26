@@ -56,9 +56,25 @@ public class EdgeDevice extends AndroidDevice {
                 // do nothing - orientation is same
             } else {
                 try {
-                    fb.initParameters();
+                    //do e-ink rotate
+//                    FileWriter writer = null;
+//                    try {
+//                        Common.d("Changing e-ink orientattion....");
+////                        writer = new FileWriter("/sys/class/graphics/fb" + fb.framebuffer + "/rotate");
+////                        writer.write((width > height ? "90" : "0") + "\n");
+                        Process pr = Runtime.getRuntime().exec("echo " + (width > height ? "90" : "0") +">/sys/class/graphics/fb2/rotate");
+                        pr.waitFor();
+                        Common.d("...orientattion changed successfully");
+
+//                finally {
+////                        if (writer != null) {
+////                            writer.close();
+////                        }
+//                    }
+
+                    //fb.initParameters();
                     onSetContentView(false);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     Common.d(e);
                 }
             }

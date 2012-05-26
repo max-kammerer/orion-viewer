@@ -152,10 +152,16 @@
     </PreferenceCategory>
 
 
+<PreferenceCategory
+               android:title="System" android:key="SYSTEM">
     <universe.constellation.orion.viewer.prefs.DevicePrefInfo android:persistent="false"
-            android:title="Device">
+            android:title="Device Info"/>
 
+    <CheckBoxPreference
+                    android:key="DEBUG"
+                    android:title="@string/pref_debug"
+                    android:summary="@string/pref_debug_desc"
+                    android:defaultValue="false"/>
 
-    </universe.constellation.orion.viewer.prefs.DevicePrefInfo>
-
+</PreferenceCategory>
 </PreferenceScreen>

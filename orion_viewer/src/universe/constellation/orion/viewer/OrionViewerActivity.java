@@ -65,7 +65,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
     public static final int HELP_SCREEN = 100;
 
 
-
     public static final int CROP_RESTRICTION_MIN = -10;
 
     private static final int CROP_DELTA = 10;
@@ -224,7 +223,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     public void openFile(String filePath) {
         DocumentWrapper doc = null;
         Common.d("File URI  = " + filePath);
-        Common.startLogger(filePath + ".trace");
+
         getOrionContext().onNewBook(filePath);
         try {
             String filePAthLowCase = filePath.toLowerCase();
@@ -238,7 +237,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
             int idx = filePath.lastIndexOf('/');
 
             lastPageInfo = LastPageInfo.loadBookParameters(this, filePath);
+
             getOrionContext().setCurrentBookParameters(lastPageInfo);
+
+            OptionActions.DEBUG.doAction(this, false, getGlobalOptions().getBooleanProperty("DEBUG", false));
 
             controller = new Controller(this, doc, str, view);
 
@@ -1092,8 +1094,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public void initRotationScreen() {
-        if (getDevice() instanceof EdgeDevice) {
-        //if (false) {
+        //if (getDevice() instanceof EdgeDevice) {
+        if (false) {
             final RadioGroup rotationGroup = (RadioGroup) findMyViewById(R.id.rotationGroup);
 
             rotationGroup.check(R.id.rotate0);
@@ -1246,12 +1248,14 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public long getBookId() {
+        Common.d("Selecting book id...");
         LastPageInfo info = lastPageInfo;
         Long bookId = getOrionContext().getTempOptions().bookId;
         if (bookId == null) {
             bookId = getOrionContext().getBookmarkAccessor().selectBookId(info.simpleFileName, info.fileSize);
             getOrionContext().getTempOptions().bookId = bookId;
         }
+        Common.d("...book id = " + bookId.longValue());
         return bookId.longValue();
     }
 

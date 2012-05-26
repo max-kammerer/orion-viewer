@@ -20,6 +20,7 @@ package universe.constellation.orion.viewer.prefs;
  */
 
 import android.content.SharedPreferences;
+import android.os.Debug;
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.OptionActions;
 import universe.constellation.orion.viewer.OrionViewerActivity;
@@ -63,6 +64,7 @@ public class GlobalOptions implements Serializable {
     public final static String LONG_CROP_VALUE = "LONG_CROP_VALUE";
     public final static String SCREEN_OVERLAPPING_HORIZONTAL = "SCREEN_OVERLAPPING_HORIZONTAL";
     public final static String SCREEN_OVERLAPPING_VERTICAL = "SCREEN_OVERLAPPING_VERTICAL";
+    public final static String DEBUG = "SCREEN_OVERLAPPING_VERTICAL";
 
     public final static String BRIGHTNESS = "BRIGHTNESS";
 
@@ -112,6 +114,8 @@ public class GlobalOptions implements Serializable {
                         OptionActions.SCREEN_OVERLAPPING_HORIZONTAL.doAction(activity, getHorizontalOverlapping(), getVerticalOverlapping());
                     } else if (SCREEN_OVERLAPPING_VERTICAL.equals(name)) {
                         OptionActions.SCREEN_OVERLAPPING_VERTICAL.doAction(activity, getHorizontalOverlapping(), getVerticalOverlapping());
+                    } else if (DEBUG.equals(name)) {
+                        OptionActions.DEBUG.doAction(activity, false, getBooleanProperty(DEBUG, false));
                     }
 
                 }

@@ -55,17 +55,17 @@ public class Common {
     public static PrintWriter writer;
 
     public static void startLogger(String file) {
-//        if (writer != null) {
-//            stopLogger();
-//        }
-//        try {
-//            writer = new PrintWriter(new FileWriter(file));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            if (writer != null) {
-//                writer.close();
-//            }
-//        }
+        if (writer != null) {
+            stopLogger();
+        }
+        try {
+            writer = new PrintWriter(new FileWriter(file));
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (writer != null) {
+                writer.close();
+            }
+        }
     }
 
     public static void stopLogger() {

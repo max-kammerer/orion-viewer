@@ -19,6 +19,7 @@ package universe.constellation.orion.viewer.prefs;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
@@ -55,5 +56,14 @@ public class DevicePrefInfo extends DialogPreference {
         tv.setText(Device.Info.MODEL);
         tv = (TextView) view.findViewById(R.id.DEVICE);
         tv.setText(Device.Info.DEVICE);
+
+//        tv = (TextView) view.findViewById(R.id.MEMORY);
+//
+//        ActivityManager activityManager = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
+//        ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+//        activityManager.getMemoryInfo(memoryInfo);
+//
+//
+//        tv.setText("" + memoryInfo.availMem / 1024 / 1024 + " Mb");
     }
 }

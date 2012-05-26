@@ -32,14 +32,21 @@ public enum OptionActions {
         }
     },
 
-
-
-
     SET_CONSTRAST("contrast") {
         public void doAction(OrionViewerActivity activity, int oldValue, int newValue) {
             Controller controller = activity.getController();
             if (controller != null) {
                 controller.changeContrast(newValue);
+            }
+        }
+    },
+
+    DEBUG("DEBUG") {
+        public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
+            if (newValue) {
+                Common.startLogger(activity.getOrionContext().getCurrentBookParameters().openingFileName + ".trace");
+            } else {
+                Common.stopLogger();
             }
         }
     };

@@ -26,6 +26,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.ContactsContract;
+import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.R;
 
 import java.util.ArrayList;
@@ -137,6 +138,7 @@ public class BookmarkAccessor extends SQLiteOpenHelper {
 
     //pageNum is zero based!
     public String selectExistingBookmark(long bookId, int pageNum) {
+        Common.d("Selecting existing bookmark: bookId = " + bookId + " pagenum = " + pageNum);
         SQLiteDatabase dataBase = getReadableDatabase();
         Cursor c = null;
         try {

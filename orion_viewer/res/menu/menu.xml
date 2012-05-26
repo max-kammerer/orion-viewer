@@ -25,7 +25,7 @@
     android:icon="@drawable/rotate"/>
 
     <item android:id="@+id/book_options_menu_item"
-          android:title="Book Options"
+          android:title="@string/menu_book_preferences"
           android:icon="@drawable/book_preferences"/>
 
     <item android:id="@+id/navigation_menu_item"
