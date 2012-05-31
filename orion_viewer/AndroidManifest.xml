@@ -28,56 +28,43 @@
                   android:theme="@android:style/Theme.NoTitleBar"
                   android:launchMode="singleTask"
                   android:icon="@drawable/orion" android:configChanges="orientation" android:screenOrientation="behind" android:windowSoftInputMode="adjustPan">
+            <!--<intent-filter>-->
+                <!--<action android:name="com.bravo.intent.action.VIEW"/>-->
+                <!--<category android:name="android.intent.category.DEFAULT"/>-->
+                <!--<data android:scheme="file"/>-->
+                <!--<data android:scheme="content"/>-->
+                <!--<data android:mimeType="application/pdf"/>-->
+                <!--<data android:mimeType="application/djvu"/>-->
+                <!--<data android:mimeType="image/x-djvu"/>-->
+                <!--<data android:mimeType="image/vnd.djvu"/>-->
+                <!--<data android:mimeType="application/vnd.ms-xpsdocument"/>-->
+                <!--<data android:mimeType="application/x-cbz"/>-->
+            <!--</intent-filter>-->
+
             <intent-filter>
                 <action android:name="com.bravo.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:scheme="file" android:mimeType="application/pdf"/>
-                <data android:scheme="content" android:mimeType="application/pdf"/>
-                <data android:scheme="file" android:mimeType="application/djvu"/>
-                <data android:scheme="content" android:mimeType="application/djvu"/>
-                <data android:scheme="file" android:mimeType="image/x-djvu"/>
-                <data android:scheme="content" android:mimeType="image/x-djvu"/>
-                <data android:scheme="file" android:mimeType="image/vnd.djvu"/>
-                <data android:scheme="content" android:mimeType="image/vnd.djvu"/>
-            </intent-filter>
-
-            <intent-filter>
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="file"/>
                 <data android:scheme="content"/>
-				<data android:mimeType="application/pdf"/>
-			</intent-filter>
-
-            <intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<data android:host="" android:scheme="file" />
-				<data android:pathPattern=".*\\.pdf" />
-			</intent-filter>
-
-            <intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-				<category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="file"/>
-                <data android:scheme="content"/>
-				<data android:mimeType="application/djvu"/>
-			</intent-filter>
-
-            <intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-				<category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="file"/>
-                <data android:scheme="content"/>
-				<data android:mimeType="image/vnd.djvu"/>
+                <data android:mimeType="image/vnd.djvu"/>
                 <data android:mimeType="image/x-djvu"/>
+                <data android:mimeType="application/djvu"/>
+                <data android:mimeType="application/pdf"/>
+                <data android:mimeType="application/vnd.ms-xpsdocument"/>
+                <data android:mimeType="application/x-cbz"/>
 			</intent-filter>
 
             <intent-filter>
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
-				<data android:host="" android:scheme="file" />
+				<data android:host="*"/>
+                <data android:scheme="file" />
+                <data android:scheme="content" />
 				<data android:pathPattern=".*\\.djvu" />
+                <data android:pathPattern=".*\\.pdf" />
+                <data android:pathPattern=".*\\.xps" />
+                <data android:pathPattern=".*\\.cbz" />
 			</intent-filter>
         </activity>
 
