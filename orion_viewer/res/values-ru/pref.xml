@@ -32,9 +32,6 @@
 
     <string name="pref_open_recent_book">Открывать последнюю книгу при старте</string>
 
-    <string name="pref_debug">Debug</string>
-    <string name="pref_debug_desc">Write traces to file &lt;opened book name&gt; + .trace</string>
-
     <!--book preferences-->
     <string name="pref_book_contrast">Контрастность</string>
     <string name="pref_book_contrast_desc">Контрастность 1-1000 (по умолчанию 100)</string>
