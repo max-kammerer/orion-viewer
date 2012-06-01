@@ -180,10 +180,16 @@
                           android:gravity="left|center_vertical" android:linksClickable="true" android:autoLink="all"/>
             </TableRow>
             <TableRow>
-                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                   android:src="@drawable/pdf"/>
 
-                <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                <LinearLayout android:layout_width="wrap_content"
+                               android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center">
+                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                       android:src="@drawable/pdf"/>
+                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                       android:src="@drawable/xps"/>
+                </LinearLayout>
+
+                <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
                           android:textSize="18sp"
                           android:text="Oxygen Team - http://www.oxygen-icons.org"
                           android:gravity="left|center_vertical" android:linksClickable="true" android:autoLink="all"/>
