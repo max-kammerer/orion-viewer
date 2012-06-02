@@ -189,6 +189,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         int did = controller.getDirection();
         int lid = controller.getLayout();
         ((RadioGroup) findMyViewById(R.id.layoutGroup)).check(lid == 0 ? R.id.layout1 : lid == 1 ? R.id.layout2 : R.id.layout3);
+        //((RadioGroup) findMyViewById(R.id.directionGroup)).check(did == 0 ? R.id.direction1 : did == 1 ? R.id.direction2 : R.id.direction3);
         ((RadioGroup) findMyViewById(R.id.directionGroup)).check(did == 0 ? R.id.direction1 : R.id.direction2);
     }
 
@@ -522,7 +523,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 onApplyAction();
                 int did = ((RadioGroup) findMyViewById(R.id.directionGroup)).getCheckedRadioButtonId();
                 int lid = ((RadioGroup) findMyViewById(R.id.layoutGroup)).getCheckedRadioButtonId();
-                controller.setDirectionAndLayout(did == R.id.direction1 ? 0 : 1, lid == R.id.layout1 ? 0 : lid == R.id.layout2 ? 1 : 2);
+                controller.setDirectionAndLayout(did == R.id.direction1 ? 0 : did == R.id.direction2 ? 1 : 2, lid == R.id.layout1 ? 0 : lid == R.id.layout2 ? 1 : 2);
             }
         });
 

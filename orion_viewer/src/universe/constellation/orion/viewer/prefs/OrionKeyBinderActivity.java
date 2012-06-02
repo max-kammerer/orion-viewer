@@ -56,8 +56,8 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
         Button button = (Button) findViewById(R.id.reset_bind);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                getOrionContext().getKeyBinding().removeAll();
-                adapter.clear();
+            getOrionContext().getKeyBinding().removeAll();
+            adapter.clear();
             }
         });
 
@@ -74,6 +74,9 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
                 selectAction(keyCodeAndAction.keyCode);
             }
         });
+
+        bindedKeys.setFocusable(false);
+        button.setFocusable(false);
     }
 
     @Override

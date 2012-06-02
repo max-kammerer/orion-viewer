@@ -29,6 +29,10 @@ import universe.constellation.orion.viewer.prefs.GlobalOptions;
  */
 public class SimpleLayoutStrategy implements LayoutStrategy {
 
+    private static final int D_ABCD = 0;
+    private static final int D_ACBD = 1;
+    private static final int D_BDAC = 2;
+
     public int viewWidth;
 
     public int viewHeight;
@@ -56,62 +60,96 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
     }
 
     public void nextPage(LayoutPosition info) {
-        if (getDirection() == 0) {
-            if (info.cellX < info.maxX) {
-                info.cellX += 1;
-            } else if (info.cellY < info.maxY) {
-                info.cellX = 0;
-                info.cellY += 1;
-            } else {
-                if (info.pageNumber < doc.getPageCount() - 1) {
-                    reset(info, info.pageNumber + 1);
+        switch (getDirection()) {
+            case D_ACBD: //A, C, B, D
+                if (info.cellY < info.maxY) {
+                    info.cellY += 1;
+                } else if (info.cellX < info.maxX) {
+                    info.cellY = 0;
+                    info.cellX += 1;
+                } else {
+                    if (info.pageNumber < doc.getPageCount() - 1) {
+                        reset(info, info.pageNumber + 1);
+                    }
                 }
-            }
-        } else {
-            if (info.cellY < info.maxY) {
-                info.cellY += 1;
-            } else if (info.cellX < info.maxX) {
-                info.cellY = 0;
-                info.cellX += 1;
-            } else {
-                if (info.pageNumber < doc.getPageCount() - 1) {
-                    reset(info, info.pageNumber + 1);
+                break;
+            case D_BDAC: //B, D, A, C
+                if (info.cellY < info.maxY) {
+                    info.cellY += 1;
+                } else if (info.cellX > 0) {
+                    info.cellY = 0;
+                    info.cellX -= 1;
+                } else {
+                    if (info.pageNumber < doc.getPageCount() - 1) {
+                        reset(info, info.pageNumber + 1);
+                    }
                 }
-            }
+                break;
+            case D_ABCD: default: //A, B, C, D
+                if (info.cellX < info.maxX) {
+                    info.cellX += 1;
+                } else if (info.cellY < info.maxY) {
+                    info.cellX = 0;
+                    info.cellY += 1;
+                } else {
+                    if (info.pageNumber < doc.getPageCount() - 1) {
+                        reset(info, info.pageNumber + 1);
+                    }
+                }
+                break;
         }
         Common.d("new cellX = " + info.cellX + " cellY = " + info.cellY);
     }
 
     public void prevPage(LayoutPosition info) {
-        if (getDirection() == 0) {
-            if (info.cellX > 0) {
-                info.cellX -= 1;
-            } else if (info.cellY > 0) {
-                info.cellX = info.maxX;
-                info.cellY -= 1;
-            } else {
-                if (info.pageNumber > 0) {
-                    reset(info, info.pageNumber - 1);
-                    info.cellX = info.maxX;
+        switch (getDirection()) {
+            case D_ACBD: //A, C, B, D
+                if (info.cellY > 0) {
+                    info.cellY -= 1;
+                } else if (info.cellX > 0) {
                     info.cellY = info.maxY;
+                    info.cellX -= 1;
+                } else {
+                    if (info.pageNumber > 0) {
+                        reset(info, info.pageNumber - 1);
+                        info.cellX = info.maxX;
+                        info.cellY = info.maxY;
+                    }
                 }
-            }
-        } else {
-            if (info.cellY > 0) {
-                info.cellY -= 1;
-            } else if (info.cellX > 0) {
-                info.cellY = info.maxY;
-                info.cellX -= 1;
-            } else {
-                if (info.pageNumber > 0) {
-                    reset(info, info.pageNumber - 1);
-                    info.cellX = info.maxX;
+                break;
+            case D_BDAC: //B, D, A, C
+                if (info.cellY > 0) {
+                    info.cellY -= 1;
+                } else if (info.cellX < info.maxX) {
                     info.cellY = info.maxY;
+                    info.cellX += 1;
+                } else {
+                    if (info.pageNumber > 0) {
+                        reset(info, info.pageNumber - 1);
+                        info.cellX = 0;
+                        info.cellY = info.maxY;
+                    }
                 }
-            }
+                break;
+            case D_ABCD:
+            default: //A, B, C, D
+                if (info.cellX > 0) {
+                    info.cellX -= 1;
+                } else if (info.cellY > 0) {
+                    info.cellX = info.maxX;
+                    info.cellY -= 1;
+                } else {
+                    if (info.pageNumber > 0) {
+                        reset(info, info.pageNumber - 1);
+                        info.cellX = info.maxX;
+                        info.cellY = info.maxY;
+                    }
+                }
+                break;
         }
 
-        Common.d("new cellX = " + info.cellX + " maxX = " + info.cellY);
+
+        Common.d("new cellX = " + info.cellX + " cellY = " + info.cellY);
     }
     public boolean changeRotation(int rotation) {
         if (this.rotation != rotation) {
@@ -184,7 +222,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
             info.maxY = (info.pageHeight - vOverlap) / (info.pieceHeight - vOverlap) + ((info.pageHeight - vOverlap) % (info.pieceHeight - vOverlap) == 0 ?  0: 1) -1;
         }
 
-        info.cellX = 0;
+        info.cellX = getDirection() == D_BDAC ? info.maxX : 0;
         info.cellY = 0;
     }
 

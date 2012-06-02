@@ -25,7 +25,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
-import android.widget.Toast;
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.OrionView;
 import universe.constellation.orion.viewer.R;
@@ -50,61 +49,22 @@ public class EdgeDevice extends AndroidDevice {
     }
 
     @Override
-    public void screenSizeChanged(int width, int height) {
-        if (fb != null) {
-            if ((width > height && fb.getWidth() > fb.getHeight()) || (width < height && fb.getWidth() < fb.getHeight())) {
-                // do nothing - orientation is same
-            } else {
-                try {
-                    //do e-ink rotate
-//                    FileWriter writer = null;
-//                    try {
-//                        Common.d("Changing e-ink orientattion....");
-////                        writer = new FileWriter("/sys/class/graphics/fb" + fb.framebuffer + "/rotate");
-////                        writer.write((width > height ? "90" : "0") + "\n");
-                        Process pr = Runtime.getRuntime().exec("echo " + (width > height ? "90" : "0") +">/sys/class/graphics/fb2/rotate");
-                        pr.waitFor();
-                        Common.d("...orientattion changed successfully");
-
-//                finally {
-////                        if (writer != null) {
-////                            writer.close();
-////                        }
-//                    }
-
-                    //fb.initParameters();
-                    onSetContentView(false);
-                } catch (Exception e) {
-                    Common.d(e);
-                }
-            }
-        }
-    }
-
     public void onSetContentView() {
-        onSetContentView(true);
-    }
-
-
-    public void onSetContentView(boolean wrap) {
         if (fb != null) {
             if (activity.getViewerType() == VIEWER_ACTIVITY) {
                 View view = activity.findViewById(R.id.view);
-                ScrollView vsv = null;
-                if (wrap) {
-                    ViewGroup parent = (ViewGroup) view.getParent();
-                    parent.removeView(view);
+                ViewGroup parent = (ViewGroup) view.getParent();
+                parent.removeView(view);
 
-                    HorizontalScrollView hsv = new HorizontalScrollView(activity);
-                    hsv.setHorizontalFadingEdgeEnabled(false);
-                    ViewGroup.LayoutParams lp2 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
-                    parent.addView(hsv, lp2);
+                HorizontalScrollView hsv = new HorizontalScrollView(activity);
+                hsv.setHorizontalFadingEdgeEnabled(false);
+                ViewGroup.LayoutParams lp2 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+                parent.addView(hsv, lp2);
 
-                    lp2 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
-                    vsv = new ScrollView(activity);
-                    vsv.setVerticalFadingEdgeEnabled(false);
-                    hsv.addView(vsv, lp2);
-                }
+                lp2 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+                ScrollView vsv = new ScrollView(activity);
+                vsv.setVerticalFadingEdgeEnabled(false);
+                hsv.addView(vsv, lp2);
 
                 ViewGroup.LayoutParams lp = view.getLayoutParams();
                 lp.width = fb.getWidth();
@@ -112,11 +72,16 @@ public class EdgeDevice extends AndroidDevice {
                 view.setMinimumWidth(lp.width);
                 view.setMinimumHeight(lp.height);
                 view.setLayoutParams(lp);
-                if (wrap) {
-                    vsv.addView(view, lp);
-                }
+                vsv.addView(view, lp);
             }
         }
+//        if (activity.getViewerType() == VIEWER_ACTIVITY) {
+//            View view = activity.findViewById(R.id.view);
+//            ViewGroup.LayoutParams lp = view.getLayoutParams();
+//            lp.width = 300;
+//            lp.height = 300;
+//            view.setLayoutParams(lp);
+//        }
     }
 
     @Override
@@ -148,10 +113,6 @@ public class EdgeDevice extends AndroidDevice {
 
         public EdgeFB(int framebuffer) throws IOException {
             this.framebuffer = framebuffer;
-            initParameters();
-        }
-
-        protected void initParameters() throws IOException {
             BufferedReader buf = new BufferedReader(new FileReader("/sys/class/graphics/fb" + framebuffer + "/rotate"));
             String s = buf.readLine();
             buf.close();
@@ -208,6 +169,8 @@ public class EdgeDevice extends AndroidDevice {
                 bitmap.recycle();
 
             byte[] buffer = new byte[HEIGHT * stride];
+
+            int co;
 
             int o = 0;
 

@@ -97,7 +97,7 @@ public class Controller {
     public void screenSizeChanged(int newWidth, int newHeight) {
         Common.d("New screen size " + newWidth + "x" + newHeight);
 
-        activity.getDevice().screenSizeChanged(newWidth, newHeight);
+        //activity.getDevice().screenSizeChanged(newWidth, newHeight);
 
         layout.setDimension(newWidth, newHeight);
         GlobalOptions options = getActivity().getGlobalOptions();
