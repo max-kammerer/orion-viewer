@@ -40,6 +40,8 @@ public class EdgeDevice extends AndroidDevice {
 
     private EdgeFB fb;
 
+    private Boolean portrait;
+
     public EdgeDevice() {
         try {
             fb = new EdgeFB(2);
@@ -49,43 +51,90 @@ public class EdgeDevice extends AndroidDevice {
     }
 
     @Override
+//    public void screenSizeChanged(int width, int height) {
+//        if (fb != null) {
+//            boolean newPort = height > width;
+//            if (newPort == portrait) {
+//                // do nothing - orientation is same
+//                Common.d("Changing e-ink orientattion - do nothing");
+//            } else {
+//                try {
+//                    Common.d("Changing e-ink orientattion....");
+//                    onSetContentView(false);
+//                } catch (Exception e) {
+//                    Common.d(e);
+//                }
+//            }
+//        }
+//    }
+
     public void onSetContentView() {
+        onSetContentView(true);
+    }
+
+
+    public void onSetContentView(boolean wrap) {
         if (fb != null) {
+            Common.d("On set content view ");
             if (activity.getViewerType() == VIEWER_ACTIVITY) {
-                View view = activity.findViewById(R.id.view);
+                final View view = activity.findViewById(R.id.view);
+                ScrollView vsv = null;
+
                 ViewGroup parent = (ViewGroup) view.getParent();
                 parent.removeView(view);
 
-                HorizontalScrollView hsv = new HorizontalScrollView(activity);
-                hsv.setHorizontalFadingEdgeEnabled(false);
-                ViewGroup.LayoutParams lp2 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
-                parent.addView(hsv, lp2);
+                if (wrap) {
+                    HorizontalScrollView hsv = new HorizontalScrollView(activity) {
+                        @Override
+                        protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+                            Common.d("HSV onSizeChanged " + w + "x" + h);
+                            if (w != 0 && h != 0 & fb != null) {
+                                boolean newPortrait = h > w;
+                                if (portrait == null || newPortrait != portrait.booleanValue()) {
+                                    portrait = newPortrait;
 
-                lp2 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
-                ScrollView vsv = new ScrollView(activity);
-                vsv.setVerticalFadingEdgeEnabled(false);
-                hsv.addView(vsv, lp2);
+//                                try {
+//                                    Process pr = Runtime.getRuntime().exec("su -c echo " + (h > w ? "270" : "180")  + ">/sys/class/graphics/fb2/rotate");
+//                                    pr.waitFor();
+//                                    fb.initParameters();
+                                    onSetContentView(false);
+//                                } catch (IOException e) {
+//                                    Common.d(e);
+//                                } catch (InterruptedException e) {
+//                                    Common.d(e);
+                                }
+                            }
+                        }
+                    };
+                    hsv.setHorizontalFadingEdgeEnabled(false);
+                    ViewGroup.LayoutParams lp2 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+                    parent.addView(hsv, lp2);
 
-                ViewGroup.LayoutParams lp = view.getLayoutParams();
-                lp.width = fb.getWidth();
-                lp.height = fb.getHeight();
-                view.setMinimumWidth(lp.width);
-                view.setMinimumHeight(lp.height);
+                    lp2 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+                    vsv = new ScrollView(activity);
+                    vsv.setVerticalFadingEdgeEnabled(false);
+                    hsv.addView(vsv, lp2);
+                } else {
+                    vsv = (ScrollView) parent;
+                }
+                int newW = portrait == null || portrait.booleanValue() ? fb.getWidth() : fb.getHeight();
+                int newH = portrait == null || portrait.booleanValue() ? fb.getHeight() : fb.getWidth();
+                ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(newW, newH);
+                view.setMinimumWidth(newH);
+                view.setMinimumHeight(newH);
+
+                Common.d("Setting new lp " + lp.width + "x" + lp.height);
+
                 view.setLayoutParams(lp);
                 vsv.addView(view, lp);
             }
         }
-//        if (activity.getViewerType() == VIEWER_ACTIVITY) {
-//            View view = activity.findViewById(R.id.view);
-//            ViewGroup.LayoutParams lp = view.getLayoutParams();
-//            lp.width = 300;
-//            lp.height = 300;
-//            view.setLayoutParams(lp);
-//        }
     }
 
     @Override
     public void flushBitmap(int delay) {
+
+
         if (fb != null && activity.getViewerType() == VIEWER_ACTIVITY) {
             Bitmap bm = ((OrionView) activity.getView()).getBitmap();
             if (bm != null && !bm.isRecycled()) {
@@ -113,15 +162,21 @@ public class EdgeDevice extends AndroidDevice {
 
         public EdgeFB(int framebuffer) throws IOException {
             this.framebuffer = framebuffer;
+            initParameters();
+        }
+
+        protected void initParameters() throws IOException {
+            Common.d("Edge: initParameters");
             BufferedReader buf = new BufferedReader(new FileReader("/sys/class/graphics/fb" + framebuffer + "/rotate"));
             String s = buf.readLine();
             buf.close();
             rotate = Integer.parseInt(s);
-
+            Common.d("Edge: rotate = " + rotate);
             buf = new BufferedReader(new FileReader("/sys/class/graphics/fb" + framebuffer + "/stride"));
             s = buf.readLine();
             buf.close();
             stride = Integer.parseInt(s);
+            Common.d("Edge: stride = " + stride);
 
             buf = new BufferedReader(new FileReader("/sys/class/graphics/fb" + framebuffer + "/virtual_size"));
             String[] as = buf.readLine().split(",");
@@ -129,18 +184,24 @@ public class EdgeDevice extends AndroidDevice {
             width = Integer.parseInt(as[0]);
             height = Integer.parseInt(as[1]);
 
+            //it seems that on this step width and height is same)))) max of them)
+            Common.d("Edge: width = " + width);
+            Common.d("Edge: height = " + height);
+
             if (rotate == 90 || rotate == 270)
-                if (width == 800)
+                if (width == 800) {
                     width = 600; // edgejr
-                else {
+                    height = 800;
+                } else {
                     width = 825; // edge
                     height = 1200; // edge
                 }
 
             if (rotate == 0 || rotate == 180)
-                if (height == 800)
+                if (height == 800) {
                     height = 600; // edgejr
-                else {
+                    width = 800;
+                } else {
                     height = 825; // edge
                     width = 1200;
                 }
@@ -159,6 +220,12 @@ public class EdgeDevice extends AndroidDevice {
         }
 
         public void transfer(Bitmap bitmap, boolean recycle) throws IOException {
+            Common.d("Edge: rotate = " + rotate);
+            Common.d("Edge: stride = " + stride);
+            Common.d("Edge: width = " + width);
+            Common.d("Edge: height = " + height);
+
+
             OutputStream os = new FileOutputStream("/dev/graphics/fb" + framebuffer);
             int WIDTH = bitmap.getWidth(), HEIGHT = bitmap.getHeight();
             int dim = WIDTH * HEIGHT;
@@ -168,25 +235,30 @@ public class EdgeDevice extends AndroidDevice {
             if (recycle)
                 bitmap.recycle();
 
-            byte[] buffer = new byte[HEIGHT * stride];
-
-            int co;
+            byte[] buffer = new byte[(portrait ? HEIGHT : WIDTH) * stride];
 
             int o = 0;
 
-            for (int i = 0; i < HEIGHT; i++)
-                for (int j = 0; j < WIDTH; j++) {
-                    buffer[i * stride + j] = (byte) (Color.red(pixels[o++]) & 0xff);
-                }
+            if (portrait) {
+                for (int i = 0; i < HEIGHT; i++)
+                    for (int j = 0; j < WIDTH; j++) {
+                        buffer[i * stride + j] = (byte) (Color.red(pixels[o++]) & 0xff);
+                    }
+            } else {
+                for (int j = 0; j < HEIGHT; j++)
+                    for (int i = 0; i < WIDTH; i++) {
+                        buffer[i * stride + HEIGHT - j - 1] = (byte) (Color.red(pixels[o++]) & 0xff);
+                    }
+            }
 
             os.write(buffer);
             os.close();
-            renew(HEIGHT);
+            renew(HEIGHT, WIDTH);
         }
 
-        public void renew(int height) throws IOException {
+        public void renew(int height, int width) throws IOException {
             InputStream fs = new FileInputStream("/dev/graphics/fb" + framebuffer);
-            byte[] buffer = new byte[height * stride];
+            byte[] buffer = new byte[(portrait ? height : width) * stride];
             byte[] buffer2 = new byte[500 * stride];
             fs.read(buffer);
             fs.close();
