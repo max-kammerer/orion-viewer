@@ -88,7 +88,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-            android:title="@string/pref_e_ink_optimization">
+            android:title="@string/pref_e_ink_optimization" android:key="NOOK2_EINK">
         <CheckBoxPreference
                 android:key="EINK_OPTIMIZATION"
                 android:title="@string/pref_e_ink_fast_refresh"

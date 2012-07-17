@@ -26,6 +26,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import universe.constellation.orion.viewer.Action;
+import universe.constellation.orion.viewer.OrionBaseActivity;
+import universe.constellation.orion.viewer.OrionBookmarkActivity;
 import universe.constellation.orion.viewer.R;
 
 
@@ -36,14 +38,15 @@ import universe.constellation.orion.viewer.R;
  */
 public class ActionListActivity extends Activity {
 
-    private boolean populating;
+    //private boolean populating;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getOrionContext().applyTheme(this);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.actions_selection);
+
+        OrionBaseActivity.setContentView(this, R.layout.actions_selection);
 
         int type = getIntent().getIntExtra("type", 0);
         TextView header = (TextView) findViewById(R.id.actions_header);

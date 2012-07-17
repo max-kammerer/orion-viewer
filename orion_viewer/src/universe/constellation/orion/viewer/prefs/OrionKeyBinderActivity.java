@@ -26,10 +26,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
-import universe.constellation.orion.viewer.Action;
-import universe.constellation.orion.viewer.Common;
-import universe.constellation.orion.viewer.OrionBaseActivity;
-import universe.constellation.orion.viewer.R;
+import universe.constellation.orion.viewer.*;
 
 import java.util.*;
 
@@ -51,7 +48,8 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.key_binder);
+
+        OrionViewerActivity.setContentView(this, R.layout.key_binder);
 
         Button button = (Button) findViewById(R.id.reset_bind);
         button.setOnClickListener(new View.OnClickListener() {

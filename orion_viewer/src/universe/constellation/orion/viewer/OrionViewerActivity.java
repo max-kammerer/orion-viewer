@@ -872,7 +872,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         boolean swapKeys = globalOptions.isSwapKeys();
         int width = getView().getWidth();
         int height = getView().getHeight();
-        boolean landscape = width > height;
+        boolean landscape = width > height || controller.getRotation() != 0; /*second condition for nook and alex*/
         if (controller != null) {
             if (operation == Device.NEXT && (!landscape || !swapKeys) || swapKeys && operation == Device.PREV && landscape) {
                 controller.drawNext();

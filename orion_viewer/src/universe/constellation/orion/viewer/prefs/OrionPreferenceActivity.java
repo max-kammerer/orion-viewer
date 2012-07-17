@@ -57,7 +57,12 @@ public class OrionPreferenceActivity extends PreferenceActivity {
 
         PreferenceScreen screen = getPreferenceScreen();
 
-        screen.findPreference("EINK_OPTIMIZATION").setEnabled(Device.Info.NOOK2);
+        PreferenceCategory NOOK2_EINK = (PreferenceCategory) screen.findPreference("NOOK2_EINK");
+
+        if (!Device.Info.NOOK2) {
+            screen.removePreference(NOOK2_EINK);
+        }
+        //screen.findPreference("EINK_OPTIMIZATION").setEnabled(Device.Info.NOOK2);
 
         PreferenceCategory LAYOUT = (PreferenceCategory) screen.findPreference("LAYOUT");
         ListPreference SCREEN_ORIENTATION = (ListPreference) findPreference("SCREEN_ORIENTATION");

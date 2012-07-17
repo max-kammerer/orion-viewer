@@ -24,7 +24,9 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
 import universe.constellation.orion.viewer.device.AndroidDevice;
 import pl.polidea.customwidget.TheMissingTabHost;
@@ -39,8 +41,6 @@ import universe.constellation.orion.viewer.prefs.OrionApplication;
 public class OrionBaseActivity extends Activity {
 
     public static final String DONT_OPEN_RECENT = "DONT_OPEN_RECENT";
-
-    //private int screenOrientation;
 
     protected Device device ;
 
@@ -71,9 +71,6 @@ public class OrionBaseActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-
-//        String orientation = PreferenceManager.getDefaultSharedPreferences(this).getString(GlobalOptions.SCREEN_ORIENTATION, "DEFAULT");
-//        changeOrientation(getScreenOrientation(orientation));
 
         if (device != null) {
             device.onResume();
@@ -249,5 +246,31 @@ public class OrionBaseActivity extends Activity {
 
     public String getApplicationDefaulOrientation() {
         return getOrionContext().getOptions().getStringProperty(GlobalOptions.SCREEN_ORIENTATION, "DEFAULT");
+    }
+
+    public static void setContentView(final Activity activity, final  int layout) {
+        if (Device.Info.NOOK_CLASSIC) {
+            activity.setContentView(R.layout.nook_template);
+            View view = activity.findViewById(R.id.nook_sensor2);
+            LayoutInflater inflater = activity.getLayoutInflater();
+            inflater.inflate(layout, (ViewGroup) view);
+
+            ImageButton menu = (ImageButton) activity.findViewById(R.id.nook_menu);
+            menu.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    activity.openOptionsMenu();
+                }
+            });
+
+            ImageButton cancel = (ImageButton) activity.findViewById(R.id.nook_cancel);
+            cancel.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    activity.finish();
+                }
+            });
+
+        } else {
+            activity.setContentView(layout);
+        }
     }
 }
