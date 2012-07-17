@@ -33,17 +33,21 @@ import java.io.*;
  */
 public class Common {
 
+    public static final boolean ENABLE2SCREEN = /*replace*/true/*replace*/;
+
     public static Device createDevice() {
-        try {
-             if (Device.Info.NOOK_CLASSIC) {
-                 return new NookDevice();
-             } else if (Device.Info.ALEX) {
-                 return (Device) Class.forName("universe.constellation.orion.viewer.device.AlexDevice").newInstance();
-             } else if (Device.Info.EDGE) {
-                 return new EdgeDevice();
-             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (ENABLE2SCREEN) {
+            try {
+                 if (Device.Info.NOOK_CLASSIC) {
+                     return new NookDevice();
+                 } else if (Device.Info.ALEX) {
+                     return (Device) Class.forName("universe.constellation.orion.viewer.device.AlexDevice").newInstance();
+                 } else if (Device.Info.EDGE) {
+                     return new EdgeDevice();
+                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return new AndroidDevice();
     }
