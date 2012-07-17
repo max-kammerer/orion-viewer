@@ -1,4 +1,6 @@
 /* Globals */
+
+/* For compilation only */
 #include <math.h>
 #include <jni.h>
 
@@ -10,14 +12,24 @@
 
 
 unsigned char orion_gamma [256];
-unsigned int DEFAULT_CONTRAST = 100;
+unsigned const int DEFAULT_CONTRAST = 100;
 unsigned int contrast = 100;
+unsigned int threshold = 255;
+
+void orion_setContrast(JNIEnv * env, jobject thiz, jint contrast1);
 
 #ifdef ORION_PDF
 JNIEXPORT void
 JNICALL Java_com_artifex_mupdf_MuPDFCore_setContrast(JNIEnv * env, jobject thiz, jint contrast1)
 {
     orion_setContrast(env, thiz, contrast1);
+}
+
+/* Setting the watermark removal threshold */
+JNIEXPORT void
+JNICALL Java_com_artifex_mupdf_MuPDFCore_setThreshold(JNIEnv * env, jobject thiz, jint threshold1)
+{
+	threshold = threshold1;
 }
 
 #else
@@ -27,6 +39,13 @@ JNICALL Java_universe_constellation_orion_viewer_djvu_DjvuDocument_setContrast(J
 {
     orion_setContrast(env, thiz, contrast1);
 }
+
+JNIEXPORT void
+JNICALL Java_universe_constellation_orion_viewer_djvu_DjvuDocument_setThreshold(JNIEnv * env, jobject thiz, jint threshold1)
+{
+    threshold = threshold1;
+}
+
 #endif
 
 void orion_setContrast(JNIEnv * env, jobject thiz, jint contrast1)
@@ -49,4 +68,16 @@ void orion_updateContrast(unsigned char * data , int size) {
             data[i] = orion_gamma[data[i]];
         }
     }
+
+    if (threshold > 0 && threshold < 255) {
+        int i;
+        for (i = 0; i < size; i++) {
+        	if (data[i] > threshold) {
+    	        data[i] = 255;
+	        }
+        }
+    }
+    
+
 }
+

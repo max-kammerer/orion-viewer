@@ -2,6 +2,7 @@ package com.artifex.mupdf;
 
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.DocInfo;
+import universe.constellation.orion.viewer.OutlineItem;
 import universe.constellation.orion.viewer.PageInfo;
 
 import java.util.Date;
@@ -90,6 +91,7 @@ public class MuPDFCore
         return info;
     }
 
-
+	public static native com.artifex.mupdf.OutlineItem[] getOutlineInternal();
     public native void setContrast(int contrast);
+	public native void setThreshold(int threshold);
 }

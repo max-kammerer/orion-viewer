@@ -16,4 +16,5 @@
     <string name="menu_tap_text">Тап зоны</string>
 
     <string name="menu_book_preferences">Настройки книги</string>
+    <string name="menu_outline_text">Содержание</string>
 </resources>

@@ -11,6 +11,7 @@
     <string name="menu_navigation_text">Page layout</string>
     <string name="menu_help_text">Help</string>
     <string name="menu_open_text">Open Book</string>
+    <string name="menu_outline_text">Outline</string>
     <string name="menu_open_dictionary_text">Open Dictionary</string>
     <string name="menu_day_night_text">Day/Night mode</string>
     <string name="menu_exit_text">Close</string>

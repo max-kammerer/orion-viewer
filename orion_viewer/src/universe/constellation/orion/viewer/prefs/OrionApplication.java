@@ -156,6 +156,12 @@ public class OrionApplication extends Application {
                     controller.changeContrast((Integer)value);
                 }
             }
+			if ("threshold".equals(key)) {
+				Controller controller = viewActivity.getController();
+				if (controller != null) {
+					controller.changeThreshhold((Integer) value);
+				}
+			}
         }
     }
 }

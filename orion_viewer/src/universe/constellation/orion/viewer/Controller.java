@@ -50,6 +50,7 @@ public class Controller {
     private Point lastScreenSize;
 
     private int contrast;
+    private int threshold;
 
     private boolean hasPendingEvents = false;
 
@@ -231,6 +232,7 @@ public class Controller {
 
     public void init(LastPageInfo info) {
         doc.setContrast(info.contrast);
+        doc.setThreshold(info.threshold);
 
         layout.init(info, getActivity().getGlobalOptions());
         layoutInfo = new LayoutPosition();
@@ -281,11 +283,19 @@ public class Controller {
     }
 
     public void changeContrast(int contrast) {
-        if (this.contrast != contrast) {
-            this.contrast = contrast;
-            doc.setContrast(contrast);
-            sendViewChangeNotification();
-        }
+		if (this.contrast != contrast) {
+			this.contrast = contrast;
+			doc.setContrast(contrast);
+			sendViewChangeNotification();
+		}
+    }
+
+    public void changeThreshhold(int threshold) {
+		if (this.threshold != threshold) {
+			this.threshold = threshold;
+			doc.setThreshold(threshold);
+			sendViewChangeNotification();
+		}
     }
 
     public OrionViewerActivity getActivity() {
@@ -306,6 +316,10 @@ public class Controller {
         }
         activity.changeOrientation(activity.getScreenOrientation(realOrintationId));
     }
+
+	public OutlineItem[] getOutline() {
+		return doc.getOutline();
+	}
 
     public String getScreenOrientation() {
         return screenOrientation;

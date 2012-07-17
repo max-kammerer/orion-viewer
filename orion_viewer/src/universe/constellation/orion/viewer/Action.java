@@ -19,9 +19,14 @@ package universe.constellation.orion.viewer;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+import pl.polidea.treeview.InMemoryTreeStateManager;
+import pl.polidea.treeview.TreeViewList;
+import universe.constellation.orion.viewer.outline.OutlineAdapter;
 import universe.constellation.orion.viewer.prefs.OrionApplication;
 import universe.constellation.orion.viewer.prefs.OrionBookPreferences;
 import universe.constellation.orion.viewer.prefs.OrionPreferenceActivity;
@@ -190,6 +195,36 @@ public enum Action {
             Intent intent = new Intent(activity, OrionFileManagerActivity.class);
             intent.putExtra(OrionBaseActivity.DONT_OPEN_RECENT, true);
             activity.startActivity(intent);
+        }
+    },
+
+    SHOW_OUTLINE (R.string.action_outline, R.integer.action_open_outline) {
+		public void doAction(Controller controller, OrionViewerActivity activity) {
+			Common.d("In Show Outline!");
+			OutlineItem[] outline = controller.getOutline();
+
+			if (outline == null) 
+				return;
+
+			final Dialog dialog = new Dialog(activity);
+			dialog.setTitle(R.string.table_of_contents);
+			LinearLayout contents = new LinearLayout(activity);
+			contents.setOrientation(LinearLayout.VERTICAL);
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+			params.leftMargin = 5;
+			params.rightMargin = 5;
+			params.bottomMargin = 2;
+			params.topMargin = 2;
+
+            InMemoryTreeStateManager<Integer> manager = new InMemoryTreeStateManager<Integer>();
+			manager.setVisibleByDefault(false);
+            OutlineAdapter.SetManagerFromOutlineItems(manager, outline);
+            TreeViewList tocTree = new TreeViewList(activity);
+            tocTree.setAdapter(new OutlineAdapter(controller, activity, dialog, manager, outline));
+
+			contents.addView(tocTree, params);
+			dialog.setContentView(contents);
+			dialog.show();
         }
     },
 

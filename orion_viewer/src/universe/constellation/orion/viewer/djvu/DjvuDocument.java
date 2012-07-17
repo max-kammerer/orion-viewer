@@ -21,6 +21,7 @@ package universe.constellation.orion.viewer.djvu;
 
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.DocumentWrapper;
+import universe.constellation.orion.viewer.OutlineItem;
 import universe.constellation.orion.viewer.PageInfo;
 
 import java.util.Date;
@@ -99,4 +100,8 @@ public class DjvuDocument implements DocumentWrapper {
     }
 
     public native void setContrast(int contrast);
+
+	public native void setThreshold(int threshold);
+
+	public native OutlineItem[] getOutline();
 }

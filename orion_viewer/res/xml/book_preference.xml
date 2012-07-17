@@ -13,6 +13,15 @@
                   orion:isBook="true"
                   orion:pattern="[0-9]?[0-9]?[0-9]|1000"/>
 
+        <universe.constellation.orion.viewer.prefs.OrionEditPreference
+                  android:summary="@string/pref_book_threshold_desc"
+                  android:defaultValue="255"
+                  android:title="@string/pref_book_threshold"
+                  android:key="threshold"
+                  android:numeric="integer"
+                  orion:isBook="true"
+                  orion:pattern="[0-9]?[0-9]?[0-9]|1000"/>
+
         <!--<ListPreference-->
             <!--android:key="screenOrientation"-->
                     <!--android:title="@string/pref_screen_orientation"-->

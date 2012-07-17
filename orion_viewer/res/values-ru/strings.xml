@@ -43,5 +43,5 @@
     <string name="fit_page">По размеру страницы</string>
     <string name="fit_custom">Указать масштаб...</string>
 
-
+    <string name="table_of_contents">Содержание</string>
 </resources>

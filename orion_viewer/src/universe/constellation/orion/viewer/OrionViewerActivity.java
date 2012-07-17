@@ -932,6 +932,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 startActivity(tap);
                 return true;
 
+            case R.id.outline_menu_item: action = Action.SHOW_OUTLINE; break;
             case R.id.open_menu_item: action = Action.OPEN_BOOK; break;
             case R.id.open_dictionary_menu_item: action = Action.DICTIONARY; break;
             case R.id.day_night_menu_item:  action = Action.DAY_NIGHT; break;

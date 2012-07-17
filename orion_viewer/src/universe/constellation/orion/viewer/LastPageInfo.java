@@ -66,6 +66,7 @@ public class LastPageInfo implements Serializable {
     public int pageLayout = 0;
 
     public int contrast = 100;
+    public int threshold = 255;
 
     public transient String fileData;
 

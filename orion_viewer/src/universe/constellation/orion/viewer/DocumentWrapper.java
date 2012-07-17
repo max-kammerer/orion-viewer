@@ -38,5 +38,9 @@ public interface DocumentWrapper {
 
     String getTitle();
 
-    void setContrast(int contrast);
+	void setContrast(int contrast);
+
+	void setThreshold(int threshold);
+	
+	public OutlineItem[] getOutline();
 }

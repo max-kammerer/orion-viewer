@@ -50,5 +50,6 @@
 
     <string name="key_binder_message">Push any key and select action to bind them!</string>
     <string name="key_binder_warning">Couldn\'t bind key with zero keycode, try another key!</string>
+    <string name="table_of_contents">Table of Contents</string>
 
 </resources>

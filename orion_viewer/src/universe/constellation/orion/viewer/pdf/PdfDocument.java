@@ -21,7 +21,9 @@ package universe.constellation.orion.viewer.pdf;
 
 import com.artifex.mupdf.MuPDFCore;
 import universe.constellation.orion.viewer.DocumentWrapper;
+import universe.constellation.orion.viewer.OutlineItem;
 import universe.constellation.orion.viewer.PageInfo;
+
 
 /**
  * User: mike
@@ -60,8 +62,24 @@ public class PdfDocument implements DocumentWrapper {
         return core.getInfo().title;
     }
 
-
     public void setContrast(int contrast) {
         core.setContrast(contrast);
     }
+
+	public void setThreshold(int threshold) {
+		core.setThreshold(threshold);
+	}
+
+	public OutlineItem[] getOutline() {
+        com.artifex.mupdf.OutlineItem [] items =  core.getOutlineInternal();
+        if (items == null || items.length == 0) {
+            return  null;
+        } else {
+            OutlineItem [] result = new OutlineItem[items.length];
+            for (int i = 0; i < result.length; i++) {
+                result[i] = new OutlineItem(items[i].level, items[i].title, items[i].page);
+            }
+            return result;
+        }
+	}
 }

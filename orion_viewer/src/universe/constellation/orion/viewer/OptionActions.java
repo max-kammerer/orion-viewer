@@ -41,6 +41,15 @@ public enum OptionActions {
         }
     },
 
+    SET_THRESHOLD("threshold") {
+        public void doAction(OrionViewerActivity activity, int oldValue, int newValue) {
+            Controller controller = activity.getController();
+            if (controller != null) {
+                controller.changeThreshhold(newValue);
+            }
+        }
+    },
+
     DEBUG("DEBUG") {
         public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
             if (newValue) {
