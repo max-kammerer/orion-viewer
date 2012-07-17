@@ -184,7 +184,7 @@ public enum Action {
                     activity.startActivity(intent);
                 } catch (ActivityNotFoundException ex) {
                     Common.d(ex);
-                    Toast.makeText(activity, "Couldn't find dictionary: " + action, Toast.LENGTH_SHORT);
+                    activity.showWarning("Couldn't find dictionary: " + action);
                 }
             }
         }
@@ -203,28 +203,29 @@ public enum Action {
 			Common.d("In Show Outline!");
 			OutlineItem[] outline = controller.getOutline();
 
-			if (outline == null) 
-				return;
+			if (outline != null && outline.length != 0) {
+                final Dialog dialog = new Dialog(activity);
+                dialog.setTitle(R.string.table_of_contents);
+                LinearLayout contents = new LinearLayout(activity);
+                contents.setOrientation(LinearLayout.VERTICAL);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                params.leftMargin = 5;
+                params.rightMargin = 5;
+                params.bottomMargin = 2;
+                params.topMargin = 2;
 
-			final Dialog dialog = new Dialog(activity);
-			dialog.setTitle(R.string.table_of_contents);
-			LinearLayout contents = new LinearLayout(activity);
-			contents.setOrientation(LinearLayout.VERTICAL);
-			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-			params.leftMargin = 5;
-			params.rightMargin = 5;
-			params.bottomMargin = 2;
-			params.topMargin = 2;
+                InMemoryTreeStateManager<Integer> manager = new InMemoryTreeStateManager<Integer>();
+                manager.setVisibleByDefault(false);
+                OutlineAdapter.SetManagerFromOutlineItems(manager, outline);
+                TreeViewList tocTree = new TreeViewList(activity);
+                tocTree.setAdapter(new OutlineAdapter(controller, activity, dialog, manager, outline));
 
-            InMemoryTreeStateManager<Integer> manager = new InMemoryTreeStateManager<Integer>();
-			manager.setVisibleByDefault(false);
-            OutlineAdapter.SetManagerFromOutlineItems(manager, outline);
-            TreeViewList tocTree = new TreeViewList(activity);
-            tocTree.setAdapter(new OutlineAdapter(controller, activity, dialog, manager, outline));
-
-			contents.addView(tocTree, params);
-			dialog.setContentView(contents);
-			dialog.show();
+                contents.addView(tocTree, params);
+                dialog.setContentView(contents);
+                dialog.show();
+            } else {
+                activity.showWarning("Outline is empty");
+            }
         }
     },
 

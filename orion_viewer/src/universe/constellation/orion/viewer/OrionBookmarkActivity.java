@@ -155,7 +155,7 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
     }
 
     private void showError(Exception e) {
-        Toast.makeText(this, "Error " + e.getMessage(), Toast.LENGTH_SHORT).show();;
+        Toast.makeText(this, "Error " + e.getMessage(), Toast.LENGTH_SHORT).show();
         System.out.println("Error " + e.getMessage());
     }
 }

@@ -36,13 +36,6 @@
           android:title="@string/menu_goto_text"
           android:icon="@drawable/next"/>
 
-    <item android:id="@+id/options_menu_item"
-          android:title="@string/menu_options_text"
-          android:icon="@drawable/options"/>
-
-    <item android:id="@+id/tap_menu_item"
-          android:title="@string/menu_tap_text"
-          android:icon="@drawable/options"/>
 
     <!--<item android:id="@+id/keybinder_menu_item"-->
           <!--android:title="@string/menu_key_binder_text"-->
@@ -63,6 +56,14 @@
     <item android:id="@+id/day_night_menu_item"
           android:title="@string/menu_day_night_text"
           android:icon="@drawable/day_night"/>
+
+    <item android:id="@+id/tap_menu_item"
+          android:title="@string/menu_tap_text"
+          android:icon="@drawable/options"/>
+
+    <item android:id="@+id/options_menu_item"
+              android:title="@string/menu_options_text"
+              android:icon="@drawable/options"/>
 
     <item android:id="@+id/help_menu_item"
           android:title="@string/menu_help_text"

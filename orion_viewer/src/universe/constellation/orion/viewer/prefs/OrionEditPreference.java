@@ -84,7 +84,7 @@ public class OrionEditPreference extends EditTextPreference  implements Preferen
             setSummary(originalSummary + ": " + newValue);
             return true;
         } else {
-            Toast.makeText(getContext(), "Error on ", Toast.LENGTH_SHORT);
+            Toast.makeText(getContext(), "Couldn't set value: wrong interval!", Toast.LENGTH_SHORT).show();
             return false;
         }
     }
