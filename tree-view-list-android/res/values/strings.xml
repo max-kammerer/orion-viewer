@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TreeViewListDemo</string>
+    <string name="simple_menu_name">Simple Adapter</string>
+    <string name="simple_menu_condensed">Simple</string>
+    <string name="fancy_menu_name">Fancy Menu</string>
+    <string name="fancy_menu_condensed">Fancy</string>
+    <string name="expand_all_menu">Expand all</string>
+    <string name="expand_all_condensed">Expand All</string>
+    <string name="collapsible_menu_enable">Enable collapsible</string>
+    <string name="collapsible_condensed_enable">Enable collapsible</string>
+    <string name="collapsible_menu_disable">Disable collapsible</string>
+    <string name="collapsible_condensed_disable">Disable collapsible</string>
+    <string name="collapse_all_menu">Collapse all</string>
+    <string name="collapse_all_condesed">Collapse all</string>
+    <string name="expand_menu">Expand</string>
+    <string name="expand_menu_condensed">Expand</string>
+    <string name="delete_menu">Delete</string>
+    <string name="delete_menu_condensed">Delete</string>
+</resources>
