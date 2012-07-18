@@ -47,6 +47,8 @@ public class GlobalOptions implements Serializable {
 
     public final static String DEFAULT_ORIENTATION = "BOOK_ORIENTATION";
 
+    public final static String DEFAULT_ZOOM = "DEFAULT_ZOOM";
+
     public final static String APPLY_AND_CLOSE = "APPLY_AND_CLOSE";
 
     public final static String FULL_SCREEN = "FULL_SCREEN";
@@ -208,6 +210,10 @@ public class GlobalOptions implements Serializable {
 
     public int getDefaultOrientation() {
         return getIntFromStringProperty(DEFAULT_ORIENTATION, 0);
+    }
+
+    public int getDefaultZoom() {
+        return getIntFromStringProperty(DEFAULT_ZOOM, 0);
     }
 
     public boolean isApplyAndClose() {

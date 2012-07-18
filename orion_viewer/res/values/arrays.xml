@@ -47,6 +47,17 @@
         <item>@string/fit_page</item>
     </string-array>
 
+    <string-array name="default_zoom_option">
+        <item>0</item>
+        <item>-1</item>
+        <item>-2</item>
+    </string-array>
+
+    <string-array name="default_zoom_option_desc">
+            <item>@string/fit_width</item>
+            <item>@string/fit_height</item>
+            <item>@string/fit_page</item>
+    </string-array>
 
     <string-array name="dictionaries">
         <item>FORA</item>

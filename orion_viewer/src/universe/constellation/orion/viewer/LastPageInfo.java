@@ -25,6 +25,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
+import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -96,8 +97,9 @@ public class LastPageInfo implements Serializable {
         if (!successfull) {
             //reinit
             lastPageInfo = new LastPageInfo();
+            GlobalOptions options = activity.getOrionContext().getOptions();
             if (Device.Info.TWO_SCREEN) {
-                int defaultRotation = activity.getOrionContext().getOptions().getDefaultOrientation();
+                int defaultRotation = options.getDefaultOrientation();
                 switch (defaultRotation) {
                     case 90:
                         defaultRotation = -1;
@@ -111,6 +113,8 @@ public class LastPageInfo implements Serializable {
                 }
                 lastPageInfo.rotation = defaultRotation;
             }
+
+            lastPageInfo.zoom = options.getDefaultZoom();
         }
 
         lastPageInfo.fileData = fileData;
