@@ -19,6 +19,8 @@ package universe.constellation.orion.viewer.prefs;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import universe.constellation.orion.viewer.OutlineItem;
+
 /**
  * User: mike
  * Date: 24.01.12
@@ -29,6 +31,8 @@ public class TemporaryOptions {
     public boolean switchCropping;
 
     public boolean inverseCropping;
+
+    public OutlineItem[] outline;
 
     public Long bookId;
 

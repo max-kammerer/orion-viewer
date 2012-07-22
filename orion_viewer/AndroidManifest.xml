@@ -113,6 +113,9 @@
         <activity android:name=".OrionBookmarkActivity" android:screenOrientation="behind"
           android:label="Bookmarks"/>
 
+        <activity android:name=".outline.OutlineActivity" android:screenOrientation="behind"
+          android:label="Outlines"/>
+
     </application>
     <uses-sdk android:minSdkVersion="3"/>
     <uses-sdk android:targetSdkVersion="8"/>

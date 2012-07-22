@@ -10,10 +10,9 @@ public class OutlineItem {
    	public final String title;
    	public final int    page;
 
-   	public OutlineItem(int _level, String _title, int _page) {
-   		level = _level;
-   		title = _title;
-   		page  = _page;
+   	public OutlineItem(int level, String title, int page) {
+   		this.level = level;
+        this.title = title;
+        this.page  = page;
    	}
-
 }
