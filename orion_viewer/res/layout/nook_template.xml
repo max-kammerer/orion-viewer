@@ -12,7 +12,13 @@
         <LinearLayout android:id="@+id/nook_sensor2"
                       android:orientation="vertical"
                       android:layout_width="420px"
-                      android:layout_height="fill_parent"/>
+                      android:layout_height="fill_parent">
+            <!--hack for list wrapper-->
+            <ListView android:id="@android:id/list"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"/>
+
+        </LinearLayout>
 
         <LinearLayout
                 android:orientation="vertical"
