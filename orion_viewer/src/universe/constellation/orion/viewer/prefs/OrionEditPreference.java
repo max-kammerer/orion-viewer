@@ -40,7 +40,7 @@ import java.util.regex.Pattern;
  * Date: 25.01.12
  * Time: 12:41
  */
-public class OrionEditPreference extends EditTextPreference  implements Preference.OnPreferenceChangeListener {
+public class OrionEditPreference extends EditTextPreference implements Preference.OnPreferenceChangeListener {
 
     private Integer minValue;
     private Integer maxValue;

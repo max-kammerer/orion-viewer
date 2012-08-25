@@ -150,18 +150,16 @@ public class OrionApplication extends Application {
     //temporary hack
     public void processBookOptionChange(String key, Object value) {
         if (viewActivity != null) {
-            if ("contrast".equals(key)) {
-                Controller controller = viewActivity.getController();
-                if (controller != null) {
+            Controller controller = viewActivity.getController();
+            if (controller != null) {
+                if ("contrast".equals(key)) {
                     controller.changeContrast((Integer)value);
+                } else if ("threshold".equals(key)) {
+                    controller.changeThreshhold((Integer) value);
+                } else if ("screenOrientation".equals(key)) {
+                    controller.changeOrinatation((String) value);
                 }
             }
-			if ("threshold".equals(key)) {
-				Controller controller = viewActivity.getController();
-				if (controller != null) {
-					controller.changeThreshhold((Integer) value);
-				}
-			}
         }
     }
 }

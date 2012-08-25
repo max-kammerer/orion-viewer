@@ -62,7 +62,7 @@ public class ImageButton extends android.widget.ImageButton {
             System.out.println("action code button " + action);
             setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
-                    action.doAction(((OrionViewerActivity) getContext()).getController(), (OrionViewerActivity) getContext());
+                    action.doAction(((OrionViewerActivity) getContext()).getController(), (OrionViewerActivity) getContext(), null);
                 }
             });
         }

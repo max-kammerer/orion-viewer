@@ -6,6 +6,7 @@
     <string name="pref_rotate_new_book_on_opening">Rotate new book on opening</string>
     <string name="pref_screen_orientation">Screen orientation</string>
     <string name="pref_rotate_screen">Default screen orientation: restart application to apply</string>
+    <string name="pref_book_screen_orientation">Screen orientation for current book</string>
     <string name="pref_close_dialog_on_apply">Close dialog on apply</string>
     <string name="pref_close_page_option_dialog_on_apply">Close page option dialog on apply</string>
     <string name="pref_swap_prev_next_keys">Swap prev/next keys</string>

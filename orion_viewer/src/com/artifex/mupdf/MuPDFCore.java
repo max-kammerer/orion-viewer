@@ -27,6 +27,9 @@ public class MuPDFCore
 	public static native int [] drawPage(float zoom, int pageW, int pageH,
 			int patchX, int patchY,
 			int patchW, int patchH);
+
+    public native String getText(int page, float zoom, int absoluteX, int absoluteY, int width, int height);
+
 	public static native void destroying();
 
 	public MuPDFCore(String filename) throws Exception

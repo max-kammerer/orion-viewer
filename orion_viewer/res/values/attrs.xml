@@ -47,4 +47,8 @@
         <attr name="pattern"/>
         <attr name="isBook"/>
     </declare-styleable>
+
+    <declare-styleable name="universe.constellation.orion.viewer.prefs.OrionListPreference">
+            <attr name="isBook"/>
+        </declare-styleable>
 </resources>

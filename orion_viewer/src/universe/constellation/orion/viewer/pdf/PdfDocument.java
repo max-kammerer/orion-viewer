@@ -70,7 +70,11 @@ public class PdfDocument implements DocumentWrapper {
 		core.setThreshold(threshold);
 	}
 
-	public OutlineItem[] getOutline() {
+    public String getText(int pageNumber, double zoom, int absoluteX, int absoluteY, int width, int height) {
+        return core.getText(pageNumber, (float)zoom, absoluteX, absoluteY, width, height);
+    }
+
+    public OutlineItem[] getOutline() {
         com.artifex.mupdf.OutlineItem [] items =  core.getOutlineInternal();
         if (items == null || items.length == 0) {
             return  null;

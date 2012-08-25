@@ -64,7 +64,8 @@ public interface Device {
             NOOK_CLASSIC = isNookClassic;
         }
 
-        public final static boolean TWO_SCREEN = ALEX || NOOK_CLASSIC || EDGE;
+        //EDGE removed from two screen - cause general screen rotation is used.
+        public final static boolean TWO_SCREEN = ALEX || NOOK_CLASSIC;
 
         public static String getField(String name) {
             try {

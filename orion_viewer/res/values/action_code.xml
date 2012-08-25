@@ -44,4 +44,5 @@
     <integer name="action_switch_long_crop">40</integer>
 
     <integer name="action_open_outline">41</integer>
+    <integer name="action_select_text">42</integer>
 </resources>

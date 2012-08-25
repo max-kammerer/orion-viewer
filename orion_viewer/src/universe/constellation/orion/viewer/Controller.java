@@ -312,7 +312,7 @@ public class Controller {
         System.out.println("New orientation " + screenOrientation);
         String realOrintationId = orientationId;
         if ("DEFAULT".equals(orientationId)) {
-            realOrintationId = activity.getApplicationDefaulOrientation();
+            realOrintationId = activity.getApplicationDefaultOrientation();
         }
         activity.changeOrientation(activity.getScreenOrientation(realOrintationId));
     }
@@ -323,5 +323,18 @@ public class Controller {
 
     public String getScreenOrientation() {
         return screenOrientation;
+    }
+
+    public String selectText(int startX, int startY, int widht, int height) {
+        Point leftTopCorner = layout.convertToPoint(layoutInfo);
+        if (widht < 0) {
+            startX += widht;
+            widht = -widht;
+        }
+        if (height < 0) {
+            startY += height;
+            height = - height;
+        }
+        return doc.getText(layoutInfo.pageNumber, layoutInfo.docZoom, leftTopCorner.x + startX, leftTopCorner.y +startY, widht, height);
     }
 }

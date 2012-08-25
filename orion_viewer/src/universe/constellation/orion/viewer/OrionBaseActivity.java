@@ -57,7 +57,7 @@ public class OrionBaseActivity extends Activity {
         getOrionContext().applyTheme(this);
 
         if (this instanceof OrionViewerActivity || this instanceof OrionFileManagerActivity) {
-            int screenOrientation = getScreenOrientation(getApplicationDefaulOrientation());
+            int screenOrientation = getScreenOrientation(getApplicationDefaultOrientation());
             changeOrientation(screenOrientation);
         }
 
@@ -190,7 +190,10 @@ public class OrionBaseActivity extends Activity {
 
     public void showWarning(String warning) {
         Toast.makeText(this, warning, Toast.LENGTH_SHORT).show();
+    }
 
+    public void showFastMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     class Localizer {
@@ -244,7 +247,7 @@ public class OrionBaseActivity extends Activity {
         return screenOrientation;
     }
 
-    public String getApplicationDefaulOrientation() {
+    public String getApplicationDefaultOrientation() {
         return getOrionContext().getOptions().getStringProperty(GlobalOptions.SCREEN_ORIENTATION, "DEFAULT");
     }
 

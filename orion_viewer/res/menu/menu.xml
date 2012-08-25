@@ -19,10 +19,13 @@
     android:title="@string/menu_crop_text"
     android:icon="@drawable/crop"/>
 
+    <item android:id="@+id/select_text_menu_item"
+    android:title="@string/menu_select_text"
+    android:icon="@drawable/edit"/>
 
-    <item android:id="@+id/rotation_menu_item"
-    android:title="@string/menu_rotation_text"
-    android:icon="@drawable/rotate"/>
+    <!--<item android:id="@+id/rotation_menu_item"-->
+    <!--android:title="@string/menu_rotation_text"-->
+    <!--android:icon="@drawable/rotate"/>-->
 
     <item android:id="@+id/book_options_menu_item"
           android:title="@string/menu_book_preferences"

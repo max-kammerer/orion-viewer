@@ -32,7 +32,6 @@ import android.view.*;
 import android.widget.*;
 
 
-import universe.constellation.orion.viewer.device.EdgeDevice;
 import universe.constellation.orion.viewer.djvu.DjvuDocument;
 import universe.constellation.orion.viewer.pdf.PdfDocument;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
@@ -91,6 +90,12 @@ public class OrionViewerActivity extends OrionBaseActivity {
     private Intent myIntent;
 
     public boolean isResumed;
+
+    private boolean selectionMode = false;
+
+    private SelectionAutomata textSelection;
+
+    private SelectedTextActions selectedTextActions;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -724,7 +729,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
             public boolean onLongClick(View v) {
                 //page seeker
-                Action.OPEN_BOOKMARKS.doAction(controller, OrionViewerActivity.this);
+                Action.OPEN_BOOKMARKS.doAction(controller, OrionViewerActivity.this, null);
                 //animator.setDisplayedChild(PAGE_SCREEN);
                 return true;
             }
@@ -746,7 +751,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         btn = (ImageButton) findMyViewById(R.id.zoom);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                showOrionDialog(ZOOM_SCREEN, null);
+                showOrionDialog(ZOOM_SCREEN, null, null);
             }
         });
 
@@ -795,6 +800,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         super.onResume();
         updateBrightness();
 
+
         Common.d("onResume");
         if (myIntent != null) {
             //starting creation intent
@@ -829,11 +835,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
             try {
                 controller.serialize(lastPageInfo);
                 lastPageInfo.save(this);
-//                ObjectOutputStream out =
-//                    new ObjectOutputStream(OrionViewerActivity.this.openFileOutput(lastPageInfo.fileData,
-//                        Context.MODE_PRIVATE));
-//                out.writeObject(lastPageInfo);
-//                out.close();
             } catch (Exception ex) {
                 Log.e(Common.LOGTAG, ex.getMessage(), ex);
             }
@@ -918,10 +919,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
             case R.id.zoom_menu_item: action = Action.ZOOM; break;
             case R.id.add_bookmark_menu_item: action = Action.ADD_BOOKMARK; break;
             case R.id.goto_menu_item: action = Action.GOTO; break;
-            case R.id.navigation_menu_item: showOrionDialog(PAGE_LAYOUT_SCREEN, null);
+            case R.id.select_text_menu_item: action = Action.SELECT_TEXT; break;
+            case R.id.navigation_menu_item: showOrionDialog(PAGE_LAYOUT_SCREEN, null, null);
                 return true;
 
-            case R.id.rotation_menu_item: action = Action.ROTATION; break;
+//            case R.id.rotation_menu_item: action = Action.ROTATION; break;
 
             case R.id.options_menu_item: action = Action.OPTIONS; break;
 
@@ -983,54 +985,71 @@ public class OrionViewerActivity extends OrionBaseActivity {
             private static final long TIME_DELTA = 600;
             public boolean onTouch(View v, MotionEvent event) {
                 //Common.d("Event " + event.getAction() + ": "  + (SystemClock.uptimeMillis() - startTime));
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    //Common.d("DOWN " + event.getAction());
-                    startTime = SystemClock.uptimeMillis();
-                    lastX = (int) event.getX();
-                    lastY = (int) event.getY();
+                if (!selectionMode) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        //Common.d("DOWN " + event.getAction());
+                        startTime = SystemClock.uptimeMillis();
+                        lastX = (int) event.getX();
+                        lastY = (int) event.getY();
+                        return true;
+                    } else {
+    //                    Common.d("ev " + event.getAction());
+                        boolean doAction = false;
+                        if (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_UP) {
+                            if (event.getAction() == MotionEvent.ACTION_UP) {
+                                Common.d("UP " + event.getAction());
+                                doAction = true;
+                            } else {
+                                if (lastX != -1 && lastY != -1) {
+                                    boolean isLongClick = (SystemClock.uptimeMillis() - startTime) > TIME_DELTA;
+                                    doAction = isLongClick;
+                                }
+                            }
+
+                            if (doAction) {
+                                Common.d("Check event action " + event.getAction());
+                                boolean isLongClick = (SystemClock.uptimeMillis() - startTime) > TIME_DELTA;
+
+                                if (lastX != -1 && lastY != -1) {
+                                    int width = getView().getWidth();
+                                    int height = getView().getHeight();
+
+                                    int i = 3 * lastY / height;
+                                    int j = 3 * lastX / width;
+
+                                    int code = globalOptions.getActionCode(i, j, isLongClick);
+                                    doAction(code);
+
+                                    startTime = 0;
+                                    lastX = -1;
+                                    lastY = -1;
+                                }
+
+                            }
+                            return true;
+                        } else if (event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                            startTime = 0;
+                            lastX = -1;
+                            lastY = -1;
+                        }
+                    }
                     return true;
                 } else {
-//                    Common.d("ev " + event.getAction());
-                    boolean doAction = false;
-                    if (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_UP) {
-                        if (event.getAction() == MotionEvent.ACTION_UP) {
-                            Common.d("UP " + event.getAction());
-                            doAction = true;
+                    boolean result = textSelection.onTouch(event);
+                    if (textSelection.isSuccessful()) {
+                        selectionMode = false;
+                        String text = controller.selectText(textSelection.getStartX(), textSelection.getStartY(), textSelection.getWidth(), textSelection.getHeight());
+                        if (text != null) {
+                            if (selectedTextActions == null) {
+                                selectedTextActions = new SelectedTextActions(OrionViewerActivity.this);
+                            }
+                            selectedTextActions.show(text);
                         } else {
-                            if (lastX != -1 && lastY != -1) {
-                                boolean isLongClick = (SystemClock.uptimeMillis() - startTime) > TIME_DELTA;
-                                doAction = isLongClick;
-                            }
-                        }
-
-                        if (doAction) {
-                            Common.d("Check event action " + event.getAction());
-                            boolean isLongClick = (SystemClock.uptimeMillis() - startTime) > TIME_DELTA;
-
-                            if (lastX != -1 && lastY != -1) {
-                                int width = getView().getWidth();
-                                int height = getView().getHeight();
-
-                                int i = 3 * lastY / height;
-                                int j = 3 * lastX / width;
-
-                                int code = globalOptions.getActionCode(i, j, isLongClick);
-                                doAction(code);
-
-                                startTime = 0;
-                                lastX = -1;
-                                lastY = -1;
-                            }
 
                         }
-                        return true;
-                    } else if (event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_OUTSIDE) {
-                        startTime = 0;
-                        lastX = -1;
-                        lastY = -1;
                     }
+                    return result;
                 }
-                return true;
             }
         });
 
@@ -1064,7 +1083,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
 
     public void doAction(Action action) {
-        action.doAction(controller, this);
+        action.doAction(controller, this, null);
     }
 
 
@@ -1275,7 +1294,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         }
     }
 
-    public void showOrionDialog(int screenId, Action action) {
+    public void showOrionDialog(int screenId, Action action, Object parameter) {
         if (screenId != -1) {
             switch (screenId) {
                 case ROTATION_SCREEN: updateRotation(); break;
@@ -1286,8 +1305,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
 
             if (action == Action.ADD_BOOKMARK) {
-                int page = controller.getCurrentPage();
-                String text = getOrionContext().getBookmarkAccessor().selectExistingBookmark(getBookId(), page);
+                String text = (String) parameter;
+                if (text == null) {
+                    int page = controller.getCurrentPage();
+                    text = getOrionContext().getBookmarkAccessor().selectExistingBookmark(getBookId(), page);
+                }
                 ((EditText)findMyViewById(R.id.add_bookmark_text)).setText(text);
             }
 
@@ -1297,6 +1319,15 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 dialog.show();
             }
         }
+    }
+
+
+    public void textSelectionMode() {
+        //selectionMode = true;
+        if (textSelection == null) {
+            textSelection = new SelectionAutomata(this);
+        }
+        textSelection.startSelection();
     }
 
 
@@ -1342,4 +1373,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
             return view;
         }
     }
+
+
 }
