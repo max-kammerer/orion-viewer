@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:orion="http://schemas.android.com/apk/res/universe.constellation.orion.viewer">
+
+    <PreferenceScreen android:title="Default Book Settings"  android:summary="Will be applied only for new books. For current book use 'Book Options'" android:key="BOOK_DEFAULT">
+        <!--page orientation-->
+            <ListPreference
+                    android:key="BOOK_ORIENTATION"
+                    android:title="@string/pref_bookDefaultOrientation"
+                    android:summary="@string/pref_rotate_new_book_on_opening"
+                    android:entries="@array/orientation_desc"
+                    android:entryValues="@array/orientation"
+                    android:dialogTitle="Rotation"
+                    android:defaultValue="0"/>
+
+            <ListPreference
+                    android:key="DEFAULT_ZOOM"
+                    android:title="@string/pref_bookDefaultZoom"
+                    android:summary="@string/pref_bookDefaultZoom"
+                    android:entries="@array/default_zoom_option_desc"
+                    android:entryValues="@array/default_zoom_option"
+                    android:dialogTitle="@string/pref_bookDefaultZoom"
+                    android:defaultValue="0"/>
+
+            <universe.constellation.orion.viewer.prefs.OrionEditPreference
+                  android:key="DEFAULT_CONTRAST"
+                  android:summary="@string/pref_book_contrast_desc"
+                  android:defaultValue="100"
+                  android:title="@string/pref_book_contrast"
+                  android:numeric="integer"
+                  orion:minValue="1"
+                  orion:maxValue="1000"/>
+    </PreferenceScreen>
+
     <PreferenceCategory
             android:title="General" android:key="GENERAL">
         <CheckBoxPreference
@@ -18,24 +49,6 @@
                 android:dialogTitle="Rotation"
                 android:defaultValue="DEFAULT" orion:justAndroidGeneral="true"/>
 
-        <!--page orientation-->
-        <ListPreference
-                android:key="BOOK_ORIENTATION"
-                android:title="@string/pref_bookDefaultOrientation"
-                android:summary="@string/pref_rotate_new_book_on_opening"
-                android:entries="@array/orientation_desc"
-                android:entryValues="@array/orientation"
-                android:dialogTitle="Rotation"
-                android:defaultValue="0"/>
-
-        <ListPreference
-                android:key="DEFAULT_ZOOM"
-                android:title="@string/pref_bookDefaultZoom"
-                android:summary="@string/pref_bookDefaultZoom"
-                android:entries="@array/default_zoom_option_desc"
-                android:entryValues="@array/default_zoom_option"
-                android:dialogTitle="@string/pref_bookDefaultZoom"
-                android:defaultValue="0"/>
 
         <CheckBoxPreference
           android:summary="@string/pref_open_recent_book"

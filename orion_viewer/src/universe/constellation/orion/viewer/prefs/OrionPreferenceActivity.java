@@ -62,16 +62,17 @@ public class OrionPreferenceActivity extends PreferenceActivity {
         if (!Device.Info.NOOK2) {
             screen.removePreference(NOOK2_EINK);
         }
-        //screen.findPreference("EINK_OPTIMIZATION").setEnabled(Device.Info.NOOK2);
 
         PreferenceCategory GENERAL = (PreferenceCategory) screen.findPreference("GENERAL");
         ListPreference SCREEN_ORIENTATION = (ListPreference) findPreference("SCREEN_ORIENTATION");
-        Preference BOOK_ORIENTATION = screen.findPreference("BOOK_ORIENTATION");
+
+        PreferenceScreen BOOK_DEFAULT = (PreferenceScreen) screen.findPreference("BOOK_DEFAULT");
+        Preference BOOK_ORIENTATION = BOOK_DEFAULT.findPreference("BOOK_ORIENTATION");
 
         if (!isAndroidGeneral) {
             GENERAL.removePreference(SCREEN_ORIENTATION);
         } else {
-            GENERAL.removePreference(BOOK_ORIENTATION);
+            BOOK_DEFAULT.removePreference(BOOK_ORIENTATION);
 
             if (getOrionContext().getSdkVersion() >= 9) {
                 SCREEN_ORIENTATION.setEntries(getResources().getTextArray(R.array.screen_orientation_full));

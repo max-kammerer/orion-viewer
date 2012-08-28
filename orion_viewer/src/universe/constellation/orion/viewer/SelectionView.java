@@ -52,8 +52,8 @@ public class SelectionView extends View {
         }
         oldRect = newRect;
 
-        postInvalidateDelayed(30, invalidate.left, invalidate.top, invalidate.right, invalidate.bottom);
-        //invalidate(invalidate);
+        //postInvalidateDelayed(30, invalidate.left, invalidate.top, invalidate.right, invalidate.bottom);
+        invalidate(invalidate);
     }
 
     public void reset() {

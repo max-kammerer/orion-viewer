@@ -80,13 +80,24 @@ public class OrionEditPreference extends EditTextPreference implements Preferenc
 
 
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (Pattern.compile(pattern).matcher((String) newValue).matches()){
-            setSummary(originalSummary + ": " + newValue);
-            return true;
-        } else {
+        if (minValue != null && minValue > Integer.valueOf((String)newValue)) {
+            Toast.makeText(getContext(), "New value should be greater or equal than " + minValue, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (maxValue != null && maxValue < Integer.valueOf((String)newValue)) {
+            Toast.makeText(getContext(), "New value should be less or equal than " + maxValue, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (pattern != null && !Pattern.compile(pattern).matcher((String) newValue).matches()) {
             Toast.makeText(getContext(), "Couldn't set value: wrong interval!", Toast.LENGTH_SHORT).show();
             return false;
         }
+
+        setSummary(originalSummary + ": " + newValue);
+
+        return true;
     }
 
 
@@ -94,10 +105,22 @@ public class OrionEditPreference extends EditTextPreference implements Preferenc
         originalSummary = getSummary();
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.universe_constellation_orion_viewer_prefs_OrionEditPreference);
         pattern = a.getString(R.styleable.universe_constellation_orion_viewer_prefs_OrionEditPreference_pattern);
+        minValue = getIntegerOrNull(a, R.styleable.universe_constellation_orion_viewer_prefs_OrionEditPreference_minValue);
+        maxValue = getIntegerOrNull(a, R.styleable.universe_constellation_orion_viewer_prefs_OrionEditPreference_maxValue);
         isCurrentBookOption = a.getBoolean(R.styleable.universe_constellation_orion_viewer_prefs_OrionEditPreference_isBook, false);
         a.recycle();
-        if (pattern != null) {
+        if (pattern != null || minValue != null || maxValue != null) {
             setOnPreferenceChangeListener(this);
+        }
+    }
+
+    private Integer getIntegerOrNull(TypedArray array, int id) {
+        int UNDEFINED = -10000;
+        int value = array.getInt(id, UNDEFINED);
+        if (value == UNDEFINED) {
+            return null;
+        } else {
+            return Integer.valueOf(value);
         }
     }
 

@@ -49,6 +49,8 @@ public class GlobalOptions implements Serializable {
 
     public final static String DEFAULT_ZOOM = "DEFAULT_ZOOM";
 
+    public final static String DEFAULT_CONTRAST = "DEFAULT_CONTRAST";
+
     public final static String APPLY_AND_CLOSE = "APPLY_AND_CLOSE";
 
     public final static String FULL_SCREEN = "FULL_SCREEN";
@@ -214,6 +216,10 @@ public class GlobalOptions implements Serializable {
 
     public int getDefaultZoom() {
         return getIntFromStringProperty(DEFAULT_ZOOM, 0);
+    }
+
+    public int getDefaultContrast() {
+        return getIntFromStringProperty(DEFAULT_CONTRAST, 100);
     }
 
     public boolean isApplyAndClose() {
