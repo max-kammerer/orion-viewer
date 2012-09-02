@@ -50,7 +50,9 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     private int rotation;
 
-    private int direction;
+    private int direction = Integer.MIN_VALUE;
+
+    private PageWalker walker;
 
     private int layout;
 
@@ -60,93 +62,103 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
     }
 
     public void nextPage(LayoutPosition info) {
-        switch (getDirection()) {
-            case D_ACBD: //A, C, B, D
-                if (info.cellY < info.maxY) {
-                    info.cellY += 1;
-                } else if (info.cellX < info.maxX) {
-                    info.cellY = 0;
-                    info.cellX += 1;
-                } else {
-                    if (info.pageNumber < doc.getPageCount() - 1) {
-                        reset(info, info.pageNumber + 1);
-                    }
-                }
-                break;
-            case D_BDAC: //B, D, A, C
-                if (info.cellY < info.maxY) {
-                    info.cellY += 1;
-                } else if (info.cellX > 0) {
-                    info.cellY = 0;
-                    info.cellX -= 1;
-                } else {
-                    if (info.pageNumber < doc.getPageCount() - 1) {
-                        reset(info, info.pageNumber + 1);
-                    }
-                }
-                break;
-            case D_ABCD: default: //A, B, C, D
-                if (info.cellX < info.maxX) {
-                    info.cellX += 1;
-                } else if (info.cellY < info.maxY) {
-                    info.cellX = 0;
-                    info.cellY += 1;
-                } else {
-                    if (info.pageNumber < doc.getPageCount() - 1) {
-                        reset(info, info.pageNumber + 1);
-                    }
-                }
-                break;
+        if (walker.next(info)) {
+            if (info.pageNumber < doc.getPageCount() - 1) {
+                reset(info, info.pageNumber + 1);
+            }
         }
+//        switch (getDirection()) {
+//            case D_ACBD: //A, C, B, D
+//                if (info.cellY < info.maxY) {
+//                    info.cellY += 1;
+//                } else if (info.cellX < info.maxX) {
+//                    info.cellY = 0;
+//                    info.cellX += 1;
+//                } else {
+//                    if (info.pageNumber < doc.getPageCount() - 1) {
+//                        reset(info, info.pageNumber + 1);
+//                    }
+//                }
+//                break;
+//            case D_BDAC: //B, D, A, C
+//                if (info.cellY < info.maxY) {
+//                    info.cellY += 1;
+//                } else if (info.cellX > 0) {
+//                    info.cellY = 0;
+//                    info.cellX -= 1;
+//                } else {
+//                    if (info.pageNumber < doc.getPageCount() - 1) {
+//                        reset(info, info.pageNumber + 1);
+//                    }
+//                }
+//                break;
+//            case D_ABCD: default: //A, B, C, D
+//                if (info.cellX < info.maxX) {
+//                    info.cellX += 1;
+//                } else if (info.cellY < info.maxY) {
+//                    info.cellX = 0;
+//                    info.cellY += 1;
+//                } else {
+//                    if (info.pageNumber < doc.getPageCount() - 1) {
+//                        reset(info, info.pageNumber + 1);
+//                    }
+//                }
+//                break;
+//        }
         Common.d("new cellX = " + info.cellX + " cellY = " + info.cellY);
     }
 
     public void prevPage(LayoutPosition info) {
-        switch (getDirection()) {
-            case D_ACBD: //A, C, B, D
-                if (info.cellY > 0) {
-                    info.cellY -= 1;
-                } else if (info.cellX > 0) {
-                    info.cellY = info.maxY;
-                    info.cellX -= 1;
-                } else {
-                    if (info.pageNumber > 0) {
-                        reset(info, info.pageNumber - 1);
-                        info.cellX = info.maxX;
-                        info.cellY = info.maxY;
-                    }
-                }
-                break;
-            case D_BDAC: //B, D, A, C
-                if (info.cellY > 0) {
-                    info.cellY -= 1;
-                } else if (info.cellX < info.maxX) {
-                    info.cellY = info.maxY;
-                    info.cellX += 1;
-                } else {
-                    if (info.pageNumber > 0) {
-                        reset(info, info.pageNumber - 1);
-                        info.cellX = 0;
-                        info.cellY = info.maxY;
-                    }
-                }
-                break;
-            case D_ABCD:
-            default: //A, B, C, D
-                if (info.cellX > 0) {
-                    info.cellX -= 1;
-                } else if (info.cellY > 0) {
-                    info.cellX = info.maxX;
-                    info.cellY -= 1;
-                } else {
-                    if (info.pageNumber > 0) {
-                        reset(info, info.pageNumber - 1);
-                        info.cellX = info.maxX;
-                        info.cellY = info.maxY;
-                    }
-                }
-                break;
+        if (walker.prev(info)) {
+            if (info.pageNumber > 0) {
+                reset(info, info.pageNumber - 1, false);
+            }
         }
+//        switch (getDirection()) {
+//            case D_ACBD: //A, C, B, D
+//                if (info.cellY > 0) {
+//                    info.cellY -= 1;
+//                } else if (info.cellX > 0) {
+//                    info.cellY = info.maxY;
+//                    info.cellX -= 1;
+//                } else {
+//                    if (info.pageNumber > 0) {
+//                        reset(info, info.pageNumber - 1);
+//                        info.cellX = info.maxX;
+//                        info.cellY = info.maxY;
+//                    }
+//                }
+//                break;
+//            case D_BDAC: //B, D, A, C
+//                if (info.cellY > 0) {
+//                    info.cellY -= 1;
+//                } else if (info.cellX < info.maxX) {
+//                    info.cellY = info.maxY;
+//                    info.cellX += 1;
+//                } else {
+//                    if (info.pageNumber > 0) {
+//                        reset(info, info.pageNumber - 1);
+//                        info.cellX = 0;
+//                        info.cellY = info.maxY;
+//                    }
+//                }
+//                break;
+//            case D_ABCD:
+//            default: //A, B, C, D
+//                if (info.cellX > 0) {
+//                    info.cellX -= 1;
+//                } else if (info.cellY > 0) {
+//                    info.cellX = info.maxX;
+//                    info.cellY -= 1;
+//                } else {
+//                    if (info.pageNumber > 0) {
+//                        reset(info, info.pageNumber - 1);
+//                        info.cellX = info.maxX;
+//                        info.cellY = info.maxY;
+//                    }
+//                }
+//                break;
+//        }
 
 
         Common.d("new cellX = " + info.cellX + " cellY = " + info.cellY);
@@ -169,6 +181,10 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
     }
 
     public void reset(LayoutPosition info, int pageNum) {
+        reset(info, pageNum, true);
+    }
+
+    public void reset(LayoutPosition info, int pageNum, boolean forward) {
         if (doc.getPageCount() - 1 < pageNum) {
             pageNum = doc.getPageCount() - 1;
         }
@@ -222,8 +238,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
             info.maxY = (info.pageHeight - vOverlap) / (info.pieceHeight - vOverlap) + ((info.pageHeight - vOverlap) % (info.pieceHeight - vOverlap) == 0 ?  0: 1) -1;
         }
 
-        info.cellX = getDirection() == D_BDAC ? info.maxX : 0;
-        info.cellY = 0;
+        walker.reset(info, forward);
     }
 
     public boolean changeZoom(int zoom) {
@@ -237,6 +252,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
     public boolean changeNavigation(int navigation) {
         if (this.direction != navigation) {
             this.direction = navigation;
+            walker = new PageWalker(navigation);
             return true;
         }
         return false;
