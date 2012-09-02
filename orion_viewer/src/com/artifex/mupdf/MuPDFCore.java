@@ -28,7 +28,7 @@ public class MuPDFCore
 			int patchX, int patchY,
 			int patchW, int patchH);
 
-    public native String getText(int page, float zoom, int absoluteX, int absoluteY, int width, int height);
+    public native String getText(int page, int absoluteX, int absoluteY, int width, int height);
 
 	public static native void destroying();
 

@@ -105,7 +105,5 @@ public class DjvuDocument implements DocumentWrapper {
 
 	public native OutlineItem[] getOutline();
 
-    public String getText(int pageNumber, double zoom, int absoluteX, int absoluteY, int width, int height) {
-        return null;
-    }
+    public native String getText(int pageNumber, int absoluteX, int absoluteY, int width, int height);
 }

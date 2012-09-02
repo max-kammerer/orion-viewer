@@ -34,7 +34,7 @@ public interface DocumentWrapper {
 
     int[] renderPage(int pageNumber, double zoom, int w, int h, int left, int top, int right, int bottom);
 
-    String getText(int pageNumber, double zoom, int absoluteX, int absoluteY, int width, int height);
+    String getText(int pageNumber, int absoluteX, int absoluteY, int width, int height);
 
 	void destroy();
 
