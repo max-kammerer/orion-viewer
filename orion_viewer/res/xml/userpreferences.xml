@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:orion="http://schemas.android.com/apk/res/universe.constellation.orion.viewer">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:orion="http://schemas.android.com/apk/res/universe.constellation.orion.viewer"
+        android:title="Application Settings">
 
-    <PreferenceScreen android:title="Default Book Settings"  android:summary="Will be applied only for new books. For current book use 'Book Options'" android:key="BOOK_DEFAULT">
+
+    <PreferenceCategory
+            android:title="General" android:key="GENERAL">
+
+        <PreferenceScreen android:title="Default Book Settings"  android:summary="Will be applied only for new books. For current book use 'Book Options'" android:key="BOOK_DEFAULT">
         <!--page orientation-->
             <ListPreference
                     android:key="BOOK_ORIENTATION"
@@ -30,10 +36,15 @@
                   android:numeric="integer"
                   orion:minValue="1"
                   orion:maxValue="1000"/>
-    </PreferenceScreen>
+        </PreferenceScreen>
 
-    <PreferenceCategory
-            android:title="General" android:key="GENERAL">
+
+
+        <PreferenceScreen
+         android:title="@string/menu_tap_text" android:persistent="false" android:summary="@string/menu_tap_text" >
+            <intent android:action="universe.constellation.orion.viewer.TAP_ZONES"/>
+        </PreferenceScreen>
+
         <CheckBoxPreference
                 android:key="FULL_SCREEN"
                 android:title="@string/pref_fullScreen"
@@ -73,22 +84,18 @@
 
     </PreferenceCategory>
     <PreferenceCategory
-            android:title="Key Manager">
+            android:title="Key &amp; Tap Zone Managers">
+
         <CheckBoxPreference
                 android:key="SWAP_KEYS"
                 android:title="@string/pref_swap_prev_next_keys"
                 android:summary="@string/pref_swap_prev_next_keys_on_90_degree_rotation"
                 android:defaultValue="false"/>
 
-        <!--<CheckBoxPreference-->
-                <!--android:key="USE_NOOK_KEYS"-->
-                <!--android:title="Use Nook2 keys"-->
-                <!--android:summary="Use Nook2 next and prev keys"-->
-                <!--android:defaultValue="false" orion:justAndroidGeneral="true"/>-->
         <Preference
-         android:title="@string/menu_key_binder_text" android:persistent="false" android:summary="@string/menu_key_binder_text" >
+                 android:title="@string/menu_key_binder_text" android:persistent="false" android:summary="@string/menu_key_binder_text" >
             <intent android:action="universe.constellation.orion.viewer.KEY_MANAGER"/>
-         </Preference>
+        </Preference>
 
     </PreferenceCategory>
 

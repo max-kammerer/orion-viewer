@@ -38,13 +38,13 @@ public class SelectionView extends View {
         paint.setAlpha(128);
 
         if (oldRect != null) {
-            System.out.println("Draw rect " + oldRect);
+            //System.out.println("Draw rect " + oldRect);
             canvas.drawRect(oldRect, paint);
         }
     }
 
     public void updateView(int left, int top, int right, int bottom) {
-        System.out.println("updateView");
+        //System.out.println("updateView");
         Rect newRect = new Rect(left, top, right, bottom);
         Rect invalidate = new Rect(newRect);
         if (oldRect != null) {

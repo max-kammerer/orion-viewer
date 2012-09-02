@@ -81,4 +81,19 @@
         <item>DARK</item>
         <item>LIGHT</item>
   </string-array>
+
+
+    <string-array name="walk_orders_desc">
+        <item>A, B, C, D</item>
+        <item>A, C, B, D</item>
+        <item>B, A, D, C</item>
+        <item>B, D, A, C</item>
+    </string-array>
+
+    <string-array name="walk_orders">
+        <item>@integer/ABCD</item>
+        <item>@integer/ACBD</item>
+        <item>@integer/BADC</item>
+        <item>@integer/BDAC</item>
+    </string-array>
 </resources>

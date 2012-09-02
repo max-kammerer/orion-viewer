@@ -52,4 +52,9 @@
     <string name="key_binder_warning">Couldn\'t bind key with zero keycode, try another key!</string>
     <string name="table_of_contents">Table of Contents</string>
 
+    <integer name="ABCD">0</integer>
+    <integer name="ACBD">1</integer>
+    <integer name="BADC">2</integer>
+    <integer name="BDAC">3</integer>
+
 </resources>

@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:orion="http://schemas.android.com/apk/res/universe.constellation.orion.viewer">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:orion="http://schemas.android.com/apk/res/universe.constellation.orion.viewer"
+        android:title="Current Book Options">
     <PreferenceCategory
-            android:title="Book Preferences" android:key="GENERAL">
+            android:title="Current Book Options" android:key="GENERAL">
+
+        <!--ie walk_order-->
+        <universe.constellation.orion.viewer.prefs.OrionListPreference
+            android:key="navigation"
+                    android:title="@string/pref_screen_orientation"
+                    android:summary="@string/pref_book_screen_orientation"
+                    android:entries="@array/walk_orders_desc"
+                    android:entryValues="@array/walk_orders"
+                    android:dialogTitle="Walk Order"
+                    orion:isBook="true"
+                    android:defaultValue="@integer/ABCD"/>
 
         <universe.constellation.orion.viewer.prefs.OrionListPreference
             android:key="screenOrientation"

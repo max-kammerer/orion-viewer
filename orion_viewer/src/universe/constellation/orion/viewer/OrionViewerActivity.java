@@ -929,10 +929,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
             case R.id.book_options_menu_item: action = Action.BOOK_OPTIONS; break;
 
-            case R.id.tap_menu_item:
-                Intent tap = new Intent(this, OrionTapActivity.class);
-                startActivity(tap);
-                return true;
+//            case R.id.tap_menu_item:
+//                Intent tap = new Intent(this, OrionTapActivity.class);
+//                startActivity(tap);
+//                return true;
 
             case R.id.outline_menu_item: action = Action.SHOW_OUTLINE; break;
             case R.id.open_menu_item: action = Action.OPEN_BOOK; break;
