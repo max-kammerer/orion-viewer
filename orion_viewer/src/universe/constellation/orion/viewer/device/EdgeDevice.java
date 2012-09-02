@@ -247,7 +247,7 @@ public class EdgeDevice extends AndroidDevice {
             } else {
                 for (int j = 0; j < HEIGHT; j++)
                     for (int i = 0; i < WIDTH; i++) {
-                        buffer[i * stride + HEIGHT - j - 1] = (byte) (Color.red(pixels[o++]) & 0xff);
+                        buffer[(WIDTH - i - 1) * stride + j] = (byte) (Color.red(pixels[o++]) & 0xff);
                     }
             }
 
