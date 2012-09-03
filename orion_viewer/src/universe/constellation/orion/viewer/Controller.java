@@ -268,16 +268,22 @@ public class Controller {
         }
     }
 
-    public int getDirection() {
-        return layout.getDirection();
+    public String getDirection() {
+        return layout.getWalkOrder();
     }
 
     public int getLayout() {
         return layout.getLayout();
     }
 
-    public void setDirectionAndLayout(int navigation, int pageLayout) {
-        if (layout.changeNavigation(navigation) | layout.changePageLayout(pageLayout)) {
+    public void setDirectionAndLayout(String walkOrder, int pageLayout) {
+        if (layout.changeNavigation(walkOrder) | layout.changePageLayout(pageLayout)) {
+            sendViewChangeNotification();
+        }
+    }
+
+    public void changetWalkOrder(String walkOrder) {
+        if (layout.changeNavigation(walkOrder)) {
             sendViewChangeNotification();
         }
     }

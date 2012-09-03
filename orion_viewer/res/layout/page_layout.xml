@@ -20,6 +20,7 @@
   -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:orion="http://schemas.android.com/apk/res/universe.constellation.orion.viewer"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" android:orientation="vertical" android:gravity="center"
             android:scrollbars="vertical" android:fillViewport="true">
@@ -69,6 +70,7 @@
                 <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
                               android:layout_width="fill_parent" android:gravity="left">
 
+
                     <RadioGroup android:id="@+id/directionGroup" android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
@@ -77,27 +79,37 @@
                         <TextView android:layout_width="wrap_content"
                                   android:layout_height="wrap_content" android:id="@+id/navigation_title"
                                   android:text="@string/navigation" android:textSize="22px"
-                                  android:layout_marginRight="5dp" android:layout_gravity="center"/>
+                                  android:layout_marginRight="5dp" android:layout_gravity="center_vertical" android:gravity="center"/>
 
-                        <RadioButton android:id="@+id/direction1"
-                                     android:layout_width="wrap_content"
-                                     android:layout_height="wrap_content"/>
+                            <universe.constellation.orion.viewer.android.RadioButton android:id="@+id/walkOrder_ABCD"
+                                         android:layout_width="wrap_content"
+                                         android:layout_height="wrap_content" orion:walkOrder="@string/ABCD"/>
 
-                        <TextView android:layout_width="wrap_content"
-                              android:layout_height="wrap_content" android:text="A, B, C, D"/>
+                            <TextView android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content" android:text="ABCD"/>
 
-                        <RadioButton android:id="@+id/direction2"
-                                     android:layout_width="wrap_content"
-                                     android:layout_height="wrap_content" />
+                            <universe.constellation.orion.viewer.android.RadioButton android:id="@+id/walkOrder_ACBD"
+                                         android:layout_width="wrap_content"
+                                         android:layout_height="wrap_content" orion:walkOrder="@string/ACBD"/>
 
-                        <TextView android:layout_width="wrap_content"
-                              android:layout_height="wrap_content" android:text="A, C, B, D"/>
+                            <TextView android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content" android:text="ACBD"/>
 
-                        <!--<RadioButton android:id="@+id/direction3" android:layout_width="wrap_content"-->
-                                                             <!--android:layout_height="wrap_content" />-->
 
-                        <!--<TextView android:layout_width="wrap_content"-->
-                              <!--android:layout_height="wrap_content" android:text="B, D, A, C"/>-->
+                            <universe.constellation.orion.viewer.android.RadioButton android:id="@+id/walkOrder_BADC"
+                                         android:layout_width="wrap_content"
+                                         android:layout_height="wrap_content" orion:walkOrder="@string/BADC"/>
+
+                            <TextView android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content" android:text="BADC"/>
+
+                            <universe.constellation.orion.viewer.android.RadioButton android:id="@+id/walkOrder_BDAC"
+                                         android:layout_width="wrap_content"
+                                         android:layout_height="wrap_content" orion:walkOrder="@string/BDAC"/>
+
+                            <TextView android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content" android:text="BDAC"/>
+
                     </RadioGroup>
 
                 </LinearLayout>

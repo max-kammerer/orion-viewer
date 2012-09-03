@@ -32,6 +32,9 @@ import android.view.*;
 import android.widget.*;
 
 
+import android.widget.ImageButton;
+import android.widget.RadioButton;
+import universe.constellation.orion.viewer.android.*;
 import universe.constellation.orion.viewer.djvu.DjvuDocument;
 import universe.constellation.orion.viewer.pdf.PdfDocument;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
@@ -191,11 +194,21 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public void updatePageLayout() {
-        int did = controller.getDirection();
+        String walkOrder = controller.getDirection();
         int lid = controller.getLayout();
         ((RadioGroup) findMyViewById(R.id.layoutGroup)).check(lid == 0 ? R.id.layout1 : lid == 1 ? R.id.layout2 : R.id.layout3);
         //((RadioGroup) findMyViewById(R.id.directionGroup)).check(did == 0 ? R.id.direction1 : did == 1 ? R.id.direction2 : R.id.direction3);
-        ((RadioGroup) findMyViewById(R.id.directionGroup)).check(did == 0 ? R.id.direction1 : R.id.direction2);
+
+        RadioGroup group = (RadioGroup) findMyViewById(R.id.directionGroup);
+        for (int i = 0; i < group.getChildCount(); i++) {
+            View child = group.getChildAt(i);
+            if (child instanceof universe.constellation.orion.viewer.android.RadioButton) {
+                universe.constellation.orion.viewer.android.RadioButton button = (universe.constellation.orion.viewer.android.RadioButton) child;
+                if (walkOrder.equals(button.getWalkOrder())) {
+                    group.check(button.getId());
+                }
+            }
+        }
     }
 
     protected void onNewIntent(Intent intent) {
@@ -526,9 +539,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
         view.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 onApplyAction();
-                int did = ((RadioGroup) findMyViewById(R.id.directionGroup)).getCheckedRadioButtonId();
+                RadioGroup group = ((RadioGroup) findMyViewById(R.id.directionGroup));
+                int walkOrderButtonId = group.getCheckedRadioButtonId();
+                universe.constellation.orion.viewer.android.RadioButton button = (universe.constellation.orion.viewer.android.RadioButton) group.findViewById(walkOrderButtonId);
                 int lid = ((RadioGroup) findMyViewById(R.id.layoutGroup)).getCheckedRadioButtonId();
-                controller.setDirectionAndLayout(did == R.id.direction1 ? 0 : did == R.id.direction2 ? 1 : 2, lid == R.id.layout1 ? 0 : lid == R.id.layout2 ? 1 : 2);
+                controller.setDirectionAndLayout(button.getWalkOrder(), lid == R.id.layout1 ? 0 : lid == R.id.layout2 ? 1 : 2);
             }
         });
 

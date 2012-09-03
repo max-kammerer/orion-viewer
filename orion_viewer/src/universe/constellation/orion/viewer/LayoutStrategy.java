@@ -58,9 +58,9 @@ public interface LayoutStrategy {
 
     int getLayout();
 
-    int getDirection();
+    String getWalkOrder();
 
-    boolean changeNavigation(int navigation);
+    boolean changeNavigation(String walkOrder);
 
     boolean changePageLayout(int navigation);
 

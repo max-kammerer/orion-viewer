@@ -152,8 +152,10 @@ public class OrionApplication extends Application {
         if (viewActivity != null) {
             Controller controller = viewActivity.getController();
             if (controller != null) {
-                if ("contrast".equals(key)) {
-                    controller.changeContrast((Integer)value);
+                if ("walkOrder".equals(key)) {
+                    controller.changetWalkOrder((String) value);
+                } else if ("contrast".equals(key)) {
+                    controller.changeContrast((Integer) value);
                 } else if ("threshold".equals(key)) {
                     controller.changeThreshhold((Integer) value);
                 } else if ("screenOrientation".equals(key)) {

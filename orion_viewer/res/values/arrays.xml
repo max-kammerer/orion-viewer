@@ -91,9 +91,9 @@
     </string-array>
 
     <string-array name="walk_orders">
-        <item>@integer/ABCD</item>
-        <item>@integer/ACBD</item>
-        <item>@integer/BADC</item>
-        <item>@integer/BDAC</item>
+        <item>@string/ABCD</item>
+        <item>@string/ACBD</item>
+        <item>@string/BADC</item>
+        <item>@string/BDAC</item>
     </string-array>
 </resources>

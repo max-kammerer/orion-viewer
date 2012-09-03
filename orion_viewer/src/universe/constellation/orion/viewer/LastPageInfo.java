@@ -38,7 +38,7 @@ import java.lang.reflect.Modifier;
  */
 public class LastPageInfo implements Serializable {
 
-    public static final int CURRENT_VERSION = 3;
+    public static final int CURRENT_VERSION = 4;
 
     public int screenWidth;
     public int screenHeight;
@@ -63,7 +63,6 @@ public class LastPageInfo implements Serializable {
     public int leftEvenMargin = 0;
     public int rightEventMargin = 0;
 
-    public int navigation = 0;
     public int pageLayout = 0;
 
     public int contrast = 100;
@@ -76,6 +75,8 @@ public class LastPageInfo implements Serializable {
     public transient String simpleFileName;
 
     public transient String openingFileName;
+
+    public String walkOrder = "ABCD";
 
     private LastPageInfo() {
 
@@ -289,6 +290,17 @@ public class LastPageInfo implements Serializable {
                 value = 0;
             }
         }
+
+        if (localVersion < 4) {
+            if ("navigation".equals(name)) {
+                System.out.println("Property " + name + " upgraded");
+                localVersion = 4;
+                if (value == 1) {
+                    walkOrder = "ACBD";
+                }
+            }
+        }
+
         return value;
     }
 }

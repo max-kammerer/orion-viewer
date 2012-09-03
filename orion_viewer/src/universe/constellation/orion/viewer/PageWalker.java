@@ -38,33 +38,30 @@ public class PageWalker {
 
     public static enum WALK_ORDER {
 
-        ABCD (0, DIR.X, DIR.Y), ACBD (1, DIR.Y, DIR.X), BACD(2, DIR.X_M, DIR.Y), BDAC (3, DIR.Y, DIR.X_M);
-
-        private final int code;
+        ABCD (0, DIR.X, DIR.Y), ACBD (1, DIR.Y, DIR.X), BADC(2, DIR.X_M, DIR.Y), BDAC (3, DIR.Y, DIR.X_M);
 
         private final DIR first;
 
         private final DIR second;
 
         WALK_ORDER(int code, DIR first, DIR second) {
-            this.code = code;
             this.first = first;
             this.second = second;
         }
 
-        public int code() {
-            return code;
+        public String code() {
+            return this.name();
         }
     };
 
     private WALK_ORDER direction;
 
-    public PageWalker(int direction) {
+    public PageWalker(String direction) {
         WALK_ORDER [] values = WALK_ORDER.values();
         this.direction = WALK_ORDER.ABCD;
         for (int i = 0; i < values.length; i++) {
             WALK_ORDER value = values[i];
-            if (value.code() == direction) {
+            if (value.code().equals(direction)) {
                 this.direction = value;
                 break;
             }
@@ -124,5 +121,9 @@ public class PageWalker {
         DIR yDir = second.isX() ? first : second;
         info.cellX = xDir.isMinus() ? info.maxX : 0;
         info.cellY = yDir.isMinus() ? info.maxY : 0;
+    }
+
+    public String getDirection() {
+        return direction.name();
     }
 }

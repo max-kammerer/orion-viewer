@@ -29,10 +29,6 @@ import universe.constellation.orion.viewer.prefs.GlobalOptions;
  */
 public class SimpleLayoutStrategy implements LayoutStrategy {
 
-    private static final int D_ABCD = 0;
-    private static final int D_ACBD = 1;
-    private static final int D_BDAC = 2;
-
     public int viewWidth;
 
     public int viewHeight;
@@ -50,9 +46,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     private int rotation;
 
-    private int direction = Integer.MIN_VALUE;
-
-    private PageWalker walker;
+    private PageWalker walker = new PageWalker("default");
 
     private int layout;
 
@@ -249,10 +243,9 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         return false;
     }
 
-    public boolean changeNavigation(int navigation) {
-        if (this.direction != navigation) {
-            this.direction = navigation;
-            walker = new PageWalker(navigation);
+    public boolean changeNavigation(String walkOrder) {
+        if (walkOrder != null && !walkOrder.equals(walker.getDirection())) {
+            walker = new PageWalker(walkOrder);
             return true;
         }
         return false;
@@ -309,7 +302,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         changeMargins(info.leftMargin, info.topMargin, info.rightMargin, info.bottomMargin, info.enableEvenCropping, info.leftEvenMargin, info.rightEventMargin);
         changeRotation(info.rotation);
         changeZoom(info.zoom);
-        changeNavigation(info.navigation);
+        changeNavigation(info.walkOrder);
         changePageLayout(info.pageLayout);
         changeOverlapping(options.getHorizontalOverlapping(), options.getVerticalOverlapping());
     }
@@ -328,7 +321,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
         info.rotation = rotation;
         info.zoom = zoom;
-        info.navigation = direction;
+        info.walkOrder = walker.getDirection();
         info.pageLayout = layout;
     }
 
@@ -351,8 +344,8 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         return layout;
     }
 
-    public int getDirection() {
-        return direction;
+    public String getWalkOrder() {
+        return walker.getDirection();
     }
 
     public void setDimension(int width, int height) {

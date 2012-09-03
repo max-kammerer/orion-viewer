@@ -8,14 +8,14 @@
 
         <!--ie walk_order-->
         <universe.constellation.orion.viewer.prefs.OrionListPreference
-            android:key="navigation"
-                    android:title="@string/pref_screen_orientation"
-                    android:summary="@string/pref_book_screen_orientation"
+            android:key="walkOrder"
+                    android:title="@string/pref_walk_order"
+                    android:summary="@string/pref_walk_order"
                     android:entries="@array/walk_orders_desc"
                     android:entryValues="@array/walk_orders"
-                    android:dialogTitle="Walk Order"
+                    android:dialogTitle="@string/pref_walk_order"
                     orion:isBook="true"
-                    android:defaultValue="@integer/ABCD"/>
+                    android:defaultValue="@string/ABCD"/>
 
         <universe.constellation.orion.viewer.prefs.OrionListPreference
             android:key="screenOrientation"
