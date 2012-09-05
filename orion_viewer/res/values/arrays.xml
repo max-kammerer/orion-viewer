@@ -84,10 +84,10 @@
 
 
     <string-array name="walk_orders_desc">
-        <item>A, B, C, D</item>
-        <item>A, C, B, D</item>
-        <item>B, A, D, C</item>
-        <item>B, D, A, C</item>
+        <item>ABCD</item>
+        <item>ACBD</item>
+        <item>BADC</item>
+        <item>BDAC</item>
     </string-array>
 
     <string-array name="walk_orders">

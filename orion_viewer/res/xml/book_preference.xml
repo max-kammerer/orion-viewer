@@ -15,6 +15,7 @@
                     android:entryValues="@array/walk_orders"
                     android:dialogTitle="@string/pref_walk_order"
                     orion:isBook="true"
+                    android:dialogIcon="@drawable/walk_order"
                     android:defaultValue="@string/ABCD"/>
 
         <universe.constellation.orion.viewer.prefs.OrionListPreference
