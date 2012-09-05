@@ -19,6 +19,17 @@
                     android:dialogTitle="Rotation"
                     android:defaultValue="0"/>
 
+            <universe.constellation.orion.viewer.prefs.OrionListPreference
+                android:key="WALK_ORDER"
+                        android:title="@string/pref_walk_order"
+                        android:summary="@string/pref_walk_order"
+                        android:entries="@array/walk_orders_desc"
+                        android:entryValues="@array/walk_orders"
+                        android:dialogTitle="@string/pref_walk_order"
+                        android:dialogIcon="@drawable/walk_order"
+                        android:defaultValue="@string/ABCD"/>
+
+
             <ListPreference
                     android:key="DEFAULT_ZOOM"
                     android:title="@string/pref_bookDefaultZoom"

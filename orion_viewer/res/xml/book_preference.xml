@@ -6,7 +6,6 @@
     <PreferenceCategory
             android:title="Current Book Options" android:key="GENERAL">
 
-        <!--ie walk_order-->
         <universe.constellation.orion.viewer.prefs.OrionListPreference
             android:key="walkOrder"
                     android:title="@string/pref_walk_order"

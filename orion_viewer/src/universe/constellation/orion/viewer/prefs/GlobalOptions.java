@@ -20,10 +20,10 @@ package universe.constellation.orion.viewer.prefs;
  */
 
 import android.content.SharedPreferences;
-import android.os.Debug;
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.OptionActions;
 import universe.constellation.orion.viewer.OrionViewerActivity;
+import universe.constellation.orion.viewer.PageWalker;
 
 import java.io.Serializable;
 import java.util.*;
@@ -79,6 +79,8 @@ public class GlobalOptions implements Serializable {
     public final static String OPEN_RECENT_BOOK = "OPEN_RECENT_BOOK";
 
     public final static String DAY_NIGHT_MODE = "DAY_NIGHT_MODE";
+
+    public final static String WALK_ORDER = "WALK_ORDER";
 
     private LinkedList<RecentEntry> recentFiles;
 
@@ -333,6 +335,12 @@ public class GlobalOptions implements Serializable {
     public String getApplicationTheme() {
         return getStringProperty(APPLICATION_THEME, "DEFAULT");
     }
+
+    public String getWalkOrder() {
+        return getStringProperty(WALK_ORDER, PageWalker.WALK_ORDER.ABCD.name());
+    }
+
+
 
 //    public void subscribe(PrefListener listener) {
 //        prefListener.add(listener);
