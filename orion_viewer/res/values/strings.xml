@@ -57,4 +57,8 @@
     <string name="BADC">BADC</string>
     <string name="BDAC">BDAC</string>
 
+    <integer name="layout_right_bottom_outside">0</integer>
+    <integer name="layout_only_bottom_outside">1</integer>
+    <integer name="layout_always_inside">2</integer>
+
 </resources>

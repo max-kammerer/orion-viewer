@@ -288,6 +288,12 @@ public class Controller {
         }
     }
 
+    public void changetPageLayout(int pageLayout) {
+        if (layout.changePageLayout(pageLayout)) {
+            sendViewChangeNotification();
+        }
+    }
+
     public void changeContrast(int contrast) {
 		if (this.contrast != contrast) {
 			this.contrast = contrast;

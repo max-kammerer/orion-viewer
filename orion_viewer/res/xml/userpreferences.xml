@@ -4,7 +4,6 @@
                   xmlns:orion="http://schemas.android.com/apk/res/universe.constellation.orion.viewer"
         android:title="Application Settings">
 
-
     <PreferenceCategory
             android:title="General" android:key="GENERAL">
 
@@ -28,6 +27,15 @@
                         android:dialogTitle="@string/pref_walk_order"
                         android:dialogIcon="@drawable/walk_order"
                         android:defaultValue="@string/ABCD"/>
+
+            <universe.constellation.orion.viewer.prefs.OrionLayoutDialog
+                            android:key="PAGE_LAYOUT"
+                            android:title="@string/pref_page_layout"
+                            android:summary="@string/pref_page_layout"
+                            android:entries="@array/page_layouts"
+                            android:entryValues="@array/page_layouts"
+                            android:dialogTitle="@string/pref_page_layout"
+                            android:defaultValue="0"/>
 
 
             <ListPreference
@@ -187,16 +195,16 @@
     </PreferenceCategory>
 
 
-<PreferenceCategory
-               android:title="System" android:key="SYSTEM">
-    <universe.constellation.orion.viewer.prefs.DevicePrefInfo android:persistent="false"
-            android:title="Device Info"/>
+    <PreferenceCategory
+                   android:title="System" android:key="SYSTEM">
+        <universe.constellation.orion.viewer.prefs.DevicePrefInfo android:persistent="false"
+                android:title="Device Info"/>
 
-    <CheckBoxPreference
-                    android:key="DEBUG"
-                    android:title="@string/pref_debug"
-                    android:summary="@string/pref_debug_desc"
-                    android:defaultValue="false"/>
+        <CheckBoxPreference
+                        android:key="DEBUG"
+                        android:title="@string/pref_debug"
+                        android:summary="@string/pref_debug_desc"
+                        android:defaultValue="false"/>
 
-</PreferenceCategory>
+    </PreferenceCategory>
 </PreferenceScreen>

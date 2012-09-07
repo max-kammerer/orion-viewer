@@ -77,9 +77,14 @@ public class OrionEditPreference extends EditTextPreference implements Preferenc
         }
     }
 
-
-
     public boolean onPreferenceChange(Preference preference, Object newValue) {
+        if (minValue != null || maxValue != null) {
+            if (newValue == null || "".equals(newValue)) {
+                Toast.makeText(getContext(), "Value couldn't be empty!", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+
         if (minValue != null && minValue > Integer.valueOf((String)newValue)) {
             Toast.makeText(getContext(), "New value should be greater or equal than " + minValue, Toast.LENGTH_SHORT).show();
             return false;
@@ -136,54 +141,15 @@ public class OrionEditPreference extends EditTextPreference implements Preferenc
     @Override
     protected boolean persistString(String value) {
         if (isCurrentBookOption) {
-            return persistValue(value);
+            return OrionPreferenceUtil.persistValue(this, value);
         } else {
             return super.persistString(value);
         }
     }
 
-//    protected boolean persistInt(int value) {
-//        if (isCurrentBookOption) {
-//            return persistValue(value);
-//        } else {
-//            return super.persistInt(value);
-//        }
-//    }
-
-    protected boolean persistValue(String value) {
-        LastPageInfo info = ((OrionApplication) getContext().getApplicationContext()).getCurrentBookParameters();
-        if (info != null) {
-            try {
-                Field f = info.getClass().getDeclaredField(getKey());
-                Class clazz = f.getType();
-                Object resultValue = value;
-                if (int.class.equals(clazz)) {
-                    resultValue = Integer.valueOf(value);
-                }
-                f.set(info, resultValue);
-                ((OrionApplication)getContext().getApplicationContext()).processBookOptionChange(getKey(), resultValue);
-                return true;
-            } catch (Exception e) {
-                Common.d(e);
-            }
-        }
-        return  false;
-    }
-
-
     protected int getPersistedInt(int defaultReturnValue) {
         if (isCurrentBookOption) {
-            LastPageInfo info = ((OrionApplication) getContext()).getCurrentBookParameters();
-            if (info != null) {
-                try {
-                    Field f = info.getClass().getDeclaredField(getKey());
-                    Integer value = (Integer) f.get(info);
-                    return value;
-                } catch (Exception e) {
-                    Common.d(e);
-                }
-            }
-            return defaultReturnValue;
+            return OrionPreferenceUtil.getPersistedInt(this, defaultReturnValue);
         } else {
             return super.getPersistedInt(defaultReturnValue);
         }
@@ -193,17 +159,7 @@ public class OrionEditPreference extends EditTextPreference implements Preferenc
     @Override
     protected String getPersistedString(String defaultReturnValue) {
         if (isCurrentBookOption) {
-            LastPageInfo info = ((OrionApplication) getContext().getApplicationContext()).getCurrentBookParameters();
-            if (info != null) {
-                try {
-                    Field f = info.getClass().getDeclaredField(getKey());
-                    String value = f.get(info).toString();
-                    return value;
-                } catch (Exception e) {
-                    Common.d(e);
-                }
-            }
-            return  defaultReturnValue;
+            return OrionPreferenceUtil.getPersistedString(this, defaultReturnValue);
         } else {
             return super.getPersistedString(defaultReturnValue);
         }

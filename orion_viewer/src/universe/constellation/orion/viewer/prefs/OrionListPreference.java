@@ -4,11 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.ListPreference;
 import android.util.AttributeSet;
-import universe.constellation.orion.viewer.Common;
-import universe.constellation.orion.viewer.LastPageInfo;
 import universe.constellation.orion.viewer.R;
-
-import java.lang.reflect.Field;
 
 /**
  * User: mike
@@ -46,66 +42,15 @@ public class OrionListPreference extends ListPreference {
     @Override
     protected boolean persistString(String value) {
         if (isCurrentBookOption) {
-            return persistValue(value);
+            return OrionPreferenceUtil.persistValue(this, value);
         } else {
             return super.persistString(value);
         }
     }
 
-    protected boolean persistValue(String value) {
-        LastPageInfo info = ((OrionApplication) getContext().getApplicationContext()).getCurrentBookParameters();
-        if (info != null) {
-            try {
-                Field f = info.getClass().getDeclaredField(getKey());
-                Class clazz = f.getType();
-                Object resultValue = value;
-                if (int.class.equals(clazz)) {
-                    resultValue = Integer.valueOf(value);
-                }
-                f.set(info, resultValue);
-                ((OrionApplication)getContext().getApplicationContext()).processBookOptionChange(getKey(), resultValue);
-                return true;
-            } catch (Exception e) {
-                Common.d(e);
-            }
-        }
-        return  false;
-    }
-
-
-    protected int getPersistedInt(int defaultReturnValue) {
-        if (isCurrentBookOption) {
-            LastPageInfo info = ((OrionApplication) getContext()).getCurrentBookParameters();
-            if (info != null) {
-                try {
-                    Field f = info.getClass().getDeclaredField(getKey());
-                    Integer value = (Integer) f.get(info);
-                    return value;
-                } catch (Exception e) {
-                    Common.d(e);
-                }
-            }
-            return defaultReturnValue;
-        } else {
-            return super.getPersistedInt(defaultReturnValue);
-        }
-    }
-
-
-    @Override
     protected String getPersistedString(String defaultReturnValue) {
         if (isCurrentBookOption) {
-            LastPageInfo info = ((OrionApplication) getContext().getApplicationContext()).getCurrentBookParameters();
-            if (info != null) {
-                try {
-                    Field f = info.getClass().getDeclaredField(getKey());
-                    String value = f.get(info).toString();
-                    return value;
-                } catch (Exception e) {
-                    Common.d(e);
-                }
-            }
-            return  defaultReturnValue;
+            return OrionPreferenceUtil.getPersistedString(this, defaultReturnValue);
         } else {
             return super.getPersistedString(defaultReturnValue);
         }

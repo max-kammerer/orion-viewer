@@ -11,6 +11,8 @@ import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.Device;
 import universe.constellation.orion.viewer.R;
 
+import java.util.Arrays;
+
 /**
  * User: mike
  * Date: 17.05.12
@@ -41,6 +43,8 @@ public class OrionBookPreferences extends PreferenceActivity {
             general.removePreference(screenOrientation);
         } else {
             boolean isLevel9 = getOrionContext().getSdkVersion() >= 9;
+
+
             CharSequence[] values = getResources().getTextArray(isLevel9 ? R.array.screen_orientation_full_desc : R.array.screen_orientation_desc);
             CharSequence[] newValues = new CharSequence[values.length];
             for (int i = 0; i < values.length; i++) {
@@ -52,6 +56,14 @@ public class OrionBookPreferences extends PreferenceActivity {
             if (isLevel9) {
                 screenOrientation.setEntryValues(R.array.screen_orientation_full);
             }
+//            if (!isLevel9) {
+//                CharSequence [] entries = screenOrientation.getEntries();
+//                CharSequence [] values = screenOrientation.getEntryValues();
+//                entries = Arrays.copyOf(entries, 3);
+//                values = Arrays.copyOf(values, 3);
+//                screenOrientation.setEntries(entries);
+//                screenOrientation.setEntryValues(values);
+//            }
         }
 
     }

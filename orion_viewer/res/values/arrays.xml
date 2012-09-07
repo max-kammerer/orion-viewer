@@ -84,10 +84,10 @@
 
 
     <string-array name="walk_orders_desc">
-        <item>ABCD</item>
-        <item>ACBD</item>
-        <item>BADC</item>
-        <item>BDAC</item>
+        <item>@string/ABCD</item>
+        <item>@string/ACBD</item>
+        <item>@string/BADC</item>
+        <item>@string/BDAC</item>
     </string-array>
 
     <string-array name="walk_orders">
@@ -95,5 +95,11 @@
         <item>@string/ACBD</item>
         <item>@string/BADC</item>
         <item>@string/BDAC</item>
+    </string-array>
+
+    <string-array name="page_layouts">
+        <item>@integer/layout_right_bottom_outside</item>
+        <item>@integer/layout_only_bottom_outside</item>
+        <item>@integer/layout_always_inside</item>
     </string-array>
 </resources>

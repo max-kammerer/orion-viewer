@@ -82,6 +82,8 @@ public class GlobalOptions implements Serializable {
 
     public final static String WALK_ORDER = "WALK_ORDER";
 
+    public final static String PAGE_LAYOUT = "PAGE_LAYOUT";
+
     private LinkedList<RecentEntry> recentFiles;
 
     private SharedPreferences prefs;
@@ -338,6 +340,10 @@ public class GlobalOptions implements Serializable {
 
     public String getWalkOrder() {
         return getStringProperty(WALK_ORDER, PageWalker.WALK_ORDER.ABCD.name());
+    }
+
+    public int getPageLayout() {
+        return getInt(PAGE_LAYOUT, 0);
     }
 
 

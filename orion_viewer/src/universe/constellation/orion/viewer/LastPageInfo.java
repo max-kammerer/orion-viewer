@@ -118,6 +118,7 @@ public class LastPageInfo implements Serializable {
             lastPageInfo.zoom = options.getDefaultZoom();
             lastPageInfo.contrast = options.getDefaultContrast();
             lastPageInfo.walkOrder = options.getWalkOrder();
+            lastPageInfo.pageLayout = options.getPageLayout();
         }
 
         lastPageInfo.fileData = fileData;
