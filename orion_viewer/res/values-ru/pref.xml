@@ -1,6 +1,7 @@
 <resources>
     <string name="pref_fullScreen">Полноэкранный режим</string>
     <string name="pref_bookDefaultOrientation">Ориентация книги по умолчанию</string>
+    <string name="pref_bookDefaultZoom">Масштаб</string>
     <string name="pref_rotate_new_book_on_opening">Поворачивать книгу при первом открытии</string>
     <string name="pref_screen_orientation">Ориентация экрана</string>
     <string name="pref_rotate_screen">Ориентация экрана по умолчанию: необходим перезапуск приложения</string>
@@ -35,4 +36,19 @@
     <!--book preferences-->
     <string name="pref_book_contrast">Контрастность</string>
     <string name="pref_book_contrast_desc">Контрастность 1-1000 (по умолчанию 100)</string>
+
+    <!--<string name="pref_book_threshold">Threshold</string>-->
+    <!--<string name="pref_book_threshold_desc">Threshold for watermark removal</string>-->
+
+
+    <string name="pref_debug">Отладка</string>
+    <string name="pref_debug_desc">Запись отладочной информации в файл &lt;имя открытой файла&gt; + .trace</string>
+
+    <string name="pref_walk_order">@string/navigation</string>
+    <string name="pref_page_layout">@string/menu_navigation_text</string>
+
+    <string name="pref_default_book_setting">Параметры по умолчанию для книги</string>
+    <string name="book_pref_title">Настройки для открытой книги</string>
+    <string name="application_settings_title">Настройки приложения</string>
+
 </resources>

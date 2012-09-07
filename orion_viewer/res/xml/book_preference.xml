@@ -2,9 +2,9 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
                   xmlns:orion="http://schemas.android.com/apk/res/universe.constellation.orion.viewer"
-        android:title="Current Book Options">
+        android:title="@string/book_pref_title">
     <PreferenceCategory
-            android:title="Current Book Options" android:key="GENERAL">
+            android:title="@string/book_pref_title" android:key="GENERAL">
 
         <universe.constellation.orion.viewer.prefs.OrionLayoutDialog
                         android:key="pageLayout"

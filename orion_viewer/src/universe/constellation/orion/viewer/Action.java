@@ -95,20 +95,6 @@ public enum Action {
         }
     },
 
-    ZOOM (R.string.action_zoom_page, R.integer.action_zoom_page) {
-            @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            activity.showOrionDialog(OrionViewerActivity.ZOOM_SCREEN, null, null);
-        }
-    },
-
-    CROP (R.string.action_crop_page, R.integer.action_crop_page) {
-            @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            activity.showOrionDialog(OrionViewerActivity.CROP_SCREEN, null, null);
-        }
-    },
-
     OPTIONS (R.string.action_options_page, R.integer.action_options_page) {
         @Override
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
@@ -124,6 +110,28 @@ public enum Action {
             activity.startActivity(intent);
         }
     },
+
+    ZOOM (R.string.action_zoom_page, R.integer.action_zoom_page) {
+            @Override
+        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+            activity.showOrionDialog(OrionViewerActivity.ZOOM_SCREEN, null, null);
+        }
+    },
+
+    PAGE_LAYOUT (R.string.action_layout_page, R.integer.action_page_layout) {
+            @Override
+        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+            activity.showOrionDialog(OrionViewerActivity.PAGE_LAYOUT_SCREEN, null, null);
+        }
+    },
+
+    CROP (R.string.action_crop_page, R.integer.action_crop_page) {
+            @Override
+        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+            activity.showOrionDialog(OrionViewerActivity.CROP_SCREEN, null, null);
+        }
+    },
+
 
     SELECT_TEXT (R.string.action_select_text, R.integer.action_select_text) {
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {

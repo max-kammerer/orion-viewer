@@ -17,4 +17,7 @@
 
     <string name="menu_book_preferences">Настройки книги</string>
     <string name="menu_outline_text">Содержание</string>
+
+    <string name="menu_select_text">Выделить текст</string>
+    <string name="menu_book_preferences">Настройки книги</string>
 </resources>

@@ -6,13 +6,14 @@
     <string name="action_prev_page">Prev page</string>
     <string name="action_crop_page">Crop dialog</string>
     <string name="action_zoom_page">Zoom dialog</string>
+    <string name="action_layout_page">@string/menu_navigation_text</string>
     <string name="action_rotation_page">Rotation dialog</string>
     <string name="action_options_page">Options</string>
-    <string name="action_book_options">Book Options</string>
+    <string name="action_book_options">@string/menu_book_preferences</string>
     <string name="action_goto_page">Go to</string>
     <string name="action_dictionary">Open Dictionary</string>
     <string name="action_open">Open Book</string>
-    <string name="action_outline">Outline</string>
+    <string name="action_outline">@string/menu_outline_text</string>
     <string name="action_add_bookmark">Add Bookmark</string>
     <string name="action_open_bookmarks">Open Bookmarks</string>
     <string name="action_day_night_mode">Day/Night mode</string>
@@ -35,5 +36,5 @@
     <string name="action_rotate_90">Rotate 90/-90 degree</string>
     <string name="action_rotate_270">Rotate 270/-270 degree</string>
 
-    <string name="action_select_text">Select text</string>
+    <string name="action_select_text">@string/menu_select_text</string>
 </resources>

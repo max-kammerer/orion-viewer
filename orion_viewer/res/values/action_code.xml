@@ -6,6 +6,8 @@
     <integer name="action_prev_page">3</integer>
 
     <integer name="action_zoom_page">4</integer>
+    <!--new 19-->
+    <integer name="action_page_layout">19</integer>
     <integer name="action_crop_page">5</integer>
     <integer name="action_options_page">6</integer>
     <integer name="action_goto_page">7</integer>

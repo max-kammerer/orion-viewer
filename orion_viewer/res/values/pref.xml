@@ -47,4 +47,9 @@
     <string name="pref_walk_order">Walk Order</string>
     <string name="pref_page_layout">Page Layout</string>
 
+
+    <string name="application_settings_title">Application Settings</string>
+    <string name="pref_default_book_setting">Book Default Settings</string>
+    <string name="book_pref_title">Current Book Options</string>
+
 </resources>
