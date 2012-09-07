@@ -31,9 +31,9 @@
           android:title="@string/menu_book_preferences"
           android:icon="@drawable/book_preferences"/>
 
-    <item android:id="@+id/navigation_menu_item"
-          android:title="@string/menu_navigation_text"
-          android:icon="@drawable/navigation"/>
+    <!--<item android:id="@+id/navigation_menu_item"-->
+          <!--android:title="@string/menu_navigation_text"-->
+          <!--android:icon="@drawable/navigation"/>-->
 
     <item android:id="@+id/goto_menu_item"
           android:title="@string/menu_goto_text"

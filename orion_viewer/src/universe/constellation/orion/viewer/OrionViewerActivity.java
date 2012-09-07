@@ -935,8 +935,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
             case R.id.add_bookmark_menu_item: action = Action.ADD_BOOKMARK; break;
             case R.id.goto_menu_item: action = Action.GOTO; break;
             case R.id.select_text_menu_item: action = Action.SELECT_TEXT; break;
-            case R.id.navigation_menu_item: showOrionDialog(PAGE_LAYOUT_SCREEN, null, null);
-                return true;
+//            case R.id.navigation_menu_item: showOrionDialog(PAGE_LAYOUT_SCREEN, null, null);
+//                return true;
 
 //            case R.id.rotation_menu_item: action = Action.ROTATION; break;
 

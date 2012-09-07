@@ -2,7 +2,7 @@
 <resources>
     <string name="pref_fullScreen">Full screen</string>
     <string name="pref_bookDefaultOrientation">Book default orientation</string>
-    <string name="pref_bookDefaultZoom">Book default zoom</string>
+    <string name="pref_bookDefaultZoom">Zoom</string>
     <string name="pref_rotate_new_book_on_opening">Rotate new book on opening</string>
     <string name="pref_screen_orientation">Screen orientation</string>
     <string name="pref_rotate_screen">Default screen orientation: restart application to apply</string>

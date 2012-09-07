@@ -103,7 +103,7 @@
 
     </PreferenceCategory>
     <PreferenceCategory
-            android:title="Key &amp; Tap Zone Managers">
+            android:title="Key Manager">
 
         <CheckBoxPreference
                 android:key="SWAP_KEYS"
