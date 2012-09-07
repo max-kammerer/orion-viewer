@@ -5,7 +5,9 @@
               android:layout_height="wrap_content"
               android:textAppearance="?android:attr/textAppearanceLarge"
               android:gravity="center_vertical"
-              android:checkMark="?android:attr/listChoiceIndicatorSingle">
+              android:checkMark="?android:attr/listChoiceIndicatorSingle"
+              android:paddingLeft="6dip"
+              android:paddingRight="6dip" >
 
     <ImageView android:id="@+id/ibutton"
              android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -19,7 +21,6 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:gravity="center_vertical"
         android:checkMark="?android:attr/listChoiceIndicatorSingle"
-        android:paddingLeft="6dip"
-        android:paddingRight="6dip" android:layout_weight="1"/>
+        android:layout_weight="1"/>
 
 </universe.constellation.orion.viewer.android.CheckableLinearLayout>

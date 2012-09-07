@@ -6,6 +6,16 @@
     <PreferenceCategory
             android:title="Current Book Options" android:key="GENERAL">
 
+        <universe.constellation.orion.viewer.prefs.OrionLayoutDialog
+                        android:key="pageLayout"
+                        android:title="@string/pref_page_layout"
+                        android:summary="@string/pref_page_layout"
+                        android:entries="@array/page_layouts"
+                        android:entryValues="@array/page_layouts"
+                        android:dialogTitle="@string/pref_page_layout"
+                        orion:isBook="true"
+                        android:defaultValue="0"/>
+
         <universe.constellation.orion.viewer.prefs.OrionListPreference
             android:key="walkOrder"
                     android:title="@string/pref_walk_order"
@@ -16,16 +26,6 @@
                     orion:isBook="true"
                     android:dialogIcon="@drawable/walk_order"
                     android:defaultValue="@string/ABCD"/>
-
-        <universe.constellation.orion.viewer.prefs.OrionLayoutDialog
-                        android:key="pageLayout"
-                        android:title="@string/pref_page_layout"
-                        android:summary="@string/pref_page_layout"
-                        android:entries="@array/page_layouts"
-                        android:entryValues="@array/page_layouts"
-                        android:dialogTitle="@string/pref_page_layout"
-                        orion:isBook="true"
-                        android:defaultValue="0"/>
 
         <universe.constellation.orion.viewer.prefs.OrionListPreference
             android:key="screenOrientation"
