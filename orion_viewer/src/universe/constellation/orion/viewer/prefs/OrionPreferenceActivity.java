@@ -79,7 +79,24 @@ public class OrionPreferenceActivity extends PreferenceActivity {
                 SCREEN_ORIENTATION.setEntryValues(getResources().getTextArray(R.array.screen_orientation_full_desc));
             }
         }
+
+        if (Device.Info.NOOK_CLASSIC) {
+            PreferenceScreen bookDefaults = (PreferenceScreen) GENERAL.findPreference("BOOK_DEFAULT");
+            PreferenceScreen taps = (PreferenceScreen) GENERAL.findPreference("TAP_ZONES");
+            GENERAL.removePreference(taps);
+//            PreferenceCategory newBookDefaults = new PreferenceCategory(getApplicationContext(), null);
+//            newBookDefaults.setTitle("Book default options");
+//            for (int i = bookDefaults.getPreferenceCount() - 1; i >= 0; i--) {
+//                Preference pref = bookDefaults.getPreference(i);
+//                bookDefaults.removePreference(pref);
+//                newBookDefaults.addPreference(pref);
+//            }
+//            GENERAL.removePreference(bookDefaults);
+//            screen.addPreference(newBookDefaults);
+        }
     }
+
+
 
 
     public void setContentView(int layoutResID) {
@@ -89,4 +106,6 @@ public class OrionPreferenceActivity extends PreferenceActivity {
     public OrionApplication getOrionContext() {
         return (OrionApplication) getApplicationContext();
     }
+
+
 }

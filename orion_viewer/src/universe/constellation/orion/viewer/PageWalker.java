@@ -126,4 +126,8 @@ public class PageWalker {
     public String getDirection() {
         return direction.name();
     }
+
+    public boolean isLeft2Right() {
+        return direction == WALK_ORDER.ABCD || direction == WALK_ORDER.ACBD;
+    }
 }

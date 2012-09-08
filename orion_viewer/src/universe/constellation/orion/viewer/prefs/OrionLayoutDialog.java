@@ -69,6 +69,11 @@ public class OrionLayoutDialog extends DialogPreference {
 
     @Override
     protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
+        if (isCurrentBookOption && !restorePersistedValue) {
+            //for android 1.5
+            restorePersistedValue = true;
+        }
+
         if (restorePersistedValue) {
             position = getPersistedInt(0);
         } else {
