@@ -44,8 +44,8 @@
     <string name="pref_debug">Debug</string>
     <string name="pref_debug_desc">Write traces to file &lt;opened book name&gt; + .trace</string>
 
-    <string name="pref_walk_order">Walk Order</string>
-    <string name="pref_page_layout">Page Layout</string>
+    <string name="pref_walk_order">Page traversal</string>
+    <string name="pref_page_layout">Page layout</string>
 
 
     <string name="application_settings_title">Application Settings</string>

@@ -19,7 +19,7 @@
 
 <resources>
     <string name="app_name">Orion Viewer</string>
-    <string name="navigation">Walk order</string>
+    <string name="navigation">Page traversal</string>
     <string name="version_name">0.35.0</string>
     <string name="crop_left">Left</string>
     <string name="enable_even_crop">Another cropping for even pages</string>
