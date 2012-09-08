@@ -1,3 +1,8 @@
+===== 0.37.0 (Sep 08, 2012) =====
+* Text selection in djvu document (one screen & edge devices)
+* New page traversal: from right to left
+* New default options for book
+
 ===== 0.35.0 (Aug 25, 2012) =====
 * Text selection in pdf document (one screen & edge devices)
 * Options update
