@@ -95,11 +95,81 @@ public enum Action {
         }
     },
 
-    OPTIONS (R.string.action_options_page, R.integer.action_options_page) {
+    FIRST_PAGE (R.string.action_first_page, R.integer.action_first_page) {
         @Override
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            Intent intent = new Intent(activity, OrionPreferenceActivity.class);
-            activity.startActivity(intent);
+            if (controller != null) {
+                controller.drawPage(0);
+            }
+        }
+    } ,
+
+    LAST_PAGE (R.string.action_last_page, R.integer.action_last_page) {
+        @Override
+        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+            if (controller != null) {
+                controller.drawPage(controller.getPageCount() - 1);
+            }
+        }
+    } ,
+
+    SHOW_OUTLINE (R.string.action_outline, R.integer.action_open_outline) {
+		public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+			Common.d("In Show Outline!");
+			OutlineItem[] outline = controller.getOutline();
+
+			if (outline != null && outline.length != 0) {
+//                final Dialog dialog = new Dialog(activity);
+//                dialog.setTitle(R.string.table_of_contents);
+//                LinearLayout contents = new LinearLayout(activity);
+//                contents.setOrientation(LinearLayout.VERTICAL);
+//                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//                params.leftMargin = 5;
+//                params.rightMargin = 5;
+//                params.bottomMargin = 2;
+//                params.topMargin = 2;
+//
+//                InMemoryTreeStateManager<Integer> manager = new InMemoryTreeStateManager<Integer>();
+//                manager.setVisibleByDefault(false);
+//                OutlineAdapter.SetManagerFromOutlineItems(manager, outline);
+//                TreeViewList tocTree = new TreeViewList(activity);
+//                tocTree.setAdapter(new OutlineAdapter(controller, activity, dialog, manager, outline));
+//
+//                contents.addView(tocTree, params);
+//                dialog.setContentView(contents);
+//                dialog.show();
+                activity.getOrionContext().getTempOptions().outline = outline;
+                Intent intent = new Intent(activity, OutlineActivity.class);
+                activity.startActivityForResult(intent, OrionViewerActivity.OPEN_BOOKMARK_ACTIVITY_RESULT);
+            } else {
+                activity.showWarning("Outline is empty");
+            }
+        }
+    },
+
+    SELECT_TEXT (R.string.action_select_text, R.integer.action_select_text) {
+        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+            activity.textSelectionMode();
+        }
+    },
+
+    ADD_BOOKMARK (R.string.action_add_bookmark, R.integer.action_add_bookmark) {
+        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+            activity.showOrionDialog(OrionViewerActivity.ADD_BOOKMARK_SCREEN, this, parameter);
+        }
+    },
+
+    OPEN_BOOKMARKS (R.string.action_open_bookmarks, R.integer.action_open_bookmarks) {
+        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+            Intent bookmark = new Intent(activity.getApplicationContext(), OrionBookmarkActivity.class);
+            bookmark.putExtra(OrionBookmarkActivity.BOOK_ID, activity.getBookId());
+            activity.startActivityForResult(bookmark, OrionViewerActivity.OPEN_BOOKMARK_ACTIVITY_RESULT);
+        }
+    },
+
+    DAY_NIGHT (R.string.action_day_night_mode, R.integer.action_day_night_mode) {
+        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+            activity.changeDayNightMode();
         }
     },
 
@@ -129,13 +199,6 @@ public enum Action {
             @Override
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
             activity.showOrionDialog(OrionViewerActivity.CROP_SCREEN, null, null);
-        }
-    },
-
-
-    SELECT_TEXT (R.string.action_select_text, R.integer.action_select_text) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            activity.textSelectionMode();
         }
     },
 
@@ -211,57 +274,11 @@ public enum Action {
         }
     },
 
-    SHOW_OUTLINE (R.string.action_outline, R.integer.action_open_outline) {
-		public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-			Common.d("In Show Outline!");
-			OutlineItem[] outline = controller.getOutline();
-
-			if (outline != null && outline.length != 0) {
-//                final Dialog dialog = new Dialog(activity);
-//                dialog.setTitle(R.string.table_of_contents);
-//                LinearLayout contents = new LinearLayout(activity);
-//                contents.setOrientation(LinearLayout.VERTICAL);
-//                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//                params.leftMargin = 5;
-//                params.rightMargin = 5;
-//                params.bottomMargin = 2;
-//                params.topMargin = 2;
-//
-//                InMemoryTreeStateManager<Integer> manager = new InMemoryTreeStateManager<Integer>();
-//                manager.setVisibleByDefault(false);
-//                OutlineAdapter.SetManagerFromOutlineItems(manager, outline);
-//                TreeViewList tocTree = new TreeViewList(activity);
-//                tocTree.setAdapter(new OutlineAdapter(controller, activity, dialog, manager, outline));
-//
-//                contents.addView(tocTree, params);
-//                dialog.setContentView(contents);
-//                dialog.show();
-                activity.getOrionContext().getTempOptions().outline = outline;
-                Intent intent = new Intent(activity, OutlineActivity.class);
-                activity.startActivityForResult(intent, OrionViewerActivity.OPEN_BOOKMARK_ACTIVITY_RESULT);
-            } else {
-                activity.showWarning("Outline is empty");
-            }
-        }
-    },
-
-    ADD_BOOKMARK (R.string.action_add_bookmark, R.integer.action_add_bookmark) {
+    OPTIONS (R.string.action_options_page, R.integer.action_options_page) {
+        @Override
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            activity.showOrionDialog(OrionViewerActivity.ADD_BOOKMARK_SCREEN, this, parameter);
-        }
-    },
-
-    OPEN_BOOKMARKS (R.string.action_open_bookmarks, R.integer.action_open_bookmarks) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            Intent bookmark = new Intent(activity.getApplicationContext(), OrionBookmarkActivity.class);
-            bookmark.putExtra(OrionBookmarkActivity.BOOK_ID, activity.getBookId());
-            activity.startActivityForResult(bookmark, OrionViewerActivity.OPEN_BOOKMARK_ACTIVITY_RESULT);
-        }
-    },
-
-    DAY_NIGHT (R.string.action_day_night_mode, R.integer.action_day_night_mode) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            activity.changeDayNightMode();
+            Intent intent = new Intent(activity, OrionPreferenceActivity.class);
+            activity.startActivity(intent);
         }
     },
 

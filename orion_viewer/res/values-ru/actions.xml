@@ -3,6 +3,8 @@
     <string name="action_menu">Главное меню</string>
     <string name="action_next_page">Следующая страница</string>
     <string name="action_prev_page">Предыдущая страница</string>
+    <string name="action_first_page">В начало книги</string>
+    <string name="action_last_page">В конец книги</string>
     <string name="action_crop_page">Диалог обрезки полей</string>
     <string name="action_zoom_page">Диалог масштабирования</string>
     <string name="action_rotation_page">Диалог поворота</string>
