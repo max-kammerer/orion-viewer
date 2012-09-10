@@ -382,6 +382,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
         pageSeek.setProgress(controller.getCurrentPage());
         TextView view = (TextView) findMyViewById(R.id.page_picker_message);
         view.setText("" + (controller.getCurrentPage() + 1));
+        view.clearFocus();
+        view.requestFocus();
+
     }
 
     public void initZoomScreen() {
