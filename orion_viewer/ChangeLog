@@ -1,3 +1,6 @@
+===== 0.37.1 (Sep 14, 2012) =====
+* Labels and warnings update
+
 ===== 0.37.0 (Sep 08, 2012) =====
 * Text selection in djvu document (one screen & edge devices)
 * New page traversal: from right to left
