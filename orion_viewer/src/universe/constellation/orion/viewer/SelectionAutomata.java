@@ -103,7 +103,7 @@ public class SelectionAutomata {
                     selectionDialog.dismiss();
 
                     String text = activity.getController().selectText(getStartX(), getStartY(), getWidth(), getHeight());
-                    if (text != null) {
+                    if (text != null && !"".equals(text)) {
                         new SelectedTextActions(activity).show(text);
                     } else {
                         activity.showFastMessage(universe.constellation.orion.viewer.R.string.warn_no_text_in_selection);

@@ -347,6 +347,10 @@ public class Controller {
             startY += height;
             height = - height;
         }
-        return doc.getText(layoutInfo.pageNumber, (int) ((leftTopCorner.x + startX) / layoutInfo.docZoom), (int) ((leftTopCorner.y +startY) / layoutInfo.docZoom), (int) (widht / layoutInfo.docZoom), (int) (height / layoutInfo.docZoom));
+        String text = doc.getText(layoutInfo.pageNumber, (int) ((leftTopCorner.x + startX) / layoutInfo.docZoom), (int) ((leftTopCorner.y +startY) / layoutInfo.docZoom), (int) (widht / layoutInfo.docZoom), (int) (height / layoutInfo.docZoom));
+        if (text != null) {
+            text = text.trim();
+        }
+        return text;
     }
 }
