@@ -1323,12 +1323,15 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
 
             if (action == Action.ADD_BOOKMARK) {
-                String text = (String) parameter;
-                if (text == null) {
-                    int page = controller.getCurrentPage();
-                    text = getOrionContext().getBookmarkAccessor().selectExistingBookmark(getBookId(), page);
-                }
-                ((EditText)findMyViewById(R.id.add_bookmark_text)).setText(text);
+                String parameterText = (String) parameter;
+
+                int page = controller.getCurrentPage();
+                String newText = getOrionContext().getBookmarkAccessor().selectExistingBookmark(getBookId(), page, parameterText);
+
+                boolean notOverride = parameterText == null || parameterText == newText;
+                findMyViewById(R.id.warn_text_override).setVisibility(notOverride ? View.INVISIBLE : View.VISIBLE);
+
+                ((EditText)findMyViewById(R.id.add_bookmark_text)).setText(notOverride ? newText : parameterText);
             }
 
             animator.setDisplayedChild(screenId);

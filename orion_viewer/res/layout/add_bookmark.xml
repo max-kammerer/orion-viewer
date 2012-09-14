@@ -21,11 +21,26 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
-              android:layout_height="wrap_content" android:gravity="center" android:layout_gravity="center" android:orientation="vertical">
+              android:layout_height="wrap_content" android:gravity="center"
+              android:layout_gravity="center" android:orientation="vertical">
 
-    <EditText android:layout_width="fill_parent"
-                              android:layout_height="wrap_content"
-                              android:textSize="25sp" android:id="@+id/add_bookmark_text" android:layout_weight="1"/>
+    <ScrollView android:layout_width="fill_parent"
+                  android:layout_height="wrap_content" android:gravity="center"
+                  android:layout_gravity="center" android:orientation="vertical" android:layout_weight="1">
+
+        <LinearLayout android:layout_height="wrap_content" android:orientation="vertical"
+                              android:layout_width="fill_parent" >
+            <TextView android:layout_width="fill_parent"
+                                          android:layout_height="wrap_content"
+                                          android:textSize="18sp" android:id="@+id/warn_text_override" android:layout_weight="1"
+                                          android:visibility="invisible" android:textColor="#FF0000"
+                    android:text="Previous bookmark will be overriden!"/>
+
+            <EditText android:layout_width="fill_parent"
+                                      android:layout_height="wrap_content"
+                                      android:textSize="25sp" android:id="@+id/add_bookmark_text" android:layout_weight="1"/>
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
                       android:layout_width="fill_parent" android:gravity="right" android:layout_weight="0">

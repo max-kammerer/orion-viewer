@@ -137,7 +137,7 @@ public class BookmarkAccessor extends SQLiteOpenHelper {
     }
 
     //pageNum is zero based!
-    public String selectExistingBookmark(long bookId, int pageNum) {
+    public String selectExistingBookmark(long bookId, int pageNum, String defaultText) {
         Common.d("Selecting existing bookmark: bookId = " + bookId + " pagenum = " + pageNum);
         SQLiteDatabase dataBase = getReadableDatabase();
         Cursor c = null;
@@ -148,7 +148,8 @@ public class BookmarkAccessor extends SQLiteOpenHelper {
                     return c.getString(c.getColumnIndex(BOOKMARK_TEXT));
                 }
             }
-            return "Page " + (pageNum + 1);
+
+            return defaultText != null ? defaultText : "Page " + (pageNum + 1);
         } finally {
             if (c != null) {
                 c.close();
