@@ -142,7 +142,7 @@ public enum Action {
                 Intent intent = new Intent(activity, OutlineActivity.class);
                 activity.startActivityForResult(intent, OrionViewerActivity.OPEN_BOOKMARK_ACTIVITY_RESULT);
             } else {
-                activity.showWarning("Outline is empty");
+                activity.showWarning(R.string.warn_no_outline);
             }
         }
     },

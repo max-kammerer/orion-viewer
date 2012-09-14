@@ -63,7 +63,7 @@ public class SelectionAutomata {
     public boolean onTouch(MotionEvent event) {
         int action = event.getAction();
 
-        System.out.println("aaaction " + action + " " + event.getX() + ", " + event.getY());
+        //System.out.println("aaaction " + action + " " + event.getX() + ", " + event.getY());
         STATE oldState = state;
         boolean result = true;
         switch (state) {
@@ -106,7 +106,7 @@ public class SelectionAutomata {
                     if (text != null) {
                         new SelectedTextActions(activity).show(text);
                     } else {
-                        activity.showFastMessage("There is no text in selection!");
+                        activity.showFastMessage(universe.constellation.orion.viewer.R.string.warn_no_text_in_selection);
                     }
                     break;
             }

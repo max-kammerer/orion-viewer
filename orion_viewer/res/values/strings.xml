@@ -20,7 +20,7 @@
 <resources>
     <string name="app_name">Orion Viewer</string>
     <string name="navigation">Page traversal</string>
-    <string name="version_name">0.37.0</string>
+    <string name="version_name">0.37.1</string>
     <string name="crop_left">Left</string>
     <string name="enable_even_crop">Another cropping for even pages</string>
     <string name="crop_right">Right</string>
@@ -57,8 +57,13 @@
     <string name="BADC">BADC</string>
     <string name="BDAC">BDAC</string>
 
+
     <integer name="layout_right_bottom_outside">0</integer>
     <integer name="layout_only_bottom_outside">1</integer>
     <integer name="layout_always_inside">2</integer>
+
+
+    <string name="warn_no_text_in_selection">There is no text in selection!</string>
+    <string name="warn_no_outline">Outline is absent!</string>
 
 </resources>

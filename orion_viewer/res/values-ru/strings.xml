@@ -44,4 +44,7 @@
     <string name="fit_custom">Указать масштаб...</string>
 
     <string name="table_of_contents">Содержание</string>
+
+    <string name="warn_no_text_in_selection">В выделенном участке отсутствует текст!</string>
+    <string name="warn_no_outline">Содержание отсутствует!</string>
 </resources>

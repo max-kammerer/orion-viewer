@@ -192,6 +192,14 @@ public class OrionBaseActivity extends Activity {
         Toast.makeText(this, warning, Toast.LENGTH_SHORT).show();
     }
 
+    public void showWarning(int stringId) {
+        showWarning(getResources().getString(stringId));
+    }
+
+    public void showFastMessage(int stringId) {
+        showWarning(getResources().getString(stringId));
+    }
+
     public void showFastMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
