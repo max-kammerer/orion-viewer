@@ -6,6 +6,7 @@
     tree-view-list-android/local.properties
 3.a If you make build NOT for Highscreen/Spring Design Alex comment AlexDevice class 
     in orion_viewer/src/universe/constellation/orion/viewer/device/
+    and remove it classpath from orion_viewer/build.xml
 3.b Otherwise just select alex target in orion_viewer/project.properties 
     or add 'alex/android.jar' to classpath in orion_viewer/build.xml
 4. Go to orion_viewer folder (there is ant script: build.xml) 
