@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import universe.constellation.orion.viewer.OutlineItem;
 import universe.constellation.orion.viewer.R;
 
 public class OutlineAdapter extends BaseAdapter {

@@ -34,13 +34,13 @@ import android.widget.*;
 
 import android.widget.ImageButton;
 import android.widget.RadioButton;
-import universe.constellation.orion.viewer.android.*;
 import universe.constellation.orion.viewer.djvu.DjvuDocument;
 import universe.constellation.orion.viewer.pdf.PdfDocument;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionPreferenceActivity;
-import universe.constellation.orion.viewer.prefs.OrionTapActivity;
 import pl.polidea.customwidget.TheMissingTabHost;
+import universe.constellation.orion.viewer.selection.SelectedTextActions;
+import universe.constellation.orion.viewer.selection.SelectionAutomata;
 
 import java.io.*;
 

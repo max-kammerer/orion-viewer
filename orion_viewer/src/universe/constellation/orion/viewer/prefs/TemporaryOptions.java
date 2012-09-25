@@ -19,7 +19,7 @@ package universe.constellation.orion.viewer.prefs;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import universe.constellation.orion.viewer.OutlineItem;
+import universe.constellation.orion.viewer.outline.OutlineItem;
 
 /**
  * User: mike

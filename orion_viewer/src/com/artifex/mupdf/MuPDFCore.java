@@ -2,7 +2,6 @@ package com.artifex.mupdf;
 
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.DocInfo;
-import universe.constellation.orion.viewer.OutlineItem;
 import universe.constellation.orion.viewer.PageInfo;
 
 import java.util.Date;

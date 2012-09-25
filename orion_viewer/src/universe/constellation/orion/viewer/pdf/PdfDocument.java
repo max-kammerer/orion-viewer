@@ -21,7 +21,7 @@ package universe.constellation.orion.viewer.pdf;
 
 import com.artifex.mupdf.MuPDFCore;
 import universe.constellation.orion.viewer.DocumentWrapper;
-import universe.constellation.orion.viewer.OutlineItem;
+import universe.constellation.orion.viewer.outline.OutlineItem;
 import universe.constellation.orion.viewer.PageInfo;
 
 

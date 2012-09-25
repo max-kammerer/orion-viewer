@@ -1,20 +1,9 @@
-package universe.constellation.orion.viewer;
+package universe.constellation.orion.viewer.selection;
 
-import android.*;
 import android.R;
-import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
-import android.os.SystemClock;
-import android.util.AttributeSet;
 import android.view.*;
-import android.widget.PopupWindow;
-import android.widget.Toast;
+import universe.constellation.orion.viewer.OrionViewerActivity;
 
 /**
  * User: mike

@@ -23,6 +23,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.widget.Toast;
 import universe.constellation.orion.viewer.outline.OutlineActivity;
+import universe.constellation.orion.viewer.outline.OutlineItem;
 import universe.constellation.orion.viewer.prefs.OrionApplication;
 import universe.constellation.orion.viewer.prefs.OrionBookPreferences;
 import universe.constellation.orion.viewer.prefs.OrionPreferenceActivity;

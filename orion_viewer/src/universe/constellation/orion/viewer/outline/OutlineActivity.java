@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.ListView;
 import universe.constellation.orion.viewer.OrionBookmarkActivity;
-import universe.constellation.orion.viewer.OutlineItem;
 import universe.constellation.orion.viewer.prefs.OrionApplication;
 
 public class OutlineActivity extends ListActivity {

@@ -19,6 +19,8 @@ package universe.constellation.orion.viewer;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import universe.constellation.orion.viewer.outline.OutlineItem;
+
 /**
  * User: mike
  * Date: 15.10.11

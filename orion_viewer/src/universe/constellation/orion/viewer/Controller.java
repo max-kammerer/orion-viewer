@@ -20,6 +20,7 @@ package universe.constellation.orion.viewer;
  */
 
 import android.graphics.Point;
+import universe.constellation.orion.viewer.outline.OutlineItem;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
 /**

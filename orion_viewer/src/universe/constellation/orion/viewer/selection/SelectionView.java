@@ -1,4 +1,4 @@
-package universe.constellation.orion.viewer;
+package universe.constellation.orion.viewer.selection;
 
 import android.content.Context;
 import android.graphics.Canvas;

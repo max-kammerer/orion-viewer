@@ -1,10 +1,13 @@
-package universe.constellation.orion.viewer;
+package universe.constellation.orion.viewer.selection;
 
 import android.app.Dialog;
 import android.content.Intent;
 import android.view.*;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
+import universe.constellation.orion.viewer.Action;
+import universe.constellation.orion.viewer.OrionViewerActivity;
+import universe.constellation.orion.viewer.R;
 
 /**
  * User: mike

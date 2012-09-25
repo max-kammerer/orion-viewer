@@ -1,4 +1,4 @@
-package universe.constellation.orion.viewer;
+package universe.constellation.orion.viewer.outline;
 
 /**
  * User: mike
