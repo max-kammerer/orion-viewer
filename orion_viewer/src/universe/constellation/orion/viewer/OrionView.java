@@ -23,6 +23,7 @@ import android.content.Context;
 import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.View;
+import universe.constellation.orion.viewer.device.N2;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
 import java.util.Date;

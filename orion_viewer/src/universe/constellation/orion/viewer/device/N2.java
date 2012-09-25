@@ -1,4 +1,4 @@
-package universe.constellation.orion.viewer;
+package universe.constellation.orion.viewer.device;
 
 /**
  * Nook Touch EPD controller interface wrapper.
