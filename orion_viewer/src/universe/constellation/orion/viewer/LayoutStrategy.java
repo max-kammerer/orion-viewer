@@ -1,7 +1,5 @@
-package universe.constellation.orion.viewer;
-
 /*
- * Orion Viewer is a pdf and djvu viewer for android devices
+ * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
  *
  * Copyright (C) 2011-2012  Michael Bogdanov
  *
@@ -19,6 +17,7 @@ package universe.constellation.orion.viewer;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+package universe.constellation.orion.viewer;
 
 import android.graphics.Point;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
