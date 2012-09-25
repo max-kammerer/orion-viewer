@@ -23,7 +23,7 @@ import android.content.Context;
 import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.View;
-import universe.constellation.orion.viewer.device.N2;
+import universe.constellation.orion.viewer.device.Nook2Util;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
 import java.util.Date;
@@ -71,7 +71,7 @@ public class OrionView extends View {
         GlobalOptions options = ((OrionViewerActivity)getContext()).getGlobalOptions();
         if (options.isEinkOptimization()) {
             if (counter < options.getEinkRefreshAfter()) {
-                N2.setGL16Mode();
+                Nook2Util.setGL16Mode();
             } else {
                 counter = 0;
             }
