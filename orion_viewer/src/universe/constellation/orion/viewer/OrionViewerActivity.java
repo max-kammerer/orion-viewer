@@ -1329,7 +1329,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 String newText = getOrionContext().getBookmarkAccessor().selectExistingBookmark(getBookId(), page, parameterText);
 
                 boolean notOverride = parameterText == null || parameterText == newText;
-                findMyViewById(R.id.warn_text_override).setVisibility(notOverride ? View.INVISIBLE : View.VISIBLE);
+                findMyViewById(R.id.warn_text_override).setVisibility(notOverride ? View.GONE : View.VISIBLE);
 
                 ((EditText)findMyViewById(R.id.add_bookmark_text)).setText(notOverride ? newText : parameterText);
             }

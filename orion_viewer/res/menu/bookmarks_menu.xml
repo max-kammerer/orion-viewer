@@ -28,6 +28,10 @@
           android:title="@string/export_all_bookmarks_menu_item"
           android:icon="@drawable/export"/>
 
+    <item android:id="@+id/import_current_bookmarks_menu_item"
+              android:title="@string/import_current_bookmarks_menu_item"
+              android:icon="@drawable/export"/>
+
     <item android:id="@+id/close_bookmarks_menu_item"
           android:title="@string/menu_exit_text"
           android:icon="@drawable/close"/>

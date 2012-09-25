@@ -200,8 +200,17 @@ public class OrionBaseActivity extends Activity {
         showWarning(getResources().getString(stringId));
     }
 
+    public void showLongMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
     public void showFastMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    protected void showError(Exception e) {
+        Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        Common.d(e);
     }
 
     class Localizer {

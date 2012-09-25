@@ -25,7 +25,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import universe.constellation.orion.viewer.R;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
 import java.io.File;
@@ -45,19 +44,27 @@ public class FileChooser extends ArrayAdapter {
 
     private File currentFolder;
 
-    private FilenameFilter filter = new FilenameFilter() {
+    private static FilenameFilter filter;
+
+    public static FilenameFilter DEFAULT_FILTER = new FilenameFilter() {
         public boolean accept(File dir, String filename) {
-            if (new File(dir, filename).isDirectory()) {
-                return true;
-            }
-            String name = filename.toLowerCase();
-            return name.endsWith(".pdf") || name.endsWith(".djvu") || name.endsWith(".djv") || name.endsWith(".xps") /*|| name.endsWith(".oxps")*/ || name.endsWith(".cbz");
+        if (new File(dir, filename).isDirectory()) {
+            return true;
+        }
+        String name = filename.toLowerCase();
+        return name.endsWith(".pdf") || name.endsWith(".djvu") || name.endsWith(".djv") || name.endsWith(".xps") /*|| name.endsWith(".oxps")*/ || name.endsWith(".cbz");
         }
     };
 
     public FileChooser(Context context, String folder) {
+        this(context, folder, DEFAULT_FILTER);
+    }
+
+
+    public FileChooser(Context context, String folder, FilenameFilter filter) {
         super(context, R.layout.file_entry, R.id.fileName);
         currentList = new ArrayList();
+        this.filter = filter;
         changeFolder(new File(folder));
     }
 
@@ -140,6 +147,8 @@ public class FileChooser extends ArrayAdapter {
                 icon = R.drawable.cbz;
             } else if (extName.endsWith("xps")) {
                 icon = R.drawable.xps;
+            } else if (extName.endsWith("xml")) {
+                icon = R.drawable.xml;
             }
 
             fileIcon.setImageResource(icon);

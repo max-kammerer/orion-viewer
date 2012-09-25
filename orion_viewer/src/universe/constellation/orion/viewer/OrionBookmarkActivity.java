@@ -112,10 +112,13 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean showEmptyResult = false;
+
         switch (item.getItemId()) {
+
             case R.id.close_bookmarks_menu_item:
                 finish();
                 return true;
+
             case R.id.export_bookmarks_menu_item:
                 if (bookId == -1) {
                     showEmptyResult = true;
@@ -129,13 +132,12 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
 
                 if (!showEmptyResult) {
                     long bookId = item.getItemId() == R.id.export_all_bookmarks_menu_item ? -1 : this.bookId;
-                    file = file + "." + (bookId == -1 ? "all_" : "") +  "bookmark.xml";
+                    file = file + "." + (bookId == -1 ? "all_" : "") +  "bookmarks.xml";
                     Common.d("Bookmarks output file: " + file);
                     BookmarkExporter exporter = new BookmarkExporter(getOrionContext().getBookmarkAccessor(), file);
                     try {
                         showEmptyResult = !exporter.export(bookId);
                     } catch (IOException e) {
-                        Common.d(e);
                         showError(e);
                         return true;
                     }
@@ -143,19 +145,32 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
                 }
 
                 if (showEmptyResult) {
-                    Toast.makeText(this, "There is nothing to export!", Toast.LENGTH_LONG).show();;
+                    showLongMessage("There is nothing to export!");
                 } else {
-                    Toast.makeText(this, "Bookmarks exported to " + file, Toast.LENGTH_LONG).show();
+                    showLongMessage("Bookmarks exported to " + file);
                 }
                 return true;
 
+            case R.id.import_current_bookmarks_menu_item:
+
+                Intent intent = new Intent(this, OrionFileSelectorActivity.class);
+
+//                intent.putExtra("type", isLong ? 1 : 0);
+                startActivityForResult(intent, 1);
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void showError(Exception e) {
-        Toast.makeText(this, "Error " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        System.out.println("Error " + e.getMessage());
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            String fileName = data.getStringExtra(OrionFileSelectorActivity.RESULT_FILE_NAME);
+            if (fileName == null || "".equals(fileName)) {
+                showWarning("File name is empty");
+                return;
+            }
+            Common.d("To import " + fileName);
+        }
     }
 }

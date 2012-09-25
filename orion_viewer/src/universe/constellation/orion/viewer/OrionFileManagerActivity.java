@@ -35,6 +35,7 @@ import pl.polidea.customwidget.TheMissingTabHost;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
 import java.io.File;
+import java.io.FilenameFilter;
 
 /**
  * User: mike
@@ -54,6 +55,7 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
         setContentView(device.getFileManagerLayoutId());
         prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         globalOptions = getOrionContext().getOptions();
+
         initFileManager();
 
         justCreated = true;
@@ -95,56 +97,51 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
                 File file = (File) parent.getItemAtPosition(position);
                 if (file.isDirectory()) {
                     File newFolder = ((FileChooser) parent.getAdapter()).changeFolder(file);
-                    updatePath(newFolder.getAbsolutePath());
+                    updatePathTextView(newFolder.getAbsolutePath());
                 } else {
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString(Common.LAST_OPENED_DIRECTORY, file.getParentFile().getAbsolutePath());
-                    editor.commit();
+                    if (showRecentsAndSavePath()) {
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString(Common.LAST_OPENED_DIRECTORY, file.getParentFile().getAbsolutePath());
+                        editor.commit();
+                    }
                     openFile(file);
                 }
             }
         });
 
-        String startFolder = null;
-        String lastOpenedDir = globalOptions.getLastOpenedDirectory();
-
-        if (lastOpenedDir != null && new File(lastOpenedDir).exists()) {
-            startFolder = lastOpenedDir;
-        } else if (new File(Environment.getExternalStorageDirectory() + "/" + device.getDefaultDirectory()).exists()) {
-            startFolder = Environment.getExternalStorageDirectory() + "/" + device.getDefaultDirectory();
-        } else if (new File("/system/media/sdcard/" + device.getDefaultDirectory()).exists()) {
-            startFolder = "/system/media/sdcard/" + device.getDefaultDirectory();
-        } else {
-            startFolder = Environment.getRootDirectory().getAbsolutePath();
-        }
+        String startFolder = getStartFolder();
 
         Common.d("FileManager start folder is " + startFolder);
 
-        view.setAdapter(new FileChooser(this, startFolder));
+        view.setAdapter(new FileChooser(this, startFolder, getFileNameFilter()));
 
         ListView recent = (ListView) findViewById(R.id.recent_list);
-        recent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                GlobalOptions.RecentEntry entry = (GlobalOptions.RecentEntry) parent.getItemAtPosition(position);
-                File file = new File(entry.getPath());
-                if (file.exists()) {
-                    openFile(file);
+        if (showRecentsAndSavePath()) {
+            recent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    GlobalOptions.RecentEntry entry = (GlobalOptions.RecentEntry) parent.getItemAtPosition(position);
+                    File file = new File(entry.getPath());
+                    if (file.exists()) {
+                        openFile(file);
+                    }
                 }
-            }
-        });
+            });
 
-        recent.setAdapter(new FileChooser(this, globalOptions.getRecentFiles()));
+            recent.setAdapter(new FileChooser(this, globalOptions.getRecentFiles()));
+        } else {
+            recent.setVisibility(View.GONE);
+        }
 
-        updatePath(startFolder);
+        updatePathTextView(startFolder);
     }
 
-    private void updatePath(String newPath) {
+    private void updatePathTextView(String newPath) {
         TextView path = (TextView) findViewById(R.id.file_manager_path);
         path.setText(newPath);
         device.flushBitmap(100);
     }
 
-    private void openFile(File file) {
+    protected void openFile(File file) {
         Intent in = new Intent(Intent.ACTION_VIEW);
         in.setClass(getApplicationContext(), OrionViewerActivity.class);
         in.setData(Uri.fromFile(file));
@@ -152,16 +149,6 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
         startActivity(in);
     }
 
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (keyCode == KeyEvent.KEYCODE_BACK) {
-//            if (((TheMissingTabHost) findViewById(R.id.tabhost)).getCurrentTab() == 0) {
-//                ((FileChooser) ((ListView) findViewById(R.id.file_chooser)).getAdapter()).goToParent();
-//            }
-//            return true;
-//        }
-//        return false;
-//    }
 
     private void initFileManager() {
         TheMissingTabHost host = (TheMissingTabHost) findViewById(R.id.tabhost);
@@ -171,11 +158,12 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
         spec.setContent(R.id.file_chooser);
         spec.setIndicator("", getResources().getDrawable(R.drawable.folder));
         host.addTab(spec);
-        TheMissingTabHost.TheMissingTabSpec recent = host.newTabSpec("recentTab");
-        recent.setContent(R.id.recent_list);
-        recent.setIndicator("", getResources().getDrawable(R.drawable.book));
-        host.addTab(recent);
-        //host.setCurrentTab(0);
+        if (showRecentsAndSavePath()) {
+            TheMissingTabHost.TheMissingTabSpec recent = host.newTabSpec("recentTab");
+            recent.setContent(R.id.recent_list);
+            recent.setIndicator("", getResources().getDrawable(R.drawable.book));
+            host.addTab(recent);
+        }
     }
 
     @Override
@@ -196,8 +184,30 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
         return false;
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);    //To change body of overridden methods use File | Settings | File Templates.
+    public GlobalOptions getGlobalOptions() {
+        return globalOptions;
+    }
+
+    //customizable part
+    public boolean showRecentsAndSavePath() {
+        return true;
+    }
+
+    public FilenameFilter getFileNameFilter() {
+        return FileChooser.DEFAULT_FILTER;
+    }
+
+    public String getStartFolder() {
+        String lastOpenedDir = globalOptions.getLastOpenedDirectory();
+
+        if (lastOpenedDir != null && new File(lastOpenedDir).exists()) {
+            return lastOpenedDir;
+        } else if (new File(Environment.getExternalStorageDirectory() + "/" + device.getDefaultDirectory()).exists()) {
+            return Environment.getExternalStorageDirectory() + "/" + device.getDefaultDirectory();
+        } else if (new File("/system/media/sdcard/" + device.getDefaultDirectory()).exists()) {
+            return "/system/media/sdcard/" + device.getDefaultDirectory();
+        } else {
+            return Environment.getRootDirectory().getAbsolutePath();
+        }
     }
 }
