@@ -1,0 +1,43 @@
+<!--
+  ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2012  Michael Bogdanov
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--Author: Alexander-->
+
+<resources>
+    <string name="menu_zoom_text">"הגדלה"</string>
+    <string name="menu_crop_text">"חיתוך"</string>
+    <string name="menu_goto_text">"עבור אל"</string>
+    <string name="menu_bookmarks_text">"סימניות"</string>
+    <string name="menu_add_bookmark_item">"הוספת סימנייה"</string>
+    <string name="export_bookmarks_menu_item">"ייצא סימניות"</string>
+    <string name="export_all_bookmarks_menu_item">"יצוא כל הסימניות"</string>
+    <string name="menu_select_text">"בחר טקסט"</string>
+    <string name="menu_rotation_text">"סיבוב מסך"</string>
+    <string name="menu_navigation_text">"פריסת דף"</string>
+    <string name="menu_help_text">"עזרה"</string>
+    <string name="menu_open_text">"פתח ספר "</string>
+    <string name="menu_outline_text">"פתח טקסט חיצוני"</string>
+    <string name="menu_open_dictionary_text">"פתוח מילון "</string>
+    <string name="menu_day_night_text">"מצב יום / לילה"</string>
+    <string name="menu_exit_text">"סגור"</string>
+    <string name="menu_key_binder_text">"טקסט של כריכה"</string>
+    <string name="menu_options_text">"הגדרות"</string>
+    <string name="menu_tap_text">"אזורי הקשה "</string>
+    <string name="menu_book_preferences">"אפשרויות ספר"</string>
+</resources>

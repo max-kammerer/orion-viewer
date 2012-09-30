@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<!--Author: Alexander-->
 <!--
   ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
   ~
@@ -19,121 +18,10 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
+<!--Author: Alexander-->
+
 <resources>
-    <string name="action_none">"ללא"</string>
-    <string name="action_menu">"תפריט ראשי"</string>
-    <string name="action_next_page">"העמוד הבא"</string>
-    <string name="action_prev_page">"עמוד קודם"</string>
-    <string name="action_first_page">"הדף הראשון"</string>
-    <string name="action_last_page">"הדף האחרון"</string>
-    <string name="action_crop_page">"אפשרויות חיתוך"</string>
-    <string name="action_zoom_page">"אפשרויות הגדלה"</string>
-    <string name="action_layout_page">"@string/menu_navigation_text"</string>
-    <string name="action_rotation_page">"אפשרויות סיבוב"</string>
-    <string name="action_options_page">"אפשרויות"</string>
-    <string name="action_book_options">"@string/menu_book_preferences"</string>
-    <string name="action_goto_page">"עבור אל"</string>
-    <string name="action_dictionary">"פתח מילון "</string>
-    <string name="action_open">"פתח ספר"</string>
-    <string name="action_outline">"@string/menu_outline_text"</string>
-    <string name="action_add_bookmark">"הוסף סימנייה"</string>
-    <string name="action_open_bookmarks">"פתח סימניות"</string>
-    <string name="action_day_night_mode">"מצב יום / לילה "</string>
-    <string name="action_crop_left">"חתוך שולים שמאליים"</string>
-    <string name="action_crop_right">"חתוך שולים ימניים"</string>
-    <string name="action_crop_top">"חתוך שולים למעלה"</string>
-    <string name="action_crop_bottom">"חתוך שולים תחתונים"</string>
-    <string name="action_uncrop_left">"הגדל את השולים שמאליים"</string>
-    <string name="action_uncrop_right">"הגדל את השולים ימניים"</string>
-    <string name="action_uncrop_top">"הגדל את השולים עליונים"</string>
-    <string name="action_uncrop_bottom">"הגדל את השולים תחתונים"</string>
-    <string name="action_inverse_crops">"מעבר בין חיתוך - הגדלה של שולים"</string>
-    <string name="action_switch_long_crop">"מעבר בין חיתוך קטן / גדול"</string>
-    <string name="action_next_10">"קדימה 10 עמודים"</string>
-    <string name="action_prev_10">"אחורה 10 עמודים"</string>
-    <string name="action_rotate_90">"סובב 90/-90 מעלות"</string>
-    <string name="action_rotate_270">"סובב 270/-270 מעלות"</string>
-    <string name="action_select_text">"@string/menu_select_text"</string>
-    <string name="zoom">"פתח חלון ההגדלה. ערך ההגדלה שווה אפס פירושה שטקסט מתאים לרוחב המסך."</string>
-    <string name="rotation">"סובב מסמך ל90 מעלות בכיוון שעון. לחיצה ארוכה מסובבת נגד כיוון שעון."</string>
-    <string name="rotation_android">"פתח אפשריות סיבוב."</string>
-    <string name="crop">"פתח אפשריות חיתוך גבולות. ערכים מוגדרים יחסית לגודל דף. לחיצה ארוכה לתוספת או בניכוי ערך תשנה ב10%. ערך שלילי תוסיף גבולות נוספים."</string>
-    <string name="next_page_android">"פתח אפשריות מעבר דפים."</string>
-    <string name="next_page">"עבור לדף הבא. בלחיצה ארוכה פותח את אפשריות סימנייות."</string>
-    <string name="prev_page">"עבור לדף קודם. בלחיצה ארוכה פותח אפשריות בחירת הדף."</string>
-    <string name="apply">"החל את האפשרויות קיימות."</string>
-    <string name="escape">"להחזיר / לבטל."</string>
-    <string name="general_usage">"אופן שימוש:"</string>
-    <string name="general_usage_step1">"1. מסמך נפתח (זום בהתאמת רוחב כברירת מחדל)"</string>
-    <string name="general_usage_step2">"2. בחירת כיוון מתאים: לאורך או לרוחב"</string>
-    <string name="general_usage_step3">"3.חתוך שולים, גודל טקסט ישתנה בהתאם לשינוי שולים (אם צוין זום בהתאמת רוחב )"</string>
-    <string name="general_usage_step4">"4. בהצלחה בלימוד!"</string>
-    <string name="option_help">"הגדרות תוכנה"</string>
-    <string name="navigation_help">"פתח אפשריות של סדר הדפדוף. בלימוד בדפים גדולים ומורכבים אתה יכול לבחור פריסת דף מתאימה."</string>
-    <string name="dictionary_help">"פותח מילון חיצוני. בחר יישום מילון מתאים באפשרויות."</string>
-    <string name="tap_help">"אזורי נגיעה לאפשר למשתמש לקשר חלקים שונים של מסך לפקודות נפוצות. בתאים 3x3 משתמש יכול מגדיר פעולות ללחיצה קצרה (תווית עליונה) וללחיצה ארוכה (תווית תחתונה)."</string>
-    <string name="bookmarks_export_help">"לאפשר למשתמש לייצא את הסימניות (לכל הספרים או לזו נוכחית). סימניות מיוצאות לקובץ XML עם שמו של ספר נפתח + [bookmarks.xml או all_bookmarks.xml] הסיומת. אפשרות זו נמצאת בתפריט סימניות."</string>
-    <string name="menu_zoom_text">"הגדלה"</string>
-    <string name="menu_crop_text">"חיתוך"</string>
-    <string name="menu_goto_text">"עבור אל"</string>
-    <string name="menu_bookmarks_text">"סימניות"</string>
-    <string name="menu_add_bookmark_item">"הוספת סימנייה"</string>
-    <string name="export_bookmarks_menu_item">"ייצא סימניות"</string>
-    <string name="export_all_bookmarks_menu_item">"יצוא כל הסימניות"</string>
-    <string name="menu_select_text">"בחר טקסט"</string>
-    <string name="menu_rotation_text">"סיבוב מסך"</string>
-    <string name="menu_navigation_text">"פריסת דף"</string>
-    <string name="menu_help_text">"עזרה"</string>
-    <string name="menu_open_text">"פתח ספר "</string>
-    <string name="menu_outline_text">"פתח טקסט חיצוני"</string>
-    <string name="menu_open_dictionary_text">"פתוח מילון "</string>
-    <string name="menu_day_night_text">"מצב יום / לילה"</string>
-    <string name="menu_exit_text">"סגור"</string>
-    <string name="menu_key_binder_text">"טקסט של כריכה"</string>
-    <string name="menu_options_text">"הגדרות"</string>
-    <string name="menu_tap_text">"אזורי הקשה "</string>
-    <string name="menu_book_preferences">"אפשרויות ספר"</string>
-    <string name="pref_fullScreen">"מסך מלא"</string>
-    <string name="pref_bookDefaultOrientation">"כיוון הספר ברירת מחדל "</string>
-    <string name="pref_bookDefaultZoom">"הגדלה"</string>
-    <string name="pref_rotate_new_book_on_opening">"בפתיחה סובב ספר חדש "</string>
-    <string name="pref_screen_orientation">"כיוון מסך"</string>
-    <string name="pref_rotate_screen">"כיוון מסך ברירת מחדל : הפעל מחדש את תוכנה על מנת ליישם"</string>
-    <string name="pref_book_screen_orientation">"כיוון מסך לספר נוכחי"</string>
-    <string name="pref_close_dialog_on_apply">"סגור חלון מיד עם הקשה על וי"</string>
-    <string name="pref_close_page_option_dialog_on_apply">"סגור אפשרויות עמוד מיד עם הקשה על וי"</string>
-    <string name="pref_swap_prev_next_keys">"להחליף המפתחות קודם / הבא "</string>
-    <string name="pref_swap_prev_next_keys_on_90_degree_rotation">"להחליף המפתחות קודם / הבא  במצב לרוחב"</string>
-    <string name="pref_dictionary">"מילון"</string>
-    <string name="pref_e_ink_optimization">"דיו דיגיטלי"</string>
-    <string name="pref_e_ink_fast_refresh">"רענון מהיר לדיו דיגיטלי"</string>
-    <string name="pref_total_refresh_after">"רענון מלא לאחר ..."</string>
-    <string name="pref_long_crop_value">"ערך חיתוך גדול"</string>
-    <string name="pref_long_crop_value_desc">"גודל ערך חיתוך גדול (0-40%)"</string>
-    <string name="pref_screen_overlapping_horizontal">"החיפוף במסך אופקי "</string>
-    <string name="pref_screen_overlapping_horizontal_desc">"החיפוף במסך אופקי כשהופכים דף (0-90%)"</string>
-    <string name="pref_screen_overlapping_vertical">"החיפוף במסך אנכי"</string>
-    <string name="pref_screen_overlapping_vertical_desc">"החיפוף במסך אנכי כשהופכים דף (0-90%)"</string>
-    <string name="pref_custom_brightness">"כוונון בהירות"</string>
-    <string name="pref_brightness">"בהירות"</string>
-    <string name="pref_brightness_desc">"בהירות (1-100%)"</string>
-    <string name="pref_application_theme">"רקעי יישום"</string>
-    <string name="pref_application_theme_desc">"הפעל מחדש את תוכנה על מנת ליישם"</string>
-    <string name="pref_open_recent_book">"פתח ספר האחרון בהפעלת תוכנה"</string>
-    <string name="pref_book_contrast">"ניגודיות"</string>
-    <string name="pref_book_contrast_desc">"ניגודיות 1-1000 (ברירת מחדל 100)"</string>
-    <string name="pref_book_threshold">"גבולות"</string>
-    <string name="pref_book_threshold_desc">"גבולות להסרת סימן מים"</string>
-    <string name="pref_debug">"תיקון באגים"</string>
-    <string name="pref_debug_desc">"כתוב עקבות לקובץ בשם &lt;opened book name&gt; + .trace"</string>
-    <string name="pref_walk_order">"מעברי עמוד"</string>
-    <string name="pref_page_layout">"פריסת דף"</string>
-    <string name="application_settings_title">"הגדרות יישום"</string>
-    <string name="pref_default_book_setting">"הגדרות ברירת מחדל של ספרים"</string>
-    <string name="book_pref_title">"אפשרויות ספר נוכחי"</string>
-    <string name="app_name">"דף קבוע"</string>
     <string name="navigation">"מעברי עמוד"</string>
-    <string name="version_name">"0.37.1"</string>
     <string name="crop_left">"שמאל"</string>
     <string name="enable_even_crop">"חיתוך נוסף לעמודים זוגיים"</string>
     <string name="crop_right">"ימין"</string>
@@ -158,10 +46,6 @@
     <string name="key_binder_message">"לחץ איזה כפתור ובחר פעולה!"</string>
     <string name="key_binder_warning">"לא יכל לקשור פעולה לכפתור עם קוד אפס, נסה כפתור אחר!"</string>
     <string name="table_of_contents">"תוכן העניינים"</string>
-    <string name="ABCD">"ABCD"</string>
-    <string name="ACBD">"ACBD"</string>
-    <string name="BADC">"BADC"</string>
-    <string name="BDAC">"BDAC"</string>
     <string name="warn_no_text_in_selection">"אין טקסט בבחירה שלך!"</string>
     <string name="warn_no_outline">"מתווה חסרה!"</string>
 </resources>
