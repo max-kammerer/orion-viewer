@@ -28,14 +28,11 @@
     <string name="action_last_page">"הדף האחרון"</string>
     <string name="action_crop_page">"אפשרויות חיתוך"</string>
     <string name="action_zoom_page">"אפשרויות הגדלה"</string>
-    <string name="action_layout_page">"@string/menu_navigation_text"</string>
     <string name="action_rotation_page">"אפשרויות סיבוב"</string>
     <string name="action_options_page">"אפשרויות"</string>
-    <string name="action_book_options">"@string/menu_book_preferences"</string>
     <string name="action_goto_page">"עבור אל"</string>
     <string name="action_dictionary">"פתח מילון "</string>
     <string name="action_open">"פתח ספר"</string>
-    <string name="action_outline">"@string/menu_outline_text"</string>
     <string name="action_add_bookmark">"הוסף סימנייה"</string>
     <string name="action_open_bookmarks">"פתח סימניות"</string>
     <string name="action_day_night_mode">"מצב יום / לילה "</string>
@@ -53,5 +50,4 @@
     <string name="action_prev_10">"אחורה 10 עמודים"</string>
     <string name="action_rotate_90">"סובב 90/-90 מעלות"</string>
     <string name="action_rotate_270">"סובב 270/-270 מעלות"</string>
-    <string name="action_select_text">"@string/menu_select_text"</string>
 </resources>
