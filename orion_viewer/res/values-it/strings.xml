@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Author: Alberto Pettarin-->
-
 <!--
   ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
   ~
@@ -19,6 +17,8 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
+
+<!--Author: Alberto Pettarin-->
 
 <resources>
     <string name="app_name">Orion Viewer</string>

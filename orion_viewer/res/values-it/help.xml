@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Author: Alberto Pettarin-->
 <!--
   ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
   ~
@@ -19,6 +18,7 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
+<!--Author: Alberto Pettarin-->
 
 <resources>
     <string name="zoom">Apre la finestra Zoom. Il valore zero adatta lo zoom alla larghezza di pagina.</string>

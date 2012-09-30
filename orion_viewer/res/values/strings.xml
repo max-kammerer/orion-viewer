@@ -19,25 +19,22 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<!--Orion Viewer is a pdf and djvu viewer for android devices-->
-
-<!--This program is free software: you can redistribute it and/or modify-->
-<!--it under the terms of the GNU General Public License as published by-->
-<!--the Free Software Foundation, either version 3 of the License, or-->
-<!--(at your option) any later version.-->
-
-<!--This program is distributed in the hope that it will be useful,-->
-<!--but WITHOUT ANY WARRANTY; without even the implied warranty of-->
-<!--MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the-->
-<!--GNU General Public License for more details.-->
-
-<!--You should have received a copy of the GNU General Public License-->
-<!--along with this program.  If not, see <http://www.gnu.org/licenses/>.-->
+<!--Author: Alexander-->
 
 <resources>
+    <!--Don not translate this section: start-->
     <string name="app_name">Orion Viewer</string>
-    <string name="navigation">Page traversal</string>
     <string name="version_name">0.37.1</string>
+
+    <string name="ABCD">ABCD</string>
+    <string name="ACBD">ACBD</string>
+    <string name="BADC">BADC</string>
+    <string name="BDAC">BDAC</string>
+    <!--Don not translate this section: end-->
+
+
+
+    <string name="navigation">Page traversal</string>
     <string name="crop_left">Left</string>
     <string name="enable_even_crop">Another cropping for even pages</string>
     <string name="crop_right">Right</string>
@@ -49,7 +46,6 @@
     <string name="long_click">On long click</string>
     <string name="short_click">On short click</string>
     <string name="binding_click">On binding</string>
-
 
 
     <string name="orientation_default">Default</string>
@@ -68,11 +64,6 @@
     <string name="key_binder_message">Push any key and select action to bind them!</string>
     <string name="key_binder_warning">Couldn\'t bind key with zero keycode, try another key!</string>
     <string name="table_of_contents">Table of Contents</string>
-
-    <string name="ABCD">ABCD</string>
-    <string name="ACBD">ACBD</string>
-    <string name="BADC">BADC</string>
-    <string name="BDAC">BDAC</string>
 
 
     <integer name="layout_right_bottom_outside">0</integer>
