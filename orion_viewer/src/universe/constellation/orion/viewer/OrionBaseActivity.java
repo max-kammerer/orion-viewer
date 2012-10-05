@@ -20,6 +20,8 @@
 package universe.constellation.orion.viewer;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
@@ -32,6 +34,10 @@ import universe.constellation.orion.viewer.device.AndroidDevice;
 import pl.polidea.customwidget.TheMissingTabHost;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionApplication;
+
+import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * User: mike
@@ -184,9 +190,6 @@ public class OrionBaseActivity extends Activity {
         }
     }
 
-    public void showError(String error, Exception ex) {
-        Toast.makeText(this, error + ": " + ex.getMessage(), Toast.LENGTH_SHORT).show();
-    }
 
     public void showWarning(String warning) {
         Toast.makeText(this, warning, Toast.LENGTH_SHORT).show();
@@ -209,8 +212,12 @@ public class OrionBaseActivity extends Activity {
     }
 
     protected void showError(Exception e) {
-        Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        Common.d(e);
+        showError("Error", e);
+    }
+
+    public void showError(String error, Exception ex) {
+        Toast.makeText(this, error + ": " + ex.getMessage(), Toast.LENGTH_LONG).show();
+        Common.d(ex);
     }
 
     class Localizer {
@@ -292,5 +299,40 @@ public class OrionBaseActivity extends Activity {
         } else {
             activity.setContentView(layout);
         }
+    }
+
+    public boolean showAlert(String title, String message) {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(message);
+
+
+        final AtomicBoolean result = new AtomicBoolean(false);
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                result.set(true);
+                latch.countDown();
+            }
+        });
+
+        alertDialog.setButton("Cancel", new DialogInterface.OnClickListener() {
+           public void onClick(DialogInterface dialog, int which) {
+               dialog.dismiss();
+               latch.countDown();
+           }
+        });
+        alertDialog.show();
+
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            showError(e);
+        }
+
+        return result.get();
     }
 }

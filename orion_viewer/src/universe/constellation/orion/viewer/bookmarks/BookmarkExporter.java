@@ -17,17 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer.db;
+package universe.constellation.orion.viewer.bookmarks;
 
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Xml;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -47,8 +44,10 @@ public class BookmarkExporter {
         this.outputName = outputName;
     }
 
+
     /*if bookId null export all*/
     public boolean export(long bookId) throws IOException {
+
         Cursor c = null;
         FileWriter writer = null;
         try {

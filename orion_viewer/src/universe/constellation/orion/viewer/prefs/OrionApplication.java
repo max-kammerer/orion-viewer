@@ -25,7 +25,7 @@ import android.preference.PreferenceManager;
 import universe.constellation.orion.viewer.Controller;
 import universe.constellation.orion.viewer.LastPageInfo;
 import universe.constellation.orion.viewer.OrionViewerActivity;
-import universe.constellation.orion.viewer.db.BookmarkAccessor;
+import universe.constellation.orion.viewer.bookmarks.BookmarkAccessor;
 
 import java.lang.reflect.Field;
 

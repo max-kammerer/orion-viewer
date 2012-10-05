@@ -19,7 +19,6 @@
   -->
 
 <!--Author: Alberto Pettarin-->
-
 <resources>
     <string name="menu_zoom_text">Zoom</string>
     <string name="menu_crop_text">Ritaglia</string>

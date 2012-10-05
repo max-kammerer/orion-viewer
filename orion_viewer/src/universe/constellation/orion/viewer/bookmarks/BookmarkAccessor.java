@@ -17,21 +17,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer.db;
+package universe.constellation.orion.viewer.bookmarks;
 
-import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.ContactsContract;
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.R;
 
 import java.util.ArrayList;
-import java.util.Currency;
-import java.util.LinkedList;
 import java.util.List;
 
 /**

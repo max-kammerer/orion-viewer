@@ -20,6 +20,9 @@
 package universe.constellation.orion.viewer;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -27,12 +30,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import universe.constellation.orion.viewer.db.Bookmark;
-import universe.constellation.orion.viewer.db.BookmarkAccessor;
-import universe.constellation.orion.viewer.db.BookmarkExporter;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+import universe.constellation.orion.viewer.bookmarks.Bookmark;
+import universe.constellation.orion.viewer.bookmarks.BookmarkAccessor;
+import universe.constellation.orion.viewer.bookmarks.BookmarkExporter;
 
-import java.io.IOException;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 /**
  * User: mike
@@ -46,6 +52,12 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
     public static final String OPENED_FILE = "opened_file";
 
     public static final String BOOK_ID = "book_id";
+
+    public static final String NAMESPACE = "";
+
+    public static final int IMPORT_CURRRENT = 1;
+
+    public static final int IMPORT_ALL = 2;
 
     private long bookId;
 
@@ -134,6 +146,7 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
                     long bookId = item.getItemId() == R.id.export_all_bookmarks_menu_item ? -1 : this.bookId;
                     file = file + "." + (bookId == -1 ? "all_" : "") +  "bookmarks.xml";
                     Common.d("Bookmarks output file: " + file);
+
                     BookmarkExporter exporter = new BookmarkExporter(getOrionContext().getBookmarkAccessor(), file);
                     try {
                         showEmptyResult = !exporter.export(bookId);
@@ -141,7 +154,6 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
                         showError(e);
                         return true;
                     }
-
                 }
 
                 if (showEmptyResult) {
@@ -152,11 +164,14 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
                 return true;
 
             case R.id.import_current_bookmarks_menu_item:
-
                 Intent intent = new Intent(this, OrionFileSelectorActivity.class);
+                startActivityForResult(intent, IMPORT_CURRRENT);
+                return true;
 
-//                intent.putExtra("type", isLong ? 1 : 0);
-                startActivityForResult(intent, 1);
+            case R.id.import_all_bookmarks_menu_item:
+                intent = new Intent(this, OrionFileSelectorActivity.class);
+                startActivityForResult(intent, IMPORT_ALL);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -169,8 +184,179 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
             if (fileName == null || "".equals(fileName)) {
                 showWarning("File name is empty");
                 return;
+            } else {
+                Common.d("To import " + fileName);
+                List<BookNameAndSize> books = listBooks(fileName);
+                if (books == null) {
+                    return;
+                }
+
+                if (books.isEmpty()) {
+                    showWarning("There is no any bookmarks");
+                }
+
+                if (IMPORT_CURRRENT == requestCode) {
+                    Collections.sort(books);
+
+                    View group = getLayoutInflater().inflate(R.layout.bookmark_book_list, null);
+                    final ListView tree = (ListView) group.findViewById(R.id.book_list);
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Select source book").setCancelable(true).setView(group);
+                    builder.setPositiveButton("Import", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            doImport((BookNameAndSize) (tree.getSelectedItem()));
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+
+                    final AlertDialog dialog = builder.create();
+                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            ((AlertDialog)dialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
+                        }
+                    });
+
+
+                    tree.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+                    tree.setItemsCanFocus(false);
+                    tree.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            dialog.getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
+                        }
+                    });
+                    tree.setAdapter(new ArrayAdapter<BookNameAndSize>(this, R.layout.select_book_item, R.id.title, books) {
+                        @Override
+                        public View getView(int position, View convertView, ViewGroup parent) {
+                            convertView = super.getView(position, convertView, parent);
+
+                            BookNameAndSize book = getItem(position);
+                            TextView view = (TextView) convertView.findViewById(R.id.page);
+                            view.setText(buityfySize(book.size));
+
+                            view = (TextView) convertView.findViewById(R.id.title);
+                            view.setText(book.name);
+
+
+                            return convertView;
+                        }
+                    });
+                    tree.setItemsCanFocus(false);
+
+                    dialog.show();
+                } else {
+//                    if (IMPORT_CURRRENT == requestCode) {
+//                        doImport(books.get(0));
+//                    } else {
+                        //all
+                        doImport(null);
+//                    }
+                }
             }
-            Common.d("To import " + fileName);
         }
+    }
+
+    private void doImport(BookNameAndSize book){
+        if (book != null) {
+            Common.d("Import d " + book.name);
+        } else {
+            Common.d("Import all bookmarks");
+
+        }
+    }
+
+
+    public List<BookNameAndSize> listBooks(String fileName) {
+        ArrayList<BookNameAndSize> bookNames = new ArrayList<BookNameAndSize>();
+        InputStreamReader reader = null;
+        try {
+            reader = new InputStreamReader(new FileInputStream(new File(fileName)));
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(reader);
+
+            int eventType = xpp.getEventType();
+            boolean wasBookmarks = false;
+
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    String tagName = xpp.getName();
+                    if ("bookmarks".equals(tagName)) {
+                        wasBookmarks = true;
+                    } else if (wasBookmarks) {
+                        if ("book".equals(tagName)) {
+                            String name = xpp.getAttributeValue(NAMESPACE, "fileName");
+                            long size = Long.valueOf(xpp.getAttributeValue(NAMESPACE, "fileSize"));
+                            BookNameAndSize book = new BookNameAndSize(name, size);
+                            bookNames.add(book);
+                        }
+                    }
+                }
+                eventType = xpp.next();
+            }
+            return bookNames;
+        } catch (FileNotFoundException e) {
+            showError("Couldn't open file", e);
+        } catch (XmlPullParserException e) {
+            showError("Couldn't parse book parameters", e);
+        } catch (IOException e) {
+            showError("Couldn't parse book parameters", e);
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    Common.d(e);
+                }
+            }
+        }
+        return null;
+    }
+
+    public static class BookNameAndSize implements Comparable<BookNameAndSize> {
+
+        private String name;
+
+        private long size;
+
+        private long id;
+
+        public BookNameAndSize(String name, long size) {
+            this.name = name;
+            this.size = size;
+        }
+
+        @Override
+        public int compareTo(BookNameAndSize another) {
+            int res = name.compareTo(another.name);
+            if (res == 0) {
+                res = size < another.size ? -1 : (size == another.size ? 0 : 1);
+            }
+            return res;
+        }
+    }
+
+    public String buityfySize(long size) {
+        if (size < 1024) {
+            return size + "b";
+        }
+        if (size < 1024 * 1024) {
+            return (size / 1024) + "." + (size % 1024)/103 + "Kb";
+        }
+        if (size < 1024 * 1024 * 1024) {
+            return (size / (1024 * 1024)) + "." + (size % (1024 * 1024))/(103*1024) + "Mb";
+        }
+        return size + "b";
     }
 }
