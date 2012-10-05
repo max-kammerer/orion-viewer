@@ -80,6 +80,12 @@
                   android:textSize="20sp"
                   android:text="Alberto Pettarin - Italian translation"
                   android:gravity="center"/>
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                          android:textSize="20sp"
+                          android:text="Alexander Goldberg - Hebrew translation"
+                          android:gravity="center"/>
+
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
                           android:textSize="20sp"
                           android:text="Bruce Li - code"
