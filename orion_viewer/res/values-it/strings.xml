@@ -21,9 +21,7 @@
 <!--Author: Alberto Pettarin-->
 
 <resources>
-    <string name="app_name">Orion Viewer</string>
     <string name="navigation">Navigazione</string>
-    <string name="version_name">0.29.3</string>
     <string name="crop_left">Sinistro</string>
     <string name="enable_even_crop">Ritaglia pagine pari</string>
     <string name="crop_right">Destro</string>
