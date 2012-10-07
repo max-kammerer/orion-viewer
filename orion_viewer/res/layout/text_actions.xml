@@ -24,12 +24,12 @@
               android:layout_height="wrap_content" android:background="#ffcc66" >
 
     <ImageButton android:id="@+id/stext_open_dictionary" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                 android:src="@drawable/dictionary" android:background="#ffcc66"/>
+                 android:src="@drawable/dictionary" android:background="#ffcc66" android:padding="5dp"/>
 
     <ImageButton android:id="@+id/stext_add_bookmark" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                 android:src="@drawable/add_bookmark" android:background="#ffcc66"/>
+                 android:src="@drawable/add_bookmark" android:background="#ffcc66" android:padding="5dp"/>
 
     <ImageButton android:id="@+id/stext_send_text" android:layout_width="wrap_content" android:layout_height="wrap_content"
-                             android:src="@drawable/external_edit"  android:background="#ffcc66"/>
+                             android:src="@drawable/external_edit"  android:background="#ffcc66" android:padding="5dp"/>
 
 </LinearLayout>

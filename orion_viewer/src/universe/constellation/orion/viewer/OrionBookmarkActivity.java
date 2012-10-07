@@ -219,12 +219,13 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
 
 
                     final AlertDialog dialog = builder.create();
-                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                        @Override
-                        public void onShow(DialogInterface dialog) {
-                            ((AlertDialog)dialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
-                        }
-                    });
+//                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+//                        @Override
+//                        public void onShow(DialogInterface dialog) {
+//                            ((AlertDialog)dialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
+//                        }
+//                    });
+
 
 
                     tree.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -236,6 +237,8 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
                         }
                     });
                     tree.setAdapter(new ArrayAdapter<BookNameAndSize>(this, R.layout.select_book_item, R.id.title, books) {
+
+                        private boolean positiveDisabled;
                         @Override
                         public View getView(int position, View convertView, ViewGroup parent) {
                             convertView = super.getView(position, convertView, parent);
@@ -247,6 +250,11 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
                             view = (TextView) convertView.findViewById(R.id.title);
                             view.setText(book.name);
 
+                            if (!positiveDisabled) {
+                                //android bug
+                                positiveDisabled = true;
+                                ((AlertDialog)dialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
+                            }
 
                             return convertView;
                         }

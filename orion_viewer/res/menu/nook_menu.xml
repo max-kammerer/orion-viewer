@@ -12,7 +12,7 @@
 
     <item android:id="@+id/outline_menu_item"
               android:title="@string/menu_outline_text"
-              android:icon="@drawable/help"/>
+              android:icon="@drawable/outline"/>
 
     <item android:id="@+id/help_menu_item"
           android:title="@string/menu_help_text"
