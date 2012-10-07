@@ -188,7 +188,7 @@ public class BookmarkAccessor extends SQLiteOpenHelper {
 
 
     public long insertOrUpdateBookmark(long bookId, int page, String text) {
-        System.out.println("Book ID " + bookId);
+        Common.d("Inserting bookmark fir book " + bookId + " and page " + page);
         SQLiteDatabase dataBase = getReadableDatabase();
         Cursor c = null;
         long bookmarkId = -1;

@@ -301,38 +301,17 @@ public class OrionBaseActivity extends Activity {
         }
     }
 
-    public boolean showAlert(String title, String message) {
-        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle(title);
-        alertDialog.setMessage(message);
+    public void showAlert(String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(message);
 
-
-        final AtomicBoolean result = new AtomicBoolean(false);
-        final CountDownLatch latch = new CountDownLatch(1);
-
-        alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                result.set(true);
-                latch.countDown();
             }
         });
 
-        alertDialog.setButton("Cancel", new DialogInterface.OnClickListener() {
-           public void onClick(DialogInterface dialog, int which) {
-               dialog.dismiss();
-               latch.countDown();
-           }
-        });
-        alertDialog.show();
-
-
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            showError(e);
-        }
-
-        return result.get();
+        builder.create().show();
     }
 }

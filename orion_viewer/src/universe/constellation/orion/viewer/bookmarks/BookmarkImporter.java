@@ -20,18 +20,14 @@
 package universe.constellation.orion.viewer.bookmarks;
 
 import android.database.Cursor;
-import android.util.Xml;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
-import org.xmlpull.v1.XmlSerializer;
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.OrionBaseActivity;
+import universe.constellation.orion.viewer.OrionException;
 
 import java.io.*;
-import java.lang.reflect.Field;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * User: mike
@@ -46,155 +42,113 @@ public class BookmarkImporter {
 
     private OrionBaseActivity activity;
 
-    public BookmarkImporter(OrionBaseActivity activity, BookmarkAccessor dataBase, String inputName) {
+    private BookNameAndSize book;
+
+    public BookmarkImporter(OrionBaseActivity activity, BookmarkAccessor dataBase, String inputName, BookNameAndSize book) {
         this.activity = activity;
         this.dataBase = dataBase;
         this.inputName = inputName;
+        this.book = book;
     }
 
 
-    public boolean importToBook(File file, long size) throws IOException {
-        Cursor c = null;
-        FileWriter writer = null;
+    public boolean doImport() throws OrionException {
+        InputStreamReader reader = null;
         try {
-            long bookId = dataBase.insertOrUpdate(file.getName(), size);
+            reader = new InputStreamReader(new FileInputStream(inputName));
 
-            if (bookId == -1) {
-                activity.showWarning("Couldn't insert new book to database!");
-                return false;
-            }
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(reader);
+            int fileVersion = -1;
+            int eventType = xpp.getEventType();
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    String name = xpp.getName();
 
-            InputStreamReader reader = null;
-            try {
-                reader = new InputStreamReader(new FileInputStream(file));
-
-                XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-                //factory.setNamespaceAware(true);
-                XmlPullParser xpp = factory.newPullParser();
-                xpp.setInput(reader);
-
-                int fileVersion = -1;
-                int eventType = xpp.getEventType();
-                while (eventType != XmlPullParser.END_DOCUMENT) {
-                    if (eventType == XmlPullParser.START_TAG) {
-                        String name = xpp.getName();
-
-                        if ("bookmarks".equals(name)) {
-                            fileVersion = Integer.valueOf(xpp.getAttributeValue("", "version"));
-                        } else {
-                            try {
-                                String rawValue = xpp.getAttributeValue("", "value");
-                                Field f = getClass().getField(name);
-                                Object value  = null;
-                                Class type = f.getType();
-                                if (type.equals(int.class)) {
-                                    value = Integer.valueOf(rawValue);
-                                } else if (type.equals(boolean.class)) {
-                                    value = Boolean.valueOf(rawValue);
-                                } else if (type.equals(String.class)) {
-                                    value = rawValue;
-                                } else {
-                                    Common.d("Error on deserializing field " + name + " = " + rawValue);
-                                    continue;
-                                }
-                                getClass().getField(name).set(this, value);
-                            } catch (IllegalAccessException e) {
-                                Common.d(e);
-                            } catch (NoSuchFieldException e) {
-                                //skip
-                                Common.d(e);
-                            } catch (NumberFormatException e) {
-                                Common.d(e);
+                    if ("bookmarks".equals(name)) {
+                        fileVersion = Integer.valueOf(xpp.getAttributeValue("", "version"));
+                    } else {
+                        if ("book".equals(name)) {
+                            long size = Long.valueOf(xpp.getAttributeValue("", "fileSize"));
+                            String fileName = xpp.getAttributeValue("", "fileName");
+                            if (book == null || (book.getSize() == size && book.getName().equals(fileName))) {
+                                //next will be called inside
+                                eventType = doBookImport(xpp, new BookNameAndSize(fileName, size));
+                                continue;
                             }
                         }
                     }
-                    eventType = xpp.next();
                 }
-                return true;
-            } catch (FileNotFoundException e) {
-                activity.showError("Couldn't open file", e);
-            } catch (XmlPullParserException e) {
-                activity.showError("Couldn't parse book parameters", e);
-            } catch (IOException e) {
-                activity.showError("Couldn't parse book parameters", e);
-            } finally {
-                if (reader != null) {
-                    try {
-                        reader.close();
-                    } catch (IOException e) {
-                        Common.d(e);
-                    }
-                }
+                eventType = xpp.next();
             }
-
-
-            XmlSerializer serializer = Xml.newSerializer();
-            writer = new FileWriter(inputName);
-            serializer.setOutput(writer);
-            serializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
-
-            serializer.startDocument("UTF-8", true);
-            String nameSpace = "";
-            serializer.startTag(nameSpace, "bookmarks");
-            serializer.attribute(nameSpace, "version", "1");
-            serializer.attribute(nameSpace, "date", new SimpleDateFormat().format(new Date()));
-
-            int bookIdColumn = c.getColumnIndex(BookmarkAccessor.BOOK_ID);
-            //hack
-            if (bookIdColumn == -1) {
-                String [] names = c.getColumnNames();
-                for (int i = 0; i < names.length; i++) {
-                    String name = names[i];
-                    if (name.endsWith("." + BookmarkAccessor.BOOK_ID)) {
-                        bookIdColumn = i;
-                        break;
-                    }
-                }
-            }
-            int bookName = c.getColumnIndex(BookmarkAccessor.BOOK_NAME);
-            int bookSize = c.getColumnIndex(BookmarkAccessor.BOOK_FILE_SIZE);
-            int bookmarkPage = c.getColumnIndex(BookmarkAccessor.BOOKMARK_PAGE);
-            int bookmarkText = c.getColumnIndex(BookmarkAccessor.BOOKMARK_TEXT);
-
-            long lastBookId = -1;
-            do {
-                long newBookId = c.getLong(bookIdColumn);
-
-                if (newBookId != lastBookId) {
-                    if (lastBookId != -1) {
-                        serializer.endTag(nameSpace, "book");
-                    }
-                    lastBookId = newBookId;
-                    serializer.startTag(nameSpace, "book");
-                    serializer.attribute(nameSpace, "fileName", c.getString(bookName));
-                    serializer.attribute(nameSpace, "fileSize", Long.toString(c.getLong(bookSize)));
-                }
-
-                serializer.startTag(nameSpace, "bookmark");
-                serializer.attribute(nameSpace, "page", Integer.toString(c.getInt(bookmarkPage) + 1));
-                serializer.text(c.getString(bookmarkText));
-                serializer.endTag(nameSpace, "bookmark");
-
-
-            } while (c.moveToNext());
-
-            if (lastBookId != -1) {
-                serializer.endTag(nameSpace, "book");
-            }
-
-            serializer.endTag(nameSpace, "bookmarks");
-            serializer.endDocument();
-            serializer.flush();
+            return true;
+        } catch (FileNotFoundException e) {
+            throw new OrionException("Couldn't parse book parameters", e);
+        } catch (XmlPullParserException e) {
+            throw new OrionException("Couldn't parse book parameters", e);
+        } catch (IOException e) {
+            throw new OrionException("Couldn't parse book parameters" , e);
+        } catch (NumberFormatException e) {
+            throw new OrionException("Couldn't parse book parameters" , e);
         } finally {
-            if (c != null) {
-                c.close();
-            }
-            if (writer != null) {
-                writer.close();
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    Common.d(e);
+                }
             }
         }
-        return true;
     }
 
+
+
+    //now we stay on book start tag
+    public int doBookImport(XmlPullParser xpp, BookNameAndSize book) throws OrionException {
+        Cursor c = null;
+        try {
+            long bookId = dataBase.selectBookId(book.getName(), book.getSize());
+            if (bookId == -1) {
+                bookId = dataBase.insertOrUpdate(book.getName(), book.getSize());
+            }
+
+            if (bookId == -1) {
+                throw new DataBaseInsertException("Couldn't insert new book record to database", book);
+            }
+
+            int eventType = XmlPullParser.START_TAG;
+            int pageNumber = -1;
+            while (eventType != XmlPullParser.END_DOCUMENT && !(eventType == XmlPullParser.END_TAG && "book".equals(xpp.getName()))) {
+
+                if (eventType == XmlPullParser.START_TAG ) {
+                    String name = xpp.getName();
+
+                    if ("bookmark".equals(name)) {
+                        try {
+                            pageNumber = Integer.valueOf(xpp.getAttributeValue("", "page")) - 1;
+                        } catch (NumberFormatException e){
+                            throw new OrionException("Wrong page number for book", book.toString() +": " + xpp.getAttributeValue("", "page"));
+                        }
+                    }
+                }
+
+                if (eventType == XmlPullParser.TEXT && pageNumber != -1) {
+                    String text = xpp.getText();
+                    if (text != null) {
+                        dataBase.insertOrUpdateBookmark(bookId, pageNumber, text);
+                    }
+                    pageNumber = -1;
+                }
+
+                eventType = xpp.next();
+            }
+            return eventType;
+        } catch (XmlPullParserException e) {
+            throw new OrionException("Couldn't parse book parameters " + book, e);
+        } catch (IOException e) {
+            throw new OrionException("Couldn't parse book parameters " + book, e);
+        }
+    }
 
 }

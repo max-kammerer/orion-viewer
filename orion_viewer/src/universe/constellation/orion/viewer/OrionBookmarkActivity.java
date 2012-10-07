@@ -33,9 +33,7 @@ import android.widget.*;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
-import universe.constellation.orion.viewer.bookmarks.Bookmark;
-import universe.constellation.orion.viewer.bookmarks.BookmarkAccessor;
-import universe.constellation.orion.viewer.bookmarks.BookmarkExporter;
+import universe.constellation.orion.viewer.bookmarks.*;
 
 import java.io.*;
 import java.util.*;
@@ -91,9 +89,12 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
 
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-
-        BookmarkAccessor accessor = getOrionContext().getBookmarkAccessor();
         bookId = intent.getLongExtra(BOOK_ID, -1);
+        updateView(bookId);
+    }
+
+    private void updateView(long bookId) {
+        BookmarkAccessor accessor = getOrionContext().getBookmarkAccessor();
         List bookmarks = accessor.selectBookmarks(bookId);
         ListView view = (ListView) findMyViewById(R.id.bookmarks);
         view.setAdapter(new ArrayAdapter(this, R.layout.bookmark_entry, R.id.bookmark_entry, bookmarks) {
@@ -180,7 +181,7 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-            String fileName = data.getStringExtra(OrionFileSelectorActivity.RESULT_FILE_NAME);
+            final String fileName = data.getStringExtra(OrionFileSelectorActivity.RESULT_FILE_NAME);
             if (fileName == null || "".equals(fileName)) {
                 showWarning("File name is empty");
                 return;
@@ -207,7 +208,7 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            doImport((BookNameAndSize) (tree.getSelectedItem()));
+                            doImport(fileName, (BookNameAndSize) (tree.getAdapter().getItem(tree.getCheckedItemPosition())));
                         }
                     });
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -219,13 +220,6 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
 
 
                     final AlertDialog dialog = builder.create();
-//                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-//                        @Override
-//                        public void onShow(DialogInterface dialog) {
-//                            ((AlertDialog)dialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
-//                        }
-//                    });
-
 
 
                     tree.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -245,10 +239,10 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
 
                             BookNameAndSize book = getItem(position);
                             TextView view = (TextView) convertView.findViewById(R.id.page);
-                            view.setText(buityfySize(book.size));
+                            view.setText(book.buityfySize());
 
                             view = (TextView) convertView.findViewById(R.id.title);
-                            view.setText(book.name);
+                            view.setText(book.getName());
 
                             if (!positiveDisabled) {
                                 //android bug
@@ -267,20 +261,29 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
 //                        doImport(books.get(0));
 //                    } else {
                         //all
-                        doImport(null);
+                        doImport(fileName, null);
 //                    }
                 }
             }
         }
     }
 
-    private void doImport(BookNameAndSize book){
+    private void doImport(String fileName, BookNameAndSize book){
         if (book != null) {
-            Common.d("Import d " + book.name);
+            Common.d("Import d " + book.getName());
         } else {
             Common.d("Import all bookmarks");
-
         }
+
+        BookmarkImporter importer = new BookmarkImporter(this, getOrionContext().getBookmarkAccessor(), fileName, book);
+        try {
+            importer.doImport();
+            updateView(getOrionContext().getBookmarkAccessor().selectBookId(getOrionContext().getCurrentBookParameters().simpleFileName, getOrionContext().getCurrentBookParameters().fileSize));
+            showFastMessage("Imported successfully");
+        } catch (OrionException e) {
+            showAlert("Error", e.getMessage());
+        }
+
     }
 
 
@@ -332,39 +335,4 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
         return null;
     }
 
-    public static class BookNameAndSize implements Comparable<BookNameAndSize> {
-
-        private String name;
-
-        private long size;
-
-        private long id;
-
-        public BookNameAndSize(String name, long size) {
-            this.name = name;
-            this.size = size;
-        }
-
-        @Override
-        public int compareTo(BookNameAndSize another) {
-            int res = name.compareTo(another.name);
-            if (res == 0) {
-                res = size < another.size ? -1 : (size == another.size ? 0 : 1);
-            }
-            return res;
-        }
-    }
-
-    public String buityfySize(long size) {
-        if (size < 1024) {
-            return size + "b";
-        }
-        if (size < 1024 * 1024) {
-            return (size / 1024) + "." + (size % 1024)/103 + "Kb";
-        }
-        if (size < 1024 * 1024 * 1024) {
-            return (size / (1024 * 1024)) + "." + (size % (1024 * 1024))/(103*1024) + "Mb";
-        }
-        return size + "b";
-    }
 }
