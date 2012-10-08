@@ -23,20 +23,20 @@
     <string name="zoom">"פתח חלון ההגדלה. ערך ההגדלה שווה אפס פירושה שטקסט מתאים לרוחב המסך."</string>
     <string name="rotation">"סובב מסמך ל90 מעלות בכיוון שעון. לחיצה ארוכה מסובבת נגד כיוון שעון."</string>
     <string name="rotation_android">"פתח אפשריות סיבוב."</string>
-    <string name="crop">"פתח אפשריות חיתוך גבולות. ערכים מוגדרים יחסית לגודל דף. לחיצה ארוכה לתוספת או בניכוי ערך תשנה ב10%. ערך שלילי תוסיף גבולות נוספים."</string>
+    <string name="crop">"פתח אפשריות חיתוך גבולות. ערכים מוגדרים יחסית לגודל דף. לחיצה ארוכה ערך תשנה ב10%. ערך שלילי תוסיף גבולות נוספים."</string>
     <string name="next_page_android">"פתח אפשריות מעבר דפים."</string>
     <string name="next_page">"עבור לדף הבא. בלחיצה ארוכה פותח את אפשריות סימנייות."</string>
     <string name="prev_page">"עבור לדף קודם. בלחיצה ארוכה פותח אפשריות בחירת הדף."</string>
     <string name="apply">"החל את האפשרויות קיימות."</string>
     <string name="escape">"להחזיר / לבטל."</string>
     <string name="general_usage">"אופן שימוש:"</string>
-    <string name="general_usage_step1">"1. מסמך נפתח (זום בהתאמת רוחב כברירת מחדל)"</string>
+    <string name="general_usage_step1">"1. מסמך נפתח - זום בהתאמה רוחב כברירת מחדל"</string>
     <string name="general_usage_step2">"2. בחירת כיוון מתאים: לאורך או לרוחב"</string>
-    <string name="general_usage_step3">"3.חתוך שולים, גודל טקסט ישתנה בהתאם לשינוי שולים (אם צוין זום בהתאמת רוחב )"</string>
+    <string name="general_usage_step3">"3.חתוך שולים, גודל טקסט ישתנה בהתאם לשינוי שולים - אם צוין זום בהתאמה רוחב"</string>
     <string name="general_usage_step4">"4. בהצלחה בלימוד!"</string>
     <string name="option_help">"הגדרות תוכנה"</string>
     <string name="navigation_help">"פתח אפשריות של סדר הדפדוף. בלימוד בדפים גדולים ומורכבים אתה יכול לבחור פריסת דף מתאימה."</string>
     <string name="dictionary_help">"פותח מילון חיצוני. בחר יישום מילון מתאים באפשרויות."</string>
-    <string name="tap_help">"אזורי נגיעה לאפשר למשתמש לקשר חלקים שונים של מסך לפקודות נפוצות. בתאים 3x3 משתמש יכול מגדיר פעולות ללחיצה קצרה (תווית עליונה) וללחיצה ארוכה (תווית תחתונה)."</string>
+    <string name="tap_help">"אזורי נגיעה לאפשר למשתמש לקשר חלקים שונים של מסך לפקודות נפוצות. בתאים 3x3 משתמש יכול להגדיר פעולות ללחיצה קצרה (תווית עליונה) וללחיצה ארוכה (תווית תחתונה."</string>
     <string name="bookmarks_export_help">"לאפשר למשתמש לייצא את הסימניות (לכל הספרים או לזו נוכחית). סימניות מיוצאות לקובץ XML עם שמו של ספר נפתח + [bookmarks.xml או all_bookmarks.xml] הסיומת. אפשרות זו נמצאת בתפריט סימניות."</string>
 </resources>
