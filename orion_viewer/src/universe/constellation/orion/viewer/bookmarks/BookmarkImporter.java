@@ -19,7 +19,7 @@
 
 package universe.constellation.orion.viewer.bookmarks;
 
-import android.database.Cursor;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -28,6 +28,7 @@ import universe.constellation.orion.viewer.OrionBaseActivity;
 import universe.constellation.orion.viewer.OrionException;
 
 import java.io.*;
+import java.util.Set;
 
 /**
  * User: mike
@@ -42,13 +43,13 @@ public class BookmarkImporter {
 
     private OrionBaseActivity activity;
 
-    private BookNameAndSize book;
+    private Set<BookNameAndSize> books;
 
-    public BookmarkImporter(OrionBaseActivity activity, BookmarkAccessor dataBase, String inputName, BookNameAndSize book) {
+    public BookmarkImporter(OrionBaseActivity activity, BookmarkAccessor dataBase, String inputName, Set<BookNameAndSize> books) {
         this.activity = activity;
         this.dataBase = dataBase;
         this.inputName = inputName;
-        this.book = book;
+        this.books = books;
     }
 
 
@@ -72,9 +73,10 @@ public class BookmarkImporter {
                         if ("book".equals(name)) {
                             long size = Long.valueOf(xpp.getAttributeValue("", "fileSize"));
                             String fileName = xpp.getAttributeValue("", "fileName");
-                            if (book == null || (book.getSize() == size && book.getName().equals(fileName))) {
+                            BookNameAndSize book = new BookNameAndSize(fileName, size);
+                            if (books.contains(book)) {
                                 //next will be called inside
-                                eventType = doBookImport(xpp, new BookNameAndSize(fileName, size));
+                                eventType = doBookImport(xpp, book);
                                 continue;
                             }
                         }
@@ -106,7 +108,7 @@ public class BookmarkImporter {
 
     //now we stay on book start tag
     public int doBookImport(XmlPullParser xpp, BookNameAndSize book) throws OrionException {
-        Cursor c = null;
+        Common.d("Importing bookmarks for " + book);
         try {
             long bookId = dataBase.selectBookId(book.getName(), book.getSize());
             if (bookId == -1) {

@@ -77,4 +77,15 @@ public class BookNameAndSize implements Comparable<BookNameAndSize> {
     public String toString() {
         return name + " " + buityfySize();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        BookNameAndSize another = (BookNameAndSize) o;
+        return size == another.size && name.equals(another.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 }

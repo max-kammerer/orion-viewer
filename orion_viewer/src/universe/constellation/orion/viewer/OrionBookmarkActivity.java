@@ -25,6 +25,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -196,86 +197,84 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
                     showWarning("There is no any bookmarks");
                 }
 
-                if (IMPORT_CURRRENT == requestCode) {
-                    Collections.sort(books);
+                final boolean importCurrent = requestCode == IMPORT_CURRRENT;
 
-                    View group = getLayoutInflater().inflate(R.layout.bookmark_book_list, null);
-                    final ListView tree = (ListView) group.findViewById(R.id.book_list);
+                Collections.sort(books);
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle("Select source book").setCancelable(true).setView(group);
-                    builder.setPositiveButton("Import", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            doImport(fileName, (BookNameAndSize) (tree.getAdapter().getItem(tree.getCheckedItemPosition())));
-                        }
-                    });
-                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
+                View group = getLayoutInflater().inflate(R.layout.bookmark_book_list, null);
+                final ListView tree = (ListView) group.findViewById(R.id.book_list);
 
-
-                    final AlertDialog dialog = builder.create();
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Select source book").setCancelable(true).setView(group);
+                builder.setPositiveButton("Import", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        doImport(fileName, getCheckedItems(tree));
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
 
 
-                    tree.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-                    tree.setItemsCanFocus(false);
-                    tree.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            dialog.getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
-                        }
-                    });
-                    tree.setAdapter(new ArrayAdapter<BookNameAndSize>(this, R.layout.select_book_item, R.id.title, books) {
+                final AlertDialog dialog = builder.create();
 
-                        private boolean positiveDisabled;
-                        @Override
-                        public View getView(int position, View convertView, ViewGroup parent) {
-                            convertView = super.getView(position, convertView, parent);
 
-                            BookNameAndSize book = getItem(position);
-                            TextView view = (TextView) convertView.findViewById(R.id.page);
-                            view.setText(book.buityfySize());
+                tree.setChoiceMode(!importCurrent ? ListView.CHOICE_MODE_MULTIPLE : ListView.CHOICE_MODE_SINGLE);
+                tree.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        dialog.getButton(Dialog.BUTTON_POSITIVE).setEnabled(tree.getCheckedItemPositions().size() != 0);
+                    }
+                });
 
-                            view = (TextView) convertView.findViewById(R.id.title);
-                            view.setText(book.getName());
+                tree.setAdapter(new ArrayAdapter<BookNameAndSize>(this, R.layout.select_book_item, R.id.title, books) {
 
-                            if (!positiveDisabled) {
-                                //android bug
-                                positiveDisabled = true;
+                    private boolean positiveDisabled;
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        convertView = super.getView(position, convertView, parent);
+
+                        BookNameAndSize book = getItem(position);
+                        TextView view = (TextView) convertView.findViewById(R.id.page);
+                        view.setText(book.buityfySize());
+
+                        view = (TextView) convertView.findViewById(R.id.title);
+                        view.setText(book.getName());
+
+                        if (!positiveDisabled) {
+                            //android bug
+                            positiveDisabled = true;
+                            if (importCurrent) {
                                 ((AlertDialog)dialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
                             }
-
-                            return convertView;
                         }
-                    });
-                    tree.setItemsCanFocus(false);
 
-                    dialog.show();
-                } else {
-//                    if (IMPORT_CURRRENT == requestCode) {
-//                        doImport(books.get(0));
-//                    } else {
-                        //all
-                        doImport(fileName, null);
-//                    }
+                        return convertView;
+                    }
+                });
+                tree.setItemsCanFocus(false);
+
+                if (!importCurrent) {
+                    for (int i = 0; i < tree.getAdapter().getCount(); i++) {
+                          tree.setItemChecked(i, true);
+                    }
                 }
+
+                dialog.show();
+
             }
         }
     }
 
-    private void doImport(String fileName, BookNameAndSize book){
-        if (book != null) {
-            Common.d("Import d " + book.getName());
-        } else {
-            Common.d("Import all bookmarks");
-        }
+    private void doImport(String fileName, Set<BookNameAndSize> books){
+        Common.d("Import bookmarks " + books.size());
 
-        BookmarkImporter importer = new BookmarkImporter(this, getOrionContext().getBookmarkAccessor(), fileName, book);
+        BookmarkImporter importer = new BookmarkImporter(this, getOrionContext().getBookmarkAccessor(), fileName, books);
         try {
             importer.doImport();
             updateView(getOrionContext().getBookmarkAccessor().selectBookId(getOrionContext().getCurrentBookParameters().simpleFileName, getOrionContext().getCurrentBookParameters().fileSize));
@@ -333,6 +332,17 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
             }
         }
         return null;
+    }
+
+    public Set<BookNameAndSize> getCheckedItems(ListView view) {
+        HashSet<BookNameAndSize> result = new HashSet();
+        SparseBooleanArray checked = view.getCheckedItemPositions();
+        for (int i = 0; i < checked.size(); i++) {
+            if (checked.valueAt(i)) {
+                result.add((BookNameAndSize)view.getAdapter().getItem(checked.keyAt(i)));
+            }
+        }
+        return  result;
     }
 
 }
