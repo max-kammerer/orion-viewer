@@ -219,10 +219,22 @@ public class BookmarkAccessor extends SQLiteOpenHelper {
             bookmarkId = dataBase.insert(BOOKMARKS_TABLE_NAME, null, cv);
         }
 
-        System.out.println("bookmarkdId " + bookmarkId);
+        Common.d("Inserted bookmarkdId = " + bookmarkId);
         return bookmarkId;
 
     }
+
+    public void deleteBookmark(long bookmarkId) {
+        Common.d("Deleting bookmark " + bookmarkId);
+        SQLiteDatabase dataBase = getReadableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(BOOKMARK_ID, bookmarkId);
+        int rows = dataBase.delete(BOOKMARKS_TABLE_NAME, BOOKMARK_ID + " = " + bookmarkId, null);
+
+        Common.d("Affected rows: " + rows);
+    }
+
 
 
     public Cursor getExportedBookCursor(long bookId) {

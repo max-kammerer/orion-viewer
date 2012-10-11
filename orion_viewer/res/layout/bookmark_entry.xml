@@ -25,10 +25,13 @@
 
     <TextView android:layout_width="fill_parent"
               android:layout_height="wrap_content" android:id="@+id/bookmark_entry"
-              android:textSize="24sp" android:paddingLeft="2px" android:layout_weight="1"/>
+              android:textSize="24sp" android:layout_weight="1" android:layout_gravity="center"/>
 
     <TextView android:layout_width="wrap_content" android:layout_weight="0"
               android:layout_height="wrap_content" android:id="@+id/bookmark_entry_page"
-              android:textSize="24sp" android:paddingLeft="2px"/>
+              android:textSize="24sp" android:paddingLeft="2px" android:layout_gravity="center"/>
+
+    <ImageView android:layout_width="wrap_content" android:layout_weight="0" android:src="@drawable/edit_item"
+            android:layout_height="wrap_content" android:id="@+id/bookmark_edit_entry" android:clickable="true"/>
 
 </LinearLayout>

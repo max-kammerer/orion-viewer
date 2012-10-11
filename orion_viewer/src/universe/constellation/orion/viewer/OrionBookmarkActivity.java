@@ -78,6 +78,7 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
             }
         });
 
+
         ImageButton menu = (ImageButton) findMyViewById(R.id.nook_bookmarks_menu);
         if (menu != null) {
             menu.setOnClickListener(new View.OnClickListener(){
@@ -94,17 +95,64 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
         updateView(bookId);
     }
 
-    private void updateView(long bookId) {
+    private void updateView(final long bookId) {
         BookmarkAccessor accessor = getOrionContext().getBookmarkAccessor();
         List bookmarks = accessor.selectBookmarks(bookId);
-        ListView view = (ListView) findMyViewById(R.id.bookmarks);
+        final ListView view = (ListView) findMyViewById(R.id.bookmarks);
         view.setAdapter(new ArrayAdapter(this, R.layout.bookmark_entry, R.id.bookmark_entry, bookmarks) {
             @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
+            public View getView(final int position, View convertView, ViewGroup parent) {
                 convertView = super.getView(position, convertView, parent);
+
                 Bookmark item = (Bookmark) getItem(position);
                 TextView page = (TextView) convertView.findViewById(R.id.bookmark_entry_page);
                 page.setText("" + (item.page == - 1 ? "*" : item.page + 1));
+
+                ImageView edit = (ImageView) convertView.findViewById(R.id.bookmark_edit_entry);
+                //if (edit != null)
+                edit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (position != 0) {
+                            final Bookmark item = (Bookmark) getItem(position);
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(OrionBookmarkActivity.this).setIcon(R.drawable.edit_item);
+
+                            builder.setTitle("Edit Bookmark");
+                            final EditText editText = new EditText(OrionBookmarkActivity.this);
+                            editText.setText(item.text);
+                            builder.setView(editText);
+
+                            builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if ("".equals(editText.getText())) {
+                                        OrionBookmarkActivity.this.showAlert("Warning", "Coudn't save empty bookmark");
+                                    } else {
+                                        getOrionContext().getBookmarkAccessor().insertOrUpdateBookmark(bookId, item.page, editText.getText().toString());
+                                        item.text = editText.getText().toString();
+                                        ((ArrayAdapter)view.getAdapter()).notifyDataSetChanged();
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+
+                            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+
+                            builder.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getOrionContext().getBookmarkAccessor().deleteBookmark(item.id);
+                                    updateView(bookId);
+                                }
+                            });
+
+                            builder.create().show();
+                        }
+                    }
+                });
                 return convertView;
             }
         });
