@@ -39,4 +39,9 @@
 
     <string name="menu_select_text">Выделить текст</string>
     <string name="menu_book_preferences">Настройки книги</string>
+
+    <string name="export_all_bookmarks_menu_item">Экспортировать все закладки</string>
+    <string name="export_bookmarks_menu_item">Экспортировать текущие закладки</string>
+    <string name="import_all_bookmarks_menu_item">Импортировать все закладки</string>
+    <string name="import_current_bookmarks_menu_item">Импортировать в открытую книгу</string>
 </resources>
