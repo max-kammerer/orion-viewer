@@ -20,24 +20,24 @@
 <!--Author: Alexander Goldberg-->
 
 <resources>
-    <string name="menu_zoom_text">"הגדלה"</string>
-    <string name="menu_crop_text">"חיתוך"</string>
-    <string name="menu_goto_text">"עבור אל"</string>
-    <string name="menu_bookmarks_text">"סימניות"</string>
-    <string name="menu_add_bookmark_item">"הוספת סימנייה"</string>
-    <string name="export_bookmarks_menu_item">"ייצא סימניות"</string>
-    <string name="export_all_bookmarks_menu_item">"יצוא כל הסימניות"</string>
-    <string name="menu_select_text">"בחר טקסט"</string>
-    <string name="menu_rotation_text">"סיבוב מסך"</string>
-    <string name="menu_navigation_text">"פריסת דף"</string>
-    <string name="menu_help_text">"עזרה"</string>
-    <string name="menu_open_text">"פתח ספר "</string>
-    <string name="menu_outline_text">"פתח  שכבת טקסטי"</string>
-    <string name="menu_open_dictionary_text">"פתח מילון "</string>
-    <string name="menu_day_night_text">"מצב יום / לילה"</string>
-    <string name="menu_exit_text">"סגור"</string>
-    <string name="menu_key_binder_text">"טקסט של כריכה"</string>
-    <string name="menu_options_text">"הגדרות"</string>
-    <string name="menu_tap_text">"אזורי הקשה "</string>
-    <string name="menu_book_preferences">"אפשרויות ספר"</string>
+    <string name="menu_zoom_text">הגדלה</string>
+    <string name="menu_crop_text">חיתוך</string>
+    <string name="menu_goto_text">עבור אל</string>
+    <string name="menu_bookmarks_text">סימניות</string>
+    <string name="menu_add_bookmark_item">הוספת סימנייה</string>
+    <string name="export_bookmarks_menu_item">ייצא סימניות</string>
+    <string name="export_all_bookmarks_menu_item">יצוא כל הסימניות</string>
+    <string name="menu_select_text">בחר טקסט</string>
+    <string name="menu_rotation_text">סיבוב מסך</string>
+    <string name="menu_navigation_text">פריסת דף</string>
+    <string name="menu_help_text">עזרה</string>
+    <string name="menu_open_text">פתח ספר </string>
+    <string name="menu_outline_text">פתח  שכבת טקסטי</string>
+    <string name="menu_open_dictionary_text">פתח מילון </string>
+    <string name="menu_day_night_text">מצב יום / לילה</string>
+    <string name="menu_exit_text">סגור</string>
+    <string name="menu_key_binder_text">טקסט של כריכה</string>
+    <string name="menu_options_text">הגדרות</string>
+    <string name="menu_tap_text">אזורי הקשה </string>
+    <string name="menu_book_preferences">אפשרויות ספר</string>
 </resources>
