@@ -232,7 +232,7 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
                     }
                 });
 
-                tree.setAdapter(new ArrayAdapter<BookNameAndSize>(this, R.layout.select_book_item, R.id.title, books) {
+                tree.setAdapter(new ArrayAdapter<BookNameAndSize>(this, importCurrent ? R.layout.select_book_item : R.layout.select_book_item_multi, R.id.title, books) {
 
                     private boolean positiveDisabled;
                     @Override
