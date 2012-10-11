@@ -202,6 +202,9 @@
                                        android:src="@drawable/pdf"/>
                     <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
                                        android:src="@drawable/xps"/>
+
+                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                                           android:src="@drawable/xml"/>
                 </LinearLayout>
 
                 <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
@@ -210,15 +213,15 @@
                           android:gravity="left|center_vertical" android:linksClickable="true" android:autoLink="all"/>
             </TableRow>
 
-            <TableRow>
-                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                   android:src="@drawable/view"/>
+            <!--<TableRow>-->
+                <!--<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"-->
+                   <!--android:src="@drawable/view"/>-->
 
-                <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
-                          android:textSize="18sp"
-                          android:text="Derived on Oxygen Team icon"
-                          android:gravity="left|center_vertical"/>
-            </TableRow>
+                <!--<TextView android:layout_width="fill_parent" android:layout_height="fill_parent"-->
+                          <!--android:textSize="18sp"-->
+                          <!--android:text="Derived on Oxygen Team icon"-->
+                          <!--android:gravity="left|center_vertical"/>-->
+            <!--</TableRow>-->
 
             <TableRow>
                 <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
