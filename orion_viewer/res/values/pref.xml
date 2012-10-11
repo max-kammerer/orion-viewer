@@ -58,7 +58,7 @@
     <string name="pref_book_contrast_desc">Contrast 1-1000 (default 100)</string>
 
     <string name="pref_book_threshold">Threshold</string>
-    <string name="pref_book_threshold_desc">Threshold for watermark removal</string>
+    <string name="pref_book_threshold_desc">Threshold for watermark removal (default 255)</string>
 
     <string name="pref_debug">Debug</string>
     <string name="pref_debug_desc">Write traces to file &lt;opened book name&gt; + .trace</string>
