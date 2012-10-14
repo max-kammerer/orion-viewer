@@ -42,6 +42,6 @@
 
     <string name="export_all_bookmarks_menu_item">Экспортировать все закладки</string>
     <string name="export_bookmarks_menu_item">Экспортировать текущие закладки</string>
-    <string name="import_all_bookmarks_menu_item">Импортировать все закладки</string>
-    <string name="import_current_bookmarks_menu_item">Импортировать в открытую книгу</string>
+    <string name="import_all_bookmarks_menu_item">Импортировать...</string>
+    <string name="import_current_bookmarks_menu_item">Дополнить из...</string>
 </resources>
