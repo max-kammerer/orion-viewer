@@ -81,20 +81,27 @@ public class OrionPreferenceActivity extends PreferenceActivity {
         }
 
         if (Device.Info.NOOK_CLASSIC) {
-            PreferenceScreen bookDefaults = (PreferenceScreen) GENERAL.findPreference("BOOK_DEFAULT");
+            //nook classic hacks
+            final PreferenceScreen bookDefaults = (PreferenceScreen) GENERAL.findPreference("BOOK_DEFAULT");
             PreferenceScreen taps = (PreferenceScreen) GENERAL.findPreference("TAP_ZONES");
             GENERAL.removePreference(taps);
-//            PreferenceCategory newBookDefaults = new PreferenceCategory(getApplicationContext(), null);
-//            newBookDefaults.setTitle("Book default options");
-//            for (int i = bookDefaults.getPreferenceCount() - 1; i >= 0; i--) {
-//                Preference pref = bookDefaults.getPreference(i);
-//                bookDefaults.removePreference(pref);
-//                newBookDefaults.addPreference(pref);
-//            }
-//            GENERAL.removePreference(bookDefaults);
-//            screen.addPreference(newBookDefaults);
+
+            //nook doesn't support inner preference screen
+            PreferenceCategory newBookDefaults = new PreferenceCategory(getApplicationContext(), null);
+            newBookDefaults.setTitle("Book default options");
+            screen.addPreference(newBookDefaults);
+
+            for (int i = bookDefaults.getPreferenceCount() - 1; i >= 0; i--) {
+                Preference pref = bookDefaults.getPreference(i);
+                bookDefaults.removePreference(pref);
+                newBookDefaults.addPreference(pref);
+            }
+            GENERAL.removePreference(bookDefaults);
         }
+
     }
+
+
 
 
 
