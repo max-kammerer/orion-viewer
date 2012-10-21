@@ -34,6 +34,9 @@ import universe.constellation.orion.viewer.prefs.OrionApplication;
  */
 public interface Device {
 
+    final static int DELAY = 1; //1 min
+
+    final static int VIEWER_DELAY = 10; //10 min
 
     public static class Info {
         public final static String MANUFACTURER = getField("MANUFACTURER");

@@ -120,7 +120,16 @@
                 android:dialogTitle="@string/pref_application_theme"
                 android:defaultValue="DEFAULT"/>
 
+        <ListPreference
+                android:key="SCREEN_BACKLIGHT_TIMEOUT"
+                android:title="@string/pref_screen_backlight_timeout"
+                android:summary="@string/pref_screen_backlight_timeout_desc"
+                android:entries="@array/screen_backligth_timeout_desc"
+                android:entryValues="@array/screen_backligth_timeout"
+                android:dialogTitle="@string/pref_screen_backlight_timeout"
+                android:defaultValue="10"/>
     </PreferenceCategory>
+
     <PreferenceCategory
             android:title="Key Manager">
 

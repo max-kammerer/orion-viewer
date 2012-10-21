@@ -20,10 +20,7 @@
 package universe.constellation.orion.viewer.prefs;
 
 import android.content.SharedPreferences;
-import universe.constellation.orion.viewer.Common;
-import universe.constellation.orion.viewer.OptionActions;
-import universe.constellation.orion.viewer.OrionViewerActivity;
-import universe.constellation.orion.viewer.PageWalker;
+import universe.constellation.orion.viewer.*;
 
 import java.io.Serializable;
 import java.util.*;
@@ -83,6 +80,8 @@ public class GlobalOptions implements Serializable {
     public final static String WALK_ORDER = "WALK_ORDER";
 
     public final static String PAGE_LAYOUT = "PAGE_LAYOUT";
+
+    public final static String SCREEN_BACKLIGHT_TIMEOUT = "SCREEN_BACKLIGHT_TIMEOUT";
 
     private LinkedList<RecentEntry> recentFiles;
 
@@ -344,6 +343,10 @@ public class GlobalOptions implements Serializable {
 
     public int getPageLayout() {
         return getInt(PAGE_LAYOUT, 0);
+    }
+
+    public int getScreenBacklightTimeout(int defaultValue) {
+        return getIntFromStringProperty(SCREEN_BACKLIGHT_TIMEOUT, defaultValue);
     }
 
 

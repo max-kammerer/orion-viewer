@@ -49,10 +49,6 @@ public class AndroidDevice implements Device {
 
     protected OrionBaseActivity activity;
 
-    private static int DELAY = 60000;
-
-    private static int VIEWER_DELAY = 600000;
-
     private int delay = DELAY;
 
     public GlobalOptions options;
@@ -121,7 +117,7 @@ public class AndroidDevice implements Device {
         keyBinding = activity.getOrionContext().getKeyBinding();
 
         if (activity.getViewerType() == VIEWER_ACTIVITY) {
-            delay = VIEWER_DELAY;
+            delay = activity.getOrionContext().getOptions().getScreenBacklightTimeout(VIEWER_DELAY) * 1000 * 60;
         }
         this.activity = activity;
         PowerManager power = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
