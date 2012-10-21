@@ -1,7 +1,7 @@
 ===== 0.38.3 (Oct 21, 2012) =====
-* New default options problem in Nook Classic
-* Crash on view djvu contents
-* Added screen backlight timeout option
+* Issue 30: New default options problem in Nook Classic
+* Issue 35: Crash on view djvu contents
+* Issue 21: Feature request: standby settings - Added screen backlight timeout option
 
 ===== 0.38.1 (Oct 11, 2012) =====
 * Bookmarks Edit/Delete actions
