@@ -258,7 +258,8 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        doImport(fileName, getCheckedItems(tree));
+                        BookNameAndSize toBook = new BookNameAndSize(getOrionContext().getCurrentBookParameters().simpleFileName, getOrionContext().getCurrentBookParameters().fileSize);
+                        doImport(fileName, getCheckedItems(tree), importCurrent ? toBook : null);
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -319,10 +320,10 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
         }
     }
 
-    private void doImport(String fileName, Set<BookNameAndSize> books){
+    private void doImport(String fileName, Set<BookNameAndSize> books, BookNameAndSize toBook){
         Common.d("Import bookmarks " + books.size());
 
-        BookmarkImporter importer = new BookmarkImporter(this, getOrionContext().getBookmarkAccessor(), fileName, books);
+        BookmarkImporter importer = new BookmarkImporter(this, getOrionContext().getBookmarkAccessor(), fileName, books, toBook);
         try {
             importer.doImport();
             updateView(getOrionContext().getBookmarkAccessor().selectBookId(getOrionContext().getCurrentBookParameters().simpleFileName, getOrionContext().getCurrentBookParameters().fileSize));

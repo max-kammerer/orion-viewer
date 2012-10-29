@@ -1,3 +1,6 @@
+===== 0.38.5 (Oct 29, 2012) =====
+* Fixed "Append" import for bookmarks
+
 ===== 0.38.3 (Oct 21, 2012) =====
 * Issue 30: New default options problem in Nook Classic
 * Issue 35: Crash on view djvu contents
@@ -7,10 +10,9 @@
 * Bookmarks Edit/Delete actions
 * Localizations update
 
-
 ===== 0.38.0 (Oct 8, 2012) =====
 * Bookmarks Export/Import
-* Hebrew Localization
+* Hebrew Localization by Alexander Goldberg
 * New Icons
 
 ===== 0.37.1 (Sep 14, 2012) =====
@@ -82,24 +84,20 @@
 * New action for taps
 
 ===== 0.25.3 (Jan 13, 2012) =====
-
 * Tap zones feature in Android build
 * External dictionaries support
 * Fixed bug with relative cropping
 
 ===== 0.25.0 (Jan 5, 2012) =====
-
  * Fixed issue with blank page on attempt to render rotated pdf document
  * Border cropping relative to page size
  * Added full screen mode (not works on Alex: Is anybody know how support full epd screen on Alex?)
  * Added new options
 
 ===== 0.24.0 (Dec 12, 2011) =====
-
 * Djvu support
 
 ===== 0.16.0 (Nov 26, 2011) =====
-
 * FileManager keeps last opened folder on startup
 * Recently opened files view added to FileManager
 * Fixed issue with refreshing crop screen

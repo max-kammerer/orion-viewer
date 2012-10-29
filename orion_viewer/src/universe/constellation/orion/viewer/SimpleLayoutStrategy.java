@@ -52,7 +52,6 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     public SimpleLayoutStrategy(DocumentWrapper doc, Point deviceSize) {
         this.doc = doc;
-        int zoomNormalization = Math.min(deviceSize.x, deviceSize.y);
     }
 
     public void nextPage(LayoutPosition info) {
@@ -61,44 +60,6 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
                 reset(info, info.pageNumber + 1);
             }
         }
-//        switch (getDirection()) {
-//            case D_ACBD: //A, C, B, D
-//                if (info.cellY < info.maxY) {
-//                    info.cellY += 1;
-//                } else if (info.cellX < info.maxX) {
-//                    info.cellY = 0;
-//                    info.cellX += 1;
-//                } else {
-//                    if (info.pageNumber < doc.getPageCount() - 1) {
-//                        reset(info, info.pageNumber + 1);
-//                    }
-//                }
-//                break;
-//            case D_BDAC: //B, D, A, C
-//                if (info.cellY < info.maxY) {
-//                    info.cellY += 1;
-//                } else if (info.cellX > 0) {
-//                    info.cellY = 0;
-//                    info.cellX -= 1;
-//                } else {
-//                    if (info.pageNumber < doc.getPageCount() - 1) {
-//                        reset(info, info.pageNumber + 1);
-//                    }
-//                }
-//                break;
-//            case D_ABCD: default: //A, B, C, D
-//                if (info.cellX < info.maxX) {
-//                    info.cellX += 1;
-//                } else if (info.cellY < info.maxY) {
-//                    info.cellX = 0;
-//                    info.cellY += 1;
-//                } else {
-//                    if (info.pageNumber < doc.getPageCount() - 1) {
-//                        reset(info, info.pageNumber + 1);
-//                    }
-//                }
-//                break;
-//        }
         Common.d("new cellX = " + info.cellX + " cellY = " + info.cellY);
     }
 
@@ -108,52 +69,6 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
                 reset(info, info.pageNumber - 1, false);
             }
         }
-//        switch (getDirection()) {
-//            case D_ACBD: //A, C, B, D
-//                if (info.cellY > 0) {
-//                    info.cellY -= 1;
-//                } else if (info.cellX > 0) {
-//                    info.cellY = info.maxY;
-//                    info.cellX -= 1;
-//                } else {
-//                    if (info.pageNumber > 0) {
-//                        reset(info, info.pageNumber - 1);
-//                        info.cellX = info.maxX;
-//                        info.cellY = info.maxY;
-//                    }
-//                }
-//                break;
-//            case D_BDAC: //B, D, A, C
-//                if (info.cellY > 0) {
-//                    info.cellY -= 1;
-//                } else if (info.cellX < info.maxX) {
-//                    info.cellY = info.maxY;
-//                    info.cellX += 1;
-//                } else {
-//                    if (info.pageNumber > 0) {
-//                        reset(info, info.pageNumber - 1);
-//                        info.cellX = 0;
-//                        info.cellY = info.maxY;
-//                    }
-//                }
-//                break;
-//            case D_ABCD:
-//            default: //A, B, C, D
-//                if (info.cellX > 0) {
-//                    info.cellX -= 1;
-//                } else if (info.cellY > 0) {
-//                    info.cellX = info.maxX;
-//                    info.cellY -= 1;
-//                } else {
-//                    if (info.pageNumber > 0) {
-//                        reset(info, info.pageNumber - 1);
-//                        info.cellX = info.maxX;
-//                        info.cellY = info.maxY;
-//                    }
-//                }
-//                break;
-//        }
-
 
         Common.d("new cellX = " + info.cellX + " cellY = " + info.cellY);
     }

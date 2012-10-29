@@ -45,11 +45,15 @@ public class BookmarkImporter {
 
     private Set<BookNameAndSize> books;
 
-    public BookmarkImporter(OrionBaseActivity activity, BookmarkAccessor dataBase, String inputName, Set<BookNameAndSize> books) {
+    private BookNameAndSize toBook;
+
+
+    public BookmarkImporter(OrionBaseActivity activity, BookmarkAccessor dataBase, String inputName, Set<BookNameAndSize> books, BookNameAndSize toBook) {
         this.activity = activity;
         this.dataBase = dataBase;
         this.inputName = inputName;
         this.books = books;
+        this.toBook = toBook;
     }
 
 
@@ -76,7 +80,7 @@ public class BookmarkImporter {
                             BookNameAndSize book = new BookNameAndSize(fileName, size);
                             if (books.contains(book)) {
                                 //next will be called inside
-                                eventType = doBookImport(xpp, book);
+                                eventType = doBookImport(xpp, toBook != null ? toBook : book);
                                 continue;
                             }
                         }
@@ -110,9 +114,12 @@ public class BookmarkImporter {
     public int doBookImport(XmlPullParser xpp, BookNameAndSize book) throws OrionException {
         Common.d("Importing bookmarks for " + book);
         try {
-            long bookId = dataBase.selectBookId(book.getName(), book.getSize());
+            String bookName = book.getName();
+            long bookSize = book.getSize();
+
+            long bookId = dataBase.selectBookId(bookName, bookSize);
             if (bookId == -1) {
-                bookId = dataBase.insertOrUpdate(book.getName(), book.getSize());
+                bookId = dataBase.insertOrUpdate(bookName, bookSize);
             }
 
             if (bookId == -1) {
