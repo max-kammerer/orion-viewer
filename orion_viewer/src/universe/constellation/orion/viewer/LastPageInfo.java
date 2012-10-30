@@ -34,7 +34,7 @@ import java.lang.reflect.Modifier;
 /**
  * User: mike
  * Date: 13.09.11
- * Time: 12:19
+ * Time: 12:19 //test
  */
 public class LastPageInfo implements Serializable {
 
