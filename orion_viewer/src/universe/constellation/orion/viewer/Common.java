@@ -79,6 +79,11 @@ public class Common {
         }
     }
 
+    public static void d(String message, Exception e) {
+        d(message);
+        d(e);
+    }
+
     public static void d(String message) {
         Log.d(LOGTAG, message);
         if (writer != null) {

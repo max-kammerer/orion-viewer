@@ -128,6 +128,15 @@
                 android:entryValues="@array/screen_backligth_timeout"
                 android:dialogTitle="@string/pref_screen_backlight_timeout"
                 android:defaultValue="10"/>
+
+        <ListPreference
+                android:key="LANGUAGE"
+                android:title="@string/pref_app_language"
+                android:summary="@string/pref_app_language"
+                android:entries="@array/pref_languages_desc"
+                android:entryValues="@array/pref_languages"
+                android:dialogTitle="@string/pref_app_language"
+                android:defaultValue="DEFAULT"/>
     </PreferenceCategory>
 
     <PreferenceCategory
