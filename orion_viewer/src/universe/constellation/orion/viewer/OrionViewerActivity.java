@@ -20,15 +20,19 @@
 package universe.constellation.orion.viewer;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.SystemClock;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.*;
+import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 
 
@@ -239,9 +243,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
         }
     }
 
-    public void openFile(String filePath) {
+    public DocumentWrapper openFile(String filePath) {
         DocumentWrapper doc = null;
-        Common.d("File URI  = " + filePath);
+        Common.d("Trying to open file: " + filePath);
 
         getOrionContext().onNewBook(filePath);
         try {
@@ -281,6 +285,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
             device.updateTitle(title);
             globalOptions.addRecentEntry(new GlobalOptions.RecentEntry(new File(filePath).getAbsolutePath()));
+            askPassword(controller);
+
         } catch (Exception e) {
             Common.d(e);
             if (doc != null) {
@@ -288,6 +294,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
             finish();
         }
+        return doc;
     }
 
 
@@ -1395,5 +1402,36 @@ public class OrionViewerActivity extends OrionBaseActivity {
         }
     }
 
+    private void askPassword(final Controller controller) {
+        if (controller.needPassword()) {
+            AlertDialog.Builder buider = new AlertDialog.Builder(this);
+            buider.setTitle("Password");
+
+            final EditText input = new EditText(this);
+            input.setInputType(EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+            input.setTransformationMethod(new PasswordTransformationMethod());
+            buider.setView(input);
+
+            buider.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (controller.authentificate(input.getText().toString())) {
+                        dialog.dismiss();
+                    } else {
+                        askPassword(controller);
+                        showWarning("Wrong password!");
+                    }
+                }
+            });
+
+            buider.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            buider.create().show();
+        }
+    }
 
 }

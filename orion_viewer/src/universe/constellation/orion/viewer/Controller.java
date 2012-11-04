@@ -354,4 +354,16 @@ public class Controller {
         }
         return text;
     }
+
+    public boolean needPassword() {
+        return doc.needPassword();
+    }
+
+    public boolean authentificate(String password) {
+        boolean result = doc.authentificate(password);
+        if (result) {
+            sendViewChangeNotification();
+        }
+        return result;
+    }
 }

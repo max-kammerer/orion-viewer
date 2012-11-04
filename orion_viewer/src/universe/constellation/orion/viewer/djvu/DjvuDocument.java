@@ -106,4 +106,14 @@ public class DjvuDocument implements DocumentWrapper {
 	public native OutlineItem[] getOutline();
 
     public native String getText(int pageNumber, int absoluteX, int absoluteY, int width, int height);
+
+    @Override
+    public boolean needPassword() {
+        return false;
+    }
+
+    @Override
+    public boolean authentificate(String password) {
+        return true;
+    }
 }
