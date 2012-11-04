@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2012  Michael Bogdanov
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="action_none">无</string>
+    <string name="action_menu">主菜单</string>
+    <string name="action_next_page">后一页</string>
+    <string name="action_prev_page">前一页</string>
+    <string name="action_first_page">第一页</string>
+    <string name="action_last_page">最后一页</string>
+    <string name="action_crop_page">裁剪</string>
+    <string name="action_zoom_page">放缩</string>
+    <string name="action_rotation_page">旋转</string>
+    <string name="action_options_page">选项</string>
+    <string name="action_goto_page">跳转</string>
+    <string name="action_dictionary">打开字典</string>
+    <string name="action_open">打开文件</string>
+    <string name="action_add_bookmark">添加书签</string>
+    <string name="action_open_bookmarks">打开书签</string>
+    <string name="action_day_night_mode">白天/夜晚 模式</string>
+
+    <string name="action_crop_left">左</string>
+    <string name="action_crop_right">右</string>
+    <string name="action_crop_top">上</string>
+    <string name="action_crop_bottom">下</string>
+
+    <string name="action_uncrop_left">增加左边界</string>
+    <string name="action_uncrop_right">增加右边界</string>
+    <string name="action_uncrop_top">增加上边界</string>
+    <string name="action_uncrop_bottom">增加下边界</string>
+    <string name="action_inverse_crops">切换 裁剪/增加 边界</string>
+    <string name="action_switch_long_crop">切换 小/大 裁边</string>
+
+    <string name="action_next_10">前进 10 页</string>
+    <string name="action_prev_10">后退 10 页</string>
+
+    <string name="action_rotate_90">旋转 90/-90 度</string>
+    <string name="action_rotate_270">旋转 270/-270 度</string>
+</resources>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2012  Michael Bogdanov
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--Author: Alexander-->
+
+<resources>
+    <string name="navigation">浏览顺序</string>
+    <string name="crop_left">左</string>
+    <string name="enable_even_crop">偶数页面分别裁边</string>
+    <string name="crop_right">右</string>
+    <string name="crop_top">上</string>
+    <string name="crop_bottom">下</string>
+    <string name="rotate_0">0 度</string>
+    <string name="rotate_90">90 度</string>
+    <string name="rotate_270">270 度</string>
+    <string name="long_click">长按时</string>
+    <string name="short_click">短按时</string>
+    <string name="binding_click">绑定</string>
+
+
+    <string name="orientation_default">默认</string>
+    <string name="orientation_default_rotation">应用程序默认</string>
+    <string name="orientation_landscape">横屏</string>
+    <string name="orientation_portrait">竖屏</string>
+    <string name="orientation_landscape_inverse">横屏 (270度)</string>
+    <string name="orientation_portrait_inverse">竖屏 (180度)</string>
+
+
+    <string name="fit_width">适应宽度</string>
+    <string name="fit_height">适应高度</string>
+    <string name="fit_page">适应页面</string>
+    <string name="fit_custom">自定义...</string>
+
+    <string name="key_binder_message">按下任意键来绑定!</string>
+    <string name="key_binder_warning">无法绑定不能识别的按键, 请尝试其他按键!</string>
+    <string name="table_of_contents">目录</string>
+
+    <string name="warn_no_text_in_selection">没有选定文字!</string>
+    <string name="warn_no_outline">没有目录!</string>
+
+</resources>

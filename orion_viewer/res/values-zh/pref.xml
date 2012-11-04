@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2012  Michael Bogdanov
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="pref_fullScreen">全屏阅读</string>
+    <string name="pref_bookDefaultOrientation">书籍默认旋转方向</string>
+    <string name="pref_bookDefaultZoom">缩放</string>
+    <string name="pref_rotate_new_book_on_opening">打开新书籍时旋转</string>
+    <string name="pref_screen_orientation">屏幕方向</string>
+    <string name="pref_rotate_screen">默认屏幕方向(重启使设定生效)</string>
+    <string name="pref_book_screen_orientation">当前书籍屏幕方向</string>
+    <string name="pref_close_dialog_on_apply">应用生效时关闭对话框</string>
+    <string name="pref_close_page_option_dialog_on_apply">生效时关闭页面选项对话框</string>
+    <string name="pref_swap_prev_next_keys">交换 上一页/下一页 按键</string>
+    <string name="pref_swap_prev_next_keys_on_90_degree_rotation">横屏时交换 上一页/下一页 按键</string>
+    <string name="pref_dictionary">字典</string>
+    <string name="pref_e_ink_optimization">电子墨水</string>
+    <string name="pref_e_ink_fast_refresh">电子墨水快速刷新</string>
+    <string name="pref_total_refresh_after">多少次后全刷...</string>
+
+    <string name="pref_long_crop_value">最大切边值</string>
+    <string name="pref_long_crop_value_desc">最大切边的数值 (0-40%)</string>
+
+    <string name="pref_screen_overlapping_horizontal">水平屏幕重叠</string>
+    <string name="pref_screen_overlapping_horizontal_desc">翻页时水平重叠百分比 (0-90%)</string>
+
+    <string name="pref_screen_overlapping_vertical">垂直重叠</string>
+    <string name="pref_screen_overlapping_vertical_desc">翻页时垂直重叠百分比 (0-90%)</string>
+
+    <string name="pref_custom_brightness">调节亮度</string>
+    <string name="pref_brightness">亮度</string>
+    <string name="pref_brightness_desc">亮度 (1-100%)</string>
+
+    <string name="pref_application_theme">主题</string>
+    <string name="pref_application_theme_desc">重启程序使设置生效</string>
+
+    <string name="pref_open_recent_book">启动时打开最近阅读的书</string>
+
+    <!--book preferences-->
+    <string name="pref_book_contrast">对比度</string>
+    <string name="pref_book_contrast_desc">对比度 1-1000 (默认 100)</string>
+
+    <string name="pref_book_threshold">阈值</string>
+    <string name="pref_book_threshold_desc">去除水印阈值 (default 255)</string>
+
+    <string name="pref_debug">调试</string>
+    <string name="pref_debug_desc">打印调试信息到 &lt;书籍名&gt; + .trace</string>
+
+    <string name="pref_walk_order">浏览顺序</string>
+    <string name="pref_page_layout">页面布局</string>
+
+
+    <string name="application_settings_title">设定</string>
+    <string name="pref_default_book_setting">书籍相关设定</string>
+    <string name="book_pref_title">当前书籍设定</string>
+
+    <string name="pref_screen_backlight_timeout">屏幕背光时间</string>
+    <string name="pref_screen_backlight_timeout_desc">多少秒后关闭屏幕背光</string>
+
+</resources>
