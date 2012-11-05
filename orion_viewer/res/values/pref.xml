@@ -19,6 +19,14 @@
   -->
 
 <resources>
+    <!--Categories-->
+    <string name="pref_category_general">General</string>
+    <string name="pref_category_key_manager">Key Manager</string>
+    <string name="pref_category_device_parameters">Device Parameters</string>
+    <string name="pref_category_add_parameters">Additional Parameters</string>
+    <string name="pref_category_system">System</string>
+
+    <!--General Prefs-->
     <string name="pref_fullScreen">Full screen</string>
     <string name="pref_bookDefaultOrientation">Book default orientation</string>
     <string name="pref_bookDefaultZoom">Zoom</string>
@@ -57,9 +65,10 @@
     <string name="pref_book_contrast">Contrast</string>
     <string name="pref_book_contrast_desc">Contrast 1-1000 (default 100)</string>
 
-    <string name="pref_book_threshold">Threshold</string>
+    <string name="pref_book_threshold">Watermark threshold</string>
     <string name="pref_book_threshold_desc">Threshold for watermark removal (default 255)</string>
 
+    <string name="pref_device_info">Device Info</string>
     <string name="pref_debug">Debug</string>
     <string name="pref_debug_desc">Write traces to file &lt;opened book name&gt; + .trace</string>
 
@@ -69,11 +78,17 @@
 
     <string name="application_settings_title">Application Settings</string>
     <string name="pref_default_book_setting">Book Default Settings</string>
+    <string name="pref_default_book_setting_desc">Will be applied only for new books. For current book use \'Book Options\'</string>
+
     <string name="book_pref_title">Current Book Options</string>
 
     <string name="pref_screen_backlight_timeout">Screen backlight timeout</string>
     <string name="pref_screen_backlight_timeout_desc">Screen backlight timeout</string>
 
-    <string name="pref_app_language">Language</string>
+    <string name="pref_app_language">Application Language</string>
+    <string name="pref_app_language_desc">Application Language: restart application to apply!</string>
+
+    <string name="pref_tap_zones_desc">Tap Zones: link actions to screen zones.</string>
+
 
 </resources>
