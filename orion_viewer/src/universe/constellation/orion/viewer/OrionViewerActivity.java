@@ -1297,7 +1297,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         Common.d("Selecting book id...");
         LastPageInfo info = lastPageInfo;
         Long bookId = getOrionContext().getTempOptions().bookId;
-        if (bookId == null) {
+        if (bookId == null || bookId == -1) {
             bookId = getOrionContext().getBookmarkAccessor().selectBookId(info.simpleFileName, info.fileSize);
             getOrionContext().getTempOptions().bookId = bookId;
         }
