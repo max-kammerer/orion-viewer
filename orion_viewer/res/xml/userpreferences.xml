@@ -21,40 +21,42 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
                   xmlns:orion="http://schemas.android.com/apk/res/universe.constellation.orion.viewer"
-        android:title="@string/application_settings_title">
+                  android:title="@string/application_settings_title">
 
     <PreferenceCategory
-            android:title="General" android:key="GENERAL">
+            android:title="@string/pref_category_general" android:key="GENERAL">
 
-        <PreferenceScreen android:title="@string/pref_default_book_setting"  android:summary="Will be applied only for new books. For current book use 'Book Options'" android:key="BOOK_DEFAULT">
+        <PreferenceScreen android:title="@string/pref_default_book_setting"
+                          android:summary="@string/pref_default_book_setting_desc"
+                          android:key="BOOK_DEFAULT">
 
             <universe.constellation.orion.viewer.prefs.OrionListPreference
-                android:key="WALK_ORDER"
-                        android:title="@string/pref_walk_order"
-                        android:summary="@string/pref_walk_order"
-                        android:entries="@array/walk_orders_desc"
-                        android:entryValues="@array/walk_orders"
-                        android:dialogTitle="@string/pref_walk_order"
-                        android:dialogIcon="@drawable/walk_order"
-                        android:defaultValue="@string/ABCD"/>
+                    android:key="WALK_ORDER"
+                    android:title="@string/pref_walk_order"
+                    android:summary="@string/pref_walk_order"
+                    android:entries="@array/walk_orders_desc"
+                    android:entryValues="@array/walk_orders"
+                    android:dialogTitle="@string/pref_walk_order"
+                    android:dialogIcon="@drawable/walk_order"
+                    android:defaultValue="@string/ABCD"/>
 
             <ListPreference
-                        android:key="BOOK_ORIENTATION"
-                        android:title="@string/pref_bookDefaultOrientation"
-                        android:summary="@string/pref_rotate_new_book_on_opening"
-                        android:entries="@array/orientation_desc"
-                        android:entryValues="@array/orientation"
-                        android:dialogTitle="Rotation"
-                        android:defaultValue="0"/>
+                    android:key="BOOK_ORIENTATION"
+                    android:title="@string/pref_bookDefaultOrientation"
+                    android:summary="@string/pref_rotate_new_book_on_opening"
+                    android:entries="@array/orientation_desc"
+                    android:entryValues="@array/orientation"
+                    android:dialogTitle="Rotation"
+                    android:defaultValue="0"/>
 
             <universe.constellation.orion.viewer.prefs.OrionLayoutDialog
-                            android:key="PAGE_LAYOUT"
-                            android:title="@string/pref_page_layout"
-                            android:summary="@string/pref_page_layout"
-                            android:entries="@array/page_layouts"
-                            android:entryValues="@array/page_layouts"
-                            android:dialogTitle="@string/pref_page_layout"
-                            android:defaultValue="0"/>
+                    android:key="PAGE_LAYOUT"
+                    android:title="@string/pref_page_layout"
+                    android:summary="@string/pref_page_layout"
+                    android:entries="@array/page_layouts"
+                    android:entryValues="@array/page_layouts"
+                    android:dialogTitle="@string/pref_page_layout"
+                    android:defaultValue="0"/>
 
 
             <ListPreference
@@ -67,19 +69,19 @@
                     android:defaultValue="0"/>
 
             <universe.constellation.orion.viewer.prefs.OrionEditPreference
-                  android:key="DEFAULT_CONTRAST"
-                  android:summary="@string/pref_book_contrast_desc"
-                  android:defaultValue="100"
-                  android:title="@string/pref_book_contrast"
-                  android:numeric="integer"
-                  orion:minValue="1"
-                  orion:maxValue="1000"/>
+                    android:key="DEFAULT_CONTRAST"
+                    android:summary="@string/pref_book_contrast_desc"
+                    android:defaultValue="100"
+                    android:title="@string/pref_book_contrast"
+                    android:numeric="integer"
+                    orion:minValue="1"
+                    orion:maxValue="1000"/>
         </PreferenceScreen>
 
 
-
         <PreferenceScreen
-         android:title="@string/menu_tap_text" android:persistent="false" android:summary="@string/menu_tap_text"  android:key="TAP_ZONES">
+                android:title="@string/menu_tap_text" android:persistent="false" android:summary="@string/pref_tap_zones_desc"
+                android:key="TAP_ZONES">
             <intent android:action="universe.constellation.orion.viewer.TAP_ZONES"/>
         </PreferenceScreen>
 
@@ -90,26 +92,27 @@
                 android:defaultValue="false"/>
 
         <ListPreference
-        android:key="SCREEN_ORIENTATION"
+                android:key="SCREEN_ORIENTATION"
                 android:title="@string/pref_screen_orientation"
                 android:summary="@string/pref_rotate_screen"
                 android:entries="@array/screen_orientation_desc"
                 android:entryValues="@array/screen_orientation"
-                android:dialogTitle="Rotation"
+                android:dialogTitle="@string/pref_screen_orientation"
                 android:defaultValue="DEFAULT" orion:justAndroidGeneral="true"/>
 
 
         <CheckBoxPreference
-          android:summary="@string/pref_open_recent_book"
-          android:defaultValue="false"
-          android:title="@string/pref_open_recent_book"
-          android:key="OPEN_RECENT_BOOK"/>
+                android:summary="@string/pref_open_recent_book"
+                android:defaultValue="false"
+                android:title="@string/pref_open_recent_book"
+                android:key="OPEN_RECENT_BOOK"/>
 
         <CheckBoxPreference
-                        android:key="APPLY_AND_CLOSE"
-                        android:title="@string/pref_close_dialog_on_apply"
-                        android:summary="@string/pref_close_page_option_dialog_on_apply"
-                        android:defaultValue="false"/>
+                android:key="APPLY_AND_CLOSE"
+                android:title="@string/pref_close_dialog_on_apply"
+                android:summary="@string/pref_close_page_option_dialog_on_apply"
+                android:defaultValue="false"/>
+
 
         <ListPreference
                 android:key="APPLICATION_THEME"
@@ -121,6 +124,19 @@
                 android:defaultValue="DEFAULT"/>
 
         <ListPreference
+                android:key="LANGUAGE"
+                android:title="@string/pref_app_language"
+                android:summary="@string/pref_app_language_desc"
+                android:entries="@array/pref_languages_desc"
+                android:entryValues="@array/pref_languages"
+                android:dialogTitle="@string/pref_app_language"
+                android:defaultValue="DEFAULT"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+                android:title="@string/pref_category_device_parameters">
+
+        <ListPreference
                 android:key="SCREEN_BACKLIGHT_TIMEOUT"
                 android:title="@string/pref_screen_backlight_timeout"
                 android:summary="@string/pref_screen_backlight_timeout_desc"
@@ -128,10 +144,30 @@
                 android:entryValues="@array/screen_backligth_timeout"
                 android:dialogTitle="@string/pref_screen_backlight_timeout"
                 android:defaultValue="10"/>
+
+
+        <CheckBoxPreference
+                android:summary="@string/pref_custom_brightness"
+                android:defaultValue="false"
+                android:title="@string/pref_custom_brightness"
+                android:key="CUSTOM_BRIGHTNESS"/>
+
+        <universe.constellation.orion.viewer.prefs.OrionEditPreference
+                android:summary="@string/pref_brightness_desc"
+                android:dependency="CUSTOM_BRIGHTNESS"
+                android:defaultValue="100"
+                android:title="@string/pref_brightness"
+                android:key="BRIGHTNESS"
+                android:numeric="integer"
+                orion:pattern="[1-9]|[1-9][0-9]|100"/>
+
+        <universe.constellation.orion.viewer.prefs.DevicePrefInfo android:persistent="false"
+                                                                  android:title="@string/pref_device_info"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory
-            android:title="Key Manager">
+            android:title="@string/pref_category_key_manager">
 
         <CheckBoxPreference
                 android:key="SWAP_KEYS"
@@ -140,22 +176,23 @@
                 android:defaultValue="false"/>
 
         <Preference
-                 android:title="@string/menu_key_binder_text" android:persistent="false" android:summary="@string/menu_key_binder_text" >
+                android:title="@string/menu_key_binder_text" android:persistent="false"
+                android:summary="@string/menu_key_binder_text">
             <intent android:action="universe.constellation.orion.viewer.KEY_MANAGER"/>
         </Preference>
 
     </PreferenceCategory>
 
-        <PreferenceCategory
+    <PreferenceCategory
             android:title="@string/pref_dictionary">
-            <ListPreference
-                    android:key="DICTIONARY"
-                    android:title="@string/pref_dictionary"
-                    android:summary="@string/pref_dictionary"
-                    android:entries="@array/dictionaries_desc"
-                    android:entryValues="@array/dictionaries"
-                    android:dialogTitle="@string/pref_dictionary"
-                    android:defaultValue="FORA"/>
+        <ListPreference
+                android:key="DICTIONARY"
+                android:title="@string/pref_dictionary"
+                android:summary="@string/pref_dictionary"
+                android:entries="@array/dictionaries_desc"
+                android:entryValues="@array/dictionaries"
+                android:dialogTitle="@string/pref_dictionary"
+                android:defaultValue="FORA"/>
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -167,72 +204,55 @@
                 android:defaultValue="false"/>
 
         <universe.constellation.orion.viewer.prefs.OrionEditPreference
-          android:dependency="EINK_OPTIMIZATION"
-          android:summary="@string/pref_total_refresh_after"
-          android:defaultValue="10"
-          android:title="@string/pref_total_refresh_after"
-          android:key="EINK_TOTAL_AFTER"
-          android:numeric="integer"
-          orion:pattern="[0-9]+"/>
+                android:dependency="EINK_OPTIMIZATION"
+                android:summary="@string/pref_total_refresh_after"
+                android:defaultValue="10"
+                android:title="@string/pref_total_refresh_after"
+                android:key="EINK_TOTAL_AFTER"
+                android:numeric="integer"
+                orion:pattern="[0-9]+"/>
 
     </PreferenceCategory>
 
     <PreferenceCategory
-            android:title="Additional parameters">
-
-
-        <universe.constellation.orion.viewer.prefs.OrionEditPreference
-          android:summary="@string/pref_long_crop_value_desc"
-          android:defaultValue="10"
-          android:title="@string/pref_long_crop_value"
-          android:key="LONG_CROP_VALUE"
-          android:numeric="integer"
-          orion:pattern="[0-3]?[0-9]|40"/>
-
-      <universe.constellation.orion.viewer.prefs.OrionEditPreference
-          android:summary="@string/pref_screen_overlapping_horizontal_desc"
-          android:defaultValue="3"
-          android:title="@string/pref_screen_overlapping_horizontal"
-          android:key="SCREEN_OVERLAPPING_HORIZONTAL"
-          android:numeric="integer"
-          orion:pattern="[0-8]?[0-9]|90"/>
+            android:title="@string/pref_category_add_parameters">
 
         <universe.constellation.orion.viewer.prefs.OrionEditPreference
-          android:summary="@string/pref_screen_overlapping_vertical_desc"
-          android:defaultValue="3"
-          android:title="@string/pref_screen_overlapping_vertical"
-          android:key="SCREEN_OVERLAPPING_VERTICAL"
-          android:numeric="integer"
-          orion:pattern="[0-8]?[0-9]|90"/>
-
-        <CheckBoxPreference
-          android:summary="@string/pref_custom_brightness"
-          android:defaultValue="false"
-          android:title="@string/pref_custom_brightness"
-          android:key="CUSTOM_BRIGHTNESS"/>
+                android:summary="@string/pref_long_crop_value_desc"
+                android:defaultValue="10"
+                android:title="@string/pref_long_crop_value"
+                android:key="LONG_CROP_VALUE"
+                android:numeric="integer"
+                orion:pattern="[0-3]?[0-9]|40"/>
 
         <universe.constellation.orion.viewer.prefs.OrionEditPreference
-          android:summary="@string/pref_brightness_desc"
-          android:dependency="CUSTOM_BRIGHTNESS"
-          android:defaultValue="100"
-          android:title="@string/pref_brightness"
-          android:key="BRIGHTNESS"
-          android:numeric="integer"
-          orion:pattern="[1-9]|[1-9][0-9]|100"/>
+                android:summary="@string/pref_screen_overlapping_horizontal_desc"
+                android:defaultValue="3"
+                android:title="@string/pref_screen_overlapping_horizontal"
+                android:key="SCREEN_OVERLAPPING_HORIZONTAL"
+                android:numeric="integer"
+                orion:pattern="[0-8]?[0-9]|90"/>
+
+        <universe.constellation.orion.viewer.prefs.OrionEditPreference
+                android:summary="@string/pref_screen_overlapping_vertical_desc"
+                android:defaultValue="3"
+                android:title="@string/pref_screen_overlapping_vertical"
+                android:key="SCREEN_OVERLAPPING_VERTICAL"
+                android:numeric="integer"
+                orion:pattern="[0-8]?[0-9]|90"/>
+
 
     </PreferenceCategory>
 
 
     <PreferenceCategory
-                   android:title="System" android:key="SYSTEM">
-        <universe.constellation.orion.viewer.prefs.DevicePrefInfo android:persistent="false"
-                android:title="Device Info"/>
+            android:title="@string/pref_category_system" android:key="SYSTEM">
 
         <CheckBoxPreference
-                        android:key="DEBUG"
-                        android:title="@string/pref_debug"
-                        android:summary="@string/pref_debug_desc"
-                        android:defaultValue="false"/>
+                android:key="DEBUG"
+                android:title="@string/pref_debug"
+                android:summary="@string/pref_debug_desc"
+                android:defaultValue="false"/>
 
     </PreferenceCategory>
 </PreferenceScreen>

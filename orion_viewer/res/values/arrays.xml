@@ -138,4 +138,21 @@
         <item>@integer/layout_only_bottom_outside</item>
         <item>@integer/layout_always_inside</item>
     </string-array>
+
+    <string-array name="pref_languages">
+        <item>@string/lang_default</item>
+        <item>@string/lang_english</item>
+        <item>@string/lang_russian</item>
+        <item>@string/lang_hebrew</item>
+        <item>@string/lang_chinese</item>
+    </string-array>
+
+    <string-array name="pref_languages_desc">
+        <item>@string/lang_default_user</item>
+        <item>@string/lang_english_user</item>
+        <item>@string/lang_russian_user</item>
+        <item>@string/lang_hebrew_user</item>
+        <item>@string/lang_chinese_user</item>
+    </string-array>
+
 </resources>

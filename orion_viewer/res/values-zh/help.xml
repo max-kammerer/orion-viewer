@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2012  Michael Bogdanov
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="zoom">打开缩放对话框. 放大值为0表示以宽度放大.</string>
+    <string name="rotation">顺时针90度旋转页面.长按逆时针旋转.</string>
+    <string name="rotation_android">打开旋转对话框.</string>
+
+    <string name="crop">打开切边对话框. 数值大小为相对于页面尺寸的百分比. 长按+/-以10%调整数值. 负数增加边界大小.</string>
+
+    <string name="next_page_android">打开跳转对话框.</string>
+
+    <string name="next_page">前往下一页. 长按打开书签.</string>
+
+    <string name="prev_page">前往上一页. 长按打开页面选择对话框.</string>
+
+    <string name="apply">应用当前选项.</string>
+    <string name="escape">返回/退出.</string>
+
+    <string name="general_usage">使用方法:</string>
+
+    <string name="general_usage_step1">1. 打开文件 (默认适应宽度)
+        </string>
+
+    <string name="general_usage_step2">
+        2. 选择适当的方向: 竖屏 或 横屏
+        </string>
+
+    <string name="general_usage_step3">
+        3. 剪切边界, 文字大小将相应变化 (如果设定为按照宽度缩放)
+        </string>
+
+    <string name="general_usage_step4">
+        4. 享受阅读!</string>
+
+    <!--<string name="help_taps">-->
+        <!--Click on screen - go to next page, long click - go to prev page.</string>-->
+
+    <string name="option_help">
+        应用程序参数</string>
+
+    <string name="navigation_help">
+        打开页面布局对话框. 在阅读漫画或有图表的书籍时, 您可以选择合适的页面布局.</string>
+
+    <string name="dictionary_help">
+        打开外部字典. 在选项中设定合适的字典程序.</string>
+
+    <string name="tap_help">
+        触摸区域使得用户能够自由设定触摸屏幕不同区域时的动作
+        这里有 3x3 个格子, 用户可以自由定义短按(顶部标签)和长按(底部标签)的动作.</string>
+
+    <string name="bookmarks_export_help">
+        用户可以导出书签 (所有书籍或者当前书籍).
+        书签导出为xml格式, 文件名为书籍名 + [bookmarks.xml 或 all_bookmarks.xml] 后缀.
+        这个功能在书签页面的菜单中.</string>
+</resources>

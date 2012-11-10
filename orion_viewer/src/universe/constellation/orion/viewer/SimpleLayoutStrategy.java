@@ -145,6 +145,15 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         if (info.pieceHeight != 0 && info.pieceWidth != 0) {
             info.maxX = (info.pageWidth - hOverlap) / (info.pieceWidth - hOverlap) + ((info.pageWidth - hOverlap) % (info.pieceWidth - hOverlap) == 0 ? 0 : 1)  - 1;
             info.maxY = (info.pageHeight - vOverlap) / (info.pieceHeight - vOverlap) + ((info.pageHeight - vOverlap) % (info.pieceHeight - vOverlap) == 0 ?  0: 1) -1;
+
+            //in this case page size is smaller than overlap and it smaller than screen size - so there is only one possibility
+            if (info.maxX < 0)  {
+                info.maxX = 0;
+            }
+
+            if (info.maxY < 0)  {
+                info.maxY = 0;
+            }
         }
 
         walker.reset(info, forward);

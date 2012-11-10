@@ -86,4 +86,14 @@ public class PdfDocument implements DocumentWrapper {
             return result;
         }
 	}
+
+    @Override
+    public boolean needPassword() {
+        return MuPDFCore.needsPasswordInternal();
+    }
+
+    @Override
+    public boolean authentificate(String password) {
+        return MuPDFCore.authenticatePasswordInternal(password);
+    }
 }

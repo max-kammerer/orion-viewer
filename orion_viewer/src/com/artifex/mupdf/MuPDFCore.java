@@ -23,6 +23,9 @@ public class MuPDFCore
 	private static native void gotoPageInternal(int localActionPageNum);
 	private static native int getPageInfo(int pageNum, PageInfo info);
 
+    public static native boolean needsPasswordInternal();
+    public static native boolean authenticatePasswordInternal(String password);
+
 	public static native int [] drawPage(float zoom, int pageW, int pageH,
 			int patchX, int patchY,
 			int patchW, int patchH);

@@ -18,12 +18,21 @@
   -->
 
 <resources>
+    <!--Categories-->
+    <string name="pref_category_general">Основные</string>
+    <string name="pref_category_key_manager">Управление клавишами</string>
+    <string name="pref_category_device_parameters">Настройки устройства</string>
+    <string name="pref_category_add_parameters">Дополнительные параметры</string>
+    <string name="pref_category_system">Системные параметры</string>
+
+    <!--General Prefs-->
     <string name="pref_fullScreen">Полноэкранный режим</string>
     <string name="pref_bookDefaultOrientation">Ориентация книги по умолчанию</string>
     <string name="pref_bookDefaultZoom">Масштаб</string>
     <string name="pref_rotate_new_book_on_opening">Поворачивать книгу при первом открытии</string>
     <string name="pref_screen_orientation">Ориентация экрана</string>
     <string name="pref_rotate_screen">Ориентация экрана по умолчанию: необходим перезапуск приложения</string>
+    <string name="pref_book_screen_orientation">Ориентация экрана для текущей книги</string>
     <string name="pref_close_dialog_on_apply">Закрывать диалог при применении настроеек</string>
     <string name="pref_close_page_option_dialog_on_apply">Закрывать диалог параметров страницы при применении настроеек</string>
     <string name="pref_swap_prev_next_keys">Обменять клавиши местами</string>
@@ -59,7 +68,7 @@
     <!--<string name="pref_book_threshold">Threshold</string>-->
     <!--<string name="pref_book_threshold_desc">Threshold for watermark removal</string>-->
 
-
+    <string name="pref_device_info">Устройство</string>
     <string name="pref_debug">Отладка</string>
     <string name="pref_debug_desc">Запись отладочной информации в файл &lt;имя открытой файла&gt; + .trace</string>
 
@@ -67,9 +76,18 @@
     <string name="pref_page_layout">@string/menu_navigation_text</string>
 
     <string name="pref_default_book_setting">Параметры по умолчанию для книги</string>
+    <string name="pref_default_book_setting_desc">Будут применяться при открытии новой книги. Для уже открытых используйте \'Настройки книги\'</string>
     <string name="book_pref_title">Настройки для открытой книги</string>
     <string name="application_settings_title">Настройки приложения</string>
 
     <string name="pref_screen_backlight_timeout">Подстветка экрана</string>
     <string name="pref_screen_backlight_timeout_desc">Длительность подсветки экрана</string>
+
+    <string name="pref_app_language">Язык приложения</string>
+    <string name="pref_app_language_desc">Язык приложения. Необходим перезапуск приложения!</string>
+
+    <string name="pref_tap_zones_desc">Зоны действий: привязка операции к зонам экрана</string>
+
+    <string name="pref_book_threshold">Порог для водяных знаков</string>
+    <string name="pref_book_threshold_desc">Порог удаления водяных знаков (по умолчанию 255)</string>
 </resources>

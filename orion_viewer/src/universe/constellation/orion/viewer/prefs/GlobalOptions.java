@@ -73,6 +73,8 @@ public class GlobalOptions implements Serializable {
 
     public final static String APPLICATION_THEME = "APPLICATION_THEME";
 
+    public final static String APP_LANGUAGE = "LANGUAGE";
+
     public final static String OPEN_RECENT_BOOK = "OPEN_RECENT_BOOK";
 
     public final static String DAY_NIGHT_MODE = "DAY_NIGHT_MODE";
@@ -123,6 +125,8 @@ public class GlobalOptions implements Serializable {
                         OptionActions.SCREEN_OVERLAPPING_VERTICAL.doAction(activity, getHorizontalOverlapping(), getVerticalOverlapping());
                     } else if (DEBUG.equals(name)) {
                         OptionActions.DEBUG.doAction(activity, false, getBooleanProperty(DEBUG, false));
+                    } else if (APP_LANGUAGE.equals(name)) {
+                        context.setLanguage(getAppLanguage());
                     }
 
                 }
@@ -335,6 +339,10 @@ public class GlobalOptions implements Serializable {
 
     public String getApplicationTheme() {
         return getStringProperty(APPLICATION_THEME, "DEFAULT");
+    }
+
+    public String getAppLanguage() {
+        return getStringProperty(APP_LANGUAGE, "DEFAULT");
     }
 
     public String getWalkOrder() {

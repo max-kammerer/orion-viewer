@@ -1,3 +1,10 @@
+===== 0.39.1 (Nov 5, 2012) =====
+* Encrypted pdf support
+* Chinese Localization by Bruce Li
+* Application language customization
+* Fixed ArithmeticException
+* Fixed empty bookmark screen on reopening it after import
+
 ===== 0.38.5 (Oct 29, 2012) =====
 * Fixed "Append" import for bookmarks
 

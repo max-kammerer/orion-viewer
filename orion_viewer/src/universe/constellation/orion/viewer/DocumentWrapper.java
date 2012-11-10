@@ -47,4 +47,8 @@ public interface DocumentWrapper {
 	void setThreshold(int threshold);
 	
 	public OutlineItem[] getOutline();
+
+    public boolean needPassword();
+
+    public boolean authentificate(String password);
 }

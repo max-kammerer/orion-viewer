@@ -52,7 +52,7 @@
                     android:summary="@string/pref_book_screen_orientation"
                     android:entries="@array/screen_orientation_desc"
                     android:entryValues="@array/screen_orientation"
-                    android:dialogTitle="Screen Rotation"
+                    android:dialogTitle="@string/pref_screen_orientation"
                     orion:isBook="true"
                     android:defaultValue="DEFAULT" orion:justAndroidGeneral="true"/>
 

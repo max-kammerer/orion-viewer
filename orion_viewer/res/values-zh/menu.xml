@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2012  Michael Bogdanov
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="menu_zoom_text">缩放</string>
+    <string name="menu_crop_text">切边</string>
+    <string name="menu_goto_text">跳转到</string>
+    <string name="menu_bookmarks_text">书签</string>
+    <string name="menu_add_bookmark_item">添加书签</string>
+    <string name="menu_select_text">选择文本</string>
+    <string name="menu_rotation_text">屏幕旋转</string>
+    <string name="menu_navigation_text">页面布局</string>
+    <string name="menu_help_text">帮助</string>
+    <string name="menu_open_text">打开文件</string>
+    <string name="menu_outline_text">目录</string>
+    <string name="menu_open_dictionary_text">打开字典</string>
+    <string name="menu_day_night_text">白天/夜晚 模式</string>
+    <string name="menu_exit_text">关闭</string>
+    <string name="menu_key_binder_text">绑定按键</string>
+    <string name="menu_options_text">设置</string>
+    <string name="menu_tap_text">触摸区域</string>
+
+
+    <string name="menu_book_preferences">书籍设置</string>
+
+
+    <string name="export_all_bookmarks_menu_item">导出所有书签</string>
+    <string name="export_bookmarks_menu_item">导出当前书籍书签</string>
+    <string name="import_all_bookmarks_menu_item">导入...</string>
+    <string name="import_current_bookmarks_menu_item">添加...</string>
+</resources>
