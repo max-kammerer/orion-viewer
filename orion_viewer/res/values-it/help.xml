@@ -2,7 +2,7 @@
 <!--
   ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
   ~
-  ~ Copyright (C) 2011-2012  Michael Bogdanov
+  ~ Copyright (C) 2011-2012  Michael Bogdanov & Co
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
@@ -19,21 +19,20 @@
   -->
 
 <!--Author: Alberto Pettarin-->
-
 <resources>
     <string name="zoom">Apre la finestra Zoom. Il valore zero adatta lo zoom alla larghezza di pagina.</string>
     <string name="rotation">Ruota il documento di 90 gradi in senso orario. Un tap lungo ruota in senso antiorario.</string>
     <string name="rotation_android">Apre la finestra Rotazione.</string>
 
-    <string name="crop">Apre la finestra Ritaglia Margini. I valori sono relativi alle dimensioni della pagina. Un tap lungo cambia i valori di ritaglio del 10%. Valori negativi aumentano i margini.</string>
+    <string name="crop">Apre la finestra Ritaglia margini. I valori sono relativi alle dimensioni della pagina. Un tap lungo cambia i valori di ritaglio del 10%. Valori negativi aumentano i margini.</string>
 
-    <string name="next_page_android">Apre la finestra Vai A</string>
+    <string name="next_page_android">Apre la finestra Vai a.</string>
 
     <string name="next_page">Va alla pagina successiva. Un tap lungo apre la finestra Segnalibri.</string>
 
-    <string name="prev_page">Va alla pagina precedente. Un tap lungo apre la finestra Vai A.</string>
+    <string name="prev_page">Va alla pagina precedente. Un tap lungo apre la finestra Vai a.</string>
 
-    <string name="apply">Applica le opzioni correnti.</string>
+    <string name="apply">Applica le modifiche alle impostazioni.</string>
     <string name="escape">Chiude l\'applicazione.</string>
 
     <string name="general_usage">Utilizzo:</string>
@@ -65,12 +64,12 @@
         Apre il Dizionario. Selezionare il dizionario desiderato nelle Opzioni.</string>
 
     <string name="tap_help">
-        Le Zone Tocco consentono di associare al tocco di una parte delle schermo comandi specifici.
-        Ci sono 3x3 celle; per ciascuna l\'utente può definire l\'azione associata a un tap breve (etichetta in alto) o lungo (etichetta in basso).</string>
+        Le Zone Tocco consentono di associare comandi specifici al tocco di una parte delle schermo.
+        Ci sono 3x3 celle; per ciascuna, l\'utente può definire l\'azione associata a un tocco breve (etichetta in alto) o lungo (etichetta in basso).</string>
 
     <string name="bookmarks_export_help">
         Consente all\'utente di esportare i segnalibri per il libro corrente o per tutti i libri.
-        I segnalibri sono esportati in un file XML, chiamato nome_del_libro_corrente + bookmarks.xml
-        oppure all_bookmarks.xml .</string>
+        I segnalibri sono esportati in un file XML, chiamato nome_del_libro + bookmarks.xml
+        oppure all_bookmarks.xml.</string>
 
 </resources>
