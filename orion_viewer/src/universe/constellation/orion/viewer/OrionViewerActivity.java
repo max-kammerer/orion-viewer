@@ -788,17 +788,17 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
         });
 
-        btn = (ImageButton) findMyViewById(R.id.help);
-        if (btn != null) {
-            btn.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    //animator.setDisplayedChild(HELP_SCREEN);
-                    Intent intent = new Intent();
-                    intent.setClass(OrionViewerActivity.this, OrionHelpActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
+//        btn = (ImageButton) findMyViewById(R.id.help);
+//        if (btn != null) {
+//            btn.setOnClickListener(new View.OnClickListener() {
+//                public void onClick(View v) {
+//                    //animator.setDisplayedChild(HELP_SCREEN);
+//                    Intent intent = new Intent();
+//                    intent.setClass(OrionViewerActivity.this, OrionHelpActivity.class);
+//                    startActivity(intent);
+//                }
+//            });
+//        }
 
 
         btn = (ImageButton) findMyViewById(R.id.navigation);

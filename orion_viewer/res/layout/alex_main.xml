@@ -55,14 +55,8 @@
                         <ImageButton android:id="@+id/options"  android:layout_width="50px" android:layout_height="50px"
                                      android:src="@drawable/options"/>
 
-                        <ImageButton android:id="@+id/help" android:layout_width="50px"
-                                     android:layout_height="50px"
-                                     android:src="@drawable/help"/>
-
-
-                        <ImageButton android:id="@+id/exit" android:layout_width="50px"
-                                     android:layout_height="50px"
-                                     android:src="@drawable/close"/>
+                        <ImageButton android:id="@+id/menu" android:layout_width="50px" android:layout_height="50px"
+                                 android:src="@drawable/menu"/>
 
                 </LinearLayout>
 
