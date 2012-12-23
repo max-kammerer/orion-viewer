@@ -246,9 +246,10 @@ public enum Action {
                 action = "colordict.intent.action.SEARCH";
                 queryText = "EXTRA_QUERY";
             } else if ("AARD".equals(dict)) {
-                action = Intent.ACTION_MAIN;
+                action = Intent.ACTION_SEARCH;
                 intent.setClassName("aarddict.android", "aarddict.android.LookupActivity");
                 queryText = "query";
+                parameter = parameter == null ? "" : parameter;
             }
 
             if (action != null) {
