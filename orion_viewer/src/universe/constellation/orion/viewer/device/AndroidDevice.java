@@ -55,8 +55,14 @@ public class AndroidDevice implements Device {
 
     public GlobalOptions keyBinding;
 
-    public AndroidDevice() {
+    private final int wakeLockType;
 
+    public AndroidDevice() {
+        this(PowerManager.SCREEN_BRIGHT_WAKE_LOCK);
+    }
+
+    public AndroidDevice(int wakeLockType) {
+        this.wakeLockType = wakeLockType;
     }
 
     public void updateTitle(String title) {
@@ -121,9 +127,11 @@ public class AndroidDevice implements Device {
         }
         this.activity = activity;
         PowerManager power = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
-        screenLock = power.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "OrionViewer" + hashCode());
+        screenLock = power.newWakeLock(wakeLockType, "OrionViewer" + hashCode());
         screenLock.setReferenceCounted(false);
     }
+
+
 
     public void onPause() {
         if (screenLock != null) {

@@ -21,6 +21,7 @@ package universe.constellation.orion.viewer.device;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.PowerManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
@@ -43,30 +44,13 @@ public class EdgeDevice extends AndroidDevice {
     private Boolean portrait;
 
     public EdgeDevice() {
+        super(PowerManager.SCREEN_DIM_WAKE_LOCK);
         try {
             fb = new EdgeFB(2);
         } catch (Exception e) {
             Common.d(e);
         }
     }
-
-    @Override
-//    public void screenSizeChanged(int width, int height) {
-//        if (fb != null) {
-//            boolean newPort = height > width;
-//            if (newPort == portrait) {
-//                // do nothing - orientation is same
-//                Common.d("Changing e-ink orientattion - do nothing");
-//            } else {
-//                try {
-//                    Common.d("Changing e-ink orientattion....");
-//                    onSetContentView(false);
-//                } catch (Exception e) {
-//                    Common.d(e);
-//                }
-//            }
-//        }
-//    }
 
     public void onSetContentView() {
         onSetContentView(true);
