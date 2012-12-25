@@ -24,10 +24,7 @@ import android.content.Intent;
 import android.widget.Toast;
 import universe.constellation.orion.viewer.outline.OutlineActivity;
 import universe.constellation.orion.viewer.outline.OutlineItem;
-import universe.constellation.orion.viewer.prefs.OrionApplication;
-import universe.constellation.orion.viewer.prefs.OrionBookPreferences;
-import universe.constellation.orion.viewer.prefs.OrionPreferenceActivity;
-import universe.constellation.orion.viewer.prefs.TemporaryOptions;
+import universe.constellation.orion.viewer.prefs.*;
 
 import java.util.HashMap;
 
@@ -165,6 +162,13 @@ public enum Action {
             Intent bookmark = new Intent(activity.getApplicationContext(), OrionBookmarkActivity.class);
             bookmark.putExtra(OrionBookmarkActivity.BOOK_ID, activity.getBookId());
             activity.startActivityForResult(bookmark, OrionViewerActivity.OPEN_BOOKMARK_ACTIVITY_RESULT);
+        }
+    },
+
+    FULL_SCREEN (R.string.action_full_screen, R.integer.action_full_screen) {
+        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+            GlobalOptions options = activity.getGlobalOptions();
+            options.saveBooleanProperty(GlobalOptions.FULL_SCREEN, !options.isFullScreen());
         }
     },
 

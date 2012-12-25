@@ -312,6 +312,13 @@ public class GlobalOptions implements Serializable {
     }
 
 
+    public void saveBooleanProperty(String key, boolean newValue) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(key, newValue);
+        editor.commit();
+    }
+
+
     public int getLongCrop() {
         return getIntFromStringProperty(LONG_CROP_VALUE, 10);
     }
