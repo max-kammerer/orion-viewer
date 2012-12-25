@@ -20,7 +20,9 @@
 package universe.constellation.orion.viewer.selection;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.text.ClipboardManager;
 import android.view.*;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
@@ -53,6 +55,17 @@ public class SelectedTextActions {
         View view = activity.getLayoutInflater().inflate(R.layout.text_actions, null);
 
         popup.setContentView(view);
+
+        ImageButton copy_to_Clipboard = (ImageButton) view.findViewById(R.id.stext_copy_to_clipboard);
+        copy_to_Clipboard.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                popup.dismiss();
+                ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
+                clipboard.setText(text);
+                activity.showFastMessage("Copied to clipboard");
+
+            }
+        });
 
         ImageButton add_bookmark = (ImageButton) view.findViewById(R.id.stext_add_bookmark);
         add_bookmark.setOnClickListener(new View.OnClickListener() {
