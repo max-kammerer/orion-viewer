@@ -24,6 +24,7 @@
         <string name="lang_russian">ru</string>
         <string name="lang_hebrew">iw</string>
         <string name="lang_chinese">zh</string>
+        <string name="lang_italian">it</string>
     <!--Do not translate this section and do not include it in result localization: end-->
 
     <string name="lang_default_user">System Language</string>
@@ -31,4 +32,5 @@
     <string name="lang_russian_user">Russian</string>
     <string name="lang_hebrew_user">Hebrew</string>
     <string name="lang_chinese_user">Chinese</string>
+    <string name="lang_italian_user">Italian</string>
 </resources>

@@ -18,17 +18,10 @@
   -->
 
 <resources>
-    <!--Do not translate this section and do not include it in result localization: start-->
-        <string name="lang_default">DEFAULT</string>
-        <string name="lang_english">en</string>
-        <string name="lang_russian">ru</string>
-        <string name="lang_hebrew">iw</string>
-        <string name="lang_chinese">zh</string>
-    <!--Do not translate this section and do not include it in result localization: end-->
-
     <string name="lang_default_user">Системный</string>
     <string name="lang_english_user">Английский</string>
     <string name="lang_russian_user">Русский</string>
     <string name="lang_hebrew_user">Иврит</string>
+    <string name="lang_italian_user">Итальянский</string>
     <string name="lang_chinese_user">Китайский</string>
 </resources>
