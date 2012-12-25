@@ -1,3 +1,9 @@
+===== 0.39.2 (Dec 25, 2012) =====
+* Updated Italian localization by Alberto Pettarin
+* Copy to clipboard action for selected text
+* Issue 40: Aard dictionary interaction is broken ( don't get selected word )
+* Issue 41: Add "Toggle fullscreen" to available tap-zone actions
+
 ===== 0.39.1 (Nov 5, 2012) =====
 * Encrypted pdf support
 * Chinese Localization by Bruce Li
