@@ -2,7 +2,7 @@
 <!--
   ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
   ~
-  ~ Copyright (C) 2011-2012  Michael Bogdanov
+  ~ Copyright (C) 2011-2012  Michael Bogdanov & Co
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
@@ -19,24 +19,33 @@
   -->
 
 <!--Author: Alberto Pettarin-->
-
 <resources>
-    <string name="pref_fullScreen">Pieno schermo</string>
+    <!--Categories-->
+    <string name="pref_category_general">Generali</string>
+    <string name="pref_category_key_manager">Associazione tasti</string>
+    <string name="pref_category_device_parameters">Impostazioni dispositivo</string>
+    <string name="pref_category_add_parameters">Altre impostazioni</string>
+    <string name="pref_category_system">Sistema</string>
+
+    <!--General Prefs-->
+    <string name="pref_fullScreen">Schermo pieno</string>
     <string name="pref_bookDefaultOrientation">Orientazione predefinita</string>
-    <string name="pref_rotate_new_book_on_opening">Ruota nuovo libro all\'apertura</string>
+    <string name="pref_bookDefaultZoom">Zoom</string>
+    <string name="pref_rotate_new_book_on_opening">Ruota nuovo libro aperto</string>
     <string name="pref_screen_orientation">Orientazione schermo</string>
-    <string name="pref_rotate_screen">Orientazione predefinita: riavvia l\'applicazione per applicare</string>
-    <string name="pref_close_dialog_on_apply">Chiudi finestra per applicare</string>
-    <string name="pref_close_page_option_dialog_on_apply">Chiudi le Opzioni per applicare</string>
-    <string name="pref_swap_prev_next_keys">Inverti tasti avanti/indietro</string>
-    <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Inverti tasti avanti/indietro in modalità orizzontale</string>
+    <string name="pref_rotate_screen">Orientazione schermo: richiede il riavvio</string>
+    <string name="pref_book_screen_orientation">Orientazione schermo libro corrente</string>
+    <string name="pref_close_dialog_on_apply">Chiudi la finestra quando confermi</string>
+    <string name="pref_close_page_option_dialog_on_apply">Chiudi le opzioni quando confermi</string>
+    <string name="pref_swap_prev_next_keys">Inverti tasti precedente/successivo</string>
+    <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Inverti tasti precedente/successivo in modalità orizzontale</string>
     <string name="pref_dictionary">Dizionario</string>
     <string name="pref_e_ink_optimization">E-ink</string>
     <string name="pref_e_ink_fast_refresh">E-ink aggiornamento rapido</string>
     <string name="pref_total_refresh_after">Refresh completo dopo...</string>
 
-    <string name="pref_long_crop_value">Ritaglio Grande</string>
-    <string name="pref_long_crop_value_desc">Valore Ritaglio Grande (0-40%)</string>
+    <string name="pref_long_crop_value">Ritaglio grande</string>
+    <string name="pref_long_crop_value_desc">Valore ritaglio grande (0-40%)</string>
 
     <string name="pref_screen_overlapping_horizontal">Sovrapposizione orizzontale schermo</string>
     <string name="pref_screen_overlapping_horizontal_desc">Sovrapposizione orizzontale schermo al cambio pagina (0-90%)</string>
@@ -44,13 +53,43 @@
     <string name="pref_screen_overlapping_vertical">Sovrapposizione verticale schermo</string>
     <string name="pref_screen_overlapping_vertical_desc">Sovrapposizione verticale schermo al cambio pagina (0-90%)</string>
 
-    <string name="pref_custom_brightness">Luminosità</string>
+    <string name="pref_custom_brightness">Imposta luminosità</string>
     <string name="pref_brightness">Luminosità</string>
     <string name="pref_brightness_desc">Luminosità (1-100%)</string>
 
-    <string name="pref_application_theme">Tema Applicazione</string>
-    <string name="pref_application_theme_desc">Riavvia applicazione per applicare</string>
+    <string name="pref_application_theme">Tema applicazione</string>
+    <string name="pref_application_theme_desc">Riavvia per applicare le modifiche</string>
 
     <string name="pref_open_recent_book">All\'avvio apri l\'ultimo libro letto</string>
+
+    <!--book preferences-->
+    <string name="pref_book_contrast">Contrasto</string>
+    <string name="pref_book_contrast_desc">Contrasto (1-1000, default 100)</string>
+
+    <string name="pref_book_threshold">Soglia filigrana</string>
+    <string name="pref_book_threshold_desc">Soglia filigrana (default 255)</string>
+
+    <string name="pref_device_info">Informazioni dispositivo</string>
+    <string name="pref_debug">Debug</string>
+    <string name="pref_debug_desc">Scrivi log su &lt;file libro&gt; + .trace</string>
+
+    <string name="pref_walk_order">Schema scorrimento pagine</string>
+    <string name="pref_page_layout">Layout pagina</string>
+
+
+    <string name="application_settings_title">Impostazioni applicazione</string>
+    <string name="pref_default_book_setting">Impostazioni predefinite libri</string>
+    <string name="pref_default_book_setting_desc">Saranno applicate solo a nuovi libri. Per quelli correnti, usare \'Impostazioni libro\'</string>
+
+    <string name="book_pref_title">Impostazioni libro corrente</string>
+
+    <string name="pref_screen_backlight_timeout">Intervallo retroilluminazione</string>
+    <string name="pref_screen_backlight_timeout_desc">Intervallo retroilluminazione</string>
+
+    <string name="pref_app_language">Lingua</string>
+    <string name="pref_app_language_desc">Lingua: riavvia per applicare le modifiche</string>
+
+    <string name="pref_tap_zones_desc">Zone tocco: associa comandi alle zone tocco</string>
+
 
 </resources>

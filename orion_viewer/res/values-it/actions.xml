@@ -2,7 +2,7 @@
 <!--
   ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
   ~
-  ~ Copyright (C) 2011-2012  Michael Bogdanov
+  ~ Copyright (C) 2011-2012  Michael Bogdanov & Co
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
@@ -19,38 +19,42 @@
   -->
 
 <!--Author: Alberto Pettarin-->
-
 <resources>
     <string name="action_none">Nessuna</string>
     <string name="action_menu">Menu</string>
-    <string name="action_next_page">Successiva</string>
-    <string name="action_prev_page">Precedente</string>
+    <string name="action_next_page">Pagina successiva</string>
+    <string name="action_prev_page">Pagina precedente</string>
+    <string name="action_first_page">Prima pagina</string>
+    <string name="action_last_page">Ultima pagina</string>
     <string name="action_crop_page">Ritaglia</string>
     <string name="action_zoom_page">Zoom</string>
-    <string name="action_rotation_page">Rotazione</string>
+    <string name="action_rotation_page">Ruota</string>
     <string name="action_options_page">Opzioni</string>
-    <string name="action_goto_page">Vai A</string>
-    <string name="action_dictionary">Apri Dizionario</string>
-    <string name="action_open">Apri Libro</string>
-    <string name="action_add_bookmark">Aggiungi Segnalibro</string>
-    <string name="action_open_bookmarks">Apri Segnalibri</string>
-    <string name="action_day_night_mode">Modalità Notturna</string>
+    <string name="action_goto_page">Vai a</string>
+    <string name="action_dictionary">Apri dizionario</string>
+    <string name="action_open">Apri libro</string>
+    <string name="action_outline">@string/menu_outline_text</string>
+    <string name="action_add_bookmark">Aggiungi segnalibro</string>
+    <string name="action_open_bookmarks">Apri segnalibri</string>
+    <string name="action_day_night_mode">Modalità notturna</string>
 
-    <string name="action_crop_left">Ritaglia Margine Sinistro</string>
-    <string name="action_crop_right">Ritaglia Margine Destro</string>
-    <string name="action_crop_top">Ritaglia Margine Superiore</string>
-    <string name="action_crop_bottom">Ritaglia Margine Inferiore</string>
+    <string name="action_crop_left">Ritaglia margine sinistro</string>
+    <string name="action_crop_right">Ritaglia margine destro</string>
+    <string name="action_crop_top">Ritaglia margine superiore</string>
+    <string name="action_crop_bottom">Ritaglia margine inferiore</string>
 
-    <string name="action_uncrop_left">Aumenta Margine Sinistro</string>
-    <string name="action_uncrop_right">Aumenta Margine Destro</string>
-    <string name="action_uncrop_top">Aumenta Margine Superiore</string>
-    <string name="action_uncrop_bottom">Aumenta Margine Inferiore</string>
-    <string name="action_inverse_crops">Scambia Ritaglia/Aumenta Margine</string>
-    <string name="action_switch_long_crop">Ritaglio Grande/Piccolo</string>
+    <string name="action_uncrop_left">Aumenta margine sinistro</string>
+    <string name="action_uncrop_right">Aumenta margine destro</string>
+    <string name="action_uncrop_top">Aumenta margine superiore</string>
+    <string name="action_uncrop_bottom">Aumenta margine inferiore</string>
+    <string name="action_inverse_crops">Scambia ritaglia/aumenta margine</string>
+    <string name="action_switch_long_crop">Scambia ritaglio grande/piccolo</string>
 
-    <string name="action_next_10">Avanti 10 Pagine</string>
-    <string name="action_prev_10">Indietro 10 Pagine</string>
+    <string name="action_next_10">Avanti 10 pagine</string>
+    <string name="action_prev_10">Indietro 10 pagine</string>
 
-    <string name="action_rotate_90">Ruota 90/-90 Gradi</string>
-    <string name="action_rotate_270">Ruota 270/-270 Gradi</string>
+    <string name="action_rotate_90">Ruota -/+90 gradi</string>
+    <string name="action_rotate_270">Ruota -/+270 gradi</string>
+
+    <string name="action_select_text">@string/menu_select_text</string>
 </resources>

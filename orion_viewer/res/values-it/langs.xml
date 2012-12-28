@@ -1,7 +1,7 @@
 <!--
   ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
   ~
-  ~ Copyright (C) 2011-2012  Michael Bogdanov
+  ~ Copyright (C) 2011-2012  Michael Bogdanov & Co
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
@@ -17,11 +17,11 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
+<!--Author: Alberto Pettarin-->
 <resources>
-    <string name="lang_default_user">Системный</string>
-    <string name="lang_english_user">Английский</string>
-    <string name="lang_russian_user">Русский</string>
-    <string name="lang_hebrew_user">Иврит</string>
-    <string name="lang_italian_user">Итальянский</string>
-    <string name="lang_chinese_user">Китайский</string>
+    <string name="lang_default_user">Lingua predefinita</string>
+    <string name="lang_english_user">Inglese</string>
+    <string name="lang_russian_user">Russo</string>
+    <string name="lang_hebrew_user">Ebraico</string>
+    <string name="lang_chinese_user">Cinese</string>
 </resources>

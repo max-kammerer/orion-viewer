@@ -21,6 +21,7 @@ package universe.constellation.orion.viewer.device;
 
 import android.content.Intent;
 import android.graphics.Point;
+import android.os.PowerManager;
 import android.view.KeyEvent;
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.OperationHolder;
@@ -55,7 +56,7 @@ public class NookDevice extends AndroidDevice {
     protected static final int NOOK_PAGE_UP_SWIPE = 101;
 
     public NookDevice() {
-
+        super(PowerManager.SCREEN_DIM_WAKE_LOCK);
     }
 
     public void updateTitle(String title) {

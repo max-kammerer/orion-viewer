@@ -32,6 +32,7 @@
     <string name="action_dictionary">Открыть словарь</string>
     <string name="action_open">Открыть книгу</string>
     <string name="action_add_bookmark">Добавить закладку</string>
+    <string name="action_full_screen">Переключить полноэкранный режим</string>
     <string name="action_open_bookmarks">Закладки</string>
     <string name="action_day_night_mode">Дневной/Ночной режим</string>
 
@@ -52,4 +53,6 @@
 
     <string name="action_rotate_90">Повернуть на  90/-90 градусов</string>
     <string name="action_rotate_270">Повернуть на 270/-270 градусов</string>
+
+
 </resources>

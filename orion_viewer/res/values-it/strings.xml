@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
   ~
-  ~ Copyright (C) 2011-2012  Michael Bogdanov
+  ~ Copyright (C) 2011-2012  Michael Bogdanov & Co
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
@@ -19,7 +20,6 @@
   -->
 
 <!--Author: Alberto Pettarin-->
-
 <resources>
     <string name="navigation">Navigazione</string>
     <string name="crop_left">Sinistro</string>
@@ -30,23 +30,37 @@
     <string name="rotate_0">0 gradi</string>
     <string name="rotate_90">90 gradi</string>
     <string name="rotate_270">270 gradi</string>
-    <string name="long_click">Tap lungo</string>
-    <string name="short_click">Tap breve</string>
+    <string name="long_click">Tocco lungo</string>
+    <string name="short_click">Tocco breve</string>
     <string name="binding_click">Tasto associato</string>
 
 
 
     <string name="orientation_default">Predefinita</string>
-    <string name="orientation_default_rotation">Rotazione Prefefinita</string>
+    <string name="orientation_default_rotation">Rotazione predefinita</string>
     <string name="orientation_landscape">Orizzontale</string>
     <string name="orientation_portrait">Verticale</string>
     <string name="orientation_landscape_inverse">Orizzontale (270)</string>
     <string name="orientation_portrait_inverse">Verticale (180)</string>
 
 
-    <string name="fit_width">Adatta Larghezza</string>
-    <string name="fit_height">Adatta Altezza</string>
-    <string name="fit_page">Adatta Pagina</string>
+    <string name="fit_width">Adatta larghezza</string>
+    <string name="fit_height">Adatta altezza</string>
+    <string name="fit_page">Adatta pagina</string>
     <string name="fit_custom">Personalizzata...</string>
+
+
+    <string name="key_binder_message">Premi un tasto per associarvi un comando</string>
+    <string name="key_binder_warning">Associazione fallita, prova un altro tasto</string>
+    <string name="table_of_contents">Indice</string>
+
+
+    <integer name="layout_right_bottom_outside">0</integer>
+    <integer name="layout_only_bottom_outside">1</integer>
+    <integer name="layout_always_inside">2</integer>
+
+
+    <string name="warn_no_text_in_selection">Nessun testo selezionato</string>
+    <string name="warn_no_outline">Indice non disponibile</string>
 
 </resources>
