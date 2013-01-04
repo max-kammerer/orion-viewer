@@ -53,6 +53,10 @@ public class PageWalker {
         public boolean isMinus() {
             return this == X_M || this == Y_M;
         }
+
+        public boolean isPlus() {
+            return this == X || this == Y;
+        }
     }
 
     public static enum WALK_ORDER {
@@ -97,56 +101,116 @@ public class PageWalker {
 
     //true if should increase page
     public boolean next(LayoutPosition info, DIR firstDir, DIR secondDir) {
-        int first = info.cellX;
-        int firstMax = info.maxX;
+//        int first = info.cellX;
+//        int firstMax = info.maxX;
+//
+//        int second = info.cellY;
+//        int secondMax = info.maxY;
+//
+//        if  (!firstDir.isX()) {
+//            first = info.cellY;
+//            firstMax = info.maxY;
+//            second = info.cellX;
+//            secondMax = info.maxX;
+//        }
+//
+//        firstMax++;
+//        secondMax++;
+//
+//        first = first + firstDir.delta + firstMax;
+//        int changeF = first / firstMax;
+//        first %= firstMax;
+//
+//        if (changeF != 1) {
+//            second = second + secondDir.delta + secondMax;
+//            int changeS = second / secondMax;
+//            second %= secondMax;
+//            if (changeS != 1) {
+//                return true;
+//            }
+//        }
+//
+//        info.cellX = firstDir.isX() ? first : second;
+//        info.cellY = secondDir.isX() ? first : second;
+//
+//
+        boolean isX = firstDir.isX();
+        OneDirection first = isX ? info.x : info.y;
+        OneDirection second = isX ? info.y : info.x;
 
-        int second = info.cellY;
-        int secondMax = info.maxY;
+        int firstOffset = first.offset;
+        int secondOffset = second.offset;
 
-        if  (!firstDir.isX()) {
-            first = info.cellY;
-            firstMax = info.maxY;
-            second = info.cellX;
-            secondMax = info.maxX;
+        boolean changeSecond = false;
+
+
+        int newValue = firstOffset + first.screenDimension * firstDir.delta + firstDir.delta;
+        if ((firstOffset <= 0 && newValue <= 0) || (newValue > first.pageDimension)) {
+            changeSecond = true;
+            firstOffset = firstDir.isPlus() ? 0 : first.pageDimension - first.screenDimension;
+        } else {
+            firstOffset = newValue - first.overlap * firstDir.delta;
         }
+        int newValueFirst = firstOffset;
 
-        firstMax++;
-        secondMax++;
-
-        first = first + firstDir.delta + firstMax;
-        int changeF = first / firstMax;
-        first %= firstMax;
-
-        if (changeF != 1) {
-            second = second + secondDir.delta + secondMax;
-            int changeS = second / secondMax;
-            second %= secondMax;
-            if (changeS != 1) {
-                return true;
+        int newValueSecond = secondOffset;
+        if (changeSecond) {
+            changeSecond = false;
+            firstOffset = secondOffset;
+            first = second;
+            newValue = firstOffset + first.screenDimension * firstDir.delta + firstDir.delta;
+            if ((firstOffset <= 0 && newValue <= 0) || (newValue > first.pageDimension)) {
+                changeSecond = true;
+                firstOffset = firstDir.isPlus() ? 0 : first.pageDimension - first.screenDimension;
+            } else {
+                firstOffset = newValue - first.overlap * firstDir.delta;
             }
+            newValueSecond = firstOffset;
         }
 
-        info.cellX = firstDir.isX() ? first : second;
-        info.cellY = secondDir.isX() ? first : second;
+        if (!changeSecond) {
+            (isX ? info.x : info.y).offset = newValueFirst;
+            second.offset = newValueSecond;
+        }
 
-        return false;
+        return changeSecond;
     }
 
-    public void reset(LayoutPosition info, boolean isNext) {
+    public void reset(LayoutPosition info, boolean isNext, int hOverlap, int vOverlap) {
+//        if (info.screenHeight != 0 && info.screenWidth != 0) {
+//            info.maxX = (info.pageWidth - hOverlap) / (info.getRenderWidth() - hOverlap) + ((info.pageWidth - hOverlap) % (info.getRenderWidth() - hOverlap) == 0 ? 0 : 1)  - 1;
+//            info.maxY = (info.pageHeight - vOverlap) / (info.getRenderHeight() - vOverlap) + ((info.pageHeight - vOverlap) % (info.getRenderHeight() - vOverlap) == 0 ?  0: 1) -1;
+//
+//            //in this case page size is smaller than overlap and it smaller than screen size - so there is only one possibility
+//            if (info.maxX < 0)  {
+//                info.maxX = 0;
+//            }
+//
+//            if (info.maxY < 0)  {
+//                info.maxY = 0;
+//            }
+//        }
+//
         DIR first = isNext ? direction.first : direction.first.inverse();
         DIR second = isNext ? direction.second : direction.second.inverse();
+//
+//        DIR xDir = first.isX() ? first : second;
+//        DIR yDir = second.isX() ? first : second;
 
-        DIR xDir = first.isX() ? first : second;
-        DIR yDir = second.isX() ? first : second;
-        info.cellX = xDir.isMinus() ? info.maxX : 0;
-        info.cellY = yDir.isMinus() ? info.maxY : 0;
+        OneDirection hor =  first.isX() ? info.getHor() : info.getVert();
+        OneDirection vert =  first.isX() ? info.getVert() : info.getHor();
+
+        hor.offset = first.isMinus() ? hor.pageDimension - hor.screenDimension : 0;
+        vert.offset = second.isMinus() ? vert.pageDimension - vert.screenDimension : 0;
+
+//        info.cellX = xDir.isMinus() ? info.maxX : 0;
+//        info.cellY = yDir.isMinus() ? info.maxY : 0;
+
+
     }
 
     public String getDirection() {
         return direction.name();
     }
 
-    public boolean isLeft2Right() {
-        return direction == WALK_ORDER.ABCD || direction == WALK_ORDER.ACBD;
-    }
 }

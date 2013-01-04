@@ -224,8 +224,8 @@ public class RenderThread extends Thread {
 
                 if (resultEntry == null) {
                     //render page
-                    int width = curPos.pieceWidth;
-                    int height = curPos.pieceHeight;
+                    int width = curPos.getRenderWidth();
+                    int height = curPos.getRenderHeight();
 
                     int screenWidth = curPos.screenWidth;
                     int screenHeight = curPos.screenHeight;
@@ -258,12 +258,13 @@ public class RenderThread extends Thread {
 
                     int [] data = doc.renderPage(curPos.pageNumber, curPos.docZoom, width, height, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + width, leftTopCorner.y + height);
 
-                    Date date = new Date();
-                    cacheCanvas.setBitmap(bitmap);
+                    long startTime = System.currentTimeMillis();
 
+                    cacheCanvas.setBitmap(bitmap);
                     cacheCanvas.drawBitmap(data, 0, width, 0, 0, width, height, false, null);
-                    Date date2 = new Date();
-                    Common.d("Drawing bitmap in cache " + 0.001 * (date2.getTime() - date.getTime()) + " s");
+
+                    long endTime = System.currentTimeMillis();
+                    Common.d("Drawing bitmap in cache " + 0.001 * (endTime - startTime) + " s");
 
                     resultEntry = new CacheInfo(curPos, bitmap);
 

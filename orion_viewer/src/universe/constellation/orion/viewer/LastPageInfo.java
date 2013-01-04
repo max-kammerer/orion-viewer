@@ -49,8 +49,8 @@ public class LastPageInfo implements Serializable {
     //application default
     public String screenOrientation = "DEFAULT";
 
-    public int offsetX;
-    public int offsetY;
+    public int newOffsetX;
+    public int newOffsetY;
 
     public int zoom;
 
@@ -161,8 +161,8 @@ public class LastPageInfo implements Serializable {
 //            writeValue(serializer, "rotation", rotation);
 //            writeValue(serializer, "screenOrientation", screenOrientation);
 //
-//            writeValue(serializer, "offsetX", offsetX);
-//            writeValue(serializer, "offsetY", offsetY);
+//            writeValue(serializer, "newOffsetX", newOffsetX);
+//            writeValue(serializer, "newOffsetY", newOffsetY);
 //
 //            writeValue(serializer, "zoom", zoom);
 //
@@ -302,6 +302,14 @@ public class LastPageInfo implements Serializable {
                 }
             }
         }
+
+//        if (localVersion < 5) {
+//            if ("newOffsetX".equals(name) || "newOffsetY".equals(name)) {
+//                System.out.println("Property " + name + " upgraded");
+//                localVersion = 5;
+//                value = 0;
+//            }
+//        }
 
         return value;
     }

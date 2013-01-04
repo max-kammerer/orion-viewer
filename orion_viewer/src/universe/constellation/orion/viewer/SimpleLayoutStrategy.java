@@ -34,6 +34,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
     public int viewHeight;
 
     public int VERT_OVERLAP = 3;
+
     public int HOR_OVERLAP = 3;
 
     private DocumentWrapper doc;
@@ -60,7 +61,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
                 reset(info, info.pageNumber + 1);
             }
         }
-        Common.d("new cellX = " + info.cellX + " cellY = " + info.cellY);
+        Common.d("new cellX = " + info.x.offset + " cellY = " + info.y.offset);
     }
 
     public void prevPage(LayoutPosition info) {
@@ -70,7 +71,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
             }
         }
 
-        Common.d("new cellX = " + info.cellX + " cellY = " + info.cellY);
+        Common.d("new cellX = " + info.x.offset + " cellY = " + info.y.offset);
     }
     public boolean changeRotation(int rotation) {
         if (this.rotation != rotation) {
@@ -100,63 +101,44 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         if (pageNum < 0) {
             pageNum = 0;
         }
+        info.rotation = rotation;
 
         info.pageNumber = pageNum;
+
         //original width and height without cropped margins
-        PageInfo pinfo = doc.getPageInfo(pageNum);
+        PageInfo pageInfo = doc.getPageInfo(pageNum);
 
         boolean isEvenPage = (pageNum + 1) % 2 == 0;
         int leftMargin = enableEvenCrop && isEvenPage ? leftEvenMargin : this.leftMargin;
         int rightMargin = enableEvenCrop && isEvenPage ? rightEvenMargin : this.rightMargin;
 
-        info.marginLeft = (int) (leftMargin * pinfo.width * 0.01);
-        info.marginTop = (int) (topMargin * pinfo.height * 0.01);
+        info.x.marginLess = (int) (leftMargin * pageInfo.width * 0.01);
+        info.y.marginLess = (int) (topMargin * pageInfo.height * 0.01);
 
-        info.pageWidth = Math.round(pinfo.width * (1 - 0.01f *(leftMargin + rightMargin)));
-        info.pageHeight = Math.round(pinfo.height * (1- 0.01f *(topMargin + bottomMargin)));
+        info.x.pageDimension = Math.round(pageInfo.width * (1 - 0.01f *(leftMargin + rightMargin)));
+        info.y.pageDimension = Math.round(pageInfo.height * (1- 0.01f *(topMargin + bottomMargin)));
 
-        info.pieceWidth = rotation == 0 ? viewWidth : viewHeight;
-        info.pieceHeight = rotation == 0 ? viewHeight : viewWidth;
+        info.x.screenDimension = rotation == 0 ? viewWidth : viewHeight;
+        info.y.screenDimension = rotation == 0 ? viewHeight : viewWidth;
 
         info.screenWidth = viewWidth;
         info.screenHeight = viewHeight;
 
-        //calc zoom
-        if (zoom <= 0) {
-            //zoom by width
-            switch (zoom) {
-                case 0: info.docZoom = ((double) info.pieceWidth) / info.pageWidth; break;
-                case -1: info.docZoom = ((double)info.pieceHeight) / info.pageHeight; break;
-                case -2: info.docZoom = Math.min(((double ) info.pieceWidth) / info.pageWidth, ((double)info.pieceHeight) / info.pageHeight); break;
-            }
-        } else {
-            info.docZoom = 0.0001f * zoom;
-        }
-        info.marginLeft = (int) (info.docZoom * info.marginLeft);
-        info.marginTop = (int) (info.docZoom * info.marginTop);
+        //set zoom and zoom margins and dimensions
+        info.setDocZoom(zoom);
+
+        info.x.marginLess = (int) (info.docZoom * info.x.marginLess);
+        info.y.marginLess = (int) (info.docZoom * info.y.marginLess);
 
         //zoomed with and height
-        info.pageWidth = (int)(info.docZoom * info.pageWidth);
-        info.pageHeight = (int) (info.docZoom * info.pageHeight);
+        info.x.pageDimension = (int)(info.docZoom * info.x.pageDimension);
+        info.y.pageDimension = (int) (info.docZoom * info.y.pageDimension);
 
-        int hOverlap = info.pieceWidth * HOR_OVERLAP / 100;
-        int vOverlap = info.pieceHeight * VERT_OVERLAP / 100;
+        info.x.overlap = info.x.screenDimension * HOR_OVERLAP / 100;
+        info.y.overlap = info.y.screenDimension * VERT_OVERLAP / 100;
         //System.out.println("overlap " + hOverlap + " " + vOverlap);
-        if (info.pieceHeight != 0 && info.pieceWidth != 0) {
-            info.maxX = (info.pageWidth - hOverlap) / (info.pieceWidth - hOverlap) + ((info.pageWidth - hOverlap) % (info.pieceWidth - hOverlap) == 0 ? 0 : 1)  - 1;
-            info.maxY = (info.pageHeight - vOverlap) / (info.pieceHeight - vOverlap) + ((info.pageHeight - vOverlap) % (info.pieceHeight - vOverlap) == 0 ?  0: 1) -1;
 
-            //in this case page size is smaller than overlap and it smaller than screen size - so there is only one possibility
-            if (info.maxX < 0)  {
-                info.maxX = 0;
-            }
-
-            if (info.maxY < 0)  {
-                info.maxY = 0;
-            }
-        }
-
-        walker.reset(info, forward);
+        walker.reset(info, forward, info.x.overlap, info.y.overlap);
     }
 
     public boolean changeZoom(int zoom) {
@@ -253,15 +235,15 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         int layout  = getLayout();
 //        int absLeftMargin = (int) (leftMargin * pos.pageWidth * 0.01);
 //        int absTopMargin = (int) (topMargin * pos.pageHeight * 0.01);
-        int absLeftMargin = (int) pos.marginLeft;
-        int absTopMargin = (int) pos.marginTop;
-        int hOverlap = pos.pieceWidth * HOR_OVERLAP / 100;
-        int vOverlap = pos.pieceHeight * VERT_OVERLAP / 100;
+//        int absLeftMargin = pos.x.marginLess;
+//        int absTopMargin = pos.x.marginTop;
+//        int hOverlap = pos.getRenderWidth() * HOR_OVERLAP / 100;
+//        int vOverlap = pos.getRenderHeight() * VERT_OVERLAP / 100;
+//
+//        int x = pos.cellX == 0 || pos.cellX != pos.maxX || layout == 0 ?  (int)(absLeftMargin + pos.cellX * (pos.getRenderWidth() - hOverlap)) : (int) (absLeftMargin + pos.pageWidth - pos.getRenderWidth());
+//        int y = pos.cellY == 0 || pos.cellY != pos.maxY || layout != 1 ? (int) (absTopMargin + pos.cellY * (pos.getRenderHeight() - vOverlap)) : (int) (absTopMargin + pos.pageHeight - pos.getRenderHeight());
 
-        int x = pos.cellX == 0 || pos.cellX != pos.maxX || layout == 0 ?  (int)(absLeftMargin + pos.cellX * (pos.pieceWidth - hOverlap)) : (int) (absLeftMargin + pos.pageWidth - pos.pieceWidth);
-        int y = pos.cellY == 0 || pos.cellY != pos.maxY || layout != 1 ? (int) (absTopMargin + pos.cellY * (pos.pieceHeight - vOverlap)) : (int) (absTopMargin + pos.pageHeight - pos.pieceHeight);
-
-        return new Point(x, y);
+        return new Point(pos.x.marginLess + pos.x.offset, pos.y.marginLess + pos.y.offset);
     }
 
     public int getLayout() {

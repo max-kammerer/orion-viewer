@@ -26,7 +26,6 @@ import android.view.View;
 import universe.constellation.orion.viewer.device.Nook2Util;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
-import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -35,6 +34,8 @@ import java.util.concurrent.CountDownLatch;
  * Time: 13:52
  */
 public class OrionView extends View {
+
+    private static final float DEFAULT_SCALE = 1.0f;
 
     public Bitmap bitmap;
 
@@ -45,6 +46,12 @@ public class OrionView extends View {
     private int counter = 0;
 
     private boolean isNightMode = true;
+
+    private float scale = 1.0f;
+
+    private Point startFocus;
+
+    private Point endFocus;
 
     private ColorMatrixColorFilter nightMatrix = new ColorMatrixColorFilter(new ColorMatrix(
             new float[]{
@@ -78,7 +85,7 @@ public class OrionView extends View {
         }
 
         if (bitmap != null && !bitmap.isRecycled()) {
-            long start = new Date().getTime();
+            long start = System.currentTimeMillis();
             Common.d("OrionView: drawing bitmap on view...");
 
             Paint paint = null;
@@ -87,9 +94,22 @@ public class OrionView extends View {
                 paint.setColorFilter(nightMatrix);
             }
 
+            final float myScale = scale;
+
+            //do scaling on pinch zoom
+            if (myScale != DEFAULT_SCALE) {
+                canvas.save();
+                canvas.translate((startFocus.x) * (1 - myScale) - startFocus.x + endFocus.x, (startFocus.y) * (1 - myScale) - startFocus.y + endFocus.y);
+                canvas.scale(myScale, myScale);
+            }
+
             canvas.drawBitmap(bitmap, 0, 0, paint);
 
-            Common.d("OrionView:... takes " + 0.001f * (new Date().getTime() - start) + " s");
+            if (myScale != DEFAULT_SCALE) {
+                canvas.restore();
+            }
+
+            Common.d("OrionView: bitmap rendering takes " + 0.001f * (System.currentTimeMillis() - start) + " s");
         }
         if (latch != null) {
             latch.countDown();
@@ -127,5 +147,11 @@ public class OrionView extends View {
 
     public Bitmap getBitmap() {
         return bitmap;
+    }
+
+    public void doScale(float scale, Point startFocus, Point endFocus) {
+        this.scale = scale;
+        this.startFocus = startFocus;
+        this.endFocus = endFocus;
     }
 }

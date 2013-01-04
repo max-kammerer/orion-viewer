@@ -104,13 +104,13 @@ public class Controller {
         layout.setDimension(newWidth, newHeight);
         GlobalOptions options = getActivity().getGlobalOptions();
         layout.changeOverlapping(options.getHorizontalOverlapping(), options.getVerticalOverlapping());
-        int offsetX = layoutInfo.cellX;
-        int offsetY = layoutInfo.cellY;
+        int offsetX = layoutInfo.x.offset;
+        int offsetY = layoutInfo.y.offset;
         layout.reset(layoutInfo, layoutInfo.pageNumber);
         if (lastScreenSize != null) {
             if (newWidth == lastScreenSize.x && newHeight == lastScreenSize.y) {
-                layoutInfo.cellX = offsetX;
-                layoutInfo.cellY = offsetY;
+                layoutInfo.x.offset = offsetX;
+                layoutInfo.y.offset = offsetY;
             }
             lastScreenSize = null;
         }
@@ -126,6 +126,22 @@ public class Controller {
     public void drawPrev() {
         layout.prevPage(layoutInfo);
         drawPage();
+    }
+
+    public void translateAndZoom(float zoomScaling, float deltaX, float deltaY) {
+        System.out.println("zoomscaling  " + zoomScaling + "  " + deltaX + "  " + deltaY );
+        int oldOffsetX = layoutInfo.x.offset;
+        int oldOffsetY = layoutInfo.y.offset;
+        System.out.println("oldZoom  " + layoutInfo.docZoom + "  " + layoutInfo.x.offset + " x " + layoutInfo.y.offset);
+
+        layout.changeZoom((int) (10000f * zoomScaling * layoutInfo.docZoom));
+        layout.reset(layoutInfo, layoutInfo.pageNumber);
+
+        layoutInfo.x.offset = (int) (zoomScaling * oldOffsetX + deltaX);
+        layoutInfo.y.offset = (int) (zoomScaling * oldOffsetY + deltaY);
+        System.out.println("newZoom  " + layoutInfo.docZoom + "  " + layoutInfo.x.offset + " x " + layoutInfo.y.offset);
+
+        sendViewChangeNotification();
     }
 
     public void changeZoom(int zoom) {
@@ -238,8 +254,8 @@ public class Controller {
         layout.init(info, getActivity().getGlobalOptions());
         layoutInfo = new LayoutPosition();
         layout.reset(layoutInfo, info.pageNumber);
-        layoutInfo.cellX = info.offsetX;
-        layoutInfo.cellY = info.offsetY;
+        layoutInfo.x.offset = info.newOffsetX;
+        layoutInfo.y.offset = info.newOffsetY;
 
         lastScreenSize = new Point(info.screenWidth, info.screenHeight);
         screenOrientation = info.screenOrientation;
@@ -252,8 +268,8 @@ public class Controller {
 
     public void serialize(LastPageInfo info) {
         layout.serialize(info);
-        info.offsetX = layoutInfo.cellX;
-        info.offsetY = layoutInfo.cellY;
+        info.newOffsetX = layoutInfo.x.offset;
+        info.newOffsetY = layoutInfo.y.offset;
         info.pageNumber = layoutInfo.pageNumber;
         info.screenOrientation = screenOrientation;
     }

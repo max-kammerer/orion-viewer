@@ -26,40 +26,27 @@ package universe.constellation.orion.viewer;
  */
 public class LayoutPosition implements Cloneable {
 
+    public OneDirection x = new OneDirection();
+
+    public OneDirection y = new OneDirection();
+
     public int pageNumber;
-
-    public int pieceWidth;
-
-    public int pieceHeight;
-
-    public int maxX;
-
-    public int maxY;
-
-    public int cellX;
-
-    public int cellY;
-
-    public int pageWidth;
-
-    public int pageHeight;
 
     public int screenWidth;
 
     public int screenHeight;
 
-    public int marginLeft;
-
-    public int marginTop;
-
     public double docZoom;
 
-    //public int rotation;
+    public int rotation;
 
     @Override
     public LayoutPosition clone() {
         try {
-            return (LayoutPosition) super.clone();
+            LayoutPosition lp = (LayoutPosition) super.clone();
+            lp.x = (OneDirection) lp.x.clone();
+            lp.y = (OneDirection) lp.y.clone();
+            return lp;
         } catch (CloneNotSupportedException e) {
             Common.d(e);
         }
@@ -70,10 +57,11 @@ public class LayoutPosition implements Cloneable {
     public boolean equals(Object o) {
         LayoutPosition pos = (LayoutPosition) o;
         if (pos.pageNumber == pageNumber &&
-                pos.cellX == cellX &&
-                pos.cellY == cellY &&
-                pos.pieceWidth == pieceWidth &&
-                pos.pieceHeight == pieceHeight) {
+                pos.x.equals(x) &&
+                pos.y.equals(y) &&
+                pos.rotation == rotation &&
+                pos.screenHeight == screenHeight &&
+                pos.screenWidth == screenWidth) {
             return true;
         }
         return false;
@@ -81,6 +69,35 @@ public class LayoutPosition implements Cloneable {
 
     @Override
     public int hashCode() {
-        return pageNumber / 3 + cellX / 3 + cellY / 3;
+        return pageNumber / 3 + x.hashCode() / 3 + y.hashCode() / 3;
+    }
+
+    public int getRenderWidth() {
+        return (rotation == 0 ? x : y).screenDimension;
+    }
+
+    public int getRenderHeight() {
+        return (rotation == 0 ? y : x).screenDimension;
+    }
+
+    public void setDocZoom(int zoom) {
+        if (zoom <= 0) {
+            switch (zoom) {
+                //zoom by width
+                case 0: docZoom = ((double) x.screenDimension) / x.pageDimension; break;
+                case -1: docZoom = ((double) y.screenDimension) / y.screenDimension; break;
+                case -2: docZoom = Math.min(((double) x.screenDimension) / x.pageDimension, ((double) y.screenDimension) / y.screenDimension); break;
+            }
+        } else {
+            docZoom = 0.0001f * zoom;
+        }
+    }
+
+    public OneDirection getHor() {
+        return x;
+    }
+
+    public OneDirection getVert() {
+        return y;
     }
 }
