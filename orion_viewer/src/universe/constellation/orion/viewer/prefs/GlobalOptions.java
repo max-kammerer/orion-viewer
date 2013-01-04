@@ -63,8 +63,11 @@ public class GlobalOptions implements Serializable {
     public final static String DICTIONARY = "DICTIONARY";
 
     public final static String LONG_CROP_VALUE = "LONG_CROP_VALUE";
+
     public final static String SCREEN_OVERLAPPING_HORIZONTAL = "SCREEN_OVERLAPPING_HORIZONTAL";
+
     public final static String SCREEN_OVERLAPPING_VERTICAL = "SCREEN_OVERLAPPING_VERTICAL";
+
     public final static String DEBUG = "DEBUG";
 
     public final static String BRIGHTNESS = "BRIGHTNESS";
