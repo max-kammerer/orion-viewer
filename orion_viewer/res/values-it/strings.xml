@@ -54,12 +54,6 @@
     <string name="key_binder_warning">Associazione fallita, prova un altro tasto</string>
     <string name="table_of_contents">Indice</string>
 
-
-    <integer name="layout_right_bottom_outside">0</integer>
-    <integer name="layout_only_bottom_outside">1</integer>
-    <integer name="layout_always_inside">2</integer>
-
-
     <string name="warn_no_text_in_selection">Nessun testo selezionato</string>
     <string name="warn_no_outline">Indice non disponibile</string>
 

@@ -145,6 +145,7 @@
         <item>@string/lang_russian</item>
         <item>@string/lang_hebrew</item>
         <item>@string/lang_italian</item>
+        <item>@string/lang_spanish</item>
         <item>@string/lang_chinese</item>
     </string-array>
 
@@ -154,6 +155,7 @@
         <item>@string/lang_russian_user</item>
         <item>@string/lang_hebrew_user</item>
         <item>@string/lang_italian_user</item>
+        <item>@string/lang_spanish_user</item>
         <item>@string/lang_chinese_user</item>
     </string-array>
 

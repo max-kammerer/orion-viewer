@@ -30,6 +30,10 @@
         <string name="ACBD">ACBD</string>
         <string name="BADC">BADC</string>
         <string name="BDAC">BDAC</string>
+
+        <integer name="layout_right_bottom_outside">0</integer>
+        <integer name="layout_only_bottom_outside">1</integer>
+        <integer name="layout_always_inside">2</integer>
     <!--Do not translate this section and do not include it in result localization: end-->
 
 
@@ -63,12 +67,6 @@
     <string name="key_binder_message">Push any key and select action to bind them!</string>
     <string name="key_binder_warning">Couldn\'t bind key with zero keycode, try another key!</string>
     <string name="table_of_contents">Table of Contents</string>
-
-
-    <integer name="layout_right_bottom_outside">0</integer>
-    <integer name="layout_only_bottom_outside">1</integer>
-    <integer name="layout_always_inside">2</integer>
-
 
     <string name="warn_no_text_in_selection">There is no text in selection!</string>
     <string name="warn_no_outline">Outline is absent!</string>
