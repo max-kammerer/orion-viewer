@@ -661,6 +661,12 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
         });
 
+        if (Device.Info.NOOK2) {
+            TextView tv = (TextView) findMyViewById(R.id.navigation_title);
+            int color = tv.getTextColors().getDefaultColor();
+            checkBox.setTextColor(color);
+        }
+
 
         ImageButton preview = (ImageButton) findMyViewById(R.id.crop_preview);
         preview.setOnClickListener(new View.OnClickListener() {
