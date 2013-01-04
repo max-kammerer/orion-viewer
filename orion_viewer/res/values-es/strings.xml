@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2012  Michael Bogdanov & Co
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--Author: Alexander-->
+<!--Author: Marc Armengol-->
+<resources>
+    <string name="navigation">Navegación</string>
+    <string name="crop_left">Izquierdo</string>
+    <string name="enable_even_crop">Otro recorte para páginas impares</string>
+    <string name="crop_right">Derecho</string>
+    <string name="crop_top">Superior</string>
+    <string name="crop_bottom">Inferior</string>
+    <string name="rotate_0">0 grados</string>
+    <string name="rotate_90">90 grados</string>
+    <string name="rotate_270">270 grados</string>
+    <string name="long_click">Click largo</string>
+    <string name="short_click">Click corto</string>
+    <string name="binding_click">Tecla asociada</string>
+
+
+    <string name="orientation_default">Orientación por defecto</string>
+    <string name="orientation_default_rotation">Rotación por defecto</string>
+    <string name="orientation_landscape">Apaisado</string>
+    <string name="orientation_portrait">Vertical</string>
+    <string name="orientation_landscape_inverse">Apaisado (270)</string>
+    <string name="orientation_portrait_inverse">Vertical (180)</string>
+
+
+    <string name="fit_width">Adaptar a lo ancho</string>
+    <string name="fit_height">Adaptar a lo largo</string>
+    <string name="fit_page">Adaptar a la página</string>
+    <string name="fit_custom">Personalizar...</string>
+
+    <string name="key_binder_message">¡Pulse una tecla y asocie una acción!</string>
+    <string name="key_binder_warning">No se pudo asociar una acción con la tecla, ¡pruebe otra!</string>
+    <string name="table_of_contents">Tabla de Contenidos</string>
+
+
+    <string name="warn_no_text_in_selection">No hay texto en la selección!</string>
+    <string name="warn_no_outline">No existe índice!</string>
+
+</resources>

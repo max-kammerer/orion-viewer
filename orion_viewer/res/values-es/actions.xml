@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2012  Michael Bogdanov
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--Author: Marc Armengol-->
+<resources>
+    <string name="action_none">ninguna</string>
+    <string name="action_menu">Menú principal</string>
+    <string name="action_next_page">Página siguiente</string>
+    <string name="action_prev_page">Página anterior</string>
+    <string name="action_first_page">Primera página</string>
+    <string name="action_last_page">Última página</string>
+    <string name="action_crop_page">Recortar</string>
+    <string name="action_zoom_page">Zoom</string>
+    <string name="action_layout_page">@string/menu_navigation_text</string>
+    <string name="action_rotation_page">Rotar</string>
+    <string name="action_options_page">Opciones</string>
+    <string name="action_book_options">@string/menu_book_preferences</string>
+    <string name="action_goto_page">Ir a</string>
+    <string name="action_dictionary">Abrir diccionario</string>
+    <string name="action_open">Abrir libro</string>
+    <string name="action_outline">@string/menu_outline_text</string>
+    <string name="action_add_bookmark">Añadir marcador</string>
+    <string name="action_open_bookmarks">Abrir marcadores</string>
+    <string name="action_full_screen">Pantalla completa</string>
+    <string name="action_day_night_mode">Modo Día/Noche</string>
+
+    <string name="action_crop_left">Recortar margen izquierdo</string>
+    <string name="action_crop_right">Recortar margen derecho</string>
+    <string name="action_crop_top">Recortar margen superior</string>
+    <string name="action_crop_bottom">Recortar margen inferior</string>
+
+    <string name="action_uncrop_left">Aumentar margen izquierdo</string>
+    <string name="action_uncrop_right">Aumentar margen derecho</string>
+    <string name="action_uncrop_top">Aumentar margen superior</string>
+    <string name="action_uncrop_bottom">Aumentar margen inferior</string>
+    <string name="action_inverse_crops">Cambiar recortar/aumentar margen</string>
+    <string name="action_switch_long_crop">Cambiar recorte grande/pequeño</string>
+
+    <string name="action_next_10">Avanzar 10 páginas</string>
+    <string name="action_prev_10">Retroceder 10 páginas</string>
+
+    <string name="action_rotate_90">Rotar 90/-90 grados</string>
+    <string name="action_rotate_270">Rotar 270/-270 grados</string>
+
+    <string name="action_select_text">@string/menu_select_text</string>
+</resources>
