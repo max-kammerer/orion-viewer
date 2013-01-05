@@ -24,7 +24,7 @@ package universe.constellation.orion.viewer;
  * Date: 01.01.13
  * Time: 18:57
  */
-public class OneDirection implements Cloneable {
+public class OneDimension implements Cloneable {
 
     public int offset;
 
@@ -46,8 +46,8 @@ public class OneDirection implements Cloneable {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof OneDirection) {
-            OneDirection other = (OneDirection) o;
+        if (o instanceof OneDimension) {
+            OneDimension other = (OneDimension) o;
             return offset == other.offset &&
                     pageDimension == other.pageDimension &&
                     screenDimension == other.screenDimension &&

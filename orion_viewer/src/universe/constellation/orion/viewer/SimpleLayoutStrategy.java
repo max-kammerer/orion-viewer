@@ -47,7 +47,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     private int rotation;
 
-    private PageWalker walker = new PageWalker("default");
+    private PageWalker walker = new PageWalker("default", this);
 
     private int layout;
 
@@ -138,7 +138,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         info.y.overlap = info.y.screenDimension * VERT_OVERLAP / 100;
         //System.out.println("overlap " + hOverlap + " " + vOverlap);
 
-        walker.reset(info, forward, info.x.overlap, info.y.overlap);
+        walker.reset(info, forward);
     }
 
     public boolean changeZoom(int zoom) {
@@ -151,7 +151,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     public boolean changeNavigation(String walkOrder) {
         if (walkOrder != null && !walkOrder.equals(walker.getDirection())) {
-            walker = new PageWalker(walkOrder);
+            walker = new PageWalker(walkOrder, this);
             return true;
         }
         return false;
@@ -274,4 +274,6 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
     public int getBottomMargin() {
         return bottomMargin;
     }
+
 }
+

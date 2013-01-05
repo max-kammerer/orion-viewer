@@ -50,11 +50,11 @@ public class PageWalker {
             return this == X_M || this == X;
         }
 
-        public boolean isMinus() {
+        public boolean toLeftOrUp() {
             return this == X_M || this == Y_M;
         }
 
-        public boolean isPlus() {
+        public boolean toRightOrDown() {
             return this == X || this == Y;
         }
     }
@@ -79,7 +79,9 @@ public class PageWalker {
 
     private WALK_ORDER direction;
 
-    public PageWalker(String direction) {
+    private SimpleLayoutStrategy layout;
+
+    public PageWalker(String direction, SimpleLayoutStrategy layout) {
         WALK_ORDER [] values = WALK_ORDER.values();
         this.direction = WALK_ORDER.ABCD;
         for (int i = 0; i < values.length; i++) {
@@ -89,6 +91,7 @@ public class PageWalker {
                 break;
             }
         }
+        this.layout = layout;
     }
 
     public boolean next(LayoutPosition info) {
@@ -99,58 +102,31 @@ public class PageWalker {
         return next(info, direction.first.inverse(), direction.second.inverse());
     }
 
-    //true if should increase page
+    //true if should show prev/next page
     public boolean next(LayoutPosition info, DIR firstDir, DIR secondDir) {
-//        int first = info.cellX;
-//        int firstMax = info.maxX;
-//
-//        int second = info.cellY;
-//        int secondMax = info.maxY;
-//
-//        if  (!firstDir.isX()) {
-//            first = info.cellY;
-//            firstMax = info.maxY;
-//            second = info.cellX;
-//            secondMax = info.maxX;
-//        }
-//
-//        firstMax++;
-//        secondMax++;
-//
-//        first = first + firstDir.delta + firstMax;
-//        int changeF = first / firstMax;
-//        first %= firstMax;
-//
-//        if (changeF != 1) {
-//            second = second + secondDir.delta + secondMax;
-//            int changeS = second / secondMax;
-//            second %= secondMax;
-//            if (changeS != 1) {
-//                return true;
-//            }
-//        }
-//
-//        info.cellX = firstDir.isX() ? first : second;
-//        info.cellY = secondDir.isX() ? first : second;
-//
-//
         boolean isX = firstDir.isX();
-        OneDirection first = isX ? info.x : info.y;
-        OneDirection second = isX ? info.y : info.x;
+        OneDimension first = isX ? info.x : info.y;
+        OneDimension second = isX ? info.y : info.x;
 
         int firstOffset = first.offset;
         int secondOffset = second.offset;
 
         boolean changeSecond = false;
 
+        int newOffsetStart = firstOffset + first.screenDimension * firstDir.delta;
+        int newOffsetEnd = newOffsetStart + first.screenDimension - 1;
 
-        int newValue = firstOffset + first.screenDimension * firstDir.delta + firstDir.delta;
-        if ((firstOffset <= 0 && newValue <= 0) || (newValue > first.pageDimension)) {
+        if (!inInterval(newOffsetStart, first) && !inInterval(newOffsetEnd, first)) {
             changeSecond = true;
-            firstOffset = firstDir.isPlus() ? 0 : first.pageDimension - first.screenDimension;
+            firstOffset = reset(firstDir, first, 0);
         } else {
-            firstOffset = newValue - first.overlap * firstDir.delta;
+            if (needAlign(firstDir) && (!inInterval(newOffsetStart, first) || !inInterval(newOffsetEnd, first))) {
+                firstOffset = align(firstDir, first);
+            } else {
+                firstOffset = newOffsetStart - first.overlap * firstDir.delta;
+            }
         }
+
         int newValueFirst = firstOffset;
 
         int newValueSecond = secondOffset;
@@ -158,12 +134,20 @@ public class PageWalker {
             changeSecond = false;
             firstOffset = secondOffset;
             first = second;
-            newValue = firstOffset + first.screenDimension * firstDir.delta + firstDir.delta;
-            if ((firstOffset <= 0 && newValue <= 0) || (newValue > first.pageDimension)) {
+            firstDir = secondDir;
+
+            newOffsetStart = firstOffset + first.screenDimension * firstDir.delta;
+            newOffsetEnd = newOffsetStart + first.screenDimension - 1;
+
+            if (!inInterval(newOffsetStart, first) && !inInterval(newOffsetEnd, first)) {
                 changeSecond = true;
-                firstOffset = firstDir.isPlus() ? 0 : first.pageDimension - first.screenDimension;
+                firstOffset = reset(firstDir, first, 0);
             } else {
-                firstOffset = newValue - first.overlap * firstDir.delta;
+                if (needAlign(firstDir) && (!inInterval(newOffsetStart, first) || !inInterval(newOffsetEnd, first))) {
+                    firstOffset = align(firstDir, first);
+                } else {
+                    firstOffset = newOffsetStart - first.overlap * firstDir.delta;
+                }
             }
             newValueSecond = firstOffset;
         }
@@ -176,7 +160,37 @@ public class PageWalker {
         return changeSecond;
     }
 
-    public void reset(LayoutPosition info, boolean isNext, int hOverlap, int vOverlap) {
+    private int reset(DIR dir, OneDimension dim, int possibleOffset) {
+        if (dir.toRightOrDown() || dim.pageDimension <= dim.screenDimension) {
+            return 0;
+        } else {
+            if (!needAlign(dir)) {
+                return  ((dim.pageDimension - dim.overlap) / (dim.screenDimension - dim.overlap)) * (dim.screenDimension - dim.overlap);
+            } else {
+                return dim.pageDimension - dim.screenDimension;
+            }
+        }
+    }
+
+
+    private int align(DIR dir, OneDimension dim) {
+        if (dir.toRightOrDown()) {
+            return dim.pageDimension - dim.screenDimension;
+        } else {
+            return 0;
+        }
+    }
+
+    private boolean needAlign(DIR dir) {
+        return dir.isX() && layout.getLayout() != 0 || (!dir.isX() && layout.getLayout() == 1);
+    }
+
+    private boolean inInterval(int value, OneDimension dim) {
+        return value >= 0 && value < dim.pageDimension;
+    }
+
+
+    public void reset(LayoutPosition info, boolean isNext) {
 //        if (info.screenHeight != 0 && info.screenWidth != 0) {
 //            info.maxX = (info.pageWidth - hOverlap) / (info.getRenderWidth() - hOverlap) + ((info.pageWidth - hOverlap) % (info.getRenderWidth() - hOverlap) == 0 ? 0 : 1)  - 1;
 //            info.maxY = (info.pageHeight - vOverlap) / (info.getRenderHeight() - vOverlap) + ((info.pageHeight - vOverlap) % (info.getRenderHeight() - vOverlap) == 0 ?  0: 1) -1;
@@ -197,11 +211,15 @@ public class PageWalker {
 //        DIR xDir = first.isX() ? first : second;
 //        DIR yDir = second.isX() ? first : second;
 
-        OneDirection hor =  first.isX() ? info.getHor() : info.getVert();
-        OneDirection vert =  first.isX() ? info.getVert() : info.getHor();
+        OneDimension hor =  first.isX() ? info.getHor() : info.getVert();
+        OneDimension vert =  first.isX() ? info.getVert() : info.getHor();
 
-        hor.offset = first.isMinus() ? hor.pageDimension - hor.screenDimension : 0;
-        vert.offset = second.isMinus() ? vert.pageDimension - vert.screenDimension : 0;
+        reset(first, hor, 0);
+        reset(second, vert, 0);
+//        hor.offset = first.toLeftOrUp() ? hor.pageDimension - hor.screenDimension : 0;
+//        vert.offset = second.toLeftOrUp() ? vert.pageDimension - vert.screenDimension : 0;
+        hor.offset = reset(first, hor, 0);
+        vert.offset = reset(second, vert, 0);
 
 //        info.cellX = xDir.isMinus() ? info.maxX : 0;
 //        info.cellY = yDir.isMinus() ? info.maxY : 0;

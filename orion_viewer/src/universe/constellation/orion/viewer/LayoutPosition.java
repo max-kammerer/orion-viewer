@@ -26,9 +26,9 @@ package universe.constellation.orion.viewer;
  */
 public class LayoutPosition implements Cloneable {
 
-    public OneDirection x = new OneDirection();
+    public OneDimension x = new OneDimension();
 
-    public OneDirection y = new OneDirection();
+    public OneDimension y = new OneDimension();
 
     public int pageNumber;
 
@@ -44,8 +44,8 @@ public class LayoutPosition implements Cloneable {
     public LayoutPosition clone() {
         try {
             LayoutPosition lp = (LayoutPosition) super.clone();
-            lp.x = (OneDirection) lp.x.clone();
-            lp.y = (OneDirection) lp.y.clone();
+            lp.x = (OneDimension) lp.x.clone();
+            lp.y = (OneDimension) lp.y.clone();
             return lp;
         } catch (CloneNotSupportedException e) {
             Common.d(e);
@@ -93,11 +93,11 @@ public class LayoutPosition implements Cloneable {
         }
     }
 
-    public OneDirection getHor() {
+    public OneDimension getHor() {
         return x;
     }
 
-    public OneDirection getVert() {
+    public OneDimension getVert() {
         return y;
     }
 }
