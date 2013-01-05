@@ -75,6 +75,10 @@ public class PageWalker {
         public String code() {
             return this.name();
         }
+
+        public boolean isLeftToRight() {
+            return this == ABCD || this == ACBD;
+        }
     };
 
     private WALK_ORDER direction;
@@ -103,65 +107,60 @@ public class PageWalker {
     }
 
     //true if should show prev/next page
-    public boolean next(LayoutPosition info, DIR firstDir, DIR secondDir) {
+    private boolean next(LayoutPosition info, DIR firstDir, DIR secondDir) {
         boolean isX = firstDir.isX();
         OneDimension first = isX ? info.x : info.y;
         OneDimension second = isX ? info.y : info.x;
 
-        int firstOffset = first.offset;
-        int secondOffset = second.offset;
+        boolean changeSecond = true;
+        int newFirstOffset = -1;
+        int newSecondOffset = -1;
 
-        boolean changeSecond = false;
+        for (int i = 1; i <= 2; i ++) {
+            OneDimension dimension = i == 1 ? first : second;
+            DIR dir = i == 1 ? firstDir : secondDir;
 
-        int newOffsetStart = firstOffset + first.screenDimension * firstDir.delta;
-        int newOffsetEnd = newOffsetStart + first.screenDimension - 1;
+            boolean inverseX = dir.isX() && !direction.isLeftToRight();
+            int offset = inverseX ? dimension.pageDimension - dimension.offset - dimension.screenDimension: dimension.offset;
+            dir = inverseX ? dir.inverse() : dir;
 
-        if (!inInterval(newOffsetStart, first) && !inInterval(newOffsetEnd, first)) {
-            changeSecond = true;
-            firstOffset = reset(firstDir, first, 0);
-        } else {
-            if (needAlign(firstDir) && (!inInterval(newOffsetStart, first) || !inInterval(newOffsetEnd, first))) {
-                firstOffset = align(firstDir, first);
-            } else {
-                firstOffset = newOffsetStart - first.overlap * firstDir.delta;
-            }
-        }
+            if (changeSecond) {
+                changeSecond = false;
 
-        int newValueFirst = firstOffset;
+                int newOffsetStart = offset + dimension.screenDimension * dir.delta;
+                int newOffsetEnd = newOffsetStart + dimension.screenDimension - 1;
 
-        int newValueSecond = secondOffset;
-        if (changeSecond) {
-            changeSecond = false;
-            firstOffset = secondOffset;
-            first = second;
-            firstDir = secondDir;
-
-            newOffsetStart = firstOffset + first.screenDimension * firstDir.delta;
-            newOffsetEnd = newOffsetStart + first.screenDimension - 1;
-
-            if (!inInterval(newOffsetStart, first) && !inInterval(newOffsetEnd, first)) {
-                changeSecond = true;
-                firstOffset = reset(firstDir, first, 0);
-            } else {
-                if (needAlign(firstDir) && (!inInterval(newOffsetStart, first) || !inInterval(newOffsetEnd, first))) {
-                    firstOffset = align(firstDir, first);
+                if (!inInterval(newOffsetStart, dimension) && !inInterval(newOffsetEnd, dimension)) {
+                    changeSecond = true;
+                    offset = reset(dir, dimension, 0);
                 } else {
-                    firstOffset = newOffsetStart - first.overlap * firstDir.delta;
+                    if (needAlign(dir) && (!inInterval(newOffsetStart, dimension) || !inInterval(newOffsetEnd, dimension))) {
+                        offset = align(dir, dimension);
+                    } else {
+                        offset = newOffsetStart - dimension.overlap * dir.delta;
+                    }
                 }
             }
-            newValueSecond = firstOffset;
+
+            offset = inverseX ? dimension.pageDimension - offset - dimension.screenDimension: offset;
+
+            if (i == 1) {
+                newFirstOffset = offset;
+            } else {
+                newSecondOffset = offset;
+            }
         }
 
         if (!changeSecond) {
-            (isX ? info.x : info.y).offset = newValueFirst;
-            second.offset = newValueSecond;
+            (isX ? info.x : info.y).offset = newFirstOffset;
+            second.offset = newSecondOffset;
         }
 
         return changeSecond;
     }
 
     private int reset(DIR dir, OneDimension dim, int possibleOffset) {
-        if (dir.toRightOrDown() || dim.pageDimension <= dim.screenDimension) {
+        if (dir.toRightOrDown() || dim.pageDimension <= dim.screenDimension || dim.screenDimension == 0) {
             return 0;
         } else {
             if (!needAlign(dir)) {
@@ -191,40 +190,18 @@ public class PageWalker {
 
 
     public void reset(LayoutPosition info, boolean isNext) {
-//        if (info.screenHeight != 0 && info.screenWidth != 0) {
-//            info.maxX = (info.pageWidth - hOverlap) / (info.getRenderWidth() - hOverlap) + ((info.pageWidth - hOverlap) % (info.getRenderWidth() - hOverlap) == 0 ? 0 : 1)  - 1;
-//            info.maxY = (info.pageHeight - vOverlap) / (info.getRenderHeight() - vOverlap) + ((info.pageHeight - vOverlap) % (info.getRenderHeight() - vOverlap) == 0 ?  0: 1) -1;
-//
-//            //in this case page size is smaller than overlap and it smaller than screen size - so there is only one possibility
-//            if (info.maxX < 0)  {
-//                info.maxX = 0;
-//            }
-//
-//            if (info.maxY < 0)  {
-//                info.maxY = 0;
-//            }
-//        }
-//
         DIR first = isNext ? direction.first : direction.first.inverse();
         DIR second = isNext ? direction.second : direction.second.inverse();
-//
-//        DIR xDir = first.isX() ? first : second;
-//        DIR yDir = second.isX() ? first : second;
 
-        OneDimension hor =  first.isX() ? info.getHor() : info.getVert();
-        OneDimension vert =  first.isX() ? info.getVert() : info.getHor();
+        DIR horDir = first.isX() ? first : second;
+        DIR vertDir = first.isX() ? second : first;
 
-        reset(first, hor, 0);
-        reset(second, vert, 0);
-//        hor.offset = first.toLeftOrUp() ? hor.pageDimension - hor.screenDimension : 0;
-//        vert.offset = second.toLeftOrUp() ? vert.pageDimension - vert.screenDimension : 0;
-        hor.offset = reset(first, hor, 0);
-        vert.offset = reset(second, vert, 0);
+        boolean inverse = !direction.isLeftToRight();
+        horDir = inverse ? horDir.inverse() : horDir;
+        info.x.offset = reset(horDir, info.x, 0);
+        info.x.offset = inverse ? info.x.pageDimension - info.x.screenDimension - info.x.offset : info.x.offset;
 
-//        info.cellX = xDir.isMinus() ? info.maxX : 0;
-//        info.cellY = yDir.isMinus() ? info.maxY : 0;
-
-
+        info.y.offset = reset(vertDir, info.y, 0);
     }
 
     public String getDirection() {
