@@ -72,13 +72,6 @@ public class LayoutPosition implements Cloneable {
         return pageNumber / 3 + x.hashCode() / 3 + y.hashCode() / 3;
     }
 
-    public int getRenderWidth() {
-        return (rotation == 0 ? x : y).screenDimension;
-    }
-
-    public int getRenderHeight() {
-        return (rotation == 0 ? y : x).screenDimension;
-    }
 
     public void setDocZoom(int zoom) {
         if (zoom <= 0) {

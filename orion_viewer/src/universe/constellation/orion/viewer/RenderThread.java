@@ -224,8 +224,8 @@ public class RenderThread extends Thread {
 
                 if (resultEntry == null) {
                     //render page
-                    int width = curPos.getRenderWidth();
-                    int height = curPos.getRenderHeight();
+                    int width = curPos.x.screenDimension;
+                    int height = curPos.y.screenDimension;
 
                     int screenWidth = curPos.screenWidth;
                     int screenHeight = curPos.screenHeight;
