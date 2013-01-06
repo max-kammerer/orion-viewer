@@ -1,21 +1,21 @@
 /*
- * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
- *
- * Copyright (C) 2011-2012  Michael Bogdanov
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+* Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+*
+* Copyright (C) 2011-2012  Michael Bogdanov
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 package universe.constellation.orion.viewer.selection;
 
@@ -25,12 +25,15 @@ import android.view.MotionEvent;
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.OrionView;
 import universe.constellation.orion.viewer.OrionViewerActivity;
+import universe.constellation.orion.viewer.android.touch.AndroidScaleWrapper;
+import universe.constellation.orion.viewer.android.touch.OldAdroidScaleWrapper;
+import universe.constellation.orion.viewer.android.touch.ScaleDetectorWrapper;
 
 /**
- * User: mike
- * Date: 02.01.13
- * Time: 18:57
- */
+* User: mike
+* Date: 02.01.13
+* Time: 18:57
+*/
 public class TouchAutomata extends TouchAutomataOldAndroid {
 
     private Point startFocus = new Point();
@@ -39,31 +42,13 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
 
     private float curScale = 1f;
 
-    private ScaleGestureDetector gestureDetector;
+    private ScaleDetectorWrapper gestureDetector;
 
     public TouchAutomata(OrionViewerActivity activity, OrionView view) {
         super(activity, view);
-        gestureDetector = new ScaleGestureDetector(activity.getApplicationContext(), new ScaleGestureDetector.OnScaleGestureListener() {
-            @Override
-            public boolean onScale(ScaleGestureDetector detector) {
-                System.out.println("onScale " + detector.getScaleFactor());
-                return onTouch(null, PinchEvents.DO_SCALE, detector.getScaleFactor());
-            }
-
-            @Override
-            public boolean onScaleBegin(ScaleGestureDetector detector) {
-                float x = detector.getFocusX();
-                float y = detector.getFocusY();
-                System.out.println("onScaleBegin " + detector.getScaleFactor());
-                System.out.println("focus: " + x + " " + y);
-                return onTouch(null, PinchEvents.START_SCALE, detector.getScaleFactor());
-            }
-
-            @Override
-            public void onScaleEnd(ScaleGestureDetector detector) {
-                onTouch(null, PinchEvents.END_SCALE, detector.getScaleFactor());
-            }
-        });
+        int sdkVersion = activity.getOrionContext().getSdkVersion();
+        gestureDetector = sdkVersion >= 8 ? new AndroidScaleWrapper(activity, this) :
+                sdkVersion >= 5 ?  new OldAdroidScaleWrapper(activity, this) : null;
     }
 
     public void startAutomata() {
@@ -74,10 +59,10 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
         return onTouch(event, null, 0);
     }
 
-    private boolean onTouch(MotionEvent event, PinchEvents pinch, float scale) {
+    public boolean onTouch(MotionEvent event, PinchEvents pinch, float scale) {
         boolean processed = false;
 
-        if (pinch == null) {
+        if (pinch == null && gestureDetector != null) {
             gestureDetector.onTouchEvent(event);
             if (gestureDetector.isInProgress()) {
                 return true;

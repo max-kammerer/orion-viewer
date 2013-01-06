@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package universe.constellation.orion.viewer.selection;
+package universe.constellation.orion.viewer.android.touch;
 
 import android.content.Context;
 import android.util.FloatMath;
@@ -25,7 +25,7 @@ import android.view.MotionEvent;
  * Date: 03.01.13
  * Time: 16:14
  */
-public class ScaleGestureDetector {
+public class ScaleGestureDetectorOld {
     private static final String TAG = "ScaleGestureDetector";
 
     /**
@@ -36,9 +36,9 @@ public class ScaleGestureDetector {
      *
      * An application will receive events in the following order:
      * <ul>
-     *  <li>One {@link OnScaleGestureListener#onScaleBegin(ScaleGestureDetector)}
-     *  <li>Zero or more {@link OnScaleGestureListener#onScale(ScaleGestureDetector)}
-     *  <li>One {@link OnScaleGestureListener#onScaleEnd(ScaleGestureDetector)}
+     *  <li>One {@link OnScaleGestureListener#onScaleBegin(ScaleGestureDetectorOld)}
+     *  <li>Zero or more {@link OnScaleGestureListener#onScale(ScaleGestureDetectorOld)}
+     *  <li>One {@link OnScaleGestureListener#onScaleEnd(ScaleGestureDetectorOld)}
      * </ul>
      */
     public interface OnScaleGestureListener {
@@ -55,7 +55,7 @@ public class ScaleGestureDetector {
          *          only wants to update scaling factors if the change is
          *          greater than 0.01.
          */
-        public boolean onScale(ScaleGestureDetector detector);
+        public boolean onScale(ScaleGestureDetectorOld detector);
 
         /**
          * Responds to the beginning of a scaling gesture. Reported by
@@ -69,43 +69,43 @@ public class ScaleGestureDetector {
          *          sense, onScaleBegin() may return false to ignore the
          *          rest of the gesture.
          */
-        public boolean onScaleBegin(ScaleGestureDetector detector);
+        public boolean onScaleBegin(ScaleGestureDetectorOld detector);
 
         /**
          * Responds to the end of a scale gesture. Reported by existing
          * pointers going up.
          *
-         * Once a scale has ended, {@link ScaleGestureDetector#getFocusX()}
-         * and {@link ScaleGestureDetector#getFocusY()} will return the location
+         * Once a scale has ended, {@link ScaleGestureDetectorOld#getFocusX()}
+         * and {@link ScaleGestureDetectorOld#getFocusY()} will return the location
          * of the pointer remaining on the screen.
          *
          * @param detector The detector reporting the event - use this to
          *          retrieve extended info about event state.
          */
-        public void onScaleEnd(ScaleGestureDetector detector);
+        public void onScaleEnd(ScaleGestureDetectorOld detector);
     }
 
     /**
      * A convenience class to extend when you only want to listen for a subset
      * of scaling-related events. This implements all methods in
      * {@link OnScaleGestureListener} but does nothing.
-     * {@link OnScaleGestureListener#onScale(ScaleGestureDetector)} returns
+     * {@link OnScaleGestureListener#onScale(ScaleGestureDetectorOld)} returns
      * {@code false} so that a subclass can retrieve the accumulated scale
      * factor in an overridden onScaleEnd.
-     * {@link OnScaleGestureListener#onScaleBegin(ScaleGestureDetector)} returns
+     * {@link OnScaleGestureListener#onScaleBegin(ScaleGestureDetectorOld)} returns
      * {@code true}.
      */
     public static class SimpleOnScaleGestureListener implements OnScaleGestureListener {
 
-        public boolean onScale(ScaleGestureDetector detector) {
+        public boolean onScale(ScaleGestureDetectorOld detector) {
             return false;
         }
 
-        public boolean onScaleBegin(ScaleGestureDetector detector) {
+        public boolean onScaleBegin(ScaleGestureDetectorOld detector) {
             return true;
         }
 
-        public void onScaleEnd(ScaleGestureDetector detector) {
+        public void onScaleEnd(ScaleGestureDetectorOld detector) {
             // Intentionally empty
         }
     }
@@ -148,7 +148,7 @@ public class ScaleGestureDetector {
     private int mActiveId1;
     private boolean mActive0MostRecent;
 
-    public ScaleGestureDetector(Context context, OnScaleGestureListener listener) {
+    public ScaleGestureDetectorOld(Context context, OnScaleGestureListener listener) {
         mContext = context;
         mListener = listener;
     }
@@ -182,7 +182,7 @@ public class ScaleGestureDetector {
                     mPrevEvent = MotionEvent.obtain(event);
                     mTimeDelta = 0;
 
-                    int index1 = event.getActionIndex();
+                    int index1 = getActionIndex(event);
                     int index0 = event.findPointerIndex(mActiveId0);
                     mActiveId1 = event.getPointerId(index1);
                     if (index0 < 0 || index0 == index1) {
@@ -210,7 +210,7 @@ public class ScaleGestureDetector {
 
                     mPrevEvent = MotionEvent.obtain(event);
                     mActiveId0 = mActive0MostRecent ? oldActive0 : oldActive1;
-                    mActiveId1 = event.getPointerId(event.getActionIndex());
+                    mActiveId1 = event.getPointerId(getActionIndex(event));
                     mActive0MostRecent = false;
 
                     int index0 = event.findPointerIndex(mActiveId0);
@@ -232,7 +232,7 @@ public class ScaleGestureDetector {
 
                 case MotionEvent.ACTION_POINTER_UP: {
                     final int pointerCount = event.getPointerCount();
-                    final int actionIndex = event.getActionIndex();
+                    final int actionIndex = getActionIndex(event);
                     final int actionId = event.getPointerId(actionIndex);
 
                     boolean gestureEnded = false;
@@ -538,5 +538,10 @@ public class ScaleGestureDetector {
      */
     public long getEventTime() {
         return mCurrEvent.getEventTime();
+    }
+
+    public int getActionIndex(MotionEvent event) {
+        return (event.getAction() & MotionEvent.ACTION_POINTER_ID_MASK)
+                        >> MotionEvent.ACTION_POINTER_ID_SHIFT;
     }
 }

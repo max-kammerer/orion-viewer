@@ -105,7 +105,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     private SelectedTextActions selectedTextActions;
 
     //new for new devices)
-    private TouchAutomataOldAndroid touchListener;
+    private TouchAutomata touchListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -143,7 +143,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         myIntent = getIntent();
 
-        touchListener = getOrionContext().getSdkVersion() >= 8 ? new TouchAutomata(this, view) : new TouchAutomataOldAndroid(this, view);
+        touchListener = new TouchAutomata(this, view);
         System.out.println("Touch listener:  " + touchListener.getClass());
     }
 
