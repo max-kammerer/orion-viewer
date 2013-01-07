@@ -279,9 +279,10 @@ public class RenderThread extends Thread {
                     Common.d("Sending Bitmap");
                     final CountDownLatch mutex = new CountDownLatch(1);
 
+                    final LayoutPosition info = curPos;
                     activity.runOnUiThread(new Runnable() {
                         public void run() {
-                            view.setData(bitmap, mutex);
+                            view.setData(bitmap, info, mutex);
                             //view.invalidate();
                             activity.getDevice().flushBitmap(0);
                         }

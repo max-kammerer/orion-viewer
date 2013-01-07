@@ -39,6 +39,8 @@ public class OrionView extends View {
 
     public Bitmap bitmap;
 
+    public LayoutPosition info;
+
     private CountDownLatch latch;
 
     private Controller controller;
@@ -53,6 +55,10 @@ public class OrionView extends View {
 
     private Point endFocus;
 
+    private Paint borderPaint;
+
+    private Paint nightPaint;
+
     private ColorMatrixColorFilter nightMatrix = new ColorMatrixColorFilter(new ColorMatrix(
             new float[]{
                     -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
@@ -63,14 +69,27 @@ public class OrionView extends View {
 
     public OrionView(Context context) {
         super(context);
+        init();
     }
 
     public OrionView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public OrionView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        init();
+    }
+
+    private void init() {
+        borderPaint = new Paint();
+        borderPaint.setColor(Color.rgb(0,0,0));
+        borderPaint.setStrokeWidth(2);
+        borderPaint.setStyle(Paint.Style.STROKE);
+
+        nightPaint = new Paint();
+        nightPaint.setColorFilter(nightMatrix);
     }
 
     @Override
@@ -88,12 +107,6 @@ public class OrionView extends View {
             long start = System.currentTimeMillis();
             Common.d("OrionView: drawing bitmap on view...");
 
-            Paint paint = null;
-            if (isNightMode) {
-                paint = new Paint();
-                paint.setColorFilter(nightMatrix);
-            }
-
             final float myScale = scale;
 
             //do scaling on pinch zoom
@@ -103,10 +116,18 @@ public class OrionView extends View {
                 canvas.scale(myScale, myScale);
             }
 
-            canvas.drawBitmap(bitmap, 0, 0, paint);
+            canvas.drawBitmap(bitmap, 0, 0, isNightMode ? nightPaint : null);
 
             if (myScale != DEFAULT_SCALE) {
                 canvas.restore();
+
+                borderPaint.setColor(isNightMode ? Color.WHITE : Color.BLACK);
+                int left = (int) ((-info.x.offset - startFocus.x) * myScale + endFocus.x);
+                int top = (int) ((-info.y.offset - startFocus.y) * myScale + endFocus.y);
+
+                int right = (int) (left + info.x.pageDimension * myScale);
+                int bottom = (int) (top + info.y.pageDimension * myScale);
+                canvas.drawRect(left, top, right, bottom, borderPaint);
             }
 
             Common.d("OrionView: bitmap rendering takes " + 0.001f * (System.currentTimeMillis() - start) + " s");
@@ -116,9 +137,10 @@ public class OrionView extends View {
         }
     }
 
-    public void setData(Bitmap bitmap, CountDownLatch latch) {
+    public void setData(Bitmap bitmap, LayoutPosition info, CountDownLatch latch) {
         this.bitmap = bitmap;
         this.latch = latch;
+        this.info = info;
         counter++;
     }
 
