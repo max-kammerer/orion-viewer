@@ -35,10 +35,6 @@ import pl.polidea.customwidget.TheMissingTabHost;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionApplication;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 /**
  * User: mike
  * Date: 24.12.11
@@ -74,12 +70,21 @@ public class OrionBaseActivity extends Activity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//
+//        if (device != null) {
+//            device.onResume();
+//        }
+//    }
 
-        if (device != null) {
-            device.onResume();
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if (hasFocus) {
+            if (device != null) {
+                device.onWindowGainFocus();
+            }
         }
     }
 

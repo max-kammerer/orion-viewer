@@ -139,7 +139,7 @@ public class AndroidDevice implements Device {
         }
     }
 
-    public void onResume() {
+    public void onWindowGainFocus() {
         if (screenLock != null) {
             screenLock.acquire(delay);
         }

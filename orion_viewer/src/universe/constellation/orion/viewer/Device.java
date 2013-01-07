@@ -43,7 +43,7 @@ public interface Device {
         public final static String MODEL = getField("MODEL");
         public final static String DEVICE = getField("DEVICE");
 
-        public final static boolean NOOK2 = "barnesandnoble".equals(MANUFACTURER.toLowerCase()) && "NOOK".equals(MODEL) && "zoom2".equals(DEVICE.toLowerCase());
+        public final static boolean NOOK2 = "barnesandnoble".equals(MANUFACTURER.toLowerCase()) && ("NOOK".equals(MODEL) || "BNRV350".equals(MODEL)) && "zoom2".equals(DEVICE.toLowerCase());
 
         public final static boolean SONY_PRS_T1 = "sony".equals(MANUFACTURER.toLowerCase()) && "PRS-T1".equals(MODEL);
 
@@ -99,7 +99,7 @@ public interface Device {
 
     void onPause();
 
-    void onResume();
+    void onWindowGainFocus();
 
     void onUserInteraction();
 

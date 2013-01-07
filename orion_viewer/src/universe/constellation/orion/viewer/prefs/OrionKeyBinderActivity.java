@@ -116,12 +116,14 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         //TODO add zero keycode warning
+        Common.d("KeyBinder: on key down " + keyCode);
         if (keyCode == KeyEvent.KEYCODE_UNKNOWN) {
             statusText.setText(R.string.key_binder_warning);
             statusText.setTextColor(Color.RED);
         } else if (keyCode != KeyEvent.KEYCODE_MENU && keyCode != KeyEvent.KEYCODE_BACK) {
             statusText.setText(R.string.key_binder_message);
             statusText.setTextColor(defaultColor);
+            Common.d("KeyBinder: on key down2 " + event.getKeyCode());
             selectAction(event.getKeyCode());
             return true;
         }

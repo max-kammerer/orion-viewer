@@ -65,7 +65,7 @@ public class AlexDevice extends EpdRender implements Device {
         setVdsActive(false);
     }
 
-    public void onResume() {
+    public void onWindowGainFocus() {
         Common.d("on Resume");
         setVdsActive(true);
         onUserInteraction();
