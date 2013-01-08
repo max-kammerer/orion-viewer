@@ -1,3 +1,10 @@
+===== 0.41.2 (Jan 08, 2013) =====
+* Pinch zoom
+* Fixed crash on opening big outline for djvu file
+* Fixed wrong outline navigation in djvu
+* Spanish localization by Marc Armengol
+* Updated page alignment
+
 ===== 0.39.2 (Dec 25, 2012) =====
 * Updated Italian localization by Alberto Pettarin
 * Copy to clipboard action for selected text
