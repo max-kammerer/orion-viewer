@@ -1,15 +1,17 @@
 1. To build Orion Viewer from command line you will 
-    need android-sdk-r20 and apache-ant installed on your system.
-2. Change path to android-sdk in:
-    orion_viewer/local.properties
-    themissingtabwidget-0.2/local.properties
-    tree-view-list-android/local.properties
-3.a If you make build NOT for Highscreen/Spring Design Alex comment AlexDevice class 
+    need android-sdk-r21 and apache-ant 1.8 installed on your system.
+2. Change path to android-sdk in orion_viewer/local.properties.
+    See orion_viewer/local.properties.sample for example.
+3. If you make build NOT for Highscreen/Spring Design Alex comment AlexDevice class
     in orion_viewer/src/universe/constellation/orion/viewer/device/
-    and remove it classpath from orion_viewer/build.xml
-3.b Otherwise just select alex target in orion_viewer/project.properties 
-    or add 'alex/android.jar' to classpath in orion_viewer/build.xml
-4. Go to orion_viewer folder (there is ant script: build.xml) 
+4. Go to orion_viewer folder (there is ant script: build.xml)
     and run 'ant' commmand with 'release' target:
 	ant release
+
+For Highscreen Alex:
+3.b Select alex target in orion_viewer/project.properties
+    or specify property alex.sdk.path in ant.properties
+4.b Run command:
+    ant -f build_alex.xml release
+
 5. Project building will starts!

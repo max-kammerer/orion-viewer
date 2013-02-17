@@ -1,0 +1,2 @@
+# Modify 'sdk.dir' property  and resave this file as local.properties
+sdk.dir=/path/to/android/sdk/android-sdk-linux
