@@ -10,7 +10,7 @@
 
 For Highscreen Alex:
 3.b Select alex target in orion_viewer/project.properties
-    or specify property alex.sdk.path in ant.properties
+    or specify property alex.sdk.path in local.properties
 4.b Run command:
     ant -f build_alex.xml release
 
