@@ -1,0 +1,105 @@
+# view land/res/layout-land/android_help.xml #generated:22
+# view land/res/layout-land/file_manager.xml #generated:20
+# view land/res/layout-land/tab_content.xml #generated:13
+# view port/res/layout-port/android_help.xml #generated:22
+# view port/res/layout-port/file_manager.xml #generated:20
+# view port/res/layout-port/tab_content.xml #generated:12
+# view res/layout/nook_file_manager.xml #generated:40
+# view res/layout/nook_help.xml #generated:24
+-keep class pl.polidea.customwidget.TheMissingTabHost { <init>(...); }
+
+# view land/res/layout-land/android_help.xml #generated:28
+# view land/res/layout-land/file_manager.xml #generated:26
+# view land/res/layout-land/tab_content.xml #generated:20
+# view port/res/layout-port/android_help.xml #generated:29
+# view port/res/layout-port/file_manager.xml #generated:27
+# view port/res/layout-port/tab_content.xml #generated:20
+# view res/layout/nook_file_manager.xml #generated:46
+# view res/layout/nook_help.xml #generated:30
+-keep class pl.polidea.customwidget.TheMissingTabWidget { <init>(...); }
+
+# view AndroidManifest.xml #generated:122
+-keep class universe.constellation.orion.viewer.OrionBookmarkActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:69
+-keep class universe.constellation.orion.viewer.OrionFileManagerActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:82
+-keep class universe.constellation.orion.viewer.OrionFileSelectorActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:99
+-keep class universe.constellation.orion.viewer.OrionHelpActivity { <init>(...); }
+
+# view res/layout/android_main.xml #generated:25
+# view res/layout/epd.xml #generated:29
+# view res/layout/nook_main.xml #generated:189
+-keep class universe.constellation.orion.viewer.OrionView { <init>(...); }
+
+# view AndroidManifest.xml #generated:36
+-keep class universe.constellation.orion.viewer.OrionViewerActivity { <init>(...); }
+
+# view res/layout/page_layout_pref.xml #generated:22
+# view res/layout/select_book_item.xml #generated:22
+# view res/layout/select_book_item_multi.xml #generated:22
+-keep class universe.constellation.orion.viewer.android.CheckableLinearLayout { <init>(...); }
+
+# view res/layout/alex_main.xml #generated:118
+# view res/layout/alex_main.xml #generated:122
+# view res/layout/alex_main.xml #generated:52
+# view res/layout/nook_main.xml #generated:42
+# view res/layout/nook_main.xml #generated:45
+# view res/layout/nook_main.xml #generated:99
+-keep class universe.constellation.orion.viewer.android.ImageButton { <init>(...); }
+
+# view res/layout/page_layout.xml #generated:106
+# view res/layout/page_layout.xml #generated:84
+# view res/layout/page_layout.xml #generated:91
+# view res/layout/page_layout.xml #generated:99
+-keep class universe.constellation.orion.viewer.android.RadioButton { <init>(...); }
+
+# view AndroidManifest.xml #generated:125
+-keep class universe.constellation.orion.viewer.outline.OutlineActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:119
+-keep class universe.constellation.orion.viewer.prefs.ActionListActivity { <init>(...); }
+
+# view res/xml/userpreferences.xml #generated:164
+-keep class universe.constellation.orion.viewer.prefs.DevicePrefInfo { <init>(...); }
+
+# view AndroidManifest.xml #generated:35
+-keep class universe.constellation.orion.viewer.prefs.OrionApplication { <init>(...); }
+
+# view AndroidManifest.xml #generated:108
+-keep class universe.constellation.orion.viewer.prefs.OrionBookPreferences { <init>(...); }
+
+# view res/xml/book_preference.xml #generated:60
+# view res/xml/book_preference.xml #generated:70
+# view res/xml/userpreferences.xml #generated:155
+# view res/xml/userpreferences.xml #generated:206
+# view res/xml/userpreferences.xml #generated:220
+# view res/xml/userpreferences.xml #generated:228
+# view res/xml/userpreferences.xml #generated:236
+# view res/xml/userpreferences.xml #generated:71
+-keep class universe.constellation.orion.viewer.prefs.OrionEditPreference { <init>(...); }
+
+# view AndroidManifest.xml #generated:88
+-keep class universe.constellation.orion.viewer.prefs.OrionKeyBinderActivity { <init>(...); }
+
+# view res/xml/book_preference.xml #generated:28
+# view res/xml/userpreferences.xml #generated:52
+-keep class universe.constellation.orion.viewer.prefs.OrionLayoutDialog { <init>(...); }
+
+# view res/xml/book_preference.xml #generated:38
+# view res/xml/book_preference.xml #generated:49
+# view res/xml/userpreferences.xml #generated:33
+-keep class universe.constellation.orion.viewer.prefs.OrionListPreference { <init>(...); }
+
+# view AndroidManifest.xml #generated:105
+-keep class universe.constellation.orion.viewer.prefs.OrionPreferenceActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:111
+-keep class universe.constellation.orion.viewer.prefs.OrionTapActivity { <init>(...); }
+
+# view res/layout/text_selector.xml #generated:26
+-keep class universe.constellation.orion.viewer.selection.SelectionView { <init>(...); }
+

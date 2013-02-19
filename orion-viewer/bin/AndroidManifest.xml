@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2012  Michael Bogdanov
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="universe.constellation.orion.viewer"
+          android:installLocation="auto"
+          android:versionCode="30"
+          android:versionName="@string/version_name">
+
+    <supports-screens
+            android:xlargeScreens="true"
+            android:largeScreens="true"
+            android:normalScreens="true"
+            android:smallScreens="true"
+            android:anyDensity="true"/>
+
+    <application android:label="@string/app_name" android:icon="@drawable/orion" android:name=".prefs.OrionApplication">
+        <activity android:name=".OrionViewerActivity"
+                  android:label="@string/app_name"
+                  android:theme="@android:style/Theme.NoTitleBar"
+                  android:launchMode="singleTask"
+                  android:icon="@drawable/orion" android:configChanges="orientation|locale" android:screenOrientation="behind" android:windowSoftInputMode="adjustPan">
+
+            <intent-filter>
+                <action android:name="com.bravo.intent.action.VIEW"/>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="file"/>
+                <data android:scheme="content"/>
+                <data android:mimeType="image/vnd.djvu"/>
+                <data android:mimeType="image/x-djvu"/>
+                <data android:mimeType="application/djvu"/>
+                <data android:mimeType="application/pdf"/>
+                <data android:mimeType="application/vnd.ms-xpsdocument"/>
+                <data android:mimeType="application/x-cbz"/>
+			</intent-filter>
+
+            <intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:host="*"/>
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+				<data android:pathPattern=".*\\.djvu" />
+                <data android:pathPattern=".*\\.pdf" />
+                <data android:pathPattern=".*\\.xps" />
+                <data android:pathPattern=".*\\.cbz" />
+			</intent-filter>
+        </activity>
+
+        <activity android:name=".OrionFileManagerActivity"
+                  android:label="@string/app_name"
+                  android:theme="@android:style/Theme.NoTitleBar"
+                  android:launchMode="singleTask"
+                  android:icon="@drawable/orion">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+        </activity>
+
+        <activity android:name=".OrionFileSelectorActivity"
+                          android:label="@string/app_name"
+                          android:theme="@android:style/Theme.NoTitleBar"
+                          android:icon="@drawable/orion"/>
+
+
+        <activity android:name=".prefs.OrionKeyBinderActivity" android:screenOrientation="behind"
+                  android:label="@string/app_name"
+                  android:theme="@android:style/Theme.NoTitleBar"
+                  android:launchMode="singleTask"
+                  android:icon="@drawable/orion">
+            <intent-filter>
+                <action android:name="universe.constellation.orion.viewer.KEY_MANAGER"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".OrionHelpActivity" android:screenOrientation="behind"
+                  android:label="@string/app_name"
+                  android:theme="@android:style/Theme.NoTitleBar"
+                  android:launchMode="singleInstance"
+                  android:icon="@drawable/orion"/>
+
+        <activity android:name=".prefs.OrionPreferenceActivity" android:screenOrientation="behind"
+          android:label="My Preferences"/>
+
+        <activity android:name=".prefs.OrionBookPreferences" android:screenOrientation="behind"
+          android:label="My Preferences"/>
+
+        <activity android:name=".prefs.OrionTapActivity" android:screenOrientation="behind"
+          android:label="Tap Zones">
+            <intent-filter>
+                <action android:name="universe.constellation.orion.viewer.TAP_ZONES"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".prefs.ActionListActivity" android:screenOrientation="behind"
+          android:label="Action List"/>
+
+        <activity android:name=".OrionBookmarkActivity" android:screenOrientation="behind"
+          android:label="Bookmarks"/>
+
+        <activity android:name=".outline.OutlineActivity" android:screenOrientation="behind"
+          android:label="Outlines"/>
+
+    </application>
+    <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="8"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+</manifest>
