@@ -1,7 +1,7 @@
 /*
  * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
  *
- * Copyright (C) 2011-2012  Michael Bogdanov
+ * Copyright (C) 2011-2013  Michael Bogdanov & Co
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ import java.io.*;
  */
 public class Common {
 
-    public static final boolean ENABLE2SCREEN = /*replace*/true/*replace*/;
+    public static final boolean ENABLE2SCREEN = /*replace*/false/*replace*/;
 
     public static Device createDevice() {
         if (ENABLE2SCREEN) {
