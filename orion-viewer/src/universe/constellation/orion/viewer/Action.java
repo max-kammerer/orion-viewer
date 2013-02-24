@@ -222,20 +222,6 @@ public enum Action {
         }
     },
 
-    ROTATE_90 (R.string.action_rotate_90, R.integer.action_rotate_90) {
-        @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            //controller.setRotation((controller.getRotation() - 1) % 2);
-        }
-    },
-
-    ROTATE_270 (R.string.action_rotate_270, R.integer.action_rotate_270) {
-        @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            //controller.setRotation((controller.getRotation() + 1) % 2);
-        }
-    },
-
     DICTIONARY (R.string.action_dictionary, R.integer.action_dictionary) {
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
             String dict = activity.getGlobalOptions().getDictionary();
@@ -285,6 +271,42 @@ public enum Action {
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
             Intent intent = new Intent(activity, OrionPreferenceActivity.class);
             activity.startActivity(intent);
+        }
+    },
+
+    FIT_WIDTH (R.string.action_fit_width, R.integer.action_fit_width) {
+        @Override
+        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+            controller.changeZoom(0);
+        }
+    },
+
+    FIT_HEIGHT (R.string.action_fit_height, R.integer.action_fit_heigh) {
+        @Override
+        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+            controller.changeZoom(-1);
+        }
+    },
+
+    FIT_PAGE (R.string.action_fit_page, R.integer.action_fit_page) {
+        @Override
+        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+            controller.changeZoom(-2);
+        }
+    },
+
+
+    ROTATE_90 (R.string.action_rotate_90, R.integer.action_rotate_90) {
+        @Override
+        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+            //controller.setRotation((controller.getRotation() - 1) % 2);
+        }
+    },
+
+    ROTATE_270 (R.string.action_rotate_270, R.integer.action_rotate_270) {
+        @Override
+        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+            //controller.setRotation((controller.getRotation() + 1) % 2);
         }
     },
 

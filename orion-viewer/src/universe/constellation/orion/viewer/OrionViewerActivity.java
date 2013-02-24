@@ -880,7 +880,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        System.out.println("key " + keyCode);
+        L.log("key = " + keyCode);
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (!device.optionViaDialog() && animator.getDisplayedChild() != MAIN_SCREEN) {
                 onAnimatorCancel();

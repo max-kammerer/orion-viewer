@@ -121,5 +121,4 @@ public interface Device {
 
     Point getDeviceSize();
 
-    void screenSizeChanged(int width, int height);
 }

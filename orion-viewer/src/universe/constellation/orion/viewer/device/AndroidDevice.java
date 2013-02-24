@@ -188,8 +188,4 @@ public class AndroidDevice implements Device {
 
     }
 
-    @Override
-    public void screenSizeChanged(int width, int height) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
 }

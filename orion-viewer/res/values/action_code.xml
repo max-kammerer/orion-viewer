@@ -72,4 +72,10 @@
 
     <integer name="action_open_outline">41</integer>
     <integer name="action_select_text">42</integer>
+
+
+    <integer name="action_fit_width">50</integer>
+    <integer name="action_fit_heigh">51</integer>
+    <integer name="action_fit_page">52</integer>
+
 </resources>
