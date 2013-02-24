@@ -1016,60 +1016,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
         animator = ((ViewAnimator)dialog.findViewById(R.id.viewanim));
 
         getView().setOnTouchListener(new View.OnTouchListener() {
-            private int lastX = -1;
-            private int lastY = -1;
-            long startTime = 0;
-            private static final long TIME_DELTA = 600;
             public boolean onTouch(View v, MotionEvent event) {
-                //Common.d("Event " + event.getAction() + ": "  + (SystemClock.uptimeMillis() - startTime));
                 if (!selectionMode) {
-//                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//                        //Common.d("DOWN " + event.getAction());
-//                        startTime = SystemClock.uptimeMillis();
-//                        lastX = (int) event.getX();
-//                        lastY = (int) event.getY();
-//                        return true;
-//                    } else {
-//    //                    Common.d("ev " + event.getAction());
-//                        boolean doAction = false;
-//                        if (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_UP) {
-//                            if (event.getAction() == MotionEvent.ACTION_UP) {
-//                                Common.d("UP " + event.getAction());
-//                                doAction = true;
-//                            } else {
-//                                if (lastX != -1 && lastY != -1) {
-//                                    boolean isLongClick = (SystemClock.uptimeMillis() - startTime) > TIME_DELTA;
-//                                    doAction = isLongClick;
-//                                }
-//                            }
-//
-//                            if (doAction) {
-//                                Common.d("Check event action " + event.getAction());
-//                                boolean isLongClick = (SystemClock.uptimeMillis() - startTime) > TIME_DELTA;
-//
-//                                if (lastX != -1 && lastY != -1) {
-//                                    int width = getView().getWidth();
-//                                    int height = getView().getHeight();
-//
-//                                    int i = 3 * lastY / height;
-//                                    int j = 3 * lastX / width;
-//
-//                                    int code = globalOptions.getActionCode(i, j, isLongClick);
-//                                    doAction(code);
-//
-//                                    startTime = 0;
-//                                    lastX = -1;
-//                                    lastY = -1;
-//                                }
-//
-//                            }
-//                            return true;
-//                        } else if (event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_OUTSIDE) {
-//                            startTime = 0;
-//                            lastX = -1;
-//                            lastY = -1;
-//                        }
-//                    }
                     return touchListener.onTouch(event);
                 } else {
                     boolean result = textSelection.onTouch(event);
@@ -1090,26 +1038,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
         });
 
-//        getView().setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                v.get
-//                globalOptions.getActionCode()
-//                controller.drawNext();
-//            }
-//        });
-//
-//        getView().setOnLongClickListener(new View.OnLongClickListener(){
-//            public boolean onLongClick(View v) {
-//                controller.drawPrev();
-//                return true;
-//            }
-//        });
-
-//        getView().setOnTouchListener(new View.OnTouchListener() {
-//            public boolean onTouch(View v, MotionEvent event) {
-//
-//            }
-//        });
+        dialog.setCanceledOnTouchOutside(true);
     }
 
     public void doAction(int code) {
