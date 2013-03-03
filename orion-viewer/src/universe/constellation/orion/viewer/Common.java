@@ -33,7 +33,7 @@ import java.io.*;
  */
 public class Common {
 
-    public static final boolean ENABLE2SCREEN = /*replace*/false/*replace*/;
+    public static final boolean ENABLE2SCREEN = /*replace*/true/*replace*/;
 
     public static Device createDevice() {
         if (ENABLE2SCREEN) {
