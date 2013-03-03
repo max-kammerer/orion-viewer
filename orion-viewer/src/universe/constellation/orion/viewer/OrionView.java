@@ -19,6 +19,7 @@
 
 package universe.constellation.orion.viewer;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.*;
 import android.util.AttributeSet;
@@ -97,7 +98,7 @@ public class OrionView extends View {
         GlobalOptions options = ((OrionViewerActivity)getContext()).getGlobalOptions();
         if (options.isEinkOptimization()) {
             if (counter < options.getEinkRefreshAfter()) {
-                Nook2Util.setGL16Mode((OrionViewerActivity)getContext());
+                Nook2Util.setGL16Mode((Activity)getContext());
             } else {
                 counter = 0;
             }

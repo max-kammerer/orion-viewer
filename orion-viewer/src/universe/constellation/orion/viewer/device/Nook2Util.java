@@ -7,7 +7,6 @@ package universe.constellation.orion.viewer.device;
  */
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import universe.constellation.orion.viewer.Device;
@@ -16,12 +15,16 @@ import android.app.Activity;
 
 public class Nook2Util {
 
+    private static final boolean NOOK_120 = Device.Info.NOOK_120;
+
     private static Class epdControllerClass;
 
     private  static Class epdControllerRegionClass;
     private  static Class epdControllerRegionParamsClass;
     private  static Class epdControllerWaveClass;
     private  static Class epdControllerModeClass;
+
+    private static Object mEpdController = null;
 
     private static Object[] waveEnums;
 
@@ -41,7 +44,7 @@ public class Nook2Util {
                         .forName("android.hardware.EpdController");
             epdControllerRegionClass = Class
                     .forName("android.hardware.EpdController$Region");
-            if (Device.Info.NOOK_120) {
+            if (NOOK_120) {
             	epdControllerRegionParamsClass = Class
             			.forName("android.hardware.EpdRegionParams");
             	epdControllerWaveClass = Class
@@ -79,7 +82,7 @@ public class Nook2Util {
 
     }
 
-//	public static void exitA2Mode() {FIXME: it is never used so no 1.2.* corrections
+    //	public static void exitA2Mode() {FIXME: it is never used so no 1.2.* corrections
 //		System.err.println("Orion::exitA2Mode");
 //		try {
 //
@@ -119,16 +122,14 @@ public class Nook2Util {
 //		}
 //
 //	}
-	
-	private static Object mEpdController = null;
 
-	public static void setGL16Mode(Activity a) {
+	public static void setGL16Mode(Activity activity) {
 		System.err.println("Orion::setGL16Mode");
 		try {
             if (successful) {
-            	if (Device.Info.NOOK_120 && mEpdController == null) {
+            	if (NOOK_120 && mEpdController == null) {
             		Constructor[] EpdControllerConstructors = epdControllerClass.getConstructors();
-					mEpdController = EpdControllerConstructors[0].newInstance(new Object[] { a });
+					mEpdController = EpdControllerConstructors[0].newInstance(new Object[] { activity });
 				}
                 Constructor RegionParamsConstructor = epdControllerRegionParamsClass
                         .getConstructor(new Class[] { Integer.TYPE, Integer.TYPE,
@@ -141,7 +142,7 @@ public class Nook2Util {
                         "setRegion", new Class[] { String.class,
                                 epdControllerRegionClass,
                                 epdControllerRegionParamsClass, epdControllerModeClass });
-                if (Device.Info.NOOK_120) {
+                if (NOOK_120) {
                 	epdControllerSetRegionMethod
 					.invoke(mEpdController, new Object[] { "Orion",
 							regionEnums[2], localRegionParams, modeEnums[2] }); // Mode = ONESHOT_ALL
