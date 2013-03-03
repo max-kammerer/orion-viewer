@@ -97,7 +97,7 @@ public class OrionView extends View {
         GlobalOptions options = ((OrionViewerActivity)getContext()).getGlobalOptions();
         if (options.isEinkOptimization()) {
             if (counter < options.getEinkRefreshAfter()) {
-                Nook2Util.setGL16Mode();
+                Nook2Util.setGL16Mode((OrionViewerActivity)getContext());
             } else {
                 counter = 0;
             }

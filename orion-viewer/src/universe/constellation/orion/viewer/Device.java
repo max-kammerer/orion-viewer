@@ -43,8 +43,10 @@ public interface Device {
         public final static String MODEL = getField("MODEL");
         public final static String DEVICE = getField("DEVICE");
 
-        public final static boolean NOOK2 = "barnesandnoble".equals(MANUFACTURER.toLowerCase()) && ("NOOK".equals(MODEL) || "BNRV350".equals(MODEL)) && "zoom2".equals(DEVICE.toLowerCase());
+        public final static boolean NOOK2 = "barnesandnoble".equals(MANUFACTURER.toLowerCase()) && ("NOOK".equals(MODEL) || "BNRV350".equals(MODEL) || "BNRV300".equals(MODEL)) && "zoom2".equals(DEVICE.toLowerCase());
 
+        public final static boolean NOOK_120 = NOOK2 && ("1.2.0".equals(getVersion()) || "1.2.1".equals(getVersion()));
+        
         public final static boolean SONY_PRS_T1 = "sony".equals(MANUFACTURER.toLowerCase()) && "PRS-T1".equals(MODEL);
 
         public final static boolean ALEX = "sdi".equals(MANUFACTURER.toLowerCase()) && "seleucia".equals(MODEL.toLowerCase()) && "seleucia".equals(DEVICE.toLowerCase());
@@ -70,7 +72,7 @@ public interface Device {
         //EDGE removed from two screen - cause general screen rotation is used.
         public final static boolean TWO_SCREEN = ALEX || NOOK_CLASSIC;
 
-        public static String getField(String name) {
+		public static String getField(String name) {
             try {
                 return (String) Build.class.getField(name).get(null);
             } catch (Exception e) {
@@ -78,6 +80,11 @@ public interface Device {
                 return "";
             }
         }
+		
+		public static String getVersion() {
+			return Build.VERSION.INCREMENTAL;
+		}
+		
     }
 
 
