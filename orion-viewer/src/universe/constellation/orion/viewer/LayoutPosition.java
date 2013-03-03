@@ -76,21 +76,16 @@ public class LayoutPosition implements Cloneable {
     public void setDocZoom(int zoom) {
         if (zoom <= 0) {
             switch (zoom) {
-                //zoom by width
+                //fit width
                 case 0: docZoom = ((double) x.screenDimension) / x.pageDimension; break;
-                case -1: docZoom = ((double) y.screenDimension) / y.screenDimension; break;
-                case -2: docZoom = Math.min(((double) x.screenDimension) / x.pageDimension, ((double) y.screenDimension) / y.screenDimension); break;
+                //fit height
+                case -1: docZoom = ((double) y.screenDimension) / y.pageDimension; break;
+                //fit page
+                case -2: docZoom = Math.min(((double) x.screenDimension) / x.pageDimension, ((double) y.screenDimension) / y.pageDimension); break;
             }
         } else {
             docZoom = 0.0001f * zoom;
         }
     }
 
-    public OneDimension getHor() {
-        return x;
-    }
-
-    public OneDimension getVert() {
-        return y;
-    }
 }
