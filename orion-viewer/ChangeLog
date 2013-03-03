@@ -1,4 +1,5 @@
-===== 0.41.5 (Mar 03, 2013) =====
+===== 0.41.6 (Mar 03, 2013) =====
+* Fast e-ink refresh for Nook ST 1.2.*
 * Fixed "Fit height" and "Fit page" zoom
 * New tap actions for zoom
 * Dismiss dialog on click outside
