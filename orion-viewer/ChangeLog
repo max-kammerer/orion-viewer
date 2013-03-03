@@ -1,3 +1,8 @@
+===== 0.41.5 (Mar 03, 2013) =====
+* Fixed "Fit height" and "Fit page" zoom
+* New tap actions for zoom
+* Dismiss dialog on click outside
+
 ===== 0.41.2 (Jan 08, 2013) =====
 * Pinch zoom
 * Fixed crash on opening big outline for djvu file
