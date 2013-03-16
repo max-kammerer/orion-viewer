@@ -30,6 +30,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.*;
 
+import universe.constellation.orion.viewer.Device;
+import universe.constellation.orion.viewer.device.EdgeDevice;
+
 /**
  * User: mike
  * Date: 19.10.11
@@ -64,15 +67,19 @@ public class RenderThread extends Thread {
     private boolean paused;
 
     private OrionViewerActivity activity;
+    
+    private Device device;
 
 
-    public RenderThread(OrionViewerActivity activity, OrionView view, LayoutStrategy layout, DocumentWrapper doc) {
+    private void create(OrionViewerActivity activity, OrionView view, LayoutStrategy layout, DocumentWrapper doc) {
         this.view = view;
         this.layout = layout;
         this.doc = doc;
         this.activity = activity;
 
-        WindowManager manager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager manager = null;
+        if (activity != null)
+            manager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
         if (manager == null) {
             bitmapConfig = Bitmap.Config.ARGB_8888;
             return;
@@ -107,6 +114,15 @@ public class RenderThread extends Thread {
         Common.d("BitmapConfig is " +  bitmapConfig);
     }
 
+    public RenderThread(OrionViewerActivity activity, OrionView view, LayoutStrategy layout, DocumentWrapper doc) {
+        create(activity, view, layout, doc);
+    }
+    
+    public RenderThread(Device device, LayoutStrategy layout, DocumentWrapper doc) {
+        this.device = device ;
+        create(null, null, layout, doc);
+    }
+    
     public void invalidateCache() {
         synchronized (this) {
             for (Iterator<CacheInfo> iterator = cachedBitmaps.iterator(); iterator.hasNext(); ) {
@@ -280,13 +296,17 @@ public class RenderThread extends Thread {
                     final CountDownLatch mutex = new CountDownLatch(1);
 
                     final LayoutPosition info = curPos;
-                    activity.runOnUiThread(new Runnable() {
-                        public void run() {
-                            view.setData(bitmap, info, mutex);
-                            //view.invalidate();
-                            activity.getDevice().flushBitmap(0);
-                        }
-                    });
+                    if (activity!=null) {
+                        activity.runOnUiThread(new Runnable() {
+                            public void run() {
+                                view.setData(bitmap, info, mutex);
+                                //view.invalidate();
+                                activity.getDevice().flushBitmap(0);
+                            }
+                            });
+                    } else {
+                        ((EdgeDevice)device).flushBitmap(bitmap);
+                    }
 
                     try {
                         mutex.await(1, TimeUnit.SECONDS);

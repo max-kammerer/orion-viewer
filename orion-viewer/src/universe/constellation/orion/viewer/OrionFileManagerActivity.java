@@ -143,10 +143,17 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
 
     protected void openFile(File file) {
         Intent in = new Intent(Intent.ACTION_VIEW);
-        in.setClass(getApplicationContext(), OrionViewerActivity.class);
         in.setData(Uri.fromFile(file));
         in.addCategory(Intent.CATEGORY_DEFAULT);
-        startActivity(in);
+        if (Device.Info.EDGE) {
+            in.setClass(getApplicationContext(), EdgeViewService.class);
+            startService(in);
+        }
+        else
+        {
+            in.setClass(getApplicationContext(), OrionViewerActivity.class);
+            startActivity(in);
+        }
     }
 
 

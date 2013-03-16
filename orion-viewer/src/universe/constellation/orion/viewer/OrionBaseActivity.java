@@ -183,8 +183,8 @@ public class OrionBaseActivity extends Activity {
         return true;
     }
 
-    public OrionApplication getOrionContext() {
-        return (OrionApplication) getApplicationContext();
+    public static OrionApplication getOrionContext() {
+        return (OrionApplication) OrionApplication.instance.getApplicationContext();
     }
 
     @Override

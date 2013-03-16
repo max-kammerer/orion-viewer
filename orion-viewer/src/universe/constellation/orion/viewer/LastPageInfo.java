@@ -30,6 +30,7 @@ import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import universe.constellation.orion.viewer.prefs.OrionApplication;
 
 /**
  * User: mike
@@ -98,7 +99,7 @@ public class LastPageInfo implements Serializable {
         if (!successfull) {
             //reinit
             lastPageInfo = new LastPageInfo();
-            GlobalOptions options = activity.getOrionContext().getOptions();
+            GlobalOptions options = OrionBaseActivity.getOrionContext().getOptions();
             if (Device.Info.TWO_SCREEN) {
                 int defaultRotation = options.getDefaultOrientation();
                 switch (defaultRotation) {
@@ -132,7 +133,7 @@ public class LastPageInfo implements Serializable {
         OutputStreamWriter writer = null;
         try {
             XmlSerializer serializer = Xml.newSerializer();
-            writer = new OutputStreamWriter(activity.openFileOutput(fileData, Context.MODE_PRIVATE));
+            writer = new OutputStreamWriter(OrionBaseActivity.getOrionContext().openFileOutput(fileData, Context.MODE_PRIVATE));
             serializer.setOutput(writer);
             serializer.startDocument("UTF-8", true);
             String nameSpace = "";
@@ -182,7 +183,8 @@ public class LastPageInfo implements Serializable {
             serializer.endDocument();
         } catch (IOException e) {
             Common.d(e);
-            activity.showError("Couldn't save book preferences", e);
+            if (activity != null)
+                activity.showError("Couldn't save book preferences", e);
         } finally {
             if (writer != null) {
                 try {
@@ -211,7 +213,7 @@ public class LastPageInfo implements Serializable {
     private boolean load(OrionBaseActivity activity, String filePath) {
         InputStreamReader reader = null;
         try {
-            reader = new InputStreamReader(activity.openFileInput(filePath));
+            reader = new InputStreamReader(OrionApplication.instance.getApplicationContext().openFileInput(filePath));
 
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             //factory.setNamespaceAware(true);
@@ -260,9 +262,11 @@ public class LastPageInfo implements Serializable {
         } catch (FileNotFoundException e) {
             //do nothing
         } catch (XmlPullParserException e) {
-            activity.showError("Couldn't parse book parameters", e);
+            if (activity != null)
+                activity.showError("Couldn't parse book parameters", e);
         } catch (IOException e) {
-            activity.showError("Couldn't parse book parameters", e);
+            if (activity != null)
+                activity.showError("Couldn't parse book parameters", e);
         } finally {
             if (reader != null) {
                 try {
