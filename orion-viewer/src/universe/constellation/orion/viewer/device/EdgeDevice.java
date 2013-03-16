@@ -21,12 +21,15 @@ package universe.constellation.orion.viewer.device;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.PowerManager;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 import universe.constellation.orion.viewer.Common;
+import universe.constellation.orion.viewer.Device;
 import universe.constellation.orion.viewer.OrionView;
 import universe.constellation.orion.viewer.R;
 
@@ -43,6 +46,8 @@ public class EdgeDevice extends AndroidDevice {
 
     private Boolean portrait;
 
+    private EdgeKbdThread listener;
+
     public EdgeDevice() {
         super(PowerManager.SCREEN_DIM_WAKE_LOCK);
         try {
@@ -52,12 +57,42 @@ public class EdgeDevice extends AndroidDevice {
         }
     }
 
+    //only for edge service
+    public void setPortrait(Boolean portrait) {
+        this.portrait = portrait;
+    }
+
+    public void startKeyboardListener(KeyEventProducer producer) {
+        this.listener = new EdgeKbdThread(producer);
+        this.listener.setDaemon(true);
+        this.listener.start();
+    }
+
+    public Point getDeviceSize() {
+        return new Point(fb.getWidth(), fb.getHeight());
+
+    }
+    
     public void onSetContentView() {
         onSetContentView(true);
     }
 
 
     public void onSetContentView(boolean wrap) {
+        if (activity != null && activity.getViewerType() == Device.VIEWER_ACTIVITY && listener == null) {
+            startKeyboardListener(new KeyEventProducer() {
+                @Override
+                public void nextPage() {
+                    activity.onKeyDown(KeyEvent.KEYCODE_SOFT_RIGHT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SOFT_LEFT));
+                }
+
+                @Override
+                public void prevPage() {
+                    activity.onKeyDown(KeyEvent.KEYCODE_SOFT_LEFT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SOFT_LEFT));
+                }
+            });
+        }
+
         if (fb != null) {
             Common.d("On set content view ");
             if (activity.getViewerType() == VIEWER_ACTIVITY) {
@@ -132,6 +167,14 @@ public class EdgeDevice extends AndroidDevice {
         super.flushBitmap(delay);
     }
 
+    public void flushBitmap(Bitmap bitmap) {
+        try {
+			fb.transfer(bitmap, false);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
 
     /*
     * Copyright (C) 2011 vldmr
