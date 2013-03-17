@@ -88,7 +88,7 @@ public class AndroidDevice implements Device {
                 }
         }
 
-        if (Info.SONY_PRS_T1) {
+        if (Info.SONY_PRS_T1_T2) {
             if (keyCode == 0) {
                  switch (event.getScanCode()) {
                     case 105:

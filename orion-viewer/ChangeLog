@@ -1,3 +1,7 @@
+===== 0.41.7 (Mar 17, 2013) =====
+* Edge buttons support
+* PRS-T2 buttons support
+
 ===== 0.41.6 (Mar 03, 2013) =====
 * Fast e-ink refresh for Nook ST 1.2.*
 * Fixed "Fit height" and "Fit page" zoom

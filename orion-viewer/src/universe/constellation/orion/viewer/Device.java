@@ -47,7 +47,7 @@ public interface Device {
 
         public final static boolean NOOK_120 = NOOK2 && ("1.2.0".equals(getVersion()) || "1.2.1".equals(getVersion()));
         
-        public final static boolean SONY_PRS_T1 = "sony".equals(MANUFACTURER.toLowerCase()) && "PRS-T1".equals(MODEL);
+        public final static boolean SONY_PRS_T1_T2 = "sony".equals(MANUFACTURER.toLowerCase()) && ("PRS-T1".equals(MODEL) || "PRS-T2".equals(MODEL));
 
         public final static boolean ALEX = "sdi".equals(MANUFACTURER.toLowerCase()) && "seleucia".equals(MODEL.toLowerCase()) && "seleucia".equals(DEVICE.toLowerCase());
 
