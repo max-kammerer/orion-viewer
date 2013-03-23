@@ -70,6 +70,11 @@ public class OrionBaseActivity extends Activity {
         }
     }
 
+    @Override
+    protected void onDestroy () {
+        super.onDestroy();
+        device.onDestroy();
+    }
 //    @Override
 //    protected void onResume() {
 //        super.onResume();

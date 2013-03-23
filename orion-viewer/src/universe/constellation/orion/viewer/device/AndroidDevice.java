@@ -131,7 +131,9 @@ public class AndroidDevice implements Device {
         screenLock.setReferenceCounted(false);
     }
 
-
+    public void onDestroy() {
+        
+    }
 
     public void onPause() {
         if (screenLock != null) {

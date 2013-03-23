@@ -104,6 +104,8 @@ public interface Device {
 
     void onCreate(OrionBaseActivity activity);
 
+    void onDestroy();
+    
     void onPause();
 
     void onWindowGainFocus();

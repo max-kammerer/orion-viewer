@@ -57,6 +57,15 @@ public class EdgeDevice extends AndroidDevice {
         }
     }
 
+    
+    public void onDestroy() {
+        if (this.listener != null) {
+            this.listener.detouch();
+            this.listener = null;
+        }
+    }
+
+    
     //only for edge service
     public void setPortrait(Boolean portrait) {
         this.portrait = portrait;
@@ -70,7 +79,6 @@ public class EdgeDevice extends AndroidDevice {
 
     public Point getDeviceSize() {
         return new Point(fb.getWidth(), fb.getHeight());
-
     }
     
     public void onSetContentView() {

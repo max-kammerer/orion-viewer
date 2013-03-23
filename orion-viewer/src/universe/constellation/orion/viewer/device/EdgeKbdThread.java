@@ -14,10 +14,17 @@ import java.io.IOException;
  */
 public class EdgeKbdThread extends Thread {
     
-    KeyEventProducer producer;
+    private KeyEventProducer producer;
+
+    private volatile boolean isAlive;
     
     public EdgeKbdThread(KeyEventProducer producer) {
         this.producer = producer;
+        isAlive = true;
+    }
+    
+    public void detouch(){
+        isAlive = false;
     }
     
     public void run() {
@@ -29,11 +36,12 @@ public class EdgeKbdThread extends Thread {
 			e.printStackTrace();
 			return;
 		}
+
         int sizeof_input_event = 16;
         int c;
         int input_event[] = new int[sizeof_input_event]; // struct input_event
         int n;
-        while (true) {
+        while (isAlive) {
             try {
                 n = 0;
 				for (int i=0; i<sizeof_input_event; i++) {
@@ -68,6 +76,15 @@ public class EdgeKbdThread extends Thread {
                     producer.prevPage();
                     break;
             }
+        }
+
+
+        try {
+            if (f != null) {
+                f.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
