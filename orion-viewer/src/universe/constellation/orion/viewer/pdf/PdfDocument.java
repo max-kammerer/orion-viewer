@@ -89,11 +89,11 @@ public class PdfDocument implements DocumentWrapper {
 
     @Override
     public boolean needPassword() {
-        return MuPDFCore.needsPasswordInternal();
+        return core.needsPasswordInternal();
     }
 
     @Override
     public boolean authentificate(String password) {
-        return MuPDFCore.authenticatePasswordInternal(password);
+        return core.authenticatePasswordInternal(password);
     }
 }

@@ -18,26 +18,31 @@ public class MuPDFCore
     public int lastPage = -1;
     private DocInfo info;
 
+    private long globals;
+
 	/* The native functions */
-	private static native int openFile(String filename, DocInfo info);
-	private static native void gotoPageInternal(int localActionPageNum);
-	private static native int getPageInfo(int pageNum, PageInfo info);
+	private native long openFile(String filename, DocInfo info);
+	private native void gotoPageInternal(int localActionPageNum);
+	private native void getPageInfo(int pageNum, PageInfo info);
 
-    public static native boolean needsPasswordInternal();
-    public static native boolean authenticatePasswordInternal(String password);
+    public native boolean needsPasswordInternal();
+    public native boolean authenticatePasswordInternal(String password);
 
-	public static native int [] drawPage(float zoom, int pageW, int pageH,
+	public native int [] drawPage(float zoom, int pageW, int pageH,
 			int patchX, int patchY,
 			int patchW, int patchH);
 
     public native String getText(int page, int absoluteX, int absoluteY, int width, int height);
 
-	public static native void destroying();
+	public native void destroying();
 
 	public MuPDFCore(String filename) throws Exception
 	{
         info = new DocInfo();
-        openFile(filename, info);
+        globals = openFile(filename, info);
+        if (globals == 0){
+            throw new Exception("Failed to open " + filename);
+        }
         numPages = info.pageCount;
 		if (numPages <= 0) {
 			throw new Exception("Failed to open " + filename);
@@ -96,7 +101,7 @@ public class MuPDFCore
         return info;
     }
 
-	public static native com.artifex.mupdf.OutlineItem[] getOutlineInternal();
+	public native com.artifex.mupdf.OutlineItem[] getOutlineInternal();
     public native void setContrast(int contrast);
 	public native void setThreshold(int threshold);
 }

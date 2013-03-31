@@ -2,7 +2,6 @@
 #include <time.h>
 #include <pthread.h>
 #include <android/log.h>
-#include <android/bitmap.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,9 +14,11 @@
 #include "fitz.h"
 #include "fitz-internal.h"
 #include "mupdf.h"
+#include <unistd.h>
+#include "list.h"
 
-#define JNI_FN(A) Java_com_artifex_mupdfdemo_ ## A
-#define PACKAGENAME "com/artifex/mupdfdemo"
+#define JNI_FN(A) Java_com_artifex_mupdf_ ## A
+#define PACKAGENAME "com/artifex/mupdf"
 
 #define LOG_TAG "libmupdf"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
@@ -255,7 +256,7 @@ static globals *get_globals(JNIEnv *env, jobject thiz)
 }
 
 JNIEXPORT jlong JNICALL
-JNI_FN(MuPDFCore_openFile)(JNIEnv * env, jobject thiz, jstring jfilename)
+JNI_FN(MuPDFCore_openFile)(JNIEnv * env, jobject thiz, jstring jfilename, jobject docInfo)
 {
 	const char *filename;
 	globals    *glo;
@@ -272,7 +273,8 @@ JNI_FN(MuPDFCore_openFile)(JNIEnv * env, jobject thiz, jstring jfilename)
 	glo = calloc(1, sizeof(*glo));
 	if (glo == NULL)
 		return 0;
-	glo->resolution = 160;
+	//glo->resolution = 160;
+	glo->resolution = 72;
 	glo->alerts_initialised = 0;
 
 	filename = (*env)->GetStringUTFChars(env, jfilename, NULL);
@@ -284,7 +286,7 @@ JNI_FN(MuPDFCore_openFile)(JNIEnv * env, jobject thiz, jstring jfilename)
 	}
 
 	/* 128 MB store for low memory devices. Tweak as necessary. */
-	glo->ctx = ctx = fz_new_context(NULL, NULL, 128 << 20);
+	glo->ctx = ctx = fz_new_context(NULL, NULL, 48 << 20);
 	if (!ctx)
 	{
 		LOGE("Failed to initialise context");
@@ -309,7 +311,18 @@ JNI_FN(MuPDFCore_openFile)(JNIEnv * env, jobject thiz, jstring jfilename)
 		{
 			fz_throw(ctx, "Cannot open document: '%s'", filename);
 		}
-		LOGE("Done!");
+
+		char * title = NULL;
+		int pages  = fz_count_pages(glo->doc);
+
+		jclass cls = (*env)->GetObjectClass(env, docInfo);	
+		jfieldID pageCountF = (*env)->GetFieldID(env, cls, "pageCount", "I");	
+		jfieldID titleF = (*env)->GetFieldID(env, cls, "title", "Ljava/lang/String;");	
+		(*env)->SetIntField(env, docInfo, pageCountF, pages);	
+		if (title) {
+			(*env)->SetObjectField(env, docInfo, titleF, ((*env)->NewStringUTF(env, title)));	
+		}
+		LOGI("Document with %i pages opened!", pages);
 	}
 	fz_catch(ctx)
 	{
@@ -537,6 +550,15 @@ JNI_FN(MuPDFCore_gotoPageInternal)(JNIEnv *env, jobject thiz, int page)
 		fz_round_rect(&bbox, fz_transform_rect(&rect, &ctm));
 		pc->width = bbox.x1-bbox.x0;
 		pc->height = bbox.y1-bbox.y0;
+
+		/*currentPage = fz_load_page(doc, page);
+		//zoom = resolution / 72;
+		currentMediabox = fz_bound_page(doc, currentPage);
+		ctm = fz_scale(zoom, zoom);
+		bbox = fz_round_rect(fz_transform_rect(ctm, currentMediabox));
+		bbox = fz_round_rect(currentMediabox);
+		pageWidth = bbox.x1-bbox.x0;
+		pageHeight = bbox.y1-bbox.y0;*/
 	}
 	fz_catch(ctx)
 	{
@@ -558,6 +580,26 @@ JNI_FN(MuPDFCore_getPageHeight)(JNIEnv *env, jobject thiz)
 	globals *glo = get_globals(env, thiz);
 	LOGE("PageHeight=%d", glo->pages[glo->current].height);
 	return glo->pages[glo->current].height;
+}
+
+
+JNIEXPORT void JNICALL
+JNI_FN(MuPDFCore_getPageInfo)(JNIEnv *env, jobject thiz, int page, jobject info)
+{
+
+    JNI_FN(MuPDFCore_gotoPageInternal)(env, thiz, page);
+
+    globals *glo = get_globals(env, thiz);
+    int pageWidth = (int) glo->pages[glo->current].width;
+    int pageHeight = (int) glo->pages[glo->current].height;
+
+	jclass cls = (*env)->GetObjectClass(env, info);
+	jfieldID width = (*env)->GetFieldID(env, cls, "width", "I");
+	jfieldID height = (*env)->GetFieldID(env, cls, "height", "I");
+    (*env)->SetIntField(env, info, width, pageWidth);
+    (*env)->SetIntField(env, info, height, pageHeight);
+
+	LOGI("Page %d info: %dx%d", page, pageWidth, pageHeight);
 }
 
 JNIEXPORT jboolean JNICALL
@@ -586,15 +628,14 @@ static void update_changed_rects(globals *glo, page_cache *pc, fz_interactive *i
 	}
 }
 
-JNIEXPORT jboolean JNICALL
-JNI_FN(MuPDFCore_drawPage)(JNIEnv *env, jobject thiz, jobject bitmap,
-		int pageW, int pageH, int patchX, int patchY, int patchW, int patchH)
+JNIEXPORT jintArray JNICALL
+Java_com_artifex_mupdf_MuPDFCore_drawPage(JNIEnv *env, jobject thiz, float zoom,
+		int pageW, int pageH, int patchX, int patchY, int patchW, int patchH)				
 {
-	AndroidBitmapInfo info;
+	LOGI("==================Start Rendering==============");
 	void *pixels;
 	int ret;
 	fz_device *dev = NULL;
-	float zoom;
 	fz_matrix ctm;
 	fz_irect bbox;
 	fz_rect rect;
@@ -613,28 +654,21 @@ JNI_FN(MuPDFCore_drawPage)(JNIEnv *env, jobject thiz, jobject bitmap,
 	fz_var(pix);
 	fz_var(dev);
 
-	LOGI("In native method\n");
-	if ((ret = AndroidBitmap_getInfo(env, bitmap, &info)) < 0) {
-		LOGE("AndroidBitmap_getInfo() failed ! error=%d", ret);
-		return 0;
-	}
-
-	LOGI("Checking format\n");
-	if (info.format != ANDROID_BITMAP_FORMAT_RGBA_8888) {
-		LOGE("Bitmap format is not RGBA_8888 !");
-		return 0;
-	}
-
-	LOGI("locking pixels\n");
-	if ((ret = AndroidBitmap_lockPixels(env, bitmap, &pixels)) < 0) {
-		LOGE("AndroidBitmap_lockPixels() failed ! error=%d", ret);
-		return 0;
-	}
+	int num_pixels = pageW * pageH;
+	jintArray jints; /* return value */
+	int *jbuf;
+	
+	clock_t start, end;
+	double elapsed;
+	
 
 	/* Call mupdf to render display list to screen */
 	LOGE("Rendering page(%d)=%dx%d patch=[%d,%d,%d,%d]",
 			pc->number, pageW, pageH, patchX, patchY, patchW, patchH);
 
+	jints = (*env)->NewIntArray(env, num_pixels);
+	jbuf = (*env)->GetIntArrayElements(env, jints, NULL);	
+	start = clock();
 	fz_try(ctx)
 	{
 		fz_interactive *idoc = fz_interact(doc);
@@ -673,7 +707,7 @@ JNI_FN(MuPDFCore_drawPage)(JNIEnv *env, jobject thiz, jobject bitmap,
 		bbox.y0 = patchY;
 		bbox.x1 = patchX + patchW;
 		bbox.y1 = patchY + patchH;
-		pix = fz_new_pixmap_with_bbox_and_data(ctx, glo->colorspace, &bbox, pixels);
+		pix = fz_new_pixmap_with_bbox_and_data(ctx, glo->colorspace, &bbox, jbuf);
 		if (pc->page_list == NULL && pc->annot_list == NULL)
 		{
 			fz_clear_pixmap_with_value(ctx, pix, 0xd0);
@@ -681,15 +715,20 @@ JNI_FN(MuPDFCore_drawPage)(JNIEnv *env, jobject thiz, jobject bitmap,
 		}
 		fz_clear_pixmap_with_value(ctx, pix, 0xff);
 
-		zoom = glo->resolution / 72;
-		fz_scale(&ctm, zoom, zoom);
+		LOGE("zoom = %f", zoom);
+        //zoom = glo->resolution / 72;
+        fz_scale(&ctm, zoom, zoom);
 		rect = pc->media_box;
 		fz_round_rect(&bbox, fz_transform_rect(&rect, &ctm));
 		/* Now, adjust ctm so that it would give the correct page width
 		 * heights. */
-		xscale = (float)pageW/(float)(bbox.x1-bbox.x0);
-		yscale = (float)pageH/(float)(bbox.y1-bbox.y0);
-		fz_concat(&ctm, &ctm, fz_scale(&scale, xscale, yscale));
+		LOGI("x=[%d,%d,%d,%d], %dx%d",
+			bbox.x0, bbox.x1, bbox.y0, bbox.y1, bbox.x1-bbox.x0, bbox.y1-bbox.y0, 0);
+		/* Now, adjust ctm so that it would give the correct page width
+		 * heights. */
+		//xscale = (float)pageW/(float)(bbox.x1-bbox.x0);
+		//yscale = (float)pageH/(float)(bbox.y1-bbox.y0);
+		//fz_concat(&ctm, &ctm, fz_scale(&scale, xscale, yscale));
 		rect = pc->media_box;
 		fz_transform_rect(&rect, &ctm);
 		dev = fz_new_draw_device(ctx, pix);
@@ -715,6 +754,8 @@ JNI_FN(MuPDFCore_drawPage)(JNIEnv *env, jobject thiz, jobject bitmap,
 		fz_free_device(dev);
 		dev = NULL;
 		fz_drop_pixmap(ctx, pix);
+		orion_updateContrast((unsigned char *) jbuf, num_pixels*4);
+		(*env)->ReleaseIntArrayElements(env, jints, jbuf, 0);
 		LOGE("Rendered");
 	}
 	fz_catch(ctx)
@@ -722,10 +763,11 @@ JNI_FN(MuPDFCore_drawPage)(JNIEnv *env, jobject thiz, jobject bitmap,
 		fz_free_device(dev);
 		LOGE("Render failed");
 	}
+	end = clock();
+	elapsed = ((double) (end - start)) / CLOCKS_PER_SEC;
+	LOGI("Total murendering time %lf", elapsed);
 
-	AndroidBitmap_unlockPixels(env, bitmap);
-
-	return 1;
+	return jints;
 }
 
 static char *widget_type_string(int t)
@@ -741,161 +783,162 @@ static char *widget_type_string(int t)
 	default: return "non-widget";
 	}
 }
-JNIEXPORT jboolean JNICALL
-JNI_FN(MuPDFCore_updatePageInternal)(JNIEnv *env, jobject thiz, jobject bitmap, int page,
-		int pageW, int pageH, int patchX, int patchY, int patchW, int patchH)
-{
-	AndroidBitmapInfo info;
-	void *pixels;
-	int ret;
-	fz_device *dev = NULL;
-	float zoom;
-	fz_matrix ctm;
-	fz_irect bbox;
-	fz_rect rect;
-	fz_pixmap *pix = NULL;
-	float xscale, yscale;
-	fz_interactive *idoc;
-	page_cache *pc = NULL;
-	int hq = (patchW < pageW || patchH < pageH);
-	int i;
-	globals *glo = get_globals(env, thiz);
-	fz_context *ctx = glo->ctx;
-	fz_document *doc = glo->doc;
-	rect_node *crect;
-	fz_matrix scale;
 
-	for (i = 0; i < NUM_CACHE; i++)
-	{
-		if (glo->pages[i].page != NULL && glo->pages[i].number == page)
-		{
-			pc = &glo->pages[i];
-			break;
-		}
-	}
-
-	if (pc == NULL)
-	{
-		/* Without a cached page object we cannot perform a partial update so
-		render the entire bitmap instead */
-		JNI_FN(MuPDFCore_gotoPageInternal)(env, thiz, page);
-		return JNI_FN(MuPDFCore_drawPage)(env, thiz, bitmap, pageW, pageH, patchX, patchY, patchW, patchH);
-	}
-
-	idoc = fz_interact(doc);
-
-	fz_var(pix);
-	fz_var(dev);
-
-	LOGI("In native method\n");
-	if ((ret = AndroidBitmap_getInfo(env, bitmap, &info)) < 0) {
-		LOGE("AndroidBitmap_getInfo() failed ! error=%d", ret);
-		return 0;
-	}
-
-	LOGI("Checking format\n");
-	if (info.format != ANDROID_BITMAP_FORMAT_RGBA_8888) {
-		LOGE("Bitmap format is not RGBA_8888 !");
-		return 0;
-	}
-
-	LOGI("locking pixels\n");
-	if ((ret = AndroidBitmap_lockPixels(env, bitmap, &pixels)) < 0) {
-		LOGE("AndroidBitmap_lockPixels() failed ! error=%d", ret);
-		return 0;
-	}
-
-	/* Call mupdf to render display list to screen */
-	LOGE("Rendering page(%d)=%dx%d patch=[%d,%d,%d,%d]",
-			pc->number, pageW, pageH, patchX, patchY, patchW, patchH);
-
-	fz_try(ctx)
-	{
-		fz_annot *annot;
-
-		if (idoc)
-		{
-			/* Update the changed-rects for both hq patch and main bitmap */
-			update_changed_rects(glo, pc, idoc);
-		}
-
-		if (pc->page_list == NULL)
-		{
-			/* Render to list */
-			pc->page_list = fz_new_display_list(ctx);
-			dev = fz_new_list_device(ctx, pc->page_list);
-			fz_run_page_contents(doc, pc->page, dev, &fz_identity, NULL);
-		}
-
-		if (pc->annot_list == NULL) {
-			if (dev) {
-				fz_free_device(dev);
-				dev = NULL;
-			}
-			pc->annot_list = fz_new_display_list(ctx);
-			dev = fz_new_list_device(ctx, pc->annot_list);
-			for (annot = fz_first_annot(doc, pc->page); annot; annot = fz_next_annot(doc, annot))
-				fz_run_annot(doc, pc->page, annot, dev, &fz_identity, NULL);
-		}
-
-		bbox.x0 = patchX;
-		bbox.y0 = patchY;
-		bbox.x1 = patchX + patchW;
-		bbox.y1 = patchY + patchH;
-		pix = fz_new_pixmap_with_bbox_and_data(ctx, glo->colorspace, &bbox, pixels);
-
-		zoom = glo->resolution / 72;
-		fz_scale(&ctm, zoom, zoom);
-		rect = pc->media_box;
-		fz_round_rect(&bbox, fz_transform_rect(&rect, &ctm));
-		/* Now, adjust ctm so that it would give the correct page width
-		 * heights. */
-		xscale = (float)pageW/(float)(bbox.x1-bbox.x0);
-		yscale = (float)pageH/(float)(bbox.y1-bbox.y0);
-		fz_concat(&ctm, &ctm, fz_scale(&scale, xscale, yscale));
-		rect = pc->media_box;
-		fz_transform_rect(&rect, &ctm);
-
-		LOGI("Start partial update");
-		for (crect = hq ? pc->hq_changed_rects : pc->changed_rects; crect; crect = crect->next)
-		{
-			fz_irect abox;
-			fz_rect arect = crect->rect;
-			fz_intersect_rect(fz_transform_rect(&arect, &ctm), &rect);
-			fz_round_rect(&abox, &arect);
-
-			LOGI("Update rectangle (%d, %d, %d, %d)", abox.x0, abox.y0, abox.x1, abox.y1);
-			if (!fz_is_empty_irect(&abox))
-			{
-				LOGI("And it isn't empty");
-				fz_clear_pixmap_rect_with_value(ctx, pix, 0xff, &abox);
-				dev = fz_new_draw_device_with_bbox(ctx, pix, &abox);
-				if (pc->page_list)
-					fz_run_display_list(pc->page_list, dev, &ctm, &arect, NULL);
-				if (pc->annot_list)
-					fz_run_display_list(pc->annot_list, dev, &ctm, &arect, NULL);
-				fz_free_device(dev);
-				dev = NULL;
-			}
-		}
-		LOGI("End partial update");
-
-		/* Drop the changed rects we've just rendered */
-		drop_changed_rects(ctx, hq ? &pc->hq_changed_rects : &pc->changed_rects);
-
-		LOGE("Rendered");
-	}
-	fz_catch(ctx)
-	{
-		fz_free_device(dev);
-		LOGE("Render failed");
-	}
-
-	fz_drop_pixmap(ctx, pix);
-	AndroidBitmap_unlockPixels(env, bitmap);
-
-	return 1;
-}
+//JNIEXPORT jboolean JNICALL
+//JNI_FN(MuPDFCore_updatePageInternal)(JNIEnv *env, jobject thiz, jobject bitmap, int page,
+//		int pageW, int pageH, int patchX, int patchY, int patchW, int patchH)
+//{
+//	AndroidBitmapInfo info;
+//	void *pixels;
+//	int ret;
+//	fz_device *dev = NULL;
+//	float zoom;
+//	fz_matrix ctm;
+//	fz_irect bbox;
+//	fz_rect rect;
+//	fz_pixmap *pix = NULL;
+//	float xscale, yscale;
+//	fz_interactive *idoc;
+//	page_cache *pc = NULL;
+//	int hq = (patchW < pageW || patchH < pageH);
+//	int i;
+//	globals *glo = get_globals(env, thiz);
+//	fz_context *ctx = glo->ctx;
+//	fz_document *doc = glo->doc;
+//	rect_node *crect;
+//	fz_matrix scale;
+//
+//	for (i = 0; i < NUM_CACHE; i++)
+//	{
+//		if (glo->pages[i].page != NULL && glo->pages[i].number == page)
+//		{
+//			pc = &glo->pages[i];
+//			break;
+//		}
+//	}
+//
+//	if (pc == NULL)
+//	{
+//		/* Without a cached page object we cannot perform a partial update so
+//		render the entire bitmap instead */
+//		JNI_FN(MuPDFCore_gotoPageInternal)(env, thiz, page);
+//		return JNI_FN(MuPDFCore_drawPage)(env, thiz, bitmap, pageW, pageH, patchX, patchY, patchW, patchH);
+//	}
+//
+//	idoc = fz_interact(doc);
+//
+//	fz_var(pix);
+//	fz_var(dev);
+//
+//	LOGI("In native method\n");
+//	if ((ret = AndroidBitmap_getInfo(env, bitmap, &info)) < 0) {
+//		LOGE("AndroidBitmap_getInfo() failed ! error=%d", ret);
+//		return 0;
+//	}
+//
+//	LOGI("Checking format\n");
+//	if (info.format != ANDROID_BITMAP_FORMAT_RGBA_8888) {
+//		LOGE("Bitmap format is not RGBA_8888 !");
+//		return 0;
+//	}
+//
+//	LOGI("locking pixels\n");
+//	if ((ret = AndroidBitmap_lockPixels(env, bitmap, &pixels)) < 0) {
+//		LOGE("AndroidBitmap_lockPixels() failed ! error=%d", ret);
+//		return 0;
+//	}
+//
+//	/* Call mupdf to render display list to screen */
+//	LOGE("Rendering page(%d)=%dx%d patch=[%d,%d,%d,%d]",
+//			pc->number, pageW, pageH, patchX, patchY, patchW, patchH);
+//
+//	fz_try(ctx)
+//	{
+//		fz_annot *annot;
+//
+//		if (idoc)
+//		{
+//			/* Update the changed-rects for both hq patch and main bitmap */
+//			update_changed_rects(glo, pc, idoc);
+//		}
+//
+//		if (pc->page_list == NULL)
+//		{
+//			/* Render to list */
+//			pc->page_list = fz_new_display_list(ctx);
+//			dev = fz_new_list_device(ctx, pc->page_list);
+//			fz_run_page_contents(doc, pc->page, dev, &fz_identity, NULL);
+//		}
+//
+//		if (pc->annot_list == NULL) {
+//			if (dev) {
+//				fz_free_device(dev);
+//				dev = NULL;
+//			}
+//			pc->annot_list = fz_new_display_list(ctx);
+//			dev = fz_new_list_device(ctx, pc->annot_list);
+//			for (annot = fz_first_annot(doc, pc->page); annot; annot = fz_next_annot(doc, annot))
+//				fz_run_annot(doc, pc->page, annot, dev, &fz_identity, NULL);
+//		}
+//
+//		bbox.x0 = patchX;
+//		bbox.y0 = patchY;
+//		bbox.x1 = patchX + patchW;
+//		bbox.y1 = patchY + patchH;
+//		pix = fz_new_pixmap_with_bbox_and_data(ctx, glo->colorspace, &bbox, pixels);
+//
+//		zoom = glo->resolution / 72;
+//		fz_scale(&ctm, zoom, zoom);
+//		rect = pc->media_box;
+//		fz_round_rect(&bbox, fz_transform_rect(&rect, &ctm));
+//		/* Now, adjust ctm so that it would give the correct page width
+//		 * heights. */
+//		xscale = (float)pageW/(float)(bbox.x1-bbox.x0);
+//		yscale = (float)pageH/(float)(bbox.y1-bbox.y0);
+//		fz_concat(&ctm, &ctm, fz_scale(&scale, xscale, yscale));
+//		rect = pc->media_box;
+//		fz_transform_rect(&rect, &ctm);
+//
+//		LOGI("Start partial update");
+//		for (crect = hq ? pc->hq_changed_rects : pc->changed_rects; crect; crect = crect->next)
+//		{
+//			fz_irect abox;
+//			fz_rect arect = crect->rect;
+//			fz_intersect_rect(fz_transform_rect(&arect, &ctm), &rect);
+//			fz_round_rect(&abox, &arect);
+//
+//			LOGI("Update rectangle (%d, %d, %d, %d)", abox.x0, abox.y0, abox.x1, abox.y1);
+//			if (!fz_is_empty_irect(&abox))
+//			{
+//				LOGI("And it isn't empty");
+//				fz_clear_pixmap_rect_with_value(ctx, pix, 0xff, &abox);
+//				dev = fz_new_draw_device_with_bbox(ctx, pix, &abox);
+//				if (pc->page_list)
+//					fz_run_display_list(pc->page_list, dev, &ctm, &arect, NULL);
+//				if (pc->annot_list)
+//					fz_run_display_list(pc->annot_list, dev, &ctm, &arect, NULL);
+//				fz_free_device(dev);
+//				dev = NULL;
+//			}
+//		}
+//		LOGI("End partial update");
+//
+//		/* Drop the changed rects we've just rendered */
+//		drop_changed_rects(ctx, hq ? &pc->hq_changed_rects : &pc->changed_rects);
+//
+//		LOGE("Rendered");
+//	}
+//	fz_catch(ctx)
+//	{
+//		fz_free_device(dev);
+//		LOGE("Render failed");
+//	}
+//
+//	fz_drop_pixmap(ctx, pix);
+//	AndroidBitmap_unlockPixels(env, bitmap);
+//
+//	return 1;
+//}
 
 static int
 charat(fz_text_page *page, int idx)
@@ -2360,4 +2403,102 @@ JNI_FN(MuPDFCore_saveInternal)(JNIEnv * env, jobject thiz)
 			free(tmp);
 		}
 	}
+}
+
+JNIEXPORT jstring JNICALL
+Java_com_artifex_mupdf_MuPDFCore_getText(JNIEnv *env, jobject thiz, int pageNumber,
+		int startX, int startY, int width, int height)
+{
+	LOGI("==================Start Text Extraction==============");
+	/*fz_display_list *pageList = NULL;
+	fz_page *currentPagex = NULL;
+
+	fz_device *dev = NULL;	
+	fz_matrix ctm;
+	fz_rect rect;
+
+	fz_var(dev);
+	clock_t start, end;
+	double elapsed;
+
+	jstring * result;
+
+	LOGI("Start text extraction: rectangle=[%d,%d,%d,%d]", startX, startY, width, height);
+
+	rect.x0 = startX;
+	rect.y0 = startY;
+	rect.x1 = startX + width;
+	rect.y1 = startY + height;
+	
+	start = clock();
+
+	Arraylist values = arraylist_create();
+
+    globals *glo = get_globals(env, thiz);
+	fz_context *ctx = glo->ctx;
+
+	fz_try(ctx)
+	{
+		fz_text_sheet * sheet = fz_new_text_sheet(ctx);
+		fz_text_page * page = fz_new_text_page(ctx, rect);
+		dev = fz_new_text_device(ctx, sheet, page);
+
+		currentPagex = fz_load_page(doc, pageNumber);
+        fz_run_page(doc, currentPagex, dev, fz_identity, NULL);
+
+        fz_text_block *block;
+        fz_text_line *line;
+        fz_text_span *span;
+        fz_text_char *ch;
+        char utf[10];
+        int i, n;
+
+        for (block = page->blocks; block < page->blocks + page->len; block++)
+        {
+            for (line = block->lines; line < block->lines + block->len; line++)
+            {
+                for (span = line->spans; span < line->spans + line->len; span++)
+                {
+                    for (ch = span->text; ch < span->text + span->len; ch++)
+                    {
+                        fz_rect span_rect = ch->bbox;
+                        fz_rect intr = fz_intersect_rect(span_rect, rect);
+                        if (!fz_is_empty_rect(intr) && ((intr.x1-intr.x0)*(intr.y1-intr.y0) / ((span_rect.x1-span_rect.x0)*(span_rect.y1-span_rect.y0)) > 0.4)) {
+                            n = fz_runetochar(utf, ch->c);
+                            for (i = 0; i < n; i++) {
+                                arraylist_add(values, utf[i]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        arraylist_add(values, 0);
+
+		LOGI("Data: %s", arraylist_getData(values));
+		result = (*env)->NewStringUTF(env, arraylist_getData(values));
+		arraylist_free(values);
+
+		fz_free_device(dev);
+		fz_free_text_sheet(ctx, sheet);
+		fz_free_text_page(ctx, page);
+		
+		dev = NULL;
+	}
+	fz_catch(ctx)
+	{
+		fz_free_device(dev);
+		LOGE("Render failed");
+	}
+	end = clock();
+	elapsed = ((double) (end - start)) / CLOCKS_PER_SEC;
+
+	fz_free_display_list(ctx, pageList);
+
+    fz_free_page(doc, currentPagex);
+
+	LOGI("Total text etraction time %lf", elapsed);
+	return result;*/
+	return "";
 }
