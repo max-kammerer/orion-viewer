@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MuPDF</string>
+    <string name="version">1.2</string>
+    <string name="no_media_warning">Storage Media not present</string>
+    <string name="no_media_hint">Sharing the storage media with a PC can make it inaccessible</string>
+    <string name="open_failed">Unable to open document</string>
+    <string name="content_failure">%1$s: %2$s</string>
+    <string name="cancel">Cancel</string>
+    <string name="search_backwards">Search backwards</string>
+    <string name="search_forwards">Search forwards</string>
+    <string name="search_document">Search document</string>
+    <string name="picker_title">%1$s %2$s: %3$s</string>
+    <string name="outline_title">Table of Contents</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="text_not_found">Text not found</string>
+    <string name="searching_">Searching...</string>
+    <string name="link_control">Link highlighting and enabling</string>
+    <string name="no_further_occurences_found">No further occurences found</string>
+    <string name="select">Select</string>
+    <string name="search">Search</string>
+    <string name="copy">Copy</string>
+    <string name="strike_out">Strike out</string>
+    <string name="delete">Delete</string>
+    <string name="highlight">Highlight</string>
+    <string name="underline">Underline</string>
+    <string name="edit_annotations">Edit annotations</string>
+    <string name="ink">Ink</string>
+    <string name="save">Save</string>
+    <string name="print">Print</string>
+</resources>
