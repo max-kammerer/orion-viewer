@@ -149,4 +149,8 @@ public class AlexDevice extends EpdRender implements Device {
         return new Point(800, 600);
     }
 
+    @Override
+    public void onDestroy() {
+
+    }
 }
