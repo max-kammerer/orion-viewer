@@ -3,7 +3,8 @@ APP_PLATFORM=android-8
 
 # We only build for arm variants by default. If you want more, uncomment
 # the appropriate line below.
-APP_ABI := armeabi armeabi-v7a
+APP_ABI := armeabi
+#APP_ABI := armeabi armeabi-v7a
 #APP_ABI := armeabi armeabi-v7a x86 mips
 #APP_ABI := all
 
@@ -28,4 +29,5 @@ endif
 #NDK_TOOLCHAIN_VERSION=4.4.3
 
 # If the ndk is newer than r8c, try using clang.
-#NDK_TOOLCHAIN_VERSION=clang3.1
+#NDK_TOOLCHAIN_VERSION=clang3.2
+LOCAL_ARM_MODE := arm

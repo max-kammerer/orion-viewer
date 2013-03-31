@@ -4,6 +4,8 @@ include $(CLEAR_VARS)
 
 MY_ROOT := ../..
 
+LOCAL_ARM_MODE := arm
+
 OPENJPEG := openjpeg
 JPEG := jpeg
 ZLIB := zlib
@@ -11,7 +13,7 @@ FREETYPE := freetype
 V8 := v8-3.9
 
 ifeq ($(TARGET_ARCH),arm)
-LOCAL_CFLAGS += -DARCH_ARM -DARCH_THUMB -DARCH_ARM_CAN_LOAD_UNALIGNED
+LOCAL_CFLAGS += -DARCH_ARM
 ifdef NDK_PROFILER
 LOCAL_CFLAGS += -pg -DNDK_PROFILER -O2
 endif

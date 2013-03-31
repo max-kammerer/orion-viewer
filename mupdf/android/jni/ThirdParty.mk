@@ -2,6 +2,8 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
+LOCAL_ARM_MODE := arm
+
 MY_ROOT := ../..
 
 OPENJPEG := openjpeg

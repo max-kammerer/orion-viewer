@@ -11,7 +11,7 @@ FREETYPE := freetype
 V8 := v8-3.9
 
 ifeq ($(TARGET_ARCH),arm)
-LOCAL_CFLAGS += -DARCH_ARM -DARCH_THUMB -DARCH_ARM_CAN_LOAD_UNALIGNED
+LOCAL_CFLAGS += -DARCH_ARM
 ifdef NDK_PROFILER
 LOCAL_CFLAGS += -pg -DNDK_PROFILER -O0
 NDK_APP_CFLAGS :=
@@ -40,6 +40,6 @@ LOCAL_MODULE    := mupdfcore2
 LOCAL_SRC_FILES := \
 	$(MY_ROOT)/fitz/res_shade.c
 
-LOCAL_LDLIBS    := -lm -llog -ljnigraphics
+LOCAL_LDLIBS    := -lm -llog
 
 include $(BUILD_STATIC_LIBRARY)
