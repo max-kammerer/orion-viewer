@@ -23,8 +23,8 @@ LOCAL_C_INCLUDES := \
 LOCAL_CFLAGS += -DORION_PDF
 LOCAL_MODULE    := mupdf
 LOCAL_SRC_FILES := mupdf.c \
-		    orion_bitmap.c \
-		    list.c
+		    orion_bitmap.c
+
 
 LOCAL_STATIC_LIBRARIES := mupdfcore mupdfcore2 mupdfthirdparty
 ifdef NDK_PROFILER

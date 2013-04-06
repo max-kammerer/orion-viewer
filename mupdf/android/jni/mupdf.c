@@ -15,10 +15,9 @@
 #include "fitz-internal.h"
 #include "mupdf.h"
 #include <unistd.h>
-#include "list.h"
 
-#define JNI_FN(A) Java_com_artifex_mupdf_ ## A
-#define PACKAGENAME "com/artifex/mupdf"
+#define JNI_FN(A) Java_com_artifex_mupdfdemo_ ## A
+#define PACKAGENAME "com/artifex/mupdfdemo"
 
 #define LOG_TAG "libmupdf"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
@@ -298,7 +297,7 @@ JNI_FN(MuPDFCore_openFile)(JNIEnv * env, jobject thiz, jstring jfilename, jobjec
 	glo->doc = NULL;
 	fz_try(ctx)
 	{
-		glo->colorspace = fz_device_rgb;
+		glo->colorspace = fz_device_bgr;
 
 		LOGE("Opening document...");
 		fz_try(ctx)
@@ -428,7 +427,7 @@ JNI_FN(MuPDFCore_openBuffer)(JNIEnv * env, jobject thiz)
 		stream = fz_new_stream(ctx, glo, bufferStreamRead, bufferStreamClose);
 		stream->seek = bufferStreamSeek;
 
-		glo->colorspace = fz_device_rgb;
+		glo->colorspace = fz_device_bgr;
 
 		LOGE("Opening document...");
 		fz_try(ctx)
@@ -629,7 +628,7 @@ static void update_changed_rects(globals *glo, page_cache *pc, fz_interactive *i
 }
 
 JNIEXPORT jintArray JNICALL
-Java_com_artifex_mupdf_MuPDFCore_drawPage(JNIEnv *env, jobject thiz, float zoom,
+JNI_FN(MuPDFCore_drawPage)(JNIEnv *env, jobject thiz, float zoom,
 		int pageW, int pageH, int patchX, int patchY, int patchW, int patchH)				
 {
 	LOGI("==================Start Rendering==============");

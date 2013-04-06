@@ -19,7 +19,7 @@
 
 package universe.constellation.orion.viewer.pdf;
 
-import com.artifex.mupdf.MuPDFCore;
+import com.artifex.mupdfdemo.MuPDFCore;
 import universe.constellation.orion.viewer.DocumentWrapper;
 import universe.constellation.orion.viewer.outline.OutlineItem;
 import universe.constellation.orion.viewer.PageInfo;
@@ -75,7 +75,7 @@ public class PdfDocument implements DocumentWrapper {
     }
 
     public OutlineItem[] getOutline() {
-        com.artifex.mupdf.OutlineItem [] items =  core.getOutlineInternal();
+        com.artifex.mupdfdemo.OutlineItem [] items =  core.getOutlineInternal();
         if (items == null || items.length == 0) {
             return  null;
         } else {

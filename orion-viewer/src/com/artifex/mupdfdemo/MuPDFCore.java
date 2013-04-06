@@ -1,4 +1,4 @@
-package com.artifex.mupdf;
+package com.artifex.mupdfdemo;
 
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.DocInfo;
@@ -24,6 +24,7 @@ public class MuPDFCore
 	private native long openFile(String filename, DocInfo info);
 	private native void gotoPageInternal(int localActionPageNum);
 	private native void getPageInfo(int pageNum, PageInfo info);
+    private native byte[] textAsHtml();
 
     public native boolean needsPasswordInternal();
     public native boolean authenticatePasswordInternal(String password);
@@ -101,7 +102,12 @@ public class MuPDFCore
         return info;
     }
 
-	public native com.artifex.mupdf.OutlineItem[] getOutlineInternal();
+    public synchronized byte[] html(int page) {
+   		gotoPage(page);
+   		return textAsHtml();
+   	}
+
+	public native com.artifex.mupdfdemo.OutlineItem[] getOutlineInternal();
     public native void setContrast(int contrast);
 	public native void setThreshold(int threshold);
 }
