@@ -14,6 +14,7 @@
 #include "fitz.h"
 #include "fitz-internal.h"
 #include "mupdf.h"
+#include "list.c"
 #include <unistd.h>
 
 #define JNI_FN(A) Java_com_artifex_mupdfdemo_ ## A
@@ -2405,10 +2406,132 @@ JNI_FN(MuPDFCore_saveInternal)(JNIEnv * env, jobject thiz)
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_artifex_mupdf_MuPDFCore_getText(JNIEnv *env, jobject thiz, int pageNumber,
+JNI_FN(MuPDFCore_getText)(JNIEnv *env, jobject thiz, int pageNumber,
 		int startX, int startY, int width, int height)
 {
-	LOGI("==================Start Text Extraction==============");
+	LOGI("Start text extraction: rectangle=[%d,%d,%d,%d]", startX, startY, width, height);
+	clock_t start, end;
+	double elapsed;
+	start = clock();
+
+	jstring * result;
+	fz_rect rect;
+	rect.x0 = startX;
+    rect.y0 = startY;
+    rect.x1 = startX + width;
+    rect.y1 = startY + height;
+
+	fz_text_sheet *sheet = NULL;
+	fz_text_page *text = NULL;
+	fz_device *dev  = NULL;
+	float zoom;
+	fz_matrix ctm;
+
+	JNI_FN(MuPDFCore_gotoPageInternal)(env, thiz, pageNumber);
+	globals *glo = get_globals(env, thiz);
+	fz_context *ctx = glo->ctx;
+	fz_document *doc = glo->doc;
+	page_cache *pc = &glo->pages[glo->current];
+
+	fz_var(sheet);
+	fz_var(text);
+	fz_var(dev);
+
+	fz_try(ctx)
+	{
+		fz_rect mbrect;
+		int b, l, s, c;
+
+		mbrect = pc->media_box;
+		sheet = fz_new_text_sheet(ctx);
+		text = fz_new_text_page(ctx, &mbrect);
+		dev  = fz_new_text_device(ctx, sheet, text);
+		fz_run_page(doc, pc->page, dev, &fz_identity, NULL);
+		fz_free_device(dev);
+		dev = NULL;
+
+        int i, n;
+        char utf[10];
+        Arraylist values = arraylist_create();
+
+        int add_space = 0;
+
+		for (b = 0; b < text->len; b++)
+		{
+			fz_text_block *block = &text->blocks[b];
+			add_space = 1;
+
+			for (l = 0; l < block->len; l++)
+			{
+				fz_text_line *line = &block->lines[l];
+                add_space = 1;
+
+				for (s = 0; s < line->len; s++)
+				{
+					fz_text_span *span = line->spans[s];
+                    add_space = 1;
+
+					for (c = 0; c < span->len; c++)
+					{
+						fz_text_char *ch = &span->text[c];
+
+						fz_rect span_rect;
+						fz_text_char_bbox(&span_rect, span, c);
+                        fz_rect span_rect1 = span_rect;
+                        fz_rect intr = *(fz_intersect_rect(&span_rect1, &rect));
+
+//                        if (ch->c == ' ') {
+//                            LOGI("Data space: %c", ch->c);
+//                            LOGI("Inter=[%f,%f,%f,%f]", intr.x0, intr.y0, intr.x1, intr.y1);
+//                            LOGI("Span=[%f,%f,%f,%f]", span_rect.x0, span_rect.y0, span_rect.x1, span_rect.y1);
+//                        }
+
+                        if (!fz_is_empty_rect(&intr) && ((intr.x1-intr.x0)*(intr.y1-intr.y0) / ((span_rect.x1-span_rect.x0)*(span_rect.y1-span_rect.y0)) > 0.4)) {
+//                            if (add_space == 1) {
+//                                add_space = 0;
+//                                n = fz_runetochar(utf, ' ');
+//                                for (i = 0; i < n; i++) {
+//                                    arraylist_add(values, utf[i]);
+//                                }
+//                            }
+
+                            n = fz_runetochar(utf, ch->c);
+                            for (i = 0; i < n; i++) {
+                                arraylist_add(values, utf[i]);
+                            }
+                        }
+
+					}
+				}
+			}
+		}
+
+		arraylist_add(values, 0);
+        LOGI("Data: %s", arraylist_getData(values));
+        result = (*env)->NewStringUTF(env, arraylist_getData(values));
+        arraylist_free(values);
+	}
+	fz_always(ctx)
+	{
+		fz_free_text_page(ctx, text);
+		fz_free_text_sheet(ctx, sheet);
+		fz_free_device(dev);
+	}
+	fz_catch(ctx)
+	{
+		jclass cls = (*env)->FindClass(env, "java/lang/OutOfMemoryError");
+		if (cls != NULL)
+			(*env)->ThrowNew(env, cls, "Out of memory in MuPDFCore_text");
+		(*env)->DeleteLocalRef(env, cls);
+
+		return NULL;
+	}
+
+	end = clock();
+    elapsed = ((double) (end - start)) / CLOCKS_PER_SEC;
+    LOGI("Total text etraction time %lf", elapsed);
+    return result;
+
 	/*fz_display_list *pageList = NULL;
 	fz_page *currentPagex = NULL;
 
@@ -2499,5 +2622,5 @@ Java_com_artifex_mupdf_MuPDFCore_getText(JNIEnv *env, jobject thiz, int pageNumb
 
 	LOGI("Total text etraction time %lf", elapsed);
 	return result;*/
-	return "";
+	//return "";
 }
