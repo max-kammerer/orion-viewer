@@ -152,6 +152,6 @@ LOCAL_SRC_FILES += \
 	$(MY_ROOT)/pdf/pdf_js_none.c
 endif
 
-LOCAL_LDLIBS    := -lm -llog -ljnigraphics
+LOCAL_LDLIBS    := -lm -llog
 
 include $(BUILD_STATIC_LIBRARY)
