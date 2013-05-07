@@ -147,6 +147,7 @@
         <item>@string/lang_italian</item>
         <item>@string/lang_spanish</item>
         <item>@string/lang_chinese</item>
+        <item>@string/lang_ukrainian</item>
     </string-array>
 
     <string-array name="pref_languages_desc">
@@ -157,6 +158,7 @@
         <item>@string/lang_italian_user</item>
         <item>@string/lang_spanish_user</item>
         <item>@string/lang_chinese_user</item>
+        <item>@string/lang_ukrainian_user</item>
     </string-array>
 
 </resources>
