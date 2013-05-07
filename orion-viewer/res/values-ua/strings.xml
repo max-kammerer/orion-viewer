@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2013  Michael Bogdanov & Co
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--Orion Viewer is a pdf and djvu viewer for android devices-->
+
+<!--This program is free software: you can redistribute it and/or modify-->
+<!--it under the terms of the GNU General Public License as published by-->
+<!--the Free Software Foundation, either version 3 of the License, or-->
+<!--(at your option) any later version.-->
+
+<!--This program is distributed in the hope that it will be useful,-->
+<!--but WITHOUT ANY WARRANTY; without even the implied warranty of-->
+<!--MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the-->
+<!--GNU General Public License for more details.-->
+
+<!--You should have received a copy of the GNU General Public License-->
+<!--along with this program.  If not, see <http://www.gnu.org/licenses/>.-->
+
+<resources>
+    <string name="navigation">Порядок переходів</string>
+    <string name="crop_left">Ліве</string>
+    <string name="crop_right">Праве</string>
+    <string name="crop_top">Верхнє</string>
+    <string name="crop_bottom">Нижнє</string>
+    <string name="enable_even_crop">Окрема обрізка для парних сторінок</string>
+    <string name="rotate_0">0 градусів</string>
+    <string name="rotate_90">90 градусів</string>
+    <string name="rotate_270">270 градусів</string>
+    <string name="long_click">При довгому натисненні</string>
+    <string name="short_click">При короткому натисненні</string>
+    <string name="binding_click">Перепризначення</string>
+
+    <string name="orientation_default">Стандартно</string>
+    <string name="orientation_default_rotation">Стандартно</string>
+    <string name="orientation_landscape">Альбомна</string>
+    <string name="orientation_portrait">Книжкова</string>
+    <string name="orientation_landscape_inverse">Альбомна (270)</string>
+    <string name="orientation_portrait_inverse">Книжкова (180)</string>
+
+    <string name="fit_width">За шириною</string>
+    <string name="fit_height">За висотою</string>
+    <string name="fit_page">За розміром сторінки</string>
+    <string name="fit_custom">Вказати масштаб...</string>
+
+    <string name="table_of_contents">Зміст</string>
+
+    <string name="warn_no_text_in_selection">У виділеній ділянці відсутній текст!</string>
+    <string name="warn_no_outline">Зміст відсутній!</string>
+</resources>

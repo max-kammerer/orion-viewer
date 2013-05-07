@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2013  Michael Bogdanov & Co
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="action_none">Дія не призначена</string>
+    <string name="action_menu">Головне меню</string>
+    <string name="action_next_page">Наступна сторінка</string>
+    <string name="action_prev_page">Попередня сторінка</string>
+    <string name="action_first_page">На початок книжки</string>
+    <string name="action_last_page">В кінець книжки</string>
+    <string name="action_crop_page">Діалог обрізки полів</string>
+    <string name="action_zoom_page">Діалог масштабування</string>
+    <string name="action_rotation_page">Діалог повороту</string>
+    <string name="action_options_page">Налаштування</string>
+    <string name="action_goto_page">Перейти до ...</string>
+    <string name="action_dictionary">Відкрити словник</string>
+    <string name="action_open">Відкрити книжку</string>
+    <string name="action_add_bookmark">Додати закладку</string>
+    <string name="action_full_screen">Вкл/викл. повноекранний режим</string>
+    <string name="action_open_bookmarks">Закладки</string>
+    <string name="action_day_night_mode">Денний/Нічний режим</string>
+
+    <string name="action_crop_left">Обрізати ліве поле</string>
+    <string name="action_crop_right">Обрізати праве поле</string>
+    <string name="action_crop_top">Обрізати верхнє поле</string>
+    <string name="action_crop_bottom">Обрізати нижнє поле</string>
+
+    <string name="action_uncrop_left">Збільшити ліве поле</string>
+    <string name="action_uncrop_right">Збільшити праве поле</string>
+    <string name="action_uncrop_top">Збільшити верхнє поле</string>
+    <string name="action_uncrop_bottom">Збільшити нижнє поле</string>
+    <string name="action_inverse_crops">Переключити на обрізку чи збільшення полів</string>
+    <string name="action_switch_long_crop">Переключити на велику чи маленьку обрізку</string>
+
+    <string name="action_next_10">Вперед на 10 сторінок</string>
+    <string name="action_prev_10">Назад на 10 сторінок</string>
+
+    <string name="action_rotate_90">Повернути на  90/-90 градусів</string>
+    <string name="action_rotate_270">Повернути на 270/-270 градусів</string>
+
+
+</resources>

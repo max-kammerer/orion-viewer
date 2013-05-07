@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2013  Michael Bogdanov & Co
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <!--Categories-->
+    <string name="pref_category_general">Загальне</string>
+    <string name="pref_category_key_manager">Менеджер клавіш</string>
+    <string name="pref_category_device_parameters">Налаштування пристрою</string>
+    <string name="pref_category_add_parameters">Додаткові параметри</string>
+    <string name="pref_category_system">Системні параметри</string>
+
+    <!--General Prefs-->
+    <string name="pref_fullScreen">Повноекранний режим</string>
+    <string name="pref_bookDefaultOrientation">Орієнтація книги за замовчуванням</string>
+    <string name="pref_bookDefaultZoom">Масштаб</string>
+    <string name="pref_rotate_new_book_on_opening">Повертати книгу при першому відкритті</string>
+    <string name="pref_screen_orientation">Орієнтація екрану</string>
+    <string name="pref_rotate_screen">Орієнтація екрану за замовчанням: необхідний перезапуск програми</string>
+    <string name="pref_book_screen_orientation">Орієнтація екрану для поточної книжки</string>
+    <string name="pref_close_dialog_on_apply">Закривати діалог при застосуванні налаштувань</string>
+    <string name="pref_close_page_option_dialog_on_apply">Закривати діалог параметрів сторінки при застосуванні налаштувань</string>
+    <string name="pref_swap_prev_next_keys">Поміняти клавіші місцями</string>
+    <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Обміняти дії клавіш вперед / назад в портретному режимі</string>
+    <string name="pref_dictionary">Словник</string>
+    <string name="pref_e_ink_optimization">E-ink</string>
+    <string name="pref_e_ink_fast_refresh">Швидке оновлення e-ink</string>
+    <string name="pref_total_refresh_after">Повне оновлення після...</string>
+
+    <string name="pref_long_crop_value">Велика обрізка</string>
+    <string name="pref_long_crop_value_desc">Значення параметра великий обрізки (0-40%)</string>
+
+    <string name="pref_screen_overlapping_horizontal">Горизонтальне перекриття</string>
+    <string name="pref_screen_overlapping_horizontal_desc">Горизонтальне перекриття відображуваних частин сторінки (0-90%)</string>
+
+    <string name="pref_screen_overlapping_vertical">Вертикальне перекриття</string>
+    <string name="pref_screen_overlapping_vertical_desc">Вертикальне перекриття відображуваних частин сторінки (0-90%)</string>
+
+
+    <string name="pref_custom_brightness">Регулювання Яскравості</string>
+    <string name="pref_brightness">Яскравість</string>
+    <string name="pref_brightness_desc">Яскравість (1-100%)</string>
+
+    <string name="pref_application_theme">Тема програми</string>
+    <string name="pref_application_theme_desc">Необхідно перезапустити програму</string>
+
+    <string name="pref_open_recent_book">Відкривати останню книгу при старті</string>
+
+    <!--book preferences-->
+    <string name="pref_book_contrast">Контраст</string>
+    <string name="pref_book_contrast_desc">Контраст 1-1000 (за замовчуванням 100)</string>
+
+    <!--<string name="pref_book_threshold">Threshold</string>-->
+    <!--<string name="pref_book_threshold_desc">Threshold for watermark removal</string>-->
+
+    <string name="pref_device_info">Про пристрій</string>
+    <string name="pref_debug">Налагодження</string>
+    <string name="pref_debug_desc">Запис налагоджувальної інформації в файл &lt;ім'я відкритої файлу&gt; + .trace</string>
+
+    <string name="pref_default_book_setting">Параметри за замовчуванням для книжок</string>
+    <string name="pref_default_book_setting_desc">Будуть застосовуватися при відкритті нової книги. Для вже відкритих використовуйте \'Налаштування книжки\'</string>
+    <string name="book_pref_title">Налаштування для відкритої книги</string>
+    <string name="application_settings_title">Налаштування програми</string>
+
+    <string name="pref_screen_backlight_timeout">Підсвітка екрану</string>
+    <string name="pref_screen_backlight_timeout_desc">Тривалість підсвічування екрану</string>
+
+    <string name="pref_app_language">Мова програми</string>
+    <string name="pref_app_language_desc">Мова програми. Необхідний перезапуск програми!</string>
+
+    <string name="pref_tap_zones_desc">Тап зони: прив'язка операції до зон екрану</string>
+
+    <string name="pref_book_threshold">Поріг для водяних знаків</string>
+    <string name="pref_book_threshold_desc">Поріг видалення водяних знаків (за замовчуванням 255)</string>
+</resources>
