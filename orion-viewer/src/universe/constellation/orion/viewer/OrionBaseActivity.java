@@ -73,7 +73,9 @@ public class OrionBaseActivity extends Activity {
     @Override
     protected void onDestroy () {
         super.onDestroy();
-        device.onDestroy();
+        if (device != null) {
+            device.onDestroy();
+        }
     }
 //    @Override
 //    protected void onResume() {

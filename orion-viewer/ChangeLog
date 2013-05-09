@@ -1,3 +1,6 @@
+===== 0.42.1 (May 11, 2013) =====
+* Fixed crash on exit from bookmarks and help activities
+
 ===== 0.42.0 (May 07, 2013) =====
 * Migration to MuPdf 1.2
 * Ukrainian translation
