@@ -43,7 +43,7 @@ public interface Device {
         public final static String MODEL = getField("MODEL");
         public final static String DEVICE = getField("DEVICE");
 
-        public final static boolean NOOK2 = "barnesandnoble".equals(MANUFACTURER.toLowerCase()) && ("NOOK".equals(MODEL) || "BNRV350".equals(MODEL) || "BNRV300".equals(MODEL)) && "zoom2".equals(DEVICE.toLowerCase());
+        public final static boolean NOOK2 = "barnesandnoble".equals(MANUFACTURER.toLowerCase()) && ("NOOK".equals(MODEL) || "BNRV350".equals(MODEL) || "BNRV300".equals(MODEL) || "unknown".equals(MODEL)) && "zoom2".equals(DEVICE.toLowerCase());
 
         public final static boolean NOOK_120 = NOOK2 && ("1.2.0".equals(getVersion()) || "1.2.1".equals(getVersion()));
         
