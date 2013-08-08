@@ -53,6 +53,8 @@ public interface Device {
 
         public final static boolean EDGE = "edge".equals(DEVICE.toLowerCase()) || "edgejr".equals(DEVICE.toLowerCase());
 
+        public final static boolean TEXET_TB_138 = "texet".equalsIgnoreCase(DEVICE) && "rk29sdk".equalsIgnoreCase(MODEL);
+
         public final static boolean NOOK_CLASSIC;
 
         static {

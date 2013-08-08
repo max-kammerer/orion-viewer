@@ -23,6 +23,7 @@ import android.util.Log;
 import universe.constellation.orion.viewer.device.AndroidDevice;
 import universe.constellation.orion.viewer.device.EdgeDevice;
 import universe.constellation.orion.viewer.device.NookDevice;
+import universe.constellation.orion.viewer.device.TexetTb138Device;
 
 import java.io.*;
 
@@ -49,6 +50,12 @@ public class Common {
                 e.printStackTrace();
             }
         }
+
+        if(Device.Info.TEXET_TB_138) {
+            Common.d("Using TexetTb138Device");
+            return new TexetTb138Device();
+        }
+
         return new AndroidDevice();
     }
 

@@ -23,10 +23,7 @@ import android.os.Bundle;
 import android.preference.*;
 import android.view.View;
 import android.widget.ImageButton;
-import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.Device;
-import universe.constellation.orion.viewer.device.AndroidDevice;
-import universe.constellation.orion.viewer.device.NookDevice;
 import universe.constellation.orion.viewer.R;
 
 /**
@@ -59,6 +56,7 @@ public class OrionPreferenceActivity extends PreferenceActivity {
 
         PreferenceCategory NOOK2_EINK = (PreferenceCategory) screen.findPreference("NOOK2_EINK");
 
+        // may be Texet TB-138 also wants eink preferences
         if (!Device.Info.NOOK2) {
             screen.removePreference(NOOK2_EINK);
         }
