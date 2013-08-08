@@ -1,3 +1,7 @@
+===== 0.42.3 (Aug 08, 2013) =====
+* Text TB-138 support by evsinev
+* Support "unknown" Nook ST
+
 ===== 0.42.2 (May 13, 2013) =====
 * Fixed wrong text selection in djvu files
 * Changed some text font sizes
