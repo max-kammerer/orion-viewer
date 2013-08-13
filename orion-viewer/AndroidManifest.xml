@@ -48,6 +48,7 @@
                 <data android:mimeType="image/vnd.djvu"/>
                 <data android:mimeType="image/x-djvu"/>
                 <data android:mimeType="application/djvu"/>
+                <data android:mimeType="application/vnd.djvu"/>
                 <data android:mimeType="application/pdf"/>
                 <data android:mimeType="application/vnd.ms-xpsdocument"/>
                 <data android:mimeType="application/x-cbz"/>
