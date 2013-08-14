@@ -73,7 +73,7 @@ public class AndroidDevice implements Device {
 
     }
 
-    public boolean onKeyDown(int keyCode, KeyEvent event, OperationHolder holder) {
+    public boolean onKeyUp(int keyCode, KeyEvent event, OperationHolder holder) {
         //check mapped keys
         if (Info.NOOK2) {
             switch (keyCode) {

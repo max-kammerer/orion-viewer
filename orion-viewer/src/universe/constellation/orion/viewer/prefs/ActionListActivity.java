@@ -52,9 +52,10 @@ public class ActionListActivity extends Activity {
         TextView header = (TextView) findViewById(R.id.actions_header);
         header.setText(type == 0 ? R.string.short_click : type == 1 ? R.string.long_click : R.string.binding_click);
         final int keyCode = getIntent().getIntExtra("keyCode", 0);
+        final boolean isLong = getIntent().getBooleanExtra("isLong", false);
         if (type == 2) {
             String name = KeyEventNamer.getKeyName(keyCode);
-            header.setText(header.getText().toString() + " " + name);
+            header.setText(header.getText().toString() + " " + name + (isLong ? " [long press]" : ""));
         }
 
         ListView view = (ListView) findViewById(R.id.actionsGroup);
@@ -86,6 +87,7 @@ public class ActionListActivity extends Activity {
                 Intent result = new Intent();
                 result.putExtra("code", code);
                 result.putExtra("keyCode", keyCode);
+                result.putExtra("isLong", isLong);
                 setResult(Activity.RESULT_OK, result);
                 finish();
             }

@@ -84,7 +84,7 @@ public class NookDevice extends AndroidDevice {
     }
 
 
-    public boolean onKeyDown(int keyCode, KeyEvent event, OperationHolder holder) {
+    public boolean onKeyUp(int keyCode, KeyEvent event, OperationHolder holder) {
         switch (keyCode) {
             case NOOK_PAGE_UP_KEY_LEFT:
             case NOOK_PAGE_UP_KEY_RIGHT:

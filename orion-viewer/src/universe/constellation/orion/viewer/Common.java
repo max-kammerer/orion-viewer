@@ -111,4 +111,7 @@ public class Common {
         Common.d(message);
     }
 
+    public static String getPrefKey(int keyCode, boolean isLong) {
+        return keyCode + (isLong ? "long" : "");
+    }
 }

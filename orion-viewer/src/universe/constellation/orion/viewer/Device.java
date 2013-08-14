@@ -102,7 +102,7 @@ public interface Device {
 
     void updateTitle(String title);
 
-    boolean onKeyDown(int keyCode, KeyEvent event, OperationHolder operation);
+    boolean onKeyUp(int keyCode, KeyEvent event, OperationHolder operation);
 
     void onCreate(OrionBaseActivity activity);
 

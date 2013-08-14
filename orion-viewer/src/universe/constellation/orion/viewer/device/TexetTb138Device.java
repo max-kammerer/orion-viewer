@@ -38,7 +38,7 @@ public class TexetTb138Device extends AndroidDevice {
 
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event, OperationHolder holder) {
+    public boolean onKeyUp(int keyCode, KeyEvent event, OperationHolder holder) {
 
         switch (keyCode) {
             // button '>' on the left and the right side
@@ -52,7 +52,7 @@ public class TexetTb138Device extends AndroidDevice {
                 return true;
 
             default:
-                return super.onKeyDown(keyCode, event, holder);
+                return super.onKeyUp(keyCode, event, holder);
 
         }
     }

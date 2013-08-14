@@ -47,7 +47,7 @@ public class AlexDevice extends EpdRender implements Device {
 
     }
 
-    public boolean onKeyDown(int keyCode, KeyEvent event, OperationHolder operation) {
+    public boolean onKeyUp(int keyCode, KeyEvent event, OperationHolder operation) {
         Common.d("On key down " + Thread.currentThread().getName() + Thread.currentThread().getId());
         if (keyCode == KeyEvent.KEYCODE_SOFT_LEFT || keyCode == KeyEvent.KEYCODE_SOFT_RIGHT) {
             operation.value = keyCode == KeyEvent.KEYCODE_SOFT_LEFT ? PREV : NEXT;
@@ -97,7 +97,7 @@ public class AlexDevice extends EpdRender implements Device {
         Common.d("On page up " + Thread.currentThread().getName() + Thread.currentThread().getId());
         //uiThread
         //handler.sendEmptyMessage(PREV);
-        return activity.onKeyDown(KeyEvent.KEYCODE_SOFT_LEFT, null);
+        return activity.onKeyUp(KeyEvent.KEYCODE_SOFT_LEFT, null);
         //return true;
     }
 
@@ -105,7 +105,7 @@ public class AlexDevice extends EpdRender implements Device {
         Common.d("On page down " + Thread.currentThread().getName() + Thread.currentThread().getId());
         //uiThread
         //handler.sendEmptyMessage(NEXT);
-        return activity.onKeyDown(KeyEvent.KEYCODE_SOFT_RIGHT, null);
+        return activity.onKeyUp(KeyEvent.KEYCODE_SOFT_RIGHT, null);
         // return true;
     }
 

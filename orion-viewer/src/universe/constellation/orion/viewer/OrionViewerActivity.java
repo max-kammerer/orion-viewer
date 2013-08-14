@@ -45,7 +45,6 @@ import pl.polidea.customwidget.TheMissingTabHost;
 import universe.constellation.orion.viewer.selection.SelectedTextActions;
 import universe.constellation.orion.viewer.selection.SelectionAutomata;
 import universe.constellation.orion.viewer.selection.TouchAutomata;
-import universe.constellation.orion.viewer.selection.TouchAutomataOldAndroid;
 
 import java.io.*;
 
@@ -879,8 +878,24 @@ public class OrionViewerActivity extends OrionBaseActivity {
         saveGlobalOptions();
     }
 
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if(isLevel5ApiEnabled() && SafeApi.isCanceled(event)) {
+            return super.onKeyUp(keyCode,  event);
+        }
+
+        return processKey(keyCode, event, false) ? true : super.onKeyUp(keyCode,  event);
+    }
+
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        L.log("key = " + keyCode);
+        if (isLevel5ApiEnabled() && doTrack(keyCode)) {
+            SafeApi.doTrackEvent(event);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private boolean processKey(int keyCode, KeyEvent event, boolean isLong) {
+        L.log("key = " + keyCode + " isLong = " + isLong);
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (!device.optionViaDialog() && animator.getDisplayedChild() != MAIN_SCREEN) {
                 onAnimatorCancel();
@@ -888,7 +903,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
         }
 
-        int actionCode = getOrionContext().getKeyBinding().getInt("" + keyCode, -1);
+        int actionCode = getOrionContext().getKeyBinding().getInt(Common.getPrefKey(keyCode, isLong), -1);
         if (actionCode != -1) {
             Action action = Action.getAction(actionCode);
             switch (action) {
@@ -898,12 +913,15 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
         }
 
-        if (device.onKeyDown(keyCode, event, operation)) {
+        if (device.onKeyUp(keyCode, event, operation)) {
             changePage(operation.value);
             return true;
         }
+        return false;
+    }
 
-        return super.onKeyDown(keyCode,  event);
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        return processKey(keyCode, event, true);
     }
 
     public void changePage(int operation) {

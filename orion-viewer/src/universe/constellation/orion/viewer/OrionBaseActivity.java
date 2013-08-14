@@ -26,6 +26,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -325,5 +326,13 @@ public class OrionBaseActivity extends Activity {
         });
 
         builder.create().show();
+    }
+
+    public boolean isLevel5ApiEnabled() {
+        return getOrionContext().getSdkVersion() >= 5;
+    }
+
+    protected boolean doTrack(int keyCode) {
+        return keyCode != KeyEvent.KEYCODE_MENU && keyCode != KeyEvent.KEYCODE_BACK;
     }
 }

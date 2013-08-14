@@ -69,7 +69,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 KeyCodeAndAction keyCodeAndAction = (KeyCodeAndAction) parent.getAdapter().getItem(position);
-                selectAction(keyCodeAndAction.keyCode);
+                selectAction(keyCodeAndAction.keyCode, keyCodeAndAction.isLong);
             }
         });
 
@@ -101,41 +101,61 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
         if (resultCode == Activity.RESULT_OK) {
             int code = data.getIntExtra("code", 0);
             int keyCode = data.getIntExtra("keyCode", 0);
+            boolean isLong = data.getBooleanExtra("isLong", false);
+            String prefKey = Common.getPrefKey(keyCode, isLong);
             Action action = Action.getAction(code);
             if (action == Action.NONE) {
-                getOrionContext().getKeyBinding().removePreference("" + keyCode);
-                adapter.remove(new KeyCodeAndAction(keyCode, action));
+                getOrionContext().getKeyBinding().removePreference(prefKey);
+                adapter.remove(new KeyCodeAndAction(keyCode, action, isLong));
             } else {
-                getOrionContext().getKeyBinding().putIntPreference("" + keyCode, code);
-                adapter.insertOrUpdate(new KeyCodeAndAction(keyCode, action));
+                getOrionContext().getKeyBinding().putIntPreference(prefKey, code);
+                adapter.insertOrUpdate(new KeyCodeAndAction(keyCode, action, isLong));
             }
         }
     }
 
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (isLevel5ApiEnabled() && doTrack(keyCode)) {
+            SafeApi.doTrackEvent(event);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (isLevel5ApiEnabled() && SafeApi.isCanceled(event)) {
+            return super.onKeyUp(keyCode, event);
+        }
+
+        return processKey(keyCode, event, false) ? true : super.onKeyUp(keyCode, event);
+    }
+
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        return processKey(keyCode, event, true);
+    }
+
+    private boolean processKey(int keyCode, KeyEvent event, boolean isLong) {
         //TODO add zero keycode warning
-        Common.d("KeyBinder: on key down " + keyCode);
+        Common.d("KeyBinder: on key down " + keyCode + (isLong ? " long press" : ""));
         if (keyCode == KeyEvent.KEYCODE_UNKNOWN) {
             statusText.setText(R.string.key_binder_warning);
             statusText.setTextColor(Color.RED);
         } else if (keyCode != KeyEvent.KEYCODE_MENU && keyCode != KeyEvent.KEYCODE_BACK) {
             statusText.setText(R.string.key_binder_message);
             statusText.setTextColor(defaultColor);
-            Common.d("KeyBinder: on key down2 " + event.getKeyCode());
-            selectAction(event.getKeyCode());
+            selectAction(event.getKeyCode(), isLong);
             return true;
         }
-
-        return super.onKeyDown(keyCode, event);
+        return false;
     }
 
-    private void selectAction(int keyCode) {
+    private void selectAction(int keyCode, boolean isLong) {
         Intent intent = new Intent(this, ActionListActivity.class);
-        intent.putExtra("code", getOrionContext().getKeyBinding().getInt("" + keyCode, 0));
+        intent.putExtra("code", getOrionContext().getKeyBinding().getInt(Common.getPrefKey(keyCode, isLong), 0));
         intent.putExtra("type", 2);
         intent.putExtra("keyCode", keyCode);
+        intent.putExtra("isLong", isLong);
         startActivityForResult(intent, 1);
     }
 
@@ -161,18 +181,20 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
     public class KeyCodeAndAction implements Comparable<KeyCodeAndAction>{
         private int keyCode;
         private Action action;
+        private boolean isLong;
 
-        public KeyCodeAndAction(int keyCode, Action action) {
+        public KeyCodeAndAction(int keyCode, Action action, boolean isLong) {
             this.keyCode = keyCode;
             this.action = action;
+            this.isLong = isLong;
         }
 
         public String toString() {
-            return KeyEventNamer.getKeyName(keyCode);
+            return KeyEventNamer.getKeyName(keyCode) + (isLong ? " [long press]" : "");
         }
 
         public int compareTo(KeyCodeAndAction object2) {
-            return keyCode > object2.keyCode ? 1 : (keyCode < object2.keyCode ? -1 : 0);
+            return keyCode > object2.keyCode ? 1 : (keyCode < object2.keyCode ? -1 : isLong == object2.isLong ? 0 : isLong ? 1 : -1);
         }
     }
 
@@ -192,7 +214,11 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
                     Action action = Action.getAction(actionCode);
                     if (action != Action.NONE) {
                         try {
-                            values.add(new KeyCodeAndAction(Integer.valueOf(key), action));
+                            boolean isLong = key.endsWith("long");
+                            if (isLong) {
+                                key = key.substring(0, key.length() - "long".length());
+                            }
+                            values.add(new KeyCodeAndAction(Integer.valueOf(key), action, isLong));
                         } catch (Exception e) {
                             Common.d(e);
                         }
@@ -224,7 +250,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
             action.setText(item.action.getName());
 
             TextView code = (TextView)convertView.findViewById(android.R.id.text1);
-            code.setText(KeyEventNamer.getKeyName(item.keyCode));
+            code.setText(KeyEventNamer.getKeyName(item.keyCode) + (item.isLong ? " [long press]" : ""));
             return convertView;
         }
 

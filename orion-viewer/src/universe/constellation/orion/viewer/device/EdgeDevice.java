@@ -91,12 +91,12 @@ public class EdgeDevice extends AndroidDevice {
             startKeyboardListener(new KeyEventProducer() {
                 @Override
                 public void nextPage() {
-                    activity.onKeyDown(KeyEvent.KEYCODE_SOFT_RIGHT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SOFT_LEFT));
+                    activity.onKeyUp(KeyEvent.KEYCODE_SOFT_RIGHT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SOFT_LEFT));
                 }
 
                 @Override
                 public void prevPage() {
-                    activity.onKeyDown(KeyEvent.KEYCODE_SOFT_LEFT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SOFT_LEFT));
+                    activity.onKeyUp(KeyEvent.KEYCODE_SOFT_LEFT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SOFT_LEFT));
                 }
             });
         }
