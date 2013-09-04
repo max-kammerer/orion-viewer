@@ -1,0 +1,10 @@
+MuPdf build
+
+Note: this version of orion required mupdf 1.2
+
+1. checkout mupdf 1.2:
+       git clone git://git.ghostscript.com/mupdf.git
+       git checkout -b new_branch 1.2
+2. copy files from "common" and "mupdf" folders to checked out mupdf/android/jni folder
+3. see mupdf/android/ReadMe.txt for other steps:
+        be careaful when updating thirdparty libraries you will need them for mupdf 1.2 version
