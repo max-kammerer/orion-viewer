@@ -1,9 +1,11 @@
 package com.artifex.mupdfdemo;
 
+import android.graphics.RectF;
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.DocInfo;
 import universe.constellation.orion.viewer.PageInfo;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MuPDFCore
@@ -33,7 +35,8 @@ public class MuPDFCore
 			int patchX, int patchY,
 			int patchW, int patchH);
 
-    public native String getText(int page, int absoluteX, int absoluteY, int width, int height);
+    //public native String getText(int page, int absoluteX, int absoluteY, int width, int height);
+    private native TextChar[][][][] text();
 
 	public native void destroying();
 
@@ -110,4 +113,69 @@ public class MuPDFCore
 	public native com.artifex.mupdfdemo.OutlineItem[] getOutlineInternal();
     public native void setContrast(int contrast);
 	public native void setThreshold(int threshold);
+
+
+    public synchronized String textLines(int page, RectF region) {
+   		gotoPage(page);
+   		TextChar[][][][] chars = text();
+
+   		// The text of the page held in a hierarchy (blocks, lines, spans).
+   		// Currently we don't need to distinguish the blocks level or
+        // the spans, and we need to collect the text into words.
+        ArrayList<TextWord[]> lns = new ArrayList<TextWord[]>();
+
+
+        for (TextChar[][][] bl: chars) {
+            for (TextChar[][] ln: bl) {
+                ArrayList<TextWord> wds = new ArrayList<TextWord>();
+                TextWord wd = new TextWord();
+
+                for (TextChar[] sp: ln) {
+                    for (TextChar tc: sp) {
+                        if (tc.c != ' ') {
+                            wd.Add(tc);
+                        } else if (wd.textLength() > 0) {
+                            float square = wd.width() * wd.height() / 5;
+                            if (wd.setIntersect(wd, region)) {
+                                if (wd.width() * wd.height() > square) {
+                                    wds.add(wd);
+                                    System.out.println(wd.getText());
+                                }
+                            }
+                            wd = new TextWord();
+                        }
+                    }
+
+                    if (wd.textLength() > 0) {
+                        float square = wd.width() * wd.height() / 5;
+                        if (wd.setIntersect(wd, region)) {
+                            if (wd.width() * wd.height() > square) {
+                                wds.add(wd);
+                            }
+                        }
+                    }
+
+                    if (wds.size() > 0)
+                        lns.add(wds.toArray(new TextWord[wds.size()]));
+                }
+   			}
+   		}
+
+        StringBuffer res = new StringBuffer();
+        for (int i = 0; i < lns.size(); i++) {
+            TextWord[] textWords = lns.get(i);
+            for (int j = 0; j < textWords.length; j++) {
+                TextWord textWord = textWords[j];
+                res.append(textWord.getText());
+                if (j != textWords.length - 1) {
+                    res.append(" ");
+                }
+            }
+            if (i != lns.size() - 1) {
+                res.append(" ");
+            }
+        }
+        return res.toString();
+   	}
+
 }

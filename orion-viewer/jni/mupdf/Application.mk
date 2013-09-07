@@ -1,33 +1,44 @@
-# The ARMv7 is significanly faster due to the use of the hardware FPU
+# When we build for google play, we build 4 different apk's, each with
+# a different version, by uncommenting one of the pairs of lines below.
+# Suppose our base version is X:
+
+# Version X: armeabi
+#APP_PLATFORM=android-8
+#APP_ABI := armeabi
+
+# Version X+1: armeabi-v7a (Much faster due to the availability of hardware
+# FP, but cannot be run in the emulator).
 APP_PLATFORM=android-8
-
-# We only build for arm variants by default. If you want more, uncomment
-# the appropriate line below.
-
-#APP_ABI := armeabi armeabi-v7a
-#APP_ABI := armeabi armeabi-v7a x86 mips
 APP_ABI := all
+
+# Version X+2: x86 (Requires android-9, so a change needs to be made in
+# AndroidManifest.xml too)
+#APP_PLATFORM=android-9
+#APP_ABI := x86
+
+# Version X+3: mips (Requires android-9, so a change needs to be made in
+# AndroidManifest.xml too)
+#APP_PLATFORM=android-9
+#APP_ABI := mips
 
 ifdef NDK_PROFILER
 # The profiler doesn't seem to receive ticks when run on release code.
 # Accordingly, we need to build as debug - but this turns optimisations
-# off, which is less than ideal. We COULD force them back on by using
-# APP_CFLAGS = -O2, but this then triggers bugs in the compiler when it
-# builds a couple of our source files. Accordingly, we have moved
-# those files into Core2, and we have some flag hackery to make just that
-# module without optimisation.
+# off, which is less than ideal.
 APP_OPTIM := debug
-APP_CFLAGS :=
+APP_CFLAGS := -O2
 else
 APP_OPTIM := release
 endif
 ifdef V8_BUILD
 APP_STL := stlport_static
 endif
+ifdef MEMENTO
+APP_CFLAGS += -DMEMENTO -DMEMENTO_LEAKONLY
+endif
 
 # If the ndk is r8b then workaround bug by uncommenting the following line
 #NDK_TOOLCHAIN_VERSION=4.4.3
 
 # If the ndk is newer than r8c, try using clang.
-#NDK_TOOLCHAIN_VERSION=clang3.2
-LOCAL_ARM_MODE := arm
+#NDK_TOOLCHAIN_VERSION=clang3.1

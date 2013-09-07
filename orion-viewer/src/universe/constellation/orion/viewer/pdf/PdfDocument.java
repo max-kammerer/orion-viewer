@@ -19,6 +19,7 @@
 
 package universe.constellation.orion.viewer.pdf;
 
+import android.graphics.RectF;
 import com.artifex.mupdfdemo.MuPDFCore;
 import universe.constellation.orion.viewer.DocumentWrapper;
 import universe.constellation.orion.viewer.outline.OutlineItem;
@@ -71,7 +72,7 @@ public class PdfDocument implements DocumentWrapper {
 	}
 
     public String getText(int pageNumber, int absoluteX, int absoluteY, int width, int height) {
-        return core.getText(pageNumber, absoluteX, absoluteY, width, height);
+        return core.textLines(pageNumber, new RectF(absoluteX, absoluteY, absoluteX + width, absoluteY + height));
     }
 
     public OutlineItem[] getOutline() {

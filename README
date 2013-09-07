@@ -15,3 +15,5 @@ For Highscreen Alex:
     ant -f build_alex.xml release
 
 5. Project building will starts!
+
+For native build see ReadMe file in "orion-viewer/jni" folder
