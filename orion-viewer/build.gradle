@@ -3,7 +3,8 @@ enableAlex = false
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-    compile  project(":themissingtabwidget-0.2")
+    compile project(":themissingtabwidget-0.2")
+    compile fileTree(dir: "$buildDir/native-libs", include: 'native-libs.jar')
 }
 
 android {
@@ -27,7 +28,7 @@ android {
         }
 
         // Move the tests to tests/java, tests/res, etc...
-//        instrumentTest.setRoot('tests')
+        instrumentTest.setRoot('tests')
 
         // Move the build types to build-types/<type>
         // For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...
@@ -39,5 +40,23 @@ android {
        // release.setRoot('build-types/release')
     }
 
+//    defaultConfig {
+//        minSdkVersion = 8
+//        testPackageName "universe.constellation.orion.viewer.test"
+//        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+//    }
+
 }
 
+//hack for native libraries
+task nativeLibsToJar(type: Zip, description: 'create a jar archive of the native libs') {
+    destinationDir file("$buildDir/native-libs")
+    baseName 'native-libs'
+    extension 'jar'
+    from fileTree(dir: 'libs', include: '**/*.so')
+    into 'lib/'
+}
+
+tasks.withType(JavaCompile) {
+    compileTask -> compileTask.dependsOn(nativeLibsToJar)
+}
