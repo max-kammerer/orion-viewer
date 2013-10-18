@@ -20,14 +20,14 @@ void orion_setContrast(JNIEnv * env, jobject thiz, jint contrast1);
 
 #ifdef ORION_PDF
 JNIEXPORT void
-JNICALL Java_com_artifex_mupdf_MuPDFCore_setContrast(JNIEnv * env, jobject thiz, jint contrast1)
+JNICALL Java_com_artifex_mupdfdemo_MuPDFCore_setContrast(JNIEnv * env, jobject thiz, jint contrast1)
 {
     orion_setContrast(env, thiz, contrast1);
 }
 
 /* Setting the watermark removal threshold */
 JNIEXPORT void
-JNICALL Java_com_artifex_mupdf_MuPDFCore_setThreshold(JNIEnv * env, jobject thiz, jint threshold1)
+JNICALL Java_com_artifex_mupdfdemo_MuPDFCore_setThreshold(JNIEnv * env, jobject thiz, jint threshold1)
 {
 	threshold = threshold1;
 }
