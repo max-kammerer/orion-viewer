@@ -255,10 +255,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
         getOrionContext().onNewBook(filePath);
         try {
             String filePAthLowCase = filePath.toLowerCase();
-            if (filePAthLowCase.endsWith("pdf") || filePAthLowCase.endsWith("xps") || filePAthLowCase.endsWith("cbz")) {
-                doc = new PdfDocument(filePath);
-            } else {
+            if (isDjvuFile(filePAthLowCase)) {
                 doc = new DjvuDocument(filePath);
+            } else {
+                doc = new PdfDocument(filePath);
             }
 
             LayoutStrategy str = new SimpleLayoutStrategy(doc, device.getDeviceSize());
@@ -300,6 +300,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
             finish();
         }
         return doc;
+    }
+
+    private boolean isDjvuFile(String filePathLowCase) {
+        return filePathLowCase.endsWith("djvu") || filePathLowCase.endsWith("djv");
     }
 
 
