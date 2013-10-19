@@ -126,39 +126,42 @@ public class MuPDFCore
 
 
         for (TextChar[][][] bl: chars) {
-            for (TextChar[][] ln: bl) {
-                ArrayList<TextWord> wds = new ArrayList<TextWord>();
-                TextWord wd = new TextWord();
-
-                for (TextChar[] sp: ln) {
-                    for (TextChar tc: sp) {
-                        if (tc.c != ' ') {
-                            wd.Add(tc);
-                        } else if (wd.textLength() > 0) {
-                            float square = wd.width() * wd.height() / 5;
-                            if (wd.setIntersect(wd, region)) {
-                                if (wd.width() * wd.height() > square) {
-                                    wds.add(wd);
-                                    System.out.println(wd.getText());
+            if (bl != null) {
+                for (TextChar[][] ln: bl) {
+                    if (ln != null) {
+                        ArrayList<TextWord> wds = new ArrayList<TextWord>();
+                        TextWord wd = new TextWord();
+                        for (TextChar[] sp: ln) {
+                            for (TextChar tc: sp) {
+                                if (tc.c != ' ') {
+                                    wd.Add(tc);
+                                } else if (wd.textLength() > 0) {
+                                    float square = wd.width() * wd.height() / 5;
+                                    if (wd.setIntersect(wd, region)) {
+                                        if (wd.width() * wd.height() > square) {
+                                            wds.add(wd);
+                                            System.out.println(wd.getText());
+                                        }
+                                    }
+                                    wd = new TextWord();
                                 }
                             }
-                            wd = new TextWord();
-                        }
-                    }
 
-                    if (wd.textLength() > 0) {
-                        float square = wd.width() * wd.height() / 5;
-                        if (wd.setIntersect(wd, region)) {
-                            if (wd.width() * wd.height() > square) {
-                                wds.add(wd);
+                            if (wd.textLength() > 0) {
+                                float square = wd.width() * wd.height() / 5;
+                                if (wd.setIntersect(wd, region)) {
+                                    if (wd.width() * wd.height() > square) {
+                                        wds.add(wd);
+                                    }
+                                }
                             }
+
+                            if (wds.size() > 0)
+                                lns.add(wds.toArray(new TextWord[wds.size()]));
                         }
                     }
-
-                    if (wds.size() > 0)
-                        lns.add(wds.toArray(new TextWord[wds.size()]));
                 }
-   			}
+            }
    		}
 
         StringBuffer res = new StringBuffer();
