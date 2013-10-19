@@ -26,6 +26,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import universe.constellation.orion.viewer.device.Nook2Util;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
+import universe.constellation.orion.viewer.view.ViewDimensionAware;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -44,7 +45,7 @@ public class OrionView extends View {
 
     private CountDownLatch latch;
 
-    private Controller controller;
+    private ViewDimensionAware dimensionAware;
 
     private int counter = 0;
 
@@ -145,17 +146,17 @@ public class OrionView extends View {
         counter++;
     }
 
-    public void setController(Controller controller) {
-        this.controller = controller;
+    public void setDimensionAware(ViewDimensionAware dimensionAware) {
+        this.dimensionAware = dimensionAware;
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         Common.d("OrionView: onSizeChanged " + w + "x" + h);
         super.onSizeChanged(w, h, oldw, oldh);
-        if (w != 0 && h != 0 && (w != oldw || h != oldh)) {
-            if (controller != null ) {
-                controller.screenSizeChanged(w, h);
+        if (w != oldw || h != oldh) {
+            if (dimensionAware != null ) {
+                dimensionAware.onDimensionChanged(w, h);
             }
         }
     }

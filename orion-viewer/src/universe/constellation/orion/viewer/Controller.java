@@ -22,13 +22,15 @@ package universe.constellation.orion.viewer;
 import android.graphics.Point;
 import universe.constellation.orion.viewer.outline.OutlineItem;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
+import universe.constellation.orion.viewer.view.Renderer;
+import universe.constellation.orion.viewer.view.ViewDimensionAware;
 
 /**
  * User: mike
  * Date: 15.10.11
  * Time: 18:48
  */
-public class Controller {
+public class Controller implements ViewDimensionAware {
 
     private LayoutPosition layoutInfo;
 
@@ -36,11 +38,9 @@ public class Controller {
 
     private LayoutStrategy layout;
 
-    private OrionView view;
-
     private OrionViewerActivity activity;
 
-    private RenderThread renderer;
+    private Renderer renderer;
 
     private int lastPage = -1;
 
@@ -55,18 +55,18 @@ public class Controller {
 
     private boolean hasPendingEvents = false;
 
-    public Controller(OrionViewerActivity activity, DocumentWrapper doc, LayoutStrategy layout, OrionView view) {
+    public Controller(OrionViewerActivity activity, DocumentWrapper doc, LayoutStrategy layout, Renderer renderer) {
         this.activity = activity;
         this.doc = doc;
         this.layout = layout;
-        this.view = view;
-        renderer = new RenderThread(activity, view, layout, doc);
-        renderer.start();
+        this.renderer = renderer;
+
+        renderer.startRenreder();
 
         listener = new  DocumentViewAdapter() {
             public void viewParametersChanged() {
                 if (Controller.this.activity.isResumed) {
-                    renderer.invalidateCache();
+                    Controller.this.renderer.invalidateCache();
                     drawPage();
                     hasPendingEvents = false;
                 } else {
@@ -96,26 +96,26 @@ public class Controller {
         }
     }
 
-    public void screenSizeChanged(int newWidth, int newHeight) {
-        Common.d("New screen size " + newWidth + "x" + newHeight);
+    public void onDimensionChanged(int newWidth, int newHeight) {
+        if (newWidth != 0 && newHeight != 0) {
+            Common.d("New screen size " + newWidth + "x" + newHeight);
 
-        //activity.getDevice().screenSizeChanged(newWidth, newHeight);
-
-        layout.setDimension(newWidth, newHeight);
-        GlobalOptions options = getActivity().getGlobalOptions();
-        layout.changeOverlapping(options.getHorizontalOverlapping(), options.getVerticalOverlapping());
-        int offsetX = layoutInfo.x.offset;
-        int offsetY = layoutInfo.y.offset;
-        layout.reset(layoutInfo, layoutInfo.pageNumber);
-        if (lastScreenSize != null) {
-            if (newWidth == lastScreenSize.x && newHeight == lastScreenSize.y) {
-                layoutInfo.x.offset = offsetX;
-                layoutInfo.y.offset = offsetY;
+            layout.setDimension(newWidth, newHeight);
+            GlobalOptions options = getActivity().getGlobalOptions();
+            layout.changeOverlapping(options.getHorizontalOverlapping(), options.getVerticalOverlapping());
+            int offsetX = layoutInfo.x.offset;
+            int offsetY = layoutInfo.y.offset;
+            layout.reset(layoutInfo, layoutInfo.pageNumber);
+            if (lastScreenSize != null) {
+                if (newWidth == lastScreenSize.x && newHeight == lastScreenSize.y) {
+                    layoutInfo.x.offset = offsetX;
+                    layoutInfo.y.offset = offsetY;
+                }
+                lastScreenSize = null;
             }
-            lastScreenSize = null;
+            sendViewChangeNotification();
+            renderer.onResume();
         }
-        sendViewChangeNotification();
-        renderer.onResume();
     }
 
     public void drawNext() {
@@ -238,16 +238,13 @@ public class Controller {
         return layoutInfo.pageNumber;
     }
 
-//    public int getZoom10() {
-//        return layoutInfo.docZoom;
-//    }
-
     public int getPageCount() {
         return doc.getPageCount();
     }
 
 
-    public void init(LastPageInfo info) {
+    public void init(LastPageInfo info, int width, int height) {
+        Common.d("Init controller...");
         doc.setContrast(info.contrast);
         doc.setThreshold(info.threshold);
 
@@ -260,10 +257,9 @@ public class Controller {
         lastScreenSize = new Point(info.screenWidth, info.screenHeight);
         screenOrientation = info.screenOrientation;
 
-        if (view.getWidth() != 0 && view.getHeight() != 0) {
-            Common.d("Calling screen size from init...");
-            screenSizeChanged(view.getWidth(), view.getHeight());
-        }
+        onDimensionChanged(width, height);
+
+        Common.d("Controller inited");
     }
 
     public void serialize(LastPageInfo info) {

@@ -24,8 +24,8 @@ import android.graphics.*;
 import android.os.Debug;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
+import universe.constellation.orion.viewer.view.Renderer;
 
-import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.*;
@@ -35,7 +35,7 @@ import java.util.concurrent.*;
  * Date: 19.10.11
  * Time: 9:52
  */
-public class RenderThread extends Thread {
+public class RenderThread extends Thread implements Renderer {
 
     private LayoutStrategy layout;
 
@@ -107,6 +107,7 @@ public class RenderThread extends Thread {
         Common.d("BitmapConfig is " +  bitmapConfig);
     }
 
+    @Override
     public void invalidateCache() {
         synchronized (this) {
             for (Iterator<CacheInfo> iterator = cachedBitmaps.iterator(); iterator.hasNext(); ) {
@@ -117,7 +118,12 @@ public class RenderThread extends Thread {
         }
     }
 
+    @Override
+    public void startRenreder() {
+        start();
+    }
 
+    @Override
     public void cleanCache() {
         synchronized (this) {
             //if(clearCache) {
@@ -137,6 +143,7 @@ public class RenderThread extends Thread {
         }
     }
 
+    @Override
     public void stopRenderer() {
         synchronized (this) {
             stopped = true;
@@ -145,12 +152,14 @@ public class RenderThread extends Thread {
         }
     }
 
+    @Override
     public void onPause() {
 //        synchronized (this) {
 //            paused = true;
 //        }
     }
 
+    @Override
     public void onResume() {
         synchronized (this) {
             paused = false;
@@ -299,6 +308,7 @@ public class RenderThread extends Thread {
         }
     }
 
+    @Override
     public void render(LayoutPosition lastInfo) {
         lastInfo = lastInfo.clone();
         synchronized (this) {

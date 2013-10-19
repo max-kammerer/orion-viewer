@@ -37,8 +37,6 @@ import android.widget.*;
 
 import android.widget.ImageButton;
 import android.widget.RadioButton;
-import universe.constellation.orion.viewer.djvu.DjvuDocument;
-import universe.constellation.orion.viewer.pdf.PdfDocument;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionPreferenceActivity;
 import pl.polidea.customwidget.TheMissingTabHost;
@@ -254,15 +252,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         getOrionContext().onNewBook(filePath);
         try {
-            String filePAthLowCase = filePath.toLowerCase();
-            if (isDjvuFile(filePAthLowCase)) {
-                doc = new DjvuDocument(filePath);
-            } else {
-                doc = new PdfDocument(filePath);
-            }
+            doc = FileUtil.openFile(filePath);
 
-            LayoutStrategy str = new SimpleLayoutStrategy(doc, device.getDeviceSize());
-            int idx = filePath.lastIndexOf('/');
+            LayoutStrategy layoutStrategy = new SimpleLayoutStrategy(doc, device.getDeviceSize());
 
             lastPageInfo = LastPageInfo.loadBookParameters(this, filePath);
 
@@ -270,20 +262,21 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
             OptionActions.DEBUG.doAction(this, false, getGlobalOptions().getBooleanProperty("DEBUG", false));
 
-            controller = new Controller(this, doc, str, view);
+            controller = new Controller(this, doc, layoutStrategy, new RenderThread(this, view, layoutStrategy, doc));
 
             controller.changeOrinatation(lastPageInfo.screenOrientation);
 
-            controller.init(lastPageInfo);
+            controller.init(lastPageInfo, view.getWidth(), view.getHeight());
 
             getSubscriptionManager().sendDocOpenedNotification(controller);
 
-            getView().setController(controller);
+            getView().setDimensionAware(controller);
 
             controller.drawPage();
 
             String title = doc.getTitle();
             if (title == null || "".equals(title)) {
+                int idx = filePath.lastIndexOf('/');
                 title = filePath.substring(idx + 1);
                 title = title.substring(0, title.lastIndexOf("."));
             }
@@ -300,10 +293,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
             finish();
         }
         return doc;
-    }
-
-    private boolean isDjvuFile(String filePathLowCase) {
-        return filePathLowCase.endsWith("djvu") || filePathLowCase.endsWith("djv");
     }
 
 
