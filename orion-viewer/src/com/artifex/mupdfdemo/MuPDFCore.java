@@ -6,7 +6,6 @@ import universe.constellation.orion.viewer.DocInfo;
 import universe.constellation.orion.viewer.PageInfo;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class MuPDFCore
 {
@@ -55,28 +54,28 @@ public class MuPDFCore
 
 	private synchronized void gotoPage(int page) {
         if(lastPage != page) {
-            Common.d("Changing page...");
-            Date date = new Date();
+            Common.d("Changing page to " + page + " ...");
+            long start = System.currentTimeMillis();
             if (page > numPages-1)
                 page = numPages-1;
             else if (page < 0)
                 page = 0;
             gotoPageInternal(page);
 
-            Date date2 = new Date();
+            long end = System.currentTimeMillis();
 
             lastPage = page;
-            Common.d("Page changing takes " + page + " = " + 0.001 * (date2.getTime() - date.getTime()) + " s");
+            Common.d("Page " + page + " changing takes = " + 0.001 * (end - start) + " s");
         }
 	}
 
     public synchronized int[] renderPage(int n, double zoom, int left, int top, int w, int h) {
         gotoPage(n);
         Common.d("MuPDFCore starts rendering...");
-        Date date = new Date();
+        long date = System.currentTimeMillis();
         int [] res =  drawPage((float)zoom, w, h, left, top, w, h);
-        Date date2 = new Date();
-        Common.d("MuPDFCore render time takes " + n + " = " + 0.001 * (date2.getTime() - date.getTime()) + " s");
+        long date2 = System.currentTimeMillis();
+        Common.d("MuPDFCore render time takes " + n + " = " + 0.001 * (date2 - date) + " s");
         return res;
     }
 
