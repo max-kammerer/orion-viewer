@@ -16,7 +16,6 @@ public class MuPDFCore
 
 	/* Readable members */
 	public int numPages;
-    public int lastPage = -1;
     private DocInfo info;
 
     private long globals;
@@ -53,20 +52,15 @@ public class MuPDFCore
 	}
 
 	private synchronized void gotoPage(int page) {
-        if(lastPage != page) {
-            Common.d("Changing page to " + page + " ...");
-            long start = System.currentTimeMillis();
-            if (page > numPages-1)
-                page = numPages-1;
-            else if (page < 0)
-                page = 0;
-            gotoPageInternal(page);
+        Common.d("Changing page to " + page + " ...");
+        long start = System.currentTimeMillis();
+        if (page > numPages-1)
+            page = numPages-1;
+        else if (page < 0)
+            page = 0;
+        gotoPageInternal(page);
 
-            long end = System.currentTimeMillis();
-
-            lastPage = page;
-            Common.d("Page " + page + " changing takes = " + 0.001 * (end - start) + " s");
-        }
+        Common.d("Page " + page + " changing takes = " + 0.001 * (System.currentTimeMillis() - start) + " s");
 	}
 
     public synchronized int[] renderPage(int n, double zoom, int left, int top, int w, int h) {
