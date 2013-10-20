@@ -22,6 +22,7 @@ package universe.constellation.orion.viewer;
 import android.content.Context;
 import android.graphics.*;
 import android.os.Debug;
+import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 import universe.constellation.orion.viewer.view.Renderer;
@@ -37,17 +38,17 @@ import java.util.concurrent.*;
  */
 public class RenderThread extends Thread implements Renderer {
 
-    private LayoutStrategy layout;
+    protected LayoutStrategy layout;
 
     private LinkedList<CacheInfo> cachedBitmaps = new LinkedList<CacheInfo>();
 
-    private OrionView view;
+    private ImageView view;
 
     private LayoutPosition currentPosition;
 
     private LayoutPosition lastEvent;
 
-    private DocumentWrapper doc;
+    protected DocumentWrapper doc;
 
     private int CACHE_SIZE = 4;
 
@@ -55,7 +56,8 @@ public class RenderThread extends Thread implements Renderer {
 
     private Canvas cacheCanvas = new Canvas();
 
-    private Bitmap.Config bitmapConfig;
+    private final Bitmap.Config bitmapConfig;
+    private boolean executeInSeparateThread;
 
     private boolean clearCache;
 
@@ -65,17 +67,26 @@ public class RenderThread extends Thread implements Renderer {
 
     private OrionViewerActivity activity;
 
+    public RenderThread(OrionViewerActivity activity, ImageView view, LayoutStrategy layout, DocumentWrapper doc) {
+        this(activity, view, layout, doc, createBitmapConfig(activity), true);
+    }
 
-    public RenderThread(OrionViewerActivity activity, OrionView view, LayoutStrategy layout, DocumentWrapper doc) {
+    public RenderThread(OrionViewerActivity activity, ImageView view, LayoutStrategy layout, DocumentWrapper doc, Bitmap.Config config, boolean executeInSeparateThread) {
         this.view = view;
         this.layout = layout;
         this.doc = doc;
         this.activity = activity;
 
+        this.bitmapConfig = config;
+        this.executeInSeparateThread = executeInSeparateThread;
+
+        Common.d("BitmapConfig is " +  bitmapConfig);
+    }
+
+    public static Bitmap.Config createBitmapConfig(OrionViewerActivity activity) {
         WindowManager manager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
         if (manager == null) {
-            bitmapConfig = Bitmap.Config.ARGB_8888;
-            return;
+            return Bitmap.Config.ARGB_8888;
         }
 
         DisplayMetrics metrics = new DisplayMetrics();
@@ -85,26 +96,15 @@ public class RenderThread extends Thread implements Renderer {
 
         switch (manager.getDefaultDisplay().getPixelFormat()) {
             case PixelFormat.A_8:
-                bitmapConfig = Bitmap.Config.ALPHA_8;
-                break;
+                return Bitmap.Config.ALPHA_8;
             case PixelFormat.RGB_565:
-                bitmapConfig = Bitmap.Config.RGB_565;
-                break;
+                return  Bitmap.Config.RGB_565;
             case PixelFormat.RGBA_4444:
-                bitmapConfig = Bitmap.Config.ARGB_4444;
-                break;
+                return  Bitmap.Config.ARGB_4444;
             case PixelFormat.RGBA_8888:
-                bitmapConfig = Bitmap.Config.ARGB_8888;
-                break;
-            case 5:
-                //this value in my  phone
-                bitmapConfig = Bitmap.Config.ARGB_8888;
-                break;
             default:
-                bitmapConfig = Bitmap.Config.ARGB_8888;
+                return  Bitmap.Config.ARGB_8888;
         }
-
-        Common.d("BitmapConfig is " +  bitmapConfig);
     }
 
     @Override
@@ -175,8 +175,7 @@ public class RenderThread extends Thread implements Renderer {
 
             Common.d("Allocated heap size " + (Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize())/ 1024 / 1024 + "Mb");
 
-            int rotation = 0;
-            CacheInfo resultEntry = null;
+            int rotation;
             synchronized (this) {
 //                if (paused) {
 //                    try {
@@ -217,95 +216,115 @@ public class RenderThread extends Thread implements Renderer {
             }
 
             Common.d("rotation = " + rotation);
-            if (curPos != null) {
-                //try to find result in cache
-                for (Iterator<CacheInfo> iterator = cachedBitmaps.iterator(); iterator.hasNext(); ) {
-                    CacheInfo cacheInfo =  iterator.next();
-                    if (cacheInfo.isValid() && cacheInfo.info.equals(curPos)) {
-                        resultEntry = cacheInfo;
-                        //relocate info to end of cache
-                        iterator.remove();
-                        cachedBitmaps.add(cacheInfo);
-                        break;
-                    }
+            renderInCurrentThread(futureIndex == 0, curPos, rotation);
+            futureIndex++;
+        }
+    }
+
+    protected Bitmap renderInCurrentThread(boolean flushBitmap, LayoutPosition curPos, int rotation) {
+        CacheInfo resultEntry = null;
+        Common.d("Orion: rendering " + curPos.toString());
+        if (curPos != null) {
+            //try to find result in cache
+            for (Iterator<CacheInfo> iterator = cachedBitmaps.iterator(); iterator.hasNext(); ) {
+                CacheInfo cacheInfo =  iterator.next();
+                if (cacheInfo.isValid() && cacheInfo.info.equals(curPos)) {
+                    resultEntry = cacheInfo;
+                    //relocate info to end of cache
+                    iterator.remove();
+                    cachedBitmaps.add(cacheInfo);
+                    break;
                 }
+            }
 
 
-                if (resultEntry == null) {
-                    //render page
-                    int width = curPos.x.screenDimension;
-                    int height = curPos.y.screenDimension;
+            if (resultEntry == null) {
+                //render page
+                resultEntry = render(curPos, rotation);
 
-                    int screenWidth = curPos.screenWidth;
-                    int screenHeight = curPos.screenHeight;
-
-                    Bitmap bitmap = null;
-                    if (cachedBitmaps.size() >= CACHE_SIZE) {
-                        CacheInfo info = cachedBitmaps.removeFirst();
-                        info.setValid(true);
-
-                        if (screenWidth == info.bitmap.getWidth() && screenHeight == info.bitmap.getHeight() /*|| rotation != 0 && width == info.bitmap.getHeight() && height == info.bitmap.getWidth()*/) {
-                            bitmap = info.bitmap;
-                        } else {
-                            info.bitmap.recycle(); //todo recycle from ui
-                            info.bitmap = null;
-                        }
-                    }
-                    if (bitmap == null) {
-                        Common.d("Creating Bitmap " + bitmapConfig + " " + screenWidth + "x" + screenHeight + "...");
-                        bitmap = Bitmap.createBitmap(screenWidth, screenHeight, bitmapConfig);
-                    }
-
-                    cacheCanvas.setMatrix(null);
-                    if (rotation != 0) {
-                        int rotationShift = (screenHeight - screenWidth) / 2;
-                        cacheCanvas.rotate(-rotation * 90, screenHeight / 2, screenWidth / 2);
-                        cacheCanvas.translate(-rotation * rotationShift, -rotation * rotationShift);
-                    }
-
-                    Point leftTopCorner = layout.convertToPoint(curPos);
-
-                    int [] data = doc.renderPage(curPos.pageNumber, curPos.docZoom, width, height, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + width, leftTopCorner.y + height);
-
-                    long startTime = System.currentTimeMillis();
-
-                    cacheCanvas.setBitmap(bitmap);
-                    cacheCanvas.drawBitmap(data, 0, width, 0, 0, width, height, false, null);
-
-                    long endTime = System.currentTimeMillis();
-                    Common.d("Drawing bitmap in cache " + 0.001 * (endTime - startTime) + " s");
-
-                    resultEntry = new CacheInfo(curPos, bitmap);
-
-                    synchronized (this) {
-                        cachedBitmaps.add(resultEntry);
-                    }
+                synchronized (this) {
+                    cachedBitmaps.add(resultEntry);
                 }
+            }
 
 
-                if (futureIndex == 0) {
-                    final Bitmap bitmap = resultEntry.bitmap;
-                    Common.d("Sending Bitmap");
-                    final CountDownLatch mutex = new CountDownLatch(1);
+            if (flushBitmap) {
+                final Bitmap bitmap = resultEntry.bitmap;
+                Common.d("Sending Bitmap");
+                final CountDownLatch mutex = new CountDownLatch(1);
 
-                    final LayoutPosition info = curPos;
+                final LayoutPosition info = curPos;
+                if (!executeInSeparateThread) {
+                    view.onNewImage(bitmap, info, mutex);
+                    activity.getDevice().flushBitmap(0);
+                    mutex.countDown();
+                } else {
                     activity.runOnUiThread(new Runnable() {
                         public void run() {
-                            view.setData(bitmap, info, mutex);
+                            view.onNewImage(bitmap, info, mutex);
                             //view.invalidate();
                             activity.getDevice().flushBitmap(0);
                         }
                     });
-
-                    try {
-                        mutex.await(1, TimeUnit.SECONDS);
-                    } catch (InterruptedException e) {
-                        Common.d(e);
-                    }
                 }
-                futureIndex++;
+
+                try {
+                    mutex.await(1, TimeUnit.SECONDS);
+                } catch (InterruptedException e) {
+                    Common.d(e);
+                }
             }
         }
+
+        return resultEntry.bitmap;
+    }
+
+    private CacheInfo render(LayoutPosition curPos, int rotation) {
+        CacheInfo resultEntry;
+        int width = curPos.x.screenDimension;
+        int height = curPos.y.screenDimension;
+
+        int screenWidth = curPos.screenWidth;
+        int screenHeight = curPos.screenHeight;
+
+        Bitmap bitmap = null;
+        if (cachedBitmaps.size() >= CACHE_SIZE) {
+            CacheInfo info = cachedBitmaps.removeFirst();
+            info.setValid(true);
+
+            if (screenWidth == info.bitmap.getWidth() && screenHeight == info.bitmap.getHeight() /*|| rotation != 0 && width == info.bitmap.getHeight() && height == info.bitmap.getWidth()*/) {
+                bitmap = info.bitmap;
+            } else {
+                info.bitmap.recycle(); //todo recycle from ui
+                info.bitmap = null;
+            }
+        }
+        if (bitmap == null) {
+            Common.d("Creating Bitmap " + bitmapConfig + " " + screenWidth + "x" + screenHeight + "...");
+            bitmap = Bitmap.createBitmap(screenWidth, screenHeight, bitmapConfig);
+        }
+
+        cacheCanvas.setMatrix(null);
+        if (rotation != 0) {
+            int rotationShift = (screenHeight - screenWidth) / 2;
+            cacheCanvas.rotate(-rotation * 90, screenHeight / 2, screenWidth / 2);
+            cacheCanvas.translate(-rotation * rotationShift, -rotation * rotationShift);
+        }
+
+        Point leftTopCorner = layout.convertToPoint(curPos);
+
+        int [] data = doc.renderPage(curPos.pageNumber, curPos.docZoom, width, height, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + width, leftTopCorner.y + height);
+
+        long startTime = System.currentTimeMillis();
+
+        cacheCanvas.setBitmap(bitmap);
+        cacheCanvas.drawBitmap(data, 0, width, 0, 0, width, height, false, null);
+
+        long endTime = System.currentTimeMillis();
+        Common.d("Drawing bitmap in cache " + 0.001 * (endTime - startTime) + " s");
+
+        resultEntry = new CacheInfo(curPos, bitmap);
+        return resultEntry;
     }
 
     @Override

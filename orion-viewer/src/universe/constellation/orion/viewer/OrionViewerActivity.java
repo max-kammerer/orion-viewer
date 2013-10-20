@@ -252,17 +252,19 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         getOrionContext().onNewBook(filePath);
         try {
+            OptionActions.DEBUG.doAction(this, false, getGlobalOptions().getBooleanProperty("DEBUG", false));
+
+            lastPageInfo = LastPageInfo.loadBookParameters(this, filePath);
+            getOrionContext().setCurrentBookParameters(lastPageInfo);
+
+
             doc = FileUtil.openFile(filePath);
 
             LayoutStrategy layoutStrategy = new SimpleLayoutStrategy(doc, device.getDeviceSize());
 
-            lastPageInfo = LastPageInfo.loadBookParameters(this, filePath);
+            RenderThread renderer = new RenderThread(this, view, layoutStrategy, doc);
 
-            getOrionContext().setCurrentBookParameters(lastPageInfo);
-
-            OptionActions.DEBUG.doAction(this, false, getGlobalOptions().getBooleanProperty("DEBUG", false));
-
-            controller = new Controller(this, doc, layoutStrategy, new RenderThread(this, view, layoutStrategy, doc));
+            controller = new Controller(this, doc, layoutStrategy, renderer);
 
             controller.changeOrinatation(lastPageInfo.screenOrientation);
 

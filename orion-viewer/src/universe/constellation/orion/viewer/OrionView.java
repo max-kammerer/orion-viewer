@@ -35,7 +35,7 @@ import java.util.concurrent.CountDownLatch;
  * Date: 16.10.11
  * Time: 13:52
  */
-public class OrionView extends View {
+public class OrionView extends View implements ImageView {
 
     private static final float DEFAULT_SCALE = 1.0f;
 
@@ -139,7 +139,8 @@ public class OrionView extends View {
         }
     }
 
-    public void setData(Bitmap bitmap, LayoutPosition info, CountDownLatch latch) {
+    @Override
+    public void onNewImage(Bitmap bitmap, LayoutPosition info, CountDownLatch latch) {
         this.bitmap = bitmap;
         this.latch = latch;
         this.info = info;

@@ -62,4 +62,9 @@ public class OneDimension implements Cloneable {
     public Object clone() throws CloneNotSupportedException {
         return super.clone();    //To change body of overridden methods use File | Settings | File Templates.
     }
+
+    @Override
+    public String toString() {
+        return "offset = " + offset;
+    }
 }

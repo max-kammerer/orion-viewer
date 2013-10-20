@@ -88,4 +88,8 @@ public class LayoutPosition implements Cloneable {
         }
     }
 
+    @Override
+    public String toString() {
+        return "page: " + pageNumber + " x: " + x + " y: " + y;
+    }
 }

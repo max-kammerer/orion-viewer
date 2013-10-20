@@ -256,6 +256,7 @@ public class Controller implements ViewDimensionAware {
 
         lastScreenSize = new Point(info.screenWidth, info.screenHeight);
         screenOrientation = info.screenOrientation;
+        changeOrinatation(screenOrientation);
 
         onDimensionChanged(width, height);
 
