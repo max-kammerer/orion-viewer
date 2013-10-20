@@ -24,8 +24,6 @@ import universe.constellation.orion.viewer.DocumentWrapper;
 import universe.constellation.orion.viewer.outline.OutlineItem;
 import universe.constellation.orion.viewer.PageInfo;
 
-import java.util.Date;
-
 /**
  * User: mike
  * Date: 22.11.11
@@ -72,17 +70,15 @@ public class DjvuDocument implements DocumentWrapper {
     private synchronized void gotoPage(int page) {
         if(lastPage != page) {
             Common.d("Changing page...");
-            Date date = new Date();
+            long start = System.currentTimeMillis();
             if (page > pageCount-1)
                 page = pageCount-1;
             else if (page < 0)
                 page = 0;
             gotoPageInternal(page);
 
-            Date date2 = new Date();
-
             lastPage = page;
-            Common.d("Page changing takes " + page + " = " + 0.001 * (date2.getTime() - date.getTime()));
+            Common.d("Page changing takes " + page + " = " + 0.001 * (System.currentTimeMillis() - start));
         }
 	}
 
