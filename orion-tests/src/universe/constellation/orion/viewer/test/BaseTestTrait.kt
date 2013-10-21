@@ -42,6 +42,6 @@ trait BaseTestTrait {
     public class object {
         public val testFolder: File = File(Environment.getExternalStorageDirectory(), "orion")
 
-        public val SCIP: String = "sicp.pdf"
+        public val SICP: String = "sicp.pdf"
     }
 }

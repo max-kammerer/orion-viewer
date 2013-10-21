@@ -23,7 +23,7 @@ import java.util.Arrays
  * Time: 19:57
  */
 
-class NavigationTest : ActivityUnitTestCase<OrionViewerActivity>(javaClass<OrionViewerActivity>()), BaseTestTrait {
+class NavigationTest : ActivityBaseTest() {
 
     class MyView(val imageView: ImageView) : ImageView {
 
@@ -36,23 +36,13 @@ class NavigationTest : ActivityUnitTestCase<OrionViewerActivity>(javaClass<Orion
 
     }
 
-    //val activity = OrionViewerActivity()
-
     val deviceSize = Point(300, 350); //to split page on two screen - page size is 663x886
     var view: MyView? = null;
 
     override fun setUp() {
-        super<ActivityUnitTestCase>.setUp()
-        val intent = Intent(getInstrumentation()!!.getTargetContext(), javaClass<OrionViewerActivity>());
-        startActivity(intent, null, null) as OrionViewerActivity;
+        super<ActivityBaseTest>.setUp()
         view = MyView(getActivity()!!.getView()!!)
     }
-
-
-    override fun tearDown() {
-        super<ActivityUnitTestCase>.tearDown()
-    }
-
 
     fun testProperPages() {
         val controller = prepareEngine()
@@ -94,7 +84,7 @@ class NavigationTest : ActivityUnitTestCase<OrionViewerActivity>(javaClass<Orion
     }
 
     fun prepareEngine(): Controller {
-        val doc = openTestDocument(BaseTestTrait.SCIP)
+        val doc = openTestDocument(BaseTestTrait.SICP)
 
         var layoutStrategy: LayoutStrategy = SimpleLayoutStrategy(doc, deviceSize)
         val renderer = SingleThreadRenderer(getActivity()!!, view!!, layoutStrategy, doc, Bitmap.Config.ARGB_8888)

@@ -11,7 +11,7 @@ import junit.framework.Assert.*
 class SimpleTest : BaseTest() {
 
     fun testScip() {
-        val doc = openTestDocument(BaseTestTrait.SCIP)
+        val doc = openTestDocument(BaseTestTrait.SICP)
         assertNotNull(doc)
     }
 }
