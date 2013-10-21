@@ -8,38 +8,45 @@ import android.graphics.PixelFormat
 import android.content.Intent
 import universe.constellation.orion.viewer.OrionViewerActivity
 import android.net.Uri
+import android.test.ActivityInstrumentationTestCase2
+import android.content.pm.ActivityInfo
+import android.test.UiThreadTest
 
 /**
  * User: mike
  * Date: 21.10.13
  * Time: 7:17
  */
-class RotationTest : ActivityBaseTest() {
+class RotationTest() : InstrumentationTestCase() {
 
     private val width = 300;
     private val height = 400;
 
-    override fun setUp() {
-        super<ActivityBaseTest>.setUp()
-        val params = WindowManager.LayoutParams(width, height, WindowManager.LayoutParams.TYPE_APPLICATION, 0, PixelFormat.OPAQUE)
-        getActivity().getWindow()!!.setAttributes(params)
-        OptionActions.FULL_SCREEN.doAction(getActivity(), true, false)
-    }
 
     fun testRotation() {
-        val file = extractFileFromTestData(BaseTestTrait.SICP)
-        val intent = Intent(getInstrumentation()!!.getTargetContext(), javaClass<OrionViewerActivity>());
+        val file = extractFileFromTestData(TestUtil.SICP)
+        val intent = Intent();
         intent.setData(Uri.fromFile(file))
+        setActivityIntent(intent)
 
-        openTestDocument(BaseTestTrait.SICP)
         val view = getActivity().getView()!!
-        Assert.assertTrue(view.getWidth() == width)
-        Assert.assertTrue(view.getHeight() == height)
-    }
+        val width = view.getWidth()
+        val height = view.getHeight()
+
+        Assert.assertTrue(width != 0)
+        Assert.assertTrue(height != 0)
+        //OptionActions.FULL_SCREEN.doAction(getActivity(), true, false)
+
+        runTestOnUiThread { getActivity().changeOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) }
 
 
 
-    override fun getDataPath(): Uri? {
-        return Uri.fromFile(extractFileFromTestData(BaseTestTrait.SICP))
+        Thread.sleep(2000)
+
+        val width2 = view.getWidth()
+        val height2 = view.getHeight()
+
+        Assert.assertTrue(width != width2)
+        Assert.assertTrue(height != height2)
     }
 }

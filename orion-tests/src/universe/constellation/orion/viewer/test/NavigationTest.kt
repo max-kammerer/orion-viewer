@@ -84,7 +84,7 @@ class NavigationTest : ActivityBaseTest() {
     }
 
     fun prepareEngine(): Controller {
-        val doc = openTestDocument(BaseTestTrait.SICP)
+        val doc = openTestDocument(TestUtil.SICP)
 
         var layoutStrategy: LayoutStrategy = SimpleLayoutStrategy(doc, deviceSize)
         val renderer = SingleThreadRenderer(getActivity()!!, view!!, layoutStrategy, doc, Bitmap.Config.ARGB_8888)

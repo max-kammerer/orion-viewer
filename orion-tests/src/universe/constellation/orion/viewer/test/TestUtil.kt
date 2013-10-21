@@ -14,7 +14,7 @@ import android.os.Environment
  * Time: 8:32
  */
 
-trait BaseTestTrait {
+trait TestUtil {
 
     public fun openTestDocument(relativePath: String) : DocumentWrapper {
         val fileOnSdcard = extractFileFromTestData(relativePath)
@@ -43,5 +43,7 @@ trait BaseTestTrait {
         public val testFolder: File = File(Environment.getExternalStorageDirectory(), "orion")
 
         public val SICP: String = "sicp.pdf"
+
+        public val ORION_PKG: String = "universe.constellation.orion.viewer"
     }
 }

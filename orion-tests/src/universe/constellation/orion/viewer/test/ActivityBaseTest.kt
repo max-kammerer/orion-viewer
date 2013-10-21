@@ -11,7 +11,7 @@ import android.net.Uri
  * Date: 21.10.13
  * Time: 7:12
  */
-open class ActivityBaseTest : ActivityUnitTestCase<OrionViewerActivity>(javaClass<OrionViewerActivity>()), BaseTestTrait {
+open class ActivityBaseTest : ActivityUnitTestCase<OrionViewerActivity>(javaClass<OrionViewerActivity>()), TestUtil {
 
     override fun setUp() {
         super<ActivityUnitTestCase>.setUp()
