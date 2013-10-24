@@ -221,24 +221,25 @@ public class OrionViewerActivity extends OrionBaseActivity {
     protected void onNewIntent(Intent intent) {
         Common.d("Runtime.getRuntime().totalMemory() = " + Runtime.getRuntime().totalMemory());
         Common.d("Debug.getNativeHeapSize() = " + Debug.getNativeHeapSize());
+        String file =  null;
         Uri uri = intent.getData();
-        Common.d("File URI  = " + uri.toString());
-        String file = uri.getPath();
+        if (uri != null) {
+            Common.d("File URI  = " + uri.toString());
+            file = uri.getPath();
 
-        if (controller != null) {
-            if (lastPageInfo!= null) {
-                if (lastPageInfo.openingFileName.equals(file)) {
-                    //keep controller
-                    controller.drawPage();
-                    return;
+            if (controller != null) {
+                if (lastPageInfo!= null) {
+                    if (lastPageInfo.openingFileName.equals(file)) {
+                        //keep controller
+                        controller.drawPage();
+                        return;
+                    }
                 }
+
+                controller.destroy();
+                controller = null;
             }
 
-            controller.destroy();
-            controller = null;
-        }
-
-        if (intent.getData() != null) {
             Common.stopLogger();
             openFile(file);
         } else /*if (intent.getAction().endsWith("MAIN"))*/ {
