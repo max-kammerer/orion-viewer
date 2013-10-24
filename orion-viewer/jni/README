@@ -1,6 +1,6 @@
-For building native libraries you will need android ndk r8e
+For building native libraries you need android ndk r8e ang git installed on your system
 
-1. You will need to upload mupdf 1.3 and djvulibre 3.5.24 sources
+1. You need to upload mupdf 1.3 and djvulibre 3.5.24 sources
     from appropriate folder run this commands:
 
        #mupdf 1.3 download
@@ -24,4 +24,4 @@ For building native libraries you will need android ndk r8e
 
 4. Run 'ndk-build' command from  'mupdf/platform/android/' and 'djvu/android' folders
 
-5. copy generated libs to orion-viewer/orion-viewer/lib
+5. copy generated libs to 'orion-viewer/libs'
