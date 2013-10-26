@@ -22,7 +22,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="universe.constellation.orion.viewer"
           android:installLocation="auto"
-          android:versionCode="38"
+          android:versionCode="46"
           android:versionName="@string/version_name">
 
     <supports-screens
@@ -35,14 +35,15 @@
     <application android:label="@string/app_name" android:icon="@drawable/orion" android:name=".prefs.OrionApplication">
         <activity android:name=".OrionViewerActivity"
                   android:label="@string/app_name"
-                  android:theme="@android:style/Theme.NoTitleBar"
+                  android:theme="@style/Theme.AppCompat"
                   android:launchMode="singleTask"
-                  android:icon="@drawable/orion" android:configChanges="orientation|locale" android:screenOrientation="behind" android:windowSoftInputMode="adjustPan">
+                  android:icon="@drawable/orion" android:configChanges="orientation|locale|screenSize"
+                  android:screenOrientation="behind" android:windowSoftInputMode="adjustPan">
 
             <intent-filter>
                 <action android:name="com.bravo.intent.action.VIEW"/>
-				<action android:name="android.intent.action.VIEW" />
-				<category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
                 <data android:scheme="file"/>
                 <data android:scheme="content"/>
                 <data android:mimeType="image/vnd.djvu"/>
@@ -60,19 +61,19 @@
                 <!--<data android:mimeType="image/png"/>-->
                 <!--<data android:mimeType="image/jpeg"/>-->
                 <!--<data android:mimeType="image/pjpeg"/>-->
-			</intent-filter>
+            </intent-filter>
 
             <intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<data android:host="*"/>
-                <data android:scheme="file" />
-                <data android:scheme="content" />
-				<data android:pathPattern=".*\\.djvu" />
-                <data android:pathPattern=".*\\.pdf" />
-                <data android:pathPattern=".*\\.xps" />
-                <data android:pathPattern=".*\\.oxps" />
-                <data android:pathPattern=".*\\.cbz" />
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:host="*"/>
+                <data android:scheme="file"/>
+                <data android:scheme="content"/>
+                <data android:pathPattern=".*\\.djvu"/>
+                <data android:pathPattern=".*\\.pdf"/>
+                <data android:pathPattern=".*\\.xps"/>
+                <data android:pathPattern=".*\\.oxps"/>
+                <data android:pathPattern=".*\\.cbz"/>
 
                 <!--images-->
                 <!--<data android:pathPattern=".*\\.tiff" />-->
@@ -80,14 +81,15 @@
                 <!--<data android:pathPattern=".*\\.png" />-->
                 <!--<data android:pathPattern=".*\\.jpg" />-->
                 <!--<data android:pathPattern=".*\\.jpeg" />-->
-			</intent-filter>
+            </intent-filter>
         </activity>
 
         <activity android:name=".OrionFileManagerActivity"
                   android:label="@string/app_name"
-                  android:theme="@android:style/Theme.NoTitleBar"
+                  android:theme="@style/Theme.AppCompat"
                   android:launchMode="singleTask"
-                  android:icon="@drawable/orion">
+                  android:icon="@drawable/orion"
+                  android:configChanges="orientation|locale|screenSize">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -97,53 +99,58 @@
         </activity>
 
         <activity android:name=".OrionFileSelectorActivity"
-                          android:label="@string/app_name"
-                          android:theme="@android:style/Theme.NoTitleBar"
-                          android:icon="@drawable/orion"/>
-
+                  android:label="@string/app_name"
+                  android:theme="@style/Theme.AppCompat"
+                  android:icon="@drawable/orion"/>
 
         <activity android:name=".prefs.OrionKeyBinderActivity" android:screenOrientation="behind"
                   android:label="@string/app_name"
-                  android:theme="@android:style/Theme.NoTitleBar"
+                  android:theme="@style/Theme.AppCompat"
                   android:launchMode="singleTask"
                   android:icon="@drawable/orion">
             <intent-filter>
                 <action android:name="universe.constellation.orion.viewer.KEY_MANAGER"/>
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
         <activity android:name=".OrionHelpActivity" android:screenOrientation="behind"
+                  android:theme="@style/Theme.AppCompat"
                   android:label="@string/app_name"
-                  android:theme="@android:style/Theme.NoTitleBar"
                   android:launchMode="singleInstance"
                   android:icon="@drawable/orion"/>
 
         <activity android:name=".prefs.OrionPreferenceActivity" android:screenOrientation="behind"
-          android:label="My Preferences"/>
+                  android:theme="@style/Theme.AppCompat"
+                  android:label="My Preferences"/>
 
         <activity android:name=".prefs.OrionBookPreferences" android:screenOrientation="behind"
-          android:label="My Preferences"/>
+                  android:theme="@style/Theme.AppCompat"
+                  android:label="My Preferences"/>
 
         <activity android:name=".prefs.OrionTapActivity" android:screenOrientation="behind"
-          android:label="Tap Zones">
+                  android:theme="@style/Theme.AppCompat"
+                  android:label="Tap Zones">
             <intent-filter>
                 <action android:name="universe.constellation.orion.viewer.TAP_ZONES"/>
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
         <activity android:name=".prefs.ActionListActivity" android:screenOrientation="behind"
-          android:label="Action List"/>
+                  android:theme="@style/Theme.AppCompat"
+                  android:label="Action List"/>
 
         <activity android:name=".OrionBookmarkActivity" android:screenOrientation="behind"
-          android:label="Bookmarks"/>
+                  android:theme="@style/Theme.AppCompat"
+                  android:label="Bookmarks"/>
 
         <activity android:name=".outline.OutlineActivity" android:screenOrientation="behind"
-          android:label="Outlines"/>
+                  android:theme="@style/Theme.AppCompat"
+                  android:label="Outlines"/>
 
     </application>
-    <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="8"/>
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="16"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 </manifest>

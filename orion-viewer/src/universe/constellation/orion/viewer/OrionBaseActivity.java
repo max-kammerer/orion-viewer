@@ -26,6 +26,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +42,7 @@ import universe.constellation.orion.viewer.prefs.OrionApplication;
  * Date: 24.12.11
  * Time: 17:00
  */
-public class OrionBaseActivity extends Activity {
+public class OrionBaseActivity extends ActionBarActivity {
 
     public static final String DONT_OPEN_RECENT = "DONT_OPEN_RECENT";
 
