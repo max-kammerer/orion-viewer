@@ -24,6 +24,7 @@ import android.app.Application;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
+import android.support.v7.appcompat.R;
 import android.util.DisplayMetrics;
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.Controller;
@@ -105,13 +106,11 @@ public class OrionApplication extends Application {
             return;
         }
 
-        boolean haveTitleBar = false;
-
         int themeId = -1;
         if ("DARK".equals(theme)) {
-            themeId =  haveTitleBar ? android.R.style.Theme_Black : android.R.style.Theme_Black_NoTitleBar;
+            themeId =  R.style.Theme_AppCompat;
         } else if ("LIGHT".equals(theme)) {
-            themeId = haveTitleBar ? android.R.style.Theme_Light : android.R.style.Theme_Light_NoTitleBar;
+            themeId = R.style.Theme_AppCompat_Light;
         }
 
         if (themeId != -1) {
