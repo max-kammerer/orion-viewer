@@ -38,6 +38,16 @@ public enum OptionActions {
         }
     },
 
+    SHOW_ACTION_BAR("SHOW_ACTION_BAR") {
+            public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
+                if (newValue) {
+                    activity.getSupportActionBar().show();
+                } else {
+                    activity.getSupportActionBar().hide();
+                }
+            }
+        },
+
 
     SCREEN_OVERLAPPING_HORIZONTAL("SCREEN_OVERLAPPING_HORIZONTAL") {
         public void doAction(OrionViewerActivity activity, int hor, int ver) {

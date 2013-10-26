@@ -80,7 +80,8 @@
 
 
         <PreferenceScreen
-                android:title="@string/menu_tap_text" android:persistent="false" android:summary="@string/pref_tap_zones_desc"
+                android:title="@string/menu_tap_text" android:persistent="false"
+                android:summary="@string/pref_tap_zones_desc"
                 android:key="TAP_ZONES">
             <intent android:action="universe.constellation.orion.viewer.TAP_ZONES"/>
         </PreferenceScreen>
@@ -90,6 +91,12 @@
                 android:title="@string/pref_fullScreen"
                 android:summary="@string/pref_fullScreen"
                 android:defaultValue="false"/>
+
+        <CheckBoxPreference
+                android:key="SHOW_ACTION_BAR"
+                android:title="@string/pref_showActionBar"
+                android:summary="@string/pref_showActionBar"
+                android:defaultValue="true"/>
 
         <ListPreference
                 android:key="SCREEN_ORIENTATION"
@@ -134,7 +141,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-                android:title="@string/pref_category_device_parameters">
+            android:title="@string/pref_category_device_parameters">
 
         <ListPreference
                 android:key="SCREEN_BACKLIGHT_TIMEOUT"

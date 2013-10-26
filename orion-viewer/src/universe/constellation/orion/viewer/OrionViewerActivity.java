@@ -110,8 +110,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         getOrionContext().setViewActivity(this);
         OptionActions.FULL_SCREEN.doAction(this, !globalOptions.isFullScreen(), globalOptions.isFullScreen());
-
         super.onCreate(savedInstanceState);
+
+        OptionActions.SHOW_ACTION_BAR.doAction(this, !globalOptions.isActionBarVisible(), globalOptions.isActionBarVisible());
         setContentView(device.getLayoutId());
 
         view = (OrionView) findViewById(R.id.view);
