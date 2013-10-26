@@ -26,8 +26,9 @@ trait TestUtil {
         if (outFile.exists()) {
             return outFile
         }
+        outFile.createNewFile()
 
-        val input =  getTestContext().getAssets()!!.open(getFileUnderTestData(fileName))
+        val input =  getTestContext().getAssets()!!.open(getFileUnderTestData(fileName))!!
         input.buffered().copyTo(FileOutputStream(outFile).buffered())
         return outFile
     }

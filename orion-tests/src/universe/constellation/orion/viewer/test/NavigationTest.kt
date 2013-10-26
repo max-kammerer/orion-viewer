@@ -13,7 +13,7 @@ import android.content.Intent
 import junit.framework.Assert
 import universe.constellation.orion.viewer.LayoutPosition
 import java.util.concurrent.CountDownLatch
-import universe.constellation.orion.viewer.ImageView
+import universe.constellation.orion.viewer.OrionImageView
 import kotlin.test.assertEquals
 import java.util.Arrays
 

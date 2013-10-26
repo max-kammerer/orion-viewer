@@ -7,7 +7,7 @@ import universe.constellation.orion.viewer.LayoutStrategy
 import universe.constellation.orion.viewer.DocumentWrapper
 import universe.constellation.orion.viewer.LayoutPosition
 import android.graphics.Bitmap
-import universe.constellation.orion.viewer.ImageView
+import universe.constellation.orion.viewer.OrionImageView
 
 /**
  * User: mike
