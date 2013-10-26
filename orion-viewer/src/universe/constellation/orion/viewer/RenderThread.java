@@ -22,7 +22,6 @@ package universe.constellation.orion.viewer;
 import android.content.Context;
 import android.graphics.*;
 import android.os.Debug;
-import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 import universe.constellation.orion.viewer.view.Renderer;
@@ -42,7 +41,7 @@ public class RenderThread extends Thread implements Renderer {
 
     private LinkedList<CacheInfo> cachedBitmaps = new LinkedList<CacheInfo>();
 
-    private ImageView view;
+    private OrionImageView view;
 
     private LayoutPosition currentPosition;
 
@@ -67,11 +66,11 @@ public class RenderThread extends Thread implements Renderer {
 
     private OrionViewerActivity activity;
 
-    public RenderThread(OrionViewerActivity activity, ImageView view, LayoutStrategy layout, DocumentWrapper doc) {
+    public RenderThread(OrionViewerActivity activity, OrionImageView view, LayoutStrategy layout, DocumentWrapper doc) {
         this(activity, view, layout, doc, createBitmapConfig(activity), true);
     }
 
-    public RenderThread(OrionViewerActivity activity, ImageView view, LayoutStrategy layout, DocumentWrapper doc, Bitmap.Config config, boolean executeInSeparateThread) {
+    public RenderThread(OrionViewerActivity activity, OrionImageView view, LayoutStrategy layout, DocumentWrapper doc, Bitmap.Config config, boolean executeInSeparateThread) {
         this.view = view;
         this.layout = layout;
         this.doc = doc;

@@ -25,7 +25,7 @@ import java.util.Arrays
 
 class NavigationTest : ActivityBaseTest() {
 
-    class MyView(val imageView: ImageView) : ImageView {
+    class MyView(val imageView: OrionImageView) : OrionImageView {
 
         var data: Bitmap? = null;
 

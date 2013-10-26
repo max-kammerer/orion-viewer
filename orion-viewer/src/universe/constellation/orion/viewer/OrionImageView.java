@@ -9,7 +9,7 @@ import java.util.concurrent.CountDownLatch;
  * Date: 20.10.13
  * Time: 9:21
  */
-public interface ImageView {
+public interface OrionImageView {
 
     void onNewImage(Bitmap bitmap, LayoutPosition info, CountDownLatch latch);
 }

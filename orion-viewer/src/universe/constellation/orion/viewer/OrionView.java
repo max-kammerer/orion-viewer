@@ -35,7 +35,7 @@ import java.util.concurrent.CountDownLatch;
  * Date: 16.10.11
  * Time: 13:52
  */
-public class OrionView extends View implements ImageView {
+public class OrionView extends View implements OrionImageView {
 
     private static final float DEFAULT_SCALE = 1.0f;
 

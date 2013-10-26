@@ -15,7 +15,7 @@ import universe.constellation.orion.viewer.ImageView
  * Time: 21:34
  */
 
-class SingleThreadRenderer(actvity: OrionViewerActivity, view: ImageView, layout: LayoutStrategy, doc: DocumentWrapper, config: Bitmap.Config) :
+class SingleThreadRenderer(actvity: OrionViewerActivity, view: OrionImageView, layout: LayoutStrategy, doc: DocumentWrapper, config: Bitmap.Config) :
                     RenderThread(actvity, view, layout, doc, config, false) {
 
 

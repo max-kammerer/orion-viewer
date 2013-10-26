@@ -108,7 +108,7 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
                 TextView page = (TextView) convertView.findViewById(R.id.bookmark_entry_page);
                 page.setText("" + (item.page == - 1 ? "*" : item.page + 1));
 
-                OrionView edit = (OrionView) convertView.findViewById(R.id.bookmark_edit_entry);
+                ImageView edit = (ImageView) convertView.findViewById(R.id.bookmark_edit_entry);
                 //if (edit != null)
                 edit.setOnClickListener(new View.OnClickListener() {
                     @Override
