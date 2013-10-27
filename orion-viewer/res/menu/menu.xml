@@ -19,28 +19,31 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:orion="http://schemas.android.com/apk/res/universe.constellation.orion.viewer">
 
     <item android:id="@+id/add_bookmark_menu_item"
           android:title="@string/menu_add_bookmark_item"
-          android:icon="@drawable/add_bookmark"/>
+          android:icon="@drawable/add_bookmark"
+          orion:showAsAction="ifRoom"/>
 
     <item android:id="@+id/bookmarks_menu_item"
-      android:title="@string/menu_bookmarks_text"
-      android:icon="@drawable/bookmarks"/>
+          android:title="@string/menu_bookmarks_text"
+          android:icon="@drawable/bookmarks"/>
 
     <item android:id="@+id/zoom_menu_item"
-      android:title="@string/menu_zoom_text"
-      android:icon="@drawable/zoom"/>
+          android:title="@string/menu_zoom_text"
+          android:icon="@drawable/zoom"/>
 
 
     <item android:id="@+id/crop_menu_item"
-    android:title="@string/menu_crop_text"
-    android:icon="@drawable/crop"/>
+          android:title="@string/menu_crop_text"
+          android:icon="@drawable/crop"/>
 
     <item android:id="@+id/select_text_menu_item"
-    android:title="@string/menu_select_text"
-    android:icon="@drawable/edit"/>
+          android:title="@string/menu_select_text"
+          android:icon="@drawable/edit"
+          orion:showAsAction="ifRoom"/>
 
     <!--<item android:id="@+id/rotation_menu_item"-->
     <!--android:title="@string/menu_rotation_text"-->
@@ -51,8 +54,8 @@
           android:icon="@drawable/book_preferences"/>
 
     <!--<item android:id="@+id/navigation_menu_item"-->
-          <!--android:title="@string/menu_navigation_text"-->
-          <!--android:icon="@drawable/navigation"/>-->
+    <!--android:title="@string/menu_navigation_text"-->
+    <!--android:icon="@drawable/navigation"/>-->
 
     <item android:id="@+id/goto_menu_item"
           android:title="@string/menu_goto_text"
@@ -60,8 +63,8 @@
 
 
     <!--<item android:id="@+id/keybinder_menu_item"-->
-          <!--android:title="@string/menu_key_binder_text"-->
-          <!--android:icon="@drawable/help"/>-->
+    <!--android:title="@string/menu_key_binder_text"-->
+    <!--android:icon="@drawable/help"/>-->
 
     <item android:id="@+id/outline_menu_item"
           android:title="@string/menu_outline_text"
@@ -80,12 +83,12 @@
           android:icon="@drawable/day_night"/>
 
     <!--<item android:id="@+id/tap_menu_item"-->
-          <!--android:title="@string/menu_tap_text"-->
-          <!--android:icon="@drawable/options"/>-->
+    <!--android:title="@string/menu_tap_text"-->
+    <!--android:icon="@drawable/options"/>-->
 
     <item android:id="@+id/options_menu_item"
-              android:title="@string/menu_options_text"
-              android:icon="@drawable/options"/>
+          android:title="@string/menu_options_text"
+          android:icon="@drawable/options"/>
 
     <item android:id="@+id/help_menu_item"
           android:title="@string/menu_help_text"

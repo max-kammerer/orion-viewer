@@ -19,7 +19,8 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:orion="http://schemas.android.com/apk/res/universe.constellation.orion.viewer">
     <item android:id="@+id/export_bookmarks_menu_item"
           android:title="@string/export_bookmarks_menu_item"
           android:icon="@drawable/export_bookmarks"/>
@@ -38,6 +39,7 @@
 
     <item android:id="@+id/close_bookmarks_menu_item"
           android:title="@string/menu_exit_text"
-          android:icon="@drawable/close"/>
+          android:icon="@drawable/close"
+          orion:showAsAction="always"/>
 
 </menu>
