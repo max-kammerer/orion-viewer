@@ -19,25 +19,7 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent" android:layout_height="fill_parent">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@android:id/tabhost">
 
-    <LinearLayout
-               android:background="#FFFFFF"
-               android:gravity="top"
-               android:layout_width="fill_parent"
-               android:layout_height="wrap_content" android:id="@+id/view" android:layout_weight="0.7">
-
-        <TextView android:layout_width="fill_parent" android:gravity="top"
-              android:layout_height="wrap_content" android:id="@+id/file_manager_path"
-              android:textSize="20sp" android:paddingLeft="10px" android:textColor="#000000" android:paddingRight="10px"/>
-    </LinearLayout>
-
-    <LinearLayout android:layout_below="@+id/view" android:layout_width="fill_parent"
-                  android:layout_height="fill_parent" android:layout_weight="0.7">
-        <!--file manager-->
-
-       <include layout="@layout/file_manager"/>
-
-    </LinearLayout>
-</RelativeLayout>
+</FrameLayout>

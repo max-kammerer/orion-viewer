@@ -163,4 +163,8 @@ public class FileChooser extends ArrayAdapter {
     public Object getItem(int position) {
         return currentList.get(position);
     }
+
+    public File getCurrentFolder() {
+        return currentFolder;
+    }
 }

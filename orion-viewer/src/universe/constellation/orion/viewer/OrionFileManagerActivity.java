@@ -25,13 +25,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ListFragment;
+import android.support.v7.app.ActionBar;
+import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
-import pl.polidea.customwidget.TheMissingTabHost;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
 import java.io.File;
@@ -43,6 +43,88 @@ import java.io.FilenameFilter;
  * Time: 16:41
  */
 public class OrionFileManagerActivity extends OrionBaseActivity {
+
+    private static final String LAST_FOLDER = "LAST_FOLDER";
+
+    public static class MyListFragment extends ListFragment {
+
+        protected boolean forFiles = true;
+
+        protected OrionFileManagerActivity activity;
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+
+        }
+
+        @Override
+        public void onActivityCreated(Bundle savedInstanceState) {
+            super.onActivityCreated(savedInstanceState);
+            if (forFiles) {
+                activity.createFileView(this);
+            } else {
+                activity.createRecentView(this);
+            }
+        }
+
+
+        @Override
+        public void onSaveInstanceState(Bundle outState) {
+            if (forFiles) {
+                outState.putString(LAST_FOLDER, ((FileChooser)getListAdapter()).getCurrentFolder().getAbsolutePath());
+            }
+        }
+    }
+
+    public class TabListener<T extends MyListFragment> implements ActionBar.TabListener {
+        private T mFragment;
+        private final OrionBaseActivity mActivity;
+        private final String mTag;
+        private final Class<T> mClass;
+
+        /** Constructor used each time a new tab is created.
+         * @param activity  The host Activity, used to instantiate the fragment
+         * @param tag  The identifier tag for the fragment
+         * @param clz  The fragment's Class, used to instantiate the fragment
+         */
+        public TabListener(OrionBaseActivity activity, String tag, Class<T> clz) {
+            mActivity = activity;
+            mTag = tag;
+            mClass = clz;
+        }
+
+        /* The following are each of the ActionBar.TabListener callbacks */
+
+        public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+            // Check if the fragment is already initialized
+            //mFragment = (T) mActivity.getSupportFragmentManager().findFragmentByTag(mTag);
+
+            if (mFragment == null) {
+                // If not, instantiate and add it to the activity
+                mFragment = (T) Fragment.instantiate(mActivity, mClass.getName());
+                mFragment.forFiles = mTag.equals("files");
+                mFragment.activity = OrionFileManagerActivity.this;
+                ft.replace(android.R.id.tabhost, mFragment, mTag);
+            } else {
+                // If it exists, simply attach it in order to show it
+                ft.attach(mFragment);
+            }
+        }
+
+        public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+            if (mFragment != null) {
+                // Detach the fragment, because another one is being attached
+                ft.detach(mFragment);
+                mFragment = null;
+            }
+        }
+
+        public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+            // User selected the already selected tab. Usually do nothing.
+        }
+    }
 
     private SharedPreferences prefs;
 
@@ -87,11 +169,30 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
             onNewIntent(getIntent());
         }
 
-        updateFileManager();
+        updatePathTextView(getStartFolder());
     }
 
-    public void updateFileManager() {
-        ListView view = (ListView) findViewById(R.id.file_chooser);
+    private void createRecentView(ListFragment list) {
+        ListView recent = list.getListView();
+        if (showRecentsAndSavePath()) {
+            recent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    GlobalOptions.RecentEntry entry = (GlobalOptions.RecentEntry) parent.getItemAtPosition(position);
+                    File file = new File(entry.getPath());
+                    if (file.exists()) {
+                        openFile(file);
+                    }
+                }
+            });
+
+            list.setListAdapter(new FileChooser(this, globalOptions.getRecentFiles()));
+        } else {
+            recent.setVisibility(View.GONE);
+        }
+    }
+
+    private void createFileView(ListFragment list) {
+        ListView view = list.getListView();
         view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 File file = (File) parent.getItemAtPosition(position);
@@ -109,36 +210,12 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
             }
         });
 
-        String startFolder = getStartFolder();
 
-        Common.d("FileManager start folder is " + startFolder);
-
-        view.setAdapter(new FileChooser(this, startFolder, getFileNameFilter()));
-
-        ListView recent = (ListView) findViewById(R.id.recent_list);
-        if (showRecentsAndSavePath()) {
-            recent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    GlobalOptions.RecentEntry entry = (GlobalOptions.RecentEntry) parent.getItemAtPosition(position);
-                    File file = new File(entry.getPath());
-                    if (file.exists()) {
-                        openFile(file);
-                    }
-                }
-            });
-
-            recent.setAdapter(new FileChooser(this, globalOptions.getRecentFiles()));
-        } else {
-            recent.setVisibility(View.GONE);
-        }
-
-        updatePathTextView(startFolder);
+        list.setListAdapter(new FileChooser(this, getStartFolder(), getFileNameFilter()));
     }
 
     private void updatePathTextView(String newPath) {
-        TextView path = (TextView) findViewById(R.id.file_manager_path);
-        path.setText(newPath);
-        device.flushBitmap(100);
+        getSupportActionBar().setTitle(newPath);
     }
 
     protected void openFile(File file) {
@@ -151,18 +228,22 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
 
 
     private void initFileManager() {
-        TheMissingTabHost host = (TheMissingTabHost) findViewById(R.id.tabhost);
-        host.setup();
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        TheMissingTabHost.TheMissingTabSpec spec = host.newTabSpec("fileTab");
-        spec.setContent(R.id.file_chooser);
-        spec.setIndicator("", getResources().getDrawable(R.drawable.folder));
-        host.addTab(spec);
+        ActionBar.Tab tab = actionBar.newTab()
+                .setIcon(R.drawable.folder)
+                .setTabListener(new TabListener<MyListFragment>(
+                        this, "files", MyListFragment.class));
+        actionBar.addTab(tab);
+
         if (showRecentsAndSavePath()) {
-            TheMissingTabHost.TheMissingTabSpec recent = host.newTabSpec("recentTab");
-            recent.setContent(R.id.recent_list);
-            recent.setIndicator("", getResources().getDrawable(R.drawable.book));
-            host.addTab(recent);
+            tab = actionBar.newTab()
+                    .setIcon(R.drawable.book)
+                    .setTabListener(new TabListener(
+                            this, "recent", MyListFragment.class) {
+                    });
+            actionBar.addTab(tab);
         }
     }
 
@@ -182,10 +263,6 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
                 return true;
         }
         return false;
-    }
-
-    public GlobalOptions getGlobalOptions() {
-        return globalOptions;
     }
 
     //customizable part
