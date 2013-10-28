@@ -285,6 +285,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
 
             device.updateTitle(title);
+            getSupportActionBar().setTitle(title);
             globalOptions.addRecentEntry(new GlobalOptions.RecentEntry(new File(filePath).getAbsolutePath()));
             askPassword(controller);
 
