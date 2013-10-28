@@ -2,6 +2,7 @@
 #include <time.h>
 #include <pthread.h>
 #include <android/log.h>
+#include <android/bitmap.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,10 +13,8 @@
 #endif
 
 #include "mupdf/fitz.h"
-//#include "mupdf/fitz-internal.h"
 #include "mupdf/pdf.h"
 #include "list.c"
-#include <unistd.h>
 
 #define JNI_FN(A) Java_com_artifex_mupdfdemo_ ## A
 #define PACKAGENAME "com/artifex/mupdfdemo"
@@ -301,7 +300,7 @@ JNI_FN(MuPDFCore_openFile)(JNIEnv * env, jobject thiz, jstring jfilename, jobjec
 	glo->doc = NULL;
 	fz_try(ctx)
 	{
-		glo->colorspace = fz_device_bgr(ctx);
+		glo->colorspace = fz_device_rgb(ctx);
 
 		LOGE("Opening document...");
 		fz_try(ctx)
@@ -431,7 +430,7 @@ JNI_FN(MuPDFCore_openBuffer)(JNIEnv * env, jobject thiz)
 		stream = fz_new_stream(ctx, glo, bufferStreamRead, bufferStreamClose);
 		stream->seek = bufferStreamSeek;
 
-		glo->colorspace = fz_device_bgr(ctx);
+		glo->colorspace = fz_device_rgb(ctx);
 
 		LOGE("Opening document...");
 		fz_try(ctx)
@@ -463,7 +462,6 @@ JNI_FN(MuPDFCore_openBuffer)(JNIEnv * env, jobject thiz)
 
 	return (jlong)(void *)glo;
 }
-
 
 JNIEXPORT int JNICALL
 JNI_FN(MuPDFCore_countPagesInternal)(JNIEnv *env, jobject thiz)
@@ -581,26 +579,6 @@ JNI_FN(MuPDFCore_getPageHeight)(JNIEnv *env, jobject thiz)
 	return glo->pages[glo->current].height;
 }
 
-
-JNIEXPORT void JNICALL
-JNI_FN(MuPDFCore_getPageInfo)(JNIEnv *env, jobject thiz, int page, jobject info)
-{
-
-    JNI_FN(MuPDFCore_gotoPageInternal)(env, thiz, page);
-
-    globals *glo = get_globals(env, thiz);
-    int pageWidth = (int) glo->pages[glo->current].width;
-    int pageHeight = (int) glo->pages[glo->current].height;
-
-	jclass cls = (*env)->GetObjectClass(env, info);
-	jfieldID width = (*env)->GetFieldID(env, cls, "width", "I");
-	jfieldID height = (*env)->GetFieldID(env, cls, "height", "I");
-    (*env)->SetIntField(env, info, width, pageWidth);
-    (*env)->SetIntField(env, info, height, pageHeight);
-
-	LOGI("Page %d info: %dx%d", page, pageWidth, pageHeight);
-}
-
 JNIEXPORT jboolean JNICALL
 JNI_FN(MuPDFCore_javascriptSupported)(JNIEnv *env, jobject thiz)
 {
@@ -627,14 +605,17 @@ static void update_changed_rects(globals *glo, page_cache *pc, pdf_document *ido
 	}
 }
 
-JNIEXPORT jintArray JNICALL
-JNI_FN(MuPDFCore_drawPage)(JNIEnv *env, jobject thiz, float zoom,
-		int pageW, int pageH, int patchX, int patchY, int patchW, int patchH)				
+JNIEXPORT jboolean JNICALL
+JNI_FN(MuPDFCore_drawPage)(JNIEnv *env, jobject thiz,jobject bitmap,
+        float zoom,
+		int pageW, int pageH, int patchX, int patchY, int patchW, int patchH)
 {
 	LOGI("==================Start Rendering==============");
+	AndroidBitmapInfo info;
 	void *pixels;
 	int ret;
 	fz_device *dev = NULL;
+	//float zoom;
 	fz_matrix ctm;
 	fz_irect bbox;
 	fz_rect rect;
@@ -646,6 +627,7 @@ JNI_FN(MuPDFCore_drawPage)(JNIEnv *env, jobject thiz, float zoom,
 	page_cache *pc = &glo->pages[glo->current];
 	int hq = (patchW < pageW || patchH < pageH);
 	fz_matrix scale;
+	int num_pixels = pageW * pageH;
 
 	if (pc->page == NULL)
 		return 0;
@@ -653,21 +635,28 @@ JNI_FN(MuPDFCore_drawPage)(JNIEnv *env, jobject thiz, float zoom,
 	fz_var(pix);
 	fz_var(dev);
 
-	int num_pixels = pageW * pageH;
-	jintArray jints; /* return value */
-	int *jbuf;
-	
-	clock_t start, end;
-	double elapsed;
-	
+	LOGI("In native method\n");
+	if ((ret = AndroidBitmap_getInfo(env, bitmap, &info)) < 0) {
+		LOGE("AndroidBitmap_getInfo() failed ! error=%d", ret);
+		return 0;
+	}
+
+	LOGI("Checking format\n");
+	if (info.format != ANDROID_BITMAP_FORMAT_RGBA_8888) {
+		LOGE("Bitmap format is not RGBA_8888 !");
+		return 0;
+	}
+
+	LOGI("locking pixels\n");
+	if ((ret = AndroidBitmap_lockPixels(env, bitmap, &pixels)) < 0) {
+		LOGE("AndroidBitmap_lockPixels() failed ! error=%d", ret);
+		return 0;
+	}
 
 	/* Call mupdf to render display list to screen */
 	LOGE("Rendering page(%d)=%dx%d patch=[%d,%d,%d,%d]",
 			pc->number, pageW, pageH, patchX, patchY, patchW, patchH);
 
-	jints = (*env)->NewIntArray(env, num_pixels);
-	jbuf = (*env)->GetIntArrayElements(env, jints, NULL);	
-	start = clock();
 	fz_try(ctx)
 	{
 		pdf_document *idoc = pdf_specifics(doc);
@@ -705,7 +694,7 @@ JNI_FN(MuPDFCore_drawPage)(JNIEnv *env, jobject thiz, float zoom,
 		bbox.y0 = patchY;
 		bbox.x1 = patchX + patchW;
 		bbox.y1 = patchY + patchH;
-		pix = fz_new_pixmap_with_bbox_and_data(ctx, glo->colorspace, &bbox, jbuf);
+		pix = fz_new_pixmap_with_bbox_and_data(ctx, glo->colorspace, &bbox, pixels);
 		if (pc->page_list == NULL && pc->annot_list == NULL)
 		{
 			fz_clear_pixmap_with_value(ctx, pix, 0xd0);
@@ -713,15 +702,13 @@ JNI_FN(MuPDFCore_drawPage)(JNIEnv *env, jobject thiz, float zoom,
 		}
 		fz_clear_pixmap_with_value(ctx, pix, 0xff);
 
-		LOGE("zoom = %f", zoom);
+		LOGI("zoom = %f", zoom);
+		LOGI("x=[%d,%d,%d,%d], %dx%d",
+        			bbox.x0, bbox.x1, bbox.y0, bbox.y1, bbox.x1-bbox.x0, bbox.y1-bbox.y0, 0);
         //zoom = glo->resolution / 72;
         fz_scale(&ctm, zoom, zoom);
 		rect = pc->media_box;
 		fz_round_rect(&bbox, fz_transform_rect(&rect, &ctm));
-		/* Now, adjust ctm so that it would give the correct page width
-		 * heights. */
-		LOGI("x=[%d,%d,%d,%d], %dx%d",
-			bbox.x0, bbox.x1, bbox.y0, bbox.y1, bbox.x1-bbox.x0, bbox.y1-bbox.y0, 0);
 		/* Now, adjust ctm so that it would give the correct page width
 		 * heights. */
 		//xscale = (float)pageW/(float)(bbox.x1-bbox.x0);
@@ -752,8 +739,7 @@ JNI_FN(MuPDFCore_drawPage)(JNIEnv *env, jobject thiz, float zoom,
 		fz_free_device(dev);
 		dev = NULL;
 		fz_drop_pixmap(ctx, pix);
-		orion_updateContrast((unsigned char *) jbuf, num_pixels*4);
-		(*env)->ReleaseIntArrayElements(env, jints, jbuf, 0);
+		orion_updateContrast((unsigned char *) pixels, num_pixels*4);
 		LOGE("Rendered");
 	}
 	fz_always(ctx)
@@ -765,11 +751,10 @@ JNI_FN(MuPDFCore_drawPage)(JNIEnv *env, jobject thiz, float zoom,
 	{
 		LOGE("Render failed");
 	}
-	end = clock();
-	elapsed = ((double) (end - start)) / CLOCKS_PER_SEC;
-	LOGI("Total murendering time %lf", elapsed);
 
-	return jints;
+	AndroidBitmap_unlockPixels(env, bitmap);
+
+	return 1;
 }
 
 static char *widget_type_string(int t)
@@ -785,7 +770,6 @@ static char *widget_type_string(int t)
 	default: return "non-widget";
 	}
 }
-/*
 JNIEXPORT jboolean JNICALL
 JNI_FN(MuPDFCore_updatePageInternal)(JNIEnv *env, jobject thiz, jobject bitmap, int page,
 		int pageW, int pageH, int patchX, int patchY, int patchW, int patchH)
@@ -810,14 +794,21 @@ JNI_FN(MuPDFCore_updatePageInternal)(JNIEnv *env, jobject thiz, jobject bitmap, 
 	rect_node *crect;
 	fz_matrix scale;
 
+	for (i = 0; i < NUM_CACHE; i++)
+	{
+		if (glo->pages[i].page != NULL && glo->pages[i].number == page)
+		{
+			pc = &glo->pages[i];
+			break;
+		}
+	}
+
 	if (pc == NULL)
 	{
-		*/
-/* Without a cached page object we cannot perform a partial update so
-		render the entire bitmap instead *//*
-
+		/* Without a cached page object we cannot perform a partial update so
+		render the entire bitmap instead */
 		JNI_FN(MuPDFCore_gotoPageInternal)(env, thiz, page);
-		return JNI_FN(MuPDFCore_drawPage)(env, thiz, bitmap, pageW, pageH, patchX, patchY, patchW, patchH);
+		return JNI_FN(MuPDFCore_drawPage)(env, thiz, bitmap, 1.0/*TODO*/, pageW, pageH, patchX, patchY, patchW, patchH);
 	}
 
 	idoc = pdf_specifics(doc);
@@ -843,9 +834,7 @@ JNI_FN(MuPDFCore_updatePageInternal)(JNIEnv *env, jobject thiz, jobject bitmap, 
 		return 0;
 	}
 
-	*/
-/* Call mupdf to render display list to screen *//*
-
+	/* Call mupdf to render display list to screen */
 	LOGE("Rendering page(%d)=%dx%d patch=[%d,%d,%d,%d]",
 			pc->number, pageW, pageH, patchX, patchY, patchW, patchH);
 
@@ -855,17 +844,13 @@ JNI_FN(MuPDFCore_updatePageInternal)(JNIEnv *env, jobject thiz, jobject bitmap, 
 
 		if (idoc)
 		{
-			*/
-/* Update the changed-rects for both hq patch and main bitmap *//*
-
+			/* Update the changed-rects for both hq patch and main bitmap */
 			update_changed_rects(glo, pc, idoc);
 		}
 
 		if (pc->page_list == NULL)
 		{
-			*/
-/* Render to list *//*
-
+			/* Render to list */
 			pc->page_list = fz_new_display_list(ctx);
 			dev = fz_new_list_device(ctx, pc->page_list);
 			fz_run_page_contents(doc, pc->page, dev, &fz_identity, NULL);
@@ -892,10 +877,8 @@ JNI_FN(MuPDFCore_updatePageInternal)(JNIEnv *env, jobject thiz, jobject bitmap, 
 		fz_scale(&ctm, zoom, zoom);
 		rect = pc->media_box;
 		fz_round_rect(&bbox, fz_transform_rect(&rect, &ctm));
-		*/
-/* Now, adjust ctm so that it would give the correct page width
-		 * heights. *//*
-
+		/* Now, adjust ctm so that it would give the correct page width
+		 * heights. */
 		xscale = (float)pageW/(float)(bbox.x1-bbox.x0);
 		yscale = (float)pageH/(float)(bbox.y1-bbox.y0);
 		fz_concat(&ctm, &ctm, fz_scale(&scale, xscale, yscale));
@@ -926,9 +909,7 @@ JNI_FN(MuPDFCore_updatePageInternal)(JNIEnv *env, jobject thiz, jobject bitmap, 
 		}
 		LOGI("End partial update");
 
-		*/
-/* Drop the changed rects we've just rendered *//*
-
+		/* Drop the changed rects we've just rendered */
 		drop_changed_rects(ctx, hq ? &pc->hq_changed_rects : &pc->changed_rects);
 
 		LOGE("Rendered");
@@ -948,7 +929,6 @@ JNI_FN(MuPDFCore_updatePageInternal)(JNIEnv *env, jobject thiz, jobject bitmap, 
 
 	return 1;
 }
-*/
 
 static int
 charat(fz_text_page *page, int idx)
@@ -1272,25 +1252,25 @@ JNI_FN(MuPDFCore_text)(JNIEnv * env, jobject thiz)
 				if (sarr == NULL) fz_throw(ctx, FZ_ERROR_GENERIC, "NewObjectArray failed");
 
 				for (s=0, span = line->first_span; span; s++, span = span->next)
-                {
-                    jobjectArray *carr = (*env)->NewObjectArray(env, span->len, textCharClass, NULL);
-                    if (carr == NULL) fz_throw(ctx, FZ_ERROR_GENERIC, "NewObjectArray failed");
+				{
+					jobjectArray *carr = (*env)->NewObjectArray(env, span->len, textCharClass, NULL);
+					if (carr == NULL) fz_throw(ctx, FZ_ERROR_GENERIC, "NewObjectArray failed");
 
-                    for (c = 0; c < span->len; c++)
-                    {
-                        fz_text_char *ch = &span->text[c];
-                        fz_rect bbox;
-                        fz_text_char_bbox(&bbox, span, c);
-                        jobject cobj = (*env)->NewObject(env, textCharClass, ctor, bbox.x0, bbox.y0, bbox.x1, bbox.y1, ch->c);
-                        if (cobj == NULL) fz_throw(ctx, FZ_ERROR_GENERIC, "NewObjectfailed");
+					for (c = 0; c < span->len; c++)
+					{
+						fz_text_char *ch = &span->text[c];
+						fz_rect bbox;
+						fz_text_char_bbox(&bbox, span, c);
+						jobject cobj = (*env)->NewObject(env, textCharClass, ctor, bbox.x0, bbox.y0, bbox.x1, bbox.y1, ch->c);
+						if (cobj == NULL) fz_throw(ctx, FZ_ERROR_GENERIC, "NewObjectfailed");
 
-                        (*env)->SetObjectArrayElement(env, carr, c, cobj);
-                        (*env)->DeleteLocalRef(env, cobj);
-                    }
+						(*env)->SetObjectArrayElement(env, carr, c, cobj);
+						(*env)->DeleteLocalRef(env, cobj);
+					}
 
-                    (*env)->SetObjectArrayElement(env, sarr, s, carr);
-                    (*env)->DeleteLocalRef(env, carr);
-                }
+					(*env)->SetObjectArrayElement(env, sarr, s, carr);
+					(*env)->DeleteLocalRef(env, carr);
+				}
 
 				(*env)->SetObjectArrayElement(env, larr, l, sarr);
 				(*env)->DeleteLocalRef(env, sarr);
@@ -1350,6 +1330,8 @@ JNI_FN(MuPDFCore_textAsHtml)(JNIEnv * env, jobject thiz)
 		fz_free_device(dev);
 		dev = NULL;
 
+		fz_analyze_text(ctx, sheet, text);
+
 		buf = fz_new_buffer(ctx, 256);
 		out = fz_new_output_with_buffer(ctx, buf);
 		fz_printf(out, "<html>\n");
@@ -1357,6 +1339,9 @@ JNI_FN(MuPDFCore_textAsHtml)(JNIEnv * env, jobject thiz)
 		fz_printf(out, "body{margin:0;}\n");
 		fz_printf(out, "div.page{background-color:white;}\n");
 		fz_printf(out, "div.block{margin:0pt;padding:0pt;}\n");
+		fz_printf(out, "div.metaline{display:table;width:100%%}\n");
+		fz_printf(out, "div.line{display:table-row;}\n");
+		fz_printf(out, "div.cell{display:table-cell;padding-left:0.25em;padding-right:0.25em}\n");
 		//fz_printf(out, "p{margin:0;padding:0;}\n");
 		fz_printf(out, "</style>\n");
 		fz_printf(out, "<body style=\"margin:0\"><div style=\"padding:10px\" id=\"content\">");
@@ -2573,3 +2558,23 @@ JNI_FN(MuPDFCore_getText)(JNIEnv *env, jobject thiz, int pageNumber,
     return result;
 }
 */
+
+JNIEXPORT void JNICALL
+JNI_FN(MuPDFCore_getPageInfo)(JNIEnv *env, jobject thiz, int page, jobject info)
+{
+
+    JNI_FN(MuPDFCore_gotoPageInternal)(env, thiz, page);
+
+    globals *glo = get_globals(env, thiz);
+    int pageWidth = (int) glo->pages[glo->current].width;
+    int pageHeight = (int) glo->pages[glo->current].height;
+
+	jclass cls = (*env)->GetObjectClass(env, info);
+	jfieldID width = (*env)->GetFieldID(env, cls, "width", "I");
+	jfieldID height = (*env)->GetFieldID(env, cls, "height", "I");
+    (*env)->SetIntField(env, info, width, pageWidth);
+    (*env)->SetIntField(env, info, height, pageHeight);
+
+	LOGI("Page %d info: %dx%d", page, pageWidth, pageHeight);
+}
+

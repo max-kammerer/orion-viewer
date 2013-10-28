@@ -87,6 +87,7 @@ public class MuPDFCore
 			throw new Exception(String.format("Cannot open file", filename));
 		}
 		file_format = fileFormatInternal();
+        numPages = info.getPageCount();
 	}
 
 	public MuPDFCore(byte buffer[]) throws Exception

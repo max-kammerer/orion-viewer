@@ -12,8 +12,8 @@ include $(TOP_LOCAL_PATH)/ThirdParty.mk
 
 include $(CLEAR_VARS)
 
-
 LOCAL_ARM_MODE := arm
+
 LOCAL_C_INCLUDES := \
 	jni/andprof \
 	$(MUPDF_ROOT)/include \
@@ -32,7 +32,7 @@ LOCAL_STATIC_LIBRARIES += andprof
 else
 endif
 
-LOCAL_LDLIBS    := -lm -llog
+LOCAL_LDLIBS    := -lm -llog -ljnigraphics
 ifdef V8_BUILD
 LOCAL_LDLIBS	+= -L$(MUPDF_ROOT)/thirdparty/v8-3.9/android -lv8_$(TARGET_ARCH_ABI)
 endif

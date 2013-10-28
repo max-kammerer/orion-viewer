@@ -59,7 +59,7 @@ LOCAL_SRC_FILES += \
 	$(MY_ROOT)/source/pdf/js/pdf-js-none.c
 endif
 
-LOCAL_LDLIBS    := -lm -llog
+LOCAL_LDLIBS    := -lm -llog -ljnigraphics
 
 LOCAL_SRC_FILES := $(addprefix ../, $(LOCAL_SRC_FILES))
 
