@@ -52,7 +52,7 @@
 //C- | TO ANY WARRANTY OF NON-INFRINGEMENT, OR ANY IMPLIED WARRANTY OF
 //C- | MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
 //C- +------------------------------------------------------------------
-# include "debug.h"
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif

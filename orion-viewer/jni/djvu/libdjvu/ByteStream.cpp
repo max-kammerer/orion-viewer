@@ -58,7 +58,7 @@
 // It has been practically rewritten by Lizardtech for i18n changes.
 // Our original implementation consisted of multiple classes.
 // <http://prdownloads.sourceforge.net/djvu/DjVu2_2b-src.tgz>.
-# include "debug.h"
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
@@ -667,8 +667,6 @@ urlfopen(const GURL &url,const char mode[])
   }
   return retval?retval:fopen((const char *)url.NativeFilename(),mode);
 #else
-  DEBUG_MSG("FILE2");
-  DEBUG_MSG((const char *)url.original);
   return fopen((const char *)url.original,mode);
 #endif
 }
@@ -677,9 +675,6 @@ urlfopen(const GURL &url,const char mode[])
 static int
 urlopen(const GURL &url, const int mode, const int perm)
 {
-  DEBUG_MSG("FILE");
-
-  DEBUG_MSG((const char *)url.original);
   return open((const char *)url.original,mode,perm);
 }
 #endif /* UNIX */
@@ -694,7 +689,7 @@ ByteStream::Stdio::init(const GURL &url, const char mode[])
     if (!fp)
     {
       //  Failed to open '%s': %s
-      G_THROW( ERR_MSG("ByteStream.open_fail") "\t" + url.pathname()
+      G_THROW( ERR_MSG("ByteStream.open_fail") "\t" + url.name()
                +"\t"+GNativeString(strerror(errno)).getNative2UTF8());
     }
   }

@@ -4,7 +4,6 @@ TOP_LOCAL_PATH := $(LOCAL_PATH)
 MY_ROOT := ..
 
 include $(TOP_LOCAL_PATH)/Core.mk
-#include $(TOP_LOCAL_PATH)/orion_bitmap.mk
 
 include $(CLEAR_VARS)
 LOCAL_ARM_MODE := arm
@@ -18,9 +17,7 @@ LOCAL_SRC_FILES := djvu.c \
 		    orion_bitmap.c
 		    
 LOCAL_STATIC_LIBRARIES := djvucore
-#LOCAL_SHARED_LIBRARIES := orion_bitmap
 
-
-LOCAL_LDLIBS    :=  -llog -lm 
+LOCAL_LDLIBS    := -lm -llog -ljnigraphics
 
 include $(BUILD_SHARED_LIBRARY)

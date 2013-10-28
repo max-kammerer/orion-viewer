@@ -22,7 +22,7 @@
 #if NEED_GNUG_PRAGMAS
 # pragma implementation "miniexp.h"
 #endif
-# include "GException.h"
+#include "GException.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>

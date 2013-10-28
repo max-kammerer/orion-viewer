@@ -1,6 +1,7 @@
 #include <jni.h>
 #include <time.h>
 #include <android/log.h>
+#include <android/bitmap.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -89,23 +90,39 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_getPageInfo(JNIEnv *e
 	LOGI("Page info get %lf s; page size = %ix%i", ((double) (end - start)) / CLOCKS_PER_SEC, dinfo.width, dinfo.height);
 }
 
-JNIEXPORT jintArray JNICALL
-Java_universe_constellation_orion_viewer_djvu_DjvuDocument_drawPage(JNIEnv *env, jobject thiz, float zoom,
+JNIEXPORT jboolean JNICALL
+Java_universe_constellation_orion_viewer_djvu_DjvuDocument_drawPage(JNIEnv *env, jobject thiz, jobject bitmap,
+        float zoom,
 		int pageW, int pageH, int patchX, int patchY, int patchW, int patchH)
 {
 	LOGI("==================Start Rendering==============");
-	jintArray jints; /* return value */
-	int *jbuf;
+	int ret;
+	AndroidBitmapInfo info;
+	void *pixels;
 	int num_pixels = pageW * pageH;
-	 
-	jints = (*env)->NewIntArray(env, num_pixels);
-	jbuf = (*env)->GetIntArrayElements(env, jints, NULL);	
-	clock_t start, end;
-	start = clock();
 
 	LOGI("Rendering page=%dx%d patch=[%d,%d,%d,%d]",
 			pageW, pageH, patchX, patchY, patchW, patchH);
     LOGI("page: %x", page);
+
+    LOGI("In native method\n");
+    if ((ret = AndroidBitmap_getInfo(env, bitmap, &info)) < 0) {
+        LOGE("AndroidBitmap_getInfo() failed ! error=%d", ret);
+        return 0;
+    }
+
+    LOGI("Checking format\n");
+    if (info.format != ANDROID_BITMAP_FORMAT_RGBA_8888) {
+        LOGE("Bitmap format is not RGBA_8888 !");
+        return 0;
+    }
+
+    LOGI("locking pixels\n");
+    if ((ret = AndroidBitmap_lockPixels(env, bitmap, &pixels)) < 0) {
+        LOGE("AndroidBitmap_lockPixels() failed ! error=%d", ret);
+        return 0;
+    }
+
 			
     //float zoom = 0.0001f * zoom10000;
 	
@@ -144,9 +161,9 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_drawPage(JNIEnv *env,
 	if (pageRect.h <  targetRect.y + targetRect.h) {
 	    targetRect.h = targetRect.h - (targetRect.y + targetRect.h - pageRect.h);
 	}
-	memset(jbuf, 255, num_pixels * 4);
+	memset(pixels, 255, num_pixels * 4);
 	 
-	 LOGI("Rendering page=%dx%d patch=[%d,%d,%d,%d]",
+	LOGI("Rendering page=%dx%d patch=[%d,%d,%d,%d]",
 			patchW, patchH, targetRect.x, targetRect.y, targetRect.w, targetRect.h);
 	 
     unsigned int masks[4] = { 0xff0000, 0xff00, 0xff, 0xff000000 };
@@ -157,22 +174,17 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_drawPage(JNIEnv *env,
     ddjvu_format_set_row_order(pixelFormat, TRUE);
 
     ddjvu_format_set_y_direction(pixelFormat, TRUE);
-	
-    char * buffer = &(jbuf[shift]);
+
+    char * buffer = &(((unsigned char *)pixels)[shift]);
     jboolean result = ddjvu_page_render(page, DDJVU_RENDER_COLOR, &pageRect, &targetRect, pixelFormat, pageW * 4, buffer);
 
-	orion_updateContrast((unsigned char *)jbuf, num_pixels * 4);
-	
-	(*env)->ReleaseIntArrayElements(env, jints, jbuf, 0);
-    
 	ddjvu_format_release(pixelFormat);
+
+	orion_updateContrast((unsigned char *) pixels, num_pixels*4);
+    AndroidBitmap_unlockPixels(env, bitmap);
+	LOGI("...Rendered");
 	
-	end = clock();		
-	
-	LOGI("Render time %lf", ((double) (end - start)) / CLOCKS_PER_SEC);
-	LOGI("Rendered");
-	
-    return jints;
+    return 1;
 }
 
 

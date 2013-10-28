@@ -87,6 +87,6 @@ $(MY_ROOT)/libdjvu/IW44EncodeCodec.cpp \
 $(MY_ROOT)/libdjvu/IW44Image.cpp \
 $(MY_ROOT)/libdjvu/miniexp.cpp \
 
-LOCAL_LDLIBS    := -lm -llog 
+#LOCAL_LDLIBS    := -lm -llog
 
 include $(BUILD_STATIC_LIBRARY)
