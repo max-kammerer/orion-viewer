@@ -300,27 +300,32 @@ public class RenderThread extends Thread implements Renderer {
         }
         if (bitmap == null) {
             Common.d("Creating Bitmap " + bitmapConfig + " " + screenWidth + "x" + screenHeight + "...");
-            bitmap = Bitmap.createBitmap(screenWidth, screenHeight, bitmapConfig);
+            bitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888);
+        } else {
+            Common.d("Cached ");
         }
 
-        cacheCanvas.setMatrix(null);
-        if (rotation != 0) {
-            int rotationShift = (screenHeight - screenWidth) / 2;
-            cacheCanvas.rotate(-rotation * 90, screenHeight / 2, screenWidth / 2);
-            cacheCanvas.translate(-rotation * rotationShift, -rotation * rotationShift);
-        }
+//        cacheCanvas.setMatrix(null);
+//        if (rotation != 0) {
+//            int rotationShift = (screenHeight - screenWidth) / 2;
+//            cacheCanvas.rotate(-rotation * 90, screenHeight / 2, screenWidth / 2);
+//            cacheCanvas.translate(-rotation * rotationShift, -rotation * rotationShift);
+//        }
 
         Point leftTopCorner = layout.convertToPoint(curPos);
 
-        int [] data = doc.renderPage(curPos.pageNumber, curPos.docZoom, width, height, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + width, leftTopCorner.y + height);
 
-        long startTime = System.currentTimeMillis();
+        doc.renderPage(curPos.pageNumber, bitmap, curPos.docZoom, width, height, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + width, leftTopCorner.y + height);
 
-        cacheCanvas.setBitmap(bitmap);
-        cacheCanvas.drawBitmap(data, 0, width, 0, 0, width, height, false, null);
+//        long startTime = System.currentTimeMillis();
 
-        long endTime = System.currentTimeMillis();
-        Common.d("Drawing bitmap in cache " + 0.001 * (endTime - startTime) + " s");
+//        cacheCanvas.setBitmap(bitmap);
+//        Rect src = new Rect(0, 0, width, height);
+//        Rect dest = new Rect(0, 0, width, height);
+//        cacheCanvas.drawBitmap(renderBitmap, src, dest, new Paint());
+//
+//        long endTime = System.currentTimeMillis();
+//        Common.d("Drawing bitmap in cache " + 0.001 * (endTime - startTime) + " s");
 
         resultEntry = new CacheInfo(curPos, bitmap);
         return resultEntry;

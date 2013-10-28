@@ -19,6 +19,7 @@
 
 package universe.constellation.orion.viewer;
 
+import android.graphics.Bitmap;
 import universe.constellation.orion.viewer.outline.OutlineItem;
 
 /**
@@ -34,7 +35,7 @@ public interface DocumentWrapper {
 
     PageInfo getPageInfo(int pageNum);
 
-    int[] renderPage(int pageNumber, double zoom, int w, int h, int left, int top, int right, int bottom);
+    void renderPage(int pageNumber, Bitmap bitmap, double zoom, int w, int h, int left, int top, int right, int bottom);
 
     String getText(int pageNumber, int absoluteX, int absoluteY, int width, int height);
 

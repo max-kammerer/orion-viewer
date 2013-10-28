@@ -19,6 +19,7 @@
 
 package universe.constellation.orion.viewer.pdf;
 
+import android.graphics.Bitmap;
 import android.graphics.RectF;
 import com.artifex.mupdfdemo.MuPDFCore;
 import universe.constellation.orion.viewer.DocumentWrapper;
@@ -51,8 +52,8 @@ public class PdfDocument implements DocumentWrapper {
         return core.getPageInfo(pageNum);
     }
 
-    public int[] renderPage(int pageNumber, double zoom, int w, int h, int left, int top, int right, int bottom) {
-        return core.renderPage(pageNumber, zoom, left, top, right - left, bottom - top);
+    public void renderPage(int pageNumber, Bitmap bitmap, double zoom, int w, int h, int left, int top, int right, int bottom) {
+        core.renderPage(pageNumber, bitmap, zoom, left, top, right - left, bottom - top);
     }
 
     public void destroy() {
@@ -76,7 +77,7 @@ public class PdfDocument implements DocumentWrapper {
     }
 
     public OutlineItem[] getOutline() {
-        com.artifex.mupdfdemo.OutlineItem [] items =  core.getOutlineInternal();
+        com.artifex.mupdfdemo.OutlineItem [] items =  core.getOutline();
         if (items == null || items.length == 0) {
             return  null;
         } else {
@@ -90,11 +91,11 @@ public class PdfDocument implements DocumentWrapper {
 
     @Override
     public boolean needPassword() {
-        return core.needsPasswordInternal();
+        return core.needsPassword();
     }
 
     @Override
     public boolean authentificate(String password) {
-        return core.authenticatePasswordInternal(password);
+        return core.authenticatePassword(password);
     }
 }

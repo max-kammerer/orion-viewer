@@ -19,6 +19,7 @@
 
 package universe.constellation.orion.viewer.djvu;
 
+import android.graphics.Bitmap;
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.DocumentWrapper;
 import universe.constellation.orion.viewer.outline.OutlineItem;
@@ -58,9 +59,9 @@ public class DjvuDocument implements DocumentWrapper {
         return info;
     }
 
-    public int[] renderPage(int pageNumber, double zoom, int w, int h, int left, int top, int right, int bottom) {
+    public void renderPage(int pageNumber, Bitmap bitmap, double zoom, int w, int h, int left, int top, int right, int bottom) {
         gotoPage(pageNumber);
-        return drawPage((float) zoom, right - left, bottom - top, left, top, right - left, bottom - top);
+        drawPage(bitmap, (float) zoom, right - left, bottom - top, left, top, right - left, bottom - top);
     }
 
     public void destroy() {
@@ -86,7 +87,7 @@ public class DjvuDocument implements DocumentWrapper {
 	private static synchronized  native void gotoPageInternal(int localActionPageNum);
 	private static synchronized  native int getPageInfo(int pageNum, PageInfo info);
 
-	public static synchronized  native int [] drawPage(float zoom, int pageW, int pageH,
+	public static synchronized  native boolean drawPage(Bitmap birmap, float zoom, int pageW, int pageH,
 			int patchX, int patchY,
 			int patchW, int patchH);
 	public static synchronized  native void destroying();
