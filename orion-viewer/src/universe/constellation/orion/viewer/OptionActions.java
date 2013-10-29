@@ -45,6 +45,7 @@ public enum OptionActions {
                 } else {
                     activity.getSupportActionBar().hide();
                 }
+                activity.supportInvalidateOptionsMenu();
             }
         },
 

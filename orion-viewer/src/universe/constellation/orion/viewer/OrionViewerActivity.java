@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
+import android.support.v4.internal.view.SupportMenuItem;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.*;
@@ -254,7 +255,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         getOrionContext().onNewBook(filePath);
         try {
-
             lastPageInfo = LastPageInfo.loadBookParameters(this, filePath);
             getOrionContext().setCurrentBookParameters(lastPageInfo);
             OptionActions.DEBUG.doAction(this, false, getGlobalOptions().getBooleanProperty("DEBUG", false));
@@ -951,11 +951,13 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        boolean result = super.onCreateOptionsMenu(menu);
-        if (result) {
-            getMenuInflater().inflate(Device.Info.NOOK_CLASSIC ? R.menu.nook_menu : R.menu.menu, menu);
-        }
-        return result;
+        getMenuInflater().inflate(Device.Info.NOOK_CLASSIC ? R.menu.nook_menu : R.menu.menu, menu);
+        boolean isShowing = getSupportActionBar().isShowing();
+        SupportMenuItem item = (SupportMenuItem) menu.getItem(0);
+        item.setShowAsAction(isShowing ? SupportMenuItem.SHOW_AS_ACTION_IF_ROOM : SupportMenuItem.SHOW_AS_ACTION_NEVER);
+        item = (SupportMenuItem) menu.getItem(4);
+        item.setShowAsAction(isShowing ? SupportMenuItem.SHOW_AS_ACTION_IF_ROOM : SupportMenuItem.SHOW_AS_ACTION_NEVER);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
