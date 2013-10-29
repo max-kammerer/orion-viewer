@@ -654,7 +654,7 @@ JNI_FN(MuPDFCore_drawPage)(JNIEnv *env, jobject thiz,jobject bitmap,
 	}
 
 	/* Call mupdf to render display list to screen */
-	LOGE("Rendering page(%d)=%dx%d patch=[%d,%d,%d,%d]",
+	LOGI("Rendering page(%d)=%dx%d patch=[%d,%d,%d,%d]",
 			pc->number, pageW, pageH, patchX, patchY, patchW, patchH);
 
 	fz_try(ctx)
@@ -722,7 +722,7 @@ JNI_FN(MuPDFCore_drawPage)(JNIEnv *env, jobject thiz,jobject bitmap,
 			clock_t time;
 			int i;
 
-			LOGE("Executing display list");
+			LOGI("Executing display list");
 			time = clock();
 			for (i=0; i<100;i++) {
 #endif
@@ -740,7 +740,7 @@ JNI_FN(MuPDFCore_drawPage)(JNIEnv *env, jobject thiz,jobject bitmap,
 		dev = NULL;
 		fz_drop_pixmap(ctx, pix);
 		orion_updateContrast((unsigned char *) pixels, num_pixels*4);
-		LOGE("Rendered");
+		LOGI("Rendered");
 	}
 	fz_always(ctx)
 	{
