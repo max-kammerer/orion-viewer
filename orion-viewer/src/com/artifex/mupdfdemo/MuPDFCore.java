@@ -372,10 +372,9 @@ public class MuPDFCore
     public synchronized void renderPage(int n, Bitmap bitmap, double zoom, int left, int top, int w, int h) {
         gotoPage(n);
         Common.d("MuPDFCore starts rendering...");
-        long date = System.currentTimeMillis();
+        long start = System.currentTimeMillis();
         drawPage(bitmap, (float)zoom, w, h, left, top, w, h);
-        long date2 = System.currentTimeMillis();
-        Common.d("MuPDFCore render time takes " + n + " = " + 0.001 * (date2 - date) + " s");
+        Common.d("MuPDFCore render time takes " + n + " = " + 0.001 * (System.currentTimeMillis() - start) + " s");
     }
 
 }
