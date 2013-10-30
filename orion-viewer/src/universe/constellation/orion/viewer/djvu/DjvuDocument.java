@@ -55,7 +55,9 @@ public class DjvuDocument implements DocumentWrapper {
 
     public PageInfo getPageInfo(int pageNum) {
         PageInfo info = new PageInfo();
+        long start = System.currentTimeMillis();
         getPageInfo(pageNum, info);
+        Common.d("Page " + pageNum + " info takes = " + 0.001 * (System.currentTimeMillis() - start) + " s");
         return info;
     }
 
