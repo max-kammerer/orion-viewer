@@ -26,6 +26,34 @@
     <PreferenceCategory
             android:title="@string/pref_category_general" android:key="GENERAL">
 
+        <PreferenceScreen
+                android:title="Appearance" android:persistent="false"
+                android:summary="Application appearance"
+                android:key="APPEARANCE">
+
+            <CheckBoxPreference
+                    android:key="FULL_SCREEN"
+                    android:title="@string/pref_fullScreen"
+                    android:summary="@string/pref_fullScreen"
+                    android:defaultValue="false"/>
+
+            <CheckBoxPreference
+                    android:key="SHOW_ACTION_BAR"
+                    android:title="@string/pref_showActionBar"
+                    android:summary="@string/pref_showActionBar"
+                    android:defaultValue="true"/>
+
+            <ListPreference
+                    android:key="APPLICATION_THEME"
+                    android:title="@string/pref_application_theme"
+                    android:summary="@string/pref_application_theme_desc"
+                    android:entries="@array/application_theme_desc"
+                    android:entryValues="@array/application_theme"
+                    android:dialogTitle="@string/pref_application_theme"
+                    android:defaultValue="DEFAULT"/>
+
+        </PreferenceScreen>
+
         <PreferenceScreen android:title="@string/pref_default_book_setting"
                           android:summary="@string/pref_default_book_setting_desc"
                           android:key="BOOK_DEFAULT">
@@ -86,17 +114,6 @@
             <intent android:action="universe.constellation.orion.viewer.TAP_ZONES"/>
         </PreferenceScreen>
 
-        <CheckBoxPreference
-                android:key="FULL_SCREEN"
-                android:title="@string/pref_fullScreen"
-                android:summary="@string/pref_fullScreen"
-                android:defaultValue="false"/>
-
-        <CheckBoxPreference
-                android:key="SHOW_ACTION_BAR"
-                android:title="@string/pref_showActionBar"
-                android:summary="@string/pref_showActionBar"
-                android:defaultValue="true"/>
 
         <ListPreference
                 android:key="SCREEN_ORIENTATION"
@@ -120,15 +137,6 @@
                 android:summary="@string/pref_close_page_option_dialog_on_apply"
                 android:defaultValue="false"/>
 
-
-        <ListPreference
-                android:key="APPLICATION_THEME"
-                android:title="@string/pref_application_theme"
-                android:summary="@string/pref_application_theme_desc"
-                android:entries="@array/application_theme_desc"
-                android:entryValues="@array/application_theme"
-                android:dialogTitle="@string/pref_application_theme"
-                android:defaultValue="DEFAULT"/>
 
         <ListPreference
                 android:key="LANGUAGE"
