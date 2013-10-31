@@ -253,11 +253,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         getOrionContext().onNewBook(filePath);
         try {
-            OptionActions.DEBUG.doAction(this, false, getGlobalOptions().getBooleanProperty("DEBUG", false));
 
             lastPageInfo = LastPageInfo.loadBookParameters(this, filePath);
             getOrionContext().setCurrentBookParameters(lastPageInfo);
-
+            OptionActions.DEBUG.doAction(this, false, getGlobalOptions().getBooleanProperty("DEBUG", false));
 
             doc = FileUtil.openFile(filePath);
 
