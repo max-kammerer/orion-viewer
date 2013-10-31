@@ -21,6 +21,7 @@ package universe.constellation.orion.viewer;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.widget.Toast;
 import universe.constellation.orion.viewer.outline.OutlineActivity;
 import universe.constellation.orion.viewer.outline.OutlineItem;
@@ -274,6 +275,12 @@ public enum Action {
         }
     },
 
+    CLOSE_ACTION (R.string.action_close, R.integer.action_close) {
+        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+            activity.finish();
+        }
+    },
+
     FIT_WIDTH (R.string.action_fit_width, R.integer.action_fit_width) {
         @Override
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
@@ -300,6 +307,11 @@ public enum Action {
         @Override
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
             //controller.setRotation((controller.getRotation() - 1) % 2);
+            if (activity.getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE || activity.getRequestedOrientation() == 8) {
+                controller.changeOrinatation("PORTRAIT");
+            } else {
+                controller.changeOrinatation("LANDSCAPE");
+            }
         }
     },
 
@@ -307,6 +319,12 @@ public enum Action {
         @Override
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
             //controller.setRotation((controller.getRotation() + 1) % 2);
+            boolean isLevel9 = activity.getOrionContext().getSdkVersion() >= 9;
+            if (!isLevel9 || activity.getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE || activity.getRequestedOrientation() == 8) {
+                ROTATE_90.doAction(controller, activity, parameter);
+            } else {
+                controller.changeOrinatation("LANDSCAPE_INVERSE");
+            }
         }
     },
 
