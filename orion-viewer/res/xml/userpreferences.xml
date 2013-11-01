@@ -96,14 +96,13 @@
                     android:dialogTitle="@string/pref_bookDefaultZoom"
                     android:defaultValue="0"/>
 
-            <universe.constellation.orion.viewer.prefs.OrionEditPreference
-                    android:key="DEFAULT_CONTRAST"
+            <universe.constellation.orion.viewer.prefs.SeekBarPreference
+                    android:key="DEFAULT_CONTRAST_2"
                     android:summary="@string/pref_book_contrast_desc"
                     android:defaultValue="100"
                     android:title="@string/pref_book_contrast"
-                    android:numeric="integer"
                     orion:minValue="1"
-                    orion:maxValue="1000"/>
+                    orion:maxValue="200"/>
         </PreferenceScreen>
 
 

@@ -57,7 +57,7 @@
                     android:defaultValue="DEFAULT" orion:justAndroidGeneral="true"/>
 
 
-        <universe.constellation.orion.viewer.prefs.OrionEditPreference
+        <universe.constellation.orion.viewer.prefs.SeekBarPreference
                   android:summary="@string/pref_book_contrast_desc"
                   android:defaultValue="100"
                   android:title="@string/pref_book_contrast"
@@ -65,9 +65,9 @@
                   android:numeric="integer"
                   orion:isBook="true"
                   orion:minValue="1"
-                  orion:maxValue="1000"/>
+                  orion:maxValue="200"/>
 
-        <universe.constellation.orion.viewer.prefs.OrionEditPreference
+        <universe.constellation.orion.viewer.prefs.SeekBarPreference
                   android:summary="@string/pref_book_threshold_desc"
                   android:defaultValue="255"
                   android:title="@string/pref_book_threshold"
