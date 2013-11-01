@@ -20,33 +20,33 @@
 
 <resources>
 
-    <attr name="actionId" format="reference" />
+    <attr name="actionId" format="reference"/>
 
-    <attr name="minValue" format="integer" />
+    <attr name="minValue" format="integer"/>
 
-    <attr name="maxValue" format="integer" />
+    <attr name="maxValue" format="integer"/>
 
-    <attr name="pattern" format="string" />
+    <attr name="pattern" format="string"/>
 
-    <attr name="isBook" format="boolean" />
+    <attr name="isBook" format="boolean"/>
 
-    <attr name="notEmpty" format="boolean" />
+    <attr name="notEmpty" format="boolean"/>
 
-    <attr name="justAndroidGeneral" format="boolean" />
+    <attr name="justAndroidGeneral" format="boolean"/>
 
-    <attr name="walkOrder" format="reference" />
+    <attr name="walkOrder" format="reference"/>
 
-            <!--<p>Must be an integer value, such as "<code>100</code>".-->
-<!--<p>This may also be a reference to a resource (in the form-->
-<!--"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or-->
-<!--theme attribute (in the form-->
-<!--"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")-->
-<!--containing a value of this type.-->
-          <!--@attr name android:actionId-->
-        <!---->
+    <!--<p>Must be an integer value, such as "<code>100</code>".-->
+    <!--<p>This may also be a reference to a resource (in the form-->
+    <!--"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or-->
+    <!--theme attribute (in the form-->
+    <!--"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")-->
+    <!--containing a value of this type.-->
+    <!--@attr name android:actionId-->
+    <!---->
 
     <declare-styleable name="android.view.View">
-        <attr name="actionId" />
+        <attr name="actionId"/>
     </declare-styleable>
 
     <declare-styleable name="android.preference.ListPreference">
@@ -80,4 +80,12 @@
     <declare-styleable name="universe.constellation.orion.viewer.prefs.OrionLayoutDialog">
         <attr name="isBook"/>
     </declare-styleable>
+
+    <declare-styleable name="universe.constellation.orion.viewer.prefs.SeekBarPreference">
+        <attr name="isBook"/>
+        <attr name="minValue"/>
+        <attr name="maxValue"/>
+        <attr name="defaultValue" format="integer"/>
+    </declare-styleable>
+
 </resources>
