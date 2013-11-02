@@ -918,10 +918,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(Device.Info.NOOK_CLASSIC ? R.menu.nook_menu : R.menu.menu, menu);
         boolean isShowing = getSupportActionBar().isShowing();
-        SupportMenuItem item = (SupportMenuItem) menu.getItem(0);
-        item.setShowAsAction(isShowing ? SupportMenuItem.SHOW_AS_ACTION_IF_ROOM : SupportMenuItem.SHOW_AS_ACTION_NEVER);
-        item = (SupportMenuItem) menu.getItem(4);
-        item.setShowAsAction(isShowing ? SupportMenuItem.SHOW_AS_ACTION_IF_ROOM : SupportMenuItem.SHOW_AS_ACTION_NEVER);
+        for (int i = 0; i < 5; i++) {
+            SupportMenuItem item = (SupportMenuItem) menu.getItem(i);
+            item.setShowAsAction(isShowing ? SupportMenuItem.SHOW_AS_ACTION_IF_ROOM : SupportMenuItem.SHOW_AS_ACTION_NEVER);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 

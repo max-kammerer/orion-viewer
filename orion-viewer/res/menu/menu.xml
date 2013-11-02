@@ -29,16 +29,19 @@
 
     <item android:id="@+id/bookmarks_menu_item"
           android:title="@string/menu_bookmarks_text"
-          android:icon="@drawable/bookmarks"/>
+          android:icon="@drawable/bookmarks"
+          orion:showAsAction="ifRoom"/>
 
     <item android:id="@+id/zoom_menu_item"
           android:title="@string/menu_zoom_text"
-          android:icon="@drawable/zoom"/>
+          android:icon="@drawable/zoom"
+          orion:showAsAction="ifRoom"/>
 
 
     <item android:id="@+id/crop_menu_item"
           android:title="@string/menu_crop_text"
-          android:icon="@drawable/crop"/>
+          android:icon="@drawable/crop"
+          orion:showAsAction="ifRoom"/>
 
     <item android:id="@+id/select_text_menu_item"
           android:title="@string/menu_select_text"
