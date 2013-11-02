@@ -21,15 +21,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical" android:gravity="bottom">
 
-<pl.polidea.customwidget.TheMissingTabHost xmlns:android="http://schemas.android.com/apk/res/android" xmlns:orion="http://schemas.android.com/apk/res/universe.constellation.orion.viewer"
-                                           android:id="@+id/helptab"
-                                           android:layout_width="480px" android:layout_height="144px" orion:always_landscape="true">
+<!--<pl.polidea.customwidget.TheMissingTabHost xmlns:android="http://schemas.android.com/apk/res/android" xmlns:orion="http://schemas.android.com/apk/res/universe.constellation.orion.viewer"-->
+                                           <!--android:id="@+id/helptab"-->
+                                           <!--android:layout_width="480px" android:layout_height="144px" orion:always_landscape="true">-->
 
     <LinearLayout android:orientation="horizontal"
 		android:layout_width="fill_parent" android:layout_height="fill_parent">
-		<pl.polidea.customwidget.TheMissingTabWidget
-			android:id="@android:id/tabs" android:layout_width="wrap_content"
-			android:layout_height="fill_parent" android:layout_weight="0" orion:always_landscape="true" />
+		<!--<pl.polidea.customwidget.TheMissingTabWidget-->
+			<!--android:id="@android:id/tabs" android:layout_width="wrap_content"-->
+			<!--android:layout_height="fill_parent" android:layout_weight="0" orion:always_landscape="true" />-->
 
         <FrameLayout android:id="@android:id/tabcontent"
 			android:layout_height="fill_parent" android:layout_width="0dip"
@@ -41,6 +41,6 @@
 
         </FrameLayout>
     </LinearLayout>
-</pl.polidea.customwidget.TheMissingTabHost>
+<!--</pl.polidea.customwidget.TheMissingTabHost>-->
 
 </LinearLayout>

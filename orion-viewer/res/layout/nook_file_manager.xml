@@ -37,15 +37,15 @@
                   android:layout_height="144.0px">
         <!--file manager-->
 
-       <pl.polidea.customwidget.TheMissingTabHost
-                                           android:id="@+id/tabhost"
-                                           android:layout_width="fill_parent" android:layout_height="fill_parent" orion:always_landscape="true">
+       <!--<pl.polidea.customwidget.TheMissingTabHost-->
+                                           <!--android:id="@+id/tabhost"-->
+                                           <!--android:layout_width="fill_parent" android:layout_height="fill_parent" orion:always_landscape="true">-->
 
     <LinearLayout android:orientation="horizontal"
 		android:layout_width="fill_parent" android:layout_height="fill_parent">
-		<pl.polidea.customwidget.TheMissingTabWidget
-			android:id="@android:id/tabs" android:layout_width="wrap_content" orion:always_landscape="true"
-			android:layout_height="fill_parent" android:layout_weight="0"  />
+		<!--<pl.polidea.customwidget.TheMissingTabWidget-->
+			<!--android:id="@android:id/tabs" android:layout_width="wrap_content" orion:always_landscape="true"-->
+			<!--android:layout_height="fill_parent" android:layout_weight="0"  />-->
 
         <FrameLayout android:id="@android:id/tabcontent"
 			android:layout_height="fill_parent" android:layout_width="0dip"
@@ -62,7 +62,7 @@
         </FrameLayout>
 
     </LinearLayout>
-</pl.polidea.customwidget.TheMissingTabHost>
+<!--</pl.polidea.customwidget.TheMissingTabHost>-->
 
     </LinearLayout>
 </RelativeLayout>

@@ -39,6 +39,6 @@
     <LinearLayout android:layout_width="fill_parent"
                   android:layout_height="fill_parent">
         <!--file manager-->
-        <include layout="@layout/file_manager"/>
+        <!--<include layout="@layout/file_manager"/>-->
     </LinearLayout>
 </FrameLayout>

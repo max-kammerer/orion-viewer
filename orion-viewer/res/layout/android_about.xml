@@ -142,11 +142,6 @@
                   android:gravity="center"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:textSize="18sp"
-                  android:text="themissingtabwidget"
-                  android:gravity="center"/>
-
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
                           android:textSize="18sp"
                           android:text="tree-view-list-android"
                           android:gravity="center"/>

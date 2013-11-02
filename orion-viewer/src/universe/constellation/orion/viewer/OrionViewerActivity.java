@@ -40,7 +40,6 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionPreferenceActivity;
-import pl.polidea.customwidget.TheMissingTabHost;
 import universe.constellation.orion.viewer.selection.SelectedTextActions;
 import universe.constellation.orion.viewer.selection.SelectionAutomata;
 import universe.constellation.orion.viewer.selection.TouchAutomata;

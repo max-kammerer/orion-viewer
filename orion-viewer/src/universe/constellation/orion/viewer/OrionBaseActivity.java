@@ -32,8 +32,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import universe.constellation.orion.viewer.device.AndroidDevice;
-import pl.polidea.customwidget.TheMissingTabHost;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionApplication;
 
