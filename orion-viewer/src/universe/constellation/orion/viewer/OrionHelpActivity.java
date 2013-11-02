@@ -94,17 +94,6 @@ public class OrionHelpActivity extends OrionBaseActivity {
                         this, "about", AboutFragment.class) {
                 });
         actionBar.addTab(tab);
-
-//        if (AndroidDevice.class.equals(device.getClass())) {
-//            TextView tx = (TextView) findViewById(R.id.help_rotation_entry);
-//            tx.setText(R.string.rotation_android);
-//
-//            tx = (TextView) findViewById(R.id.help_next_page_entry);
-//            tx.setText(R.string.next_page_android);
-//
-//            TableRow tr = (TableRow) findViewById(R.id.help_prev_page_row);
-//            ((TableLayout)tr.getParent()).removeView(tr);
-//        }
     }
 
 

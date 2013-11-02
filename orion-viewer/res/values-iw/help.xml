@@ -24,9 +24,6 @@
     <string name="rotation">סובב מסמך ל90 מעלות בכיוון שעון. לחיצה ארוכה מסובבת נגד כיוון שעון.</string>
     <string name="rotation_android">פתח אפשריות סיבוב.</string>
     <string name="crop">פתח אפשריות חיתוך גבולות. ערכים מוגדרים יחסית לגודל דף. לחיצה ארוכה ערך תשנה ב10%. ערך שלילי תוסיף גבולות נוספים.</string>
-    <string name="next_page_android">פתח אפשריות מעבר דפים.</string>
-    <string name="next_page">עבור לדף הבא. בלחיצה ארוכה פותח את אפשריות סימנייות.</string>
-    <string name="prev_page">עבור לדף קודם. בלחיצה ארוכה פותח אפשריות בחירת הדף.</string>
     <string name="apply">החל את האפשרויות קיימות.</string>
     <string name="escape">להחזיר / לבטל.</string>
     <string name="general_usage">אופן שימוש:</string>

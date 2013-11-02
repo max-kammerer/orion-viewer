@@ -25,12 +25,6 @@
 
     <string name="crop">打开切边对话框. 数值大小为相对于页面尺寸的百分比. 长按+/-以10%调整数值. 负数增加边界大小.</string>
 
-    <string name="next_page_android">打开跳转对话框.</string>
-
-    <string name="next_page">前往下一页. 长按打开书签.</string>
-
-    <string name="prev_page">前往上一页. 长按打开页面选择对话框.</string>
-
     <string name="apply">应用当前选项.</string>
     <string name="escape">返回/退出.</string>
 

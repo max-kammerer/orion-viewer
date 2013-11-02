@@ -26,12 +26,6 @@
 
     <string name="crop">Abre la ventana Recortar márgenes. Los valores son relativos al tamaño de la página. Un click largo cambia el valor del recorte en un +/-10%. Valores negativos aumentan el margen. </string>
 
-    <string name="next_page_android">Abre la ventana Ir a.</string>
-
-    <string name="next_page">Va a la página siguiente. Un click largo abre la ventana Marcadores.</string>
-
-    <string name="prev_page">Va a la página anterior. Un click largo abre la ventana de selección de página.</string>
-
     <string name="apply">Aplica las modificaciones en las diferentes opciones.</string>
     <string name="escape">Volver/Salir</string>
 

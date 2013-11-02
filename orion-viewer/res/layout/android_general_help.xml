@@ -87,7 +87,7 @@
 
                 <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
                           android:textSize="20sp" android:id="@+id/help_rotation_entry"
-                          android:text="@string/rotation"
+                          android:text="@string/rotation_android"
                           android:layout_gravity="center_vertical"
                           android:gravity="left"/>
             </TableRow>
@@ -104,29 +104,6 @@
                           android:gravity="left"/>
             </TableRow>
 
-            <TableRow>
-                <ImageView android:layout_column="0"
-                           android:layout_width="wrap_content" android:layout_height="wrap_content"
-                           android:src="@drawable/next"/>
-
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                          android:textSize="20sp" android:id="@+id/help_next_page_entry"
-                          android:text="@string/next_page"
-                          android:layout_gravity="center_vertical"
-                          android:gravity="left"/>
-            </TableRow>
-
-            <TableRow android:id="@+id/help_prev_page_row">
-                <ImageView android:layout_column="0"
-                           android:layout_width="wrap_content" android:layout_height="wrap_content"
-                           android:src="@drawable/prev"/>
-
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                          android:textSize="20sp"
-                          android:text="@string/prev_page"
-                          android:layout_gravity="center_vertical"
-                          android:gravity="left"/>
-            </TableRow>
 
             <TableRow>
                 <ImageView android:layout_column="0"

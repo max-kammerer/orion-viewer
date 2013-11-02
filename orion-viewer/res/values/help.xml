@@ -25,12 +25,6 @@
 
     <string name="crop">Opens borders crop dialog. Values defined relative to page size. Long click for plus or minus in this dialog changes crop value for 10%. Negative value add additional borders.</string>
 
-    <string name="next_page_android">Opens go to dialog.</string>
-
-    <string name="next_page">Go to next page. On long click opens bookmark screen.</string>
-
-    <string name="prev_page">Go to prev page. On long click opens page chooser dialog.</string>
-
     <string name="apply">Apply current options.</string>
     <string name="escape">Return/Escape.</string>
 

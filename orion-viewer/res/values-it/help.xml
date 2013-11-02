@@ -26,12 +26,6 @@
 
     <string name="crop">Apre la finestra Ritaglia margini. I valori sono relativi alle dimensioni della pagina. Un tap lungo cambia i valori di ritaglio del 10%. Valori negativi aumentano i margini.</string>
 
-    <string name="next_page_android">Apre la finestra Vai a.</string>
-
-    <string name="next_page">Va alla pagina successiva. Un tap lungo apre la finestra Segnalibri.</string>
-
-    <string name="prev_page">Va alla pagina precedente. Un tap lungo apre la finestra Vai a.</string>
-
     <string name="apply">Applica le modifiche alle impostazioni.</string>
     <string name="escape">Chiude l\'applicazione.</string>
 
