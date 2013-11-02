@@ -97,7 +97,7 @@ public class Controller implements ViewDimensionAware {
     }
 
     public void onDimensionChanged(int newWidth, int newHeight) {
-        if (newWidth != 0 && newHeight != 0) {
+        if (newWidth >= 0 && newHeight >= 0) {
             Common.d("New screen size " + newWidth + "x" + newHeight);
 
             layout.setDimension(newWidth, newHeight);
@@ -243,7 +243,9 @@ public class Controller implements ViewDimensionAware {
     }
 
 
-    public void init(LastPageInfo info, int width, int height) {
+    public void init(LastPageInfo info, Point dimension) {
+        int width = dimension.x;
+        int height = dimension.y;
         Common.d("Init controller...");
         doc.setContrast(info.contrast);
         doc.setThreshold(info.threshold);

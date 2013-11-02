@@ -114,15 +114,15 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         OptionActions.SHOW_ACTION_BAR.doAction(this, !globalOptions.isActionBarVisible(), globalOptions.isActionBarVisible());
         setContentView(device.getLayoutId());
-
         view = (OrionView) findViewById(R.id.view);
+
+        OptionActions.SHOW_STATUS_BAR.doAction(this, !globalOptions.isStatusBarVisible(), globalOptions.isStatusBarVisible());
         String mode = getOrionContext().getOptions().getStringProperty(GlobalOptions.DAY_NIGHT_MODE, "DAY");
         view.setNightMode("NIGHT".equals(mode));
 
         if (!device.optionViaDialog()) {
             initAnimator();
             initMainScreen();
-            //initHelpScreen();
         } else {
             initOptionDialog();
             initRotationScreen();
@@ -234,7 +234,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
             controller.changeOrinatation(lastPageInfo.screenOrientation);
 
-            controller.init(lastPageInfo, view.getWidth(), view.getHeight());
+            controller.init(lastPageInfo, view.getRenderingSize());
 
             getSubscriptionManager().sendDocOpenedNotification(controller);
 

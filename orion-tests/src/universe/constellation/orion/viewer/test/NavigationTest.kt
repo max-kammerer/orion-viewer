@@ -93,7 +93,7 @@ class NavigationTest : ActivityBaseTest() {
 
         val lastPageInfo = LastPageInfo.loadBookParameters(getActivity()!!, "123")!!
         controller.changeOrinatation(lastPageInfo.screenOrientation)
-        controller.init(lastPageInfo, deviceSize.x, deviceSize.y)
+        controller.init(lastPageInfo, deviceSize)
 
         //getSubscriptionManager()?.sendDocOpenedNotification(controller)
         getActivity()!!.getView()!!.setDimensionAware(controller)

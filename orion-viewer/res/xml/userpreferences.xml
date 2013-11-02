@@ -41,6 +41,12 @@
                     android:key="SHOW_ACTION_BAR"
                     android:title="@string/pref_showActionBar"
                     android:summary="@string/pref_showActionBar"
+                    android:defaultValue="false"/>
+
+            <CheckBoxPreference
+                    android:key="SHOW_STATUS_BAR"
+                    android:title="@string/pref_showStatusBar"
+                    android:summary="@string/pref_showStatusBar"
                     android:defaultValue="true"/>
 
             <ListPreference

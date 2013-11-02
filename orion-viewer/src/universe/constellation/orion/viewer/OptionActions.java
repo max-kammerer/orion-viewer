@@ -49,6 +49,13 @@ public enum OptionActions {
             }
         },
 
+    SHOW_STATUS_BAR("SHOW_ACTION_BAR") {
+         public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
+             activity.getView().setShowStatusBar(newValue);
+         }
+     },
+
+
 
     SCREEN_OVERLAPPING_HORIZONTAL("SCREEN_OVERLAPPING_HORIZONTAL") {
         public void doAction(OrionViewerActivity activity, int hor, int ver) {

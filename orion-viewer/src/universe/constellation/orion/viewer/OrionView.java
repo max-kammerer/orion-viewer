@@ -61,6 +61,10 @@ public class OrionView extends View implements OrionImageView {
 
     private Paint nightPaint;
 
+    private boolean showStatusBar;
+
+    private int statusBarHeight = 10;
+
     private ColorMatrixColorFilter nightMatrix = new ColorMatrixColorFilter(new ColorMatrix(
             new float[]{
                     -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
@@ -118,7 +122,7 @@ public class OrionView extends View implements OrionImageView {
                 canvas.scale(myScale, myScale);
             }
 
-            canvas.drawBitmap(bitmap, 0, 0, isNightMode ? nightPaint : null);
+            canvas.drawBitmap(bitmap, 0, statusBarHeight, isNightMode ? nightPaint : null);
 
             if (myScale != DEFAULT_SCALE) {
                 canvas.restore();
@@ -178,5 +182,28 @@ public class OrionView extends View implements OrionImageView {
         this.scale = scale;
         this.startFocus = startFocus;
         this.endFocus = endFocus;
+    }
+
+    public boolean isShowStatusBar() {
+        return showStatusBar;
+    }
+
+    public void setShowStatusBar(boolean showStatusBar) {
+        if (showStatusBar != this.showStatusBar && dimensionAware  != null) {
+            this.showStatusBar = showStatusBar;
+            Point renderingSize = getRenderingSize();
+            dimensionAware.onDimensionChanged(renderingSize.x, renderingSize.y);
+        } else {
+            this.showStatusBar = showStatusBar;
+        }
+    }
+
+    public Point getRenderingSize() {
+        if (showStatusBar) {
+            statusBarHeight = 10;
+        } else {
+            statusBarHeight = 0;
+        }
+        return new Point(getWidth(), getHeight() - statusBarHeight);
     }
 }
