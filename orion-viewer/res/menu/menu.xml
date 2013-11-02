@@ -73,31 +73,40 @@
           android:title="@string/menu_outline_text"
           android:icon="@drawable/help"/>
 
-    <item android:id="@+id/open_menu_item"
-          android:title="@string/menu_open_text"
-          android:icon="@drawable/help"/>
 
     <item android:id="@+id/open_dictionary_menu_item"
           android:title="@string/menu_open_dictionary_text"
           android:icon="@drawable/dictionary"/>
 
-    <item android:id="@+id/day_night_menu_item"
-          android:title="@string/menu_day_night_text"
-          android:icon="@drawable/day_night"/>
-
-    <!--<item android:id="@+id/tap_menu_item"-->
-    <!--android:title="@string/menu_tap_text"-->
-    <!--android:icon="@drawable/options"/>-->
-
     <item android:id="@+id/options_menu_item"
           android:title="@string/menu_options_text"
           android:icon="@drawable/options"/>
 
-    <item android:id="@+id/help_menu_item"
-          android:title="@string/menu_help_text"
-          android:icon="@drawable/help"/>
 
-    <item android:id="@+id/exit_menu_item"
-          android:title="@string/menu_exit_text"
-          android:icon="@drawable/close"/>
+    <item android:title="...">
+        <menu>
+            <item android:id="@+id/day_night_menu_item"
+                  android:title="@string/menu_day_night_text"
+                  android:icon="@drawable/day_night"/>
+
+            <item android:id="@+id/open_menu_item"
+                  android:title="@string/menu_open_text"/>
+
+            <!--<item android:id="@+id/open_menu_item"--> TODO add taps
+                      <!--android:title="@string/menu_open_text"-->
+                      <!--android:icon="@drawable/help"/>-->
+
+
+            <item android:id="@+id/help_menu_item"
+                  android:title="@string/menu_help_text"
+                  android:icon="@drawable/help"/>
+
+            <item android:id="@+id/exit_menu_item"
+                  android:title="@string/menu_exit_text"
+                  android:icon="@drawable/close"/>
+        </menu>
+
+    </item>
+
+
 </menu>

@@ -959,14 +959,20 @@ public class OrionViewerActivity extends OrionBaseActivity {
             case R.id.day_night_menu_item:  action = Action.DAY_NIGHT; break;
 
             case R.id.bookmarks_menu_item:  action = Action.OPEN_BOOKMARKS; break;
+            case R.id.help_menu_item:
+                Intent intent = new Intent();
+                intent.setClass(this, OrionHelpActivity.class);
+                startActivity(intent);
+            break;
         }
 
         if (Action.NONE != action) {
             doAction(action);
         } else {
-            Intent intent = new Intent();
-            intent.setClass(this, OrionHelpActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent();
+//            intent.setClass(this, OrionHelpActivity.class);
+//            startActivity(intent);
+            return super.onOptionsItemSelected(item);
         }
         return true;
     }
