@@ -21,7 +21,9 @@ package universe.constellation.orion.viewer.selection;
 
 import android.R;
 import android.app.Dialog;
+import android.support.v7.app.ActionBar;
 import android.view.*;
+import universe.constellation.orion.viewer.OrionView;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 
 /**
@@ -45,18 +47,15 @@ public class SelectionAutomata {
 
     public SelectionAutomata(final OrionViewerActivity activity) {
         this.activity = activity;
-        //selectionDialog = new Dialog(activity, R.style.Theme_Translucent);
-        selectionDialog = new Dialog(activity, (activity.getWindow().getAttributes().flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) > 0 ? R.style.Theme_Translucent_NoTitleBar_Fullscreen : R.style.Theme_Translucent_NoTitleBar);
 
+        selectionDialog = new Dialog(activity, R.style.Theme_Translucent_NoTitleBar);
         selectionDialog.setContentView(universe.constellation.orion.viewer.R.layout.text_selector);
 
         View view = activity.getLayoutInflater().inflate(universe.constellation.orion.viewer.R.layout.text_selector, null);
 
         selectionDialog.setContentView(view);
-        WindowManager.LayoutParams params = selectionDialog.getWindow().getAttributes();
-        params.width = ViewGroup.LayoutParams.FILL_PARENT;
-        params.height = ViewGroup.LayoutParams.FILL_PARENT;
-        selectionDialog.getWindow().setAttributes(params);
+
+
 
         selectionView = (SelectionView) selectionDialog.findViewById(universe.constellation.orion.viewer.R.id.text_selector);
 
@@ -67,6 +66,8 @@ public class SelectionAutomata {
             }
         });
     }
+
+
 
     public boolean onTouch(MotionEvent event) {
         int action = event.getAction();
@@ -124,13 +125,27 @@ public class SelectionAutomata {
 
     public void startSelection() {
         selectionView.reset();
-
-        selectionDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN & activity.getWindow().getAttributes().flags, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        initDialogSize();
         selectionDialog.show();
 
         activity.showFastMessage("Select text!");
         state = STATE.START;
+    }
+
+    private void initDialogSize() {
+        OrionView orionView = activity.getView();
+        int[] coords = new int[]{0, 0};
+        orionView.getLocationOnScreen(coords);
+        int left = coords[0];
+        int top = coords[1];
+        int width = orionView.getWidth();
+        int height = orionView.getHeight();
+        WindowManager.LayoutParams params = selectionDialog.getWindow().getAttributes();
+        params.width = width;
+        params.height = height;
+        params.x = left;
+        params.y = top;
+        selectionDialog.getWindow().setAttributes(params);
     }
 
     public boolean inSelection() {
