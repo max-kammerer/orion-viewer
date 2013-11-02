@@ -25,13 +25,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBar;
-import android.view.*;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import universe.constellation.orion.viewer.android.TabListener;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
 import java.io.File;
@@ -46,26 +47,37 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
 
     private static final String LAST_FOLDER = "LAST_FOLDER";
 
-    public static class MyListFragment extends ListFragment {
+    public static class FilesListFragment extends FMListFragment {
+
+        public FilesListFragment() {
+            super(true);
+        }
+    }
+
+    public static class RecentListFragment extends FMListFragment {
+
+        public RecentListFragment() {
+            super(false);
+        }
+    }
+
+    public static class FMListFragment extends ListFragment {
 
         protected boolean forFiles = true;
 
         protected OrionFileManagerActivity activity;
 
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-
+        protected FMListFragment(boolean forFiles) {
+            this.forFiles = forFiles;
         }
 
         @Override
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
             if (forFiles) {
-                activity.createFileView(this);
+                ((OrionFileManagerActivity)getActivity()).createFileView(this);
             } else {
-                activity.createRecentView(this);
+                ((OrionFileManagerActivity)getActivity()).createRecentView(this);
             }
         }
 
@@ -75,54 +87,6 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
             if (forFiles) {
                 outState.putString(LAST_FOLDER, ((FileChooser)getListAdapter()).getCurrentFolder().getAbsolutePath());
             }
-        }
-    }
-
-    public class TabListener<T extends MyListFragment> implements ActionBar.TabListener {
-        private T mFragment;
-        private final OrionBaseActivity mActivity;
-        private final String mTag;
-        private final Class<T> mClass;
-
-        /** Constructor used each time a new tab is created.
-         * @param activity  The host Activity, used to instantiate the fragment
-         * @param tag  The identifier tag for the fragment
-         * @param clz  The fragment's Class, used to instantiate the fragment
-         */
-        public TabListener(OrionBaseActivity activity, String tag, Class<T> clz) {
-            mActivity = activity;
-            mTag = tag;
-            mClass = clz;
-        }
-
-        /* The following are each of the ActionBar.TabListener callbacks */
-
-        public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-            // Check if the fragment is already initialized
-            //mFragment = (T) mActivity.getSupportFragmentManager().findFragmentByTag(mTag);
-
-            if (mFragment == null) {
-                // If not, instantiate and add it to the activity
-                mFragment = (T) Fragment.instantiate(mActivity, mClass.getName());
-                mFragment.forFiles = mTag.equals("files");
-                mFragment.activity = OrionFileManagerActivity.this;
-                ft.replace(android.R.id.tabhost, mFragment, mTag);
-            } else {
-                // If it exists, simply attach it in order to show it
-                ft.attach(mFragment);
-            }
-        }
-
-        public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-            if (mFragment != null) {
-                // Detach the fragment, because another one is being attached
-                ft.detach(mFragment);
-                mFragment = null;
-            }
-        }
-
-        public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-            // User selected the already selected tab. Usually do nothing.
         }
     }
 
@@ -233,15 +197,15 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
 
         ActionBar.Tab tab = actionBar.newTab()
                 .setIcon(R.drawable.folder)
-                .setTabListener(new TabListener<MyListFragment>(
-                        this, "files", MyListFragment.class));
+                .setTabListener(new TabListener<FilesListFragment>(
+                        this, "files", FilesListFragment.class));
         actionBar.addTab(tab);
 
         if (showRecentsAndSavePath()) {
             tab = actionBar.newTab()
                     .setIcon(R.drawable.book)
-                    .setTabListener(new TabListener(
-                            this, "recent", MyListFragment.class) {
+                    .setTabListener(new TabListener<RecentListFragment>(
+                            this, "recent", RecentListFragment.class) {
                     });
             actionBar.addTab(tab);
         }
