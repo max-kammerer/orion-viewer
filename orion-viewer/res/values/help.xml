@@ -21,7 +21,6 @@
 <resources>
     <string name="zoom">Opens zoom dialog. Zero zoom value means zooming by width.</string>
     <string name="rotation">Rotates document to the 90 degree clockwise. Long click rotates counterclockwise.</string>
-    <string name="rotation_android">Opens rotation dialog.</string>
 
     <string name="crop">Opens borders crop dialog. Values defined relative to page size. Long click for plus or minus in this dialog changes crop value for 10%. Negative value add additional borders.</string>
 

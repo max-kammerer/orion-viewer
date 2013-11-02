@@ -22,7 +22,6 @@
 <resources>
     <string name="zoom">Abre la ventana Zoom. Un valor igual a cero adapta el zoom a la anchura de la página.</string>
     <string name="rotation">Rota el documento 90 grados en el sentido horario. Un click largo rota el documento en el sentido antihorario.</string>
-    <string name="rotation_android">Abre la ventana Rotar.</string>
 
     <string name="crop">Abre la ventana Recortar márgenes. Los valores son relativos al tamaño de la página. Un click largo cambia el valor del recorte en un +/-10%. Valores negativos aumentan el margen. </string>
 

@@ -21,7 +21,6 @@
 <resources>
     <string name="zoom">打开缩放对话框. 放大值为0表示以宽度放大.</string>
     <string name="rotation">顺时针90度旋转页面.长按逆时针旋转.</string>
-    <string name="rotation_android">打开旋转对话框.</string>
 
     <string name="crop">打开切边对话框. 数值大小为相对于页面尺寸的百分比. 长按+/-以10%调整数值. 负数增加边界大小.</string>
 

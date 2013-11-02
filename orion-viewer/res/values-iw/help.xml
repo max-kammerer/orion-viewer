@@ -22,7 +22,6 @@
 <resources>
     <string name="zoom">פתח חלון ההגדלה. ערך ההגדלה שווה אפס פירושה שטקסט מתאים לרוחב המסך.</string>
     <string name="rotation">סובב מסמך ל90 מעלות בכיוון שעון. לחיצה ארוכה מסובבת נגד כיוון שעון.</string>
-    <string name="rotation_android">פתח אפשריות סיבוב.</string>
     <string name="crop">פתח אפשריות חיתוך גבולות. ערכים מוגדרים יחסית לגודל דף. לחיצה ארוכה ערך תשנה ב10%. ערך שלילי תוסיף גבולות נוספים.</string>
     <string name="apply">החל את האפשרויות קיימות.</string>
     <string name="escape">להחזיר / לבטל.</string>
