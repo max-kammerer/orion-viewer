@@ -20,35 +20,98 @@
 package universe.constellation.orion.viewer;
 
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.view.*;
+import android.widget.ImageButton;
+import universe.constellation.orion.viewer.android.TabListener;
 
 /**
-* User: mike
-* Date: 26.12.11
-* Time: 15:08
-*/
+ * User: mike
+ * Date: 26.12.11
+ * Time: 15:08
+ */
 public class OrionHelpActivity extends OrionBaseActivity {
+
+    public static class InfoFragment extends Fragment {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.android_general_help, container, false);
+        }
+
+        @Override
+        public void onActivityCreated(Bundle savedInstanceState) {
+            super.onActivityCreated(savedInstanceState);
+            ImageButton btn = (ImageButton) getActivity().findViewById(R.id.help_close);
+            btn.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    getActivity().finish();
+                }
+            });
+        }
+    }
+
+
+    public static class AboutFragment extends Fragment {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.android_about, container, false);
+        }
+
+        @Override
+        public void onActivityCreated(Bundle savedInstanceState) {
+            super.onActivityCreated(savedInstanceState);
+            ImageButton btn = (ImageButton) getActivity().findViewById(R.id.info_close);
+            btn.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    getActivity().finish();
+                }
+            });
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(Common.createDevice().getHelpLayoutId());
+        setContentView(R.layout.android_file_manager);
         initHelpScreen();
     }
 
-    @Override
-    protected void onAnimatorCancel() {
-        finish();
+    protected void initHelpScreen() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        ActionBar.Tab tab = actionBar.newTab()
+                .setIcon(R.drawable.help)
+                .setTabListener(new TabListener<InfoFragment>(
+                        this, "help", InfoFragment.class));
+        actionBar.addTab(tab);
+
+
+        tab = actionBar.newTab()
+                .setIcon(R.drawable.info)
+                .setTabListener(new TabListener<AboutFragment>(
+                        this, "about", AboutFragment.class) {
+                });
+        actionBar.addTab(tab);
+
+//        if (AndroidDevice.class.equals(device.getClass())) {
+//            TextView tx = (TextView) findViewById(R.id.help_rotation_entry);
+//            tx.setText(R.string.rotation_android);
+//
+//            tx = (TextView) findViewById(R.id.help_next_page_entry);
+//            tx.setText(R.string.next_page_android);
+//
+//            TableRow tr = (TableRow) findViewById(R.id.help_prev_page_row);
+//            ((TableLayout)tr.getParent()).removeView(tr);
+//        }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        boolean result = super.onCreateOptionsMenu(menu);
-        if (result) {
-            getMenuInflater().inflate(R.menu.file_manager_menu, menu);
-        }
-        return result;
+        getMenuInflater().inflate(R.menu.file_manager_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {

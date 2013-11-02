@@ -125,57 +125,6 @@ public class OrionBaseActivity extends ActionBarActivity {
         return Device.DEFAULT_ACTIVITY;
     }
 
-    protected void initHelpScreen() {
-        TheMissingTabHost host = (TheMissingTabHost) findMyViewById(R.id.helptab);
-
-        host.setup();
-
-        TheMissingTabHost.TheMissingTabSpec spec = host.newTabSpec("general_help");
-        spec.setContent(R.id.general_help);
-        spec.setIndicator("", getResources().getDrawable(R.drawable.help));
-        host.addTab(spec);
-
-        TheMissingTabHost.TheMissingTabSpec recent = host.newTabSpec("app_info");
-        recent.setContent(R.id.app_info);
-        recent.setIndicator("", getResources().getDrawable(R.drawable.info));
-        host.addTab(recent);
-        host.setCurrentTab(0);
-
-//        WebView view = (WebView) host.findViewById(R.id.webview_about);
-//
-//        view.getSettings().setJavaScriptEnabled(true);
-//        view.addJavascriptInterface(new Localizer(getResources()), "ls");
-//        view.loadUrl("file:///android_asset/about.html");
-
-        ImageButton btn = (ImageButton) findMyViewById(R.id.help_close);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //animator.setDisplayedChild(MAIN_SCREEN);
-                onAnimatorCancel();
-            }
-        });
-
-        btn = (ImageButton) findMyViewById(R.id.info_close);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                onAnimatorCancel();
-                //animator.setDisplayedChild(MAIN_SCREEN);
-            }
-        });
-
-        Device device = this.device != null ? this.device : Common.createDevice();
-        if (AndroidDevice.class.equals(device.getClass())) {
-            TextView tx = (TextView) findViewById(R.id.help_rotation_entry);
-            tx.setText(R.string.rotation_android);
-
-            tx = (TextView) findViewById(R.id.help_next_page_entry);
-            tx.setText(R.string.next_page_android);
-
-            TableRow tr = (TableRow) findViewById(R.id.help_prev_page_row);
-            ((TableLayout)tr.getParent()).removeView(tr);
-        }
-    }
-
     protected View findMyViewById(int id) {
         return findViewById(id);
     }

@@ -146,40 +146,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
         System.out.println("Touch listener:  " + touchListener.getClass());
     }
 
-
-
-    protected void initHelpScreen() {
-        TheMissingTabHost host = (TheMissingTabHost) findMyViewById(R.id.helptab);
-
-        host.setup();
-
-        TheMissingTabHost.TheMissingTabSpec spec = host.newTabSpec("general_help");
-        spec.setContent(R.id.general_help);
-        spec.setIndicator("", getResources().getDrawable(R.drawable.help));
-        host.addTab(spec);
-        TheMissingTabHost.TheMissingTabSpec recent = host.newTabSpec("app_info");
-        recent.setContent(R.id.app_info);
-        recent.setIndicator("", getResources().getDrawable(R.drawable.info));
-        host.addTab(recent);
-        host.setCurrentTab(0);
-
-        ImageButton btn = (ImageButton) findMyViewById(R.id.help_close);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //animator.setDisplayedChild(MAIN_SCREEN);
-                onAnimatorCancel();
-            }
-        });
-
-        btn = (ImageButton) findMyViewById(R.id.info_close);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                onAnimatorCancel();
-                //animator.setDisplayedChild(MAIN_SCREEN);
-            }
-        });
-    }
-
     public void updateCrops() {
         controller.getMargins(cropBorders);
         TableLayout cropTable = (TableLayout) findMyViewById(R.id.crop_borders);
