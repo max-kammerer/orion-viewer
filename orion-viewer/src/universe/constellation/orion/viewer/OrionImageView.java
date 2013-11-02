@@ -12,4 +12,6 @@ import java.util.concurrent.CountDownLatch;
 public interface OrionImageView {
 
     void onNewImage(Bitmap bitmap, LayoutPosition info, CountDownLatch latch);
+
+    void onNewBook(String title, int pageCount);
 }

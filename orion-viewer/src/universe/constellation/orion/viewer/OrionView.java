@@ -39,6 +39,10 @@ public class OrionView extends View implements OrionImageView {
 
     private static final float DEFAULT_SCALE = 1.0f;
 
+    private final static int DEFAULT_STATUS_BAR_SIZE = 15;
+
+    private final static int FONT_DELTA = 2;
+
     public Bitmap bitmap;
 
     public LayoutPosition info;
@@ -57,13 +61,21 @@ public class OrionView extends View implements OrionImageView {
 
     private Point endFocus;
 
+    private Paint currentPaint;
+
     private Paint borderPaint;
 
     private Paint nightPaint;
 
+    private Paint lightPaint;
+
     private boolean showStatusBar;
 
-    private int statusBarHeight = 10;
+    private int statusBarHeight = DEFAULT_STATUS_BAR_SIZE;
+
+    private String title = "";
+
+    private int pageCount = 0;
 
     private ColorMatrixColorFilter nightMatrix = new ColorMatrixColorFilter(new ColorMatrix(
             new float[]{
@@ -90,12 +102,29 @@ public class OrionView extends View implements OrionImageView {
 
     private void init() {
         borderPaint = new Paint();
-        borderPaint.setColor(Color.rgb(0,0,0));
+        borderPaint.setColor(Color.BLACK);
         borderPaint.setStrokeWidth(2);
         borderPaint.setStyle(Paint.Style.STROKE);
 
+
+        int fontSize = DEFAULT_STATUS_BAR_SIZE - FONT_DELTA;
+
         nightPaint = new Paint();
         nightPaint.setColorFilter(nightMatrix);
+        nightPaint.setTextSize(fontSize);
+
+
+        lightPaint = new Paint();
+        lightPaint.setColor(Color.BLACK);
+        lightPaint.setTextSize(fontSize);
+
+        Typeface tf = Typeface.create("Helvetica",Typeface.NORMAL);
+        if (tf != null) {
+            nightPaint.setTypeface(tf);
+            lightPaint.setTypeface(tf);
+        }
+        //lightPaint.setHinting();
+        currentPaint = lightPaint;
     }
 
     @Override
@@ -107,6 +136,10 @@ public class OrionView extends View implements OrionImageView {
             } else {
                 counter = 0;
             }
+        }
+
+        if (showStatusBar) {
+            drawStatusBar(canvas);
         }
 
         if (bitmap != null && !bitmap.isRecycled()) {
@@ -122,7 +155,7 @@ public class OrionView extends View implements OrionImageView {
                 canvas.scale(myScale, myScale);
             }
 
-            canvas.drawBitmap(bitmap, 0, statusBarHeight, isNightMode ? nightPaint : null);
+            canvas.drawBitmap(bitmap, 0, statusBarHeight, currentPaint);
 
             if (myScale != DEFAULT_SCALE) {
                 canvas.restore();
@@ -138,8 +171,45 @@ public class OrionView extends View implements OrionImageView {
 
             Common.d("OrionView: bitmap rendering takes " + 0.001f * (System.currentTimeMillis() - start) + " s");
         }
+
         if (latch != null) {
             latch.countDown();
+        }
+    }
+
+    private void drawStatusBar(Canvas canvas) {
+        int textY = statusBarHeight - 2;
+
+        String textToRender;
+        int color = currentPaint.getColor();
+        currentPaint.setColor(Color.WHITE);
+        canvas.drawRect(0, 0, getWidth(), statusBarHeight, currentPaint);
+        currentPaint.setColor(color);
+
+        if (info == null) {
+            textToRender =  "? /" + pageCount + " ";
+        } else {
+            textToRender = "[" + pad(info.x.offset) + ":" + pad(info.y.offset) + "]  " + (info.pageNumber + 1) + "/" + pageCount + " ";
+        }
+
+        float endWidth = currentPaint.measureText(textToRender);
+        float titleEnd = getWidth() - endWidth;
+        canvas.drawText(textToRender, titleEnd, textY, currentPaint);
+        String renderTitle = title;
+        endWidth = currentPaint.measureText(renderTitle);
+        int count = renderTitle.length();
+
+        if (endWidth > titleEnd && titleEnd > 0 && endWidth > 0) {
+            count = (int) (1.f * count / endWidth * titleEnd);
+            count -= 3;
+            if (count > 0) {
+                renderTitle = renderTitle.substring(0, count) + "...";
+            } else {
+                renderTitle = "...";
+            }
+        }
+        if (count > 0) {
+            canvas.drawText(renderTitle, 0 , textY, currentPaint);
         }
     }
 
@@ -149,6 +219,12 @@ public class OrionView extends View implements OrionImageView {
         this.latch = latch;
         this.info = info;
         counter++;
+    }
+
+    @Override
+    public void onNewBook(String title, int pageCount) {
+        this.title = title;
+        this.pageCount = pageCount;
     }
 
     public void setDimensionAware(ViewDimensionAware dimensionAware) {
@@ -161,7 +237,8 @@ public class OrionView extends View implements OrionImageView {
         super.onSizeChanged(w, h, oldw, oldh);
         if (w != oldw || h != oldh) {
             if (dimensionAware != null ) {
-                dimensionAware.onDimensionChanged(w, h);
+                Point renderingSize = getRenderingSize();
+                dimensionAware.onDimensionChanged(renderingSize.x, renderingSize.y);
             }
         }
     }
@@ -172,6 +249,7 @@ public class OrionView extends View implements OrionImageView {
 
     public void setNightMode(boolean nightMode) {
         this.isNightMode = nightMode;
+        currentPaint = isNightMode ? nightPaint : lightPaint;
     }
 
     public Bitmap getBitmap() {
@@ -200,10 +278,20 @@ public class OrionView extends View implements OrionImageView {
 
     public Point getRenderingSize() {
         if (showStatusBar) {
-            statusBarHeight = 10;
+            statusBarHeight = DEFAULT_STATUS_BAR_SIZE;
         } else {
             statusBarHeight = 0;
         }
         return new Point(getWidth(), getHeight() - statusBarHeight);
+    }
+
+    private String pad(int value) {
+        if (value < 10) {
+            return "  " + value;
+        } else if (value < 100) {
+            return " " + value;
+        } else {
+            return  "" + value;
+        }
     }
 }
