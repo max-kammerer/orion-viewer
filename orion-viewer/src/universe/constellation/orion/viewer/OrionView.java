@@ -37,11 +37,9 @@ import java.util.concurrent.CountDownLatch;
  */
 public class OrionView extends View implements OrionImageView {
 
-    private static final float DEFAULT_SCALE = 1.0f;
+    private final static int DEFAULT_STATUS_BAR_SIZE = 18;
 
-    private final static int DEFAULT_STATUS_BAR_SIZE = 15;
-
-    private final static int FONT_DELTA = 2;
+    private final static int FONT_DELTA = 3;
 
     public Bitmap bitmap;
 
@@ -78,8 +76,6 @@ public class OrionView extends View implements OrionImageView {
     private int pageCount = 0;
 
     private boolean inScaling = false;
-
-    private boolean resetScalingOnNextEvent = false;
 
     private ColorMatrixColorFilter nightMatrix = new ColorMatrixColorFilter(new ColorMatrix(
             new float[]{
@@ -122,12 +118,13 @@ public class OrionView extends View implements OrionImageView {
         lightPaint.setColor(Color.BLACK);
         lightPaint.setTextSize(fontSize);
 
-        Typeface tf = Typeface.create("Helvetica",Typeface.NORMAL);
+        Typeface tf = Typeface.DEFAULT_BOLD;
         if (tf != null) {
             nightPaint.setTypeface(tf);
             lightPaint.setTypeface(tf);
+            nightPaint.setAntiAlias(true);
+            lightPaint.setAntiAlias(true);
         }
-        //lightPaint.setHinting();
         currentPaint = lightPaint;
     }
 
@@ -154,7 +151,7 @@ public class OrionView extends View implements OrionImageView {
 
             //do scaling on pinch zoom
             if (inScaling) {
-                System.out.println("in scaling");
+                Common.d("in scaling");
                 canvas.save();
                 canvas.translate((startFocus.x) * (1 - myScale) - startFocus.x + endFocus.x, (startFocus.y) * (1 - myScale) - startFocus.y + endFocus.y);
                 canvas.scale(myScale, myScale);
@@ -163,7 +160,7 @@ public class OrionView extends View implements OrionImageView {
             canvas.drawBitmap(bitmap, 0, statusBarHeight, currentPaint);
 
             if (inScaling) {
-                System.out.println("in scaling 2");
+                Common.d("in scaling 2");
                 canvas.restore();
 
                 borderPaint.setColor(isNightMode ? Color.WHITE : Color.BLACK);
@@ -184,7 +181,7 @@ public class OrionView extends View implements OrionImageView {
     }
 
     private void drawStatusBar(Canvas canvas) {
-        int textY = statusBarHeight - 2;
+        int textY = (int) (statusBarHeight - currentPaint.descent());
 
         String textToRender;
         int color = currentPaint.getColor();
@@ -215,7 +212,7 @@ public class OrionView extends View implements OrionImageView {
             }
         }
         if (count > 0) {
-            canvas.drawText(renderTitle, 0 , textY, currentPaint);
+            canvas.drawText(renderTitle, 0, textY, currentPaint);
         }
     }
 
@@ -269,7 +266,6 @@ public class OrionView extends View implements OrionImageView {
     }
 
     public void beforeScaling() {
-        resetScalingOnNextEvent = false;
         inScaling = true;
     }
 
