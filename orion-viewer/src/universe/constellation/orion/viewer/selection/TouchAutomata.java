@@ -47,8 +47,7 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
     public TouchAutomata(OrionViewerActivity activity, OrionView view) {
         super(activity, view);
         int sdkVersion = activity.getOrionContext().getSdkVersion();
-        gestureDetector = sdkVersion >= 8 ? new AndroidScaleWrapper(activity, this) :
-                sdkVersion >= 5 ?  new OldAdroidScaleWrapper(activity, this) : null;
+        gestureDetector = sdkVersion >= 8 ? new AndroidScaleWrapper(activity, this) : new OldAdroidScaleWrapper(activity, this);
     }
 
     public void startAutomata() {

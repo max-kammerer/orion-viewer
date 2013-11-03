@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v7.appcompat.R;
 import android.util.DisplayMetrics;
@@ -51,8 +52,6 @@ public class OrionApplication extends Application {
     public static OrionApplication instance;
 
     private BookmarkAccessor bookmarkAccessor;
-
-    private int sdk_version = -1;
 
     private OrionViewerActivity viewActivity;
 
@@ -133,18 +132,7 @@ public class OrionApplication extends Application {
     }
 
     public int getSdkVersion() {
-		if (sdk_version < 0) {
-            sdk_version = 3;
-            Field fld;
-            try {
-                Class<?> cl = android.os.Build.VERSION.class;
-                fld = cl.getField("SDK_INT");
-                sdk_version = fld.getInt(cl);
-            } catch (Exception e) {
-                 //Android 1.5
-            }
-        }
-		return sdk_version;
+		return Build.VERSION.SDK_INT;
 	}
 
     public LastPageInfo getCurrentBookParameters() {
