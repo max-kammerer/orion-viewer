@@ -24,7 +24,7 @@
 <resources>
     <!--Do not translate this section and do not include it in result localization: start-->
         <string name="app_name">Orion Viewer</string>
-        <string name="version_name">0.49.2</string>
+        <string name="version_name">0.49.3</string>
 
         <string name="ABCD">ABCD</string>
         <string name="ACBD">ACBD</string>
