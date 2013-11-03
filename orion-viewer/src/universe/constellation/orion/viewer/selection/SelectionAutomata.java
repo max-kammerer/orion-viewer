@@ -21,7 +21,7 @@ package universe.constellation.orion.viewer.selection;
 
 import android.R;
 import android.app.Dialog;
-import android.support.v7.app.ActionBar;
+import android.graphics.Rect;
 import android.view.*;
 import universe.constellation.orion.viewer.OrionView;
 import universe.constellation.orion.viewer.OrionViewerActivity;
@@ -134,12 +134,13 @@ public class SelectionAutomata {
 
     private void initDialogSize() {
         OrionView orionView = activity.getView();
-        int[] coords = new int[]{0, 0};
+        Rect rect = orionView.getViewCoords();
+        int[] coords = new int[]{rect.left, rect.top};
         orionView.getLocationOnScreen(coords);
         int left = coords[0];
         int top = coords[1];
-        int width = orionView.getWidth();
-        int height = orionView.getHeight();
+        int width = rect.width();
+        int height = rect.height();
         WindowManager.LayoutParams params = selectionDialog.getWindow().getAttributes();
         params.width = width;
         params.height = height;
