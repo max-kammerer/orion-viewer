@@ -28,6 +28,8 @@
 
     <!--General Prefs-->
     <string name="pref_fullScreen">Полноэкранный режим</string>
+    <string name="pref_showActionBar">Показывать панель действий</string>
+    <string name="pref_showStatusBar">Показывать панель состояния</string>
     <string name="pref_bookDefaultOrientation">Ориентация книги по умолчанию</string>
     <string name="pref_bookDefaultZoom">Масштаб</string>
     <string name="pref_rotate_new_book_on_opening">Поворачивать книгу при первом открытии</string>
