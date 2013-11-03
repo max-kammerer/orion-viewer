@@ -64,7 +64,7 @@
 
     <!--book preferences-->
     <string name="pref_book_contrast">Contraste</string>
-    <string name="pref_book_contrast_desc">Contraste 1-1000 (default 100)</string>
+    <string name="pref_book_contrast_desc">Contraste (default 100)</string>
 
     <string name="pref_book_threshold">Umbral de marca de agua</string>
     <string name="pref_book_threshold_desc">Umbral para eliminar la marca de agua (por defecto 255)</string>

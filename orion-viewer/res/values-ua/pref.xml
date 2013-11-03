@@ -64,7 +64,7 @@
 
     <!--book preferences-->
     <string name="pref_book_contrast">Контраст</string>
-    <string name="pref_book_contrast_desc">Контраст 1-1000 (за замовчуванням 100)</string>
+    <string name="pref_book_contrast_desc">Контраст (за замовчуванням 100)</string>
 
     <!--<string name="pref_book_threshold">Threshold</string>-->
     <!--<string name="pref_book_threshold_desc">Threshold for watermark removal</string>-->

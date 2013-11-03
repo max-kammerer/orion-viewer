@@ -64,7 +64,7 @@
 
     <!--book preferences-->
     <string name="pref_book_contrast">Contrasto</string>
-    <string name="pref_book_contrast_desc">Contrasto (1-1000, default 100)</string>
+    <string name="pref_book_contrast_desc">Contrasto (default 100)</string>
 
     <string name="pref_book_threshold">Soglia filigrana</string>
     <string name="pref_book_threshold_desc">Soglia filigrana (default 255)</string>

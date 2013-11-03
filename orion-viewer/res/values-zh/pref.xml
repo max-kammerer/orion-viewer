@@ -55,7 +55,7 @@
 
     <!--book preferences-->
     <string name="pref_book_contrast">对比度</string>
-    <string name="pref_book_contrast_desc">对比度 1-1000 (默认 100)</string>
+    <string name="pref_book_contrast_desc">对比度 (默认 100)</string>
 
     <string name="pref_book_threshold">阈值</string>
     <string name="pref_book_threshold_desc">去除水印阈值 (default 255)</string>

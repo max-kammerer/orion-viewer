@@ -65,7 +65,7 @@
 
     <!--book preferences-->
     <string name="pref_book_contrast">Contrast</string>
-    <string name="pref_book_contrast_desc">Contrast 1-1000 (default 100)</string>
+    <string name="pref_book_contrast_desc">Contrast (default 100)</string>
 
     <string name="pref_book_threshold">Watermark threshold</string>
     <string name="pref_book_threshold_desc">Threshold for watermark removal (default 255)</string>

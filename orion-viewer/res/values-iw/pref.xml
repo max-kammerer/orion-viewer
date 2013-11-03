@@ -48,7 +48,7 @@
     <string name="pref_application_theme_desc">הפעל מחדש את תוכנה על מנת ליישם</string>
     <string name="pref_open_recent_book">פתח ספר האחרון בהפעלת תוכנה</string>
     <string name="pref_book_contrast">ניגודיות</string>
-    <string name="pref_book_contrast_desc">ניגודיות 1-1000 (ברירת מחדל 100)</string>
+    <string name="pref_book_contrast_desc">ניגודיות (ברירת מחדל 100)</string>
     <string name="pref_book_threshold">גבולות</string>
     <string name="pref_book_threshold_desc">גבולות להסרת סימן מים</string>
     <string name="pref_debug">תיקון באגים</string>
