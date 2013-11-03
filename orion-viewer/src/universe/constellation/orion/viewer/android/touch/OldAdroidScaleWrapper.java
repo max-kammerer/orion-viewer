@@ -28,7 +28,7 @@ import universe.constellation.orion.viewer.selection.TouchAutomataOldAndroid;
  * User: mike
  * Date: 06.01.13
  * Time: 10:01
- * Scale wrapper for Android 2.0-2.2
+ * Scale wrapper for Android 2.0-2.1
  */
 public class OldAdroidScaleWrapper implements ScaleDetectorWrapper {
 
