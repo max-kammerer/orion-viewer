@@ -36,6 +36,8 @@ import universe.constellation.orion.viewer.android.touch.ScaleDetectorWrapper;
 */
 public class TouchAutomata extends TouchAutomataOldAndroid {
 
+    private static final int MOVE_THRESHOLD = 2500;//50*50
+
     private Point startFocus = new Point();
 
     private Point endFocus = new Point();
@@ -67,6 +69,10 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                 return true;
             }
         }
+        if (event != null) { //in case of scale
+            last0.x = (int) event.getX();
+            last0.y = (int) event.getY();
+        }
 
         switch (currentState) {
             case UNDEFINED:
@@ -77,11 +83,27 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                     startTime = SystemClock.uptimeMillis();
                     start0.x = (int) event.getX();
                     start0.y = (int) event.getY();
-                    last0.x = start0.x;
-                    last0.y = start0.y;
                     nextState = States.SINGLE_CLICK;
                     processed = true;
                 }
+                break;
+
+            case DO_MOVE:
+                if (pinch != null) {
+                    nextState = States.PINCH_ZOOM;
+                } else  if (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        getView().afterScaling();
+                        activity.getController().translateAndZoom(1f, -last0.x + start0.x, -last0.y + start0.y);
+                        nextState = States.UNDEFINED;
+                    } else {
+                        getView().beforeScaling();
+                        getView().doScale(1f, start0, last0);
+                        getView().postInvalidate();
+                    }
+                    processed = true;
+                }
+
                 break;
 
             case SINGLE_CLICK:
@@ -94,6 +116,16 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                         last0.y = start0.y;
                         processed = true;
                         System.out.println("In action down twice");
+                    }
+
+                    if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                        int x = last0.x - start0.x;
+                        int y = last0.y - start0.y;
+                        System.out.println("move " + (x*x + y*y));
+                        if (x*x + y*y >= MOVE_THRESHOLD) {
+                            nextState = States.DO_MOVE;
+                        }
+                        break;
                     }
 
                     if (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_UP) {
@@ -144,16 +176,17 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                             curScale *= gestureDetector.getScaleFactor();
                             endFocus.x = (int) gestureDetector.getFocusX();
                             endFocus.y = (int) gestureDetector.getFocusY();
+                            getView().beforeScaling();
                             getView().doScale(curScale, startFocus, endFocus);
-                            getView().invalidate();
+                            getView().postInvalidate();
                             //System.out.println(endFocus.x + " onscale " + endFocus.y);
                             break;
                         case END_SCALE:
-                            getView().doScale(1f, null, null);
                             nextState = States.UNDEFINED;
                             //System.out.println(endFocus.x + " xxxx " + endFocus.y);
                             float newX = (int) ((startFocus.x) * (curScale - 1) + (startFocus.x - endFocus.x) );
                             float newY = (int) ((startFocus.y) * (curScale - 1) + (startFocus.y - endFocus.y));
+                            getView().afterScaling();
                             activity.getController().translateAndZoom(curScale, newX, newY);
                             break;
                     }
@@ -174,10 +207,22 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                     startFocus.y = (int) gestureDetector.getFocusY();
                     endFocus.x = startFocus.x;
                     endFocus.y = startFocus.y;
+                    processed = true;
                     break;
             }
         }
         currentState = nextState;
         return processed;
     }
+
+    public void reset() {
+        curScale = 1f;
+        currentState = States.UNDEFINED;
+        prevState = States.UNDEFINED;
+        nextState = States.UNDEFINED;
+        startTime = 0;
+        start0.x = -1;
+        start0.y = -1;
+    }
+
 }

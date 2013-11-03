@@ -77,6 +77,10 @@ public class OrionView extends View implements OrionImageView {
 
     private int pageCount = 0;
 
+    private boolean inScaling = false;
+
+    private boolean resetScalingOnNextEvent = false;
+
     private ColorMatrixColorFilter nightMatrix = new ColorMatrixColorFilter(new ColorMatrix(
             new float[]{
                     -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
@@ -149,7 +153,8 @@ public class OrionView extends View implements OrionImageView {
             final float myScale = scale;
 
             //do scaling on pinch zoom
-            if (myScale != DEFAULT_SCALE) {
+            if (inScaling) {
+                System.out.println("in scaling");
                 canvas.save();
                 canvas.translate((startFocus.x) * (1 - myScale) - startFocus.x + endFocus.x, (startFocus.y) * (1 - myScale) - startFocus.y + endFocus.y);
                 canvas.scale(myScale, myScale);
@@ -157,7 +162,8 @@ public class OrionView extends View implements OrionImageView {
 
             canvas.drawBitmap(bitmap, 0, statusBarHeight, currentPaint);
 
-            if (myScale != DEFAULT_SCALE) {
+            if (inScaling) {
+                System.out.println("in scaling 2");
                 canvas.restore();
 
                 borderPaint.setColor(isNightMode ? Color.WHITE : Color.BLACK);
@@ -262,6 +268,15 @@ public class OrionView extends View implements OrionImageView {
         this.endFocus = endFocus;
     }
 
+    public void beforeScaling() {
+        resetScalingOnNextEvent = false;
+        inScaling = true;
+    }
+
+    public void afterScaling() {
+        this.inScaling = false;
+    }
+
     public boolean isShowStatusBar() {
         return showStatusBar;
     }
@@ -283,6 +298,10 @@ public class OrionView extends View implements OrionImageView {
             statusBarHeight = 0;
         }
         return new Point(getWidth(), getHeight() - statusBarHeight);
+    }
+
+    public Rect getViewCoords() {
+        return new Rect(0, statusBarHeight, getWidth(), getHeight());
     }
 
     private String pad(int value) {

@@ -135,6 +135,8 @@ public class Controller implements ViewDimensionAware {
         System.out.println("oldZoom  " + layoutInfo.docZoom + "  " + layoutInfo.x.offset + " x " + layoutInfo.y.offset);
 
         layout.changeZoom((int) (10000f * zoomScaling * layoutInfo.docZoom));
+        System.out.println("new zoom " + layout.getZoom());
+        System.out.println("new zoom2 " + zoomScaling * layoutInfo.docZoom);
         layout.reset(layoutInfo, layoutInfo.pageNumber);
 
         layoutInfo.x.offset = (int) (zoomScaling * oldOffsetX + deltaX);
