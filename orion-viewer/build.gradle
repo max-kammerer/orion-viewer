@@ -3,11 +3,14 @@ apply plugin: 'android'
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
     compile fileTree(dir: "$buildDir/native-libs", include: 'native-libs.jar')
+
+    compile project(':HoloEverywhere:library')
+    compile project(':HoloEverywhere:addons:preferences')
 }
 
 android {
-    compileSdkVersion 10
-    buildToolsVersion "18.1.0"
+    compileSdkVersion 16
+    buildToolsVersion "18.1.1"
 
     sourceSets {
         main {
