@@ -31,13 +31,29 @@ import android.os.Debug;
 import android.support.v4.internal.view.SupportMenuItem;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
-import android.view.*;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 
+import org.holoeverywhere.widget.AdapterView;
+import org.holoeverywhere.widget.ArrayAdapter;
+import org.holoeverywhere.widget.CheckBox;
+import org.holoeverywhere.widget.CheckedTextView;
+import org.holoeverywhere.widget.EditText;
+import org.holoeverywhere.widget.ImageButton;
+import org.holoeverywhere.widget.ListView;
+import org.holoeverywhere.widget.RadioButton;
+import org.holoeverywhere.widget.SeekBar;
+import org.holoeverywhere.widget.Spinner;
+import android.widget.TextView;
 
-import android.widget.ImageButton;
-import android.widget.RadioButton;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionPreferenceActivity;
 import universe.constellation.orion.viewer.selection.SelectedTextActions;
@@ -367,7 +383,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         final Spinner sp = (Spinner) findMyViewById(R.id.zoom_spinner);
 
-        final TextView zoomText = (TextView) findMyViewById(R.id.zoom_picker_message);
+        final EditText zoomText = (EditText) findMyViewById(R.id.zoom_picker_message);
 
         final SeekBar zoomSeek = (SeekBar) findMyViewById(R.id.zoom_picker_seeker);
 
@@ -448,7 +464,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 if (zoomInternal != 2) {
                     zoomInternal = 1;
                     if (disable) {
-                        zoomText.setText((String)parent.getAdapter().getItem(position));
+                        zoomText.setText((String) parent.getAdapter().getItem(position));
                     } else {
                         zoomText.setText("" + ((int) (controller.getCurrentPageZoom() * 10000)) / 100f);
                         zoomSeek.setProgress((int) (controller.getCurrentPageZoom() * 100));
@@ -458,6 +474,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
                 zminus.setVisibility(disable ? View.GONE : View.VISIBLE);
                 zplus.setVisibility(disable ? View.GONE : View.VISIBLE);
+
                 zoomText.setFocusable(!disable);
                 zoomText.setFocusableInTouchMode(!disable);
             }
@@ -999,7 +1016,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public void initOptionDialog() {
-        dialog = new Dialog(this);
+        dialog = new org.holoeverywhere.app.Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.android_dialog);
         animator = ((ViewAnimator)dialog.findViewById(R.id.viewanim));
@@ -1128,17 +1145,17 @@ public class OrionViewerActivity extends OrionBaseActivity {
             list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
             list.setItemChecked(0, true);
 
-            list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    CheckedTextView check = (CheckedTextView)view;
+            list.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+                public void onItemClick(android.widget.AdapterView parent, View view, int position, long id) {
+                    CheckedTextView check = (CheckedTextView) view;
                     check.setChecked(!check.isChecked());
                 }
             });
 
             final CharSequence[] ORIENTATION_ARRAY = getResources().getTextArray(R.array.screen_orientation_full);
 
-            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            list.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+                public void onItemClick(android.widget.AdapterView parent, View view, int position, long id) {
                     onApplyAction(true);
                     String orientation = ORIENTATION_ARRAY[position].toString();
                     controller.changeOrinatation(orientation);
@@ -1299,7 +1316,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     public class MyArrayAdapter extends ArrayAdapter implements SpinnerAdapter {
 
         public MyArrayAdapter() {
-            super(OrionViewerActivity.this, android.R.layout.simple_spinner_dropdown_item, OrionViewerActivity.this.getResources().getTextArray(R.array.fits));
+            super(OrionViewerActivity.this, R.layout.simple_spinner_dropdown_item, OrionViewerActivity.this.getResources().getTextArray(R.array.fits));
         }
 
         @Override

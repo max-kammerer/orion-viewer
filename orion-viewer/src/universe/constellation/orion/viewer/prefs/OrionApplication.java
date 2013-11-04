@@ -20,20 +20,19 @@
 package universe.constellation.orion.viewer.prefs;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.support.v7.appcompat.R;
 import android.util.DisplayMetrics;
+import org.holoeverywhere.R;
+import org.holoeverywhere.app.Application;
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.Controller;
 import universe.constellation.orion.viewer.LastPageInfo;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.bookmarks.BookmarkAccessor;
 
-import java.lang.reflect.Field;
 import java.util.Locale;
 
 /**
@@ -100,21 +99,22 @@ public class OrionApplication extends Application {
 
 
     public void applyTheme(Activity activity) {
-        String theme = getOptions().getApplicationTheme();
-        if ("DEFAULT".equals(theme)) {
-            return;
-        }
-
-        int themeId = -1;
-        if ("DARK".equals(theme)) {
-            themeId =  R.style.Theme_AppCompat;
-        } else if ("LIGHT".equals(theme)) {
-            themeId = R.style.Theme_AppCompat_Light;
-        }
+        int themeId = getThemeId();
 
         if (themeId != -1) {
             activity.setTheme(themeId);
         }
+    }
+
+    private int getThemeId() {
+        String theme = getOptions().getApplicationTheme();
+        int themeId = -1;
+        if ("DEFAULT".equals(theme) || "DARK".equals(theme)) {
+            themeId = R.style.Holo_Theme;
+        } else if ("LIGHT".equals(theme)) {
+            themeId = R.style.Holo_Theme_Light;
+        }
+        return themeId;
     }
 
     public BookmarkAccessor getBookmarkAccessor() {

@@ -105,7 +105,7 @@
                       android:layout_width="fill_parent" android:gravity="center">
 
 
-            <HorizontalScrollView android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center">
+            <!--<HorizontalScrollView android:layout_width="fill_parent" android:layout_height="wrap_content" android:gravity="center">-->
             <LinearLayout android:orientation="horizontal"
                           android:layout_width="fill_parent" android:layout_height="wrap_content"
                           android:gravity="center">
@@ -119,10 +119,11 @@
                 <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                              android:src="@drawable/plus" android:id="@+id/zoom_picker_plus"/>
 
-                <Spinner  android:id="@+id/zoom_spinner" android:entries="@array/fits"  android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                <Spinner android:id="@+id/zoom_spinner" android:entries="@array/fits"  android:layout_width="wrap_content" android:layout_height="wrap_content" android:padding="5dp"
+                    />
 
             </LinearLayout>
-            </HorizontalScrollView>
+            <!--</HorizontalScrollView>-->
 
             <SeekBar android:id="@+id/zoom_picker_seeker"
                      android:minWidth="100dp" android:layout_height="wrap_content"

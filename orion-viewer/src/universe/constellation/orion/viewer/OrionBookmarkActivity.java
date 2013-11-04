@@ -20,17 +20,20 @@
 package universe.constellation.orion.viewer;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.*;
+import android.view.*;
+import android.widget.AdapterView;
+import android.widget.ImageView;
+
+import org.holoeverywhere.app.AlertDialog;
+import org.holoeverywhere.app.Dialog;
+import org.holoeverywhere.widget.ArrayAdapter;
+import org.holoeverywhere.widget.EditText;
+import org.holoeverywhere.widget.ListView;
+import org.holoeverywhere.widget.TextView;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -77,16 +80,6 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
                 finish();
             }
         });
-
-
-        ImageButton menu = (ImageButton) findMyViewById(R.id.nook_bookmarks_menu);
-        if (menu != null) {
-            menu.setOnClickListener(new View.OnClickListener(){
-                public void onClick(View v) {
-                    openOptionsMenu();
-                }
-            });
-        }
     }
 
     protected void onNewIntent(Intent intent) {
@@ -284,6 +277,7 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
                 tree.setAdapter(new ArrayAdapter<BookNameAndSize>(this, importCurrent ? R.layout.select_book_item : R.layout.select_book_item_multi, R.id.title, books) {
 
                     private boolean positiveDisabled;
+
                     @Override
                     public View getView(int position, View convertView, ViewGroup parent) {
                         convertView = super.getView(position, convertView, parent);
@@ -299,7 +293,7 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
                             //android bug
                             positiveDisabled = true;
                             if (importCurrent) {
-                                ((AlertDialog)dialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
+                                ((AlertDialog) dialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
                             }
                         }
 

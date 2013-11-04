@@ -40,6 +40,6 @@
     <item android:id="@+id/close_bookmarks_menu_item"
           android:title="@string/menu_exit_text"
           android:icon="@drawable/close"
-          orion:showAsAction="always"/>
+          android:showAsAction="always"/>
 
 </menu>

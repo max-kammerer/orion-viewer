@@ -20,9 +20,12 @@
 package universe.constellation.orion.viewer.prefs;
 
 import android.os.Bundle;
-import android.preference.*;
-import android.view.View;
-import android.widget.ImageButton;
+
+import org.holoeverywhere.preference.ListPreference;
+import org.holoeverywhere.preference.Preference;
+import org.holoeverywhere.preference.PreferenceCategory;
+import org.holoeverywhere.preference.PreferenceScreen;
+
 import universe.constellation.orion.viewer.Device;
 import universe.constellation.orion.viewer.R;
 
@@ -31,7 +34,7 @@ import universe.constellation.orion.viewer.R;
  * Date: 02.01.12
  * Time: 17:35
  */
-public class OrionPreferenceActivity extends PreferenceActivity {
+public class OrionPreferenceActivity extends org.holoeverywhere.preference.PreferenceActivity {
 
     private boolean isAndroidGeneral;
 
@@ -43,14 +46,6 @@ public class OrionPreferenceActivity extends PreferenceActivity {
 
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.userpreferences);
-        if (Device.Info.NOOK_CLASSIC) {
-            ImageButton button = (ImageButton) findViewById(R.id.preferences_close);
-            button.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    finish();
-                }
-            });
-        }
 
         PreferenceScreen screen = getPreferenceScreen();
 
@@ -77,32 +72,24 @@ public class OrionPreferenceActivity extends PreferenceActivity {
                 SCREEN_ORIENTATION.setEntryValues(getResources().getTextArray(R.array.screen_orientation_full_desc));
             }
         }
-
-        if (Device.Info.NOOK_CLASSIC) {
-            //nook classic hacks
-            final PreferenceScreen bookDefaults = (PreferenceScreen) GENERAL.findPreference("BOOK_DEFAULT");
-            PreferenceScreen taps = (PreferenceScreen) GENERAL.findPreference("TAP_ZONES");
-            GENERAL.removePreference(taps);
-
-            //nook doesn't support inner preference screen
-            PreferenceCategory newBookDefaults = new PreferenceCategory(getApplicationContext(), null);
-            newBookDefaults.setTitle("Book default options");
-            screen.addPreference(newBookDefaults);
-
-            for (int i = bookDefaults.getPreferenceCount() - 1; i >= 0; i--) {
-                Preference pref = bookDefaults.getPreference(i);
-                bookDefaults.removePreference(pref);
-                newBookDefaults.addPreference(pref);
-            }
-            GENERAL.removePreference(bookDefaults);
-        }
-
     }
 
-
-
-
-
+//    @SuppressWarnings("deprecation")
+//    @Override
+//    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+//        super.onPreferenceTreeClick(preferenceScreen, preference);
+//        if (preference != null) {
+//            if (preference instanceof PreferenceScreen)
+//                if (((PreferenceScreen) preference).getDialog() != null)
+//                    ((PreferenceScreen) preference).getDialog().getWindow().getDecorView().setBackgroundDrawable(this.getWindow().getDecorView().getBackground().getConstantState().newDrawable());
+//
+//            if (preference instanceof DialogPreference)
+//                if (((DialogPreference) preference).getDialog() != null)
+//                    ((DialogPreference) preference).getDialog().getWindow().getDecorView().setBackgroundDrawable(this.getWindow().getDecorView().getBackground().getConstantState().newDrawable());
+//        }
+//        return false;
+//    }
+//
 
     public void setContentView(int layoutResID) {
         super.setContentView(Device.Info.NOOK_CLASSIC ? R.layout.nook_preferences : layoutResID);

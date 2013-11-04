@@ -19,10 +19,10 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:orion="http://schemas.android.com/apk/res/universe.constellation.orion.viewer">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item android:id="@+id/exit_menu_item"
           android:title="@string/menu_exit_text"
           android:icon="@drawable/close"
-          orion:showAsAction="always"/>
+          android:showAsAction="always"/>
 </menu>

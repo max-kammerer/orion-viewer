@@ -19,12 +19,13 @@
 
 package universe.constellation.orion.viewer.prefs;
 
-import android.app.ActivityManager;
 import android.content.Context;
-import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
+
+import org.holoeverywhere.preference.DialogPreference;
+
 import universe.constellation.orion.viewer.Device;
 import universe.constellation.orion.viewer.R;
 
@@ -48,7 +49,7 @@ public class DevicePrefInfo extends DialogPreference {
 
     @Override
     protected void onBindDialogView(View view) {
-        super.onBindDialogView(view);    //To change body of overridden methods use File | Settings | File Templates.
+        super.onBindDialogView(view);
 
         TextView tv = (TextView) view.findViewById(R.id.MANUFACTURER);
         tv.setText(Device.Info.MANUFACTURER);

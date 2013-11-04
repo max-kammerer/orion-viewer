@@ -25,28 +25,28 @@
     <item android:id="@+id/add_bookmark_menu_item"
           android:title="@string/menu_add_bookmark_item"
           android:icon="@drawable/add_bookmark"
-          orion:showAsAction="ifRoom"/>
+          android:showAsAction="ifRoom"/>
 
     <item android:id="@+id/bookmarks_menu_item"
           android:title="@string/menu_bookmarks_text"
           android:icon="@drawable/bookmarks"
-          orion:showAsAction="ifRoom"/>
+          android:showAsAction="ifRoom"/>
 
     <item android:id="@+id/zoom_menu_item"
           android:title="@string/menu_zoom_text"
           android:icon="@drawable/zoom"
-          orion:showAsAction="ifRoom"/>
+          android:showAsAction="ifRoom"/>
 
 
     <item android:id="@+id/crop_menu_item"
           android:title="@string/menu_crop_text"
           android:icon="@drawable/crop"
-          orion:showAsAction="ifRoom"/>
+          android:showAsAction="ifRoom"/>
 
     <item android:id="@+id/select_text_menu_item"
           android:title="@string/menu_select_text"
           android:icon="@drawable/edit"
-          orion:showAsAction="ifRoom"/>
+          android:showAsAction="ifRoom"/>
 
     <!--<item android:id="@+id/rotation_menu_item"-->
     <!--android:title="@string/menu_rotation_text"-->

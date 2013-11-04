@@ -22,18 +22,17 @@ package universe.constellation.orion.viewer.prefs;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
-import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.WindowManager;
 import android.widget.Toast;
-import universe.constellation.orion.viewer.Common;
-import universe.constellation.orion.viewer.Device;
-import universe.constellation.orion.viewer.LastPageInfo;
-import universe.constellation.orion.viewer.R;
 
-import java.lang.reflect.Field;
+import org.holoeverywhere.preference.EditTextPreference;
+import org.holoeverywhere.preference.Preference;
+
 import java.util.regex.Pattern;
+
+import universe.constellation.orion.viewer.Device;
+import universe.constellation.orion.viewer.R;
 
 /**
  * User: mike
