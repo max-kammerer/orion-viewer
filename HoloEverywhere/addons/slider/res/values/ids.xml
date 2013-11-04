@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+	<item name="leftView" type="id"/>
+	<item name="rightView" type="id"/>
+	<item name="contentView" type="id"/>
+	<item name="slider" type="id"/>
+</resources>

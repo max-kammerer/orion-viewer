@@ -1,0 +1,27 @@
+apply plugin: 'android-library'
+
+dependencies {
+  compile project(':HoloEverywhere:library')
+}
+
+android {
+  compileSdkVersion 16
+  buildToolsVersion '18.1.1'
+
+  defaultConfig {
+    targetSdkVersion 16
+  }
+
+  sourceSets {
+    main {
+      manifest.srcFile 'AndroidManifest.xml'
+      java {
+          srcDir 'src'
+          exclude '**/TimePreference.java'
+          exclude '**/DatePreference.java'
+      }
+
+      res.srcDirs = ['res']
+    }
+  }
+}
