@@ -1,1 +1,3 @@
-include ":themissingtabwidget-0.2", ":orion-viewer"
+include ":orion-viewer"
+include ':HoloEverywhere:library'
+include ':HoloEverywhere:addons:preferences'
