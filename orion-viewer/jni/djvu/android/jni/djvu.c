@@ -175,7 +175,7 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_drawPage(JNIEnv *env,
 
     ddjvu_format_set_y_direction(pixelFormat, TRUE);
 
-    char * buffer = &(((unsigned char *)pixels)[shift]);
+    char * buffer = &(((unsigned char *)pixels)[shift*4]);
     jboolean result = ddjvu_page_render(page, DDJVU_RENDER_COLOR, &pageRect, &targetRect, pixelFormat, pageW * 4, buffer);
 
 	ddjvu_format_release(pixelFormat);
