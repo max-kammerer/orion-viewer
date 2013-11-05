@@ -49,6 +49,13 @@
                     android:summary="@string/pref_showStatusBar"
                     android:defaultValue="true"/>
 
+            <CheckBoxPreference
+                    android:key="SHOW_OFFSET_ON_STATUS_BAR"
+                    android:title="@string/pref_showOffsetOnStatusBar"
+                    android:summary="@string/pref_showOffsetOnStatusBar"
+                    android:dependency="SHOW_STATUS_BAR"
+                    android:defaultValue="true"/>
+
             <ListPreference
                     android:key="APPLICATION_THEME"
                     android:title="@string/pref_application_theme"

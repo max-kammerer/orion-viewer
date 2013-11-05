@@ -56,6 +56,8 @@ public class GlobalOptions implements Serializable {
 
     public final static String SHOW_STATUS_BAR = "SHOW_STATUS_BAR";
 
+    public final static String SHOW_OFFSET_ON_STATUS_BAR = "SHOW_OFFSET_ON_STATUS_BAR";
+
     public final static String TAP_ZONE = "TAP_ZONE";
 
     public final static String SCREEN_ORIENTATION = "SCREEN_ORIENTATION";
@@ -130,6 +132,8 @@ public class GlobalOptions implements Serializable {
                         OptionActions.SHOW_ACTION_BAR.doAction(activity, false, isActionBarVisible());
                     } else if (SHOW_STATUS_BAR.equals(name)) {
                         OptionActions.SHOW_STATUS_BAR.doAction(activity, false, isStatusBarVisible());
+                    } else if (SHOW_OFFSET_ON_STATUS_BAR.equals(name)) {
+                        OptionActions.SHOW_OFFSET_ON_STATUS_BAR.doAction(activity, false, isShowOffsetOnStatusBar());
                     } else if (SCREEN_OVERLAPPING_HORIZONTAL.equals(name)) {
                         OptionActions.SCREEN_OVERLAPPING_HORIZONTAL.doAction(activity, getHorizontalOverlapping(), getVerticalOverlapping());
                     } else if (SCREEN_OVERLAPPING_VERTICAL.equals(name)) {
@@ -254,6 +258,10 @@ public class GlobalOptions implements Serializable {
 
     public boolean isStatusBarVisible() {
         return getBooleanProperty(SHOW_STATUS_BAR, true);
+    }
+
+    public boolean isShowOffsetOnStatusBar() {
+        return getBooleanProperty(SHOW_OFFSET_ON_STATUS_BAR, true);
     }
 
     public int getActionCode(int i, int j, boolean isLong) {

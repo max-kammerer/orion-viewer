@@ -133,6 +133,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         view = (OrionView) findViewById(R.id.view);
 
         OptionActions.SHOW_STATUS_BAR.doAction(this, !globalOptions.isStatusBarVisible(), globalOptions.isStatusBarVisible());
+        OptionActions.SHOW_OFFSET_ON_STATUS_BAR.doAction(this, !globalOptions.isShowOffsetOnStatusBar(), globalOptions.isShowOffsetOnStatusBar());
         String mode = getOrionContext().getOptions().getStringProperty(GlobalOptions.DAY_NIGHT_MODE, "DAY");
         view.setNightMode("NIGHT".equals(mode));
 

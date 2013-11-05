@@ -37,7 +37,7 @@ import java.util.concurrent.CountDownLatch;
  */
 public class OrionView extends View implements OrionImageView {
 
-    private final static int DEFAULT_STATUS_BAR_SIZE = 18;
+    private final static int DEFAULT_STATUS_BAR_SIZE = 20;
 
     private final static int FONT_DELTA = 3;
 
@@ -76,6 +76,8 @@ public class OrionView extends View implements OrionImageView {
     private int pageCount = 0;
 
     private boolean inScaling = false;
+
+    private boolean showOffset = true;
 
     private ColorMatrixColorFilter nightMatrix = new ColorMatrixColorFilter(new ColorMatrix(
             new float[]{
@@ -118,7 +120,7 @@ public class OrionView extends View implements OrionImageView {
         lightPaint.setColor(Color.BLACK);
         lightPaint.setTextSize(fontSize);
 
-        Typeface tf = Typeface.DEFAULT_BOLD;
+        Typeface tf = Typeface.DEFAULT;
         if (tf != null) {
             nightPaint.setTypeface(tf);
             lightPaint.setTypeface(tf);
@@ -192,7 +194,7 @@ public class OrionView extends View implements OrionImageView {
         if (info == null) {
             textToRender =  "? /" + pageCount + " ";
         } else {
-            textToRender = "[" + pad(info.x.offset) + ":" + pad(info.y.offset) + "]  " + (info.pageNumber + 1) + "/" + pageCount + " ";
+            textToRender = (showOffset ? "[" + pad(info.x.offset) + ":" + pad(info.y.offset) + "]  " : " ") + (info.pageNumber + 1) + "/" + pageCount + " ";
         }
 
         float endWidth = currentPaint.measureText(textToRender);
@@ -275,6 +277,14 @@ public class OrionView extends View implements OrionImageView {
 
     public boolean isShowStatusBar() {
         return showStatusBar;
+    }
+
+    public void setShowOffset(boolean showOffset) {
+        boolean oldOffset = this.showOffset;
+        this.showOffset = showOffset;
+        if (showOffset != oldOffset) {
+            invalidate();
+        }
     }
 
     public void setShowStatusBar(boolean showStatusBar) {
