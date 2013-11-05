@@ -141,9 +141,6 @@ public class OrionView extends View implements OrionImageView {
             }
         }
 
-        if (showStatusBar) {
-            drawStatusBar(canvas);
-        }
 
         if (bitmap != null && !bitmap.isRecycled()) {
             long start = System.currentTimeMillis();
@@ -174,7 +171,11 @@ public class OrionView extends View implements OrionImageView {
                 canvas.drawRect(left, top, right, bottom, borderPaint);
             }
 
-            Common.d("OrionView: bitmap rendering takes " + 0.001f * (System.currentTimeMillis() - start) + " s");
+            Common.d("OrionView:s bitmap rendering takes " + 0.001f * (System.currentTimeMillis() - start) + " s");
+        }
+
+        if (showStatusBar) {
+            drawStatusBar(canvas);
         }
 
         if (latch != null) {
@@ -183,7 +184,7 @@ public class OrionView extends View implements OrionImageView {
     }
 
     private void drawStatusBar(Canvas canvas) {
-        int textY = (int) (statusBarHeight - currentPaint.descent());
+        int textY = (int) (statusBarHeight - 3);
 
         String textToRender;
         int color = currentPaint.getColor();
