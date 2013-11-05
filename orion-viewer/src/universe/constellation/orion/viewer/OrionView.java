@@ -168,7 +168,7 @@ public class OrionView extends View implements OrionImageView {
 
                 int right = (int) (left + info.x.pageDimension * myScale);
                 int bottom = (int) (top + info.y.pageDimension * myScale);
-                canvas.drawRect(left, top, right, bottom, borderPaint);
+                canvas.drawRect(left, top + statusBarHeight, right, bottom + statusBarHeight, borderPaint);
             }
 
             Common.d("OrionView:s bitmap rendering takes " + 0.001f * (System.currentTimeMillis() - start) + " s");
