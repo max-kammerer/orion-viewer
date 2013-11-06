@@ -1,6 +1,18 @@
 apply plugin: 'android-library'
 
 dependencies {
+  compile project(':library')
+}
+
+apply from: '../../android_default.gradle'
+
+generateJavadoc.exclude "**/_*.java"
+
+
+/*
+apply plugin: 'android-library'
+
+dependencies {
   compile project(':HoloEverywhere:library')
 }
 
@@ -17,11 +29,14 @@ android {
       manifest.srcFile 'AndroidManifest.xml'
       java {
           srcDir 'src'
-          exclude '**/TimePreference.java'
-          exclude '**/DatePreference.java'
+          exclude '**//*
+TimePreference.java'
+          exclude '**//*
+DatePreference.java'
       }
 
       res.srcDirs = ['res']
     }
   }
 }
+*/

@@ -1,35 +1,48 @@
 apply plugin: 'android-library'
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-    maven {
-        url "https://raw.github.com/Prototik/HoloEverywhere/repo"
-    }
-}
-
-
 dependencies {
-  compile 'com.android.support:support-v4:+'
-  //compile 'com.nineoldandroids:library:2.4.0@jar'
+  compile 'com.android.support:support-v4:18.0.2@jar'
+  compile 'com.nineoldandroids:library:2.4.0@jar'
 }
 
-android {
-  compileSdkVersion 16
-  buildToolsVersion '18.1.1'
+apply from: '../android_default.gradle'
 
-  defaultConfig {
-    targetSdkVersion 16
-  }
+generateJavadoc.include "**/org/holoeverywhere/**"
+generateJavadoc.title "HoloEverywhere ${project.version} JavaDoc"
 
-  sourceSets {
-    main {
-      manifest.srcFile 'AndroidManifest.xml'
-      java {
-          srcDir  'src'
-          exclude 'com/**'
-      }
-      res.srcDirs = ['res']
-    }
-  }
-}
+//
+//apply plugin: 'android-library'
+//
+//repositories {
+//    mavenLocal()
+//    mavenCentral()
+//    maven {
+//        url "https://raw.github.com/Prototik/HoloEverywhere/repo"
+//    }
+//}
+//
+//
+//dependencies {
+//  compile 'com.android.support:support-v4:+'
+//  //compile 'com.nineoldandroids:library:2.4.0@jar'
+//}
+//
+//android {
+//  compileSdkVersion 16
+//  buildToolsVersion '18.1.1'
+//
+//  defaultConfig {
+//    targetSdkVersion 16
+//  }
+//
+//  sourceSets {
+//    main {
+//      manifest.srcFile 'AndroidManifest.xml'
+//      java {
+//          srcDir  'src'
+//          exclude 'com/**'
+//      }
+//      res.srcDirs = ['res']
+//    }
+//  }
+//}
