@@ -185,6 +185,7 @@ public class OrionView extends View implements OrionImageView {
 
     private void drawStatusBar(Canvas canvas) {
         int textY = (int) (statusBarHeight - 3);
+        int sideMargin = 5;
 
         String textToRender;
         int color = currentPaint.getColor();
@@ -199,12 +200,13 @@ public class OrionView extends View implements OrionImageView {
         }
 
         float endWidth = currentPaint.measureText(textToRender);
-        float titleEnd = getWidth() - endWidth;
+        float titleEnd = getWidth() - endWidth - sideMargin;
         canvas.drawText(textToRender, titleEnd, textY, currentPaint);
         String renderTitle = title;
         endWidth = currentPaint.measureText(renderTitle);
         int count = renderTitle.length();
 
+        titleEnd = sideMargin - sideMargin;
         if (endWidth > titleEnd && titleEnd > 0 && endWidth > 0) {
             count = (int) (1.f * count / endWidth * titleEnd);
             count -= 3;
@@ -215,7 +217,7 @@ public class OrionView extends View implements OrionImageView {
             }
         }
         if (count > 0) {
-            canvas.drawText(renderTitle, 0, textY, currentPaint);
+            canvas.drawText(renderTitle, sideMargin, textY, currentPaint);
         }
     }
 
