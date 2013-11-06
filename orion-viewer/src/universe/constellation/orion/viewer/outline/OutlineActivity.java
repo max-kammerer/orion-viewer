@@ -20,29 +20,36 @@
 package universe.constellation.orion.viewer.outline;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
-import android.widget.ListView;
+import org.holoeverywhere.app.ListActivity;
 import universe.constellation.orion.viewer.OrionBookmarkActivity;
 import universe.constellation.orion.viewer.prefs.OrionApplication;
 
 public class OutlineActivity extends ListActivity {
 	OutlineItem[] items;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        getOrionContext().applyTheme(this);
+        super.onCreate(savedInstanceState);
+    }
+
     protected void onResume() {
         super.onResume();
         items = ((OrionApplication)getApplicationContext()).getTempOptions().outline;
-        setListAdapter(new OutlineAdapter(getLayoutInflater(), items));
+        setListAdapter(new OutlineAdapter(getThemedLayoutInflater(), items));
     }
 
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-		super.onListItemClick(l, v, position, id);
+    @Override
+    protected void onListItemClick(org.holoeverywhere.widget.ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
         Intent result = new Intent();
         result.putExtra(OrionBookmarkActivity.OPEN_PAGE, items[position].page);
         setResult(Activity.RESULT_OK, result);
-		finish();
-	}
+        finish();
+    }
 
     private  boolean inSettingCV = false;
     @Override
@@ -53,5 +60,9 @@ public class OutlineActivity extends ListActivity {
         } else {
             super.setContentView(layoutResID);
         }
+    }
+
+    public OrionApplication getOrionContext() {
+        return (OrionApplication) getApplicationContext();
     }
 }
