@@ -217,6 +217,31 @@
                           android:textSize="18sp"
                           android:text="Oxygen Team - http://www.oxygen-icons.org"
                           android:gravity="left|center_vertical" android:linksClickable="true" android:autoLink="all"/>
+
+            </TableRow>
+
+            <TableRow>
+
+                <LinearLayout android:layout_width="wrap_content"
+                               android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center">
+                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                       android:src="@drawable/plus"/>
+                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                       android:src="@drawable/minus"/>
+
+                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                                           android:src="@drawable/next"/>
+                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                                                               android:src="@drawable/prev"/>
+
+                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                                                                           android:src="@drawable/view"/>
+                </LinearLayout>
+
+                <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
+                          android:textSize="18sp"
+                          android:text="http://www.icojam.com"
+                          android:gravity="left|center_vertical" android:linksClickable="true" android:autoLink="all"/>
             </TableRow>
 
             <!--<TableRow>-->
