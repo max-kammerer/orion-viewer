@@ -14,7 +14,7 @@ import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Fragment;
 import org.holoeverywhere.widget.ListView;
 
-public abstract class PreferenceFragment extends Fragment implements
+public abstract  class PreferenceFragment extends Fragment implements
         PreferenceManager.OnPreferenceTreeClickListener {
     public interface OnPreferenceStartFragmentCallback {
         boolean onPreferenceStartFragment(PreferenceFragment caller,
