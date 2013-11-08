@@ -27,8 +27,8 @@
             android:title="@string/pref_category_general" android:key="GENERAL">
 
         <PreferenceScreen
-                android:title="Appearance" android:persistent="false"
-                android:summary="Application appearance"
+                android:title="@string/pref_appearance" android:persistent="false"
+                android:summary="@string/pref_appearance"
                 android:key="APPEARANCE">
 
             <CheckBoxPreference

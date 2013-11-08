@@ -27,6 +27,7 @@
     <string name="pref_category_system">System</string>
 
     <!--General Prefs-->
+    <string name="pref_appearance">Appearance</string>
     <string name="pref_fullScreen">Full screen</string>
     <string name="pref_showActionBar">Show Action Bar</string>
     <string name="pref_showStatusBar">Show Status Bar</string>
