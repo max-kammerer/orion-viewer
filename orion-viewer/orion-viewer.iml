@@ -52,8 +52,7 @@
     </content>
     <orderEntry type="jdk" jdkName="Android 4.1.2 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="preferences" />
-    <orderEntry type="module" module-name="library" />
+    <orderEntry type="module" module-name="preferences" exported="" />
   </component>
 </module>
 
