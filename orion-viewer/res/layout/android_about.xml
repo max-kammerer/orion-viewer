@@ -240,7 +240,7 @@
 
                 <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
                           android:textSize="18sp"
-                          android:text="http://www.icojam.com"
+                          android:text="Blue Bits icons, by Stan Khodjaev"
                           android:gravity="left|center_vertical" android:linksClickable="true" android:autoLink="all"/>
             </TableRow>
 
