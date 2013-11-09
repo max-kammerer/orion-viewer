@@ -330,7 +330,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         ImageButton plus = (ImageButton) findMyViewById(R.id.page_picker_plus);
         plus.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                pageSeek.incrementProgressBy(1);
+                pageSeek.incrementProgress(1);
             }
         });
 
@@ -338,7 +338,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         minus.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (pageSeek.getProgress() != 0) {
-                    pageSeek.incrementProgressBy(-1);
+                    pageSeek.incrementProgress(-1);
                 }
             }
         });
