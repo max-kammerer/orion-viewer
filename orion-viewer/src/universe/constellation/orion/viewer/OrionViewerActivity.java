@@ -421,7 +421,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         final ImageButton zplus = (ImageButton) findMyViewById(R.id.zoom_picker_plus);
         zplus.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                zoomSeek.incrementProgressBy(1);
+                zoomSeek.incrementProgress(1);
             }
         });
 
@@ -429,7 +429,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         zminus.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (zoomSeek.getProgress() != 0) {
-                    zoomSeek.incrementProgressBy(-1);
+                    zoomSeek.incrementProgress(-1);
                 }
             }
         });
@@ -453,11 +453,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
         });
 
-
-
-        //sp.setAdapter(new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, getResources().getTextArray(R.array.fits)));
         sp.setAdapter(new MyArrayAdapter());
-//        sp.setAdapter(new MyArrayAdapter(this, R.layout.zoom_spinner, R.id.spinner_text, getResources().getTextArray(R.array.fits)));
         sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 boolean disable = position != 0;
@@ -478,6 +474,15 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
                 zoomText.setFocusable(!disable);
                 zoomText.setFocusableInTouchMode(!disable);
+
+                final LinearLayout parent1 = (LinearLayout) zoomText.getParent();
+
+                parent1.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        parent1.requestLayout();
+                    }
+                });
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
@@ -641,11 +646,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
         });
 
-        if (Device.Info.NOOK2) {
-            TextView tv = (TextView) findMyViewById(R.id.navigation_title);
-            int color = tv.getTextColors().getDefaultColor();
-            checkBox.setTextColor(color);
-        }
+//        if (Device.Info.NOOK2) {
+//            TextView tv = (TextView) findMyViewById(R.id.navigation_title);
+//            int color = tv.getTextColors().getDefaultColor();
+//            checkBox.setTextColor(color);
+//        }
 
 
         ImageButton preview = (ImageButton) findMyViewById(R.id.crop_preview);
@@ -1325,10 +1330,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
             if (convertView != null) {
                 return  convertView;
             } else {
-                TextView view = null;
-                    view = new TextView(OrionViewerActivity.this);
-                    view.setText("%");
-                    return view;
+                TextView view = new TextView(OrionViewerActivity.this);
+                view.setText(" % ");
+                return view;
             }
         }
     }
