@@ -40,7 +40,7 @@
             <CheckBoxPreference
                     android:key="SHOW_ACTION_BAR"
                     android:title="@string/pref_showActionBar"
-                    android:summary="@string/pref_showActionBar"
+                    android:summary="@string/pref_showActionBar_desc"
                     android:defaultValue="false"/>
 
             <CheckBoxPreference

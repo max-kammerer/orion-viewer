@@ -157,9 +157,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
         initAddBookmarkScreen();
 
         myIntent = getIntent();
-
         touchListener = new TouchAutomata(this, view);
-        System.out.println("Touch listener:  " + touchListener.getClass());
+
     }
 
     public void updateCrops() {
@@ -268,7 +267,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
             device.updateTitle(title);
             view.onNewBook(title, controller.getPageCount());
-            getSupportActionBar().setTitle(title);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(title);
+            }
             globalOptions.addRecentEntry(new GlobalOptions.RecentEntry(new File(filePath).getAbsolutePath()));
             askPassword(controller);
 
@@ -940,12 +941,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(Device.Info.NOOK_CLASSIC ? R.menu.nook_menu : R.menu.menu, menu);
-        boolean isShowing = getSupportActionBar().isShowing();
-        for (int i = 0; i < 5; i++) {
-            SupportMenuItem item = (SupportMenuItem) menu.getItem(i);
-            item.setShowAsAction(isShowing ? SupportMenuItem.SHOW_AS_ACTION_IF_ROOM : SupportMenuItem.SHOW_AS_ACTION_NEVER);
-        }
+        getMenuInflater().inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

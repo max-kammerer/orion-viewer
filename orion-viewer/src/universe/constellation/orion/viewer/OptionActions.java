@@ -40,12 +40,12 @@ public enum OptionActions {
 
     SHOW_ACTION_BAR("SHOW_ACTION_BAR") {
             public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
-                if (newValue) {
-                    activity.getSupportActionBar().show();
-                } else {
-                    activity.getSupportActionBar().hide();
-                }
-                activity.supportInvalidateOptionsMenu();
+//                if (newValue) {
+//                    activity.getSupportActionBar().show();
+//                } else {
+//                    activity.getSupportActionBar().hide();
+//                }
+//                activity.supportInvalidateOptionsMenu();
             }
         },
 

@@ -98,21 +98,26 @@ public class OrionApplication extends Application {
     }
 
 
-    public void applyTheme(Activity activity) {
-        int themeId = getThemeId();
+    public void applyTheme(Activity activity, boolean processActionBar) {
+        int themeId = getThemeId(processActionBar);
 
         if (themeId != -1) {
             activity.setTheme(themeId);
         }
     }
 
-    private int getThemeId() {
+    public void applyTheme(Activity activity) {
+        applyTheme(activity, false);
+    }
+
+    private int getThemeId(boolean processActionBar) {
         String theme = getOptions().getApplicationTheme();
+        boolean showActionBar = !processActionBar || getOptions().isActionBarVisible();
         int themeId = -1;
         if ("DEFAULT".equals(theme) || "DARK".equals(theme)) {
-            themeId = R.style.Holo_Theme;
+            themeId = showActionBar ? R.style.Holo_Theme : R.style.Holo_Theme_NoActionBar;
         } else if ("LIGHT".equals(theme)) {
-            themeId = R.style.Holo_Theme_Light;
+            themeId = showActionBar ? R.style.Holo_Theme_Light : R.style.Holo_Theme_Light_NoActionBar;
         }
         return themeId;
     }

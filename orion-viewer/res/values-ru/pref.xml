@@ -30,6 +30,7 @@
     <string name="pref_appearance">Внешний вид</string>
     <string name="pref_fullScreen">Полноэкранный режим</string>
     <string name="pref_showActionBar">Показывать панель действий</string>
+    <string name="pref_showActionBar_desc">Показывать панель действий (необходим перезапуск)</string>
     <string name="pref_showStatusBar">Показывать строку состояния</string>
     <string name="pref_showOffsetOnStatusBar">Показывать смещение на странице</string>
     <string name="pref_bookDefaultOrientation">Ориентация книги по умолчанию</string>

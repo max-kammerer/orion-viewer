@@ -56,7 +56,7 @@ public class OrionBaseActivity extends org.holoeverywhere.app.Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getOrionContext().applyTheme(this);
+        getOrionContext().applyTheme(this, getViewerType() == Device.VIEWER_ACTIVITY);
 
         if (this instanceof OrionViewerActivity || this instanceof OrionFileManagerActivity) {
             int screenOrientation = getScreenOrientation(getApplicationDefaultOrientation());
