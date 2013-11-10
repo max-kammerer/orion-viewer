@@ -206,7 +206,7 @@ public class OrionView extends View implements OrionImageView {
         endWidth = currentPaint.measureText(renderTitle);
         int count = renderTitle.length();
 
-        titleEnd = sideMargin - sideMargin;
+        titleEnd -= sideMargin;
         if (endWidth > titleEnd && titleEnd > 0 && endWidth > 0) {
             count = (int) (1.f * count / endWidth * titleEnd);
             count -= 3;
