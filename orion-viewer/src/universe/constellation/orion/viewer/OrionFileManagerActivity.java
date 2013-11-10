@@ -65,8 +65,6 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
 
         protected boolean forFiles = true;
 
-        protected OrionFileManagerActivity activity;
-
         protected FMListFragment(boolean forFiles) {
             this.forFiles = forFiles;
         }
@@ -78,14 +76,6 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
                 ((OrionFileManagerActivity)getActivity()).createFileView(this);
             } else {
                 ((OrionFileManagerActivity)getActivity()).createRecentView(this);
-            }
-        }
-
-
-        @Override
-        public void onSaveInstanceState(Bundle outState) {
-            if (forFiles) {
-                outState.putString(LAST_FOLDER, ((FileChooser)getListAdapter()).getCurrentFolder().getAbsolutePath());
             }
         }
     }
