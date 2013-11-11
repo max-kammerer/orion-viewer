@@ -56,6 +56,7 @@ public class Controller implements ViewDimensionAware {
     private boolean hasPendingEvents = false;
 
     public Controller(OrionViewerActivity activity, DocumentWrapper doc, LayoutStrategy layout, Renderer renderer) {
+        Common.d("Controller created");
         this.activity = activity;
         this.doc = doc;
         this.layout = layout;
@@ -128,16 +129,16 @@ public class Controller implements ViewDimensionAware {
         drawPage();
     }
 
-    public void translateAndZoom(float zoomScaling, float deltaX, float deltaY) {
-        System.out.println("zoomscaling  " + zoomScaling + "  " + deltaX + "  " + deltaY );
+    public void translateAndZoom(boolean changeZoom, float zoomScaling, float deltaX, float deltaY) {
+        Common.d("zoomscaling  " + changeZoom + " " + zoomScaling + "  " + deltaX + "  " + deltaY );
         int oldOffsetX = layoutInfo.x.offset;
         int oldOffsetY = layoutInfo.y.offset;
         System.out.println("oldZoom  " + layoutInfo.docZoom + "  " + layoutInfo.x.offset + " x " + layoutInfo.y.offset);
 
-        layout.changeZoom((int) (10000f * zoomScaling * layoutInfo.docZoom));
-        System.out.println("new zoom " + layout.getZoom());
-        System.out.println("new zoom2 " + zoomScaling * layoutInfo.docZoom);
-        layout.reset(layoutInfo, layoutInfo.pageNumber);
+        if (changeZoom) {
+            layout.changeZoom((int) (10000f * zoomScaling * layoutInfo.docZoom));
+            layout.reset(layoutInfo, layoutInfo.pageNumber);
+        }
 
         layoutInfo.x.offset = (int) (zoomScaling * oldOffsetX + deltaX);
         layoutInfo.y.offset = (int) (zoomScaling * oldOffsetY + deltaY);

@@ -94,7 +94,7 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                 } else  if (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_UP) {
                     if (event.getAction() == MotionEvent.ACTION_UP) {
                         getView().afterScaling();
-                        activity.getController().translateAndZoom(1f, -last0.x + start0.x, -last0.y + start0.y);
+                        activity.getController().translateAndZoom(false, 1f, -last0.x + start0.x, -last0.y + start0.y);
                         nextState = States.UNDEFINED;
                     } else {
                         getView().beforeScaling();
@@ -187,7 +187,7 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                             float newX = (int) ((startFocus.x) * (curScale - 1) + (startFocus.x - endFocus.x) );
                             float newY = (int) ((startFocus.y) * (curScale - 1) + (startFocus.y - endFocus.y));
                             getView().afterScaling();
-                            activity.getController().translateAndZoom(curScale, newX, newY);
+                            activity.getController().translateAndZoom(true, curScale, newX, newY);
                             break;
                     }
                 } else {
