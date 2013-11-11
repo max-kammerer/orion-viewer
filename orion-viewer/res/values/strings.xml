@@ -69,6 +69,7 @@
     <string name="table_of_contents">Table of Contents</string>
 
     <string name="warn_no_text_in_selection">There is no text in selection!</string>
+    <string name="msg_select_text">Select text!</string>
     <string name="warn_no_outline">Outline is absent!</string>
 
 </resources>

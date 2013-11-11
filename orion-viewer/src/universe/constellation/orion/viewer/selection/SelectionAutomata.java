@@ -127,8 +127,8 @@ public class SelectionAutomata {
         selectionView.reset();
         initDialogSize();
         selectionDialog.show();
-
-        activity.showFastMessage("Select text!");
+        String msg = activity.getResources().getString(universe.constellation.orion.viewer.R.string.msg_select_text);
+        activity.showFastMessage(msg);
         state = STATE.START;
     }
 

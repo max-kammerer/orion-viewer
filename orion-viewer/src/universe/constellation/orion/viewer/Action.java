@@ -253,7 +253,8 @@ public enum Action {
                     activity.startActivity(intent);
                 } catch (ActivityNotFoundException ex) {
                     Common.d(ex);
-                    activity.showWarning("Couldn't find dictionary: " + action);
+                    String string = activity.getString(R.string.warn_msg_no_dictionary);
+                    activity.showWarning(string + ": " + dict + ": " + ex.getMessage());
                 }
             }
         }
