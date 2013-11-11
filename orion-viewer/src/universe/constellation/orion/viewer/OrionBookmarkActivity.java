@@ -99,7 +99,7 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
 
                 Bookmark item = (Bookmark) getItem(position);
                 TextView page = (TextView) convertView.findViewById(R.id.bookmark_entry_page);
-                page.setText("" + (item.page == - 1 ? "*" : item.page + 1));
+                page.setText("" + (item.page == -1 ? "*" : item.page + 1));
 
                 ImageView edit = (ImageView) convertView.findViewById(R.id.bookmark_edit_entry);
                 //if (edit != null)
@@ -123,9 +123,9 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
                                     } else {
                                         getOrionContext().getBookmarkAccessor().insertOrUpdateBookmark(bookId, item.page, editText.getText().toString());
                                         item.text = editText.getText().toString();
-                                        ((ArrayAdapter)view.getAdapter()).notifyDataSetChanged();
+                                        notifyDataSetChanged();
                                     }
-                                    dialog.dismiss();
+                                  dialog.dismiss();
                                 }
                             });
 
