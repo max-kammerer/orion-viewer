@@ -571,8 +571,28 @@ public class OrionViewerActivity extends OrionBaseActivity {
         view.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 EditText text = (EditText) findMyViewById(R.id.add_bookmark_text);
-                insertBookmark(controller.getCurrentPage(), text.getText().toString());
-                onApplyAction(true);
+                try {
+                    insertBookmark(controller.getCurrentPage(), text.getText().toString());
+                    onApplyAction(true);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    OrionViewerActivity activity = OrionViewerActivity.this;
+                    AlertDialog.Builder buider = new AlertDialog.Builder(activity);
+                    buider.setTitle(activity.getResources().getString(R.string.ex_msg_operation_failed));
+
+                    final EditText input = new EditText(activity);
+                    input.setText(e.getMessage());
+                    buider.setView(input);
+
+                    buider.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    buider.create().show();
+                }
             }
         });
 
