@@ -33,7 +33,6 @@
     <string name="action_goto_page">Gehe zu</string>
     <string name="action_dictionary">Wörterbuch öffnen</string>
     <string name="action_open">Buch öffnen</string>
-    <string name="action_outline">@string/menu_outline_text</string>
     <string name="action_add_bookmark">Lesezeichen hinzufügen</string>
     <string name="action_open_bookmarks">Lesezeichen öffnen</string>
     <string name="action_full_screen">Vollbild an/aus</string>

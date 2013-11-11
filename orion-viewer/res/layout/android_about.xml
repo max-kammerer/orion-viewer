@@ -98,9 +98,15 @@
                           android:gravity="center"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                                  android:textSize="20sp"
-                                  android:text="Yuriy Chorniy - Ukrainian translation"
-                                  android:gravity="center"/>
+                  android:textSize="20sp"
+                  android:text="Yuriy Chorniy - Ukrainian translation"
+                  android:gravity="center"/>
+
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:textSize="20sp"
+                  android:text="Johannes Römer - German translation"
+                  android:gravity="center"/>
+
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_1" android:layout_marginTop="20px"
                   android:text="Project site: http://code.google.com/p/orion-viewer/" android:textSize="18sp"
