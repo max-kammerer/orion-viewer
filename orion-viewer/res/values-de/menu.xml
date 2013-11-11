@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2013  Michael Bogdanov & Co
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--Author: Johannes Römer-->
+<resources>
+    <string name="menu_zoom_text">Zoomen</string>
+    <string name="menu_crop_text">Zuschneiden</string>
+    <string name="menu_goto_text">Gehe zu</string>
+    <string name="menu_bookmarks_text">Lesezeichen</string>
+    <string name="menu_add_bookmark_item">Lesezeichen setzen</string>
+    <string name="menu_select_text">Text auswählen</string>
+    <string name="menu_rotation_text">Bildschirmausrichtung</string>
+    <string name="menu_navigation_text">Seitenlayout</string>
+    <string name="menu_help_text">Hilfe</string>
+    <string name="menu_open_text">Buch öffnen</string>
+    <string name="menu_outline_text">Inhaltsübersicht</string>
+    <string name="menu_open_dictionary_text">Wörterbuch öffnen</string>
+    <string name="menu_day_night_text">Tag-/Nacht-Modus</string>
+    <string name="menu_exit_text">Schließen</string>
+    <string name="menu_key_binder_text">Tasten zuordnen</string>
+    <string name="menu_options_text">Einstellungen</string>
+    <string name="menu_tap_text">Tap-Zonen</string>
+    <string name="menu_book_preferences">Buch-Einstellungen</string>
+    <string name="export_all_bookmarks_menu_item">Exportiere alle Lesezeichen</string>
+    <string name="export_bookmarks_menu_item">Exportiere aktuelle Lesezeichen</string>
+    <string name="import_all_bookmarks_menu_item">Importiere alle...</string>
+    <string name="import_current_bookmarks_menu_item">Importiere aktuelle...</string>
+</resources>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2013  Michael Bogdanov & Co
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--Author: Johannes Römer-->
+<resources>
+    <!--Categories-->
+    <string name="pref_category_general">Allgemein</string>
+    <string name="pref_category_key_manager">Tastenzuordnungen</string>
+    <string name="pref_category_device_parameters">Geräte-Einstellungen</string>
+    <string name="pref_category_add_parameters">Andere Einstellungen</string>
+    <string name="pref_category_system">System</string>
+
+    <!--General Prefs-->
+    <string name="pref_fullScreen">Vollbild</string>
+    <string name="pref_bookDefaultOrientation">Buch-Standardausrichtung</string>
+    <string name="pref_bookDefaultZoom">Zoomen</string>
+    <string name="pref_rotate_new_book_on_opening">Drehe neues Buch beim Öffnen</string>
+    <string name="pref_screen_orientation">Bildschirmausrichtung</string>
+    <string name="pref_rotate_screen">Standardausrichtung (Neustart der Anwendung nötig)</string>
+    <string name="pref_book_screen_orientation">Bildschirmausrichtung für aktuelles Buch</string>
+    <string name="pref_close_dialog_on_apply">Schließe Dialoge nach \'Anwenden\'</string>
+    <string name="pref_close_page_option_dialog_on_apply">Schließe Einstellungsfenster bei Klick auf \'Anwenden\'</string>
+    <string name="pref_swap_prev_next_keys">Vertausche Vor-/Zurücktaste</string>
+    <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Vertausche Vor-/Zurücktaste im Querformat</string>
+    <string name="pref_dictionary">Wörterbuch</string>
+    <string name="pref_e_ink_optimization">E-Ink</string>
+    <string name="pref_e_ink_fast_refresh">Schneller Bildwechsel für E-Ink</string>
+    <string name="pref_total_refresh_after">Vollständiger Bildneuaufbau nach...</string>
+
+    <string name="pref_long_crop_value">Großer Zuschnitt</string>
+    <string name="pref_long_crop_value_desc">Wert für großen Zuschnitt (0-40%)</string>
+
+    <string name="pref_screen_overlapping_horizontal">Horizontales Überlappen</string>
+    <string name="pref_screen_overlapping_horizontal_desc">Horizontale Überlappung der Ansicht beim Blättern (0-90%)</string>
+
+    <string name="pref_screen_overlapping_vertical">Vertikales Überlappen</string>
+    <string name="pref_screen_overlapping_vertical_desc">Vertikale Überlappung der Ansicht beim Blättern (0-90%)</string>
+
+    <string name="pref_custom_brightness">Helligkeit anpassen</string>
+    <string name="pref_brightness">Helligkeit</string>
+    <string name="pref_brightness_desc">Helligkeit (1-100%)</string>
+
+    <string name="pref_application_theme">Anwendungs-Theme</string>
+    <string name="pref_application_theme_desc">Ändern des Erscheinungsbildes (Neustart der Anwendung nötig)</string>
+
+    <string name="pref_open_recent_book">Öffne letztes Buch beim Start</string>
+
+    <!--book preferences-->
+    <string name="pref_book_contrast">Kontrast</string>
+    <string name="pref_book_contrast_desc">Kontrast (Voreinstellung: 100)</string>
+
+    <string name="pref_book_threshold">Wasserzeichen</string>
+    <string name="pref_book_threshold_desc">Schwellwert zur Entfernung von Wasserzeichen (Voreinstellung: 255)</string>
+
+    <string name="pref_device_info">Geräte-Informationen</string>
+    <string name="pref_debug">Debug</string>
+    <string name="pref_debug_desc">Schreibe Traces in Datei &lt;Name des geöffneten Buches&gt; + .trace</string>
+
+    <string name="pref_walk_order">Blätter-Modus</string>
+    <string name="pref_page_layout">Seitenlayout</string>
+
+    <string name="application_settings_title">Anwendungs-Einstellungen</string>
+    <string name="pref_default_book_setting">Buch-Standardeinstellungen</string>
+    <string name="pref_default_book_setting_desc">Wird nur auf neue Bücher angewendet. Für aktuelles Buch \'Buch-Einstellungen\' benutzen.</string>
+
+    <string name="book_pref_title">Einstellungen für aktuelles Buch</string>
+
+    <string name="pref_screen_backlight_timeout">Hintergrundbeleuchtung</string>
+    <string name="pref_screen_backlight_timeout_desc">Abschaltzeit der Hintergrundbeleuchtung</string>
+
+    <string name="pref_app_language">Sprache</string>
+    <string name="pref_app_language_desc">Sprache der Benutzeroberfläche (Neustart der Anwendung nötig)</string>
+
+    <string name="pref_tap_zones_desc">Tap-Zonen: Bildschirmbereiche mit Aktionen verknüpfen</string>
+
+
+</resources>

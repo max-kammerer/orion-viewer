@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2013  Michael Bogdanov & Co
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--Author: Johannes Römer-->
+<resources>
+    <string name="action_none">Keine</string>
+    <string name="action_menu">Hauptmenü</string>
+    <string name="action_next_page">Nächste Seite</string>
+    <string name="action_prev_page">Vorherige Seite</string>
+    <string name="action_first_page">Erste Seite</string>
+    <string name="action_last_page">Letzte Seite</string>
+    <string name="action_crop_page">Zuschneiden</string>
+    <string name="action_zoom_page">Zoomen</string>
+    <string name="action_rotation_page">Bildschirmausrichtung</string>
+    <string name="action_options_page">Einstellungen</string>
+    <string name="action_goto_page">Gehe zu</string>
+    <string name="action_dictionary">Wörterbuch öffnen</string>
+    <string name="action_open">Buch öffnen</string>
+    <string name="action_outline">@string/menu_outline_text</string>
+    <string name="action_add_bookmark">Lesezeichen hinzufügen</string>
+    <string name="action_open_bookmarks">Lesezeichen öffnen</string>
+    <string name="action_full_screen">Vollbild an/aus</string>
+    <string name="action_day_night_mode">Tag-/Nacht-Modus</string>
+    <string name="action_close">Anwendung schließen</string>
+
+    <string name="action_crop_left">Linken Rand abschneiden</string>
+    <string name="action_crop_right">Rechten Rand abschneiden</string>
+    <string name="action_crop_top">Oberen Rand abschneiden</string>
+    <string name="action_crop_bottom">Unteren Rand abschneiden</string>
+
+    <string name="action_uncrop_left">Linken Rand vergrößern</string>
+    <string name="action_uncrop_right">Rechten Rand vergrößern</string>
+    <string name="action_uncrop_top">Oberen Rand vergrößern</string>
+    <string name="action_uncrop_bottom">Unteren Rand vergrößern</string>
+    <string name="action_inverse_crops">Zwischen abgeschnittenem/vergrößertem Rand wechseln</string>
+    <string name="action_switch_long_crop">Zwischen kleinem/großem Zuschnitt wechseln</string>
+
+    <string name="action_next_10">10 Seiten vor</string>
+    <string name="action_prev_10">10 Seiten zurück</string>
+
+    <string name="action_rotate_90">Drehen um 90/-90 Grad</string>
+    <string name="action_rotate_270">Drehen um 270/-270 Grad</string>
+
+    <string name="action_select_text">@string/menu_select_text</string>
+
+    <string name="action_fit_width">Auf Breite anpassen</string>
+    <string name="action_fit_height">Auf Höhe anpassen</string>
+    <string name="action_fit_page">Auf Seite anpassen</string>
+</resources>

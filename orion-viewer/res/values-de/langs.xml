@@ -18,14 +18,15 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
+<!--Author: Johannes Römer-->
 <resources>
-    <string name="lang_default_user">Системный</string>
-    <string name="lang_english_user">Английский</string>
-    <string name="lang_russian_user">Русский</string>
-    <string name="lang_hebrew_user">Иврит</string>
-    <string name="lang_italian_user">Итальянский</string>
-    <string name="lang_chinese_user">Китайский</string>
-    <string name="lang_spanish_user">Испанский</string>
-    <string name="lang_ukrainian_user">Украинский</string>
-    <string name="lang_german_user">Немецкий</string>
+    <string name="lang_default_user">Systemsprache</string>
+    <string name="lang_english_user">Englisch</string>
+    <string name="lang_russian_user">Russisch</string>
+    <string name="lang_hebrew_user">Hebräisch</string>
+    <string name="lang_chinese_user">Chinesisch</string>
+    <string name="lang_italian_user">Italienisch</string>
+    <string name="lang_spanish_user">Spanisch</string>
+    <string name="lang_ukrainian_user">Ukrainisch</string>
+    <string name="lang_german_user">Deutsch</string>
 </resources>

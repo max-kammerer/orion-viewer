@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2013  Michael Bogdanov & Co
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--Author: Johannes Römer-->
+<resources>
+    <string name="navigation">Blätter-Modus</string>
+    <string name="crop_left">Links</string>
+    <string name="crop_right">Rechts</string>
+    <string name="crop_top">Oben</string>
+    <string name="crop_bottom">Unten</string>
+    <string name="enable_even_crop">anderer Zuschnitt für gerade Seiten</string>
+    <string name="rotate_0">0 Grad</string>
+    <string name="rotate_90">90 Grad</string>
+    <string name="rotate_270">270 Grad</string>
+    <string name="long_click">Langer Klick</string>
+    <string name="short_click">Kurzer Klick</string>
+    <string name="binding_click">Verknüpfung</string>
+    <string name="orientation_default">Standard-Ausrichtung</string>
+    <string name="orientation_default_rotation">Standard-Drehung</string>
+    <string name="orientation_landscape">Querformat</string>
+    <string name="orientation_portrait">Hochformat</string>
+    <string name="orientation_landscape_inverse">Querformat (270)</string>
+    <string name="orientation_portrait_inverse">Hochformat (180)</string>
+    <string name="fit_width">auf Höhe</string>
+    <string name="fit_height">auf Breite</string>
+    <string name="fit_page">auf Seite</string>
+    <string name="fit_custom">benutzerdefiniert...</string>
+    <string name="key_binder_message">Beliebige Taste drücken und die zu verknüpfende Aktion auswählen!</string>
+    <string name="key_binder_warning">Diese Taste kann nicht mit einer Aktion verknüpft werden, versuchen Sie es mit einer anderen Taste!</string>
+    <string name="table_of_contents">Inhaltsverzeichnis</string>
+    <string name="warn_no_text_in_selection">Kein Text ausgewählt!</string>
+    <string name="warn_no_outline">Inhaltsübersicht fehlt!</string>
+</resources>

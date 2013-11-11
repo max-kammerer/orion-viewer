@@ -28,6 +28,7 @@
         <string name="lang_italian">it</string>
         <string name="lang_spanish">es</string>
         <string name="lang_ukrainian">ua</string>
+        <string name="lang_german">de</string>
     <!--Do not translate this section and do not include it in result localization: end-->
 
     <string name="lang_default_user">System Language</string>
@@ -38,4 +39,5 @@
     <string name="lang_italian_user">Italian</string>
     <string name="lang_spanish_user">Spanish</string>
     <string name="lang_ukrainian_user">Ukrainian</string>
+    <string name="lang_german_user">German</string>
 </resources>
