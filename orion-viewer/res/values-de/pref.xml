@@ -28,17 +28,22 @@
     <string name="pref_category_system">System</string>
 
     <!--General Prefs-->
-    <string name="pref_fullScreen">Vollbild</string>
+    <string name="pref_appearance">Anzeige-Optionen</string>
+    <string name="pref_fullScreen">Vollbildmodus</string>
+    <string name="pref_showActionBar">Symbolleiste</string>
+    <string name="pref_showActionBar_desc">Symbolleiste einblenden (Neustart der Anwendung nötig)</string>
+    <string name="pref_showStatusBar">Statusleiste</string>
+    <string name="pref_showOffsetOnStatusBar">Aktuelle Position innerhalb der Seite in der Statusleiste anzeigen</string>
     <string name="pref_bookDefaultOrientation">Buch-Standardausrichtung</string>
     <string name="pref_bookDefaultZoom">Zoomen</string>
-    <string name="pref_rotate_new_book_on_opening">Drehe neues Buch beim Öffnen</string>
+    <string name="pref_rotate_new_book_on_opening">Neues Buch beim Öffnen drehen</string>
     <string name="pref_screen_orientation">Bildschirmausrichtung</string>
     <string name="pref_rotate_screen">Standardausrichtung (Neustart der Anwendung nötig)</string>
     <string name="pref_book_screen_orientation">Bildschirmausrichtung für aktuelles Buch</string>
-    <string name="pref_close_dialog_on_apply">Schließe Dialoge nach \'Anwenden\'</string>
-    <string name="pref_close_page_option_dialog_on_apply">Schließe Einstellungsfenster bei Klick auf \'Anwenden\'</string>
-    <string name="pref_swap_prev_next_keys">Vertausche Vor-/Zurücktaste</string>
-    <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Vertausche Vor-/Zurücktaste im Querformat</string>
+    <string name="pref_close_dialog_on_apply">Dialoge beim \'Anwenden\' schließen</string>
+    <string name="pref_close_page_option_dialog_on_apply">Einstellungsfenster bei Klick auf \'Anwenden\' automatisch schließen</string>
+    <string name="pref_swap_prev_next_keys">Vor-/Zurücktaste vertauschen</string>
+    <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Vor-/Zurücktaste im Querformat vertauschen</string>
     <string name="pref_dictionary">Wörterbuch</string>
     <string name="pref_e_ink_optimization">E-Ink</string>
     <string name="pref_e_ink_fast_refresh">Schneller Bildwechsel für E-Ink</string>
@@ -58,9 +63,9 @@
     <string name="pref_brightness_desc">Helligkeit (1-100%)</string>
 
     <string name="pref_application_theme">Anwendungs-Theme</string>
-    <string name="pref_application_theme_desc">Ändern des Erscheinungsbildes (Neustart der Anwendung nötig)</string>
+    <string name="pref_application_theme_desc">Erscheinungsbild ändern (Neustart der Anwendung nötig)</string>
 
-    <string name="pref_open_recent_book">Öffne letztes Buch beim Start</string>
+    <string name="pref_open_recent_book">Letztes Buch beim Start öffnen</string>
 
     <!--book preferences-->
     <string name="pref_book_contrast">Kontrast</string>
@@ -78,7 +83,7 @@
 
     <string name="application_settings_title">Anwendungs-Einstellungen</string>
     <string name="pref_default_book_setting">Buch-Standardeinstellungen</string>
-    <string name="pref_default_book_setting_desc">Wird nur auf neue Bücher angewendet. Für aktuelles Buch \'Buch-Einstellungen\' benutzen.</string>
+    <string name="pref_default_book_setting_desc">Gilt nur für neue Bücher, für aktuelles Buch die \'Buch-Einstellungen\' benutzen.</string>
 
     <string name="book_pref_title">Einstellungen für aktuelles Buch</string>
 
@@ -88,7 +93,7 @@
     <string name="pref_app_language">Sprache</string>
     <string name="pref_app_language_desc">Sprache der Benutzeroberfläche (Neustart der Anwendung nötig)</string>
 
-    <string name="pref_tap_zones_desc">Tap-Zonen: Bildschirmbereiche mit Aktionen verknüpfen</string>
+    <string name="pref_tap_zones_desc">Bildschirmbereiche mit bestimmten Aktionen verknüpfen</string>
 
 
 </resources>

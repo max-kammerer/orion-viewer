@@ -22,8 +22,8 @@
 <resources>
     <string name="menu_zoom_text">Zoomen</string>
     <string name="menu_crop_text">Zuschneiden</string>
-    <string name="menu_goto_text">Gehe zu</string>
-    <string name="menu_bookmarks_text">Lesezeichen</string>
+    <string name="menu_goto_text">Gehe zu...</string>
+    <string name="menu_bookmarks_text">Lesezeichen verwalten</string>
     <string name="menu_add_bookmark_item">Lesezeichen setzen</string>
     <string name="menu_select_text">Text auswählen</string>
     <string name="menu_rotation_text">Bildschirmausrichtung</string>

@@ -30,8 +30,8 @@
     <string name="rotate_0">0 Grad</string>
     <string name="rotate_90">90 Grad</string>
     <string name="rotate_270">270 Grad</string>
-    <string name="long_click">Langer Klick</string>
-    <string name="short_click">Kurzer Klick</string>
+    <string name="long_click">Bei langem Antippen</string>
+    <string name="short_click">Bei kurzem Antippen</string>
     <string name="binding_click">Verknüpfung</string>
     <string name="orientation_default">Standard-Ausrichtung</string>
     <string name="orientation_default_rotation">Standard-Drehung</string>
@@ -42,10 +42,11 @@
     <string name="fit_width">auf Höhe</string>
     <string name="fit_height">auf Breite</string>
     <string name="fit_page">auf Seite</string>
-    <string name="fit_custom">benutzerdefiniert...</string>
+    <string name="fit_custom">benutzerdefiniert</string>
     <string name="key_binder_message">Beliebige Taste drücken und die zu verknüpfende Aktion auswählen!</string>
     <string name="key_binder_warning">Diese Taste kann nicht mit einer Aktion verknüpft werden, versuchen Sie es mit einer anderen Taste!</string>
     <string name="table_of_contents">Inhaltsverzeichnis</string>
     <string name="warn_no_text_in_selection">Kein Text ausgewählt!</string>
-    <string name="warn_no_outline">Inhaltsübersicht fehlt!</string>
+    <string name="msg_select_text">Text auswählen!</string>
+    <string name="warn_no_outline">Dokument enthält keine Inhaltsübersicht!</string>
 </resources>

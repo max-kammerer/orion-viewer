@@ -21,11 +21,9 @@
 <!--Author: Johannes Römer-->
 <resources>
     <string name="zoom">Öffnet das Einstellungsfenster zum Zoomen. Ein Zoom-Wert von 0 passt die Ansicht auf die Breite der Seite an.</string>
-    <string name="rotation_android">Öffnet das Einstellungsfenster zum Drehen.</string>
+    <string name="rotation">Dreht Dokumente um 90 Grad im Uhrzeigersinn und bei langem Klick gegen den Uhrzeigersinn.</string>
 
     <string name="crop">Öffnet das Einstellungsfenster zum Zuschneiden der Ränder. Die Werte sind relativ zur Seitengröße. Ein langer Klick auf plus oder minus ändert den Zuschnittswert um 10%. Negative Werte vergrößern die Ränder.</string>
-
-    <string name="next_page_android">Öffnet den \'Gehe zu\'-Dialog.</string>
 
     <string name="apply">Aktuelle Einstellungen anwenden.</string>
     <string name="escape">Zurück/Abbruch.</string>
@@ -60,7 +58,7 @@
 
     <string name="tap_help">
         Tap-Zonen ermöglichen es dem Anwender, die verschiedenen Bereiche des Bildschirms mit häufig verwendeten Aktionen zu verknüpfen.
-        Es gibt 3x3 Sektionen, die separaten Befehlen für kurze (obere Markierung) und lange Klicks (untere Markierung) zugeordnet werden können.</string>
+        Es gibt 3x3 Sektionen, die separaten Befehlen für kurze (oberer Eintrag) und lange Klicks (unterer Eintrag) zugeordnet werden können.</string>
 
     <string name="bookmarks_export_help">
         Erlaubt dem Anwender das Exportieren von Lesezeichen (wahlweise für alle Bücher oder nur das aktuelle Buch).
