@@ -54,6 +54,7 @@ import org.holoeverywhere.widget.SeekBar;
 import org.holoeverywhere.widget.Spinner;
 import android.widget.TextView;
 
+import universe.constellation.orion.viewer.dialog.TapHelpDialog;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionPreferenceActivity;
 import universe.constellation.orion.viewer.selection.SelectedTextActions;
@@ -843,7 +844,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
         super.onResume();
         updateBrightness();
 
-
         Common.d("onResume");
         if (myIntent != null) {
             //starting creation intent
@@ -855,6 +855,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 //controller.startRenderer();
                 controller.drawPage();
             }
+        }
+        if (getGlobalOptions().isShowTapHelp()) {
+            getGlobalOptions().saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false);
+            new TapHelpDialog(OrionViewerActivity.this).showDialog();
         }
     }
 

@@ -32,7 +32,7 @@ import java.util.*;
  */
 public class GlobalOptions implements Serializable {
 
-    public static final int MAX_RECENT_ENTRIES = 10;
+    public static final int MAX_RECENT_ENTRIES = 20;
 
     public static final String NEXT_KEY = "next_key_keycode";
 
@@ -91,6 +91,8 @@ public class GlobalOptions implements Serializable {
     public final static String WALK_ORDER = "WALK_ORDER";
 
     public final static String PAGE_LAYOUT = "PAGE_LAYOUT";
+
+    public final static String SHOW_TAP_HELP = "SHOW_TAP_HELP";
 
     public final static String SCREEN_BACKLIGHT_TIMEOUT = "SCREEN_BACKLIGHT_TIMEOUT";
 
@@ -254,6 +256,10 @@ public class GlobalOptions implements Serializable {
 
     public boolean isActionBarVisible() {
         return getBooleanProperty(SHOW_ACTION_BAR, false);
+    }
+
+    public boolean isShowTapHelp() {
+        return getBooleanProperty(SHOW_TAP_HELP, true);
     }
 
     public boolean isStatusBarVisible() {

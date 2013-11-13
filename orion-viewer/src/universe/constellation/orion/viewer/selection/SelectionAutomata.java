@@ -19,19 +19,16 @@
 
 package universe.constellation.orion.viewer.selection;
 
-import android.R;
-import android.app.Dialog;
-import android.graphics.Rect;
 import android.view.*;
-import universe.constellation.orion.viewer.OrionView;
 import universe.constellation.orion.viewer.OrionViewerActivity;
+import universe.constellation.orion.viewer.dialog.DialogOverView;
 
 /**
  * User: mike
  * Date: 11.08.12
  * Time: 14:37
  */
-public class SelectionAutomata {
+public class SelectionAutomata extends DialogOverView {
 
     private enum STATE {START, MOVING, END, CANCELED};
 
@@ -39,25 +36,12 @@ public class SelectionAutomata {
 
     private int startX, startY, width, height;
 
-    private Dialog selectionDialog;
-
     private SelectionView selectionView;
 
-    private OrionViewerActivity activity;
-
     public SelectionAutomata(final OrionViewerActivity activity) {
-        this.activity = activity;
+        super(activity, universe.constellation.orion.viewer.R.layout.text_selector, android.R.style.Theme_Translucent_NoTitleBar);
 
-        selectionDialog = new Dialog(activity, R.style.Theme_Translucent_NoTitleBar);
-        selectionDialog.setContentView(universe.constellation.orion.viewer.R.layout.text_selector);
-
-        View view = activity.getLayoutInflater().inflate(universe.constellation.orion.viewer.R.layout.text_selector, null);
-
-        selectionDialog.setContentView(view);
-
-
-
-        selectionView = (SelectionView) selectionDialog.findViewById(universe.constellation.orion.viewer.R.id.text_selector);
+        selectionView = (SelectionView) dialog.findViewById(universe.constellation.orion.viewer.R.id.text_selector);
 
         selectionView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -106,10 +90,10 @@ public class SelectionAutomata {
 
         if (oldState != state) {
             switch (state) {
-                case CANCELED: selectionDialog.dismiss(); break;
+                case CANCELED: dialog.dismiss(); break;
 
                 case END:
-                    selectionDialog.dismiss();
+                    dialog.dismiss();
 
                     String text = activity.getController().selectText(getStartX(), getStartY(), getWidth(), getHeight());
                     if (text != null && !"".equals(text)) {
@@ -126,28 +110,13 @@ public class SelectionAutomata {
     public void startSelection() {
         selectionView.reset();
         initDialogSize();
-        selectionDialog.show();
+        dialog.show();
         String msg = activity.getResources().getString(universe.constellation.orion.viewer.R.string.msg_select_text);
         activity.showFastMessage(msg);
         state = STATE.START;
     }
 
-    private void initDialogSize() {
-        OrionView orionView = activity.getView();
-        Rect rect = orionView.getViewCoords();
-        int[] coords = new int[]{rect.left, rect.top};
-        orionView.getLocationOnScreen(coords);
-        int left = coords[0];
-        int top = coords[1];
-        int width = rect.width();
-        int height = rect.height();
-        WindowManager.LayoutParams params = selectionDialog.getWindow().getAttributes();
-        params.width = width;
-        params.height = height;
-        params.x = left;
-        params.y = top;
-        selectionDialog.getWindow().setAttributes(params);
-    }
+
 
     public boolean inSelection() {
         return state == STATE.START || state == STATE.MOVING;
