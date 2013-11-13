@@ -166,7 +166,7 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_drawPage(JNIEnv *env,
 	LOGI("Rendering page=%dx%d patch=[%d,%d,%d,%d]",
 			patchW, patchH, targetRect.x, targetRect.y, targetRect.w, targetRect.h);
 	 
-    unsigned int masks[4] = { 0xff0000, 0xff00, 0xff, 0xff000000 };
+    unsigned int masks[4] = { 0xff, 0xff00, 0xff0000, 0xff000000 };
     ddjvu_format_t* pixelFormat = ddjvu_format_create(DDJVU_FORMAT_RGBMASK32, 4, masks);
 
     LOGI("zoom=%f ", zoom);
