@@ -20,6 +20,7 @@
 package universe.constellation.orion.viewer;
 
 import android.graphics.Point;
+import universe.constellation.orion.viewer.dialog.TapHelpDialog;
 import universe.constellation.orion.viewer.outline.OutlineItem;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.view.Renderer;
@@ -116,6 +117,12 @@ public class Controller implements ViewDimensionAware {
             }
             sendViewChangeNotification();
             renderer.onResume();
+
+            //HACK
+            if (activity.getGlobalOptions().isShowTapHelp()) {
+                activity.getGlobalOptions().saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false);
+                new TapHelpDialog(activity).showDialog();
+            }
         }
     }
 

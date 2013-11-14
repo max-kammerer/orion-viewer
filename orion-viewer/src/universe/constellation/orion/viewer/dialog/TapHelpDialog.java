@@ -75,7 +75,7 @@ public class TapHelpDialog extends DialogOverView {
     }
 
     public void showDialog() {
-        //initDialogSize();
+        initDialogSize();
         dialog.show();
     }
 

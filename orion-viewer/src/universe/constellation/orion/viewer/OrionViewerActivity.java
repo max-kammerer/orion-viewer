@@ -856,10 +856,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 controller.drawPage();
             }
         }
-        if (getGlobalOptions().isShowTapHelp()) {
-            getGlobalOptions().saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false);
-            new TapHelpDialog(OrionViewerActivity.this).showDialog();
-        }
     }
 
     protected void onDestroy() {
@@ -966,7 +962,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     @Override

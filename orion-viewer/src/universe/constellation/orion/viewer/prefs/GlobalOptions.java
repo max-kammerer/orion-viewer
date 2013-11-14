@@ -255,7 +255,7 @@ public class GlobalOptions implements Serializable {
     }
 
     public boolean isActionBarVisible() {
-        return getBooleanProperty(SHOW_ACTION_BAR, false);
+        return getBooleanProperty(SHOW_ACTION_BAR, true);
     }
 
     public boolean isShowTapHelp() {
