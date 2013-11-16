@@ -115,9 +115,9 @@ public class OrionApplication extends Application {
         boolean showActionBar = !processActionBar || getOptions().isActionBarVisible();
         int themeId = -1;
         if ("DEFAULT".equals(theme) || "DARK".equals(theme)) {
-            themeId = showActionBar ? R.style.Holo_Theme : R.style.Holo_Theme_NoActionBar;
+            themeId = showActionBar ? R.style.Holo_Theme : universe.constellation.orion.viewer.R.style.MyHolo;
         } else if ("LIGHT".equals(theme)) {
-            themeId = showActionBar ? R.style.Holo_Theme_Light : R.style.Holo_Theme_Light_NoActionBar;
+            themeId = showActionBar ? R.style.Holo_Theme_Light : universe.constellation.orion.viewer.R.style.MyHoloLight;
         }
         return themeId;
     }

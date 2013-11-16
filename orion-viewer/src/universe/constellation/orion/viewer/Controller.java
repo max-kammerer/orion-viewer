@@ -119,10 +119,7 @@ public class Controller implements ViewDimensionAware {
             renderer.onResume();
 
             //HACK
-            if (activity.getGlobalOptions().isShowTapHelp()) {
-                activity.getGlobalOptions().saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false);
-                new TapHelpDialog(activity).showDialog();
-            }
+            activity.myprocessOnActivityVisible();
         }
     }
 

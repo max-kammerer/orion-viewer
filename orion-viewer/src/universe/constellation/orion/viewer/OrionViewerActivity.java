@@ -52,8 +52,6 @@ import org.holoeverywhere.widget.ListView;
 import org.holoeverywhere.widget.RadioButton;
 import org.holoeverywhere.widget.SeekBar;
 import org.holoeverywhere.widget.Spinner;
-import android.widget.TextView;
-
 import universe.constellation.orion.viewer.dialog.TapHelpDialog;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionPreferenceActivity;
@@ -121,6 +119,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
     //new for new devices)
     private TouchAutomata touchListener;
 
+    private boolean hasActionBar;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         loadGlobalOptions();
@@ -129,7 +129,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
         OptionActions.FULL_SCREEN.doAction(this, !globalOptions.isFullScreen(), globalOptions.isFullScreen());
         super.onCreate(savedInstanceState);
 
-        OptionActions.SHOW_ACTION_BAR.doAction(this, !globalOptions.isActionBarVisible(), globalOptions.isActionBarVisible());
+        //OptionActions.SHOW_ACTION_BAR.doAction(this, !globalOptions.isActionBarVisible(), globalOptions.isActionBarVisible());
+        hasActionBar = globalOptions.isActionBarVisible();
         setContentView(device.getLayoutId());
         view = (OrionView) findViewById(R.id.view);
 
@@ -962,6 +963,12 @@ public class OrionViewerActivity extends OrionBaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
+        if (!hasActionBar) {
+            for (int i = 0; i < 5; i++) {
+                SupportMenuItem item = (SupportMenuItem) menu.getItem(i);
+                item.setShowAsAction(SupportMenuItem.SHOW_AS_ACTION_NEVER);
+            }
+        }
         return true;
     }
 
@@ -1400,6 +1407,18 @@ public class OrionViewerActivity extends OrionBaseActivity {
             });
             buider.create().show();
         }
+    }
+
+    //big hack
+    protected void myprocessOnActivityVisible() {
+        if (getGlobalOptions().isShowTapHelp()) {
+            getGlobalOptions().saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false);
+            new TapHelpDialog(this).showDialog();
+        }
+
+//        if (!hasActionBar) {
+//            getSupportActionBar().hide();
+//        }
     }
 
 }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- the theme applied to the application or activity -->
+    <style name="MyHolo"
+           parent="@style/Holo.Theme">
+        <item name="windowActionBarOverlay">true</item>
+    </style>
+
+    <style name="MyHoloLight"
+           parent="@style/Holo.Theme.Light">
+        <item name="windowActionBarOverlay">true</item>
+    </style>
+
+</resources>
