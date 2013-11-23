@@ -66,16 +66,6 @@ public class OrionEditPreference extends EditTextPreference implements Preferenc
         super(context);
     }
 
-
-    protected void showDialog(Bundle state) {
-        super.showDialog(state);
-
-        if (Device.Info.NOOK_CLASSIC) {
-            getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-            getEditText().requestFocus();
-        }
-    }
-
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         if (minValue != null || maxValue != null) {
             if (newValue == null || "".equals(newValue)) {

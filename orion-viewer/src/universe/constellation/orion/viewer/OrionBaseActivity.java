@@ -236,32 +236,6 @@ public class OrionBaseActivity extends org.holoeverywhere.app.Activity {
         return getOrionContext().getOptions().getStringProperty(GlobalOptions.SCREEN_ORIENTATION, "DEFAULT");
     }
 
-    public static void setContentView(final Activity activity, final  int layout) {
-        if (Device.Info.NOOK_CLASSIC) {
-            activity.setContentView(R.layout.nook_template);
-            View view = activity.findViewById(R.id.nook_sensor2);
-            LayoutInflater inflater = activity.getLayoutInflater();
-            inflater.inflate(layout, (ViewGroup) view);
-
-            ImageButton menu = (ImageButton) activity.findViewById(R.id.nook_menu);
-            menu.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    activity.openOptionsMenu();
-                }
-            });
-
-            ImageButton cancel = (ImageButton) activity.findViewById(R.id.nook_cancel);
-            cancel.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    activity.finish();
-                }
-            });
-
-        } else {
-            activity.setContentView(layout);
-        }
-    }
-
     public void showAlert(String title, String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(title);

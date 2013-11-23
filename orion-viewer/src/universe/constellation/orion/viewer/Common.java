@@ -22,7 +22,6 @@ package universe.constellation.orion.viewer;
 import android.util.Log;
 import universe.constellation.orion.viewer.device.AndroidDevice;
 import universe.constellation.orion.viewer.device.EdgeDevice;
-import universe.constellation.orion.viewer.device.NookDevice;
 import universe.constellation.orion.viewer.device.TexetTb138Device;
 
 import java.io.*;
@@ -39,11 +38,7 @@ public class Common {
     public static Device createDevice() {
         if (ENABLE2SCREEN) {
             try {
-                 if (Device.Info.NOOK_CLASSIC) {
-                     return new NookDevice();
-                 } else if (Device.Info.ALEX) {
-                     return (Device) Class.forName("universe.constellation.orion.viewer.device.AlexDevice").newInstance();
-                 } else if (Device.Info.EDGE) {
+                 if (Device.Info.EDGE) {
                      return new EdgeDevice();
                  }
             } catch (Exception e) {

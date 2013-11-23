@@ -65,7 +65,7 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(Device.Info.NOOK_CLASSIC ? R.layout.nook_bookmarks : R.layout.bookmarks);
+        setContentView(R.layout.bookmarks);
 
         onNewIntent(getIntent());
 

@@ -42,8 +42,6 @@ public class OrionPreferenceActivity extends org.holoeverywhere.preference.Prefe
     protected void onCreate(Bundle savedInstanceState) {
         getOrionContext().applyTheme(this);
 
-        isAndroidGeneral = !Device.Info.TWO_SCREEN;
-
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.userpreferences);
 
@@ -59,18 +57,14 @@ public class OrionPreferenceActivity extends org.holoeverywhere.preference.Prefe
         PreferenceCategory GENERAL = (PreferenceCategory) screen.findPreference("GENERAL");
         ListPreference SCREEN_ORIENTATION = (ListPreference) findPreference("SCREEN_ORIENTATION");
 
-        PreferenceScreen BOOK_DEFAULT = (PreferenceScreen) screen.findPreference("BOOK_DEFAULT");
-        Preference BOOK_ORIENTATION = BOOK_DEFAULT.findPreference("BOOK_ORIENTATION");
+        /*PreferenceScreen BOOK_DEFAULT = (PreferenceScreen) screen.findPreference("BOOK_DEFAULT");*/
+        /*Preference BOOK_ORIENTATION = BOOK_DEFAULT.findPreference("BOOK_ORIENTATION");*/
 
-        if (!isAndroidGeneral) {
-            GENERAL.removePreference(SCREEN_ORIENTATION);
-        } else {
-            BOOK_DEFAULT.removePreference(BOOK_ORIENTATION);
+            /*BOOK_DEFAULT.removePreference(BOOK_ORIENTATION);*/
 
-            if (getOrionContext().getSdkVersion() >= 9) {
-                SCREEN_ORIENTATION.setEntries(getResources().getTextArray(R.array.screen_orientation_full));
-                SCREEN_ORIENTATION.setEntryValues(getResources().getTextArray(R.array.screen_orientation_full_desc));
-            }
+        if (getOrionContext().getSdkVersion() >= 9) {
+            SCREEN_ORIENTATION.setEntries(getResources().getTextArray(R.array.screen_orientation_full));
+            SCREEN_ORIENTATION.setEntryValues(getResources().getTextArray(R.array.screen_orientation_full_desc));
         }
     }
 
@@ -90,10 +84,6 @@ public class OrionPreferenceActivity extends org.holoeverywhere.preference.Prefe
 //        return false;
 //    }
 //
-
-    public void setContentView(int layoutResID) {
-        super.setContentView(Device.Info.NOOK_CLASSIC ? R.layout.nook_preferences : layoutResID);
-    }
 
     public OrionApplication getOrionContext() {
         return (OrionApplication) getApplicationContext();

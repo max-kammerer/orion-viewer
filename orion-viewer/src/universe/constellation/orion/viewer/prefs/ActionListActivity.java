@@ -46,7 +46,7 @@ public class ActionListActivity extends Activity {
 
         super.onCreate(savedInstanceState);
 
-        OrionBaseActivity.setContentView(this, R.layout.actions_selection);
+        setContentView(R.layout.actions_selection);
 
         int type = getIntent().getIntExtra("type", 0);
         TextView header = (TextView) findViewById(R.id.actions_header);

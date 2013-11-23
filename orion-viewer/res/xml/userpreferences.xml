@@ -81,14 +81,14 @@
                     android:dialogIcon="@drawable/walk_order"
                     android:defaultValue="@string/ABCD"/>
 
-            <ListPreference
+            <!--<ListPreference
                     android:key="BOOK_ORIENTATION"
                     android:title="@string/pref_bookDefaultOrientation"
                     android:summary="@string/pref_rotate_new_book_on_opening"
                     android:entries="@array/orientation_desc"
                     android:entryValues="@array/orientation"
                     android:dialogTitle="Rotation"
-                    android:defaultValue="0"/>
+                    android:defaultValue="0"/>-->
 
             <universe.constellation.orion.viewer.prefs.OrionLayoutDialog
                     android:key="PAGE_LAYOUT"

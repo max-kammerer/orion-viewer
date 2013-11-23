@@ -139,13 +139,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
         String mode = getOrionContext().getOptions().getStringProperty(GlobalOptions.DAY_NIGHT_MODE, "DAY");
         view.setNightMode("NIGHT".equals(mode));
 
-        if (!device.optionViaDialog()) {
-            initAnimator();
-            initMainScreen();
-        } else {
-            initOptionDialog();
-            initRotationScreen();
-        }
+        initOptionDialog();
+        initRotationScreen();
 
         //page chooser
         initPagePeekerScreen();
@@ -741,105 +736,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
         });
     }
 
-    private void initMainScreen() {
-        ImageButton btn = (ImageButton) findMyViewById(R.id.menu);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                openOptionsMenu();
-            }
-        });
-        btn = (ImageButton) findMyViewById(R.id.prev_page);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                changePage(-1);
-            }
-        });
-
-        btn.setOnLongClickListener(new View.OnLongClickListener() {
-
-            public boolean onLongClick(View v) {
-                //page seeker
-                animator.setDisplayedChild(PAGE_SCREEN);
-                return true;
-            }
-        });
-
-        btn = (ImageButton) findMyViewById(R.id.next_page);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                changePage(1);
-            }
-        });
-        btn.setOnLongClickListener(new View.OnLongClickListener() {
-
-            public boolean onLongClick(View v) {
-                //page seeker
-                Action.OPEN_BOOKMARKS.doAction(controller, OrionViewerActivity.this, null);
-                //animator.setDisplayedChild(PAGE_SCREEN);
-                return true;
-            }
-        });
-
-        btn = (ImageButton) findMyViewById(R.id.switch_page);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                controller.setRotation((controller.getRotation() - 1) % 2);
-            }
-        });
-        btn.setOnLongClickListener(new View.OnLongClickListener() {
-            public boolean onLongClick(View v) {
-                controller.setRotation((controller.getRotation() + 1) % 2);
-                return true;
-            }
-        });
-
-        btn = (ImageButton) findMyViewById(R.id.zoom);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                showOrionDialog(ZOOM_SCREEN, null, null);
-            }
-        });
-
-        btn = (ImageButton) findMyViewById(R.id.crop_menu);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                updateCrops();
-                animator.setDisplayedChild(CROP_SCREEN);
-            }
-        });
-
-//        btn = (ImageButton) findMyViewById(R.id.help);
-//        if (btn != null) {
-//            btn.setOnClickListener(new View.OnClickListener() {
-//                public void onClick(View v) {
-//                    //animator.setDisplayedChild(HELP_SCREEN);
-//                    Intent intent = new Intent();
-//                    intent.setClass(OrionViewerActivity.this, OrionHelpActivity.class);
-//                    startActivity(intent);
-//                }
-//            });
-//        }
-
-
-        btn = (ImageButton) findMyViewById(R.id.navigation);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                updatePageLayout();
-                animator.setDisplayedChild(PAGE_LAYOUT_SCREEN);
-            }
-        });
-
-        btn = (ImageButton) findMyViewById(R.id.options);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent in = new Intent(OrionViewerActivity.this, OrionPreferenceActivity.class);
-                startActivity(in);
-            }
-        });
-
-
-    }
-
     protected void onResume() {
         isResumed = true;
         super.onResume();
@@ -904,12 +800,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private boolean processKey(int keyCode, KeyEvent event, boolean isLong) {
         L.log("key = " + keyCode + " isLong = " + isLong);
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (!device.optionViaDialog() && animator.getDisplayedChild() != MAIN_SCREEN) {
-                onAnimatorCancel();
-                return true;
-            }
-        }
 
         int actionCode = getOrionContext().getKeyBinding().getInt(Common.getPrefKey(keyCode, isLong), -1);
         if (actionCode != -1) {
@@ -1024,22 +914,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
         return true;
     }
 
-    public void initAnimator() {
-        animator = (ViewAnimator) findMyViewById(R.id.viewanim);
-        getSubscriptionManager().addDocListeners(new DocumentViewAdapter() {
-            @Override
-            public void documentOpened(Controller controller) {
-                animator.setDisplayedChild(MAIN_SCREEN);
-            }
-
-            public void pageChanged(final int newPage, final int pageCount) {
-                TextView tv = (TextView) findMyViewById(R.id.page_number_view);
-                tv.setText(newPage + 1 + "/" + pageCount);
-                device.updatePageNumber(newPage + 1, pageCount);
-            }
-        });
-    }
-
     public SubscriptionManager getSubscriptionManager() {
         return manager;
     }
@@ -1089,19 +963,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
 
     protected View findMyViewById(int id) {
-        if (device.optionViaDialog()) {
-            return dialog.findViewById(id);
-        } else {
-            return findViewById(id);
-        }
+        return dialog.findViewById(id);
     }
 
     public void onAnimatorCancel() {
-        if (!device.optionViaDialog()){
-            animator.setDisplayedChild(MAIN_SCREEN);
-        } else {
-            dialog.cancel();
-        }
+        dialog.cancel();
     }
 
     @Override
@@ -1318,10 +1184,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
 
             animator.setDisplayedChild(screenId);
-
-            if  (device.optionViaDialog()) {
-                dialog.show();
-            }
+            dialog.show();
         }
     }
 

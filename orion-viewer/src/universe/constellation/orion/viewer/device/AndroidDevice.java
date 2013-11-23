@@ -172,14 +172,6 @@ public class AndroidDevice implements Device {
         return R.layout.android_file_manager;
     }
 
-    public int getHelpLayoutId() {
-        return R.layout.android_help;
-    }
-
-    public boolean optionViaDialog() {
-        return true;
-    }
-
     public void onSetContentView() {
         //To change body of implemented methods use File | Settings | File Templates.
     }

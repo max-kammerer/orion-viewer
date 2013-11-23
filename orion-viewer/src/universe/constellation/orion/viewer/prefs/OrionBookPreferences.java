@@ -45,34 +45,23 @@ public class OrionBookPreferences extends PreferenceActivity {
 
         addPreferencesFromResource(R.xml.book_preference);
 
-        if (Device.Info.NOOK_CLASSIC) {
-            ImageButton button = (ImageButton) findViewById(R.id.preferences_close);
-            button.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    finish();
-                }
-            });
-        }
-
         PreferenceCategory general = (PreferenceCategory) getPreferenceScreen().findPreference("GENERAL");
         ListPreference screenOrientation = (ListPreference) general.findPreference("screenOrientation");
-        if (Device.Info.TWO_SCREEN) {
-            general.removePreference(screenOrientation);
-        } else {
-            boolean isLevel9 = getOrionContext().getSdkVersion() >= 9;
+
+        boolean isLevel9 = getOrionContext().getSdkVersion() >= 9;
 
 
-            CharSequence[] values = getResources().getTextArray(isLevel9 ? R.array.screen_orientation_full_desc : R.array.screen_orientation_desc);
-            CharSequence[] newValues = new CharSequence[values.length];
-            for (int i = 0; i < values.length; i++) {
-                newValues[i] = values[i];
-            }
-            newValues[0] = getResources().getString(R.string.orientation_default_rotation);
-            screenOrientation.setEntries(newValues);
+        CharSequence[] values = getResources().getTextArray(isLevel9 ? R.array.screen_orientation_full_desc : R.array.screen_orientation_desc);
+        CharSequence[] newValues = new CharSequence[values.length];
+        for (int i = 0; i < values.length; i++) {
+            newValues[i] = values[i];
+        }
+        newValues[0] = getResources().getString(R.string.orientation_default_rotation);
+        screenOrientation.setEntries(newValues);
 
-            if (isLevel9) {
-                screenOrientation.setEntryValues(R.array.screen_orientation_full);
-            }
+        if (isLevel9) {
+            screenOrientation.setEntryValues(R.array.screen_orientation_full);
+        }
 //            if (!isLevel9) {
 //                CharSequence [] entries = screenOrientation.getEntries();
 //                CharSequence [] values = screenOrientation.getEntryValues();
@@ -81,13 +70,9 @@ public class OrionBookPreferences extends PreferenceActivity {
 //                screenOrientation.setEntries(entries);
 //                screenOrientation.setEntryValues(values);
 //            }
-        }
 
     }
 
-    public void setContentView(int layoutResID) {
-        super.setContentView(Device.Info.NOOK_CLASSIC ? R.layout.nook_preferences : layoutResID);
-    }
 
     public OrionApplication getOrionContext() {
         return (OrionApplication) getApplicationContext();

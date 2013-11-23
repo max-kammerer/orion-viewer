@@ -49,30 +49,9 @@ public interface Device {
         
         public final static boolean SONY_PRS_T1_T2 = "sony".equals(MANUFACTURER.toLowerCase()) && ("PRS-T1".equals(MODEL) || "PRS-T2".equals(MODEL));
 
-        public final static boolean ALEX = "sdi".equals(MANUFACTURER.toLowerCase()) && "seleucia".equals(MODEL.toLowerCase()) && "seleucia".equals(DEVICE.toLowerCase());
-
         public final static boolean EDGE = "edge".equals(DEVICE.toLowerCase()) || "edgejr".equals(DEVICE.toLowerCase());
 
         public final static boolean TEXET_TB_138 = "texet".equalsIgnoreCase(DEVICE) && "rk29sdk".equalsIgnoreCase(MODEL);
-
-        public final static boolean NOOK_CLASSIC;
-
-        static {
-            OrionApplication application = OrionApplication.instance;
-            boolean isNookClassic = false;
-
-            if ("".equals(MANUFACTURER) && "sec_smdk6410".equals(MODEL.toLowerCase()) && "smdk6410".equals(DEVICE.toLowerCase()) && application != null) {
-                WindowManager manager = (WindowManager) application.getSystemService(Context.WINDOW_SERVICE);
-                if (manager != null) {
-                    Display display = manager.getDefaultDisplay();
-                    isNookClassic =  display.getWidth() == 600 && display.getHeight() == 944;
-                }
-            }
-            NOOK_CLASSIC = isNookClassic;
-        }
-
-        //EDGE removed from two screen - cause general screen rotation is used.
-        public final static boolean TWO_SCREEN = ALEX || NOOK_CLASSIC;
 
 		public static String getField(String name) {
             try {
@@ -122,11 +101,7 @@ public interface Device {
 
     int getFileManagerLayoutId();
 
-    int getHelpLayoutId();
-
     String getDefaultDirectory();
-
-    boolean optionViaDialog();
 
     void onSetContentView();
 

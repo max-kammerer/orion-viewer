@@ -99,21 +99,6 @@ public class LastPageInfo implements Serializable {
             //reinit
             lastPageInfo = new LastPageInfo();
             GlobalOptions options = activity.getOrionContext().getOptions();
-            if (Device.Info.TWO_SCREEN) {
-                int defaultRotation = options.getDefaultOrientation();
-                switch (defaultRotation) {
-                    case 90:
-                        defaultRotation = -1;
-                        break;
-                    case 270:
-                        defaultRotation = 1;
-                        break;
-                    default:
-                        defaultRotation = 0;
-                        break;
-                }
-                lastPageInfo.rotation = defaultRotation;
-            }
 
             lastPageInfo.zoom = options.getDefaultZoom();
             lastPageInfo.contrast = options.getDefaultContrast();

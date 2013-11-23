@@ -51,17 +51,6 @@ public class OutlineActivity extends ListActivity {
         finish();
     }
 
-    private  boolean inSettingCV = false;
-    @Override
-    public void setContentView(int layoutResID) {
-        if (!inSettingCV) {
-            inSettingCV = true;
-            OrionBookmarkActivity.setContentView(this, layoutResID);
-        } else {
-            super.setContentView(layoutResID);
-        }
-    }
-
     public OrionApplication getOrionContext() {
         return (OrionApplication) getApplicationContext();
     }
