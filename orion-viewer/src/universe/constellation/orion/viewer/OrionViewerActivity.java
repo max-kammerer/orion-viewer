@@ -1416,9 +1416,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
             new TapHelpDialog(this).showDialog();
         }
 
-//        if (!hasActionBar) {
-//            getSupportActionBar().hide();
-//        }
+        if (!hasActionBar) {
+            //relayout
+            getSupportActionBar().show();
+            getSupportActionBar().hide();
+        }
     }
 
 }
