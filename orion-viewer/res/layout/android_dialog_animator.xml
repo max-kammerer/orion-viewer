@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ViewAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:id="@+id/viewanim">
+
+    <LinearLayout android:layout_height="fill_parent" android:orientation="vertical"
+                  android:layout_width="fill_parent" android:gravity="center">
+
+        <ListView android:layout_width="fill_parent"
+                    android:layout_height="0px" android:id="@+id/rotationList" android:isScrollContainer="true" android:layout_weight="1"/>
+
+        <RadioGroup android:id="@+id/rotationGroup" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center" android:gravity="left">
+
+            <RadioButton android:id="@+id/rotate0"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content" android:text="@string/rotate_0"/>
+
+            <RadioButton android:id="@+id/rotate90"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content" android:text="@string/rotate_90"/>
+
+            <RadioButton android:id="@+id/rotate270"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content" android:text="@string/rotate_270"/>
+        </RadioGroup>
+
+        <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal" android:layout_below="@id/rotationGroup"
+                      android:layout_width="fill_parent" android:layout_gravity="center" android:gravity="right" android:layout_margin="10dp">
+            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                         android:src="@drawable/view" android:id="@+id/rotation_apply"
+                         android:layout_gravity="right"/>
+            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                         android:src="@drawable/revert" android:id="@+id/rotation_close"
+                         android:layout_gravity="right"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <!--page chooser screen-->
+    <LinearLayout android:id="@+id/page_menu"
+                  android:layout_height="fill_parent" android:orientation="vertical"
+                  android:layout_width="fill_parent" android:gravity="center">
+
+            <LinearLayout android:orientation="horizontal"
+                          android:layout_width="fill_parent" android:layout_height="wrap_content"
+                          android:gravity="center">
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:src="@drawable/minus" android:id="@+id/page_picker_minus"/>
+                <EditText android:layout_width="wrap_content"
+                          android:layout_height="wrap_content" android:id="@+id/page_picker_message"
+                          android:textSize="22sp" android:maxLength="5" android:inputType="number"
+                          android:selectAllOnFocus="true"/>
+
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:src="@drawable/plus" android:id="@+id/page_picker_plus"/>
+
+            </LinearLayout>
+
+        <SeekBar android:id="@+id/page_picker_seeker"
+                 android:minWidth="100dp" android:layout_height="wrap_content"
+                 android:layout_width="fill_parent" android:layout_margin="5dp"></SeekBar>
+
+            <LinearLayout android:orientation="horizontal"
+              android:layout_width="fill_parent" android:layout_height="wrap_content"
+              android:gravity="right" android:layout_margin="10dp">
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:src="@drawable/view" android:id="@+id/page_preview"/>
+                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                             android:src="@drawable/revert" android:id="@+id/page_picker_close"/>
+            </LinearLayout>
+    </LinearLayout>
+
+    <!--zoom chooser screen-->
+    <LinearLayout android:id="@+id/zoom_menu"
+                  android:layout_height="fill_parent" android:orientation="vertical"
+                  android:layout_width="fill_parent" android:gravity="center">
+
+
+        <!--<HorizontalScrollView android:layout_width="fill_parent" android:layout_height="wrap_content" android:gravity="center">-->
+        <LinearLayout android:orientation="horizontal"
+                      android:layout_width="fill_parent" android:layout_height="wrap_content"
+                      android:gravity="center">
+
+            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                         android:src="@drawable/minus" android:id="@+id/zoom_picker_minus"/>
+            <EditText android:layout_width="wrap_content"
+                      android:layout_height="wrap_content" android:id="@+id/zoom_picker_message" android:inputType="numberDecimal"
+                      android:textSize="20sp"/>
+
+            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                         android:src="@drawable/plus" android:id="@+id/zoom_picker_plus"/>
+
+            <Spinner android:id="@+id/zoom_spinner" android:entries="@array/fits"
+                                               android:layout_width="wrap_content"
+                                               android:layout_height="fill_parent" android:textSize="22sp"
+                                               android:layout_centerVertical="true"
+                                               android:layout_centerHorizontal="true"
+                                               />
+
+        </LinearLayout>
+        <!--</HorizontalScrollView>-->
+
+        <SeekBar android:id="@+id/zoom_picker_seeker"
+                 android:minWidth="100dp" android:layout_height="wrap_content"
+                 android:layout_width="fill_parent" android:layout_margin="5dp"></SeekBar>
+
+        <LinearLayout android:orientation="horizontal"
+                      android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="10dp"
+                      android:gravity="right">
+
+            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                         android:src="@drawable/view" android:id="@+id/zoom_preview"/>
+            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                         android:src="@drawable/revert" android:id="@+id/zoom_picker_close"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!--border crop screen-->
+    <LinearLayout android:layout_height="wrap_content" android:orientation="vertical"
+                  android:layout_width="fill_parent" android:gravity="center" android:layout_gravity="center">
+
+        <ViewAnimator android:layout_width="fill_parent" android:layout_weight="1"
+              android:layout_height="wrap_content"
+              android:id="@+id/crop_animator">
+
+            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:isScrollContainer="true"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbarStyle="outsideInset"
+                android:scrollbars="vertical"
+                android:orientation="vertical">
+
+                <include layout="@layout/crops"/>
+
+            </ScrollView>
+
+            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:isScrollContainer="true"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbarStyle="outsideInset"
+                android:scrollbars="vertical"
+                android:orientation="vertical">
+
+
+                <include layout="@layout/crops_even"/>
+
+            </ScrollView>
+        </ViewAnimator>
+
+        <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal" android:layout_weight="0"
+                  android:layout_width="fill_parent" android:gravity="right" android:layout_margin="10dp">
+
+            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                         android:src="@drawable/next" android:id="@+id/crop_even_button" android:layout_marginRight="20dp"/>
+
+            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                         android:src="@drawable/view" android:id="@+id/crop_preview"/>
+
+            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                         android:src="@drawable/revert" android:id="@+id/crop_close"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <include layout="@layout/page_layout"/>
+
+    <include layout="@layout/add_bookmark"/>
+
+</ViewAnimator>
