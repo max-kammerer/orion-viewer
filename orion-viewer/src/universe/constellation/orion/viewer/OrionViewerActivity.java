@@ -42,6 +42,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 
+import com.artifex.mupdfdemo.SearchTaskResult;
 import org.holoeverywhere.widget.AdapterView;
 import org.holoeverywhere.widget.ArrayAdapter;
 import org.holoeverywhere.widget.CheckBox;
@@ -52,9 +53,11 @@ import org.holoeverywhere.widget.ListView;
 import org.holoeverywhere.widget.RadioButton;
 import org.holoeverywhere.widget.SeekBar;
 import org.holoeverywhere.widget.Spinner;
+import universe.constellation.orion.viewer.dialog.SearchDialog;
 import universe.constellation.orion.viewer.dialog.TapHelpDialog;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionPreferenceActivity;
+import universe.constellation.orion.viewer.search.SearchTask;
 import universe.constellation.orion.viewer.selection.SelectedTextActions;
 import universe.constellation.orion.viewer.selection.SelectionAutomata;
 import universe.constellation.orion.viewer.selection.TouchAutomata;
@@ -854,7 +857,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         if (!hasActionBar) {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 6; i++) {
                 SupportMenuItem item = (SupportMenuItem) menu.getItem(i);
                 item.setShowAsAction(SupportMenuItem.SHOW_AS_ACTION_NEVER);
             }
@@ -871,6 +874,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 finish();
                 return true;
 
+            case R.id.search_menu_item: action = Action.SEARCH; break;
             case R.id.crop_menu_item: action = Action.CROP; break;
             case R.id.zoom_menu_item: action = Action.ZOOM; break;
             case R.id.add_bookmark_menu_item: action = Action.ADD_BOOKMARK; break;
@@ -1286,4 +1290,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         }
     }
 
+    public void startSearch() {
+        SearchDialog.newInstance().show(this);
+    }
 }

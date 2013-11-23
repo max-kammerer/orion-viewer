@@ -275,5 +275,9 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         return bottomMargin;
     }
 
+    @Override
+    public PageWalker getWalker() {
+        return walker;
+    }
 }
 

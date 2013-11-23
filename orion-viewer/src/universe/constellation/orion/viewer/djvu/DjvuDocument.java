@@ -20,6 +20,7 @@
 package universe.constellation.orion.viewer.djvu;
 
 import android.graphics.Bitmap;
+import android.graphics.RectF;
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.DocumentWrapper;
 import universe.constellation.orion.viewer.outline.OutlineItem;
@@ -116,5 +117,10 @@ public class DjvuDocument implements DocumentWrapper {
     @Override
     public boolean authentificate(String password) {
         return true;
+    }
+
+    @Override
+    public RectF[] searchPage(int pageNumber, String text) {
+        return new RectF[0];
     }
 }

@@ -36,7 +36,7 @@
     <string name="menu_key_binder_text">Key Binder</string>
     <string name="menu_options_text">Settings</string>
     <string name="menu_tap_text">Tap zones</string>
-
+    <string name="menu_search_item">Search</string>
 
     <string name="menu_book_preferences">Book Options</string>
 

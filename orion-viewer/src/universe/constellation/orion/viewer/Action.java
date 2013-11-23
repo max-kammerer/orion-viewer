@@ -26,6 +26,7 @@ import android.widget.Toast;
 import universe.constellation.orion.viewer.outline.OutlineActivity;
 import universe.constellation.orion.viewer.outline.OutlineItem;
 import universe.constellation.orion.viewer.prefs.*;
+import universe.constellation.orion.viewer.search.SearchTask;
 
 import java.util.HashMap;
 
@@ -143,6 +144,14 @@ public enum Action {
             } else {
                 activity.showWarning(R.string.warn_no_outline);
             }
+        }
+    },
+
+    SEARCH (R.string.action_crop_page, R.integer.action_crop_page) {
+                @Override
+        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+
+            activity.startSearch();
         }
     },
 

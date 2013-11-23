@@ -20,6 +20,7 @@
 package universe.constellation.orion.viewer;
 
 import android.graphics.Bitmap;
+import android.graphics.RectF;
 import universe.constellation.orion.viewer.outline.OutlineItem;
 
 /**
@@ -52,4 +53,6 @@ public interface DocumentWrapper {
     public boolean needPassword();
 
     public boolean authentificate(String password);
+
+    RectF[] searchPage(int pageNumber, String text);
 }

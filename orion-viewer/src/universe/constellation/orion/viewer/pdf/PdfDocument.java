@@ -98,4 +98,9 @@ public class PdfDocument implements DocumentWrapper {
     public boolean authentificate(String password) {
         return core.authenticatePassword(password);
     }
+
+    @Override
+    public RectF[] searchPage(int pageNumber, String text) {
+        return core.searchPage(pageNumber, text);
+    }
 }

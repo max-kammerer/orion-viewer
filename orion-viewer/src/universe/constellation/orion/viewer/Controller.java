@@ -69,7 +69,7 @@ public class Controller implements ViewDimensionAware {
             public void viewParametersChanged() {
                 if (Controller.this.activity.isResumed) {
                     Controller.this.renderer.invalidateCache();
-                    drawPage();
+                    drawPage(layoutInfo);
                     hasPendingEvents = false;
                 } else {
                     hasPendingEvents = true;
@@ -83,12 +83,17 @@ public class Controller implements ViewDimensionAware {
 
     public void drawPage(int page) {
         layout.reset(layoutInfo, page);
-        drawPage();
+        drawPage(layoutInfo);
     }
 
     public void drawPage() {
+        drawPage(layoutInfo);
+    }
+
+    public void drawPage(LayoutPosition info) {
+        layoutInfo = info;
         sendPageChangedNotification();
-        renderer.render(layoutInfo);
+        renderer.render(info);
     }
 
     public void processPendingEvents() {
@@ -125,12 +130,12 @@ public class Controller implements ViewDimensionAware {
 
     public void drawNext() {
         layout.nextPage(layoutInfo);
-        drawPage();
+        drawPage(layoutInfo);
     }
 
     public void drawPrev() {
         layout.prevPage(layoutInfo);
-        drawPage();
+        drawPage(layoutInfo);
     }
 
     public void translateAndZoom(boolean changeZoom, float zoomScaling, float deltaX, float deltaY) {
@@ -388,4 +393,13 @@ public class Controller implements ViewDimensionAware {
         }
         return result;
     }
+
+    public DocumentWrapper getDoc() {
+        return doc;
+    }
+
+    public LayoutStrategy getLayoutStrategy() {
+        return layout;
+    }
+
 }

@@ -26,8 +26,11 @@ import android.util.AttributeSet;
 import android.view.View;
 import universe.constellation.orion.viewer.device.Nook2Util;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
+import universe.constellation.orion.viewer.view.DrawTask;
 import universe.constellation.orion.viewer.view.ViewDimensionAware;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -78,6 +81,8 @@ public class OrionView extends View implements OrionImageView {
     private boolean inScaling = false;
 
     private boolean showOffset = true;
+
+    private List<DrawTask> tasks = new ArrayList();
 
     private ColorMatrixColorFilter nightMatrix = new ColorMatrixColorFilter(new ColorMatrix(
             new float[]{
@@ -142,6 +147,8 @@ public class OrionView extends View implements OrionImageView {
         }
 
 
+        canvas.save();
+        canvas.translate(0f, statusBarHeight);
         if (bitmap != null && !bitmap.isRecycled()) {
             long start = System.currentTimeMillis();
             Common.d("OrionView: drawing bitmap on view...");
@@ -156,7 +163,7 @@ public class OrionView extends View implements OrionImageView {
                 canvas.scale(myScale, myScale);
             }
 
-            canvas.drawBitmap(bitmap, 0, statusBarHeight, currentPaint);
+            canvas.drawBitmap(bitmap, 0, 0, currentPaint);
 
             if (inScaling) {
                 Common.d("in scaling 2");
@@ -168,11 +175,17 @@ public class OrionView extends View implements OrionImageView {
 
                 int right = (int) (left + info.x.pageDimension * myScale);
                 int bottom = (int) (top + info.y.pageDimension * myScale);
-                canvas.drawRect(left, top + statusBarHeight, right, bottom + statusBarHeight, borderPaint);
+                canvas.drawRect(left, top, right, bottom, borderPaint);
             }
 
             Common.d("OrionView:s bitmap rendering takes " + 0.001f * (System.currentTimeMillis() - start) + " s");
+
+            for (int i = 0; i < tasks.size(); i++) {
+                DrawTask drawTask = tasks.get(i);
+                drawTask.drawCanvas(canvas, currentPaint);
+            }
         }
+        canvas.restore();
 
         if (showStatusBar) {
             drawStatusBar(canvas);
@@ -298,6 +311,14 @@ public class OrionView extends View implements OrionImageView {
         } else {
             this.showStatusBar = showStatusBar;
         }
+    }
+
+    public void addTask(DrawTask drawTask) {
+        tasks.add(drawTask);
+    }
+
+    public void removeTask(DrawTask drawTask) {
+        tasks.remove(drawTask);
     }
 
     public Point getRenderingSize() {

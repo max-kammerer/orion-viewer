@@ -35,6 +35,8 @@ public interface LayoutStrategy {
 
     void reset(LayoutPosition pos, int pageNumber);
 
+    void reset(LayoutPosition pos, int pageNumber, boolean forward);
+
     boolean changeRotation(int rotation);
 
     boolean changeOverlapping(int horizontal, int vertical);
@@ -74,4 +76,6 @@ public interface LayoutStrategy {
     int getBottomMargin();
 
     boolean isEnableEvenCrop();
+
+    PageWalker getWalker();
 }

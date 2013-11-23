@@ -19,6 +19,8 @@
 
 package universe.constellation.orion.viewer;
 
+import android.graphics.RectF;
+
 /**
  * User: mike
  * Date: 15.10.11
@@ -91,5 +93,11 @@ public class LayoutPosition implements Cloneable {
     @Override
     public String toString() {
         return "page: " + pageNumber + " x: " + x + " y: " + y;
+    }
+
+    public RectF toAbsoluteRect() {
+        int left = x.offset + x.marginLess;
+        int top = y.offset + y.marginLess;
+        return new RectF(left, top, left + x.screenDimension, top + y.screenDimension);///
     }
 }
