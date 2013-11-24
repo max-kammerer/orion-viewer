@@ -40,7 +40,7 @@
     <string name="pref_rotate_screen">Ориентация экрана по умолчанию: необходим перезапуск приложения</string>
     <string name="pref_book_screen_orientation">Ориентация экрана для текущей книги</string>
     <string name="pref_close_dialog_on_apply">Закрывать диалог при применении настроеек</string>
-    <string name="pref_close_page_option_dialog_on_apply">Закрывать диалог параметров страницы при применении настроеек</string>
+    <string name="pref_close_page_option_dialog_on_apply">Закрывать диалог параметров страницы при применении настроек</string>
     <string name="pref_swap_prev_next_keys">Обменять клавиши местами</string>
     <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Обменять действия клавиш вперед/назад в портретном режиме</string>
     <string name="pref_dictionary">Словарь</string>
