@@ -1,3 +1,7 @@
+===== 0.51.0 (Nov 24, 2013) =====
+* Added search for pdf
+* Fixed bug with not visible menu ion full screen mode
+
 ===== 0.50.8 (Nov 12, 2013) =====
 * German localization by Johannes Römer
 * Bug fixing
