@@ -22,11 +22,10 @@ package universe.constellation.orion.viewer;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.widget.Toast;
+import org.holoeverywhere.widget.Toast;
 import universe.constellation.orion.viewer.outline.OutlineActivity;
 import universe.constellation.orion.viewer.outline.OutlineItem;
 import universe.constellation.orion.viewer.prefs.*;
-import universe.constellation.orion.viewer.search.SearchTask;
 
 import java.util.HashMap;
 

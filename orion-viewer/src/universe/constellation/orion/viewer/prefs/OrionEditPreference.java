@@ -21,18 +21,13 @@ package universe.constellation.orion.viewer.prefs;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.os.Bundle;
 import android.util.AttributeSet;
-import android.view.WindowManager;
-import android.widget.Toast;
-
 import org.holoeverywhere.preference.EditTextPreference;
 import org.holoeverywhere.preference.Preference;
+import org.holoeverywhere.widget.Toast;
+import universe.constellation.orion.viewer.R;
 
 import java.util.regex.Pattern;
-
-import universe.constellation.orion.viewer.Device;
-import universe.constellation.orion.viewer.R;
 
 /**
  * User: mike
