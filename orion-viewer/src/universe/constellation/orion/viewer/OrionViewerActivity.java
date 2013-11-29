@@ -42,7 +42,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 
-import com.artifex.mupdfdemo.SearchTaskResult;
 import org.holoeverywhere.widget.AdapterView;
 import org.holoeverywhere.widget.ArrayAdapter;
 import org.holoeverywhere.widget.CheckBox;
@@ -56,8 +55,6 @@ import org.holoeverywhere.widget.Spinner;
 import universe.constellation.orion.viewer.dialog.SearchDialog;
 import universe.constellation.orion.viewer.dialog.TapHelpDialog;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
-import universe.constellation.orion.viewer.prefs.OrionPreferenceActivity;
-import universe.constellation.orion.viewer.search.SearchTask;
 import universe.constellation.orion.viewer.selection.SelectedTextActions;
 import universe.constellation.orion.viewer.selection.SelectionAutomata;
 import universe.constellation.orion.viewer.selection.TouchAutomata;
@@ -142,6 +139,13 @@ public class OrionViewerActivity extends OrionBaseActivity {
         String mode = getOrionContext().getOptions().getStringProperty(GlobalOptions.DAY_NIGHT_MODE, "DAY");
         view.setNightMode("NIGHT".equals(mode));
 
+        initDialogs();
+
+        myIntent = getIntent();
+        touchListener = new TouchAutomata(this, view);
+    }
+
+    private void initDialogs() {
         initOptionDialog();
         initRotationScreen();
 
@@ -155,10 +159,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
         initPageLayoutScreen();
 
         initAddBookmarkScreen();
-
-        myIntent = getIntent();
-        touchListener = new TouchAutomata(this, view);
-
     }
 
     public void updateCrops() {
