@@ -1,6 +1,7 @@
 package universe.constellation.orion.viewer.dialog;
 
 import android.graphics.Rect;
+import android.view.Gravity;
 import android.view.WindowManager;
 import org.holoeverywhere.app.Dialog;
 import universe.constellation.orion.viewer.OrionView;
@@ -30,17 +31,12 @@ public class DialogOverView {
     protected void initDialogSize() {
         OrionView orionView = activity.getView();
         Rect rect = orionView.getViewCoords();
-        int[] coords = new int[]{rect.left, rect.top};
-        orionView.getLocationOnScreen(coords);
-        int left = coords[0];
-        int top = coords[1];
         int width = rect.width();
         int height = rect.height();
         WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+        params.gravity = Gravity.BOTTOM;
         params.width = width;
         params.height = height;
-        params.x = left;
-        params.y = top;
         dialog.getWindow().setAttributes(params);
     }
 }
