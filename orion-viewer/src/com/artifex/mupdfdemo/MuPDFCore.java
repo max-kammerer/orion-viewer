@@ -250,14 +250,30 @@ public class MuPDFCore
         // the spans, and we need to collect the text into words.
         ArrayList<TextWord[]> lns = new ArrayList<TextWord[]>();
 
+        for (TextChar[][][] bl: chars) {
+                    if (bl != null) {
+                        for (TextChar[][] ln: bl) {
+                            if (ln != null) {
+                                for (TextChar[] sp: ln) {
+                                    for (TextChar tc: sp) {
+                                        System.out.print(tc.c);
+                                }
+                                    System.out.println("");
+                            }
+                        }
+
+                    }
+                }
+        }
 
         for (TextChar[][][] bl: chars) {
             if (bl != null) {
                 for (TextChar[][] ln: bl) {
                     if (ln != null) {
                         ArrayList<TextWord> wds = new ArrayList<TextWord>();
-                        TextWord wd = new TextWord();
                         for (TextChar[] sp: ln) {
+
+                            TextWord wd = new TextWord();
                             for (TextChar tc: sp) {
                                 if (tc.c != ' ') {
                                     wd.Add(tc);
@@ -281,9 +297,10 @@ public class MuPDFCore
                                     }
                                 }
                             }
+                        }
 
-                            if (wds.size() > 0)
-                                lns.add(wds.toArray(new TextWord[wds.size()]));
+                        if (wds.size() > 0) {
+                            lns.add(wds.toArray(new TextWord[wds.size()]));
                         }
                     }
                 }
