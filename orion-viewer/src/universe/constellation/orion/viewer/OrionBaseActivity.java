@@ -20,6 +20,7 @@
 package universe.constellation.orion.viewer;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -234,7 +235,7 @@ public class OrionBaseActivity extends ActionBarActivity {
     }
 
     public void showAlert(String title, String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = createThemedAlertBuilder();
         builder.setTitle(title);
         builder.setMessage(message);
 
@@ -245,6 +246,28 @@ public class OrionBaseActivity extends ActionBarActivity {
         });
 
         builder.create().show();
+    }
+
+    public Dialog createThemedDialog() {
+        int sdkVersion = getOrionContext().getSdkVersion();
+        if (sdkVersion >= 14) {
+            return new Dialog(this);
+        } else {
+            boolean isLightTheme = getOrionContext().isLightTheme();
+            return new Dialog(this, isLightTheme ? R.style.dialog_light : R.style.dialog_dark);
+        }
+    }
+
+    public AlertDialog.Builder createThemedAlertBuilder() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        int sdkVersion = getOrionContext().getSdkVersion();
+        if (sdkVersion < 14) {
+            boolean isLightTheme = getOrionContext().isLightTheme();
+            if (isLightTheme) {
+                builder.setInverseBackgroundForced(true);
+            }
+        }
+        return builder;
     }
 
     public boolean isLevel5ApiEnabled() {

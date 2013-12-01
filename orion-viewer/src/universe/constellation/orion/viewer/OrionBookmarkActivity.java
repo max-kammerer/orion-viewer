@@ -104,7 +104,7 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
                         if (position != 0) {
                             final Bookmark item = (Bookmark) getItem(position);
 
-                            AlertDialog.Builder builder = new AlertDialog.Builder(OrionBookmarkActivity.this).setIcon(R.drawable.edit_item);
+                            AlertDialog.Builder builder = createThemedAlertBuilder().setIcon(R.drawable.edit_item);
 
                             builder.setTitle("Edit Bookmark");
                             final EditText editText = new EditText(OrionBookmarkActivity.this);
@@ -240,7 +240,7 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
                 View group = getLayoutInflater().inflate(R.layout.bookmark_book_list, null);
                 final ListView tree = (ListView) group.findViewById(R.id.book_list);
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                AlertDialog.Builder builder = createThemedAlertBuilder();
                 builder.setTitle("Select source book").setCancelable(true).setView(group);
                 builder.setPositiveButton("Import", new DialogInterface.OnClickListener() {
                     @Override

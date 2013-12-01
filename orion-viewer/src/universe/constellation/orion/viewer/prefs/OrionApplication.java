@@ -110,6 +110,16 @@ public class OrionApplication extends Application {
         applyTheme(activity, false);
     }
 
+    public boolean isLightTheme() {
+        String theme = getOptions().getApplicationTheme();
+        if ("DEFAULT".equals(theme) || "DARK".equals(theme)) {
+            return false;
+        } else if ("LIGHT".equals(theme)) {
+            return true;
+        }
+        return false;
+    }
+
     private int getThemeId(boolean processActionBar) {
         String theme = getOptions().getApplicationTheme();
         boolean showActionBar = !processActionBar || getOptions().isActionBarVisible();

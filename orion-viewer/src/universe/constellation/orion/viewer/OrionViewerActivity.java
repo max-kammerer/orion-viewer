@@ -568,7 +568,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 catch (Exception e) {
                     e.printStackTrace();
                     OrionViewerActivity activity = OrionViewerActivity.this;
-                    AlertDialog.Builder buider = new AlertDialog.Builder(activity);
+                    AlertDialog.Builder buider = createThemedAlertBuilder();
                     buider.setTitle(activity.getResources().getString(R.string.ex_msg_operation_failed));
 
                     final EditText input = new EditText(activity);
@@ -913,7 +913,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public void initOptionDialog() {
-        dialog = new Dialog(this);
+        dialog = createThemedDialog();
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.android_dialog);
         animator = ((ViewAnimator)dialog.findViewById(R.id.viewanim));
@@ -1236,7 +1236,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private void askPassword(final Controller controller) {
         if (controller.needPassword()) {
-            AlertDialog.Builder buider = new AlertDialog.Builder(this);
+            AlertDialog.Builder buider = createThemedAlertBuilder();
             buider.setTitle("Password");
 
             final EditText input = new EditText(this);
