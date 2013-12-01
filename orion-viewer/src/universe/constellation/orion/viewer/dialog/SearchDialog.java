@@ -55,9 +55,10 @@ public class SearchDialog extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Dialog dialog = getDialog();
+        dialog.setCanceledOnTouchOutside(true);
+
         Window window = dialog.getWindow();
         window.setLayout(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.TOP;
         ActionBar supportActionBar = ((OrionBaseActivity) getActivity()).getSupportActionBar();
