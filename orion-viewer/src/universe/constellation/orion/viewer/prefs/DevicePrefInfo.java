@@ -20,11 +20,10 @@
 package universe.constellation.orion.viewer.prefs;
 
 import android.content.Context;
+import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
-
-import org.holoeverywhere.preference.DialogPreference;
 
 import universe.constellation.orion.viewer.Device;
 import universe.constellation.orion.viewer.R;

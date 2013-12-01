@@ -3,13 +3,13 @@
 
     <!-- the theme applied to the application or activity -->
     <style name="MyHolo"
-           parent="@style/Holo.Theme">
+           parent="@style/Theme.AppCompat">
         <item name="windowActionBarOverlay">true</item>
         <item name="android:windowActionBarOverlay">true</item>
     </style>
 
     <style name="MyHoloLight"
-           parent="@style/Holo.Theme.Light">
+           parent="@style/Theme.AppCompat.Light">
         <item name="android:windowActionBarOverlay">true</item>
         <item name="windowActionBarOverlay">true</item>
     </style>

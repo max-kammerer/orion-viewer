@@ -20,13 +20,13 @@
 package universe.constellation.orion.viewer.prefs;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.v7.appcompat.R;
 import android.util.DisplayMetrics;
-import org.holoeverywhere.R;
-import org.holoeverywhere.app.Application;
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.Controller;
 import universe.constellation.orion.viewer.LastPageInfo;
@@ -115,9 +115,9 @@ public class OrionApplication extends Application {
         boolean showActionBar = !processActionBar || getOptions().isActionBarVisible();
         int themeId = -1;
         if ("DEFAULT".equals(theme) || "DARK".equals(theme)) {
-            themeId = showActionBar ? R.style.Holo_Theme : universe.constellation.orion.viewer.R.style.MyHolo;
+            themeId = showActionBar ? R.style.Theme_AppCompat : universe.constellation.orion.viewer.R.style.MyHolo;
         } else if ("LIGHT".equals(theme)) {
-            themeId = showActionBar ? R.style.Holo_Theme_Light : universe.constellation.orion.viewer.R.style.MyHoloLight;
+            themeId = showActionBar ? R.style.Theme_AppCompat_Light : universe.constellation.orion.viewer.R.style.MyHoloLight;
         }
         return themeId;
     }

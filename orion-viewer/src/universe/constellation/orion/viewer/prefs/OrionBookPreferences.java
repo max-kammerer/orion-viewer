@@ -20,14 +20,9 @@
 package universe.constellation.orion.viewer.prefs;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageButton;
-
-import org.holoeverywhere.preference.ListPreference;
-import org.holoeverywhere.preference.PreferenceActivity;
-import org.holoeverywhere.preference.PreferenceCategory;
-
-import universe.constellation.orion.viewer.Device;
+import android.preference.ListPreference;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
 import universe.constellation.orion.viewer.R;
 
 /**

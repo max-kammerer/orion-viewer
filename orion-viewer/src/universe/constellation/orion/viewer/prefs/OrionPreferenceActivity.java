@@ -21,11 +21,11 @@ package universe.constellation.orion.viewer.prefs;
 
 import android.os.Bundle;
 
-import org.holoeverywhere.preference.ListPreference;
-import org.holoeverywhere.preference.Preference;
-import org.holoeverywhere.preference.PreferenceCategory;
-import org.holoeverywhere.preference.PreferenceScreen;
+import android.preference.ListPreference;
+import android.preference.PreferenceActivity;
 
+import android.preference.PreferenceCategory;
+import android.preference.PreferenceScreen;
 import universe.constellation.orion.viewer.Device;
 import universe.constellation.orion.viewer.R;
 
@@ -34,7 +34,7 @@ import universe.constellation.orion.viewer.R;
  * Date: 02.01.12
  * Time: 17:35
  */
-public class OrionPreferenceActivity extends org.holoeverywhere.preference.PreferenceActivity {
+public class OrionPreferenceActivity extends PreferenceActivity {
 
     private boolean isAndroidGeneral;
 

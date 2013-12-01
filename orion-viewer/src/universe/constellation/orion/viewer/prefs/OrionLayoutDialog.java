@@ -22,12 +22,11 @@ package universe.constellation.orion.viewer.prefs;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
+import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-
-import org.holoeverywhere.preference.DialogPreference;
 
 import universe.constellation.orion.viewer.R;
 

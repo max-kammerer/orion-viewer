@@ -19,8 +19,8 @@
 
 package universe.constellation.orion.viewer.prefs;
 
-import org.holoeverywhere.preference.Preference;
 
+import android.preference.Preference;
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.LastPageInfo;
 

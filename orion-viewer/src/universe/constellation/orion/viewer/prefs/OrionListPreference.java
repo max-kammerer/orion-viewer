@@ -30,7 +30,7 @@ import universe.constellation.orion.viewer.R;
  * Date: 25.08.12
  * Time: 13:26
  */
-public class OrionListPreference extends org.holoeverywhere.preference.ListPreference {
+public class OrionListPreference extends ListPreference {
 
     private boolean isCurrentBookOption;
 

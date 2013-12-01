@@ -1,9 +1,9 @@
 package universe.constellation.orion.viewer.dialog;
 
+import android.app.Dialog;
 import android.graphics.Rect;
 import android.view.Gravity;
 import android.view.WindowManager;
-import org.holoeverywhere.app.Dialog;
 import universe.constellation.orion.viewer.OrionView;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 

@@ -42,16 +42,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 
-import org.holoeverywhere.widget.AdapterView;
-import org.holoeverywhere.widget.ArrayAdapter;
-import org.holoeverywhere.widget.CheckBox;
-import org.holoeverywhere.widget.CheckedTextView;
-import org.holoeverywhere.widget.EditText;
-import org.holoeverywhere.widget.ImageButton;
-import org.holoeverywhere.widget.ListView;
-import org.holoeverywhere.widget.RadioButton;
-import org.holoeverywhere.widget.SeekBar;
-import org.holoeverywhere.widget.Spinner;
 import universe.constellation.orion.viewer.dialog.SearchDialog;
 import universe.constellation.orion.viewer.dialog.TapHelpDialog;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
@@ -331,7 +321,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         ImageButton plus = (ImageButton) findMyViewById(R.id.page_picker_plus);
         plus.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                pageSeek.incrementProgress(1);
+                pageSeek.incrementProgressBy(1);
             }
         });
 
@@ -339,7 +329,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         minus.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (pageSeek.getProgress() != 0) {
-                    pageSeek.incrementProgress(-1);
+                    pageSeek.incrementProgressBy(-1);
                 }
             }
         });
@@ -422,7 +412,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         final ImageButton zplus = (ImageButton) findMyViewById(R.id.zoom_picker_plus);
         zplus.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                zoomSeek.incrementProgress(1);
+                zoomSeek.incrementProgressBy(1);
             }
         });
 
@@ -430,7 +420,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         zminus.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (zoomSeek.getProgress() != 0) {
-                    zoomSeek.incrementProgress(-1);
+                    zoomSeek.incrementProgressBy(-1);
                 }
             }
         });
@@ -923,7 +913,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public void initOptionDialog() {
-        dialog = new org.holoeverywhere.app.Dialog(this);
+        dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.android_dialog);
         animator = ((ViewAnimator)dialog.findViewById(R.id.viewanim));
@@ -1212,7 +1202,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     public class MyArrayAdapter extends ArrayAdapter implements SpinnerAdapter {
 
         public MyArrayAdapter() {
-            super(OrionViewerActivity.this, R.layout.simple_spinner_dropdown_item, OrionViewerActivity.this.getResources().getTextArray(R.array.fits));
+            super(OrionViewerActivity.this, android.R.layout.simple_spinner_dropdown_item, OrionViewerActivity.this.getResources().getTextArray(R.array.fits));
         }
 
         @Override
@@ -1286,11 +1276,17 @@ public class OrionViewerActivity extends OrionBaseActivity {
         if (!hasActionBar) {
             //relayout
             getSupportActionBar().show();
-            getSupportActionBar().hide();
+            view.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getSupportActionBar().hide();
+                }
+            }, 300);
+
         }
     }
 
     public void startSearch() {
-        SearchDialog.newInstance().show(this);
+        SearchDialog.newInstance().show(getSupportFragmentManager(), "search");
     }
 }

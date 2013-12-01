@@ -20,7 +20,7 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="400dp" android:layout_gravity="center"
+              android:layout_width="500dp" android:layout_gravity="center"
               android:layout_height="wrap_content" android:padding="5dp">
 
     <include layout="@layout/android_dialog_animator"/>

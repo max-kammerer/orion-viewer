@@ -1,19 +1,10 @@
 package universe.constellation.orion.viewer.dialog;
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import org.holoeverywhere.widget.ImageButton;
-import org.holoeverywhere.widget.TextView;
+import android.widget.*;
 import universe.constellation.orion.viewer.Action;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.R;

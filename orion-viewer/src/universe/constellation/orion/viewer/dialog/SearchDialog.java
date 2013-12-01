@@ -1,19 +1,18 @@
 package universe.constellation.orion.viewer.dialog;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.view.*;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import com.artifex.mupdfdemo.SearchTaskResult;
-import org.holoeverywhere.LayoutInflater;
-import org.holoeverywhere.app.Dialog;
-import org.holoeverywhere.app.DialogFragment;
-import org.holoeverywhere.widget.EditText;
 import universe.constellation.orion.viewer.*;
 import universe.constellation.orion.viewer.search.SearchTask;
 import universe.constellation.orion.viewer.util.Util;
@@ -62,7 +61,7 @@ public class SearchDialog extends DialogFragment {
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.TOP;
         ActionBar supportActionBar = ((OrionBaseActivity) getActivity()).getSupportActionBar();
-        wlp.y = supportActionBar.isShowing() ? getSupportActionBar().getHeight() + 5 : 5;
+        wlp.y = supportActionBar.isShowing() ? supportActionBar.getHeight() + 5 : 5;
 
         window.setAttributes(wlp);
 
@@ -175,7 +174,7 @@ public class SearchDialog extends DialogFragment {
 
     private void doSearch(int page, int direction, Controller controller) {
         InputMethodManager inputManager = (InputMethodManager)
-        this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(getDialog().getCurrentFocus().getWindowToken(),
         InputMethodManager.HIDE_NOT_ALWAYS);
 

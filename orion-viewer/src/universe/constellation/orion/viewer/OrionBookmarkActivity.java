@@ -20,20 +20,15 @@
 package universe.constellation.orion.viewer;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.*;
-import android.widget.AdapterView;
-import android.widget.ImageView;
+import android.widget.*;
 
-import org.holoeverywhere.app.AlertDialog;
-import org.holoeverywhere.app.Dialog;
-import org.holoeverywhere.widget.ArrayAdapter;
-import org.holoeverywhere.widget.EditText;
-import org.holoeverywhere.widget.ListView;
-import org.holoeverywhere.widget.TextView;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;

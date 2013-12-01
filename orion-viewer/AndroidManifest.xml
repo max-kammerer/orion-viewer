@@ -35,7 +35,7 @@
     <application android:label="@string/app_name" android:icon="@drawable/orion" android:name=".prefs.OrionApplication">
         <activity android:name=".OrionViewerActivity"
                   android:label="@string/app_name"
-                  android:theme="@style/Holo.Theme"
+                  android:theme="@style/Theme.AppCompat"
                   android:launchMode="singleTask"
                   android:icon="@drawable/orion" android:configChanges="orientation|locale|screenSize"
                   android:screenOrientation="behind" android:windowSoftInputMode="adjustPan">
@@ -86,7 +86,7 @@
 
         <activity android:name=".OrionFileManagerActivity"
                   android:label="@string/app_name"
-                  android:theme="@style/Holo.Theme"
+                  android:theme="@style/Theme.AppCompat"
                   android:launchMode="singleTask"
                   android:icon="@drawable/orion"
                   android:configChanges="orientation|locale|screenSize">
@@ -100,12 +100,12 @@
 
         <activity android:name=".OrionFileSelectorActivity"
                   android:label="@string/app_name"
-                  android:theme="@style/Holo.Theme"
+                  android:theme="@style/Theme.AppCompat"
                   android:icon="@drawable/orion"/>
 
         <activity android:name=".prefs.OrionKeyBinderActivity" android:screenOrientation="behind"
                   android:label="@string/app_name"
-                  android:theme="@style/Holo.Theme"
+                  android:theme="@style/Theme.AppCompat"
                   android:launchMode="singleTask"
                   android:icon="@drawable/orion">
             <intent-filter>
@@ -115,21 +115,21 @@
         </activity>
 
         <activity android:name=".OrionHelpActivity" android:screenOrientation="behind"
-                  android:theme="@style/Holo.Theme"
+                  android:theme="@style/Theme.AppCompat"
                   android:label="@string/app_name"
                   android:launchMode="singleInstance"
                   android:icon="@drawable/orion"/>
 
         <activity android:name=".prefs.OrionPreferenceActivity" android:screenOrientation="behind"
-                  android:theme="@style/Holo.Theme"
+                  android:theme="@style/Theme.AppCompat"
                   android:label="My Preferences"/>
 
         <activity android:name=".prefs.OrionBookPreferences" android:screenOrientation="behind"
-                  android:theme="@style/Holo.Theme"
+                  android:theme="@style/Theme.AppCompat"
                   android:label="My Preferences"/>
 
         <activity android:name=".prefs.OrionTapActivity" android:screenOrientation="behind"
-                  android:theme="@style/Holo.Theme"
+                  android:theme="@style/Theme.AppCompat"
                   android:label="Tap Zones">
             <intent-filter>
                 <action android:name="universe.constellation.orion.viewer.TAP_ZONES"/>
@@ -138,15 +138,15 @@
         </activity>
 
         <activity android:name=".prefs.ActionListActivity" android:screenOrientation="behind"
-                  android:theme="@style/Holo.Theme"
+                  android:theme="@style/Theme.AppCompat"
                   android:label="Action List"/>
 
         <activity android:name=".OrionBookmarkActivity" android:screenOrientation="behind"
-                  android:theme="@style/Holo.Theme"
+                  android:theme="@style/Theme.AppCompat"
                   android:label="Bookmarks"/>
 
         <activity android:name=".outline.OutlineActivity" android:screenOrientation="behind"
-                  android:theme="@style/Holo.Theme"
+                  android:theme="@style/Theme.AppCompat"
                   android:label="Outlines"/>
 
     </application>

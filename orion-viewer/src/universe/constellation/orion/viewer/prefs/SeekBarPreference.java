@@ -2,14 +2,13 @@ package universe.constellation.orion.viewer.prefs;
 
 
 import android.content.Context;
+import android.preference.DialogPreference;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 
-import org.holoeverywhere.LayoutInflater;
-import org.holoeverywhere.preference.DialogPreference;
-import org.holoeverywhere.widget.SeekBar;
-import org.holoeverywhere.widget.TextView;
-
+import android.widget.SeekBar;
+import android.widget.TextView;
 import universe.constellation.orion.viewer.R;
 
 //original by

@@ -21,10 +21,10 @@ package universe.constellation.orion.viewer.prefs;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.preference.EditTextPreference;
+import android.preference.Preference;
 import android.util.AttributeSet;
-import org.holoeverywhere.preference.EditTextPreference;
-import org.holoeverywhere.preference.Preference;
-import org.holoeverywhere.widget.Toast;
+import android.widget.Toast;
 import universe.constellation.orion.viewer.R;
 
 import java.util.regex.Pattern;
