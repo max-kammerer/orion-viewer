@@ -26,6 +26,8 @@
           android:versionName="@string/version_name">
 
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="16"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <supports-screens
             android:xlargeScreens="true"
@@ -153,6 +155,4 @@
 
     </application>
 
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 </manifest>
