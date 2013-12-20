@@ -3,7 +3,7 @@
     <string name="msg_dialog_search">Search Dialog</string>
     <string name="msg_dialog_dismis">Dismis</string>
     <string name="warn_text_not_found">No text</string>
-    <string name="warn_no_further_occurrences_found">No futher occurences found</string>
-    <string name="msg_searching">Searching...</string>
+    <string name="warn_no_further_occurrences_found">No further occurrences found</string>
+    <string name="msg_searching">Searching…</string>
 
 </resources>

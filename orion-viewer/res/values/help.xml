@@ -62,5 +62,5 @@
     <string name="bookmarks_export_help">
         Allow user to export bookmarks (for all books or for current one).
         Bookmarks are exported to xml file with the name of opened book + [bookmarks.xml or all_bookmarks.xml] suffix.
-        This option is avaliable at Bookmarks screen menu.</string>
+        This option is available at Bookmarks screen menu.</string>
 </resources>
