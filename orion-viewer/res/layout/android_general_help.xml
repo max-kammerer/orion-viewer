@@ -36,38 +36,38 @@
                       android:layout_width="fill_parent" android:layout_height="wrap_content"
                       android:text="@string/general_usage"
                       android:layout_gravity="center_vertical"
-                      android:gravity="left" android:paddingLeft="10px" android:paddingRight="10px"/>
+                      android:gravity="left" android:paddingLeft="10dp" android:paddingRight="10dp"/>
 
 
             <TextView android:textSize="20sp"
                       android:layout_width="fill_parent" android:layout_height="wrap_content"
                       android:text="@string/general_usage_step1"
                       android:layout_gravity="center_vertical"
-                      android:gravity="left" android:paddingLeft="20px" android:paddingRight="10px"/>
+                      android:gravity="left" android:paddingLeft="20dp" android:paddingRight="10dp"/>
 
             <TextView android:textSize="20sp"
                       android:layout_width="fill_parent" android:layout_height="wrap_content"
                       android:text="@string/general_usage_step2"
                       android:layout_gravity="center_vertical"
-                      android:gravity="left" android:paddingLeft="20px" android:paddingRight="10px"/>
+                      android:gravity="left" android:paddingLeft="20dp" android:paddingRight="10dp"/>
 
             <TextView android:textSize="20sp"
                       android:layout_width="fill_parent" android:layout_height="wrap_content"
                       android:text="@string/general_usage_step3"
                       android:layout_gravity="center_vertical"
-                      android:gravity="left" android:paddingLeft="20px" android:paddingRight="10px"/>
+                      android:gravity="left" android:paddingLeft="20dp" android:paddingRight="10dp"/>
 
             <TextView android:textSize="20sp"
                       android:layout_width="fill_parent" android:layout_height="wrap_content"
                       android:text="@string/general_usage_step4"
                       android:layout_gravity="center_vertical"
-                      android:gravity="left" android:paddingLeft="20px" android:paddingRight="10px"/>
+                      android:gravity="left" android:paddingLeft="20dp" android:paddingRight="10dp"/>
 
             <!--<TextView android:textSize="20sp"-->
                       <!--android:layout_width="fill_parent" android:layout_height="wrap_content"-->
                       <!--android:text="@string/help_taps"-->
                       <!--android:layout_gravity="center_vertical"-->
-                      <!--android:gravity="left" android:paddingLeft="10px" android:paddingRight="10px"/>-->
+                      <!--android:gravity="left" android:paddingLeft="10dp" android:paddingRight="10dp"/>-->
 
             <TableRow>
                 <ImageView android:layout_column="0"

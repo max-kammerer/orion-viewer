@@ -37,10 +37,10 @@
 
         <LinearLayout android:layout_width="fill_parent"
                       android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center"
-                      android:paddingBottom="10px" android:paddingTop="10px">
+                      android:paddingBottom="10dp" android:paddingTop="10dp">
 
             <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                       android:src="@drawable/orion" android:layout_marginRight="10px"/>
+                       android:src="@drawable/orion" android:layout_marginRight="10dp"/>
 
             <LinearLayout android:layout_width="wrap_content"
                           android:layout_height="wrap_content" android:orientation="vertical" android:gravity="left">
@@ -51,11 +51,11 @@
 
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                               android:textSize="20sp"
-                              android:text="Orion Viewer v." android:layout_marginRight="10px"/>
+                              android:text="Orion Viewer v." android:layout_marginRight="10dp"/>
 
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                               android:textSize="20sp"
-                              android:text="@string/version_name" android:layout_marginRight="10px"/>
+                              android:text="@string/version_name" android:layout_marginRight="10dp"/>
                 </LinearLayout>
 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
                   android:textSize="20sp"
                   android:text="Contributors:"
-                  android:gravity="center" android:layout_marginTop="20px"/>
+                  android:gravity="center" android:layout_marginTop="20dp"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
                   android:textSize="20sp"
@@ -108,7 +108,7 @@
                   android:gravity="center"/>
 
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_1" android:layout_marginTop="20px"
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_1" android:layout_marginTop="20dp"
                   android:text="Project site: http://code.google.com/p/orion-viewer/" android:textSize="18sp"
                   android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
 
@@ -130,7 +130,7 @@
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
                   android:textSize="20sp"
                   android:text="Third party libraries:"
-                  android:gravity="center" android:layout_marginTop="20px"/>
+                  android:gravity="center" android:layout_marginTop="20dp"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
                   android:textSize="18sp"
@@ -185,7 +185,7 @@
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
                   android:textSize="20sp"
                   android:text="Third party icons:"
-                  android:gravity="center" android:layout_marginTop="20px"/>
+                  android:gravity="center" android:layout_marginTop="20dp"/>
 
         <TableLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
                      android:shrinkColumns="1" android:gravity="center">
@@ -290,7 +290,7 @@
             </TableRow>
 
 <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:textSize="18sp" android:layout_marginTop="20px"
+                  android:textSize="18sp" android:layout_marginTop="20dp"
                   android:text="Orion Viewer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
