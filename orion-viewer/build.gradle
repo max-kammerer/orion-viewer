@@ -1,16 +1,13 @@
 apply plugin: 'android'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
-    compile fileTree(dir: "$buildDir/native-libs", include: 'native-libs.jar')
-
-    compile project(':HoloEverywhere:library')
-    compile project(':HoloEverywhere:addons:preferences')
+    //compile project(':appcompat')
+    compile 'com.android.support:appcompat-v7:19.0.+'
 }
 
 android {
     compileSdkVersion 16
-    buildToolsVersion "18.1.1"
+    buildToolsVersion "19.0.0"
 
     sourceSets {
         main {
@@ -19,14 +16,14 @@ android {
                 srcDir 'src'
             }
             resources.srcDirs = ['src']
-            aidl.srcDirs = ['src']
-            renderscript.srcDirs = ['src']
+//            aidl.srcDirs = ['src']
+//            renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
         }
 
         // Move the tests to tests/java, tests/res, etc...
-        instrumentTest.setRoot('tests')
+        //instrumentTest.setRoot('tests')
 
         // Move the build types to build-types/<type>
         // For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...
@@ -44,17 +41,28 @@ android {
 //        testInstrumentationRunner "android.test.InstrumentationTestRunner"
 //    }
 
+//    productFlavors {
+//        x86 {
+//            ndk {
+//                abiFilter "x86"
+//            }
+//        }
+//        arm7 {
+//            ndk {
+//                abiFilter "armeabi-v7a"
+//            }
+//        }
+//        arm {
+//            ndk {
+//                abiFilter "armeabi"
+//            }
+//        }
+//        mips {
+//            ndk {
+//                abiFilter "mips"
+//            }
+//        }
+//    }
+
 }
 
-//hack for native libraries
-task nativeLibsToJar(type: Zip, description: 'create a jar archive of the native libs') {
-    destinationDir file("$buildDir/native-libs")
-    baseName 'native-libs'
-    extension 'jar'
-    from fileTree(dir: 'libs', include: '**/*.so')
-    into 'lib/'
-}
-
-tasks.withType(JavaCompile) {
-    compileTask -> compileTask.dependsOn(nativeLibsToJar)
-}
