@@ -233,12 +233,18 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
 
         if (lastOpenedDir != null && new File(lastOpenedDir).exists()) {
             return lastOpenedDir;
-        } else if (new File(Environment.getExternalStorageDirectory() + "/" + device.getDefaultDirectory()).exists()) {
-            return Environment.getExternalStorageDirectory() + "/" + device.getDefaultDirectory();
-        } else if (new File("/system/media/sdcard/" + device.getDefaultDirectory()).exists()) {
-            return "/system/media/sdcard/" + device.getDefaultDirectory();
-        } else {
-            return Environment.getRootDirectory().getAbsolutePath();
         }
+
+        String path = Environment.getExternalStorageDirectory().getPath() + "/" + device.getDefaultDirectory();
+        if (new File(path).exists()) {
+            return path;
+        }
+
+        String path1 = "/system/media/sdcard/" + device.getDefaultDirectory();
+        if (new File(path1).exists()) {
+            return path1;
+        }
+
+        return Environment.getRootDirectory().getAbsolutePath();
     }
 }
