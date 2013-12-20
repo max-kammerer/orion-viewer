@@ -29,7 +29,7 @@
 
     <TextView android:layout_width="wrap_content" android:layout_weight="0"
               android:layout_height="wrap_content" android:id="@+id/bookmark_entry_page"
-              android:paddingLeft="2px" android:layout_gravity="center" style="@android:style/TextAppearance.Medium"/>
+              android:paddingLeft="2dp" android:layout_gravity="center" style="@android:style/TextAppearance.Medium"/>
 
     <ImageView android:layout_width="wrap_content" android:layout_weight="0" android:src="@drawable/edit_item"
             android:layout_height="wrap_content" android:id="@+id/bookmark_edit_entry" android:clickable="true"/>
