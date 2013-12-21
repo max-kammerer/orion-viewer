@@ -5,9 +5,32 @@ dependencies {
     compile 'com.android.support:appcompat-v7:19.0.+'
 }
 
+project.ext {
+    orionVersionCode = 72
+}
+
+
 android {
     compileSdkVersion 16
     buildToolsVersion "19.0.0"
+
+    defaultConfig {
+        versionCode = project.orionVersionCode
+        versionName "0.52.0"
+
+        minSdkVersion 7
+        targetSdkVersion 16
+        //testHandleProfiling false
+
+        ndk {
+            moduleName "sanangeles"
+            cFlags "-DANDROID_NDK -DDISABLE_IMPORTGL"
+            ldLibs "GLESv1_CM", "dl", "log"
+            stl "stlport_static"
+        }
+
+    }
+
 
     sourceSets {
         main {
@@ -16,53 +39,34 @@ android {
                 srcDir 'src'
             }
             resources.srcDirs = ['src']
-//            aidl.srcDirs = ['src']
-//            renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
         }
-
-        // Move the tests to tests/java, tests/res, etc...
-        //instrumentTest.setRoot('tests')
-
-        // Move the build types to build-types/<type>
-        // For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...
-        // This moves them out of them default location under src/<type>/... which would
-        // conflict with src/ being used by the main source set.
-        // Adding new build types or product flavors should be accompanied
-        // by a similar customization.
-       // debug.setRoot('build-types/debug')
-       // release.setRoot('build-types/release')
     }
 
-//    defaultConfig {
-//        minSdkVersion = 8
-//        testPackageName "universe.constellation.orion.viewer.test"
-//        testInstrumentationRunner "android.test.InstrumentationTestRunner"
-//    }
+    productFlavors {
+        arm {
+            ndk {
+                abiFilter "armeabi"
+            }
+        }
+        arm7 {
+            ndk {
+                abiFilter "armeabi-v7a"
+            }
+        }
+        x86 {
+            ndk {
+                abiFilter "x86"
+            }
+        }
+        mips {
+            ndk {
+                abiFilter "mips"
+            }
+        }
+    }
 
-//    productFlavors {
-//        x86 {
-//            ndk {
-//                abiFilter "x86"
-//            }
-//        }
-//        arm7 {
-//            ndk {
-//                abiFilter "armeabi-v7a"
-//            }
-//        }
-//        arm {
-//            ndk {
-//                abiFilter "armeabi"
-//            }
-//        }
-//        mips {
-//            ndk {
-//                abiFilter "mips"
-//            }
-//        }
-//    }
-
+    lintOptions { abortOnError false }
 }
 
