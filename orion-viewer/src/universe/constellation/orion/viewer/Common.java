@@ -22,6 +22,7 @@ package universe.constellation.orion.viewer;
 import android.util.Log;
 import universe.constellation.orion.viewer.device.AndroidDevice;
 import universe.constellation.orion.viewer.device.EdgeDevice;
+import universe.constellation.orion.viewer.device.TexetTB176FLDevice;
 import universe.constellation.orion.viewer.device.TexetTb138Device;
 
 import java.io.*;
@@ -39,6 +40,7 @@ public class Common {
         if (ENABLE2SCREEN) {
             try {
                  if (Device.Info.EDGE) {
+                     Common.d("Using Edge device");
                      return new EdgeDevice();
                  }
             } catch (Exception e) {
@@ -49,6 +51,11 @@ public class Common {
         if(Device.Info.TEXET_TB_138) {
             Common.d("Using TexetTb138Device");
             return new TexetTb138Device();
+        }
+
+        if(Device.Info.TEXET_TB176FL) {
+            Common.d("Using TEXET_TB176FL");
+            return new TexetTB176FLDevice();
         }
 
         return new AndroidDevice();

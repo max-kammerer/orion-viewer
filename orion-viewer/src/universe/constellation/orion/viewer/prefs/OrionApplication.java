@@ -27,10 +27,7 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v7.appcompat.R;
 import android.util.DisplayMetrics;
-import universe.constellation.orion.viewer.Common;
-import universe.constellation.orion.viewer.Controller;
-import universe.constellation.orion.viewer.LastPageInfo;
-import universe.constellation.orion.viewer.OrionViewerActivity;
+import universe.constellation.orion.viewer.*;
 import universe.constellation.orion.viewer.bookmarks.BookmarkAccessor;
 
 import java.util.Locale;
@@ -56,10 +53,13 @@ public class OrionApplication extends Application {
 
     private LastPageInfo currentBookParameters;
 
+    private Device device;
+
     public void onCreate() {
         instance = this;
         super.onCreate();
         setLanguage(getOptions().getAppLanguage());
+        device = Common.createDevice();
     }
 
     public void setLanguage(String langCode) {
@@ -112,21 +112,22 @@ public class OrionApplication extends Application {
 
     public boolean isLightTheme() {
         String theme = getOptions().getApplicationTheme();
-        if ("DEFAULT".equals(theme) || "DARK".equals(theme)) {
+        boolean isDefault = !("DARK".equals(theme) || "LIGHT".equals(theme));
+        boolean useDarkTheme = isDefault ? device.isDefaultDarkTheme() : false;
+
+        if (useDarkTheme || "DARK".equals(theme)) {
             return false;
-        } else if ("LIGHT".equals(theme)) {
-            return true;
         }
-        return false;
+
+        return true;
     }
 
     private int getThemeId(boolean processActionBar) {
-        String theme = getOptions().getApplicationTheme();
         boolean showActionBar = !processActionBar || getOptions().isActionBarVisible();
         int themeId = -1;
-        if ("DEFAULT".equals(theme) || "DARK".equals(theme)) {
+        if (!isLightTheme()) {
             themeId = showActionBar ? R.style.Theme_AppCompat : universe.constellation.orion.viewer.R.style.MyHolo;
-        } else if ("LIGHT".equals(theme)) {
+        } else {
             themeId = showActionBar ? R.style.Theme_AppCompat_Light : universe.constellation.orion.viewer.R.style.MyHoloLight;
         }
         return themeId;

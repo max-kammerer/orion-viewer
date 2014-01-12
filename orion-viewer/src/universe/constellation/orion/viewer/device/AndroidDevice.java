@@ -182,4 +182,8 @@ public class AndroidDevice implements Device {
 
     }
 
+    @Override
+    public boolean isDefaultDarkTheme() {
+        return true;
+    }
 }

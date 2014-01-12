@@ -19,13 +19,9 @@
 
 package universe.constellation.orion.viewer;
 
-import android.content.Context;
 import android.graphics.Point;
 import android.os.Build;
-import android.view.Display;
 import android.view.KeyEvent;
-import android.view.WindowManager;
-import universe.constellation.orion.viewer.prefs.OrionApplication;
 
 /**
  * User: mike
@@ -52,6 +48,8 @@ public interface Device {
         public final static boolean EDGE = "edge".equals(DEVICE.toLowerCase()) || "edgejr".equals(DEVICE.toLowerCase());
 
         public final static boolean TEXET_TB_138 = "texet".equalsIgnoreCase(DEVICE) && "rk29sdk".equalsIgnoreCase(MODEL);
+
+        public final static boolean TEXET_TB176FL = "TB-176FL".equalsIgnoreCase(DEVICE) && "TB-176FL".equalsIgnoreCase(MODEL);
 
 		public static String getField(String name) {
             try {
@@ -107,4 +105,5 @@ public interface Device {
 
     Point getDeviceSize();
 
+    boolean isDefaultDarkTheme();
 }
