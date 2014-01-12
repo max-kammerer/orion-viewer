@@ -32,7 +32,7 @@
     <string name="rotate_270">270 מעלות</string>
     <string name="long_click">בלחיצה ארוכה</string>
     <string name="short_click">בלחיצה קצרה</string>
-    <string name="binding_click">על כריכה</string>
+    <string name="binding_click">קישור כפתורי חומרה</string>
     <string name="orientation_default">ברירת מחדל</string>
     <string name="orientation_default_rotation">ברירת מחדל של היישום</string>
     <string name="orientation_landscape">לרוחב</string>
