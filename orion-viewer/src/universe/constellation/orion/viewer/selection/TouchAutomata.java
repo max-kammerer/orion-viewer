@@ -23,6 +23,7 @@ import android.graphics.Point;
 import android.os.SystemClock;
 import android.view.MotionEvent;
 import universe.constellation.orion.viewer.Common;
+import universe.constellation.orion.viewer.Device;
 import universe.constellation.orion.viewer.OrionView;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.android.touch.AndroidScaleWrapper;
@@ -183,10 +184,15 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                             break;
                         case END_SCALE:
                             nextState = States.UNDEFINED;
-                            //System.out.println(endFocus.x + " xxxx " + endFocus.y);
                             float newX = (int) ((startFocus.x) * (curScale - 1) + (startFocus.x - endFocus.x) );
                             float newY = (int) ((startFocus.y) * (curScale - 1) + (startFocus.y - endFocus.y));
                             getView().afterScaling();
+                            //There is no start scale event!!!!
+                            if (Device.Info.TEXET_TB176FL) {
+                                curScale *= gestureDetector.getScaleFactor();
+                                newX = (int) ((startFocus.x) * (curScale - 1));
+                                newY = (int) ((startFocus.y) * (curScale - 1));
+                            }
                             activity.getController().translateAndZoom(true, curScale, newX, newY);
                             break;
                     }
