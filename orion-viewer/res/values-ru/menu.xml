@@ -34,6 +34,7 @@
     <string name="menu_key_binder_text">Назначение клавиш</string>
     <string name="menu_options_text">Настройки</string>
     <string name="menu_tap_text">Тап зоны</string>
+    <string name="menu_search_item">Поиск</string>
 
     <string name="menu_book_preferences">Настройки книги</string>
     <string name="menu_outline_text">Содержание</string>
