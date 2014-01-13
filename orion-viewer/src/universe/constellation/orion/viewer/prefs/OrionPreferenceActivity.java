@@ -36,8 +36,6 @@ import universe.constellation.orion.viewer.R;
  */
 public class OrionPreferenceActivity extends PreferenceActivity {
 
-    private boolean isAndroidGeneral;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getOrionContext().applyTheme(this);
