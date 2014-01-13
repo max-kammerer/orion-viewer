@@ -53,13 +53,12 @@ public class OrionApplication extends Application {
 
     private LastPageInfo currentBookParameters;
 
-    private Device device;
+    private Device device = Common.createDevice();
 
     public void onCreate() {
         instance = this;
         super.onCreate();
         setLanguage(getOptions().getAppLanguage());
-        device = Common.createDevice();
     }
 
     public void setLanguage(String langCode) {
