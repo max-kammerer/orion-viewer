@@ -113,6 +113,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Common.d("Creating file manager");
+
         loadGlobalOptions();
 
         getOrionContext().setViewActivity(this);
@@ -194,6 +196,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
     protected void onNewIntent(Intent intent) {
         Common.d("Runtime.getRuntime().totalMemory() = " + Runtime.getRuntime().totalMemory());
         Common.d("Debug.getNativeHeapSize() = " + Debug.getNativeHeapSize());
+        Common.d("OVA: on new intent " + intent);
+
         String file =  null;
         Uri uri = intent.getData();
         if (uri != null) {

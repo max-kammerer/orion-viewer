@@ -88,6 +88,8 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Common.d("Creating file manager");
+
         setContentView(device.getFileManagerLayoutId());
         prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         globalOptions = getOrionContext().getOptions();
@@ -98,12 +100,15 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
     }
 
     protected void onNewIntent(Intent intent) {
+        Common.d("OFM: On new intent " + intent);
+
         boolean dontStartRecent = intent.getBooleanExtra(DONT_OPEN_RECENT, false);
         if (!dontStartRecent && globalOptions.isOpenRecentBook()) {
             if (globalOptions.getRecentFiles().isEmpty() == false) {
                 GlobalOptions.RecentEntry entry = globalOptions.getRecentFiles().get(0);
                 File book = new File(entry.getPath());
                 if (book.exists()) {
+                    Common.d("Opening recent book");
                     openFile(book);
                 }
             }
@@ -173,6 +178,8 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
     }
 
     protected void openFile(File file) {
+        Common.d("Opening new book " + file.getPath());
+
         Intent in = new Intent(Intent.ACTION_VIEW);
         in.setClass(getApplicationContext(), OrionViewerActivity.class);
         in.setData(Uri.fromFile(file));
