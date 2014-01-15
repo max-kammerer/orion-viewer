@@ -268,7 +268,14 @@ public class OrionViewerActivity extends OrionBaseActivity {
             if (doc != null) {
                 doc.destroy();
             }
-            finish();
+            AlertDialog.Builder themedAlertBuilder = createThemedAlertBuilder().setMessage("Error while openning " + filePath + ": " + e.getMessage() + " " + e.getCause());
+            themedAlertBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+            themedAlertBuilder.create().show();
         }
         return doc;
     }
