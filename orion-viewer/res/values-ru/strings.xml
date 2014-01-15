@@ -59,6 +59,8 @@
     <string name="fit_page">По размеру страницы</string>
     <string name="fit_custom">Указать масштаб...</string>
 
+    <string name="key_binder_message">Нажмите кнопку и выберите связанное действие!</string>
+    <string name="key_binder_warning">Не могу привязать кнопку с нулевым кодом, попробуйте другую!</string>
     <string name="table_of_contents">Содержание</string>
 
     <string name="warn_no_text_in_selection">В выделенном участке отсутствует текст!</string>
