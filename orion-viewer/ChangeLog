@@ -1,3 +1,8 @@
+===== 0.52.0 (Jan 15, 2014) =====
+* Some new localizations
+* Cosmetic changes
+* Additional logging
+
 ===== 0.52.0 (Dec 01, 2013) =====
 * Fixed text selection in pdf files
 * Revert ui
