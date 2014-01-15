@@ -30,7 +30,7 @@ import universe.constellation.orion.viewer.OrionViewerActivity;
 */
 public class TouchAutomataOldAndroid {
 
-    public enum States {UNDEFINED, SINGLE_CLICK, LONG_CLICK, PINCH_ZOOM, DO_MOVE, DO_ACTION};
+    public enum States {UNDEFINED, SINGLE_CLICK, LONG_CLICK, PINCH_ZOOM, DO_MOVE, DO_LIGHTING,  DO_ACTION};
 
     public enum PinchEvents {START_SCALE, DO_SCALE, END_SCALE};
 

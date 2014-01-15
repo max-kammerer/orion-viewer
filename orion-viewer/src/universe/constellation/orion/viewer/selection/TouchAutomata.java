@@ -19,9 +19,13 @@
 
 package universe.constellation.orion.viewer.selection;
 
+import android.content.Context;
 import android.graphics.Point;
+import android.os.PowerManager;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.view.MotionEvent;
+import android.widget.Toast;
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.Device;
 import universe.constellation.orion.viewer.OrionView;
@@ -29,6 +33,9 @@ import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.android.touch.AndroidScaleWrapper;
 import universe.constellation.orion.viewer.android.touch.OldAdroidScaleWrapper;
 import universe.constellation.orion.viewer.android.touch.ScaleDetectorWrapper;
+import universe.constellation.orion.viewer.device.TexetTB176FLDevice;
+
+import java.lang.reflect.Method;
 
 /**
 * User: mike
@@ -107,6 +114,24 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
 
                 break;
 
+            case DO_LIGHTING:
+                if (pinch != null) {
+                    nextState = States.PINCH_ZOOM;
+                } else  if (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        doLighting(last0.y - start0.y);
+                        nextState = States.UNDEFINED;
+                    } else {
+                        doLighting(last0.y - start0.y);
+                        start0.x = last0.x;
+                        start0.y = last0.y;
+                    }
+                    processed = true;
+                }
+
+                break;
+
+
             case SINGLE_CLICK:
                 if (PinchEvents.START_SCALE == pinch) {
                     nextState = States.PINCH_ZOOM;
@@ -124,7 +149,11 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                         int y = last0.y - start0.y;
                         System.out.println("move " + (x*x + y*y));
                         if (x*x + y*y >= MOVE_THRESHOLD) {
-                            nextState = States.DO_MOVE;
+                            if (isSupportLighting() && isRightHandSide(start0.x) && isRightHandSide(last0.x)) {
+                                nextState = States.DO_LIGHTING;
+                            } else {
+                                nextState = States.DO_MOVE;
+                            }
                         }
                         break;
                     }
@@ -165,7 +194,6 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                 break;
 
             case PINCH_ZOOM:
-  //              System.out.println("pinch " + pinch);
                 if (pinch != null) {
                     switch (pinch) {
                         case START_SCALE:
@@ -204,7 +232,7 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
         }
 
         if (nextState != currentState) {
-            System.out.println("Next state = " + nextState);
+            System.out.println("Next state = " + nextState + " oldState = " + currentState);
             switch (nextState) {
                 case UNDEFINED: reset(); break;
                 case PINCH_ZOOM:
@@ -231,4 +259,43 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
         start0.y = -1;
     }
 
+    public boolean isRightHandSide(int x) {
+        return view.getWidth() - x < 75;
+    }
+
+    public boolean isSupportLighting() {
+        return activity.getDevice() instanceof TexetTB176FLDevice;
+    }
+
+    private Toast toast;
+
+    private void doLighting(int delta) {
+        int br = 255;
+        try {
+            int brightness = Settings.System.getInt(activity.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, 255);
+
+            int newBrightness = brightness + delta / 5;
+            if (newBrightness < 0) {
+                newBrightness = 0;
+            }
+            if (newBrightness > 255) {
+                newBrightness = 255;
+            }
+
+            //if (newBrightness != brightness) {
+            if (toast == null) {
+                toast = Toast.makeText(activity, "" + newBrightness, Toast.LENGTH_SHORT);
+            }
+            toast.setText("" + newBrightness);
+            toast.show();
+            br = newBrightness;
+            PowerManager pm = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
+
+            Method setBacklight = pm.getClass().getMethod("setBacklight", Integer.TYPE);
+            setBacklight.invoke(pm, new Integer(brightness));
+            Settings.System.putInt(activity.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, newBrightness);
+        } catch (Exception e) {
+            toast.setText("" + br + ": Error " + e.getMessage() + " " + e.getCause());
+        }
+    }
 }
