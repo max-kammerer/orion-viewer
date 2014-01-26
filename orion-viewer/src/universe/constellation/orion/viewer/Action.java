@@ -249,6 +249,11 @@ public enum Action {
                 intent.setClassName("aarddict.android", "aarddict.android.LookupActivity");
                 queryText = "query";
                 parameter = parameter == null ? "" : parameter;
+            } else if ("LINGVO".equals(dict)) {
+                action = "com.abbyy.mobile.lingvo.intent.action.TRANSLATE";
+                intent.setPackage("com.abbyy.mobile.lingvo.market");
+                queryText = "com.abbyy.mobile.lingvo.intent.extra.TEXT";
+                parameter = parameter == null ? "" : parameter;
             }
 
             if (action != null) {
