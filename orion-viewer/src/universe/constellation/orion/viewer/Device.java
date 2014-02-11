@@ -83,6 +83,10 @@ public interface Device {
 
     void onCreate(OrionBaseActivity activity);
 
+    void onNewBook(LastPageInfo info);
+
+    void onBookClose(LastPageInfo info);
+
     void onDestroy();
     
     void onPause();

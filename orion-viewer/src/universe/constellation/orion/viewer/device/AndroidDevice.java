@@ -24,10 +24,7 @@ import android.graphics.Point;
 import android.os.PowerManager;
 import android.view.Display;
 import android.view.KeyEvent;
-import universe.constellation.orion.viewer.Device;
-import universe.constellation.orion.viewer.OperationHolder;
-import universe.constellation.orion.viewer.OrionBaseActivity;
-import universe.constellation.orion.viewer.R;
+import universe.constellation.orion.viewer.*;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
 /**
@@ -185,5 +182,15 @@ public class AndroidDevice implements Device {
     @Override
     public boolean isDefaultDarkTheme() {
         return true;
+    }
+
+    @Override
+    public void onNewBook(LastPageInfo info) {
+
+    }
+
+    @Override
+    public void onBookClose(LastPageInfo info) {
+
     }
 }

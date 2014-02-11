@@ -76,6 +76,8 @@ public class LastPageInfo implements Serializable {
 
     public transient String openingFileName;
 
+    public transient int totalPages;
+
     public String walkOrder = "ABCD";
 
     private LastPageInfo() {

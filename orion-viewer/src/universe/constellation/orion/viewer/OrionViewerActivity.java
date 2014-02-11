@@ -213,8 +213,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
                     }
                 }
 
-                controller.destroy();
-                controller = null;
+                destroyContollerAndBook();
             }
 
             Common.stopLogger();
@@ -265,6 +264,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 getSupportActionBar().setTitle(title);
             }
             globalOptions.addRecentEntry(new GlobalOptions.RecentEntry(new File(filePath).getAbsolutePath()));
+
+            lastPageInfo.totalPages = doc.getPageCount();
+            device.onNewBook(lastPageInfo);
+
             askPassword(controller);
 
         } catch (Exception e) {
@@ -763,15 +766,13 @@ public class OrionViewerActivity extends OrionBaseActivity {
         super.onDestroy();
         Common.d("onDestroy");
         Common.stopLogger();
-        if (controller != null) {
-            controller.destroy();
-        }
+
+        destroyContollerAndBook();
 
         if (dialog != null) {
             dialog.dismiss();
         }
         getOrionContext().destroyDb();
-        //globalOptions.onDestroy(this);
     }
 
     private void saveData() {
@@ -1299,5 +1300,15 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     public void startSearch() {
         SearchDialog.newInstance().show(getSupportFragmentManager(), "search");
+    }
+
+    public void destroyContollerAndBook() {
+        if (lastPageInfo != null) {
+            device.onBookClose(lastPageInfo);
+        }
+        if (controller != null) {
+            controller.destroy();
+            controller = null;
+        }
     }
 }
