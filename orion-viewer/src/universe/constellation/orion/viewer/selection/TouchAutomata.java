@@ -34,6 +34,7 @@ import universe.constellation.orion.viewer.android.touch.AndroidScaleWrapper;
 import universe.constellation.orion.viewer.android.touch.OldAdroidScaleWrapper;
 import universe.constellation.orion.viewer.android.touch.ScaleDetectorWrapper;
 import universe.constellation.orion.viewer.device.TexetTB176FLDevice;
+import universe.constellation.orion.viewer.util.DensityUtil;
 
 import java.lang.reflect.Method;
 
@@ -44,7 +45,7 @@ import java.lang.reflect.Method;
 */
 public class TouchAutomata extends TouchAutomataOldAndroid {
 
-    private static final int MOVE_THRESHOLD = 2500;//50*50
+    private final int MOVE_THRESHOLD;
 
     private Point startFocus = new Point();
 
@@ -58,6 +59,8 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
         super(activity, view);
         int sdkVersion = activity.getOrionContext().getSdkVersion();
         gestureDetector = sdkVersion >= 8 ? new AndroidScaleWrapper(activity, this) : new OldAdroidScaleWrapper(activity, this);
+        double edgeSize = DensityUtil.calcScreenSize(40, activity); //40 px * density factor
+        MOVE_THRESHOLD = (int) (edgeSize * edgeSize); /*40 px * 40 px*/
     }
 
     public void startAutomata() {
