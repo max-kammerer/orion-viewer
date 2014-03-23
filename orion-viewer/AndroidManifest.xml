@@ -22,7 +22,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="universe.constellation.orion.viewer"
           android:installLocation="auto"
-          android:versionCode="76"
+          android:versionCode="81"
           android:versionName="@string/version_name">
 
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="16"/>
