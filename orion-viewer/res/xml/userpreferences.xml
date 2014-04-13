@@ -131,8 +131,8 @@
                 android:key="SCREEN_ORIENTATION"
                 android:title="@string/pref_screen_orientation"
                 android:summary="@string/pref_rotate_screen"
-                android:entries="@array/screen_orientation_desc"
-                android:entryValues="@array/screen_orientation"
+                android:entries="@array/screen_orientation_full_desc"
+                android:entryValues="@array/screen_orientation_full"
                 android:dialogTitle="@string/pref_screen_orientation"
                 android:defaultValue="DEFAULT" orion:justAndroidGeneral="true"/>
 
