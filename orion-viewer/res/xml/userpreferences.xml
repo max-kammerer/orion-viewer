@@ -67,6 +67,41 @@
 
         </PreferenceScreen>
 
+        <PreferenceScreen
+            android:title="@string/pref_behavior" android:persistent="false"
+            android:summary="@string/pref_behavior"
+            android:key="BEHAVIOR">
+
+            <CheckBoxPreference
+                android:summary="@string/pref_open_recent_book"
+                android:defaultValue="false"
+                android:title="@string/pref_open_recent_book"
+                android:key="OPEN_RECENT_BOOK"/>
+
+            <CheckBoxPreference
+                android:key="APPLY_AND_CLOSE"
+                android:title="@string/pref_close_dialog_on_apply"
+                android:summary="@string/pref_close_page_option_dialog_on_apply"
+                android:defaultValue="false"/>
+
+            <PreferenceCategory
+                android:title="@string/pref_category_move" android:key="MOVE">
+
+                <CheckBoxPreference
+                    android:key="ENABLE_TOUCH_MOVE"
+                    android:title="@string/pref_enable_touch_move"
+                    android:summary="@string/pref_enable_touch_move"
+                    android:defaultValue="true"/>
+
+                <CheckBoxPreference
+                    android:key="ENABLE_MOVE_ON_PINCH_ZOOM"
+                    android:title="@string/pref_enable_move_on_pinch_zoom"
+                    android:summary="@string/pref_enable_move_on_pinch_zoom"
+                    android:defaultValue="false"/>
+                </PreferenceCategory>
+
+        </PreferenceScreen>
+
         <PreferenceScreen android:title="@string/pref_default_book_setting"
                           android:summary="@string/pref_default_book_setting_desc"
                           android:key="BOOK_DEFAULT">
@@ -80,15 +115,6 @@
                     android:dialogTitle="@string/pref_walk_order"
                     android:dialogIcon="@drawable/walk_order"
                     android:defaultValue="@string/ABCD"/>
-
-            <!--<ListPreference
-                    android:key="BOOK_ORIENTATION"
-                    android:title="@string/pref_bookDefaultOrientation"
-                    android:summary="@string/pref_rotate_new_book_on_opening"
-                    android:entries="@array/orientation_desc"
-                    android:entryValues="@array/orientation"
-                    android:dialogTitle="Rotation"
-                    android:defaultValue="0"/>-->
 
             <universe.constellation.orion.viewer.prefs.OrionLayoutDialog
                     android:key="PAGE_LAYOUT"
@@ -135,20 +161,6 @@
                 android:entryValues="@array/screen_orientation_full"
                 android:dialogTitle="@string/pref_screen_orientation"
                 android:defaultValue="DEFAULT" orion:justAndroidGeneral="true"/>
-
-
-        <CheckBoxPreference
-                android:summary="@string/pref_open_recent_book"
-                android:defaultValue="false"
-                android:title="@string/pref_open_recent_book"
-                android:key="OPEN_RECENT_BOOK"/>
-
-        <CheckBoxPreference
-                android:key="APPLY_AND_CLOSE"
-                android:title="@string/pref_close_dialog_on_apply"
-                android:summary="@string/pref_close_page_option_dialog_on_apply"
-                android:defaultValue="false"/>
-
 
         <ListPreference
                 android:key="LANGUAGE"

@@ -25,9 +25,11 @@
     <string name="pref_category_device_parameters">Device Parameters</string>
     <string name="pref_category_add_parameters">Additional Parameters</string>
     <string name="pref_category_system">System</string>
+    <string name="pref_category_move">Move</string>
 
     <!--General Prefs-->
     <string name="pref_appearance">Appearance</string>
+    <string name="pref_behavior">Controls and Behavior</string>
     <string name="pref_fullScreen">Full screen</string>
     <string name="pref_showActionBar">Show Action Bar</string>
     <string name="pref_showActionBar_desc">Show Action Bar (restart needed)</string>
@@ -95,5 +97,7 @@
 
     <string name="pref_tap_zones_desc">Tap Zones: link actions to screen zones.</string>
 
+    <string name="pref_enable_touch_move">Enable touch move</string>
+    <string name="pref_enable_move_on_pinch_zoom">Enable move on pinch zoom</string>
 
 </resources>

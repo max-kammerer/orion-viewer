@@ -28,6 +28,7 @@
 
     <!--General Prefs-->
     <string name="pref_appearance">Внешний вид</string>
+    <string name="pref_behavior">Управление и поведение</string>
     <string name="pref_fullScreen">Полноэкранный режим</string>
     <string name="pref_showActionBar">Показывать панель действий</string>
     <string name="pref_showActionBar_desc">Показывать панель действий (необходим перезапуск)</string>
