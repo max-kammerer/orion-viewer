@@ -26,6 +26,9 @@ import android.os.SystemClock;
 import android.provider.Settings;
 import android.view.MotionEvent;
 import android.widget.Toast;
+
+import java.lang.reflect.Method;
+
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.Device;
 import universe.constellation.orion.viewer.OrionView;
@@ -36,7 +39,8 @@ import universe.constellation.orion.viewer.android.touch.ScaleDetectorWrapper;
 import universe.constellation.orion.viewer.device.TexetTB176FLDevice;
 import universe.constellation.orion.viewer.util.DensityUtil;
 
-import java.lang.reflect.Method;
+import static android.view.MotionEvent.*;
+import static android.view.MotionEvent.ACTION_DOWN;
 
 /**
 * User: mike
@@ -80,9 +84,14 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                 return true;
             }
         }
+
+        int action;
         if (event != null) { //in case of scale
             last0.x = (int) event.getX();
             last0.y = (int) event.getY();
+            action = event.getAction();
+        } else {
+            action = -100;
         }
 
         switch (currentState) {
@@ -90,7 +99,7 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                 if (PinchEvents.START_SCALE == pinch) {
                     nextState = States.PINCH_ZOOM;
                     processed = true;
-                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                } else if (ACTION_DOWN == action) {
                     startTime = SystemClock.uptimeMillis();
                     start0.x = (int) event.getX();
                     start0.y = (int) event.getY();
@@ -102,8 +111,8 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
             case DO_MOVE:
                 if (pinch != null) {
                     nextState = States.PINCH_ZOOM;
-                } else  if (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_UP) {
-                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                } else  if (ACTION_MOVE == action || ACTION_UP == action) {
+                    if (action == ACTION_UP) {
                         getView().afterScaling();
                         activity.getController().translateAndZoom(false, 1f, -last0.x + start0.x, -last0.y + start0.y);
                         nextState = States.UNDEFINED;
@@ -120,8 +129,8 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
             case DO_LIGHTING:
                 if (pinch != null) {
                     nextState = States.PINCH_ZOOM;
-                } else  if (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_UP) {
-                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                } else  if (ACTION_MOVE == action || ACTION_UP == action) {
+                    if (ACTION_UP == action) {
                         doLighting(last0.y - start0.y);
                         nextState = States.UNDEFINED;
                     } else {
@@ -140,14 +149,14 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                     nextState = States.PINCH_ZOOM;
                     processed = true;
                 } else {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (ACTION_DOWN == action) {
                         last0.x = start0.x;
                         last0.y = start0.y;
                         processed = true;
                         System.out.println("In action down twice");
                     }
 
-                    if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    if (ACTION_MOVE == action) {
                         int x = last0.x - start0.x;
                         int y = last0.y - start0.y;
                         System.out.println("move " + (x*x + y*y));
@@ -157,14 +166,14 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                             } else {
                                 nextState = States.DO_MOVE;
                             }
+                            break;
                         }
-                        break;
                     }
 
-                    if (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_UP) {
+                    if (ACTION_MOVE == action || ACTION_UP == action) {
                         boolean doAction = false;
-                        if (event.getAction() == MotionEvent.ACTION_UP) {
-                            Common.d("UP " + event.getAction());
+                        if (action == ACTION_UP) {
+                            Common.d("UP " + action);
                             doAction = true;
                         } else {
                             if (last0.x != -1 && last0.y != -1) {
@@ -174,7 +183,7 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                         }
 
                         if (doAction) {
-                            Common.d("Check event action " + event.getAction());
+                            Common.d("Check event action " + action);
                             boolean isLongClick = (SystemClock.uptimeMillis() - startTime) > TIME_DELTA;
 
                             if (last0.x != -1 && last0.y != -1) {
@@ -273,6 +282,10 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
     private Toast toast;
 
     private void doLighting(int delta) {
+        if (toast == null) {
+            toast = Toast.makeText(activity, "-1", Toast.LENGTH_SHORT);
+        }
+
         int br = 255;
         try {
             int brightness = Settings.System.getInt(activity.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, 255);
@@ -285,17 +298,13 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                 newBrightness = 255;
             }
 
-            //if (newBrightness != brightness) {
-            if (toast == null) {
-                toast = Toast.makeText(activity, "" + newBrightness, Toast.LENGTH_SHORT);
-            }
             toast.setText("" + newBrightness);
             toast.show();
             br = newBrightness;
             PowerManager pm = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
 
             Method setBacklight = pm.getClass().getMethod("setBacklight", Integer.TYPE);
-            setBacklight.invoke(pm, new Integer(brightness));
+            setBacklight.invoke(pm, brightness);
             Settings.System.putInt(activity.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, newBrightness);
         } catch (Exception e) {
             toast.setText("" + br + ": Error " + e.getMessage() + " " + e.getCause());
