@@ -1,72 +1,94 @@
 apply plugin: 'android'
 
+apply from: 'signing.gradle'
+
 dependencies {
-    //compile project(':appcompat')
-    compile 'com.android.support:appcompat-v7:19.0.+'
+    compile 'com.android.support:appcompat-v7:19.1.+'
 }
 
 project.ext {
     orionVersionCode = 72
+    orionVersionName = "0.52.4"
 }
 
 
 android {
-    compileSdkVersion 16
-    buildToolsVersion "19.0.0"
+    compileSdkVersion 19
+    buildToolsVersion "19.1.0"
 
     defaultConfig {
         versionCode = project.orionVersionCode
-        versionName "0.52.0"
+        versionName = project.orionVersionName
 
         minSdkVersion 7
         targetSdkVersion 16
-        //testHandleProfiling false
-
-        ndk {
-            moduleName "sanangeles"
-            cFlags "-DANDROID_NDK -DDISABLE_IMPORTGL"
-            ldLibs "GLESv1_CM", "dl", "log"
-            stl "stlport_static"
-        }
-
     }
-
 
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
-            java {
-                srcDir 'src'
-            }
+            java.srcDirs = ['src']
+            jniLibs.srcDirs = ['libs']
             resources.srcDirs = ['src']
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
         }
     }
 
+    buildTypes {
+        release {
+            applicationVariants.all { variant ->
+                def file = variant.outputFile
+                variant.outputFile = new File(file.parent, file.name.replace("orion-viewer-", "orion_viewer_" + defaultConfig.versionName + "_").replace("-release", ""))
+            }
+
+            signingConfig signingConfigs.release
+        }
+    }
+
     productFlavors {
         arm {
+            versionCode = 0
             ndk {
                 abiFilter "armeabi"
             }
         }
         arm7 {
+            versionCode = 1
             ndk {
                 abiFilter "armeabi-v7a"
             }
         }
         x86 {
+            versionCode = 2
             ndk {
                 abiFilter "x86"
             }
         }
         mips {
+            versionCode = 3
             ndk {
                 abiFilter "mips"
             }
         }
+        android {
+            versionCode = 0
+            ndk {
+                abiFilters "armeabi-v7a", "armeabi"
+            }
+        }
+    }
+
+    // make per-variant version code
+    applicationVariants.all { variant ->
+        // get the version code of each flavor
+        def abiVersion = variant.productFlavors.get(0).versionCode
+
+        // set the composite code
+        variant.mergedFlavor.versionCode = abiVersion + defaultConfig.versionCode
+
+        print "New version code is " + variant.mergedFlavor.versionCode
     }
 
     lintOptions { abortOnError false }
 }
-
