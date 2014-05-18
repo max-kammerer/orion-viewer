@@ -96,6 +96,10 @@ public class GlobalOptions implements Serializable {
 
     public final static String SCREEN_BACKLIGHT_TIMEOUT = "SCREEN_BACKLIGHT_TIMEOUT";
 
+    public final static String ENABLE_TOUCH_MOVE = "ENABLE_TOUCH_MOVE";
+
+    public final static String ENABLE_MOVE_ON_PINCH_ZOOM = "ENABLE_MOVE_ON_PINCH_ZOOM";
+
     private LinkedList<RecentEntry> recentFiles;
 
     private SharedPreferences prefs;
@@ -232,6 +236,14 @@ public class GlobalOptions implements Serializable {
 
     public boolean isSwapKeys() {
         return getBooleanProperty(SWAP_KEYS, false);
+    }
+
+    public boolean isEnableTouchMove() {
+        return getBooleanProperty(ENABLE_TOUCH_MOVE, true);
+    }
+
+    public boolean isEnableMoveOnPinchZoom() {
+        return getBooleanProperty(ENABLE_MOVE_ON_PINCH_ZOOM, false);
     }
 
     public int getDefaultOrientation() {

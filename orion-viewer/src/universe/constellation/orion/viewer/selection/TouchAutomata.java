@@ -51,6 +51,8 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
 
     private final int MOVE_THRESHOLD;
 
+    private final boolean enableTouchMove;
+
     private Point startFocus = new Point();
 
     private Point endFocus = new Point();
@@ -65,6 +67,8 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
         gestureDetector = sdkVersion >= 8 ? new AndroidScaleWrapper(activity, this) : new OldAdroidScaleWrapper(activity, this);
         double edgeSize = DensityUtil.calcScreenSize(40, activity); //40 px * density factor
         MOVE_THRESHOLD = (int) (edgeSize * edgeSize); /*40 px * 40 px*/
+
+        enableTouchMove = activity.getGlobalOptions().isEnableTouchMove();
     }
 
     public void startAutomata() {
@@ -156,7 +160,7 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                         System.out.println("In action down twice");
                     }
 
-                    if (ACTION_MOVE == action) {
+                    if (ACTION_MOVE == action && enableTouchMove) {
                         int x = last0.x - start0.x;
                         int y = last0.y - start0.y;
                         System.out.println("move " + (x*x + y*y));
