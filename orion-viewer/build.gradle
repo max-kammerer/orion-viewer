@@ -7,7 +7,7 @@ dependencies {
 }
 
 project.ext {
-    orionVersionCode = 72
+    orionVersionCode = 82
     orionVersionName = "0.52.4"
 }
 
@@ -47,7 +47,7 @@ android {
     }
 
     productFlavors {
-        arm {
+        arm5 {
             versionCode = 0
             ndk {
                 abiFilter "armeabi"
@@ -72,7 +72,8 @@ android {
             }
         }
         android {
-            versionCode = 0
+            //TODO set to zero on next increse build version
+            versionCode = 1
             ndk {
                 abiFilters "armeabi-v7a", "armeabi"
             }
