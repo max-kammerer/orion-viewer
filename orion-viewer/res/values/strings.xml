@@ -19,8 +19,6 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<!--Author: Alexander-->
-
 <resources>
     <!--Do not translate this section and do not include it in result localization: start-->
         <string name="app_name">Orion Viewer</string>
