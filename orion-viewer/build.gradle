@@ -1,13 +1,14 @@
 apply plugin: 'android'
-
+apply plugin: 'kotlin-android'
 apply from: 'signing.gradle'
 
 dependencies {
     compile 'com.android.support:appcompat-v7:19.1.+'
+    androidTestCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
 project.ext {
-    orionVersionCode = 82
+    orionVersionCode = 86
     orionVersionName = "0.52.5"
 }
 
@@ -17,11 +18,14 @@ android {
     buildToolsVersion "19.1.0"
 
     defaultConfig {
-        versionCode = project.orionVersionCode
-        versionName = project.orionVersionName
+        versionCode = orionVersionCode
+        versionName = orionVersionName
 
         minSdkVersion 7
         targetSdkVersion 19
+
+        testPackageName "universe.constellation.orion.viewer.test"
+        testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
 
     sourceSets {
@@ -33,6 +37,10 @@ android {
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
         }
+
+        //test
+        androidTest.setRoot('tests')
+        androidTest.java.srcDirs += 'tests/kotlin'
     }
 
     buildTypes {
@@ -72,8 +80,7 @@ android {
             }
         }
         android {
-            //TODO set to zero on next increse build version
-            versionCode = 1
+            versionCode = 0
             ndk {
                 abiFilters "armeabi-v7a", "armeabi"
             }
