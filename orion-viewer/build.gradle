@@ -8,7 +8,7 @@ dependencies {
 
 project.ext {
     orionVersionCode = 82
-    orionVersionName = "0.52.4"
+    orionVersionName = "0.52.5"
 }
 
 
@@ -21,7 +21,7 @@ android {
         versionName = project.orionVersionName
 
         minSdkVersion 7
-        targetSdkVersion 16
+        targetSdkVersion 19
     }
 
     sourceSets {
