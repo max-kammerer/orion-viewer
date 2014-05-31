@@ -21,33 +21,34 @@
 
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
-              android:layout_height="fill_parent" android:orientation="vertical" android:id="@+id/tap_table" android:shrinkColumns="*" android:background="#000000">
+              android:layout_height="fill_parent" android:orientation="vertical" android:id="@+id/tap_table" android:shrinkColumns="*" android:background="#000000"
+              xmlns:tools="http://schemas.android.com/tools" tools:ignore="DuplicateIds">
 
     <TableRow android:layout_width="fill_parent" android:weightSum="3"
               android:layout_height="fill_parent" android:layout_weight="1">
                 <RelativeLayout android:layout_width="0px"
                       android:layout_height="fill_parent" android:layout_weight="1" android:orientation="vertical" android:layout_margin="1dip" android:background="#ffcc66">
                         <TextView android:layout_width="fill_parent" android:id="@+id/shortClick"
-                                  android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentTop="true" android:textColor="@android:color/black"></TextView>
+                                  android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentTop="true" android:textColor="@android:color/black"/>
                         <TextView android:layout_width="fill_parent" android:id="@+id/longClick"
-                                  android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentBottom="true" android:textColor="@android:color/black"></TextView>
+                                  android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentBottom="true" android:textColor="@android:color/black"/>
                     </RelativeLayout>
 
 
             <RelativeLayout android:layout_width="0px"
               android:layout_height="fill_parent" android:layout_weight="1" android:orientation="vertical" android:layout_margin="1dip" android:background="#ffcc66">
                 <TextView android:layout_width="fill_parent" android:id="@+id/shortClick"
-                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentTop="true" android:textColor="@android:color/black"></TextView>
+                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentTop="true" android:textColor="@android:color/black"/>
                 <TextView android:layout_width="fill_parent" android:id="@+id/longClick"
-                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentBottom="true" android:textColor="@android:color/black"></TextView>
+                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentBottom="true" android:textColor="@android:color/black"/>
             </RelativeLayout>
 
         <RelativeLayout android:layout_width="0px"
               android:layout_height="fill_parent" android:layout_weight="1" android:orientation="vertical" android:layout_margin="1dip" android:background="#ffcc66">
                 <TextView android:layout_width="fill_parent" android:id="@+id/shortClick"
-                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentTop="true" android:textColor="@android:color/black"></TextView>
+                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentTop="true" android:textColor="@android:color/black"/>
                 <TextView android:layout_width="fill_parent" android:id="@+id/longClick"
-                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentBottom="true" android:textColor="@android:color/black"></TextView>
+                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentBottom="true" android:textColor="@android:color/black"/>
             </RelativeLayout>
     </TableRow>
 
@@ -57,28 +58,28 @@
             <RelativeLayout android:layout_width="0px"
               android:layout_height="fill_parent" android:layout_weight="1" android:orientation="vertical" android:layout_margin="1dip" android:background="#ffcc66">
                 <TextView android:layout_width="fill_parent" android:id="@+id/shortClick"
-                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentTop="true" android:singleLine="false" android:textColor="@android:color/black"></TextView>
+                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentTop="true" android:singleLine="false" android:textColor="@android:color/black"/>
                 <TextView android:layout_width="fill_parent" android:id="@+id/longClick"
-                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentBottom="true" android:singleLine="false" android:textColor="@android:color/black"></TextView>
+                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentBottom="true" android:singleLine="false" android:textColor="@android:color/black"/>
             </RelativeLayout>
 
             <RelativeLayout android:layout_width="0px"
               android:layout_height="fill_parent" android:layout_weight="1" android:orientation="vertical" android:layout_margin="1dip" android:background="#ffcc66">
                 <TextView android:layout_width="fill_parent" android:id="@+id/shortClick"
-                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentTop="true" android:textColor="@android:color/black"></TextView>
+                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentTop="true" android:textColor="@android:color/black"/>
                 <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
                            android:src="@drawable/view" android:visibility="gone" android:id="@+id/tap_help_close"
                         android:layout_centerInParent="true" android:layout_centerHorizontal="true"/>
                 <TextView android:layout_width="fill_parent" android:id="@+id/longClick"
-                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentBottom="true" android:textColor="@android:color/black"></TextView>
+                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentBottom="true" android:textColor="@android:color/black"/>
             </RelativeLayout>
 
         <RelativeLayout android:layout_width="0px"
               android:layout_height="fill_parent" android:layout_weight="1" android:orientation="vertical" android:layout_margin="1dip" android:background="#ffcc66">
                 <TextView android:layout_width="fill_parent" android:id="@+id/shortClick"
-                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentTop="true" android:textColor="@android:color/black"></TextView>
+                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentTop="true" android:textColor="@android:color/black"/>
                 <TextView android:layout_width="fill_parent" android:id="@+id/longClick"
-                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentBottom="true" android:textColor="@android:color/black"></TextView>
+                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentBottom="true" android:textColor="@android:color/black"/>
             </RelativeLayout>
     </TableRow>
 
@@ -87,25 +88,25 @@
             <RelativeLayout android:layout_width="0px"
               android:layout_height="fill_parent" android:layout_weight="1" android:orientation="vertical" android:layout_margin="1dip" android:background="#ffcc66">
                 <TextView android:layout_width="fill_parent" android:id="@+id/shortClick"
-                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentTop="true" android:singleLine="false" android:textColor="@android:color/black"></TextView>
+                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentTop="true" android:singleLine="false" android:textColor="@android:color/black"/>
                 <TextView android:layout_width="fill_parent" android:id="@+id/longClick"
-                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentBottom="true" android:singleLine="false" android:textColor="@android:color/black"></TextView>
+                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentBottom="true" android:singleLine="false" android:textColor="@android:color/black"/>
             </RelativeLayout>
 
             <RelativeLayout android:layout_width="0px"
               android:layout_height="fill_parent" android:layout_weight="1" android:orientation="vertical" android:layout_margin="1dip" android:background="#ffcc66">
                 <TextView android:layout_width="fill_parent" android:id="@+id/shortClick"
-                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentTop="true" android:textColor="@android:color/black"></TextView>
+                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentTop="true" android:textColor="@android:color/black"/>
                 <TextView android:layout_width="fill_parent" android:id="@+id/longClick"
-                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentBottom="true" android:textColor="@android:color/black"></TextView>
+                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentBottom="true" android:textColor="@android:color/black"/>
             </RelativeLayout>
 
         <RelativeLayout android:layout_width="0px"
               android:layout_height="fill_parent" android:layout_weight="1" android:orientation="vertical" android:layout_margin="1dip" android:background="#ffcc66">
                 <TextView android:layout_width="fill_parent" android:id="@+id/shortClick"
-                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentTop="true" android:textColor="@android:color/black"></TextView>
+                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentTop="true" android:textColor="@android:color/black"/>
                 <TextView android:layout_width="fill_parent" android:id="@+id/longClick"
-                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentBottom="true" android:textColor="@android:color/black"></TextView>
+                          android:layout_height="wrap_content" android:gravity="center" android:layout_alignParentBottom="true" android:textColor="@android:color/black"/>
             </RelativeLayout>
     </TableRow>
 </TableLayout>
