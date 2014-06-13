@@ -307,7 +307,7 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
             br = newBrightness;
             PowerManager pm = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
 
-            Method setBacklight = pm.getClass().getMethod("setBacklight", Integer.TYPE);
+            Method setBacklight = pm.getClass().getMethod("setBacklightBrightness", Integer.TYPE);
             setBacklight.invoke(pm, brightness);
             Settings.System.putInt(activity.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, newBrightness);
         } catch (Exception e) {
