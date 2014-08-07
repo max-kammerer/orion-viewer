@@ -38,6 +38,7 @@ import universe.constellation.orion.viewer.android.touch.OldAdroidScaleWrapper;
 import universe.constellation.orion.viewer.android.touch.ScaleDetectorWrapper;
 import universe.constellation.orion.viewer.device.TexetTB176FLDevice;
 import universe.constellation.orion.viewer.util.DensityUtil;
+import universe.constellation.orion.viewer.util.MoveUtil;
 
 import static android.view.MotionEvent.*;
 import static android.view.MotionEvent.ACTION_DOWN;
@@ -53,6 +54,8 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
 
     private final boolean enableTouchMove;
 
+    private final boolean enableTouchMoveOnPinchZoom;
+
     private Point startFocus = new Point();
 
     private Point endFocus = new Point();
@@ -66,9 +69,10 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
         int sdkVersion = activity.getOrionContext().getSdkVersion();
         gestureDetector = sdkVersion >= 8 ? new AndroidScaleWrapper(activity, this) : new OldAdroidScaleWrapper(activity, this);
         double edgeSize = DensityUtil.calcScreenSize(40, activity); //40 px * density factor
-        MOVE_THRESHOLD = (int) (edgeSize * edgeSize); /*40 px * 40 px*/
+        MOVE_THRESHOLD = (int) (edgeSize * edgeSize);
 
         enableTouchMove = activity.getGlobalOptions().isEnableTouchMove();
+        enableTouchMoveOnPinchZoom = activity.getGlobalOptions().isEnableMoveOnPinchZoom();
     }
 
     public void startAutomata() {
@@ -122,7 +126,7 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                         nextState = States.UNDEFINED;
                     } else {
                         getView().beforeScaling();
-                        getView().doScale(1f, start0, last0);
+                        getView().doScale(1f, start0, last0, true);
                         getView().postInvalidate();
                     }
                     processed = true;
@@ -222,20 +226,18 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                             endFocus.x = (int) gestureDetector.getFocusX();
                             endFocus.y = (int) gestureDetector.getFocusY();
                             getView().beforeScaling();
-                            getView().doScale(curScale, startFocus, endFocus);
+                            getView().doScale(curScale, startFocus, endFocus, enableTouchMoveOnPinchZoom);
                             getView().postInvalidate();
                             //System.out.println(endFocus.x + " onscale " + endFocus.y);
                             break;
                         case END_SCALE:
                             nextState = States.UNDEFINED;
-                            float newX = (int) ((startFocus.x) * (curScale - 1) + (startFocus.x - endFocus.x) );
-                            float newY = (int) ((startFocus.y) * (curScale - 1) + (startFocus.y - endFocus.y));
+                            float newX = MoveUtil.calcOffset(startFocus.x, endFocus.x, curScale, enableTouchMoveOnPinchZoom);
+                            float newY = MoveUtil.calcOffset(startFocus.y, endFocus.y, curScale, enableTouchMoveOnPinchZoom);
                             getView().afterScaling();
                             //There is no start scale event!!!!
                             if (Device.Info.TEXET_TB176FL) {
                                 curScale *= gestureDetector.getScaleFactor();
-                                newX = (int) ((startFocus.x) * (curScale - 1));
-                                newY = (int) ((startFocus.y) * (curScale - 1));
                             }
                             activity.getController().translateAndZoom(true, curScale, newX, newY);
                             break;

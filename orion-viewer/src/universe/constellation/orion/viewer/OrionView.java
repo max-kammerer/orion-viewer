@@ -26,6 +26,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import universe.constellation.orion.viewer.device.Nook2Util;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
+import universe.constellation.orion.viewer.util.MoveUtil;
 import universe.constellation.orion.viewer.view.DrawTask;
 import universe.constellation.orion.viewer.view.ViewDimensionAware;
 
@@ -62,6 +63,8 @@ public class OrionView extends View implements OrionImageView {
 
     private Point endFocus;
 
+    private boolean enableMoveOnPinchZoom;
+
     private Paint currentPaint;
 
     private Paint borderPaint;
@@ -82,7 +85,7 @@ public class OrionView extends View implements OrionImageView {
 
     private boolean showOffset = true;
 
-    private List<DrawTask> tasks = new ArrayList();
+    private List<DrawTask> tasks = new ArrayList<DrawTask>();
 
     private ColorMatrixColorFilter nightMatrix = new ColorMatrixColorFilter(new ColorMatrix(
             new float[]{
@@ -159,7 +162,9 @@ public class OrionView extends View implements OrionImageView {
             if (inScaling) {
                 Common.d("in scaling");
                 canvas.save();
-                canvas.translate((startFocus.x) * (1 - myScale) - startFocus.x + endFocus.x, (startFocus.y) * (1 - myScale) - startFocus.y + endFocus.y);
+                canvas.translate(
+                        -MoveUtil.calcOffset(startFocus.x, endFocus.x, myScale, enableMoveOnPinchZoom),
+                        -MoveUtil.calcOffset(startFocus.y, endFocus.y, myScale, enableMoveOnPinchZoom));
                 canvas.scale(myScale, myScale);
             }
 
@@ -170,18 +175,17 @@ public class OrionView extends View implements OrionImageView {
                 canvas.restore();
 
                 borderPaint.setColor(isNightMode ? Color.WHITE : Color.BLACK);
-                int left = (int) ((-info.x.offset - startFocus.x) * myScale + endFocus.x);
-                int top = (int) ((-info.y.offset - startFocus.y) * myScale + endFocus.y);
+                int left = (int) ((-info.x.offset - startFocus.x) * myScale + (enableMoveOnPinchZoom ? endFocus.x : startFocus.x));
+                int top = (int) ((-info.y.offset - startFocus.y) * myScale + (enableMoveOnPinchZoom ? endFocus.y : startFocus.y));
 
                 int right = (int) (left + info.x.pageDimension * myScale);
                 int bottom = (int) (top + info.y.pageDimension * myScale);
                 canvas.drawRect(left, top, right, bottom, borderPaint);
             }
 
-            Common.d("OrionView:s bitmap rendering takes " + 0.001f * (System.currentTimeMillis() - start) + " s");
+            Common.d("OrionView: bitmap rendering takes " + 0.001f * (System.currentTimeMillis() - start) + " s");
 
-            for (int i = 0; i < tasks.size(); i++) {
-                DrawTask drawTask = tasks.get(i);
+            for (DrawTask drawTask : tasks) {
                 drawTask.drawCanvas(canvas, currentPaint);
             }
         }
@@ -197,7 +201,7 @@ public class OrionView extends View implements OrionImageView {
     }
 
     private void drawStatusBar(Canvas canvas) {
-        int textY = (int) (statusBarHeight - 3);
+        int textY = statusBarHeight - 3;
         int sideMargin = 5;
 
         String textToRender;
@@ -277,10 +281,11 @@ public class OrionView extends View implements OrionImageView {
         return bitmap;
     }
 
-    public void doScale(float scale, Point startFocus, Point endFocus) {
+    public void doScale(float scale, Point startFocus, Point endFocus, boolean enableMoveOnPinchZoom) {
         this.scale = scale;
         this.startFocus = startFocus;
         this.endFocus = endFocus;
+        this.enableMoveOnPinchZoom = enableMoveOnPinchZoom;
     }
 
     public void beforeScaling() {
