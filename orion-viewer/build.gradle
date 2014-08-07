@@ -8,8 +8,8 @@ dependencies {
 }
 
 project.ext {
-    orionVersionCode = 86
-    orionVersionName = "0.52.5"
+    orionVersionCode = 90
+    orionVersionName = "0.52.6"
 }
 
 
