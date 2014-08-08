@@ -6,6 +6,10 @@ import android.util.Log;
  * Allows to build tree easily in sequential mode (you have to know levels of
  * all the tree elements upfront). You should rather use this class rather than
  * manager if you build initial tree from some external data source.
+ * <p>
+ * Note, that all ids must be unique. IDs are used to find nodes in the whole
+ * tree, so they cannot repeat even if they are in different 
+ * sub-trees. 
  * 
  * @param <T>
  */
@@ -23,6 +27,8 @@ public class TreeBuilder<T> {
 
     public void clear() {
         manager.clear();
+        lastAddedId = null;
+        lastLevel = -1;
     }
 
     /**

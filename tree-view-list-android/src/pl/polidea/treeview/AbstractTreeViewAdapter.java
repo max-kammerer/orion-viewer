@@ -112,7 +112,7 @@ public abstract class AbstractTreeViewAdapter<T> extends BaseAdapter implements
 
     @Override
     public Object getItem(final int position) {
-        return getItemId(position);
+        return getTreeId(position);
     }
 
     public T getTreeId(final int position) {
