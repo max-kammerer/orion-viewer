@@ -19,11 +19,15 @@
 
 package universe.constellation.orion.viewer;
 
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.widget.Toast;
-import universe.constellation.orion.viewer.outline.OutlineActivity;
+
+import pl.polidea.treeview.InMemoryTreeStateManager;
+import pl.polidea.treeview.TreeViewList;
+import universe.constellation.orion.viewer.outline.OutlineAdapter;
 import universe.constellation.orion.viewer.outline.OutlineItem;
 import universe.constellation.orion.viewer.prefs.*;
 
@@ -118,28 +122,22 @@ public enum Action {
 			OutlineItem[] outline = controller.getOutline();
 
 			if (outline != null && outline.length != 0) {
-//                final Dialog dialog = new Dialog(activity);
-//                dialog.setTitle(R.string.table_of_contents);
-//                LinearLayout contents = new LinearLayout(activity);
-//                contents.setOrientation(LinearLayout.VERTICAL);
-//                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//                params.leftMargin = 5;
-//                params.rightMargin = 5;
-//                params.bottomMargin = 2;
-//                params.topMargin = 2;
-//
-//                InMemoryTreeStateManager<Integer> manager = new InMemoryTreeStateManager<Integer>();
-//                manager.setVisibleByDefault(false);
-//                OutlineAdapter.SetManagerFromOutlineItems(manager, outline);
-//                TreeViewList tocTree = new TreeViewList(activity);
-//                tocTree.setAdapter(new OutlineAdapter(controller, activity, dialog, manager, outline));
-//
-//                contents.addView(tocTree, params);
-//                dialog.setContentView(contents);
-//                dialog.show();
-                activity.getOrionContext().getTempOptions().outline = outline;
-                Intent intent = new Intent(activity, OutlineActivity.class);
-                activity.startActivityForResult(intent, OrionViewerActivity.OPEN_BOOKMARK_ACTIVITY_RESULT);
+                final Dialog dialog = activity.createThemedDialog();
+                dialog.setTitle(R.string.menu_outline_text);
+                dialog.setContentView(R.layout.outline);
+
+                InMemoryTreeStateManager<Integer> manager = new InMemoryTreeStateManager<Integer>();
+                manager.setVisibleByDefault(false);
+                OutlineAdapter.initializeTreeManager(manager, outline);
+                TreeViewList tocTree = (TreeViewList) dialog.findViewById(R.id.mainTreeView);
+                tocTree.setDivider(activity.getResources().getDrawable(android.R.drawable.divider_horizontal_bright));
+
+                tocTree.setAdapter(new OutlineAdapter(controller, activity, dialog, manager, outline));
+                dialog.setCanceledOnTouchOutside(true);
+                dialog.show();
+//                activity.getOrionContext().getTempOptions().outline = outline;
+//                Intent intent = new Intent(activity, OutlineActivity.class);
+//                activity.startActivityForResult(intent, OrionViewerActivity.OPEN_BOOKMARK_ACTIVITY_RESULT);
             } else {
                 activity.showWarning(R.string.warn_no_outline);
             }

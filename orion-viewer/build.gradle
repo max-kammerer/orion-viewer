@@ -4,6 +4,7 @@ apply from: 'signing.gradle'
 
 dependencies {
     compile 'com.android.support:appcompat-v7:19.1.+'
+    compile project(':tree-view-list-android')
     androidTestCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
@@ -12,10 +13,9 @@ project.ext {
     orionVersionName = "0.52.6"
 }
 
-
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.1.0"
+    buildToolsVersion '19.1.0'
 
     defaultConfig {
         versionCode = orionVersionCode

@@ -40,7 +40,7 @@ public class OutlineActivity extends ListActivity {
     protected void onResume() {
         super.onResume();
         items = ((OrionApplication)getApplicationContext()).getTempOptions().outline;
-        setListAdapter(new OutlineAdapter(getLayoutInflater(), items));
+//        setListAdapter(new OutlineAdapter(getLayoutInflater(), items));
     }
 
     @Override

@@ -19,48 +19,109 @@
 
 package universe.constellation.orion.viewer.outline;
 
-import android.view.LayoutInflater;
+import android.app.Dialog;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import pl.polidea.treeview.AbstractTreeViewAdapter;
+import pl.polidea.treeview.InMemoryTreeStateManager;
+import pl.polidea.treeview.TreeBuilder;
+import pl.polidea.treeview.TreeNodeInfo;
+import universe.constellation.orion.viewer.Common;
+import universe.constellation.orion.viewer.Controller;
+import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.R;
 
-public class OutlineAdapter extends BaseAdapter {
-	private final OutlineItem mItems[];
-	private final LayoutInflater mInflater;
-	public OutlineAdapter(LayoutInflater inflater, OutlineItem items[]) {
-		mInflater = inflater;
-		mItems    = items;
-	}
+public class OutlineAdapter extends AbstractTreeViewAdapter<Integer> {
+    private final OutlineItem items[];
+    private final Controller controller;
+    private final Dialog dialog;
 
-	public int getCount() {
-		return mItems.length;
-	}
+    public OutlineAdapter(Controller controller,
+                          OrionViewerActivity activity,
+                          Dialog dialog,
+                          InMemoryTreeStateManager<Integer> manager,
+                          OutlineItem items[]) {
+        super(activity, manager, 20);
+        this.items = items;
+        this.dialog = dialog;
+        this.controller = controller;
+    }
 
-	public Object getItem(int arg0) {
-		return null;
-	}
+    static public void initializeTreeManager(InMemoryTreeStateManager<Integer> manager, OutlineItem[] items) {
+        TreeBuilder<Integer> builder = new TreeBuilder<Integer>(manager);
+        builder.sequentiallyAddNextNode(0, items[0].level);
 
-	public long getItemId(int arg0) {
-		return 0;
-	}
+        Common.d("OutlineAdapter:: initializeTreeManager");
+        for (int i = 1; i < items.length; i++) {
+            OutlineItem item_last = items[i - 1];
+            OutlineItem item_cur = items[i];
+            int last = i - 1;
+            if (item_cur.level > item_last.level) {
+                builder.addRelation(last, i);
+            } else {
+                builder.sequentiallyAddNextNode(i, item_cur.level);
+            }
+        }
+        Common.d("OutlineAdapter:: initializeTreeManager -- END");
+    }
 
-	public View getView(int position, View convertView, ViewGroup parent) {
-		View v;
-		if (convertView == null) {
-			v = mInflater.inflate(R.layout.outline_entry, null);
-		} else {
-			v = convertView;
-		}
-		int level = mItems[position].level;
-		if (level > 8) level = 8;
-		String space = "";
-		for (int i=0; i<level;i++)
-			space += "   ";
-		((TextView)v.findViewById(R.id.title)).setText(space+mItems[position].title);
-		((TextView)v.findViewById(R.id.page)).setText(String.valueOf(mItems[position].page + 1));
-		return v;
-	}
 
+    @Override
+    public View getNewChildView(final TreeNodeInfo<Integer> treeNodeInfo) {
+        final LinearLayout viewLayout = (LinearLayout) getActivity()
+                .getLayoutInflater().inflate(R.layout.outline_entry, null);
+        Common.d("OutlineAdapter:: GetChildView");
+        return updateView(viewLayout, treeNodeInfo);
+    }
+
+    private String getDescription(final int id) {
+        Common.d("OutlineAdapter:: GetDescription");
+        return this.items[id].title;
+    }
+
+    private int getPage(final int id) {
+        Common.d("OutlineAdapter:: GetDescription");
+        return this.items[id].page;
+    }
+
+    @Override
+    public LinearLayout updateView(final View view,
+                                   final TreeNodeInfo<Integer> treeNodeInfo) {
+        Common.d("OutlineAdapter:: updateView");
+        final LinearLayout viewLayout = (LinearLayout) view;
+
+        ((TextView)view.findViewById(R.id.title)).setText(getDescription(treeNodeInfo.getId()));
+		((TextView)view.findViewById(R.id.page)).setText(String.valueOf(getPage(treeNodeInfo.getId()) + 1));
+
+        return viewLayout;
+    }
+
+    @Override
+    public long getItemId(final int position) {
+        Common.d("OutlineAdapter:: getItemID");
+        return getTreeId(position);
+    }
+
+    @Override
+    public Object getItem(final int position) {
+        Common.d("OutlineAdapter:: getItem");
+        int id = (int) getItemId(position);
+        return this.items[id];
+    }
+
+    @Override
+    public void handleItemClick(final View view, final Object id) {
+        Common.d("OutlineAdapter:: handleItemClick");
+        final Integer longId = (Integer) id;
+        final TreeNodeInfo<Integer> info = getManager().getNodeInfo(longId);
+        if (false && info.isWithChildren()) {
+            super.handleItemClick(view, id);
+        } else {
+            controller.drawPage(this.items[longId].page);
+            this.dialog.dismiss();
+        }
+        Common.d("OutlineAdapter:: handleItemClickEnd");
+    }
 }
