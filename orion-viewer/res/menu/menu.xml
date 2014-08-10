@@ -87,11 +87,6 @@
           android:title="@string/menu_options_text"
           android:icon="@drawable/options"/>
 
-
-    <item android:id="@+id/day_night_menu_item"
-          android:title="@string/menu_day_night_text"
-          android:icon="@drawable/day_night"/>
-
     <item android:id="@+id/open_menu_item"
           android:title="@string/menu_open_text"/>
 

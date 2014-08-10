@@ -55,8 +55,6 @@ public class OrionView extends View implements OrionImageView {
 
     private int counter = 0;
 
-    private boolean isNightMode = true;
-
     private float scale = 1.0f;
 
     private Point startFocus;
@@ -65,13 +63,9 @@ public class OrionView extends View implements OrionImageView {
 
     private boolean enableMoveOnPinchZoom;
 
-    private Paint currentPaint;
-
     private Paint borderPaint;
 
-    private Paint nightPaint;
-
-    private Paint lightPaint;
+    private Paint defaultPaint;
 
     private boolean showStatusBar;
 
@@ -86,14 +80,6 @@ public class OrionView extends View implements OrionImageView {
     private boolean showOffset = true;
 
     private List<DrawTask> tasks = new ArrayList<DrawTask>();
-
-    private ColorMatrixColorFilter nightMatrix = new ColorMatrixColorFilter(new ColorMatrix(
-            new float[]{
-                    -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-                    0.0f, -1.0f, 0.0f, 1.0f, 1.0f,
-                    0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
-                    0.0f, 0.0f, 0.0f, 1.0f, 0.0f
-            }));
 
     public OrionView(Context context) {
         super(context);
@@ -116,26 +102,17 @@ public class OrionView extends View implements OrionImageView {
         borderPaint.setStrokeWidth(2);
         borderPaint.setStyle(Paint.Style.STROKE);
 
-
         int fontSize = DEFAULT_STATUS_BAR_SIZE - FONT_DELTA;
 
-        nightPaint = new Paint();
-        nightPaint.setColorFilter(nightMatrix);
-        nightPaint.setTextSize(fontSize);
-
-
-        lightPaint = new Paint();
-        lightPaint.setColor(Color.BLACK);
-        lightPaint.setTextSize(fontSize);
+        defaultPaint = new Paint();
+        defaultPaint.setColor(Color.BLACK);
+        defaultPaint.setTextSize(fontSize);
 
         Typeface tf = Typeface.DEFAULT;
         if (tf != null) {
-            nightPaint.setTypeface(tf);
-            lightPaint.setTypeface(tf);
-            nightPaint.setAntiAlias(true);
-            lightPaint.setAntiAlias(true);
+            defaultPaint.setTypeface(tf);
+            defaultPaint.setAntiAlias(true);
         }
-        currentPaint = lightPaint;
     }
 
     @Override
@@ -168,13 +145,13 @@ public class OrionView extends View implements OrionImageView {
                 canvas.scale(myScale, myScale);
             }
 
-            canvas.drawBitmap(bitmap, 0, 0, currentPaint);
+            canvas.drawBitmap(bitmap, 0, 0, defaultPaint);
 
             if (inScaling) {
                 Common.d("in scaling 2");
                 canvas.restore();
 
-                borderPaint.setColor(isNightMode ? Color.WHITE : Color.BLACK);
+                borderPaint.setColor(defaultPaint.getColor());
                 int left = (int) ((-info.x.offset - startFocus.x) * myScale + (enableMoveOnPinchZoom ? endFocus.x : startFocus.x));
                 int top = (int) ((-info.y.offset - startFocus.y) * myScale + (enableMoveOnPinchZoom ? endFocus.y : startFocus.y));
 
@@ -186,7 +163,7 @@ public class OrionView extends View implements OrionImageView {
             Common.d("OrionView: bitmap rendering takes " + 0.001f * (System.currentTimeMillis() - start) + " s");
 
             for (DrawTask drawTask : tasks) {
-                drawTask.drawCanvas(canvas, currentPaint);
+                drawTask.drawCanvas(canvas, defaultPaint);
             }
         }
         canvas.restore();
@@ -205,10 +182,10 @@ public class OrionView extends View implements OrionImageView {
         int sideMargin = 5;
 
         String textToRender;
-        int color = currentPaint.getColor();
-        currentPaint.setColor(Color.WHITE);
-        canvas.drawRect(0, 0, getWidth(), statusBarHeight, currentPaint);
-        currentPaint.setColor(color);
+        int color = defaultPaint.getColor();
+        defaultPaint.setColor(Color.WHITE);
+        canvas.drawRect(0, 0, getWidth(), statusBarHeight, defaultPaint);
+        defaultPaint.setColor(color);
 
         if (info == null) {
             textToRender =  "? /" + pageCount + " ";
@@ -216,11 +193,11 @@ public class OrionView extends View implements OrionImageView {
             textToRender = (showOffset ? "[" + pad(info.x.offset) + ":" + pad(info.y.offset) + "]  " : " ") + (info.pageNumber + 1) + "/" + pageCount + " ";
         }
 
-        float endWidth = currentPaint.measureText(textToRender);
+        float endWidth = defaultPaint.measureText(textToRender);
         float titleEnd = getWidth() - endWidth - sideMargin;
-        canvas.drawText(textToRender, titleEnd, textY, currentPaint);
+        canvas.drawText(textToRender, titleEnd, textY, defaultPaint);
         String renderTitle = title;
-        endWidth = currentPaint.measureText(renderTitle);
+        endWidth = defaultPaint.measureText(renderTitle);
         int count = renderTitle.length();
 
         titleEnd -= sideMargin;
@@ -234,7 +211,7 @@ public class OrionView extends View implements OrionImageView {
             }
         }
         if (count > 0) {
-            canvas.drawText(renderTitle, sideMargin, textY, currentPaint);
+            canvas.drawText(renderTitle, sideMargin, textY, defaultPaint);
         }
     }
 
@@ -268,13 +245,15 @@ public class OrionView extends View implements OrionImageView {
         }
     }
 
-    public boolean isNightMode() {
-        return isNightMode;
-    }
-
-    public void setNightMode(boolean nightMode) {
-        this.isNightMode = nightMode;
-        currentPaint = isNightMode ? nightPaint : lightPaint;
+    public void setColorMatrix(float [] colorMatrix) {
+        if (colorMatrix != null) {
+            ColorMatrixColorFilter filter = new ColorMatrixColorFilter(new ColorMatrix(colorMatrix));
+            defaultPaint.setColorFilter(filter);
+            //borderPaint.setColorFilter(filter);
+        } else {
+            defaultPaint.setColorFilter(null);
+            //borderPaint.setColorFilter(null);
+        }
     }
 
     public Bitmap getBitmap() {

@@ -182,6 +182,8 @@ public class OrionApplication extends Application {
                     controller.changeThreshhold((Integer) value);
                 } else if ("screenOrientation".equals(key)) {
                     controller.changeOrinatation((String) value);
+                } else if ("colorMode".equals(key)) {
+                    controller.changeColorMode((String) value, true);
                 }
             }
         }

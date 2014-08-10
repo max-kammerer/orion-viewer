@@ -165,4 +165,21 @@
         <item>@string/lang_german_user</item>
     </string-array>
 
+    <string-array name="color_mode_desc">
+        <item>@string/color_mode_normal</item>
+        <item>@string/color_mode_inverted</item>
+        <item>@string/color_mode_black_on_yellowish</item>
+        <item>@string/color_mode_black_on_light_gray</item>
+        <item>@string/color_mode_green_on_black</item>
+        <item>@string/color_mode_red_on_black</item>
+    </string-array>
+
+    <string-array name="color_mode">
+        <item>CM_NORMAL</item>
+        <item>CM_INVERTED</item>
+        <item>CM_BLACK_ON_YELLOWISH</item>
+        <item>CM_BLACK_ON_LIGHT_GRAY</item>
+        <item>CM_GREEN_ON_BLACK</item>
+        <item>CM_RED_ON_BLACK</item>
+    </string-array>
 </resources>

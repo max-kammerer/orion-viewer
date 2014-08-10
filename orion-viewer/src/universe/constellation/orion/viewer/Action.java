@@ -179,12 +179,6 @@ public enum Action {
         }
     },
 
-    DAY_NIGHT (R.string.action_day_night_mode, R.integer.action_day_night_mode) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            activity.changeDayNightMode();
-        }
-    },
-
     BOOK_OPTIONS (R.string.action_book_options, R.integer.action_book_options) {
         @Override
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {

@@ -100,4 +100,6 @@
     <string name="pref_enable_touch_move">Enable touch move</string>
     <string name="pref_enable_move_on_pinch_zoom">Enable move on pinch zoom</string>
 
+    <string name="pref_color_mode">Color Mode</string>
+
 </resources>

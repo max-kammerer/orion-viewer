@@ -80,6 +80,8 @@ public class LastPageInfo implements Serializable {
 
     public String walkOrder = "ABCD";
 
+    public String colorMode = "CM_NORMAL";
+
     private LastPageInfo() {
 
     }

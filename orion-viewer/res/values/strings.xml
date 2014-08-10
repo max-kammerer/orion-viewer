@@ -60,7 +60,7 @@
     <string name="fit_width">Fit Width</string>
     <string name="fit_height">Fit Height</string>
     <string name="fit_page">Fit Page</string>
-    <string name="fit_custom">Custom...</string>
+    <string name="fit_custom">Custom…</string>
 
     <string name="key_binder_message">Push any key and select action to bind them!</string>
     <string name="key_binder_warning">Couldn\'t bind key with zero keycode, try another key!</string>
@@ -70,4 +70,10 @@
     <string name="msg_select_text">Select text!</string>
     <string name="warn_no_outline">Outline is absent!</string>
 
+    <string name="color_mode_normal">Normal colors (black on white)</string>
+    <string name="color_mode_inverted">Inverted Colors</string>
+    <string name="color_mode_black_on_yellowish">Black on yellowish</string>
+    <string name="color_mode_black_on_light_gray">Black on light gray</string>
+    <string name="color_mode_green_on_black">Green on black</string>
+    <string name="color_mode_red_on_black">Red on black</string>
 </resources>

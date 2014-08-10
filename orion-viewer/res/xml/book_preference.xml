@@ -56,6 +56,15 @@
                     orion:isBook="true"
                     android:defaultValue="DEFAULT"/>
 
+        <universe.constellation.orion.viewer.prefs.OrionListPreference
+            android:key="colorMode"
+            android:title="@string/pref_color_mode"
+            android:summary="@string/pref_color_mode"
+            android:entries="@array/color_mode_desc"
+            android:entryValues="@array/color_mode"
+            android:dialogTitle="@string/pref_color_mode"
+            orion:isBook="true"
+            android:defaultValue="CM_NORMAL"/>
 
         <universe.constellation.orion.viewer.prefs.SeekBarPreference
                   android:summary="@string/pref_book_contrast_desc"

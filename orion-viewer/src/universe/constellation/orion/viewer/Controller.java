@@ -20,9 +20,10 @@
 package universe.constellation.orion.viewer;
 
 import android.graphics.Point;
-import universe.constellation.orion.viewer.dialog.TapHelpDialog;
+
 import universe.constellation.orion.viewer.outline.OutlineItem;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
+import universe.constellation.orion.viewer.util.ViewUtil;
 import universe.constellation.orion.viewer.view.Renderer;
 import universe.constellation.orion.viewer.view.ViewDimensionAware;
 
@@ -271,6 +272,7 @@ public class Controller implements ViewDimensionAware {
         lastScreenSize = new Point(info.screenWidth, info.screenHeight);
         screenOrientation = info.screenOrientation;
         changeOrinatation(screenOrientation);
+        changeColorMode(info.colorMode, false);
 
         onDimensionChanged(width, height);
 
@@ -355,6 +357,13 @@ public class Controller implements ViewDimensionAware {
             realOrintationId = activity.getApplicationDefaultOrientation();
         }
         activity.changeOrientation(activity.getScreenOrientation(realOrintationId));
+    }
+
+    public void changeColorMode(String colorMode, boolean invalidate) {
+        activity.getView().setColorMatrix(ViewUtil.getColorMode(colorMode));
+        if (invalidate) {
+            sendViewChangeNotification();
+        }
     }
 
 	public OutlineItem[] getOutline() {

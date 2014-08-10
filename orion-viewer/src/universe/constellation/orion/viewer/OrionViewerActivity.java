@@ -128,8 +128,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         OptionActions.SHOW_STATUS_BAR.doAction(this, !globalOptions.isStatusBarVisible(), globalOptions.isStatusBarVisible());
         OptionActions.SHOW_OFFSET_ON_STATUS_BAR.doAction(this, !globalOptions.isShowOffsetOnStatusBar(), globalOptions.isShowOffsetOnStatusBar());
-        String mode = getOrionContext().getOptions().getStringProperty(GlobalOptions.DAY_NIGHT_MODE, "DAY");
-        view.setNightMode("NIGHT".equals(mode));
 
         initDialogs();
 
@@ -899,7 +897,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
             case R.id.outline_menu_item: action = Action.SHOW_OUTLINE; break;
             case R.id.open_menu_item: action = Action.OPEN_BOOK; break;
             case R.id.open_dictionary_menu_item: action = Action.DICTIONARY; break;
-            case R.id.day_night_menu_item:  action = Action.DAY_NIGHT; break;
 
             case R.id.bookmarks_menu_item:  action = Action.OPEN_BOOKMARKS; break;
             case R.id.help_menu_item:
@@ -1201,14 +1198,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
             textSelection = new SelectionAutomata(this);
         }
         textSelection.startSelection();
-    }
-
-
-    public void changeDayNightMode() {
-        boolean newMode = !getView().isNightMode();
-        getOrionContext().getOptions().saveProperty(GlobalOptions.DAY_NIGHT_MODE, newMode ? "NIGHT" : "DAY");
-        getView().setNightMode(newMode);
-        getView().invalidate();
     }
 
     public class MyArrayAdapter extends ArrayAdapter implements SpinnerAdapter {
