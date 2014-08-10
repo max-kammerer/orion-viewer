@@ -160,7 +160,7 @@
                 android:entries="@array/screen_orientation_full_desc"
                 android:entryValues="@array/screen_orientation_full"
                 android:dialogTitle="@string/pref_screen_orientation"
-                android:defaultValue="DEFAULT" orion:justAndroidGeneral="true"/>
+                android:defaultValue="DEFAULT"/>
 
         <ListPreference
                 android:key="LANGUAGE"

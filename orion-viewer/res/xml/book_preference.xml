@@ -54,7 +54,7 @@
                     android:entryValues="@array/screen_orientation"
                     android:dialogTitle="@string/pref_screen_orientation"
                     orion:isBook="true"
-                    android:defaultValue="DEFAULT" orion:justAndroidGeneral="true"/>
+                    android:defaultValue="DEFAULT"/>
 
 
         <universe.constellation.orion.viewer.prefs.SeekBarPreference

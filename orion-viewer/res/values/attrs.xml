@@ -49,14 +49,6 @@
         <attr name="actionId"/>
     </declare-styleable>
 
-    <declare-styleable name="android.preference.ListPreference">
-        <attr name="justAndroidGeneral"/>
-    </declare-styleable>
-
-    <declare-styleable name="android.preference.CheckBoxPreference">
-        <attr name="justAndroidGeneral"/>
-    </declare-styleable>
-
     <declare-styleable name="universe.constellation.orion.viewer.android.ImageButton">
         <attr name="actionId"/>
     </declare-styleable>
