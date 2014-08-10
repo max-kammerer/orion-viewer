@@ -23,7 +23,7 @@ import android.graphics.Point;
 
 import universe.constellation.orion.viewer.outline.OutlineItem;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
-import universe.constellation.orion.viewer.util.ViewUtil;
+import universe.constellation.orion.viewer.util.ColorUtil;
 import universe.constellation.orion.viewer.view.Renderer;
 import universe.constellation.orion.viewer.view.ViewDimensionAware;
 
@@ -360,7 +360,7 @@ public class Controller implements ViewDimensionAware {
     }
 
     public void changeColorMode(String colorMode, boolean invalidate) {
-        activity.getView().setColorMatrix(ViewUtil.getColorMode(colorMode));
+        activity.getView().setColorMatrix(ColorUtil.getColorMode(colorMode));
         if (invalidate) {
             sendViewChangeNotification();
         }

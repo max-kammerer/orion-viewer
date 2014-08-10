@@ -26,6 +26,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import universe.constellation.orion.viewer.device.Nook2Util;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
+import universe.constellation.orion.viewer.util.ColorUtil;
 import universe.constellation.orion.viewer.util.MoveUtil;
 import universe.constellation.orion.viewer.view.DrawTask;
 import universe.constellation.orion.viewer.view.ViewDimensionAware;
@@ -247,13 +248,17 @@ public class OrionView extends View implements OrionImageView {
 
     public void setColorMatrix(float [] colorMatrix) {
         if (colorMatrix != null) {
-            ColorMatrixColorFilter filter = new ColorMatrixColorFilter(new ColorMatrix(colorMatrix));
+            ColorMatrix matrix = new ColorMatrix(colorMatrix);
+            ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
             defaultPaint.setColorFilter(filter);
-            //borderPaint.setColorFilter(filter);
+            borderPaint.setColorFilter(filter);
+            super.setBackgroundColor(ColorUtil.transforColor(Color.WHITE, matrix));
         } else {
             defaultPaint.setColorFilter(null);
-            //borderPaint.setColorFilter(null);
+            borderPaint.setColorFilter(null);
+            super.setBackgroundColor(Color.WHITE);
         }
+
     }
 
     public Bitmap getBitmap() {

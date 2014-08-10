@@ -1,9 +1,12 @@
 package universe.constellation.orion.viewer.util;
 
+import android.graphics.Color;
+import android.graphics.ColorMatrix;
+
 /**
  * Created by mike on 8/10/14.
  */
-public class ViewUtil {
+public class ColorUtil {
     private static final float[][] COLOR_MATRICES = {
             null, /* COLOR_MODE_NORMAL */
             {
@@ -54,5 +57,20 @@ public class ViewUtil {
         }
 
         return COLOR_MATRICES[index];
+    }
+
+    public static int transforColor(int color, ColorMatrix matrix) {
+        int r = Color.red(color);
+        int g = Color.green(color);
+        int b = Color.blue(color);
+        int a = Color.alpha(color);
+
+        int [] array = new int [4];
+        float[] transformation = matrix.getArray();
+        for (int i = 0; i < array.length; i++) {
+            int shift = i*5;
+            array[i] = (int) (r * transformation[shift + 0] + g * transformation[shift + 1] + b * transformation[shift + 2] + a * transformation[shift + 3] + transformation[shift + 4]);
+        }
+        return Color.argb(array[3], array[0], array[1], array[2]);
     }
 }
