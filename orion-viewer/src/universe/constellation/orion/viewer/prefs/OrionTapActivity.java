@@ -122,7 +122,7 @@ public class OrionTapActivity extends OrionBaseActivity {
         }
     }
 
-    public static final int getDefaultAction(int row, int column, boolean isLong) {
+    public static int getDefaultAction(int row, int column, boolean isLong) {
         if (row == 1 && column == 1) {
             return isLong ? Action.OPTIONS.getCode() : Action.MENU.getCode();
         } else {
@@ -134,7 +134,7 @@ public class OrionTapActivity extends OrionBaseActivity {
         }
     }
 
-    public static final String getKey(int i, int j, boolean isLong) {
+    public static String getKey(int i, int j, boolean isLong) {
         return GlobalOptions.TAP_ZONE +(isLong ? "_LONG_CLICK_" :"_SHORT_CLICK_") + i + "_" + j;
     }
 
