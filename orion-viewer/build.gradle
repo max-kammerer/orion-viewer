@@ -1,4 +1,4 @@
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: 'signing.gradle'
 
@@ -10,7 +10,7 @@ dependencies {
 
 project.ext {
     orionVersionCode = 90
-    orionVersionName = "0.52.6"
+    orionVersionName = "0.53.0"
 }
 
 android {
