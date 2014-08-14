@@ -73,7 +73,7 @@
     <string name="color_mode_normal">Normal colors (black on white)</string>
     <string name="color_mode_inverted">Inverted Colors</string>
     <string name="color_mode_black_on_yellowish">Black on yellowish</string>
-    <string name="color_mode_black_on_light_gray">Black on light gray</string>
-    <string name="color_mode_green_on_black">Green on black</string>
-    <string name="color_mode_red_on_black">Red on black</string>
+    <string name="color_mode_grayscale_light">Grayscale light (greyish background)</string>
+    <string name="color_mode_grayscale">Grayscale (gray background) </string>
+    <string name="color_mode_grayscale_dark">Grayscale dark (dark gray background)</string>
 </resources>

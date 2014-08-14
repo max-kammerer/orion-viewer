@@ -22,22 +22,22 @@ public class ColorUtil {
                     0.0f, 0.0f, 0.0f, 1.0f, 0.0f},
 
             {
-                    0.25f, 0.54f, 0.06f, 0.0f, 0.0f, /* COLOR_MODE_BLACK_ON_LIGHT_GRAY */
-                    0.25f, 0.54f, 0.06f, 0.0f, 0.0f,
-                    0.25f, 0.54f, 0.06f, 0.0f, 0.0f,
+                    0.27f, 0.54f, 0.09f, 0.0f, 0.0f, /* COLOR_MODE_BLACK_ON_GREYISH */
+                    0.27f, 0.54f, 0.09f, 0.0f, 0.0f,
+                    0.27f, 0.54f, 0.09f, 0.0f, 0.0f,
                     0.0f, 0.0f, 0.0f, 1.0f, 0.0f},
 
             {
-                    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, /* COLOR_MODE_GREEN_ON_BLACK */
-                    -0.3f, -0.59f, -0.11f, 0.0f, 255.0f,
-                    0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-                    0.0f, 0.0f, 0.0f, 1.0f, 0.0f},
+                    0.215f, 0.45f, 0.08f, 0.0f, 0.0f, /* COLOR_MODE_BLACK_ON_LIGHT_GRAY */
+                    0.215f, 0.45f, 0.08f, 0.0f, 0.0f,
+                    0.215f, 0.45f, 0.08f, 0.0f, 0.0f,
+                    0.0f, 0.0f, 0.0f, 1.0f, 0.0f },
 
             {
-                    -0.3f, -0.59f, -0.11f, 0.0f, 255.0f, /* COLOR_MODE_RED_ON_BLACK */
-                    0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-                    0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-                    0.0f, 0.0f, 0.0f, 1.0f, 255.0f}
+                    0.15f, 0.3f, 0.05f, 0.0f, 0.0f, /* COLOR_MODE_BLACK_ON_GRAY */
+                    0.15f, 0.3f, 0.05f, 0.0f, 0.0f,
+                    0.15f, 0.3f, 0.05f, 0.0f, 0.0f,
+                    0.0f, 0.0f, 0.0f, 1.0f, 0.0f},
     };
 
     public static float[] getColorMode(String type) {
@@ -48,11 +48,11 @@ public class ColorUtil {
             index = 1;
         } else if ("CM_BLACK_ON_YELLOWISH".equals(type)) {
             index = 2;
-        } else if ("CM_BLACK_ON_LUGHT_GRAY".equals(type)) {
+        } else if ("CM_GRAYSCALE_LIGHT".equals(type)) {
+            index = 3;
+        } else if ("CM_GRAYSCALE".equals(type)) {
             index = 4;
-        } else if ("CM_GREEN_ON_BLACK".equals(type)) {
-            index = 4;
-        } else if ("CM_RED_ON_BLACK".equals(type)) {
+        }  else if ("CM_GRAYSCALE_DARK".equals(type)) {
             index = 5;
         }
 
