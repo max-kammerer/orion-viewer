@@ -23,6 +23,9 @@ import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.view.View;
+import android.view.Window;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import pl.polidea.treeview.InMemoryTreeStateManager;
@@ -32,6 +35,7 @@ import universe.constellation.orion.viewer.outline.OutlineItem;
 import universe.constellation.orion.viewer.prefs.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * User: mike
@@ -123,10 +127,13 @@ public enum Action {
 
 			if (outline != null && outline.length != 0) {
                 final Dialog dialog = activity.createThemedDialog();
-                dialog.setTitle(R.string.menu_outline_text);
+                dialog.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
                 dialog.setContentView(R.layout.outline);
+                dialog.getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.outline_header);
 
-                InMemoryTreeStateManager<Integer> manager = new InMemoryTreeStateManager<Integer>();
+                //dialog.setTitle(R.string.menu_outline_text);
+
+                final InMemoryTreeStateManager<Integer> manager = new InMemoryTreeStateManager<Integer>();
                 manager.setVisibleByDefault(false);
                 int navigateTo = OutlineAdapter.initializeTreeManager(manager, outline, controller.getCurrentPage());
                 TreeViewList tocTree = (TreeViewList) dialog.findViewById(R.id.mainTreeView);
@@ -136,6 +143,28 @@ public enum Action {
                 tocTree.setSelection(navigateTo);
                 dialog.setCanceledOnTouchOutside(true);
                 dialog.show();
+                final ImageView imageView = (ImageView) dialog.findViewById(R.id.outline_action);
+                System.out.println(imageView.getBaseline());
+                imageView.setOnClickListener(new View.OnClickListener() {
+
+                    boolean expanded = false;
+
+                    @Override
+                    public void onClick(View v) {
+                        if (expanded) {
+                            imageView.setImageDrawable(imageView.getResources().getDrawable(R.drawable.collapsed));
+                            List<Integer> children = manager.getChildren(null);
+                            for (Integer child : children) {
+                                manager.collapseChildren(child);
+                            }
+                        } else {
+                            imageView.setImageDrawable(imageView.getResources().getDrawable(R.drawable.expanded));
+                            manager.expandEverythingBelow(null);
+                        }
+
+                        expanded = !expanded;
+                    }
+                });
             } else {
                 activity.showWarning(R.string.warn_no_outline);
             }
