@@ -128,16 +128,14 @@ public enum Action {
 
                 InMemoryTreeStateManager<Integer> manager = new InMemoryTreeStateManager<Integer>();
                 manager.setVisibleByDefault(false);
-                OutlineAdapter.initializeTreeManager(manager, outline);
+                int navigateTo = OutlineAdapter.initializeTreeManager(manager, outline, controller.getCurrentPage());
                 TreeViewList tocTree = (TreeViewList) dialog.findViewById(R.id.mainTreeView);
                 tocTree.setDivider(activity.getResources().getDrawable(android.R.drawable.divider_horizontal_bright));
 
                 tocTree.setAdapter(new OutlineAdapter(controller, activity, dialog, manager, outline));
+                tocTree.setSelection(navigateTo);
                 dialog.setCanceledOnTouchOutside(true);
                 dialog.show();
-//                activity.getOrionContext().getTempOptions().outline = outline;
-//                Intent intent = new Intent(activity, OutlineActivity.class);
-//                activity.startActivityForResult(intent, OrionViewerActivity.OPEN_BOOKMARK_ACTIVITY_RESULT);
             } else {
                 activity.showWarning(R.string.warn_no_outline);
             }

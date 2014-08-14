@@ -49,22 +49,42 @@ public class OutlineAdapter extends AbstractTreeViewAdapter<Integer> {
         this.controller = controller;
     }
 
-    static public void initializeTreeManager(InMemoryTreeStateManager<Integer> manager, OutlineItem[] items) {
+    static public int initializeTreeManager(InMemoryTreeStateManager<Integer> manager, OutlineItem[] items, int currentPage) {
         TreeBuilder<Integer> builder = new TreeBuilder<Integer>(manager);
-        builder.sequentiallyAddNextNode(0, items[0].level);
 
-        Common.d("OutlineAdapter:: initializeTreeManager");
-        for (int i = 1; i < items.length; i++) {
-            OutlineItem item_last = items[i - 1];
-            OutlineItem item_cur = items[i];
+        int openAtIndex = -1;
+        OutlineItem lastItem = null;
+        Common.d("OutlineAdapter:: initializeTreeManager " + currentPage);
+        for (int i = 0; i < items.length; i++) {
+            OutlineItem curItem = items[i];
             int last = i - 1;
-            if (item_cur.level > item_last.level) {
+            if (lastItem != null && curItem.level > lastItem.level) {
                 builder.addRelation(last, i);
             } else {
-                builder.sequentiallyAddNextNode(i, item_cur.level);
+                builder.sequentiallyAddNextNode(i, curItem.level);
+            }
+
+            if (curItem.page <= currentPage) {
+                openAtIndex = i;
+            }
+            lastItem = curItem;
+        }
+
+        int resultExpandIndex = -1;
+        if (openAtIndex != -1) {
+            Integer expand = openAtIndex;
+            while (expand != null) {
+                manager.expandDirectChildren(expand);
+                expand = manager.getParent(expand);
+            }
+
+            Integer[] hierarchyDescription = manager.getHierarchyDescription(openAtIndex);
+            for (Integer integer : hierarchyDescription) {
+                resultExpandIndex += integer + 1;
             }
         }
-        Common.d("OutlineAdapter:: initializeTreeManager -- END");
+        Common.d("OutlineAdapter:: initializeTreeManager -- END " + openAtIndex + " " + items[openAtIndex].page);
+        return resultExpandIndex;
     }
 
 
