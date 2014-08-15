@@ -33,6 +33,7 @@ import pl.polidea.treeview.TreeViewList;
 import universe.constellation.orion.viewer.outline.OutlineAdapter;
 import universe.constellation.orion.viewer.outline.OutlineItem;
 import universe.constellation.orion.viewer.prefs.*;
+import universe.constellation.orion.viewer.util.ColorUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -203,6 +204,21 @@ public enum Action {
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
             GlobalOptions options = activity.getGlobalOptions();
             options.saveBooleanProperty(GlobalOptions.FULL_SCREEN, !options.isFullScreen());
+        }
+    },
+
+    SWITCH_COLOR_MODE (R.string.action_switch_color_mode, R.integer.action_switch_color_mode) {
+        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+            OrionView view = activity.getView();
+            if (view.isDefaultColorMatrix()) {
+                LastPageInfo currentBookParameters = activity.getOrionContext().getCurrentBookParameters();
+                if (currentBookParameters != null) {
+                    view.setColorMatrix(ColorUtil.getColorMode(currentBookParameters.colorMode));
+                }
+            } else {
+                view.setColorMatrix(null);
+            }
+            view.invalidate();
         }
     },
 

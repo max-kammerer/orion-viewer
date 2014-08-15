@@ -48,7 +48,7 @@
     <integer name="action_add_bookmark">15</integer>
     <integer name="action_open_bookmarks">16</integer>
 
-    <integer name="action_day_night_mode">17</integer>
+    <integer name="action_switch_color_mode">17</integer>
 
     <integer name="action_book_options">18</integer>
 

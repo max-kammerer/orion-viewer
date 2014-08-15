@@ -34,7 +34,6 @@
     <string name="action_open">打开文件</string>
     <string name="action_add_bookmark">添加书签</string>
     <string name="action_open_bookmarks">打开书签</string>
-    <string name="action_day_night_mode">白天/夜晚 模式</string>
 
     <string name="action_crop_left">左</string>
     <string name="action_crop_right">右</string>

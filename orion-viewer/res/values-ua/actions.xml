@@ -35,7 +35,6 @@
     <string name="action_add_bookmark">Додати закладку</string>
     <string name="action_full_screen">Вкл/викл. повноекранний режим</string>
     <string name="action_open_bookmarks">Закладки</string>
-    <string name="action_day_night_mode">Денний/Нічний режим</string>
 
     <string name="action_crop_left">Обрізати ліве поле</string>
     <string name="action_crop_right">Обрізати праве поле</string>

@@ -35,7 +35,7 @@
     <string name="action_open">פתח ספר</string>
     <string name="action_add_bookmark">הוסף סימנייה</string>
     <string name="action_open_bookmarks">פתח סימניות</string>
-    <string name="action_day_night_mode">מצב יום / לילה</string>
+
     <string name="action_crop_left">חתוך שולים שמאליים</string>
     <string name="action_crop_right">חתוך שולים ימניים</string>
     <string name="action_crop_top">חתוך שולים למעלה</string>

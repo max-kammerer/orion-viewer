@@ -38,7 +38,7 @@
     <string name="action_add_bookmark">Add Bookmark</string>
     <string name="action_open_bookmarks">Open Bookmarks</string>
     <string name="action_full_screen">Toggle Full Screen</string>
-    <string name="action_day_night_mode">Day/Night mode</string>
+    <string name="action_switch_color_mode">Switch color mode</string>
     <string name="action_close">Close application</string>
 
     <string name="action_crop_left">Crop left margin</string>

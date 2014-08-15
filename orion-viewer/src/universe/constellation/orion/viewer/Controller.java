@@ -362,7 +362,7 @@ public class Controller implements ViewDimensionAware {
     public void changeColorMode(String colorMode, boolean invalidate) {
         activity.getView().setColorMatrix(ColorUtil.getColorMode(colorMode));
         if (invalidate) {
-            sendViewChangeNotification();
+            activity.getView().invalidate();
         }
     }
 

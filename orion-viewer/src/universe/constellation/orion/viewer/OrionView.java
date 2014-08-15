@@ -258,7 +258,10 @@ public class OrionView extends View implements OrionImageView {
             borderPaint.setColorFilter(null);
             super.setBackgroundColor(Color.WHITE);
         }
+    }
 
+    public boolean isDefaultColorMatrix() {
+        return defaultPaint.getColorFilter() == null;
     }
 
     public Bitmap getBitmap() {

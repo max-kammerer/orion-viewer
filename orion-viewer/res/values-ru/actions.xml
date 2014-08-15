@@ -29,13 +29,13 @@
     <string name="action_zoom_page">Диалог масштабирования</string>
     <string name="action_rotation_page">Диалог поворота</string>
     <string name="action_options_page">Настройки</string>
-    <string name="action_goto_page">Перейти к ...</string>
+    <string name="action_goto_page">Перейти к …</string>
     <string name="action_dictionary">Открыть словарь</string>
     <string name="action_open">Открыть книгу</string>
     <string name="action_add_bookmark">Добавить закладку</string>
     <string name="action_full_screen">Переключить полноэкранный режим</string>
     <string name="action_open_bookmarks">Закладки</string>
-    <string name="action_day_night_mode">Дневной/Ночной режим</string>
+    <string name="action_switch_color_mode">Переключить цветовой режим</string>
     <string name="action_close">Закрыть приложение</string>
 
     <string name="action_crop_left">Обрезать левое поле</string>

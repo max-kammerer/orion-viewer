@@ -36,7 +36,6 @@
     <string name="action_outline">@string/menu_outline_text</string>
     <string name="action_add_bookmark">Aggiungi segnalibro</string>
     <string name="action_open_bookmarks">Apri segnalibri</string>
-    <string name="action_day_night_mode">Modalità notturna</string>
 
     <string name="action_crop_left">Ritaglia margine sinistro</string>
     <string name="action_crop_right">Ritaglia margine destro</string>

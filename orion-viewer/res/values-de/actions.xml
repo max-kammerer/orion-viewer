@@ -36,7 +36,6 @@
     <string name="action_add_bookmark">Lesezeichen hinzufügen</string>
     <string name="action_open_bookmarks">Lesezeichen verwalten</string>
     <string name="action_full_screen">Vollbild an/aus</string>
-    <string name="action_day_night_mode">Tag-/Nacht-Modus</string>
     <string name="action_close">Anwendung schließen</string>
 
     <string name="action_crop_left">Linken Rand abschneiden</string>

@@ -39,7 +39,6 @@
     <string name="action_add_bookmark">Añadir marcador</string>
     <string name="action_open_bookmarks">Abrir marcadores</string>
     <string name="action_full_screen">Pantalla completa</string>
-    <string name="action_day_night_mode">Modo Día/Noche</string>
 
     <string name="action_crop_left">Recortar margen izquierdo</string>
     <string name="action_crop_right">Recortar margen derecho</string>
