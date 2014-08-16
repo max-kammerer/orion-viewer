@@ -1,5 +1,0 @@
-# Modify 'sdk.dir' property  and resave this file as local.properties
-sdk.dir=/path/to/android/sdk/android-sdk-linux
-
-# For Highscreen Alex device define alex.sdk.dir property
-# alex.sdk.dir=/path/to/alex/sdk/alex

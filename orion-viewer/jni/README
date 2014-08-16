@@ -1,4 +1,4 @@
-For building native libraries you need android ndk r8e ang git installed on your system
+For building native libraries you need android ndk r8e+ ang git installed on your system
 
 NB: 1-2 steps are scripted in 'thirdparty_update.gradle' 'prepareNativePart' task
 

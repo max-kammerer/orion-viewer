@@ -1,11 +1,10 @@
-To build Orion Viewer from command line you will need:
-    android-sdk-r21
-    apache-ant 1.8
+To build Orion Viewer you will need:
+    android-sdk-r23+
+    android-ndk-r9d+
+    gradle 1.12+
 
-Specify path to android-sdk in 'orion-viewer/local.properties'
-Use 'orion-viewer/local.properties.sample' as example.
+Specify path to android-sdk in 'local.properties' (use 'local.properties.sample' as example).
 
-There is a build script in 'orion-viewer' folder named 'build.xml'.
-To build project run 'ant release' from this folder.
+All build logic scripted in build.gradle,
+but before running it checkout and build native libraries see 'orion-viewer/jni/README' file
 
-For native build see ReadMe file in "orion-viewer/jni" folder
