@@ -210,8 +210,12 @@ public enum Action {
     SWITCH_COLOR_MODE (R.string.action_switch_color_mode, R.integer.action_switch_color_mode) {
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
             OrionView view = activity.getView();
+            LastPageInfo currentBookParameters = activity.getOrionContext().getCurrentBookParameters();
+            if (currentBookParameters != null && ColorUtil.getColorMode(currentBookParameters.colorMode) == null) {
+                activity.showLongMessage(activity.getString(R.string.select_color_mode));
+                return;
+            }
             if (view.isDefaultColorMatrix()) {
-                LastPageInfo currentBookParameters = activity.getOrionContext().getCurrentBookParameters();
                 if (currentBookParameters != null) {
                     view.setColorMatrix(ColorUtil.getColorMode(currentBookParameters.colorMode));
                 }
