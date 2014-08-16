@@ -149,11 +149,6 @@
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="APV PDF Viewer"
-                    android:textSize="18sp"/>
-
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:text="tree-view-list-android"
                     android:textSize="18sp"/>
 
