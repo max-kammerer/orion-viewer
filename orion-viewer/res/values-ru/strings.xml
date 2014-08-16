@@ -57,7 +57,7 @@
     <string name="fit_width">По ширине</string>
     <string name="fit_height">По высоте</string>
     <string name="fit_page">По размеру страницы</string>
-    <string name="fit_custom">Указать масштаб...</string>
+    <string name="fit_custom">Указать масштаб…</string>
 
     <string name="key_binder_message">Нажмите кнопку и выберите связанное действие!</string>
     <string name="key_binder_warning">Не могу привязать кнопку с нулевым кодом, попробуйте другую!</string>
@@ -66,4 +66,12 @@
     <string name="warn_no_text_in_selection">В выделенном участке отсутствует текст!</string>
     <string name="msg_select_text">Выделите текст!</string>
     <string name="warn_no_outline">Содержание отсутствует!</string>
+    <string name="select_color_mode">Выберите цветовой режим для переключения</string>
+
+    <string name="color_mode_normal">Обычные цвета (черный на белом фоне)</string>
+    <string name="color_mode_inverted">Инвертированные цвета</string>
+    <string name="color_mode_black_on_yellowish">Черный на желтоватом фоне</string>
+    <string name="color_mode_grayscale_light">Градации серого на сероватом фоне</string>
+    <string name="color_mode_grayscale">Градации серого на сером фоне </string>
+    <string name="color_mode_grayscale_dark">Градации серого на темносером фоне</string>
 </resources>

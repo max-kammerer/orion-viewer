@@ -70,10 +70,11 @@
     <string name="msg_select_text">Select text!</string>
     <string name="warn_no_outline">Outline is absent!</string>
 
-    <string name="color_mode_normal">Normal colors (black on white)</string>
+    <string name="color_mode_normal">Normal colors (black on white background)</string>
     <string name="color_mode_inverted">Inverted Colors</string>
-    <string name="color_mode_black_on_yellowish">Black on yellowish</string>
-    <string name="color_mode_grayscale_light">Grayscale light (greyish background)</string>
-    <string name="color_mode_grayscale">Grayscale (gray background) </string>
-    <string name="color_mode_grayscale_dark">Grayscale dark (dark gray background)</string>
+    <string name="color_mode_black_on_yellowish">Black on yellowish background</string>
+    <string name="color_mode_grayscale_light">Grayscale on greyish background</string>
+    <string name="color_mode_grayscale">Grayscale on gray background</string>
+    <string name="color_mode_grayscale_dark">Grayscale on dark gray background</string>
+    <string name="select_color_mode">Select color mode to switch</string>
 </resources>

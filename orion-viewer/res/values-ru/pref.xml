@@ -97,4 +97,6 @@
 
     <string name="pref_book_threshold">Порог для водяных знаков</string>
     <string name="pref_book_threshold_desc">Порог удаления водяных знаков (по умолчанию 255)</string>
+
+    <string name="pref_color_mode">Цветовой режим</string>
 </resources>
