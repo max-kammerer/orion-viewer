@@ -1,6 +1,14 @@
+project.ext {
+    orionVersionCode = 90
+    orionVersionName = "0.53.3"
+    doSigning = new File("signing.gradle").exists()
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply from: 'signing.gradle'
+if (doSigning) {
+    apply from: 'signing.gradle'
+}
 
 dependencies {
     compile 'com.android.support:appcompat-v7:19.1.+'
@@ -50,7 +58,9 @@ android {
                 variant.outputFile = new File(file.parent, file.name.replace("orion-viewer-", "orion_viewer_" + defaultConfig.versionName + "_").replace("-release", ""))
             }
 
-            signingConfig signingConfigs.release
+            if (doSigning) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 
