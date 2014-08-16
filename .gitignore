@@ -1,0 +1,13 @@
+*.iml
+.idea/
+build/
+
+# signing params
+signing.gradle
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# built native files
+*.o
+*.so
