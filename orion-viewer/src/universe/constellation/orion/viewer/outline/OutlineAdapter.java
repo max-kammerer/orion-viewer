@@ -83,7 +83,7 @@ public class OutlineAdapter extends AbstractTreeViewAdapter<Integer> {
                 resultExpandIndex += integer + 1;
             }
         }
-        Common.d("OutlineAdapter:: initializeTreeManager -- END " + openAtIndex + " " + items[openAtIndex].page);
+        Common.d("OutlineAdapter:: initializeTreeManager -- END " + openAtIndex);
         return resultExpandIndex;
     }
 
@@ -92,24 +92,20 @@ public class OutlineAdapter extends AbstractTreeViewAdapter<Integer> {
     public View getNewChildView(final TreeNodeInfo<Integer> treeNodeInfo) {
         final LinearLayout viewLayout = (LinearLayout) getActivity()
                 .getLayoutInflater().inflate(R.layout.outline_entry, null);
-        Common.d("OutlineAdapter:: GetChildView");
         return updateView(viewLayout, treeNodeInfo);
     }
 
     private String getDescription(final int id) {
-        Common.d("OutlineAdapter:: GetDescription");
         return this.items[id].title;
     }
 
     private int getPage(final int id) {
-        Common.d("OutlineAdapter:: GetDescription");
         return this.items[id].page;
     }
 
     @Override
     public LinearLayout updateView(final View view,
                                    final TreeNodeInfo<Integer> treeNodeInfo) {
-        Common.d("OutlineAdapter:: updateView");
         final LinearLayout viewLayout = (LinearLayout) view;
 
         ((TextView)view.findViewById(R.id.title)).setText(getDescription(treeNodeInfo.getId()));
@@ -120,20 +116,17 @@ public class OutlineAdapter extends AbstractTreeViewAdapter<Integer> {
 
     @Override
     public long getItemId(final int position) {
-        Common.d("OutlineAdapter:: getItemID");
         return getTreeId(position);
     }
 
     @Override
     public Object getItem(final int position) {
-        Common.d("OutlineAdapter:: getItem");
         int id = (int) getItemId(position);
         return this.items[id];
     }
 
     @Override
     public void handleItemClick(final View view, final Object id) {
-        Common.d("OutlineAdapter:: handleItemClick");
         final Integer longId = (Integer) id;
         final TreeNodeInfo<Integer> info = getManager().getNodeInfo(longId);
         if (false && info.isWithChildren()) {
@@ -142,6 +135,5 @@ public class OutlineAdapter extends AbstractTreeViewAdapter<Integer> {
             controller.drawPage(this.items[longId].page);
             this.dialog.dismiss();
         }
-        Common.d("OutlineAdapter:: handleItemClickEnd");
     }
 }
