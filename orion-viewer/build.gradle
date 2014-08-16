@@ -1,8 +1,10 @@
 project.ext {
     orionVersionCode = 90
     orionVersionName = "0.53.3"
-    doSigning = new File("signing.gradle").exists()
+    doSigning = new File("orion-viewer/signing.gradle").exists()
 }
+
+print doSigning
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
