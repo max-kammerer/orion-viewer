@@ -20,7 +20,7 @@ dependencies {
 
 project.ext {
     orionVersionCode = 90
-    orionVersionName = "0.53.2"
+    orionVersionName = "0.53.3"
 }
 
 android {

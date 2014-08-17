@@ -1,10 +1,14 @@
+===== 0.53.3 (Aug 17, 2014) =====
+* Added support for PAGE_UP, PAGE_DOWN keys
+* Fixed misspelling
+
 ===== 0.53.2 (Aug 16, 2014) =====
 * Added color modes for selecting text and background colors
 * Outline transformed to expandable list
 
 ===== 0.52.6 (Aug 07, 2014) =====
 * Added option for enable/disable move on pinch zoom (disabled by default)
-* Added option to disable move at all (applicable for e-ink devices)
+* Added option to disable move at all (useful on e-ink devices)
 * Stability fixes
 
 ===== 0.52.2 (Jan 26, 2014) =====
