@@ -1,6 +1,6 @@
 project.ext {
-    orionVersionCode = 90
-    orionVersionName = "0.53.3"
+    orionVersionCode = 94
+    orionVersionName = "0.53.4"
     doSigning = new File("orion-viewer/signing.gradle").exists()
 }
 
@@ -16,11 +16,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:19.1.+'
     compile project(':tree-view-list-android')
     androidTestCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-}
-
-project.ext {
-    orionVersionCode = 90
-    orionVersionName = "0.53.3"
 }
 
 android {

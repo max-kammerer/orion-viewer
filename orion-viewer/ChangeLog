@@ -1,3 +1,6 @@
+===== 0.53.4 (Aug 20, 2014) =====
+* Fixed outline crash
+
 ===== 0.53.3 (Aug 17, 2014) =====
 * Added support for PAGE_UP, PAGE_DOWN keys
 * Fixed misspelling
