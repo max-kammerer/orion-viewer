@@ -128,11 +128,10 @@ public enum Action {
 
 			if (outline != null && outline.length != 0) {
                 final Dialog dialog = activity.createThemedDialog();
-                dialog.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+                dialog.requestWindowFeature(Window.FEATURE_LEFT_ICON);
                 dialog.setContentView(R.layout.outline);
-                dialog.getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.outline_header);
-
-                //dialog.setTitle(R.string.menu_outline_text);
+                dialog.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.collapsed);
+                dialog.setTitle(R.string.menu_outline_text);
 
                 final InMemoryTreeStateManager<Integer> manager = new InMemoryTreeStateManager<Integer>();
                 manager.setVisibleByDefault(false);
@@ -144,22 +143,26 @@ public enum Action {
                 tocTree.setSelection(navigateTo);
                 dialog.setCanceledOnTouchOutside(true);
                 dialog.show();
-                final ImageView imageView = (ImageView) dialog.findViewById(R.id.outline_action);
-                System.out.println(imageView.getBaseline());
-                imageView.setOnClickListener(new View.OnClickListener() {
+                View titleField = dialog.findViewById(android.R.id.title);
+                if (titleField == null) {
+                    return;
+                }
+
+                final View clickView = titleField.getParent() instanceof View ? (View) titleField.getParent() : titleField;
+                clickView.setOnClickListener(new View.OnClickListener() {
 
                     boolean expanded = false;
 
                     @Override
                     public void onClick(View v) {
                         if (expanded) {
-                            imageView.setImageDrawable(imageView.getResources().getDrawable(R.drawable.collapsed));
+                            dialog.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.collapsed);
                             List<Integer> children = manager.getChildren(null);
                             for (Integer child : children) {
                                 manager.collapseChildren(child);
                             }
                         } else {
-                            imageView.setImageDrawable(imageView.getResources().getDrawable(R.drawable.expanded));
+                            dialog.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.expanded);
                             manager.expandEverythingBelow(null);
                         }
 
