@@ -55,6 +55,8 @@ public class OrionApplication extends Application {
 
     private Device device = Common.createDevice();
 
+    public boolean isTesting = false;
+
     public void onCreate() {
         instance = this;
         super.onCreate();

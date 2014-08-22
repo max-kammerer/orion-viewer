@@ -23,7 +23,7 @@ import java.util.Arrays
  * Time: 19:57
  */
 
-class NavigationTest : ActivityBaseTest() {
+class RenderingAndNavigationTest : ActivityBaseTest() {
 
     class MyView(val imageView: OrionImageView) : OrionImageView {
 
@@ -49,7 +49,7 @@ class NavigationTest : ActivityBaseTest() {
 
     fun testProperPages() {
         val controller = prepareEngine()
-        val screens = 11
+        val screens = 21
 
         val nexts = arrayListOf<IntArray>()
         for (i in 1..screens) {

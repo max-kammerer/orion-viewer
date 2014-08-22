@@ -11,6 +11,7 @@ import android.net.Uri
 import android.test.ActivityInstrumentationTestCase2
 import android.content.pm.ActivityInfo
 import android.test.UiThreadTest
+import java.util.concurrent.CountDownLatch
 
 /**
  * User: mike
@@ -36,17 +37,21 @@ class RotationTest() : InstrumentationTestCase() {
         Assert.assertTrue(width != 0)
         Assert.assertTrue(height != 0)
         //OptionActions.FULL_SCREEN.doAction(getActivity(), true, false)
+        val orientation = getActivity().getResources()!!.getConfiguration().orientation;
 
-        runTestOnUiThread { getActivity().changeOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) }
+        val latch = CountDownLatch(1);
+        runTestOnUiThread {
+            getController().changeOrinatation(if (orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) "PORTRAIT" else "LANDSCAPE");
+            latch.countDown();
+        }
+        latch.await();
+        getActivity().finish()
 
-
-
-        Thread.sleep(2000)
+        Assert.assertTrue("Orintation not changed: $orientation", orientation != getActivity().getResources()!!.getConfiguration().orientation)
 
         val width2 = view.getWidth()
         val height2 = view.getHeight()
-
-        Assert.assertTrue(width != width2)
-        Assert.assertTrue(height != height2)
+        Assert.assertTrue("w1: $width, w2: $width2, original orientation: $orientation", width != width2)
+        Assert.assertTrue("h1: $height, h2: $$height2, original orientation: $orientation", height != height2)
     }
 }
