@@ -58,5 +58,5 @@
     <string name="action_rotate_90">Rotation de 90°</string>
     <string name="action_rotate_270">Rotation de 270°</string>
 
-    <string name="action_select_text">Sélection d'un texte</string>
+    <string name="action_select_text">Sélection d\'un texte</string>
 </resources>
