@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2013  Michael Bogdanov & Co
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--Author: Claude Dellacherie-->
+<resources>
+    <!--Categories-->
+    <string name="pref_category_general">Général</string>
+    <string name="pref_category_key_manager">Association des touches</string>
+    <string name="pref_category_device_parameters">Paramètres du dispositif</string>
+    <string name="pref_category_add_parameters">Paramètres additionnels</string>
+    <string name="pref_category_system">Système</string>
+
+    <!--General Prefs-->
+    <string name="pref_appearance">Apparence</string>
+    <string name="pref_behavior">Contrôles et comportement</string>
+    <string name="pref_fullScreen">Plein écran</string>
+    <string name="pref_showActionBar">Montrer la barre d'action</string>
+    <string name="pref_showActionBar_desc">Montrer la barre d'action (réinitialisation nécessaire)</string>
+    <string name="pref_showStatusBar">Montrer la barre de statut</string>
+    <string name="pref_showOffsetOnStatusBar">Montrer l'offset de la page page dans la barre de statut</string>
+    <string name="pref_bookDefaultOrientation">Orientation par défaut</string>
+    <string name="pref_bookDefaultZoom">Zoom</string>
+    <string name="pref_rotate_new_book_on_opening">Rotation d'un nouveau livre à l'ouverture</string>
+    <string name="pref_screen_orientation">Orientation de l'écran</string>
+    <string name="pref_rotate_screen">Orientation de l'écran par défaut ; réinitialiser Orion pour appliquer les changements</string>
+    <string name="pref_book_screen_orientation">Orientation de l'écran pour le livre actuel</string>
+    <string name="pref_close_dialog_on_apply">Fermer la fenêtre pour appliquer les changements</string>
+    <string name="pref_close_page_option_dialog_on_apply">Fermer la fenêtre des options de pages pour appliquer les changements</string>
+    <string name="pref_swap_prev_next_keys">Echanger les touches précédent/suivant</string>
+    <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Echanger les touches précédent/suivant en mode paysage</string>
+    <string name="pref_dictionary">Dictionnaire</string>
+    <string name="pref_e_ink_optimization">E-ink : optimisation</string>
+    <string name="pref_e_ink_fast_refresh">E-ink : rapide rafraichissement</string>
+    <string name="pref_total_refresh_after">Rafraichissement total après...</string>
+
+    <string name="pref_long_crop_value">Valeur du grand rognage</string>
+    <string name="pref_long_crop_value_desc">Valeur du grand rognage (0-40%)</string>
+
+    <string name="pref_screen_overlapping_horizontal">Recouvrement horizontal</string>
+    <string name="pref_screen_overlapping_horizontal_desc">Recouvrement horizontal de l'écran au changement de page (0-90%)</string>
+
+    <string name="pref_screen_overlapping_vertical">Recouvrement vertical</string>
+    <string name="pref_screen_overlapping_vertical_desc">Recouvrement vertical de l'écran au changement de page (0-90%)</string>
+
+    <string name="pref_custom_brightness">Ajustement de la luminosité</string>
+    <string name="pref_brightness">Luminosité</string>
+    <string name="pref_brightness_desc">Luminosité (1-100%)</string>
+
+    <string name="pref_application_theme">Thèmes</string>
+    <string name="pref_application_theme_desc">Réinitialiser Orion pour appliquer les changements</string>
+
+    <string name="pref_open_recent_book">Ouvrir un livre récent au départ</string>
+
+    <!--book preferences-->
+    <string name="pref_book_contrast">Contraste</string>
+    <string name="pref_book_contrast_desc">Contraste (défaut 100)</string>
+
+    <string name="pref_book_threshold">Filigrane</string>
+    <string name="pref_book_threshold_desc">Eliminer un filigrane (par défaut 255)</string>
+
+    <string name="pref_device_info">Informations sur le dispositif</string>
+    <string name="pref_debug">Déboguer</string>
+    <string name="pref_debug_desc">Ecrit des traces sur le fichier $lt;nom du livre ouvert$gt;+.trace</string>
+
+    <string name="pref_walk_order">Sélection de direction de lecture</string>
+    <string name="pref_page_layout">Disposition d'une page</string>
+
+
+    <string name="application_settings_title">Configuration</string>
+    <string name="pref_default_book_setting">Réglages pour livre</string>
+    <string name="pref_default_book_setting_desc">Seulement pour nouveau livre. Pour livre déjà vu utiliser Options pour livre</string>
+
+    <string name="book_pref_title">Options pour livre</string>
+
+    <string name="pref_screen_backlight_timeout">Laps de temps avant extinction de l'écran</string>
+    <string name="pref_screen_backlight_timeout_desc">Laps de temps avant exticntion de l'écran</string>
+
+    <string name="pref_app_language">Langues</string>
+    <string name="pref_app_language_desc">Langue de l'application ; réinitialiser Orion pour appliquer un changement</string>
+
+    <string name="pref_tap_zones_desc">Zones de tapes : associer des actions aux zones de l'écran</string>
+
+
+</resources>
