@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2013  Michael Bogdanov & Co
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--Author: Claude Dellacherie-->
+<resources>
+    <string name="action_none">Aucune</string>
+    <string name="action_menu">Menu principal</string>
+    <string name="action_next_page">Page suivante</string>
+    <string name="action_prev_page">Page précédente</string>
+    <string name="action_first_page">Première page</string>
+    <string name="action_last_page">Dernière page</string>
+    <string name="action_crop_page">Rognage</string>
+    <string name="action_zoom_page">Zoom</string>
+    <string name="action_layout_page">Disposition de la page</string>
+    <string name="action_rotation_page">Rotation</string>
+    <string name="action_options_page">Options</string>
+    <string name="action_book_options">Options pour livre</string>
+    <string name="action_goto_page">Aller à</string>
+    <string name="action_dictionary">Ouvrir un dictionnaire</string>
+    <string name="action_open">Ouvrir un livre</string>
+    <string name="action_outline">Sommaire</string>
+    <string name="action_add_bookmark">Ajouter un signet</string>
+    <string name="action_open_bookmarks">Ouvrir les signets</string>
+    <string name="action_full_screen">Plein écran</string>
+
+    <string name="action_crop_left">Rogner la marge de gauche</string>
+    <string name="action_crop_right">Rogner la marge de droite</string>
+    <string name="action_crop_top">Rogner la marge du haut</string>
+    <string name="action_crop_bottom">Rogner la marge du bas</string>
+
+    <string name="action_uncrop_left">Augmenter la marge de gauche</string>
+    <string name="action_uncrop_right">Augmenter la marge de droite</string>
+    <string name="action_uncrop_top">Augmenter la marge du haut</string>
+    <string name="action_uncrop_bottom">Augmenter la marge du bas</string>
+    <string name="action_inverse_crops">Echanger rogner/augmenter les marges</string>
+    <string name="action_switch_long_crop">Echanger rogner grand/petit</string>
+
+    <string name="action_next_10">Avancer de 10 pages</string>
+    <string name="action_prev_10">Reculer de 10 pages</string>
+
+    <string name="action_rotate_90">Rotation de 90°</string>
+    <string name="action_rotate_270">Rotation de 270°</string>
+
+    <string name="action_select_text">Sélection d'un texte</string>
+</resources>
