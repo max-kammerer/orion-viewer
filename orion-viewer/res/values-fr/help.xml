@@ -34,11 +34,11 @@
         </string>
 
     <string name="general_usage_step2">
-        2. Choisit l'orientation appropriée : portrait ou paysage
+        2. Choisit l'orientation appropriée: portrait ou paysage
         </string>
 
     <string name="general_usage_step3">
-        3. Rogne les marges ; la taille du texte size sera changée selon le changement des marges (si zoom largeur est spécifié)
+        3. Rogne les marges; la taille du texte size sera changée selon le changement des marges (si zoom largeur est spécifié)
         </string>
 
     <string name="general_usage_step4">
