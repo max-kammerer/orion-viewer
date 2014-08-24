@@ -24,10 +24,10 @@
         <string name="app_name">Orion Viewer</string>
         <string name="version_name">0.53.4</string>
 
-        <string name="ABCD">ABCD</string>
-        <string name="ACBD">ACBD</string>
-        <string name="BADC">BADC</string>
-        <string name="BDAC">BDAC</string>
+        <string name="ABCD" translatable="false">ABCD</string>
+        <string name="ACBD" translatable="false">ACBD</string>
+        <string name="BADC" translatable="false">BADC</string>
+        <string name="BDAC" translatable="false">BDAC</string>
 
         <integer name="layout_right_bottom_outside">0</integer>
         <integer name="layout_only_bottom_outside">1</integer>
