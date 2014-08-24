@@ -49,7 +49,7 @@
     <string name="fit_custom">Personnaliser</string>
 
     <string name="key_binder_message">Appuyer sur une touche pour lui associer une action</string>
-    <string name="key_binder_warning">On nepeut associer une action à cette touche ; essayer une autre</string>
+    <string name="key_binder_warning">On nepeut associer une action à cette touche; essayer une autre</string>
     <string name="table_of_contents">Tabla des matières</string>
 
 

@@ -39,15 +39,15 @@
     <string name="pref_bookDefaultZoom">Zoom</string>
     <string name="pref_rotate_new_book_on_opening">Rotation d'un nouveau livre à l'ouverture</string>
     <string name="pref_screen_orientation">Orientation de l'écran</string>
-    <string name="pref_rotate_screen">Orientation de l'écran par défaut ; réinitialiser Orion pour appliquer les changements</string>
+    <string name="pref_rotate_screen">Orientation de l'écran par défaut; réinitialiser Orion pour appliquer les changements</string>
     <string name="pref_book_screen_orientation">Orientation de l'écran pour le livre actuel</string>
     <string name="pref_close_dialog_on_apply">Fermer la fenêtre pour appliquer les changements</string>
     <string name="pref_close_page_option_dialog_on_apply">Fermer la fenêtre des options de pages pour appliquer les changements</string>
     <string name="pref_swap_prev_next_keys">Echanger les touches précédent/suivant</string>
     <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Echanger les touches précédent/suivant en mode paysage</string>
     <string name="pref_dictionary">Dictionnaire</string>
-    <string name="pref_e_ink_optimization">E-ink : optimisation</string>
-    <string name="pref_e_ink_fast_refresh">E-ink : rapide rafraichissement</string>
+    <string name="pref_e_ink_optimization">E-ink: optimisation</string>
+    <string name="pref_e_ink_fast_refresh">E-ink: rapide rafraichissement</string>
     <string name="pref_total_refresh_after">Rafraichissement total après...</string>
 
     <string name="pref_long_crop_value">Valeur du grand rognage</string>
@@ -93,9 +93,9 @@
     <string name="pref_screen_backlight_timeout_desc">Laps de temps avant exticntion de l'écran</string>
 
     <string name="pref_app_language">Langues</string>
-    <string name="pref_app_language_desc">Langue de l'application ; réinitialiser Orion pour appliquer un changement</string>
+    <string name="pref_app_language_desc">Langue de l'application: réinitialiser Orion pour appliquer un changement</string>
 
-    <string name="pref_tap_zones_desc">Zones de tapes : associer des actions aux zones de l'écran</string>
+    <string name="pref_tap_zones_desc">Zones de tapes: associer des actions aux zones de l'écran</string>
 
 
 </resources>
