@@ -31,16 +31,16 @@
     <string name="pref_appearance">Apparence</string>
     <string name="pref_behavior">Contrôles et comportement</string>
     <string name="pref_fullScreen">Plein écran</string>
-    <string name="pref_showActionBar">Montrer la barre d'action</string>
-    <string name="pref_showActionBar_desc">Montrer la barre d'action (réinitialisation nécessaire)</string>
+    <string name="pref_showActionBar">Montrer la barre d\'action</string>
+    <string name="pref_showActionBar_desc">Montrer la barre d\'action (réinitialisation nécessaire)</string>
     <string name="pref_showStatusBar">Montrer la barre de statut</string>
-    <string name="pref_showOffsetOnStatusBar">Montrer l'offset de la page page dans la barre de statut</string>
+    <string name="pref_showOffsetOnStatusBar">Montrer l\'offset de la page page dans la barre de statut</string>
     <string name="pref_bookDefaultOrientation">Orientation par défaut</string>
     <string name="pref_bookDefaultZoom">Zoom</string>
-    <string name="pref_rotate_new_book_on_opening">Rotation d'un nouveau livre à l'ouverture</string>
-    <string name="pref_screen_orientation">Orientation de l'écran</string>
-    <string name="pref_rotate_screen">Orientation de l'écran par défaut; réinitialiser Orion pour appliquer les changements</string>
-    <string name="pref_book_screen_orientation">Orientation de l'écran pour le livre actuel</string>
+    <string name="pref_rotate_new_book_on_opening">Rotation d\'un nouveau livre à l\'ouverture</string>
+    <string name="pref_screen_orientation">Orientation de l\'écran</string>
+    <string name="pref_rotate_screen">Orientation de l\'écran par défaut; réinitialiser Orion pour appliquer les changements</string>
+    <string name="pref_book_screen_orientation">Orientation de l\'écran pour le livre actuel</string>
     <string name="pref_close_dialog_on_apply">Fermer la fenêtre pour appliquer les changements</string>
     <string name="pref_close_page_option_dialog_on_apply">Fermer la fenêtre des options de pages pour appliquer les changements</string>
     <string name="pref_swap_prev_next_keys">Echanger les touches précédent/suivant</string>
@@ -54,10 +54,10 @@
     <string name="pref_long_crop_value_desc">Valeur du grand rognage (0-40%)</string>
 
     <string name="pref_screen_overlapping_horizontal">Recouvrement horizontal</string>
-    <string name="pref_screen_overlapping_horizontal_desc">Recouvrement horizontal de l'écran au changement de page (0-90%)</string>
+    <string name="pref_screen_overlapping_horizontal_desc">Recouvrement horizontal de l\'écran au changement de page (0-90%)</string>
 
     <string name="pref_screen_overlapping_vertical">Recouvrement vertical</string>
-    <string name="pref_screen_overlapping_vertical_desc">Recouvrement vertical de l'écran au changement de page (0-90%)</string>
+    <string name="pref_screen_overlapping_vertical_desc">Recouvrement vertical de l\'écran au changement de page (0-90%)</string>
 
     <string name="pref_custom_brightness">Ajustement de la luminosité</string>
     <string name="pref_brightness">Luminosité</string>
@@ -80,7 +80,7 @@
     <string name="pref_debug_desc">Ecrit des traces sur le fichier $lt;nom du livre ouvert$gt;+.trace</string>
 
     <string name="pref_walk_order">Sélection de direction de lecture</string>
-    <string name="pref_page_layout">Disposition d'une page</string>
+    <string name="pref_page_layout">Disposition d\'une page</string>
 
 
     <string name="application_settings_title">Configuration</string>
@@ -89,13 +89,13 @@
 
     <string name="book_pref_title">Options pour livre</string>
 
-    <string name="pref_screen_backlight_timeout">Laps de temps avant extinction de l'écran</string>
-    <string name="pref_screen_backlight_timeout_desc">Laps de temps avant exticntion de l'écran</string>
+    <string name="pref_screen_backlight_timeout">Laps de temps avant extinction de l\'écran</string>
+    <string name="pref_screen_backlight_timeout_desc">Laps de temps avant exticntion de l\'écran</string>
 
     <string name="pref_app_language">Langues</string>
-    <string name="pref_app_language_desc">Langue de l'application: réinitialiser Orion pour appliquer un changement</string>
+    <string name="pref_app_language_desc">Langue de l\'application: réinitialiser Orion pour appliquer un changement</string>
 
-    <string name="pref_tap_zones_desc">Zones de tapes: associer des actions aux zones de l'écran</string>
+    <string name="pref_tap_zones_desc">Zones de tapes: associer des actions aux zones de l\'écran</string>
 
 
 </resources>

@@ -25,7 +25,7 @@
     <string name="menu_goto_text">Aller à la page</string>
     <string name="menu_bookmarks_text">Signets</string>
     <string name="menu_add_bookmark_item">Ajouter un signet</string>
-    <string name="menu_select_text">Sélection d'un texte</string>
+    <string name="menu_select_text">Sélection d\'un texte</string>
     <string name="menu_rotation_text">Rotation</string>
     <string name="menu_navigation_text">Navigation</string>
     <string name="menu_help_text">Aide</string>
