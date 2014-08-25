@@ -25,6 +25,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
@@ -40,7 +41,26 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CheckedTextView;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+import android.widget.ViewAnimator;
+
+import java.io.File;
 
 import universe.constellation.orion.viewer.dialog.SearchDialog;
 import universe.constellation.orion.viewer.dialog.TapHelpDialog;
@@ -48,8 +68,6 @@ import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.selection.SelectedTextActions;
 import universe.constellation.orion.viewer.selection.SelectionAutomata;
 import universe.constellation.orion.viewer.selection.TouchAutomata;
-
-import java.io.*;
 
 public class OrionViewerActivity extends OrionBaseActivity {
 
@@ -196,11 +214,24 @@ public class OrionViewerActivity extends OrionBaseActivity {
         Common.d("Debug.getNativeHeapSize() = " + Debug.getNativeHeapSize());
         Common.d("OVA: on new intent " + intent);
 
-        String file =  null;
         Uri uri = intent.getData();
         if (uri != null) {
             Common.d("File URI  = " + uri.toString());
-            file = uri.getPath();
+            if ("content".equalsIgnoreCase(uri.getScheme())) {
+                Cursor cursor = getContentResolver().query(uri, new String[]{"_data"}, null, null, null);
+                try {
+                    if (cursor.moveToFirst()) {
+                        String str = cursor.getString(0);
+                        if (str != null) {
+                            uri = Uri.parse(str);
+                        }
+                    }
+                } finally {
+                    cursor.close();
+                }
+            }
+
+            String file = uri.getPath();
 
             if (controller != null) {
                 if (lastPageInfo!= null) {
@@ -273,7 +304,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             if (doc != null) {
                 doc.destroy();
             }
-            AlertDialog.Builder themedAlertBuilder = createThemedAlertBuilder().setMessage("Error while openning " + filePath + ": " + e.getMessage() + " " + e.getCause());
+            AlertDialog.Builder themedAlertBuilder = createThemedAlertBuilder().setMessage("Error while opening " + filePath + ": " + e.getMessage() + " " + e.getCause());
             themedAlertBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
