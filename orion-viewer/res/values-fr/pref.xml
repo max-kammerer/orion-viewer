@@ -96,6 +96,8 @@
     <string name="pref_app_language_desc">Langue de l\'application: réinitialiser Orion pour appliquer un changement</string>
 
     <string name="pref_tap_zones_desc">Zones de tapes: associer des actions aux zones de l\'écran</string>
+    
+    <string name="pref_color_mode">Choix de la couleur</string>
 
 
 </resources>
