@@ -282,7 +282,7 @@ JNIEXPORT jobjectArray JNICALL Java_universe_constellation_orion_viewer_djvu_Djv
     OutlineItem * item = next->item;
     jstring title = (*env)->NewStringUTF(env, item->title);
     //shift pageno to zero based
-    jobject element = (*env)->NewObject(env, olClass, ctor, item->level, title, item->page - 1);
+    jobject element = (*env)->NewObject(env, olClass, ctor, item->level, title, item->page);
     (*env)->SetObjectArrayElement(env, arr, pos, element);    
     (*env)->DeleteLocalRef(env, title);    
     (*env)->DeleteLocalRef(env, element);
@@ -314,21 +314,28 @@ int buildTOC(miniexp_t expr, list * myList, int level, JNIEnv * env, jclass olCl
           const char *name = miniexp_to_str(miniexp_car(s));
           const char *page = miniexp_to_str(miniexp_cadr(s));
           //starts with #
-//          LOGI("Page %s", page);
-          int pageno = atoi(&page[1]);
-	  
-	  if (name == NULL) {return -1;}
-	  
-	  OutlineItem * element = (list_item *) malloc(sizeof(OutlineItem));
-	  element->title = name;
-	  element->page = pageno;
-	  element->level = level;
-	  
-	  list_item * next = (list_item *) malloc(sizeof(list_item));
-	  next->item = element;
-	  next->next = NULL;
-	  myList->tail->next = next;
-	  myList->tail = next;
+
+          int pageno = -1;
+          if (page[0] == '#') {
+              pageno = ddjvu_document_search_pageno(doc, &page[1]);
+          }
+
+          if (pageno < 0) {
+            LOGI("Page %s", page);
+          }
+
+          if (name == NULL) {return -1;}
+
+          OutlineItem * element = (list_item *) malloc(sizeof(OutlineItem));
+          element->title = name;
+          element->page = pageno;
+          element->level = level;
+
+          list_item * next = (list_item *) malloc(sizeof(list_item));
+          next->item = element;
+          next->next = NULL;
+          myList->tail->next = next;
+          myList->tail = next;
 	  	  
           // recursion
           buildTOC(miniexp_cddr(s), myList, level+1, env, olClass, ctor);	  
