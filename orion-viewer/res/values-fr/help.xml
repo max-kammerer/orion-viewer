@@ -50,7 +50,7 @@
         Application des paramètres</string>
 
     <string name="navigation_help">
-        Ouvre la page de disposition de la page. Quand on lit des bandes dessinées ou qu\'on regarde des livres avec images on peut choisir la disposition de la page appropriée.</string>
+        Ouvre le menu de disposition de la page. Quand on lit des bandes dessinées ou qu\'on regarde des livres avec images on peut choisir la disposition de la page appropriée.</string>
 
     <string name="dictionary_help">
         Ouvre un dictionnaire externe. Choisir le dictionnaire approprié dans Configuration.</string>
