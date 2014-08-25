@@ -25,6 +25,8 @@
     <string name="lang_hebrew_user">Hébreu</string>
     <string name="lang_chinese_user">Chinois</string>
     <string name="lang_italian_user">Italien</string>
+    <string name="lang_spanish_user">Espagnol</string>
+    <string name="lang_ukrainian_user">Ukrainien</string>
     <string name="lang_german_user">Allemand</string>
     <string name="lang_french_user">Français</string>
 </resources>
