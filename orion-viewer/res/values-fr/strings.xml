@@ -49,11 +49,22 @@
     <string name="fit_custom">Personnaliser</string>
 
     <string name="key_binder_message">Appuyer sur une touche pour lui associer une action</string>
-    <string name="key_binder_warning">On nepeut associer une action à cette touche; essayer une autre</string>
-    <string name="table_of_contents">Tabla des matières</string>
+    <string name="key_binder_warning">On ne peut associer une action à cette touche; essayer une autre</string>
+    <string name="table_of_contents">Table des matières</string>
 
 
     <string name="warn_no_text_in_selection">Pas de texte dans la sélection</string>
+    <string name="msg_select_text">Sélection du texte</string>
+
     <string name="warn_no_outline">Pas de sommaire</string>
+    
+    <string name="color_mode_normal">Couleurs normales (noir sur fond blanc)</string>
+    <string name="color_mode_inverted">Couleurs inversées</string>
+    <string name="color_mode_black_on_yellowish">Noir sur fond jaunâtre</string>
+    <string name="color_mode_grayscale_light">Echelle de gris sur fond grisâtre</string>
+    <string name="color_mode_grayscale">Echelle de gris sur fond gris</string>
+    <string name="color_mode_grayscale_dark">Echelle de gris sur fond gris sombre</string>
+    <string name="select_color_mode">Choisir la couleur</string>
+
 
 </resources>

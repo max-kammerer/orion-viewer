@@ -26,6 +26,7 @@
     <string name="pref_category_device_parameters">Paramètres du dispositif</string>
     <string name="pref_category_add_parameters">Paramètres additionnels</string>
     <string name="pref_category_system">Système</string>
+    <string name="pref_category_move">Bouger</string>
 
     <!--General Prefs-->
     <string name="pref_appearance">Apparence</string>
@@ -34,15 +35,15 @@
     <string name="pref_showActionBar">Montrer la barre d\'action</string>
     <string name="pref_showActionBar_desc">Montrer la barre d\'action (réinitialisation nécessaire)</string>
     <string name="pref_showStatusBar">Montrer la barre de statut</string>
-    <string name="pref_showOffsetOnStatusBar">Montrer l\'offset de la page page dans la barre de statut</string>
+    <string name="pref_showOffsetOnStatusBar">Montrer l\'offset de la page dans la barre de statut</string>
     <string name="pref_bookDefaultOrientation">Orientation par défaut</string>
     <string name="pref_bookDefaultZoom">Zoom</string>
     <string name="pref_rotate_new_book_on_opening">Rotation d\'un nouveau livre à l\'ouverture</string>
     <string name="pref_screen_orientation">Orientation de l\'écran</string>
     <string name="pref_rotate_screen">Orientation de l\'écran par défaut; réinitialiser Orion pour appliquer les changements</string>
     <string name="pref_book_screen_orientation">Orientation de l\'écran pour le livre actuel</string>
-    <string name="pref_close_dialog_on_apply">Fermer la fenêtre pour appliquer les changements</string>
-    <string name="pref_close_page_option_dialog_on_apply">Fermer la fenêtre des options de pages pour appliquer les changements</string>
+    <string name="pref_close_dialog_on_apply">Fermer un dialogue après une seule tape idoine</string>
+    <string name="pref_close_page_option_dialog_on_apply">Fermer un dialogue après une tape au lieu de deux</string>
     <string name="pref_swap_prev_next_keys">Echanger les touches précédent/suivant</string>
     <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Echanger les touches précédent/suivant en mode paysage</string>
     <string name="pref_dictionary">Dictionnaire</string>
@@ -96,6 +97,11 @@
     <string name="pref_app_language_desc">Langue de l\'application: réinitialiser Orion pour appliquer un changement</string>
 
     <string name="pref_tap_zones_desc">Zones de tapes: associer des actions aux zones de l\'écran</string>
+    
+    <string name="pref_enable_touch_move">Permet de bouger avec un doigt</string>
+    <string name="pref_enable_move_on_pinch_zoom">Permet une translation pendant un zoom à deux doigts</string>
+    
+    <string name="pref_color_mode">Choix de la couleur</string>
 
 
 </resources>
