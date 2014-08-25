@@ -58,7 +58,7 @@
 
     <string name="warn_no_outline">Pas de sommaire</string>
     
-    <string name="color_mode_normal">Couleurs normales(noir sur fond blanc)</string>
+    <string name="color_mode_normal">Couleurs normales (noir sur fond blanc)</string>
     <string name="color_mode_inverted">Couleurs inversées</string>
     <string name="color_mode_black_on_yellowish">Noir sur fond jaunâtre</string>
     <string name="color_mode_grayscale_light">Echelle de gris sur fond grisâtre</string>
