@@ -54,6 +54,8 @@
 
 
     <string name="warn_no_text_in_selection">Pas de texte dans la sélection</string>
+    <string name="msg_select_text">Sélection du texte</string>
+
     <string name="warn_no_outline">Pas de sommaire</string>
 
 </resources>
