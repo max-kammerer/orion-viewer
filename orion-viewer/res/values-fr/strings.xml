@@ -50,7 +50,7 @@
 
     <string name="key_binder_message">Appuyer sur une touche pour lui associer une action</string>
     <string name="key_binder_warning">On nepeut associer une action à cette touche; essayer une autre</string>
-    <string name="table_of_contents">Tabla des matières</string>
+    <string name="table_of_contents">Table des matières</string>
 
 
     <string name="warn_no_text_in_selection">Pas de texte dans la sélection</string>
