@@ -1,14 +1,19 @@
-project.ext {
-    native_folder = "../thirdparty"
-    mupdf = native_folder + "/mupdf"
-    djvu = native_folder + "/djvu"
-}
-
 buildscript {
     repositories { mavenCentral() }
 }
 
-task checkoutDjvu << {
+project.ext {
+    native_folder = "../thirdparty"
+    mupdf = native_folder + "/mupdf"
+    djvu = native_folder + "/djvu"
+
+    /*!!!!SPECIFY path to your ndk!!!*/
+    ndkPath = "/home/mike/devel/tools/android/android-ndk-r9d/"
+}
+
+
+/*DJVU CHAIN*/
+task downloadDjvu << {
     exec {
         commandLine = ['git', 'clone', 'git://git.code.sf.net/p/djvu/djvulibre-git', djvu]
     }
@@ -19,7 +24,31 @@ task checkoutDjvu << {
     }
 }
 
-task checkoutMupdf << {
+task patchDjvu << {
+    copy {
+        from 'orion-viewer/jni/djvu'
+        into djvu
+    }
+    copy {
+        from 'orion-viewer/jni/common'
+        into djvu + '/android/jni'
+    }
+}
+
+task patchAndBuildDjvu(dependsOn: [patchDjvu]) << {
+    exec {
+        workingDir file(djvu + "/android")
+        commandLine ndkPath + "ndk-build"
+    }
+}
+
+task djvuChain(dependsOn: [downloadDjvu, patchAndBuildDjvu])
+
+patchDjvu.mustRunAfter downloadDjvu
+
+
+/*MUPDF CHAIN*/
+task downloadMupdf << {
     exec {
         commandLine = ['git', 'clone', 'git://git.ghostscript.com/mupdf.git', mupdf]
     }
@@ -39,25 +68,34 @@ task checkoutMupdf << {
     }
 }
 
-task copyDjvu << {
-    copy {
-        from 'orion-viewer/jni/djvu'
-        into djvu
-    }
-    copy {
-        from 'orion-viewer/jni/common'
-        into djvu + '/android/jni'
+task downloadAndMakeMupdf(dependsOn: downloadMupdf) << {
+    /*For more details see mupdf/platform/android/ReadMe.txt*/
+    exec {
+        workingDir file(mupdf)
+        commandLine 'make'
+        ignoreExitValue true
     }
 }
 
-task copyMupdf(type: Copy)  {
+task patchMupdf(type: Copy)  {
     from 'orion-viewer/jni/mupdf'
     from 'orion-viewer/jni/common'
     into mupdf + '/platform/android/jni'
 }
 
-//RUN ME
-task prepareNativePart(dependsOn: [copyDjvu, copyMupdf]) {
-    copyDjvu.dependsOn checkoutDjvu
-    copyMupdf.dependsOn checkoutMupdf
+task patchAndBuildMupdf(dependsOn: [patchMupdf]) << {
+    exec {
+        workingDir file(mupdf + "/platform/android")
+        commandLine ndkPath + "ndk-build"
+    }
 }
+
+task mupdfChain(dependsOn: [downloadAndMakeMupdf, patchAndBuildMupdf])
+
+patchMupdf.mustRunAfter downloadMupdf
+patchMupdf.mustRunAfter downloadAndMakeMupdf
+mupdfChain.mustRunAfter djvuChain
+
+
+/*!!!!!!!!!!RUN ME!!!!!!!!*/
+task prepareNativePart(dependsOn: [djvuChain, mupdfChain])
