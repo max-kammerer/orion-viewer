@@ -704,7 +704,7 @@ JNI_FN(MuPDFCore_drawPage)(JNIEnv *env, jobject thiz,jobject bitmap,
 
 		LOGI("zoom = %f", zoom);
 		LOGI("x=[%d,%d,%d,%d], %dx%d",
-        			bbox.x0, bbox.x1, bbox.y0, bbox.y1, bbox.x1-bbox.x0, bbox.y1-bbox.y0, 0);
+        			bbox.x0, bbox.x1, bbox.y0, bbox.y1, bbox.x1-bbox.x0, bbox.y1-bbox.y0);
         //zoom = glo->resolution / 72;
         fz_scale(&ctm, zoom, zoom);
 		rect = pc->media_box;
