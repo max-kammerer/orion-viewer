@@ -41,14 +41,14 @@
     <string name="pref_screen_orientation">Screen orientation</string>
     <string name="pref_rotate_screen">Default screen orientation: restart application to apply</string>
     <string name="pref_book_screen_orientation">Screen orientation for current book</string>
-    <string name="pref_close_dialog_on_apply">Close dialog on apply</string>
-    <string name="pref_close_page_option_dialog_on_apply">Close page option dialog on apply</string>
+    <string name="pref_close_dialog_on_apply">Close dialog on apply button click</string>
+    <string name="pref_close_page_option_dialog_on_apply">Close page option dialog on apply button click</string>
     <string name="pref_swap_prev_next_keys">Swap prev/next keys</string>
     <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Swap prev/next keys in landscape mode</string>
     <string name="pref_dictionary">Dictionary</string>
     <string name="pref_e_ink_optimization">E-ink</string>
     <string name="pref_e_ink_fast_refresh">E-ink fast refresh</string>
-    <string name="pref_total_refresh_after">Total refresh after...</string>
+    <string name="pref_total_refresh_after">Total refresh after…</string>
 
     <string name="pref_long_crop_value">Big crop value</string>
     <string name="pref_long_crop_value_desc">Big crop value (0-40%)</string>
