@@ -35,7 +35,7 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_openFile(JNIEnv * env
 
 	LOGI("Opening document: %s", fileName);
 	doc = ddjvu_document_create_by_filename_utf8(context, fileName, 0);
-	LOGI("Doc opened: %x", doc);
+	LOGI("Doc opened: %p", doc);
 
 	int pageNum = 0;
 	
@@ -71,7 +71,7 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_getPageInfo(JNIEnv *e
 	ddjvu_page_t * mypage = ddjvu_page_create_by_pageno(doc, pageNum);
 	int pageWidth =  ddjvu_page_get_width(mypage);
 	int pageHeight = ddjvu_page_get_height(mypage);
-	//LOGI("mypage: %x", mypage);
+	//LOGI("mypage: %p", mypage);
 	
 	ddjvu_page_release(mypage);
 	*/
@@ -103,7 +103,7 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_drawPage(JNIEnv *env,
 
 	LOGI("Rendering page=%dx%d patch=[%d,%d,%d,%d]",
 			pageW, pageH, patchX, patchY, patchW, patchH);
-    LOGI("page: %x", page);
+    LOGI("page: %p", page);
 
     LOGI("In native method\n");
     if ((ret = AndroidBitmap_getInfo(env, bitmap, &info)) < 0) {
@@ -210,7 +210,7 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_destroying(JNIEnv * e
 
 struct list_el {  
   jobject item;
-  struct list_item * next;
+  struct list_el * next;
 };
 
 typedef struct list_el list_item;
@@ -223,9 +223,9 @@ struct list_st {
 typedef struct list_st list;
 
 struct OutlineItem_s {  
-  char * title;
+  const char * title;
   int level;
-  int page;  
+  int page;
 };
 typedef struct OutlineItem_s OutlineItem;
 
@@ -326,7 +326,7 @@ int buildTOC(miniexp_t expr, list * myList, int level, JNIEnv * env, jclass olCl
 
           if (name == NULL) {return -1;}
 
-          OutlineItem * element = (list_item *) malloc(sizeof(OutlineItem));
+          OutlineItem * element = (OutlineItem *) malloc(sizeof(OutlineItem));
           element->title = name;
           element->page = pageno;
           element->level = level;
