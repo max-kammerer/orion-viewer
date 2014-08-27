@@ -98,7 +98,7 @@
     <string name="pref_tap_zones_desc">Tap Zones: link actions to screen zones.</string>
 
     <string name="pref_enable_touch_move">Enable touch move</string>
-    <string name="pref_enable_move_on_pinch_zoom">Enable move on pinch zoom</string>
+    <string name="pref_enable_move_on_pinch_zoom">Allow translation during pinch zoom</string>
 
     <string name="pref_color_mode">Color Mode</string>
 
