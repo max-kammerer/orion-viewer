@@ -60,4 +60,9 @@
     <string name="action_rotate_270">Rotation de 270°</string>
 
     <string name="action_select_text">Sélection d\'un texte</string>
+    
+    <string name="action_fit_width">Adapter à la largeur</string>
+    <string name="action_fit_height">Adapter à la hauteur</string>
+    <string name="action_fit_page">Adapter à la page</string>
+
 </resources>
