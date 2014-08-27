@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="msg_dialog_search">Recherche, dialogue</string>
+    <string name="msg_dialog_dismis">Abandonner</string>
+    <string name="warn_text_not_found">Texte non trouvé</string>
+    <string name="warn_no_further_occurrences_found">Pas plus d\'occurrences</string>
+    <string name="msg_searching">Cherche…</string>
+
+</resources>

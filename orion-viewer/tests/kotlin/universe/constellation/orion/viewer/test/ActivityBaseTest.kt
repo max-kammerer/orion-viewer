@@ -17,13 +17,12 @@ open class ActivityBaseTest : ActivityUnitTestCase<OrionViewerActivity>(javaClas
         super<ActivityUnitTestCase>.setUp()
         val intent = Intent(getInstrumentation()!!.getTargetContext()!!, javaClass<OrionViewerActivity>());
         intent.setData(getDataPath())
-        startActivity(intent, null, null) as OrionViewerActivity;
+        startActivity(intent, null, null)!!.getOrionContext()!!.isTesting = true
     }
 
     override fun getTestContext(): Context {
         return getInstrumentation()!!.getContext()!!;
     }
-
 
     override fun getActivity(): OrionViewerActivity {
         return super<ActivityUnitTestCase>.getActivity()!!

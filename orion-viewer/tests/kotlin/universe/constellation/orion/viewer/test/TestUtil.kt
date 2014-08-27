@@ -7,6 +7,7 @@ import java.io.FileOutputStream
 import android.content.Context
 import android.test.AndroidTestCase
 import android.os.Environment
+import java.io.IOException
 
 /**
  * User: mike
@@ -26,9 +27,14 @@ trait TestUtil {
         if (outFile.exists()) {
             return outFile
         }
-        outFile.createNewFile()
+        try {
+            outFile.getParentFile()!!.mkdirs()
+            outFile.createNewFile()
+        } catch (e: IOException) {
+            throw RuntimeException("Couldn't create new file " + outFile.getAbsolutePath(), e)
+        }
 
-        val input =  getTestContext().getAssets()!!.open(getFileUnderTestData(fileName))!!
+        val input = getTestContext().getAssets()!!.open(getFileUnderTestData(fileName))
         input.buffered().copyTo(FileOutputStream(outFile).buffered())
         return outFile
     }

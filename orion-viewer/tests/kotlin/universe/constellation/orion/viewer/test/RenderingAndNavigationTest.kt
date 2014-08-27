@@ -23,7 +23,7 @@ import java.util.Arrays
  * Time: 19:57
  */
 
-class NavigationTest : ActivityBaseTest() {
+class RenderingAndNavigationTest : ActivityBaseTest() {
 
     class MyView(val imageView: OrionImageView) : OrionImageView {
 
@@ -34,6 +34,9 @@ class NavigationTest : ActivityBaseTest() {
             this.data = bitmap;
         }
 
+        override fun onNewBook(title: String?, pageCount: Int) {
+
+        }
     }
 
     val deviceSize = Point(300, 350); //to split page on two screen - page size is 663x886
@@ -41,12 +44,12 @@ class NavigationTest : ActivityBaseTest() {
 
     override fun setUp() {
         super<ActivityBaseTest>.setUp()
-        view = MyView(getActivity()!!.getView()!!)
+        view = MyView(getActivity().getView()!!)
     }
 
     fun testProperPages() {
         val controller = prepareEngine()
-        val screens = 11
+        val screens = 21
 
         val nexts = arrayListOf<IntArray>()
         for (i in 1..screens) {
@@ -87,16 +90,16 @@ class NavigationTest : ActivityBaseTest() {
         val doc = openTestDocument(TestUtil.SICP)
 
         var layoutStrategy: LayoutStrategy = SimpleLayoutStrategy(doc, deviceSize)
-        val renderer = SingleThreadRenderer(getActivity()!!, view!!, layoutStrategy, doc, Bitmap.Config.ARGB_8888)
-        val controller = Controller(getActivity()!!, doc, layoutStrategy, renderer)
+        val renderer = SingleThreadRenderer(getActivity(), view!!, layoutStrategy, doc, Bitmap.Config.ARGB_8888)
+        val controller = Controller(getActivity(), doc, layoutStrategy, renderer)
 
 
-        val lastPageInfo = LastPageInfo.loadBookParameters(getActivity()!!, "123")!!
+        val lastPageInfo = LastPageInfo.loadBookParameters(getActivity(), "123")!!
         controller.changeOrinatation(lastPageInfo.screenOrientation)
         controller.init(lastPageInfo, deviceSize)
 
         //getSubscriptionManager()?.sendDocOpenedNotification(controller)
-        getActivity()!!.getView()!!.setDimensionAware(controller)
+        getActivity().getView()!!.setDimensionAware(controller)
         return controller
     }
 

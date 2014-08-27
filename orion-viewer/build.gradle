@@ -1,13 +1,8 @@
-project.ext {
-    orionVersionCode = 94
-    orionVersionName = "0.53.4"
-    doSigning = new File("orion-viewer/signing.gradle").exists()
-}
-
-print doSigning
-
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply from: 'version.gradle'
+
+println "do singing: " + doSigning
 if (doSigning) {
     apply from: 'signing.gradle'
 }
@@ -29,7 +24,7 @@ android {
         minSdkVersion 7
         targetSdkVersion 19
 
-        testPackageName "universe.constellation.orion.viewer.test"
+        testApplicationId "universe.constellation.orion.viewer.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
 
@@ -46,6 +41,7 @@ android {
         //test
         androidTest.setRoot('tests')
         androidTest.java.srcDirs += 'tests/kotlin'
+        androidTest.kotlin.srcDirs += 'tests/kotlin'
     }
 
     buildTypes {
@@ -102,7 +98,7 @@ android {
         // set the composite code
         variant.mergedFlavor.versionCode = abiVersion + defaultConfig.versionCode
 
-        print "New version code is " + variant.mergedFlavor.versionCode
+        println "New version code for " + variant.productFlavors.name + " is " + variant.mergedFlavor.versionCode
     }
 
     lintOptions { abortOnError false }

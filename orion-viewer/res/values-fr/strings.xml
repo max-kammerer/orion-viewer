@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2013  Michael Bogdanov & Co
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--Author: Claude Dellacherie-->
+<resources>
+    <string name="navigation">Navigation</string>
+    <string name="crop_left">Rognage à gauche</string>
+    <string name="enable_even_crop">Autre rognage pour pages paires</string>
+    <string name="crop_right">Rognage à droite</string>
+    <string name="crop_top">Rognage du haut</string>
+    <string name="crop_bottom">Rognage du bas</string>
+    <string name="rotate_0">Rotation de 0°</string>
+    <string name="rotate_90">Rotation de 90°</string>
+    <string name="rotate_270">Rotation de 270°</string>
+    <string name="long_click">Tape longue</string>
+    <string name="short_click">Tape courte</string>
+    <string name="binding_click">Touche associée</string>
+
+
+    <string name="orientation_default">Orientation par défaut</string>
+    <string name="orientation_default_rotation">Rotation par défaut</string>
+    <string name="orientation_landscape">Paysage</string>
+    <string name="orientation_portrait">Portrait</string>
+    <string name="orientation_landscape_inverse">Paysage (270°)</string>
+    <string name="orientation_portrait_inverse">Portrait (180°)</string>
+
+
+    <string name="fit_width">Adapter à la largeur</string>
+    <string name="fit_height">Adapter à la hauteur</string>
+    <string name="fit_page">Adapter à la page</string>
+    <string name="fit_custom">Personnaliser</string>
+
+    <string name="key_binder_message">Appuyer sur une touche pour lui associer une action</string>
+    <string name="key_binder_warning">On ne peut associer une action à cette touche; essayer une autre</string>
+    <string name="table_of_contents">Table des matières</string>
+
+
+    <string name="warn_no_text_in_selection">Pas de texte dans la sélection</string>
+    <string name="msg_select_text">Sélection du texte</string>
+
+    <string name="warn_no_outline">Pas de sommaire</string>
+    
+    <string name="color_mode_normal">Couleurs normales (noir sur fond blanc)</string>
+    <string name="color_mode_inverted">Couleurs inversées</string>
+    <string name="color_mode_black_on_yellowish">Noir sur fond jaunâtre</string>
+    <string name="color_mode_grayscale_light">Echelle de gris sur fond grisâtre</string>
+    <string name="color_mode_grayscale">Echelle de gris sur fond gris</string>
+    <string name="color_mode_grayscale_dark">Echelle de gris sur fond gris sombre</string>
+    <string name="select_color_mode">Choisir la couleur</string>
+
+
+</resources>

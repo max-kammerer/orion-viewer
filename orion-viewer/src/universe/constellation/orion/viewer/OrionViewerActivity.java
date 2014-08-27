@@ -1269,7 +1269,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     //big hack
     protected void myprocessOnActivityVisible() {
-        if (getGlobalOptions().isShowTapHelp()) {
+        if (getGlobalOptions().isShowTapHelp() && !getOrionContext().isTesting) {
             getGlobalOptions().saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false);
             new TapHelpDialog(this).showDialog();
         }
@@ -1283,7 +1283,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
                     getSupportActionBar().hide();
                 }
             }, 300);
-
         }
     }
 

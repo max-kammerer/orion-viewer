@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2013  Michael Bogdanov & Co
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--Author: Claude Dellacherie-->
+<resources>
+    <string name="zoom">Ouvre la fenêtre zoom. Une valeur égale à zéro adapte le zoom à la largeur de la page.</string>
+    <string name="rotation">Tourne le document de 90° dans le sens horaire. Une longue tape tourne le document dans le sens antihoraire.</string>
+
+    <string name="crop">Ouvre la fenêtre rognage. Les valeurs sont relatives à la grandeur de la page. Une longue tape change la valeur du rpgnage en un +/-10%. Les valeurs négatives augmentent la marge. </string>
+
+    <string name="apply">Applique les modifications dans les différentes options.</string>
+    <string name="escape">Retourne/Sort</string>
+
+    <string name="general_usage">Mode d\'emploi</string>
+
+    <string name="general_usage_step1">1. Ouvre un document (zoom largeur par défaut)
+        </string>
+
+    <string name="general_usage_step2">
+        2. Choisit l\'orientation appropriée: portrait ou paysage
+        </string>
+
+    <string name="general_usage_step3">
+        3. Rogne les marges; la taille du texte sera changée selon le changement des marges (si zoom largeur est spécifié)
+        </string>
+
+    <string name="general_usage_step4">4. Plaisir de lire…</string>
+
+    <!--<string name="help_taps">-->
+        <!--Tape sur l\'écran - va à la page suivante, longue tape - va à la page précédente.</string>-->
+
+    <string name="option_help">
+        Application des paramètres</string>
+
+    <string name="navigation_help">
+        Ouvre le menu de disposition de la page. Quand on lit des bandes dessinées ou qu\'on regarde des livres avec images on peut choisir la disposition de la page appropriée.</string>
+
+    <string name="dictionary_help">
+        Ouvre un dictionnaire externe. Choisir le dictionnaire approprié dans Configuration.</string>
+
+    <string name="tap_help">
+        Les zones de tape permettent de lier différentes zones de l\'écran à des ommandes usuelles.
+        Il y a 3x3 cellules où on peut définir des actions pour courtes (label du haut) et longues (label du bas) tapes.</string>
+
+    <string name="bookmarks_export_help">
+        Permet d\'exporter des signets (pour tous les livres ou pour l\'actuel).
+        Les signets sont exportés en fichiers xml avec le nom du livre ouvert + [bookmarks.xml or all_bookmarks.xml] comme suffixe.
+        Cette option se trouve au menu de la fenêtre des signets.</string>
+</resources>

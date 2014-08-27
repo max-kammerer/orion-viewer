@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+  ~
+  ~ Copyright (C) 2011-2013  Michael Bogdanov & Co
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--Author: Claude Dellacherie-->
+<resources>
+    <string name="menu_zoom_text">Zoom</string>
+    <string name="menu_crop_text">Rognage</string>
+    <string name="menu_goto_text">Aller à la page</string>
+    <string name="menu_bookmarks_text">Signets</string>
+    <string name="menu_add_bookmark_item">Ajouter un signet</string>
+    <string name="menu_select_text">Sélection d\'un texte</string>
+    <string name="menu_rotation_text">Rotation</string>
+    <string name="menu_navigation_text">Navigation</string>
+    <string name="menu_help_text">Aide</string>
+    <string name="menu_open_text">Ouvrir un livre</string>
+    <string name="menu_outline_text">Sommaire</string>
+    <string name="menu_open_dictionary_text">Ouvrir un dictionnaire</string>
+    <string name="menu_day_night_text">Mode jour/nuit</string>
+    <string name="menu_exit_text">Quitter</string>
+    <string name="menu_key_binder_text">Associer des touches</string>
+    <string name="menu_options_text">Configuration</string>
+    <string name="menu_tap_text">Zones de tapes</string>
+
+
+    <string name="menu_book_preferences">Options pour livre</string>
+
+
+    <string name="export_all_bookmarks_menu_item">Exporter tous les signets</string>
+    <string name="export_bookmarks_menu_item">Exporter les signets actuels</string>
+    <string name="import_all_bookmarks_menu_item">Importer tous les signets</string>
+    <string name="import_current_bookmarks_menu_item">Importer les signets actuels</string>
+</resources>
