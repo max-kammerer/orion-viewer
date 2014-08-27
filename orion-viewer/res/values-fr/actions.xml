@@ -30,7 +30,7 @@
     <string name="action_zoom_page">Zoom</string>
     <string name="action_layout_page">Disposition de la page</string>
     <string name="action_rotation_page">Rotation</string>
-    <string name="action_options_page">Options</string>
+    <string name="action_options_page">Configuration</string>
     <string name="action_book_options">Options pour livre</string>
     <string name="action_goto_page">Aller à</string>
     <string name="action_dictionary">Ouvrir un dictionnaire</string>
@@ -39,6 +39,7 @@
     <string name="action_add_bookmark">Ajouter un signet</string>
     <string name="action_open_bookmarks">Ouvrir les signets</string>
     <string name="action_full_screen">Plein écran</string>
+    <string name="action_switch_color_mode">Changement de couleur</string>
 
     <string name="action_crop_left">Rogner la marge de gauche</string>
     <string name="action_crop_right">Rogner la marge de droite</string>
