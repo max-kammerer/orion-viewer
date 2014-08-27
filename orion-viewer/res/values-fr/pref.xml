@@ -99,7 +99,7 @@
     <string name="pref_tap_zones_desc">Zones de tapes: associer des actions aux zones de l\'écran</string>
     
     <string name="pref_enable_touch_move">Permet de bouger avec un doigt</string>
-    <string name="pref_enable_move_on_pinch_zoom">Permet de zoomer avec deux doigts</string>
+    <string name="pref_enable_move_on_pinch_zoom">Permet de bouger avec deux doigts dans zoom</string>
     
     <string name="pref_color_mode">Choix de la couleur</string>
 
