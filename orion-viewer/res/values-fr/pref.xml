@@ -26,6 +26,7 @@
     <string name="pref_category_device_parameters">Paramètres du dispositif</string>
     <string name="pref_category_add_parameters">Paramètres additionnels</string>
     <string name="pref_category_system">Système</string>
+    <string name="pref_category_move">Bouger</string>
 
     <!--General Prefs-->
     <string name="pref_appearance">Apparence</string>
@@ -96,6 +97,9 @@
     <string name="pref_app_language_desc">Langue de l\'application: réinitialiser Orion pour appliquer un changement</string>
 
     <string name="pref_tap_zones_desc">Zones de tapes: associer des actions aux zones de l\'écran</string>
+    
+    <string name="pref_enable_touch_move">Permet de bouger avec un doigt</string>
+    <string name="pref_enable_move_on_pinch_zoom">Permet de zoomer avec deux doigts</string>
     
     <string name="pref_color_mode">Choix de la couleur</string>
 
