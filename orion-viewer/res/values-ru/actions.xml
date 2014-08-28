@@ -56,5 +56,7 @@
     <string name="action_rotate_90">Повернуть на 90/-90 градусов</string>
     <string name="action_rotate_270">Повернуть на 270/-270 градусов</string>
 
-
+    <string name="action_fit_height">Масштабировать по высоте странице</string>
+    <string name="action_fit_page">Масштабировать по странице</string>
+    <string name="action_fit_width">Масштабировать по ширине страницы</string>
 </resources>

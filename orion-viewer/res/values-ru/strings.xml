@@ -46,6 +46,7 @@
     <string name="long_click">При долгом нажатии</string>
     <string name="short_click">При коротком нажатии</string>
     <string name="binding_click">Переназначение</string>
+    <string name="key_binder_reset_all">Сбросить все</string>
 
     <string name="orientation_default">По умолчанию</string>
     <string name="orientation_default_rotation">По умолчанию</string>
