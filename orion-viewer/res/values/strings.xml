@@ -47,7 +47,7 @@
     <string name="long_click">On long click</string>
     <string name="short_click">On short click</string>
     <string name="binding_click">On binding</string>
-
+    <string name="key_binder_reset_all">Reset All</string>
 
     <string name="orientation_default">Default</string>
     <string name="orientation_default_rotation">Application Default</string>
