@@ -56,7 +56,7 @@
         Ouvre un dictionnaire externe. Choisir le dictionnaire approprié dans Configuration.</string>
 
     <string name="tap_help">
-        Les zones de tape permettent de lier différentes zones de l\'écran à des ommandes usuelles.
+        Les zones de tape permettent de lier différentes zones de l\'écran à des commandes usuelles.
         Il y a 3x3 cellules où on peut définir des actions pour courtes (label du haut) et longues (label du bas) tapes.</string>
 
     <string name="bookmarks_export_help">
