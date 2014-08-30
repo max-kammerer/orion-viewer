@@ -8,7 +8,7 @@ project.ext {
     djvu = native_folder + "/djvu"
 
     /*!!!!SPECIFY path to your ndk!!!*/
-    ndkPath = "/home/mike/devel/tools/android/android-ndk-r9d/"
+    ndkPath = "/home/mike/devel/tools/android/android-ndk-r10/"
 }
 
 
@@ -25,13 +25,13 @@ task downloadDjvu << {
 }
 
 task patchDjvu << {
-    copy {
-        from 'orion-viewer/jni/djvu'
-        into djvu
+    //NB: ant do incremental copying, gradle default copy task doesn't
+    ant.copy(todir: djvu) {
+        fileset(dir : 'orion-viewer/jni/djvu')
     }
-    copy {
-        from 'orion-viewer/jni/common'
-        into djvu + '/android/jni'
+
+    ant.copy(todir: djvu + '/android/jni') {
+        fileset(dir : 'orion-viewer/jni/common')
     }
 }
 

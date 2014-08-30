@@ -119,8 +119,7 @@ public class SearchDialog extends DialogFragment {
                 List<SubBatch> screens = new ArrayList<SubBatch>();
                 RectF[] searchBoxes = result.searchBoxes;
 
-                for (int i = 0; i < searchBoxes.length; i++) {
-                    RectF searchBox = searchBoxes[i];
+                for (RectF searchBox : searchBoxes) {
                     System.out.println("Scaling rect " + searchBox);
                     Util.scale(searchBox, position.docZoom);
                 }
@@ -131,9 +130,7 @@ public class SearchDialog extends DialogFragment {
                     sb.lp = position.clone();
                     RectF screenArea = position.toAbsoluteRect();
                     System.out.println("Area " + screenArea);
-                    for (int i = 0; i < searchBoxes.length; i++) {
-                        RectF searchBox = searchBoxes[i];
-
+                    for (RectF searchBox : searchBoxes) {
                         float square1 = searchBox.width() * searchBox.height();
                         if (temp.setIntersect(searchBox, screenArea)) {
                             System.out.println("Rect " + searchBox);
@@ -159,6 +156,13 @@ public class SearchDialog extends DialogFragment {
             }
         };
         return resultView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        searchField.requestFocus();
     }
 
     @Override

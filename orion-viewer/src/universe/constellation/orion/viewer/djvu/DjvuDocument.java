@@ -21,6 +21,9 @@ package universe.constellation.orion.viewer.djvu;
 
 import android.graphics.Bitmap;
 import android.graphics.RectF;
+
+import java.util.ArrayList;
+
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.DocumentWrapper;
 import universe.constellation.orion.viewer.outline.OutlineItem;
@@ -109,6 +112,8 @@ public class DjvuDocument implements DocumentWrapper {
 
     public native String getText(int pageNumber, int absoluteX, int absoluteY, int width, int height);
 
+    private static synchronized native boolean getPageText(int pageNumber, ArrayList stringBuilder, ArrayList positions);
+
     @Override
     public boolean needPassword() {
         return false;
@@ -121,6 +126,41 @@ public class DjvuDocument implements DocumentWrapper {
 
     @Override
     public RectF[] searchPage(int pageNumber, String text) {
-        return new RectF[0];
+        text = text.toLowerCase();
+
+        ArrayList<String> strings = new ArrayList(500);
+        ArrayList<RectF> positions = new ArrayList(500);
+        getPageText(pageNumber, strings, positions);
+
+        int prevIndex = 0;
+        ArrayList<Integer> indexes = new ArrayList<Integer>(500);
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < positions.size(); i++) {
+            String string = strings.get(i);
+            builder.append(string.toLowerCase());
+            int length = builder.length();
+            for (int j = prevIndex; j < length; j++) {
+                indexes.add(i);
+            }
+            prevIndex = length;
+        }
+
+        int searchFrom = 0;
+        ArrayList<RectF> result = new ArrayList<RectF>();
+        int i = builder.indexOf(text, searchFrom);
+        while (i != -1) {
+            Integer start = indexes.get(i);
+            Integer end = indexes.get(i + text.length() - 1);
+
+            RectF rectF = new RectF(positions.get(start));
+            rectF.union(positions.get(end));
+            result.add(rectF);
+            i = i + text.length();
+            i = builder.indexOf(text, i);
+        }
+
+        return result.toArray(new RectF[result.size()]);
     }
+
+
 }
