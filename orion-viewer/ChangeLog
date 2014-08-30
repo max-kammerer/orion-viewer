@@ -1,3 +1,6 @@
+===== 0.54.1 (Aug 30, 2014) =====
+* Experimental djvu search implementation
+
 ===== 0.54.0 (Aug 28, 2014) =====
 * Added french translation by Claude Dellacherie
 * Added ability to open file by its content-url

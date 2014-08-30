@@ -293,8 +293,10 @@ JNIEXPORT jobjectArray JNICALL Java_universe_constellation_orion_viewer_djvu_Djv
     next = next2;
     pos++;    
   }
+
   free(root);
-  
+  free(myList);
+
   return arr;  
 }
 
@@ -449,4 +451,161 @@ int extractText(miniexp_t item, Arraylist list, fz_bbox * target) {
     }
 
     return !item;
+}
+
+static int qMax(int a, int b) {
+    if (a >= b) {
+        return a;
+    }
+    return b;
+}
+
+static int miniexp_get_int(miniexp_t * r, int * x)
+{
+  if (! miniexp_numberp(miniexp_car(*r)))
+    return 0;
+
+  *x = miniexp_to_int(miniexp_car(*r));
+  *r = miniexp_cdr(*r);
+
+  return 1;
+}
+
+static int
+parse_text_type(miniexp_t exp)
+{
+  static const char *names[] = {
+    "char", "word", "line", "para", "region", "column", "page"
+  };
+  static int const nsymbs = 7;
+  static miniexp_t symbs[7];
+  if (!symbs[0]) {
+    int i;
+    for (i=0; i<nsymbs; i++)
+      symbs[i] = miniexp_symbol(names[i]);
+  }
+
+ int i;
+  for (i=0; i<nsymbs; i++)
+    if (exp == symbs[i])
+      return i;
+  return -1;
+}
+
+
+static jobject
+miniexp_get_rect(miniexp_t *r, JNIEnv * env, jclass rectFClass, jmethodID ctor, int pageHeight)
+{
+      int x1,y1,x2,y2;
+      if (! (miniexp_get_int(r, &x1) && miniexp_get_int(r, &y1) &&
+             miniexp_get_int(r, &x2) && miniexp_get_int(r, &y2) ))
+            return NULL;
+
+    if (x2<x1 || y2<y1)
+        return NULL;
+
+    jobject rectF;
+    rectF = (*env)->NewObject(env, rectFClass, ctor,
+                    (float)x1, (float)(pageHeight - y2), (float)x2, (float)pageHeight - y1);
+
+    if (rectF == NULL) return NULL;
+
+    //(*env)->DeleteLocalRef(env, rectF);
+
+    return rectF;
+}
+
+
+static jboolean miniexp_get_text(JNIEnv * env, miniexp_t exp, jobject stringBuilder, jobject positions, int *state,
+                        jclass rectFClass, jmethodID ctor, jmethodID addToList, int pageHeight)
+{
+
+  miniexp_t type = miniexp_car(exp);
+  int typenum = parse_text_type(type);
+  miniexp_t r = exp = miniexp_cdr(exp);
+  if (! miniexp_symbolp(type))
+    return 0;
+
+  jobject rect = miniexp_get_rect(&r, env, rectFClass, ctor, pageHeight);
+  if (rect == NULL)
+    return 0;
+
+  miniexp_t s = miniexp_car(r);
+  *state = qMax(*state, typenum);
+
+  if (miniexp_stringp(s) && !miniexp_cdr(r))
+    {
+      //result += (state >= 2) ? "\n" : (state >= 1) ? " " : "";
+      if (*state >= 2) {
+
+      } else if (*state >= 1) {
+
+      } else {
+        //add empty?
+      }
+      *state = -1;
+
+      (*env)->CallBooleanMethod(env, positions, addToList, rect);
+
+      jstring string = (*env)->NewStringUTF(env, miniexp_to_str(s));
+      (*env)->CallBooleanMethod(env, stringBuilder, addToList, string);
+      (*env)->DeleteLocalRef(env, string);
+
+      r = miniexp_cdr(r);
+    }
+
+  (*env)->DeleteLocalRef(env, rect);
+
+  while(miniexp_consp(s))
+    {
+      miniexp_get_text(env, s, stringBuilder, positions, state, rectFClass, ctor, addToList, pageHeight);
+      r = miniexp_cdr(r);
+      s = miniexp_car(r);
+    }
+
+  if (r)
+    return 0;
+
+  *state = qMax(*state, typenum);
+  return 1;
+}
+
+JNIEXPORT jboolean JNICALL Java_universe_constellation_orion_viewer_djvu_DjvuDocument_getPageText(JNIEnv *env, jobject thiz,
+                                                                                  jint pageNumber, jobject stringBuilder, jobject positionList)
+{
+    LOGI("Start Page Text Extraction %i", pageNumber);
+
+    miniexp_t pagetext;
+    while ((pagetext=ddjvu_document_get_pagetext(doc, pageNumber, "word"))==miniexp_dummy) {
+      //handle_ddjvu_messages(ctx, TRUE);
+    }
+
+    if (pagetext == NULL) {
+        LOGI("no text on page %i", pageNumber);
+        return 0;
+    }
+
+    jclass listClass;
+    jmethodID addToList;
+
+    listClass = (*env)->FindClass(env, "java/util/ArrayList");
+    if (listClass == NULL) return 0;
+
+    addToList = (*env)->GetMethodID(env, listClass, "add", "(Ljava/lang/Object;)Z");
+    if (addToList == NULL) return 0;
+
+    jclass rectFClass;
+    jmethodID ctor;
+
+    rectFClass = (*env)->FindClass(env, "android/graphics/RectF");
+    if (rectFClass == NULL) return 0;
+
+    ctor = (*env)->GetMethodID(env, rectFClass, "<init>", "(FFFF)V");
+    if (ctor == NULL) return 0;
+
+    int state = -1;
+    ddjvu_pageinfo_t dinfo;
+    ddjvu_document_get_pageinfo(doc, pageNumber, &dinfo);
+
+    return miniexp_get_text(env, pagetext, stringBuilder, positionList, &state, rectFClass, ctor, addToList, dinfo.height);
 }
