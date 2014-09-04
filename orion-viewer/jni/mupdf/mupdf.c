@@ -643,7 +643,7 @@ JNI_FN(MuPDFCore_drawPage)(JNIEnv *env, jobject thiz,jobject bitmap,
 
 	LOGI("Checking format\n");
 	if (info.format != ANDROID_BITMAP_FORMAT_RGBA_8888) {
-		LOGE("Bitmap format is not RGBA_8888 !");
+		LOGE("Bitmap format is not RGBA_8888! Format is %i", info.format);
 		return 0;
 	}
 

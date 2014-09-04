@@ -102,7 +102,7 @@ public class Common {
     }
 
     public static void d(Exception e) {
-        e.printStackTrace();
+        Log.d(LOGTAG, e.getMessage(), e);
         if (writer != null) {
             e.printStackTrace(writer);
             writer.write("\n");
