@@ -114,7 +114,7 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_drawPage(JNIEnv *env,
     LOGI("Checking format\n");
     if (info.format != ANDROID_BITMAP_FORMAT_RGBA_8888) {
         LOGE("Bitmap format is not RGBA_8888! Format is %i", info.format);
-        return 0;
+        //return 0;
     }
 
     LOGI("locking pixels\n");
