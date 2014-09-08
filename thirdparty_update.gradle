@@ -77,10 +77,11 @@ task downloadAndMakeMupdf(dependsOn: downloadMupdf) << {
     }
 }
 
-task patchMupdf(type: Copy)  {
-    from 'orion-viewer/jni/mupdf'
-    from 'orion-viewer/jni/common'
-    into mupdf + '/platform/android/jni'
+task patchMupdf() << {
+    ant.copy(todir: mupdf + "/platform/android/jni") {
+        fileset(dir : 'orion-viewer/jni/mupdf')
+        fileset(dir : 'orion-viewer/jni/common')
+    }
 }
 
 task patchAndBuildMupdf(dependsOn: [patchMupdf]) << {
