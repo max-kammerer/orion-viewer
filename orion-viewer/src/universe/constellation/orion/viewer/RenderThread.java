@@ -255,14 +255,14 @@ public class RenderThread extends Thread implements Renderer {
                 final LayoutPosition info = curPos;
                 if (!executeInSeparateThread) {
                     view.onNewImage(bitmap, info, mutex);
-                    activity.getDevice().flushBitmap(0);
+                    activity.getDevice().flushBitmap();
                     mutex.countDown();
                 } else {
                     activity.runOnUiThread(new Runnable() {
                         public void run() {
                             view.onNewImage(bitmap, info, mutex);
                             //view.invalidate();
-                            activity.getDevice().flushBitmap(0);
+                            activity.getDevice().flushBitmap();
                         }
                     });
                 }

@@ -41,8 +41,6 @@ public interface Device {
 
         public final static boolean NOOK2 = "barnesandnoble".equals(MANUFACTURER.toLowerCase()) && ("NOOK".equals(MODEL) || "BNRV350".equals(MODEL) || "BNRV300".equals(MODEL) || "unknown".equals(MODEL)) && "zoom2".equals(DEVICE.toLowerCase());
 
-        public final static boolean NOOK_120 = NOOK2 && ("1.2.0".equals(getVersion()) || "1.2.1".equals(getVersion()));
-        
         public final static boolean SONY_PRS_T1_T2 = "sony".equals(MANUFACTURER.toLowerCase()) && ("PRS-T1".equals(MODEL) || "PRS-T2".equals(MODEL));
 
         public final static boolean EDGE = "edge".equals(DEVICE.toLowerCase()) || "edgejr".equals(DEVICE.toLowerCase());
@@ -97,7 +95,7 @@ public interface Device {
 
     void updatePageNumber(int current, int max);
 
-    void flushBitmap(int delay);
+    void flushBitmap();
 
     int getLayoutId();
 

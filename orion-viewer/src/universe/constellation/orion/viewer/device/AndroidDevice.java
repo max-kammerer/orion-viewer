@@ -34,14 +34,6 @@ import universe.constellation.orion.viewer.prefs.GlobalOptions;
  */
 public class AndroidDevice implements Device {
 
-    protected static final int NOOK_PAGE_UP_KEY_RIGHT = 95;
-
-    protected static final int NOOK_PAGE_DOWN_KEY_RIGHT = 94;
-
-    protected static final int NOOK_PAGE_UP_KEY_LEFT = 93;
-
-    protected static final int NOOK_PAGE_DOWN_KEY_LEFT = 92;
-
     private PowerManager.WakeLock screenLock;
 
     protected OrionBaseActivity activity;
@@ -72,19 +64,6 @@ public class AndroidDevice implements Device {
 
     public boolean onKeyUp(int keyCode, KeyEvent event, OperationHolder holder) {
         //check mapped keys
-        if (Info.NOOK2) {
-            switch (keyCode) {
-                case NOOK_PAGE_UP_KEY_LEFT:
-                case NOOK_PAGE_UP_KEY_RIGHT:
-                    holder.value = PREV;
-                    return true;
-                case NOOK_PAGE_DOWN_KEY_LEFT:
-                case NOOK_PAGE_DOWN_KEY_RIGHT:
-                    holder.value = NEXT;
-                    return true;
-                }
-        }
-
         if (Info.SONY_PRS_T1_T2) {
             if (keyCode == 0) {
                  switch (event.getScanCode()) {
@@ -154,7 +133,7 @@ public class AndroidDevice implements Device {
         }
     }
 
-    public void flushBitmap(int delay) {
+    public void flushBitmap() {
         if (activity.getView() != null) {
             activity.getView().invalidate();
         }

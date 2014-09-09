@@ -54,7 +54,7 @@ public class OrionView extends View implements OrionImageView {
 
     private ViewDimensionAware dimensionAware;
 
-    private int counter = 0;
+    //private int counter = 0;
 
     private float scale = 1.0f;
 
@@ -118,14 +118,14 @@ public class OrionView extends View implements OrionImageView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        GlobalOptions options = ((OrionViewerActivity)getContext()).getGlobalOptions();
-        if (options.isEinkOptimization()) {
-            if (counter < options.getEinkRefreshAfter()) {
-                Nook2Util.setGL16Mode((Activity)getContext());
-            } else {
-                counter = 0;
-            }
-        }
+//        GlobalOptions options = ((OrionViewerActivity)getContext()).getGlobalOptions();
+//        if (options.isEinkOptimization()) {
+//            if (counter < options.getEinkRefreshAfter()) {
+//                Nook2Util.setGL16Mode((Activity)getContext());
+//            } else {
+//                counter = 0;
+//            }
+//        }
 
 
         canvas.save();
@@ -221,7 +221,7 @@ public class OrionView extends View implements OrionImageView {
         this.bitmap = bitmap;
         this.latch = latch;
         this.info = info;
-        counter++;
+        //counter++;
     }
 
     @Override

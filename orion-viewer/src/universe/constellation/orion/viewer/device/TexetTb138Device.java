@@ -58,13 +58,13 @@ public class TexetTb138Device extends AndroidDevice {
     }
 
     @Override
-    public void flushBitmap(int delay) {
+    public void flushBitmap() {
         if (activity.getView() != null) {
             boolean result = requestEpdMode(activity.getView(), EPD_FULL);
             Common.d("Invoked requestEpdMode: "+result);
         }
 
-        super.flushBitmap(delay);
+        super.flushBitmap();
     }
 
 

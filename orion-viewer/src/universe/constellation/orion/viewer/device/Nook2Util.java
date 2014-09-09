@@ -15,7 +15,7 @@ import android.app.Activity;
 
 public class Nook2Util {
 
-    private static final boolean NOOK_120 = Device.Info.NOOK_120;
+    private static final boolean NOOK_120 = Device.Info.NOOK2 && ("1.2.0".equals(Device.Info.getVersion()) || "1.2.1".equals(Device.Info.getVersion()));
 
     private static Class epdControllerClass;
 

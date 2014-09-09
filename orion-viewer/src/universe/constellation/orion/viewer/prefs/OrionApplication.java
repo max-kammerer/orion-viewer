@@ -190,4 +190,8 @@ public class OrionApplication extends Application {
             }
         }
     }
+
+    public Device getDevice() {
+        return device;
+    }
 }

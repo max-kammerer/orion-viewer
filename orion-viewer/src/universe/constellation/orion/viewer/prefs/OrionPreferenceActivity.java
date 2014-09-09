@@ -20,14 +20,13 @@
 package universe.constellation.orion.viewer.prefs;
 
 import android.os.Bundle;
-
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
-
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
-import universe.constellation.orion.viewer.Device;
+
 import universe.constellation.orion.viewer.R;
+import universe.constellation.orion.viewer.device.EInkDevice;
 
 /**
  * User: mike
@@ -45,11 +44,10 @@ public class OrionPreferenceActivity extends PreferenceActivity {
 
         PreferenceScreen screen = getPreferenceScreen();
 
-        PreferenceCategory NOOK2_EINK = (PreferenceCategory) screen.findPreference("NOOK2_EINK");
+        PreferenceCategory eInkDevice = (PreferenceCategory) screen.findPreference("NOOK2_EINK");
 
-        // may be Texet TB-138 also wants eink preferences
-        if (!Device.Info.NOOK2) {
-            screen.removePreference(NOOK2_EINK);
+        if (!(getOrionContext().getDevice() instanceof EInkDevice)) {
+            screen.removePreference(eInkDevice);
         }
 
         ListPreference SCREEN_ORIENTATION = (ListPreference) findPreference("SCREEN_ORIENTATION");

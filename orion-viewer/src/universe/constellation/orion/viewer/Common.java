@@ -22,6 +22,8 @@ package universe.constellation.orion.viewer;
 import android.util.Log;
 import universe.constellation.orion.viewer.device.AndroidDevice;
 import universe.constellation.orion.viewer.device.EdgeDevice;
+import universe.constellation.orion.viewer.device.Nook2Device;
+import universe.constellation.orion.viewer.device.OnyxM96Device;
 import universe.constellation.orion.viewer.device.TexetTB176FLDevice;
 import universe.constellation.orion.viewer.device.TexetTb138Device;
 
@@ -34,7 +36,7 @@ import java.io.*;
  */
 public class Common {
 
-    public static final boolean ENABLE2SCREEN = /*replace*/true/*replace*/;
+    public static final boolean ENABLE2SCREEN = true;
 
     public static Device createDevice() {
         if (ENABLE2SCREEN) {
@@ -56,6 +58,11 @@ public class Common {
         if(Device.Info.TEXET_TB176FL) {
             Common.d("Using TEXET_TB176FL");
             return new TexetTB176FLDevice();
+        }
+
+        if(Device.Info.NOOK2) {
+            Common.d("Using Nook2");
+            return new Nook2Device();
         }
 
         return new AndroidDevice();

@@ -159,9 +159,7 @@ public class EdgeDevice extends AndroidDevice {
     }
 
     @Override
-    public void flushBitmap(int delay) {
-
-
+    public void flushBitmap() {
         if (fb != null && activity.getViewerType() == VIEWER_ACTIVITY) {
             Bitmap bm = ((OrionView) activity.getView()).getBitmap();
             if (bm != null && !bm.isRecycled()) {
@@ -172,7 +170,7 @@ public class EdgeDevice extends AndroidDevice {
                 }
             }
         }
-        super.flushBitmap(delay);
+        super.flushBitmap();
     }
 
     public void flushBitmap(Bitmap bitmap) {
