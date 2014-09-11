@@ -37,6 +37,10 @@ import java.util.concurrent.*;
  */
 public class RenderThread extends Thread implements Renderer {
 
+    private static final int CACHE_SIZE = 4;
+
+    private static final int FUTURE_COUNT = 1;
+
     protected LayoutStrategy layout;
 
     private LinkedList<CacheInfo> cachedBitmaps = new LinkedList<CacheInfo>();
@@ -49,13 +53,8 @@ public class RenderThread extends Thread implements Renderer {
 
     protected DocumentWrapper doc;
 
-    private int CACHE_SIZE = 4;
-
-    private int FUTURE_COUNT = 1;
-
-    private Canvas cacheCanvas = new Canvas();
-
     private final Bitmap.Config bitmapConfig;
+
     private boolean executeInSeparateThread;
 
     private boolean clearCache;
@@ -109,8 +108,7 @@ public class RenderThread extends Thread implements Renderer {
     @Override
     public void invalidateCache() {
         synchronized (this) {
-            for (Iterator<CacheInfo> iterator = cachedBitmaps.iterator(); iterator.hasNext(); ) {
-                CacheInfo next = iterator.next();
+            for (CacheInfo next : cachedBitmaps) {
                 next.setValid(false);
             }
             Common.d("Cache invalidated");
@@ -127,13 +125,12 @@ public class RenderThread extends Thread implements Renderer {
         synchronized (this) {
             //if(clearCache) {
               //  clearCache = false;
-                for (Iterator<CacheInfo> iterator = cachedBitmaps.iterator(); iterator.hasNext(); ) {
-                    CacheInfo next = iterator.next();
-                    next.bitmap.recycle();
-                    next.bitmap = null;
+                for (CacheInfo cacheInfo : cachedBitmaps) {
+                    //cacheInfo.bitmap.recycle();
+                    cacheInfo.bitmap = null;
                 }
 
-                Common.d("Allocated heap size " + (Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize())/ 1024 / 1024 + "Mb");
+                Common.d("Allocated heap size: " + Common.memoryInMB(Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()));
                 cachedBitmaps.clear();
                 Common.d("Cache is cleared!");
             //}
@@ -172,7 +169,7 @@ public class RenderThread extends Thread implements Renderer {
 
         while (!stopped) {
 
-            Common.d("Allocated heap size " + (Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize())/ 1024 / 1024 + "Mb");
+            Common.d("Allocated heap size " + Common.memoryInMB(Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()));
 
             int rotation;
             synchronized (this) {
@@ -222,7 +219,7 @@ public class RenderThread extends Thread implements Renderer {
 
     protected Bitmap renderInCurrentThread(boolean flushBitmap, LayoutPosition curPos, int rotation) {
         CacheInfo resultEntry = null;
-        Common.d("Orion: rendering " + curPos.toString());
+        Common.d("Orion: rendering position: " + curPos);
         if (curPos != null) {
             //try to find result in cache
             for (Iterator<CacheInfo> iterator = cachedBitmaps.iterator(); iterator.hasNext(); ) {
