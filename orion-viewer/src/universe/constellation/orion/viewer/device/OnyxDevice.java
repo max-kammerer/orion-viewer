@@ -10,7 +10,7 @@ import universe.constellation.orion.viewer.Common;
 /**
  * Created by mike on 9/9/14.
  */
-public class OnyxM96Device extends EInkDevice {
+public class OnyxDevice extends EInkDevice {
 
     private static Class epdControllerClass;
 

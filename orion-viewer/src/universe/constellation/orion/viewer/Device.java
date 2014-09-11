@@ -23,6 +23,8 @@ import android.graphics.Point;
 import android.os.Build;
 import android.view.KeyEvent;
 
+import universe.constellation.orion.viewer.device.OnyxUtil;
+
 /**
  * User: mike
  * Date: 18.10.11
@@ -40,6 +42,8 @@ public interface Device {
         public final static String DEVICE = getField("DEVICE");
 
         public final static boolean NOOK2 = "barnesandnoble".equals(MANUFACTURER.toLowerCase()) && ("NOOK".equals(MODEL) || "BNRV350".equals(MODEL) || "BNRV300".equals(MODEL) || "unknown".equals(MODEL)) && "zoom2".equals(DEVICE.toLowerCase());
+
+        public final static boolean ONYX_DEVICE = "ONYX".equalsIgnoreCase(MANUFACTURER) && OnyxUtil.isEinkDevice();
 
         public final static boolean SONY_PRS_T1_T2 = "sony".equals(MANUFACTURER.toLowerCase()) && ("PRS-T1".equals(MODEL) || "PRS-T2".equals(MODEL));
 
