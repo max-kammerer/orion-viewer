@@ -71,6 +71,18 @@
 
             <TableRow android:gravity="center">
                 <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp" android:gravity="left|center_vertical" android:text="HARDWARE"/>
+
+
+                <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/HARDWARE"
+                    android:textSize="22sp" android:gravity="center"/>
+
+            </TableRow>
+
+            <TableRow android:gravity="center">
+                <TextView android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
                           android:textSize="22sp" android:gravity="left|center_vertical" android:text="MEMORY"/>
 

@@ -56,6 +56,8 @@ public class DevicePrefInfo extends DialogPreference {
         tv.setText(Device.Info.MODEL);
         tv = (TextView) view.findViewById(R.id.DEVICE);
         tv.setText(Device.Info.DEVICE);
+        tv = (TextView) view.findViewById(R.id.HARDWARE);
+        tv.setText(Device.Info.HARDWARE);
 
 //        tv = (TextView) view.findViewById(R.id.MEMORY);
 //
