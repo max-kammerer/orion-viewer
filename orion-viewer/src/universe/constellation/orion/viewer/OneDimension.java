@@ -67,4 +67,12 @@ public class OneDimension implements Cloneable {
     public String toString() {
         return "offset = " + offset;
     }
+
+    public int getOccupiedAreaStart() {
+        return Math.max(0, -offset);
+    }
+
+    public int getOccupiedAreaEnd() {
+        return pageDimension - offset - screenDimension < 0 ?  pageDimension - offset : screenDimension;
+    }
 }

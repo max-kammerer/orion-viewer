@@ -17,19 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer;
+package universe.constellation.orion.viewer.view;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.View;
-import universe.constellation.orion.viewer.device.Nook2Util;
-import universe.constellation.orion.viewer.prefs.GlobalOptions;
+
+import universe.constellation.orion.viewer.Common;
+import universe.constellation.orion.viewer.LayoutPosition;
+import universe.constellation.orion.viewer.OrionImageView;
 import universe.constellation.orion.viewer.util.ColorUtil;
 import universe.constellation.orion.viewer.util.MoveUtil;
-import universe.constellation.orion.viewer.view.DrawTask;
-import universe.constellation.orion.viewer.view.ViewDimensionAware;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,11 +39,11 @@ import java.util.concurrent.CountDownLatch;
  * Date: 16.10.11
  * Time: 13:52
  */
-public class OrionView extends View implements OrionImageView {
+public class OrionDrawScene extends View implements OrionImageView {
 
-    private final static int DEFAULT_STATUS_BAR_SIZE = 20;
+    public final static int DEFAULT_STATUS_BAR_SIZE = 20;
 
-    private final static int FONT_DELTA = 3;
+    public final static int FONT_DELTA = 3;
 
     public Bitmap bitmap;
 
@@ -66,6 +65,8 @@ public class OrionView extends View implements OrionImageView {
 
     private Paint borderPaint;
 
+    private Paint backgroundPaint;
+
     private Paint defaultPaint;
 
     private boolean showStatusBar;
@@ -82,38 +83,31 @@ public class OrionView extends View implements OrionImageView {
 
     private List<DrawTask> tasks = new ArrayList<DrawTask>();
 
-    public OrionView(Context context) {
+    private Rect stuffTempRect = new Rect();
+
+    private ColorStuff stuff;
+
+    public OrionDrawScene(Context context) {
         super(context);
-        init();
+        init(context);
     }
 
-    public OrionView(Context context, AttributeSet attrs) {
+    public OrionDrawScene(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context);
     }
 
-    public OrionView(Context context, AttributeSet attrs, int defStyle) {
+    public OrionDrawScene(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
+        init(context);
     }
 
-    private void init() {
-        borderPaint = new Paint();
-        borderPaint.setColor(Color.BLACK);
-        borderPaint.setStrokeWidth(2);
-        borderPaint.setStyle(Paint.Style.STROKE);
+    private void init(Context context) {
+        stuff = new ColorStuff(context);
 
-        int fontSize = DEFAULT_STATUS_BAR_SIZE - FONT_DELTA;
-
-        defaultPaint = new Paint();
-        defaultPaint.setColor(Color.BLACK);
-        defaultPaint.setTextSize(fontSize);
-
-        Typeface tf = Typeface.DEFAULT;
-        if (tf != null) {
-            defaultPaint.setTypeface(tf);
-            defaultPaint.setAntiAlias(true);
-        }
+        borderPaint = stuff.borderPaint;
+        backgroundPaint = stuff.backgroundPaint;
+        defaultPaint = stuff.defaultPaint;
     }
 
     @Override
@@ -127,6 +121,9 @@ public class OrionView extends View implements OrionImageView {
 //            }
 //        }
 
+        long backgroundStart = System.currentTimeMillis();
+        canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), backgroundPaint);
+        Common.d("OrionView: background rendering takes " + 0.001f * (System.currentTimeMillis() - backgroundStart) + " s");
 
         canvas.save();
         canvas.translate(0f, statusBarHeight);
@@ -136,8 +133,8 @@ public class OrionView extends View implements OrionImageView {
 
             final float myScale = scale;
 
-            //do scaling on pinch zoom
             if (inScaling) {
+                drawBorder(canvas, myScale, true);
                 Common.d("in scaling");
                 canvas.save();
                 canvas.translate(
@@ -146,25 +143,22 @@ public class OrionView extends View implements OrionImageView {
                 canvas.scale(myScale, myScale);
             }
 
-            canvas.drawBitmap(bitmap, 0, 0, defaultPaint);
+            stuffTempRect.set(
+                    info.x.getOccupiedAreaStart(),
+                    info.y.getOccupiedAreaStart(),
+                    info.x.getOccupiedAreaEnd(),
+                    info.y.getOccupiedAreaEnd());
+            canvas.drawBitmap(bitmap, stuffTempRect, stuffTempRect, defaultPaint);
 
             if (inScaling) {
-                Common.d("in scaling 2");
                 canvas.restore();
-
-                borderPaint.setColor(defaultPaint.getColor());
-                int left = (int) ((-info.x.offset - startFocus.x) * myScale + (enableMoveOnPinchZoom ? endFocus.x : startFocus.x));
-                int top = (int) ((-info.y.offset - startFocus.y) * myScale + (enableMoveOnPinchZoom ? endFocus.y : startFocus.y));
-
-                int right = (int) (left + info.x.pageDimension * myScale);
-                int bottom = (int) (top + info.y.pageDimension * myScale);
-                canvas.drawRect(left, top, right, bottom, borderPaint);
+                drawBorder(canvas, myScale, false);
             }
 
             Common.d("OrionView: bitmap rendering takes " + 0.001f * (System.currentTimeMillis() - start) + " s");
 
             for (DrawTask drawTask : tasks) {
-                drawTask.drawCanvas(canvas, defaultPaint);
+                drawTask.drawOnCanvas(canvas, defaultPaint, null);
             }
         }
         canvas.restore();
@@ -178,6 +172,21 @@ public class OrionView extends View implements OrionImageView {
         }
     }
 
+    private void drawBorder(Canvas canvas, float myScale, boolean cleanArea) {
+        Common.d(cleanArea ? "Draw: clean page area" : "Draw: draw border");
+
+        borderPaint.setColor(cleanArea ? Color.WHITE : Color.BLACK);
+        borderPaint.setStyle(cleanArea ? Paint.Style.FILL : Paint.Style.STROKE);
+
+        int left = (int) ((-info.x.offset - startFocus.x) * myScale + (enableMoveOnPinchZoom ? endFocus.x : startFocus.x));
+        int top = (int) ((-info.y.offset - startFocus.y) * myScale + (enableMoveOnPinchZoom ? endFocus.y : startFocus.y));
+
+        int right = (int) (left + info.x.pageDimension * myScale);
+        int bottom = (int) (top + info.y.pageDimension * myScale);
+
+        canvas.drawRect(left, top, right, bottom, borderPaint);
+    }
+
     private void drawStatusBar(Canvas canvas) {
         int textY = statusBarHeight - 3;
         int sideMargin = 5;
@@ -185,7 +194,7 @@ public class OrionView extends View implements OrionImageView {
         String textToRender;
         int color = defaultPaint.getColor();
         defaultPaint.setColor(Color.WHITE);
-        canvas.drawRect(0, 0, getWidth(), statusBarHeight, defaultPaint);
+        canvas.drawRect(0, 0, getWidth(), statusBarHeight, backgroundPaint);
         defaultPaint.setColor(color);
 
         if (info == null) {
@@ -239,8 +248,8 @@ public class OrionView extends View implements OrionImageView {
         Common.d("OrionView: onSizeChanged " + w + "x" + h);
         super.onSizeChanged(w, h, oldw, oldh);
         if (w != oldw || h != oldh) {
+            Point renderingSize = getRenderingSize();
             if (dimensionAware != null ) {
-                Point renderingSize = getRenderingSize();
                 dimensionAware.onDimensionChanged(renderingSize.x, renderingSize.y);
             }
         }
@@ -252,10 +261,12 @@ public class OrionView extends View implements OrionImageView {
             ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
             defaultPaint.setColorFilter(filter);
             borderPaint.setColorFilter(filter);
+            stuff.backgroundPaint.setColorFilter(filter);
             super.setBackgroundColor(ColorUtil.transforColor(Color.WHITE, matrix));
         } else {
             defaultPaint.setColorFilter(null);
             borderPaint.setColorFilter(null);
+            stuff.backgroundPaint.setColorFilter(null);
             super.setBackgroundColor(Color.WHITE);
         }
     }

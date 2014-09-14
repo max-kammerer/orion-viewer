@@ -64,6 +64,7 @@ import java.io.File;
 
 import universe.constellation.orion.viewer.dialog.SearchDialog;
 import universe.constellation.orion.viewer.dialog.TapHelpDialog;
+import universe.constellation.orion.viewer.view.OrionDrawScene;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.selection.SelectedTextActions;
 import universe.constellation.orion.viewer.selection.SelectionAutomata;
@@ -99,7 +100,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private final SubscriptionManager manager = new SubscriptionManager();
 
-    private OrionView view;
+    private OrionDrawScene view;
 
     private ViewAnimator animator;
 
@@ -142,7 +143,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         //OptionActions.SHOW_ACTION_BAR.doAction(this, !globalOptions.isActionBarVisible(), globalOptions.isActionBarVisible());
         hasActionBar = globalOptions.isActionBarVisible();
         setContentView(device.getLayoutId());
-        view = (OrionView) findViewById(R.id.view);
+        view = (OrionDrawScene) findViewById(R.id.view);
 
         OptionActions.SHOW_STATUS_BAR.doAction(this, !globalOptions.isStatusBarVisible(), globalOptions.isStatusBarVisible());
         OptionActions.SHOW_OFFSET_ON_STATUS_BAR.doAction(this, !globalOptions.isShowOffsetOnStatusBar(), globalOptions.isShowOffsetOnStatusBar());
@@ -880,7 +881,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         Common.d("Done!");
     }
 
-    public OrionView getView() {
+    public OrionDrawScene getView() {
         return view;
     }
 

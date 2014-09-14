@@ -120,7 +120,6 @@ public class RenderThread extends Thread implements Renderer {
         start();
     }
 
-    @Override
     public void cleanCache() {
         synchronized (this) {
             //if(clearCache) {

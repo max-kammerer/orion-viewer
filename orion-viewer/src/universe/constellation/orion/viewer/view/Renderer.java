@@ -11,8 +11,6 @@ public interface Renderer {
 
     void invalidateCache();
 
-    void cleanCache();
-
     void stopRenderer();
 
     void onPause();

@@ -31,7 +31,7 @@ import java.lang.reflect.Method;
 
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.Device;
-import universe.constellation.orion.viewer.OrionView;
+import universe.constellation.orion.viewer.view.OrionDrawScene;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.android.touch.AndroidScaleWrapper;
 import universe.constellation.orion.viewer.android.touch.OldAdroidScaleWrapper;
@@ -64,7 +64,7 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
 
     private ScaleDetectorWrapper gestureDetector;
 
-    public TouchAutomata(OrionViewerActivity activity, OrionView view) {
+    public TouchAutomata(OrionViewerActivity activity, OrionDrawScene view) {
         super(activity, view);
         int sdkVersion = activity.getOrionContext().getSdkVersion();
         gestureDetector = sdkVersion >= 8 ? new AndroidScaleWrapper(activity, this) : new OldAdroidScaleWrapper(activity, this);

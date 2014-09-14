@@ -14,6 +14,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import com.artifex.mupdfdemo.SearchTaskResult;
 import universe.constellation.orion.viewer.*;
+import universe.constellation.orion.viewer.view.DrawContext;
+import universe.constellation.orion.viewer.view.OrionDrawScene;
 import universe.constellation.orion.viewer.search.SearchTask;
 import universe.constellation.orion.viewer.util.Util;
 import universe.constellation.orion.viewer.view.DrawTask;
@@ -94,7 +96,7 @@ public class SearchDialog extends DialogFragment {
             }
         });
 
-        OrionView view = controller.getActivity().getView();
+        OrionDrawScene view = controller.getActivity().getView();
         view.addTask(lastSearchDrawler);
 
         myTask = new SearchTask(getActivity(), controller.getDoc()) {
@@ -173,7 +175,7 @@ public class SearchDialog extends DialogFragment {
             myTask.stop();
         }
 
-        OrionView view = ((OrionViewerActivity)getActivity()).getView();
+        OrionDrawScene view = ((OrionViewerActivity)getActivity()).getView();
         view.removeTask(lastSearchDrawler);
     }
 
@@ -265,7 +267,7 @@ public class SearchDialog extends DialogFragment {
         }
 
         @Override
-        public void drawCanvas(Canvas canvas, Paint paint) {
+        public void drawOnCanvas(Canvas canvas, Paint paint, DrawContext drawContext) {
             if (batch != null) {
                 List<RectF> rects = batch.rects;
                 int index = 0;

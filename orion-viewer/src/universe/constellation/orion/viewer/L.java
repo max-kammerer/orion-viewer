@@ -8,11 +8,11 @@ package universe.constellation.orion.viewer;
 /*Logger*/
 public class L {
 
-    public static final void log(String msg) {
+    public static void log(String msg) {
         Common.d(msg);
     }
 
-    public static final void info(String msg) {
+    public static void info(String msg) {
         Common.d(msg);
     }
 }

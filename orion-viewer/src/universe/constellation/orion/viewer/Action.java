@@ -25,11 +25,11 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.view.View;
 import android.view.Window;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import pl.polidea.treeview.InMemoryTreeStateManager;
 import pl.polidea.treeview.TreeViewList;
+import universe.constellation.orion.viewer.view.OrionDrawScene;
 import universe.constellation.orion.viewer.outline.OutlineAdapter;
 import universe.constellation.orion.viewer.outline.OutlineItem;
 import universe.constellation.orion.viewer.prefs.*;
@@ -212,7 +212,7 @@ public enum Action {
 
     SWITCH_COLOR_MODE (R.string.action_switch_color_mode, R.integer.action_switch_color_mode) {
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            OrionView view = activity.getView();
+            OrionDrawScene view = activity.getView();
             LastPageInfo currentBookParameters = activity.getOrionContext().getCurrentBookParameters();
             if (currentBookParameters != null && ColorUtil.getColorMode(currentBookParameters.colorMode) == null) {
                 activity.showLongMessage(activity.getString(R.string.select_color_mode));

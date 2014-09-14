@@ -20,7 +20,7 @@
 package universe.constellation.orion.viewer.selection;
 
 import android.graphics.Point;
-import universe.constellation.orion.viewer.OrionView;
+import universe.constellation.orion.viewer.view.OrionDrawScene;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 
 /**
@@ -50,14 +50,14 @@ public class TouchAutomataOldAndroid {
 
     protected OrionViewerActivity activity;
 
-    protected OrionView view;
+    protected OrionDrawScene view;
 
-    public TouchAutomataOldAndroid(OrionViewerActivity activity, OrionView view) {
+    public TouchAutomataOldAndroid(OrionViewerActivity activity, OrionDrawScene view) {
         this.activity = activity;
         this.view = view;
     }
 
-    public OrionView getView() {
+    public OrionDrawScene getView() {
         return view;
     }
 

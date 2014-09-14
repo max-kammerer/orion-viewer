@@ -1,6 +1,7 @@
 package universe.constellation.orion.viewer.util;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.DisplayMetrics;
 
 import universe.constellation.orion.viewer.Common;
@@ -12,7 +13,7 @@ public class DensityUtil {
         return (originalSize * metrics.density + 0.5);
     }
 
-    public static double calcScreenSize(int originalSize, Activity activity) {
+    public static double calcScreenSize(int originalSize, Context activity) {
         return calcScreenSize(originalSize, activity.getResources().getDisplayMetrics());
     }
 }

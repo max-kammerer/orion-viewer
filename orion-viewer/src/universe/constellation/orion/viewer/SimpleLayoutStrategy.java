@@ -232,17 +232,6 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
     }
 
     public Point convertToPoint(LayoutPosition pos) {
-        int layout  = getLayout();
-//        int absLeftMargin = (int) (leftMargin * pos.pageWidth * 0.01);
-//        int absTopMargin = (int) (topMargin * pos.pageHeight * 0.01);
-//        int absLeftMargin = pos.x.marginLess;
-//        int absTopMargin = pos.x.marginTop;
-//        int hOverlap = pos.getRenderWidth() * HOR_OVERLAP / 100;
-//        int vOverlap = pos.getRenderHeight() * VERT_OVERLAP / 100;
-//
-//        int x = pos.cellX == 0 || pos.cellX != pos.maxX || layout == 0 ?  (int)(absLeftMargin + pos.cellX * (pos.getRenderWidth() - hOverlap)) : (int) (absLeftMargin + pos.pageWidth - pos.getRenderWidth());
-//        int y = pos.cellY == 0 || pos.cellY != pos.maxY || layout != 1 ? (int) (absTopMargin + pos.cellY * (pos.getRenderHeight() - vOverlap)) : (int) (absTopMargin + pos.pageHeight - pos.getRenderHeight());
-
         return new Point(pos.x.marginLess + pos.x.offset, pos.y.marginLess + pos.y.offset);
     }
 
@@ -280,4 +269,3 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         return walker;
     }
 }
-

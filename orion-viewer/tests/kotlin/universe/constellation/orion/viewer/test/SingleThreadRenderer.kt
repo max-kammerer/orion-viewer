@@ -2,7 +2,7 @@ package universe.constellation.orion.viewer.test
 
 import universe.constellation.orion.viewer.RenderThread
 import universe.constellation.orion.viewer.OrionViewerActivity
-import universe.constellation.orion.viewer.OrionView
+import universe.constellation.orion.viewer.view.OrionDrawScene
 import universe.constellation.orion.viewer.LayoutStrategy
 import universe.constellation.orion.viewer.DocumentWrapper
 import universe.constellation.orion.viewer.LayoutPosition

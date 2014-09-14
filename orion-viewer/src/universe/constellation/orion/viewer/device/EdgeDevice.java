@@ -30,7 +30,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.Device;
-import universe.constellation.orion.viewer.OrionView;
+import universe.constellation.orion.viewer.view.OrionDrawScene;
 import universe.constellation.orion.viewer.R;
 
 import java.io.*;
@@ -161,7 +161,7 @@ public class EdgeDevice extends AndroidDevice {
     @Override
     public void flushBitmap() {
         if (fb != null && activity.getViewerType() == VIEWER_ACTIVITY) {
-            Bitmap bm = ((OrionView) activity.getView()).getBitmap();
+            Bitmap bm = ((OrionDrawScene) activity.getView()).getBitmap();
             if (bm != null && !bm.isRecycled()) {
                 try {
                     fb.transfer(bm, false);
