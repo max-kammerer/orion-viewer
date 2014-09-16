@@ -1,16 +1,11 @@
-package universe.constellation.orion.viewer.device;
+package universe.constellation.orion.viewer.device.texet;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.PowerManager;
 import android.provider.Settings;
-import android.text.format.Time;
-import android.util.Log;
-import android.widget.Toast;
 
 import java.lang.reflect.Method;
 
-import universe.constellation.orion.viewer.LastPageInfo;
 import universe.constellation.orion.viewer.OrionBaseActivity;
 
 /**

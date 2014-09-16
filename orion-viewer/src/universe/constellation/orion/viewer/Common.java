@@ -24,8 +24,8 @@ import universe.constellation.orion.viewer.device.AndroidDevice;
 import universe.constellation.orion.viewer.device.EdgeDevice;
 import universe.constellation.orion.viewer.device.Nook2Device;
 import universe.constellation.orion.viewer.device.OnyxDevice;
-import universe.constellation.orion.viewer.device.TexetTB176FLDevice;
-import universe.constellation.orion.viewer.device.TexetTb138Device;
+import universe.constellation.orion.viewer.device.texet.TexetTB176FLDevice;
+import universe.constellation.orion.viewer.device.texet.TexetTb138Device;
 
 import java.io.*;
 

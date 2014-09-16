@@ -1,4 +1,4 @@
-package universe.constellation.orion.viewer.device;
+package universe.constellation.orion.viewer.device.texet;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import universe.constellation.orion.viewer.LastPageInfo;
+import universe.constellation.orion.viewer.device.EInkDevice;
 
 /**
  * Created by mike on 9/16/14.

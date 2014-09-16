@@ -1,9 +1,10 @@
-package universe.constellation.orion.viewer.device;
+package universe.constellation.orion.viewer.device.texet;
 
 import android.view.KeyEvent;
 import android.view.View;
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.OperationHolder;
+import universe.constellation.orion.viewer.device.AndroidDevice;
 
 import java.lang.reflect.Method;
 
