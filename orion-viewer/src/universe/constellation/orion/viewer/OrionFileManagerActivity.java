@@ -47,36 +47,18 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
 
     private static final String LAST_FOLDER = "LAST_FOLDER";
 
-    public static class FilesListFragment extends FMListFragment {
+    public static class FilesListFragment extends ListFragment {
 
-        public FilesListFragment() {
-            super(true);
-        }
-    }
-
-    public static class RecentListFragment extends FMListFragment {
-
-        public RecentListFragment() {
-            super(false);
-        }
-    }
-
-    public static class FMListFragment extends ListFragment {
-
-        protected boolean forFiles = true;
-
-        protected FMListFragment(boolean forFiles) {
-            this.forFiles = forFiles;
-        }
-
-        @Override
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
-            if (forFiles) {
-                ((OrionFileManagerActivity)getActivity()).createFileView(this);
-            } else {
-                ((OrionFileManagerActivity)getActivity()).createRecentView(this);
-            }
+            ((OrionFileManagerActivity)getActivity()).createFileView(this);
+        }
+    }
+
+    public static class RecentListFragment extends ListFragment {
+        public void onActivityCreated(Bundle savedInstanceState) {
+            super.onActivityCreated(savedInstanceState);
+            ((OrionFileManagerActivity)getActivity()).createRecentView(this);
         }
     }
 
@@ -100,11 +82,11 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
     }
 
     protected void onNewIntent(Intent intent) {
-        Common.d("OFM: On new intent " + intent);
+        Common.d("OrionFileManager: On new intent " + intent);
 
         boolean dontStartRecent = intent.getBooleanExtra(DONT_OPEN_RECENT, false);
         if (!dontStartRecent && globalOptions.isOpenRecentBook()) {
-            if (globalOptions.getRecentFiles().isEmpty() == false) {
+            if (!globalOptions.getRecentFiles().isEmpty()) {
                 GlobalOptions.RecentEntry entry = globalOptions.getRecentFiles().get(0);
                 File book = new File(entry.getPath());
                 if (book.exists()) {
