@@ -19,29 +19,25 @@
 
 package universe.constellation.orion.viewer.selection;
 
-import android.content.Context;
 import android.graphics.Point;
-import android.os.PowerManager;
 import android.os.SystemClock;
-import android.provider.Settings;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
-import java.lang.reflect.Method;
-
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.Device;
-import universe.constellation.orion.viewer.view.OrionDrawScene;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.android.touch.AndroidScaleWrapper;
 import universe.constellation.orion.viewer.android.touch.OldAdroidScaleWrapper;
 import universe.constellation.orion.viewer.android.touch.ScaleDetectorWrapper;
-import universe.constellation.orion.viewer.device.TexetTB176FLDevice;
+import universe.constellation.orion.viewer.device.EInkDevice;
 import universe.constellation.orion.viewer.util.DensityUtil;
 import universe.constellation.orion.viewer.util.MoveUtil;
+import universe.constellation.orion.viewer.view.OrionDrawScene;
 
-import static android.view.MotionEvent.*;
 import static android.view.MotionEvent.ACTION_DOWN;
+import static android.view.MotionEvent.ACTION_MOVE;
+import static android.view.MotionEvent.ACTION_UP;
 
 /**
 * User: mike
@@ -282,7 +278,8 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
     }
 
     public boolean isSupportLighting() {
-        return activity.getDevice() instanceof TexetTB176FLDevice;
+        Device device = activity.getDevice();
+        return device instanceof EInkDevice && ((EInkDevice) device).isLightingSupported();
     }
 
     private Toast toast;
@@ -292,28 +289,16 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
             toast = Toast.makeText(activity, "-1", Toast.LENGTH_SHORT);
         }
 
-        int br = 255;
-        try {
-            int brightness = Settings.System.getInt(activity.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, 255);
-
-            int newBrightness = brightness + delta / 5;
-            if (newBrightness < 0) {
-                newBrightness = 0;
+        Device device = activity.getDevice();
+        if (device instanceof EInkDevice) {
+            try {
+                int newBrightness = ((EInkDevice) device).doLighting(delta / 5);
+                toast.setText("" + newBrightness);
+                toast.show();
+            } catch (Exception e) {
+                toast.setText("Error " + e.getMessage() + " " + e.getCause());
+                Common.d(e);
             }
-            if (newBrightness > 255) {
-                newBrightness = 255;
-            }
-
-            toast.setText("" + newBrightness);
-            toast.show();
-            br = newBrightness;
-            PowerManager pm = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
-
-            Method setBacklight = pm.getClass().getMethod("setBacklightBrightness", Integer.TYPE);
-            setBacklight.invoke(pm, brightness);
-            Settings.System.putInt(activity.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, newBrightness);
-        } catch (Exception e) {
-            toast.setText("" + br + ": Error " + e.getMessage() + " " + e.getCause());
         }
     }
 }

@@ -36,4 +36,12 @@ public abstract class EInkDevice extends AndroidDevice {
     public void doFullUpdate(View view) {
         super.flushBitmap();
     }
+
+    public boolean isLightingSupported() {
+        return false;
+    }
+
+    public int doLighting(int delta) throws Exception {
+        return -1;
+    }
 }
