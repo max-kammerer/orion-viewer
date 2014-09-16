@@ -25,6 +25,7 @@ import universe.constellation.orion.viewer.device.EdgeDevice;
 import universe.constellation.orion.viewer.device.Nook2Device;
 import universe.constellation.orion.viewer.device.OnyxDevice;
 import universe.constellation.orion.viewer.device.texet.TexetTB176FLDevice;
+import universe.constellation.orion.viewer.device.texet.TexetTB576HDDevice;
 import universe.constellation.orion.viewer.device.texet.TexetTb138Device;
 
 import java.io.*;
@@ -58,6 +59,11 @@ public class Common {
         if(Device.Info.TEXET_TB176FL) {
             Common.d("Using TEXET_TB176FL");
             return new TexetTB176FLDevice();
+        }
+
+        if(Device.Info.TEXET_TB576HD) {
+            Common.d("Using TEXET_TB576HD");
+            return new TexetTB576HDDevice();
         }
 
         if(Device.Info.NOOK2) {

@@ -52,7 +52,9 @@ public interface Device {
 
         public final static boolean TEXET_TB_138 = "texet".equalsIgnoreCase(DEVICE) && "rk29sdk".equalsIgnoreCase(MODEL);
 
-        public final static boolean TEXET_TB176FL = "TB-176FL".equalsIgnoreCase(DEVICE) && "TB-176FL".equalsIgnoreCase(MODEL);
+        public final static boolean TEXET_TB176FL = "texet".equalsIgnoreCase(MANUFACTURER) && "TB-176FL".equalsIgnoreCase(DEVICE) && "TB-176FL".equalsIgnoreCase(MODEL);
+
+        public final static boolean TEXET_TB576HD = "texet".equalsIgnoreCase(MANUFACTURER) && "TB-576HD".equalsIgnoreCase(DEVICE) && "TB-576HD".equalsIgnoreCase(MODEL);
 
 		public static String getField(String name) {
             try {
