@@ -167,7 +167,7 @@ public class AndroidDevice implements Device {
     }
 
     @Override
-    public void onNewBook(LastPageInfo info) {
+    public void onNewBook(LastPageInfo info, DocumentWrapper document) {
 
     }
 

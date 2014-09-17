@@ -296,7 +296,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             globalOptions.addRecentEntry(new GlobalOptions.RecentEntry(new File(filePath).getAbsolutePath()));
 
             lastPageInfo.totalPages = doc.getPageCount();
-            device.onNewBook(lastPageInfo);
+            device.onNewBook(lastPageInfo, doc);
 
             askPassword(controller);
 

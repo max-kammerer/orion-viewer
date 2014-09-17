@@ -2,11 +2,21 @@ package universe.constellation.orion.viewer.device.texet;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.text.format.Time;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+
+import universe.constellation.orion.viewer.Common;
+import universe.constellation.orion.viewer.DocumentWrapper;
 import universe.constellation.orion.viewer.LastPageInfo;
+import universe.constellation.orion.viewer.PageInfo;
 import universe.constellation.orion.viewer.device.EInkDevice;
 
 /**
@@ -14,11 +24,15 @@ import universe.constellation.orion.viewer.device.EInkDevice;
  */
 public class TexetDevice extends EInkDevice {
 
+
     @Override
-    public void onNewBook(LastPageInfo info) {
+    public void onNewBook(LastPageInfo info, DocumentWrapper document) {
         try {
-            shtampTexetFile(info.openingFileName, info.simpleFileName, "", "" + info.totalPages, "" + info.pageNumber, "");
+            String coverFileName = getIconFileName(info.simpleFileName, info.fileSize);
+            shtampTexetFile(info.openingFileName, info.simpleFileName, "", "" + info.totalPages, "" + info.pageNumber, coverFileName);
+            rememberCover(coverFileName, document);
         } catch (Exception e) {
+            Common.d(e);
             Toast.makeText(activity, "Error on new book parameters update: " + e.getMessage(), Toast.LENGTH_SHORT).show();;
         }
     }
@@ -28,8 +42,9 @@ public class TexetDevice extends EInkDevice {
         super.onBookClose(info);
 
         try {
-            shtampTexetFile(null, null, null, "" + info.totalPages, "" + info.pageNumber, "");
+            shtampTexetFile(null, null, null, "" + info.totalPages, "" + info.pageNumber, null);
         } catch (Exception e) {
+            Common.d(e);
             Toast.makeText(activity, "Error on parameters update on book close: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
@@ -174,4 +189,56 @@ public class TexetDevice extends EInkDevice {
         editor.commit();
     }
 
+    public String getIconFileName(String simpleFileName, long fileSize) {
+        return "";
+    }
+
+    private void writeCover(Bitmap originalBitmap, String newFileName) throws FileNotFoundException {
+        OutputStream stream = null;
+        try {
+            stream = new FileOutputStream(newFileName);
+            originalBitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
+        } finally {
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (IOException e) {
+                    Common.d(e);
+                }
+            }
+        }
+    }
+
+    public void rememberCover(final String coverFileName, final DocumentWrapper doc) {
+        if (coverFileName != null && coverFileName.length() != 0 && !new File(coverFileName).exists()) {
+            Common.d("Writing cover to " + coverFileName);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if (doc.getPageCount() <= 0) {
+                            Common.d("No pages in document");
+                            return;
+                        }
+                        int size = 500;
+                        Bitmap bm = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+                        Common.d("Extracting cover info ...");
+                        PageInfo pageInfo = doc.getPageInfo(0);
+                        if (pageInfo.width <= 0 || pageInfo.height <= 0) {
+                            Common.d("Wrong page size: " + pageInfo.width + "x" + pageInfo.height);
+                        }
+
+                        float zoom = Math.min(1.0f * size / pageInfo.width, 1.0f * size / pageInfo.height);
+                        int xDelta = -(size - (int)(zoom * pageInfo.width))/2;
+                        int yDelta = -(size - (int)(zoom * pageInfo.height))/2;
+                        Common.d("Cover info " + zoom + " xD: " + xDelta + " yD: " + yDelta);
+                        doc.renderPage(0, bm, zoom, size, size, xDelta, yDelta, size + xDelta, size + yDelta);
+                        writeCover(bm, coverFileName);
+                    } catch (FileNotFoundException e) {
+                        Common.d(e);
+                    }
+                }
+            }).run();
+        }
+    }
 }

@@ -88,7 +88,7 @@ public interface Device {
 
     void onCreate(OrionBaseActivity activity);
 
-    void onNewBook(LastPageInfo info);
+    void onNewBook(LastPageInfo info, DocumentWrapper document);
 
     void onBookClose(LastPageInfo info);
 

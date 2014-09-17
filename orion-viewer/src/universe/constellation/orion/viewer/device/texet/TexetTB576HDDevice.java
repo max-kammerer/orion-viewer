@@ -73,4 +73,18 @@ public class TexetTB576HDDevice extends TexetDevice {
         }
         return super.onKeyUp(keyCode, event, holder);
     }
+
+    @Override
+    public String getIconFileName(String simpleFileName, long fileSize) {
+        int i = simpleFileName.lastIndexOf(".");
+        if (i > 0) {
+            simpleFileName = simpleFileName.substring(0, i + 1);
+        }
+        return "/mnt/storage/BookCover/" + simpleFileName + fileSize + ".png.bnv";
+    }
+
+    @Override
+    public void flushBitmap() {
+        super.flushBitmap();
+    }
 }
