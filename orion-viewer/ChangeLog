@@ -1,3 +1,8 @@
+===== 0.55.1 (Sep 19, 2014) =====
+* Added rendering for out of page space
+* Added page centering
+* Added test support for non-blinking refresh on Onyx devices (could be enabled in preferences)
+
 ===== 0.54.2 (Sep 02, 2014) =====
 * Cosmetic changes
 
