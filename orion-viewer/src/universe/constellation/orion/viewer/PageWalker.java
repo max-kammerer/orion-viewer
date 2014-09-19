@@ -81,6 +81,8 @@ public class PageWalker {
         }
     };
 
+    private boolean doCentering = true;
+
     private WALK_ORDER direction;
 
     private SimpleLayoutStrategy layout;
@@ -160,6 +162,12 @@ public class PageWalker {
     }
 
     private int reset(DIR dir, OneDimension dim, int possibleOffset) {
+        if (doCentering) {
+            if (dim.pageDimension < dim.screenDimension) {
+                return (dim.pageDimension - dim.screenDimension) / 2;
+            }
+        }
+
         if (dir.toRightOrDown() || dim.pageDimension <= dim.screenDimension || dim.screenDimension == 0) {
             return 0;
         } else {
