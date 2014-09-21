@@ -62,11 +62,12 @@
                 <data android:mimeType="application/pdf"/>
                 <data android:mimeType="application/vnd.ms-xpsdocument"/>
                 <data android:mimeType="application/oxps"/>
+                <data android:mimeType="application/xps"/>
                 <data android:mimeType="application/x-cbz"/>
 
                 <!--images-->
-                <!--<data android:mimeType="image/tiff"/>-->
-                <!--<data android:mimeType="image/x-tiff"/>-->
+                <data android:mimeType="image/tiff"/>
+                <data android:mimeType="image/x-tiff"/>
                 <!--<data android:mimeType="image/png"/>-->
                 <!--<data android:mimeType="image/jpeg"/>-->
                 <!--<data android:mimeType="image/pjpeg"/>-->
@@ -85,8 +86,8 @@
                 <data android:pathPattern=".*\\.cbz"/>
 
                 <!--images-->
-                <!--<data android:pathPattern=".*\\.tiff" />-->
-                <!--<data android:pathPattern=".*\\.tif" />-->
+                <data android:pathPattern=".*\\.tiff" />
+                <data android:pathPattern=".*\\.tif" />
                 <!--<data android:pathPattern=".*\\.png" />-->
                 <!--<data android:pathPattern=".*\\.jpg" />-->
                 <!--<data android:pathPattern=".*\\.jpeg" />-->

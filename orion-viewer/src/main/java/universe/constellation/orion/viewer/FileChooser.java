@@ -53,7 +53,7 @@ public class FileChooser extends ArrayAdapter {
         }
         String name = filename.toLowerCase();
         return name.endsWith(".pdf") || name.endsWith(".djvu") || name.endsWith(".djv") || name.endsWith(".xps") || name.endsWith(".oxps") || name.endsWith(".cbz")
-                /*|| name.endsWith(".tiff") || name.endsWith(".tif") || name.endsWith(".png") || name.endsWith(".jpeg") || name.endsWith(".jpg")*/;
+                || name.endsWith(".tiff") || name.endsWith(".tif") /*|| name.endsWith(".png") || name.endsWith(".jpeg") || name.endsWith(".jpg")*/;
         }
     };
 
@@ -144,7 +144,7 @@ public class FileChooser extends ArrayAdapter {
                 icon = R.drawable.pdf;
             }else if (extName.endsWith("djvu")) {
                 icon = R.drawable.djvu;
-            } else if (extName.endsWith("cbz")) {
+            } else if (extName.endsWith("cbz")  || extName.endsWith("tif") || extName.endsWith("tiff")) {
                 icon = R.drawable.cbz;
             } else if (extName.endsWith("xps") || extName.endsWith("oxps")) {
                 icon = R.drawable.xps;
