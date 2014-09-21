@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: 'version.gradle'
+apply from: '../project.gradle'
 
 println "do singing: " + doSigning
 if (doSigning) {
@@ -32,7 +33,7 @@ android {
         main {
             manifest.srcFile 'AndroidManifest.xml'
             java.srcDirs = ['src']
-            jniLibs.srcDirs = ['libs']
+            jniLibs.srcDirs = [mupdf_libs, djvu_libs]
             resources.srcDirs = ['src']
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']

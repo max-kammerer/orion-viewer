@@ -1,16 +1,9 @@
+/*CHANGE necessary properties in project.gradle*/
+apply from: 'project.gradle'
+
 buildscript {
     repositories { mavenCentral() }
 }
-
-project.ext {
-    native_folder = "../thirdparty"
-    mupdf = native_folder + "/mupdf"
-    djvu = native_folder + "/djvu"
-
-    /*!!!!SPECIFY path to your ndk!!!*/
-    ndkPath = "/home/mike/devel/tools/android/android-ndk-r10/"
-}
-
 
 /*DJVU CHAIN*/
 task downloadDjvu << {

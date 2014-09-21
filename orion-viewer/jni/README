@@ -28,4 +28,4 @@ there is also separate tasks for djvu and mupdf build
 
 4. Run 'ndk-build' command from  'mupdf/platform/android/' and 'djvu/android' folders
 
-5. copy generated libs to 'orion-viewer/libs'
+5. Then run main build.gradle script
