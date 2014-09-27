@@ -113,11 +113,11 @@
             android:gravity="center"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_1" android:layout_marginTop="20dp"
-                  android:text="Project site: http://code.google.com/p/orion-viewer/" android:textSize="18sp"
+                  android:text="Project site: https://sourceforge.net/projects/orion-viewer/" android:textSize="18sp"
                   android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_2" android:textSize="18sp"
-                  android:text="Bug reporting: http://code.google.com/p/orion-viewer/issues/list"
+                  android:text="Bug reporting: https://sourceforge.net/p/orion-viewer/tickets/"
                   android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_3" android:textSize="18sp"
@@ -125,10 +125,8 @@
                   android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_4" android:textSize="18sp"
-                  android:text="Contribution: http://code.google.com/p/orion-viewer/wiki/Contribution"
+                  android:text="Donation: https://sourceforge.net/p/orion-viewer/wiki/Donation/"
                   android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
-
-
 
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
