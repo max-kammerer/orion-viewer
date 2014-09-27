@@ -188,6 +188,10 @@ public class SearchDialog extends DialogFragment {
         boolean performRealSearch = false;
         String newSearch = searchField.getText().toString();
         lastDirectionOnSearch = direction;
+        if ("".equals(newSearch)) {
+            ((OrionBaseActivity)getActivity()).showAlert(R.string.msg_error, R.string.msg_specify_keyword_for_search);
+            return;
+        }
 
         if (newSearch.equals(lastSearch) && screens != null) {
             //iterate
