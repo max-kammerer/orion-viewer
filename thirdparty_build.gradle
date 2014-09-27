@@ -1,6 +1,8 @@
 /*CHANGE necessary properties in project.gradle*/
 apply from: 'project.gradle'
 
+defaultTasks 'buildNativeLibs'
+
 buildscript {
     repositories { mavenCentral() }
 }
@@ -92,4 +94,4 @@ mupdfChain.mustRunAfter djvuChain
 
 
 /*!!!!!!!!!!RUN ME!!!!!!!!*/
-task prepareNativePart(dependsOn: [djvuChain, mupdfChain])
+task buildNativeLibs(dependsOn: [djvuChain, mupdfChain])

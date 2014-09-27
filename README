@@ -1,10 +1,17 @@
 To build Orion Viewer you will need:
     android-sdk-r23+
-    android-ndk-r9d+
     gradle 1.12+
+
+    for building native libs you also need
+        android-ndk-r9d+
+        git 1.9+
+        linux make util for building mupdf 3rd party libs (cygwin or mingw for windows system)
+
+Thirdpardy build scripted in 'thirdparty_build.gradle' file (details in 'orion-viewer/jni/README').
+It should be executed one time to build native libs.
+
+Main project build logic scripted in build.gradle.
 
 Specify path to android-sdk in 'local.properties' (use 'local.properties.sample' as example).
 
-All build logic scripted in build.gradle,
-but before running it checkout and build native libraries see 'orion-viewer/jni/README' file
 

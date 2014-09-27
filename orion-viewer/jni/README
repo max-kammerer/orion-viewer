@@ -1,6 +1,6 @@
 For building native libraries you need android ndk r9d+ ang git installed on your system
 
-NB: All steps scripted in 'thirdparty_update.gradle' 'prepareNativePart' task,
+NB: All steps scripted in 'thirdparty_build.gradle' 'buildNativeLibs' task,
 there is also separate tasks for djvu and mupdf build
 
 1. You need to upload mupdf 1.3 and djvulibre 3.5.24 sources
