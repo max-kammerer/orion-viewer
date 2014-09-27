@@ -220,19 +220,22 @@ public class TexetDevice extends EInkDevice {
                             Common.d("No pages in document");
                             return;
                         }
-                        int size = 500;
-                        Bitmap bm = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+                        int defaultHeight = 320;
+
                         Common.d("Extracting cover info ...");
                         PageInfo pageInfo = doc.getPageInfo(0);
                         if (pageInfo.width <= 0 || pageInfo.height <= 0) {
-                            Common.d("Wrong page size: " + pageInfo.width + "x" + pageInfo.height);
+                            Common.d("Wrong page defaultHeight: " + pageInfo.width + "x" + pageInfo.height);
                         }
 
-                        float zoom = Math.min(1.0f * size / pageInfo.width, 1.0f * size / pageInfo.height);
-                        int xDelta = -(size - (int)(zoom * pageInfo.width))/2;
-                        int yDelta = -(size - (int)(zoom * pageInfo.height))/2;
-                        Common.d("Cover info " + zoom + " xD: " + xDelta + " yD: " + yDelta);
-                        doc.renderPage(0, bm, zoom, size, size, xDelta, yDelta, size + xDelta, size + yDelta);
+                        float zoom = Math.min(1.0f * defaultHeight / pageInfo.width, 1.0f * defaultHeight / pageInfo.height);
+                        int sizeX = (int) (zoom * pageInfo.width);
+                        int sizeY = (int) (zoom * pageInfo.height);
+                        Bitmap bm = Bitmap.createBitmap(sizeX, sizeY, Bitmap.Config.ARGB_8888);
+                        int xDelta = -(sizeX - (int)(zoom * pageInfo.width))/2;
+                        int yDelta = -(sizeY - (int)(zoom * pageInfo.height))/2;
+                        Common.d("Cover info " + zoom + " xD: " + xDelta + " yD: " + yDelta + " bm: " + sizeX + "x" + sizeY);
+                        doc.renderPage(0, bm, zoom, sizeX, sizeY, xDelta, yDelta, sizeX + xDelta, sizeY + yDelta);
                         writeCover(bm, coverFileName);
                     } catch (FileNotFoundException e) {
                         Common.d(e);

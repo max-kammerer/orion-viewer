@@ -134,11 +134,12 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                 if (pinch != null) {
                     nextState = States.PINCH_ZOOM;
                 } else  if (ACTION_MOVE == action || ACTION_UP == action) {
+                    int delta = -(last0.y - start0.y);
                     if (ACTION_UP == action) {
-                        doLighting(last0.y - start0.y);
+                        doLighting(delta);
                         nextState = States.UNDEFINED;
                     } else {
-                        doLighting(last0.y - start0.y);
+                        doLighting(delta);
                         start0.x = last0.x;
                         start0.y = last0.y;
                     }
@@ -293,10 +294,13 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
         if (device instanceof EInkDevice) {
             try {
                 int newBrightness = ((EInkDevice) device).doLighting(delta / 5);
-                toast.setText("" + newBrightness);
-                toast.show();
+                if (false) {
+                    toast.setText("" + newBrightness);
+                    toast.show();
+                }
             } catch (Exception e) {
                 toast.setText("Error " + e.getMessage() + " " + e.getCause());
+                toast.show();
                 Common.d(e);
             }
         }

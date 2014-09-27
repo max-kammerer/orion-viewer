@@ -15,17 +15,18 @@ public abstract class EInkDevice extends AndroidDevice {
     @Override
     public void flushBitmap() {
         GlobalOptions options = ((OrionViewerActivity)activity).getGlobalOptions();
+        View view = activity.getView();
         if (options.isEinkOptimization()) {
             if (counter < options.getEinkRefreshAfter()) {
-                doPartialUpdate(activity.getView());
+                doPartialUpdate(view);
                 counter++;
             } else {
                 counter = 0;
-                doFullUpdate(activity.getView());
+                doFullUpdate(view);
 
             }
         } else {
-            super.flushBitmap();
+            doDefaultUpdate(view);
         }
     }
 
@@ -34,6 +35,10 @@ public abstract class EInkDevice extends AndroidDevice {
     }
 
     public void doFullUpdate(View view) {
+        super.flushBitmap();
+    }
+
+    public void doDefaultUpdate(View view) {
         super.flushBitmap();
     }
 

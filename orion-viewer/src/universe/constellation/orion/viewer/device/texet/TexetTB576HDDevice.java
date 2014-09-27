@@ -5,7 +5,9 @@ import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import universe.constellation.orion.viewer.Common;
@@ -20,6 +22,10 @@ public class TexetTB576HDDevice extends TexetDevice {
 
     private static Method texetBacklight1;
 
+    private static Method invalidateScreen;
+
+    private static boolean isMethodFound = false;
+
     static {
         try {
             texetBacklight0 = PowerManager.class.getMethod("setBacklight", int.class, Context.class);
@@ -29,6 +35,13 @@ public class TexetTB576HDDevice extends TexetDevice {
 
         try {
             texetBacklight1 = PowerManager.class.getMethod("setBacklight", int.class);
+        } catch (Exception e) {
+            Common.d(e);
+        }
+
+        try {
+            invalidateScreen = View.class.getMethod("postInvalidate", int.class);
+            isMethodFound = true;
         } catch (Exception e) {
             Common.d(e);
         }
@@ -78,13 +91,27 @@ public class TexetTB576HDDevice extends TexetDevice {
     public String getIconFileName(String simpleFileName, long fileSize) {
         int i = simpleFileName.lastIndexOf(".");
         if (i > 0) {
-            simpleFileName = simpleFileName.substring(0, i + 1);
+            simpleFileName = simpleFileName.substring(0, i);
         }
-        return "/mnt/storage/BookCover/" + simpleFileName + fileSize + ".png.bnv";
+        return "/mnt/storage/BookCover/" + simpleFileName + "." + fileSize + ".png.bnv";
     }
 
     @Override
-    public void flushBitmap() {
-        super.flushBitmap();
+    public void doFullUpdate(View view) {
+        if (isMethodFound) {
+            try {
+                invalidateScreen.invoke(view, 98);
+            } catch (Exception e) {
+                Common.d(e);
+                super.doFullUpdate(view);
+            }
+        } else {
+            super.doFullUpdate(view);
+        }
+    }
+
+    @Override
+    public void doDefaultUpdate(View view) {
+        doFullUpdate(view);
     }
 }
