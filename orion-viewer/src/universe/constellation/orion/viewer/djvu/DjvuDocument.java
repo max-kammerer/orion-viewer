@@ -23,6 +23,7 @@ import android.graphics.Bitmap;
 import android.graphics.RectF;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.DocumentWrapper;
@@ -152,14 +153,19 @@ public class DjvuDocument implements DocumentWrapper {
             Integer start = indexes.get(i);
             Integer end = indexes.get(i + text.length() - 1);
 
-            RectF rectF = new RectF(positions.get(start));
-            rectF.union(positions.get(end));
+            RectF rectF = new RectF(getSafeRectInPosition(positions, start));
+            rectF.union(getSafeRectInPosition(positions, end));
             result.add(rectF);
             i = i + text.length();
             i = builder.indexOf(text, i);
         }
 
         return result.toArray(new RectF[result.size()]);
+    }
+
+    private RectF getSafeRectInPosition(List<RectF> rects, int position) {
+        //TODO
+        return rects.get(position);
     }
 
 

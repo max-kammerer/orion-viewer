@@ -533,13 +533,18 @@ static jboolean miniexp_get_text(JNIEnv * env, miniexp_t exp, jobject stringBuil
   miniexp_t s = miniexp_car(r);
   *state = qMax(*state, typenum);
 
+  jstring space = (*env)->NewStringUTF(env, " ");
+  jstring newLine = (*env)->NewStringUTF(env, "\n");
+
   if (miniexp_stringp(s) && !miniexp_cdr(r))
     {
       //result += (state >= 2) ? "\n" : (state >= 1) ? " " : "";
       if (*state >= 2) {
-
+        (*env)->CallBooleanMethod(env, positions, addToList, rect);
+        (*env)->CallBooleanMethod(env, stringBuilder, addToList, newLine);
       } else if (*state >= 1) {
-
+        (*env)->CallBooleanMethod(env, positions, addToList, rect);
+        (*env)->CallBooleanMethod(env, stringBuilder, addToList, newLine);
       } else {
         //add empty?
       }
@@ -554,6 +559,8 @@ static jboolean miniexp_get_text(JNIEnv * env, miniexp_t exp, jobject stringBuil
       r = miniexp_cdr(r);
     }
 
+  (*env)->DeleteLocalRef(env, space);
+  (*env)->DeleteLocalRef(env, newLine);
   (*env)->DeleteLocalRef(env, rect);
 
   while(miniexp_consp(s))
