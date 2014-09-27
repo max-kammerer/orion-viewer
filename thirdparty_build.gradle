@@ -21,11 +21,11 @@ task downloadDjvu << {
 
 task patchDjvu << {
     //NB: ant do incremental copying, gradle default copy task doesn't
-    ant.copy(todir: djvu, overwrite: true) {
+    ant.copy(todir: djvu, overwrite: true, preservelastmodified: true) {
         fileset(dir : 'orion-viewer/jni/djvu')
     }
 
-    ant.copy(todir: djvu + '/android/jni', overwrite: true ) {
+    ant.copy(todir: djvu + '/android/jni', overwrite: true, preservelastmodified: true ) {
         fileset(dir : 'orion-viewer/jni/common')
     }
 }
@@ -73,7 +73,7 @@ task downloadAndMakeMupdf(dependsOn: downloadMupdf) << {
 }
 
 task patchMupdf() << {
-    ant.copy(todir: mupdf + "/platform/android/jni", overwrite: true) {
+    ant.copy(todir: mupdf + "/platform/android/jni", overwrite: true, preservelastmodified: true) {
         fileset(dir : 'orion-viewer/jni/mupdf')
         fileset(dir : 'orion-viewer/jni/common')
     }
