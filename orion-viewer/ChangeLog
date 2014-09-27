@@ -1,3 +1,7 @@
+===== 0.55.2 (Sep 27, 2014) =====
+* Fixed small errors in djvu file search
+* Tuned language switching
+
 ===== 0.55.1 (Sep 19, 2014) =====
 * Added rendering for out of page space
 * Added page centering
