@@ -55,6 +55,7 @@ public class OrionBaseActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getOrionContext().applyTheme(this, getViewerType() == Device.VIEWER_ACTIVITY);
+        getOrionContext().updateLanguage(getResources());
 
         if (this instanceof OrionViewerActivity || this instanceof OrionFileManagerActivity) {
             int screenOrientation = getScreenOrientation(getApplicationDefaultOrientation());

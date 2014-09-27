@@ -147,7 +147,7 @@ public class GlobalOptions implements Serializable {
                     } else if (DEBUG.equals(name)) {
                         OptionActions.DEBUG.doAction(activity, false, getBooleanProperty(DEBUG, false));
                     } else if (APP_LANGUAGE.equals(name)) {
-                        context.setLanguage(getAppLanguage());
+                        context.setLangCode(getAppLanguage());
                     }
 
                 }

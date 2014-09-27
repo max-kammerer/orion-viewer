@@ -57,18 +57,26 @@ public class OrionApplication extends Application {
 
     public boolean isTesting = false;
 
+    private String langCode;
+
     public void onCreate() {
         instance = this;
         super.onCreate();
-        setLanguage(getOptions().getAppLanguage());
+        setLangCode(getOptions().getAppLanguage());
     }
 
-    public void setLanguage(String langCode) {
+    public void setLangCode(String langCode) {
+        this.langCode = langCode;
+        updateLanguage(getResources());
+    }
+
+    public void updateLanguage(Resources res) {
         try {
-            Resources res = getResources();
+            Locale defaultLocale = Locale.getDefault();
+            Common.d("Updating locale to " + langCode + " from " + defaultLocale.getLanguage());
             DisplayMetrics dm = res.getDisplayMetrics();
             Configuration conf = res.getConfiguration();
-            conf.locale = ("DEFAULT".equals(langCode)) ? Locale.getDefault() : new Locale(langCode);
+            conf.locale = (langCode == null || "DEFAULT".equals(langCode)) ? defaultLocale : new Locale(langCode);
             res.updateConfiguration(conf, dm);
         } catch (Exception e) {
             Common.d("Error setting locale: "  + langCode, e);
