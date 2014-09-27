@@ -219,16 +219,21 @@ public class OrionViewerActivity extends OrionBaseActivity {
         if (uri != null) {
             Common.d("File URI  = " + uri.toString());
             if ("content".equalsIgnoreCase(uri.getScheme())) {
-                Cursor cursor = getContentResolver().query(uri, new String[]{"_data"}, null, null, null);
+                Cursor cursor = null;
                 try {
+                    cursor = getContentResolver().query(uri, new String[]{"_data"}, null, null, null);
                     if (cursor.moveToFirst()) {
                         String str = cursor.getString(0);
                         if (str != null) {
                             uri = Uri.parse(str);
                         }
                     }
+                } catch (Exception e) {
+                    Common.d(e);
                 } finally {
-                    cursor.close();
+                    if (cursor != null) {
+                        cursor.close();
+                    }
                 }
             }
 
