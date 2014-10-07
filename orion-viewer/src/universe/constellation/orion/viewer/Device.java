@@ -42,7 +42,7 @@ public interface Device {
         public final static String DEVICE = getField("DEVICE");
         public final static String HARDWARE = getField("HARDWARE");
 
-        public final static boolean NOOK2 = "barnesandnoble".equals(MANUFACTURER.toLowerCase()) && ("NOOK".equals(MODEL) || "BNRV350".equals(MODEL) || "BNRV300".equals(MODEL) || "unknown".equals(MODEL)) && "zoom2".equals(DEVICE.toLowerCase());
+        public final static boolean NOOK2 = "barnesandnoble".equals(MANUFACTURER.toLowerCase()) && ("NOOK".equals(MODEL) || "BNRV500".equals(MODEL) || "BNRV350".equals(MODEL) || "BNRV300".equals(MODEL) || "unknown".equals(MODEL)) && "zoom2".equals(DEVICE.toLowerCase());
 
         public final static boolean ONYX_DEVICE = "ONYX".equalsIgnoreCase(MANUFACTURER) && OnyxUtil.isEinkDevice();
 

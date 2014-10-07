@@ -25,6 +25,12 @@ public class Nook2Device extends EInkDevice {
     }
 
     @Override
+    public void doFullUpdate(View view) {
+        Nook2Util.setFullUpdate(activity);
+        super.doFullUpdate(view);
+    }
+
+    @Override
     public boolean onKeyUp(int keyCode, KeyEvent event, OperationHolder holder) {
         switch (keyCode) {
             case NOOK_PAGE_UP_KEY_LEFT:

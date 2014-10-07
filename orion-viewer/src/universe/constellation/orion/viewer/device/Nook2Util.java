@@ -9,13 +9,33 @@ package universe.constellation.orion.viewer.device;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
+import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.Device;
 
 import android.app.Activity;
 
 public class Nook2Util {
 
-    private static final boolean NOOK_120 = Device.Info.NOOK2 && ("1.2.0".equals(Device.Info.getVersion()) || "1.2.1".equals(Device.Info.getVersion()));
+    public static final int REGION_APP_1 = 0;
+    public static final int REGION_APP_2 = 1;
+    public static final int REGION_APP_3 = 2;
+    public static final int REGION_APP_4 = 3;
+
+    public static final int WAVE_GC = 0;
+    public static final int WAVE_GU = 1;
+    public static final int WAVE_DU = 2;
+    public static final int WAVE_A2 = 3;
+    public static final int WAVE_GL16 = 4;
+    public static final int WAVE_AUTO = 5;
+
+    public static final int MODE_BLINK = 0;
+    public static final int MODE_ACTIVE = 1;
+    public static final int MODE_ONESHOT = 2;
+    public static final int MODE_CLEAR = 3;
+    public static final int MODE_ACTIVE_ALL = 4;
+    public static final int MODE_ONESHOT_ALL = 5;
+
+    private static final boolean NOOK_12_13 = Device.Info.NOOK2 && (Device.Info.getVersion().startsWith("1.2") || Device.Info.getVersion().startsWith("1.3"));
 
     private static Class epdControllerClass;
 
@@ -23,6 +43,9 @@ public class Nook2Util {
     private  static Class epdControllerRegionParamsClass;
     private  static Class epdControllerWaveClass;
     private  static Class epdControllerModeClass;
+
+    private static Constructor regionParamsConstructor;
+    private static Method epdControllerSetRegionMethod;
 
     private static Object mEpdController = null;
 
@@ -33,18 +56,19 @@ public class Nook2Util {
     private static Object[] modeEnums;
 
     private static boolean successful = false;
+    
+    private static final int width ;
+    
+    private static final int height;
+
+
     static {
         try {
-            /*
-			 * Loading the Epson EPD Controller Classes
-			 *
-			 * */
-
             epdControllerClass = Class
                         .forName("android.hardware.EpdController");
             epdControllerRegionClass = Class
                     .forName("android.hardware.EpdController$Region");
-            if (NOOK_120) {
+            if (NOOK_12_13) {
             	epdControllerRegionParamsClass = Class
             			.forName("android.hardware.EpdRegionParams");
             	epdControllerWaveClass = Class
@@ -59,127 +83,78 @@ public class Nook2Util {
                     .forName("android.hardware.EpdController$Mode");
 
             if (epdControllerWaveClass.isEnum()) {
-				System.err.println("EpdController Wave Enum successfully retrived.");
+                Common.d("EpdController Wave Enum successfully retrived.");
 				waveEnums = epdControllerWaveClass.getEnumConstants();
 			}
 
 			if (epdControllerRegionClass.isEnum()) {
-				System.err.println("EpdController Region Enum successfully retrived.");
+				Common.d("EpdController Region Enum successfully retrived.");
 				regionEnums = epdControllerRegionClass.getEnumConstants();
 			}
 
 
             if (epdControllerModeClass.isEnum()) {
-				System.err.println("EpdController Region Enum successfully retrived.");
+				Common.d("EpdController Region Enum successfully retrived.");
 				modeEnums = epdControllerModeClass.getEnumConstants();
-				System.err.println(modeEnums);
+                Common.d(modeEnums.toString());
 			}
+
+            regionParamsConstructor = epdControllerRegionParamsClass
+                    .getConstructor(new Class[] { Integer.TYPE, Integer.TYPE,
+                            Integer.TYPE, Integer.TYPE, epdControllerWaveClass});
+
+            epdControllerSetRegionMethod = epdControllerClass.getMethod(
+                    "setRegion", new Class[] { String.class,
+                            epdControllerRegionClass,
+                            epdControllerRegionParamsClass, epdControllerModeClass });
 
             successful = true;
         } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            Common.d(e); //To change body of catch statement use File | Settings | File Templates.
         }
 
+        if ("BNRV500".equals(Device.Info.MODEL)) {
+            width = 758;
+            height = 1024;
+        } else {
+            width = 600;
+            height = 800;
+        }
     }
 
-    //	public static void exitA2Mode() {FIXME: it is never used so no 1.2.* corrections
-//		System.err.println("Orion::exitA2Mode");
-//		try {
-//
-//			Constructor RegionParamsConstructor = epdControllerRegionParamsClass.getConstructor(new Class[] { Integer.TYPE, Integer.TYPE,
-//							Integer.TYPE, Integer.TYPE, epdControllerWaveClass, Integer.TYPE });
-//
-//			Object localRegionParams = RegionParamsConstructor.newInstance(new Object[] { 0, 0, 600, 800, waveEnums[3], 16}); // Wave = A2
-//
-//			Method epdControllerSetRegionMethod = epdControllerClass.getMethod("setRegion", new Class[] { String.class,
-//							epdControllerRegionClass,
-//							epdControllerRegionParamsClass });
-//			epdControllerSetRegionMethod.invoke(null, new Object[] { "OrionView", regionEnums[2], localRegionParams });
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
+    public static void setGL16Mode(Activity activity) {
+        setMode(REGION_APP_3, WAVE_GU, MODE_ONESHOT, activity);
+    }
 
-//	public static void enterA2Mode() {FIXME: it is never used so no 1.2.* corrections
-//		System.err.println("Orion::enterA2Mode");
-//		try {
-//
-//			Constructor RegionParamsConstructor = epdControllerRegionParamsClass.getConstructor(new Class[] { Integer.TYPE, Integer.TYPE,
-//							Integer.TYPE, Integer.TYPE, epdControllerWaveClass, Integer.TYPE });
-//
-//			Object localRegionParams = RegionParamsConstructor.newInstance(new Object[] { 0, 0, 600, 800, waveEnums[2], 16}); // Wave = DU
-//
-//			Method epdControllerSetRegionMethod = epdControllerClass.getMethod("setRegion", new Class[] { String.class,
-//							epdControllerRegionClass,
-//							epdControllerRegionParamsClass });
-//			epdControllerSetRegionMethod.invoke(null, new Object[] { "Orion", regionEnums[2], localRegionParams });
-//
-//			Thread.sleep(100L);
-//			localRegionParams = RegionParamsConstructor.newInstance(new Object[] { 0, 0, 600, 800, waveEnums[3], 14}); // Wave = A2
-//			epdControllerSetRegionMethod.invoke(null, new Object[] { "Orion", regionEnums[2], localRegionParams});
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//
-//	}
+    public static void setFullUpdate(Activity activity) {
+        setMode(REGION_APP_3, WAVE_GC, MODE_ONESHOT_ALL, activity);
+    }
 
-	public static void setGL16Mode(Activity activity) {
-		System.err.println("Orion::setGL16Mode");
+    public static void setMode(int region, int wave, int mode, Activity activity) {
+		Common.d("Nook screen update: region " + region + ", wave " + wave + ", " + mode);
 		try {
             if (successful) {
-            	if (NOOK_120 && mEpdController == null) {
+            	if (NOOK_12_13 && mEpdController == null) {
             		Constructor[] EpdControllerConstructors = epdControllerClass.getConstructors();
 					mEpdController = EpdControllerConstructors[0].newInstance(new Object[] { activity });
 				}
-                Constructor RegionParamsConstructor = epdControllerRegionParamsClass
-                        .getConstructor(new Class[] { Integer.TYPE, Integer.TYPE,
-                                Integer.TYPE, Integer.TYPE, epdControllerWaveClass});
 
-                Object localRegionParams = RegionParamsConstructor
-                        .newInstance(new Object[] { 0, 0, 600, 800, waveEnums[1]}); // Wave = GU
+                Object localRegionParams = regionParamsConstructor
+                        .newInstance(new Object[] { 0, 0, width, height, waveEnums[wave]});
 
-                Method epdControllerSetRegionMethod = epdControllerClass.getMethod(
-                        "setRegion", new Class[] { String.class,
-                                epdControllerRegionClass,
-                                epdControllerRegionParamsClass, epdControllerModeClass });
-                if (NOOK_120) {
+                if (NOOK_12_13) {
                 	epdControllerSetRegionMethod
 					.invoke(mEpdController, new Object[] { "Orion",
-							regionEnums[2], localRegionParams, modeEnums[2] }); // Mode = ONESHOT_ALL
+                                regionEnums[region], localRegionParams, modeEnums[mode] });
                 } else {
 	                epdControllerSetRegionMethod
 	                        .invoke(null, new Object[] { "Orion",
-	                                regionEnums[2], localRegionParams, modeEnums[2] }); // Mode = ONESHOT_ALL
+	                                regionEnums[region], localRegionParams, modeEnums[mode] });
                 }
             }
 		} catch (Exception e) {
-			e.printStackTrace();
+			Common.d(e);
 		}
 	}
 
-//	public static void setDUMode() {FIXME: it is never used so no 1.2.* corrections
-//		System.err.println("Orion::setDUMode");
-//		try {
-//            if (successful) {
-//                Constructor RegionParamsConstructor = epdControllerRegionParamsClass
-//                        .getConstructor(new Class[] { Integer.TYPE, Integer.TYPE,
-//                                Integer.TYPE, Integer.TYPE, epdControllerWaveClass,
-//                                Integer.TYPE });
-//
-//                Object localRegionParams = RegionParamsConstructor
-//                        .newInstance(new Object[] { 0, 0, 600, 800, waveEnums[2],
-//                                14 });
-//
-//                Method epdControllerSetRegionMethod = epdControllerClass.getMethod(
-//                        "setRegion", new Class[] { String.class,
-//                                epdControllerRegionClass,
-//                                epdControllerRegionParamsClass });
-//                epdControllerSetRegionMethod
-//                        .invoke(null, new Object[] { "Orion",
-//                                regionEnums[2], localRegionParams });
-//            }
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
 }
