@@ -83,12 +83,6 @@ android {
                 abiFilter "mips"
             }
         }
-        android {
-            versionCode = 0
-            ndk {
-                abiFilters "armeabi-v7a", "armeabi"
-            }
-        }
     }
 
     // make per-variant version code
