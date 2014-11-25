@@ -2,7 +2,7 @@
 <!--
   ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
   ~
-  ~ Copyright (C) 2011-2013  Michael Bogdanov & Co
+  ~ Copyright (C) 2011-2014  Michael Bogdanov & Co
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
@@ -24,41 +24,39 @@
     <string name="action_menu">Hauptmenü</string>
     <string name="action_next_page">Nächste Seite</string>
     <string name="action_prev_page">Vorherige Seite</string>
-    <string name="action_first_page">Erste Seite</string>
-    <string name="action_last_page">Letzte Seite</string>
-    <string name="action_crop_page">Zuschneiden</string>
-    <string name="action_zoom_page">Zoomen</string>
-    <string name="action_rotation_page">Bildschirmausrichtung</string>
-    <string name="action_options_page">Einstellungen</string>
-    <string name="action_goto_page">Gehe zu...</string>
-    <string name="action_dictionary">Wörterbuch öffnen</string>
-    <string name="action_open">Buch öffnen</string>
-    <string name="action_add_bookmark">Lesezeichen hinzufügen</string>
-    <string name="action_open_bookmarks">Lesezeichen verwalten</string>
-    <string name="action_full_screen">Vollbild an/aus</string>
-    <string name="action_close">Anwendung schließen</string>
-
-    <string name="action_crop_left">Linken Rand abschneiden</string>
-    <string name="action_crop_right">Rechten Rand abschneiden</string>
-    <string name="action_crop_top">Oberen Rand abschneiden</string>
-    <string name="action_crop_bottom">Unteren Rand abschneiden</string>
-
-    <string name="action_uncrop_left">Linken Rand vergrößern</string>
-    <string name="action_uncrop_right">Rechten Rand vergrößern</string>
-    <string name="action_uncrop_top">Oberen Rand vergrößern</string>
-    <string name="action_uncrop_bottom">Unteren Rand vergrößern</string>
-    <string name="action_inverse_crops">Zwischen abgeschnittenem/vergrößertem Rand wechseln</string>
-    <string name="action_switch_long_crop">Zwischen kleinem/großem Zuschnitt wechseln</string>
-
     <string name="action_next_10">10 Seiten vor</string>
     <string name="action_prev_10">10 Seiten zurück</string>
-
-    <string name="action_rotate_90">Um 90/-90 Grad drehen</string>
-    <string name="action_rotate_270">Um 270/-270 Grad drehen</string>
-
+    <string name="action_first_page">Erste Seite</string>
+    <string name="action_last_page">Letzte Seite</string>
+    <string name="action_outline">@string/menu_outline_text</string>
+    <string name="action_crop_page">@string/menu_crop_text</string>
     <string name="action_select_text">@string/menu_select_text</string>
-
+    <string name="action_add_bookmark">@string/menu_add_bookmark_item</string>
+    <string name="action_open_bookmarks">@string/menu_bookmarks_text</string>
+    <string name="action_full_screen">Vollbild an/aus</string>
+    <string name="action_switch_color_mode">Farbmodus ändern</string>
+    <string name="action_book_options">Dokument-Einstellungen</string>
+    <string name="action_zoom_page">@string/menu_zoom_text</string>
+    <string name="action_layout_page">@string/menu_navigation_text</string>
+    <string name="action_goto_page">@string/menu_goto_text</string>
+    <string name="action_rotation_page">@string/menu_rotation_text</string>
+    <string name="action_dictionary">@string/menu_open_dictionary_text</string>
+    <string name="action_open">@string/menu_open_text</string>
+    <string name="action_options_page">@string/menu_options_text</string>
+    <string name="action_close">@string/menu_exit_text</string>
     <string name="action_fit_width">Auf Breite anpassen</string>
     <string name="action_fit_height">Auf Höhe anpassen</string>
     <string name="action_fit_page">Auf Seite anpassen</string>
+    <string name="action_rotate_90">Um 90/-90 Grad drehen</string>
+    <string name="action_rotate_270">Um 270/-270 Grad drehen</string>
+    <string name="action_inverse_crops">Zwischen beschnittenem/vergrößertem Rand wechseln</string>
+    <string name="action_switch_long_crop">Zwischen kleinem/großem Zuschnitt wechseln</string>
+    <string name="action_crop_left">Linken Rand beschneiden</string>
+    <string name="action_uncrop_left">Linken Rand vergrößern</string>
+    <string name="action_crop_right">Rechten Rand beschneiden</string>
+    <string name="action_uncrop_right">Rechten Rand vergrößern</string>
+    <string name="action_crop_top">Oberen Rand beschneiden</string>
+    <string name="action_uncrop_top">Oberen Rand vergrößern</string>
+    <string name="action_crop_bottom">Unteren Rand beschneiden</string>
+    <string name="action_uncrop_bottom">Unteren Rand vergrößern</string>
 </resources>

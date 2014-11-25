@@ -2,7 +2,7 @@
 <!--
   ~ Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
   ~
-  ~ Copyright (C) 2011-2013  Michael Bogdanov & Co
+  ~ Copyright (C) 2011-2014  Michael Bogdanov & Co
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
@@ -20,48 +20,31 @@
 
 <!--Author: Johannes Römer-->
 <resources>
-    <string name="zoom">Öffnet das Einstellungsfenster zum Zoomen. Ein Zoom-Wert von 0 passt die Ansicht auf die Breite der Seite an.</string>
-    <string name="rotation">Dreht Dokumente um 90 Grad im Uhrzeigersinn und bei langem Klick gegen den Uhrzeigersinn.</string>
-
-    <string name="crop">Öffnet das Einstellungsfenster zum Zuschneiden der Ränder. Die Werte sind relativ zur Seitengröße. Ein langer Klick auf plus oder minus ändert den Zuschnittswert um 10%. Negative Werte vergrößern die Ränder.</string>
-
-    <string name="apply">Aktuelle Einstellungen anwenden.</string>
-    <string name="escape">Zurück/Abbruch.</string>
-
     <string name="general_usage">Hinweise zur Benutzung:</string>
-
-    <string name="general_usage_step1">1. Dokument öffnen (die Ansicht wird standardmäßig auf die Breite der Seite angepasst)
-        </string>
-
+    <string name="general_usage_step1">
+        1. Dokument öffnen (die Ansicht wird standardmäßig auf die Breite der Seite angepasst)</string>
     <string name="general_usage_step2">
-        2. Gewünschte Ausrichtung auswählen: Hoch- oder Querformat
-        </string>
-
+        2. Gewünschte Ausrichtung auswählen: Hoch- oder Querformat</string>
     <string name="general_usage_step3">
-        3. Ränder zuschneiden (die Schriftgröße wird automatisch an die geänderten Seitenränder angepasst)
-        </string>
+        3. Ränder zuschneiden (die Größe des Textes wird automatisch an die geänderten Seitenränder angepasst)</string>
+    <string name="general_usage_step4">4. Viel Spaß beim Lesen!</string>
 
-    <string name="general_usage_step4">
-        4. Viel Spaß beim Lesen!</string>
-
-    <!--<string name="help_taps">-->
-        <!--Click on screen - go to next page, long click - go to prev page.</string>-->
-
-    <string name="option_help">
-        Anwendungs-Einstellungen</string>
-
+    <string name="zoom">
+        Öffnet das Einstellungsfenster zum Zoomen. Ein Zoom-Wert von 0 passt die Ansicht auf die Breite der Seite an.</string>
+    <string name="crop">
+        Öffnet das Einstellungsfenster zum Zuschneiden der Ränder. Die Angabe der Werte erfolgt relativ zur Seitengröße. Langes Tippen auf plus oder minus ändert den Zuschnittswert um 10%. Negative Werte vergrößern die Ränder.</string>
     <string name="navigation_help">
-        Öffnet das Einstellungsfenster für den Blätter-Modus. Beim Lesen von Comics oder dem Betrachten von Büchern mit vielen Bildern kann hier der jeweils passende Modus zur Verschiebung des angezeigten Bildausschnitts beim Weiterblättern ausgewählt werden.</string>
-
+        Öffnet das Einstellungsfenster für den Anzeigemodus. Beim Lesen von Comics oder dem Betrachten von Büchern mit vielen Bildern kann hier der jeweils passende Modus zur Verschiebung des angezeigten Bildausschnitts beim Weiterblättern ausgewählt werden.</string>
     <string name="dictionary_help">
-        Öffnet externes Wörterbuch. Die gewünschte Wörterbuch-Anwendung muss in den Einstellungen ausgewählt werden.</string>
-
+        Öffnet ein externes Wörterbuch. Die gewünschte Wörterbuch-Anwendung muss in den Einstellungen ausgewählt werden.</string>
+    <string name="option_help">Anwendungs-Einstellungen</string>
     <string name="tap_help">
         Tap-Zonen ermöglichen es dem Anwender, die verschiedenen Bereiche des Bildschirms mit häufig verwendeten Aktionen zu verknüpfen.
-        Es gibt 3x3 Sektionen, die separaten Befehlen für kurze (oberer Eintrag) und lange Klicks (unterer Eintrag) zugeordnet werden können.</string>
-
+        Es gibt 3x3 Bereiche, die separaten Befehlen für kurzes (oberer Eintrag) und langes Antippen (unterer Eintrag) zugeordnet werden können.</string>
     <string name="bookmarks_export_help">
-        Erlaubt dem Anwender das Exportieren von Lesezeichen (wahlweise für alle Bücher oder nur das aktuelle Buch).
+        Erlaubt dem Anwender das Exportieren von Lesezeichen (wahlweise für alle Dokumente oder nur das aktuelle Dokument).
         Die Lesezeichen werden in einer XML-Datei mit dem Namen des geöffneten Buchs und dem Suffix [bookmarks.xml oder all_bookmarks.xml] abgelegt.
         Diese Option ist im Lesezeichen-Menü zu finden.</string>
+    <string name="apply">Aktuelle Einstellungen anwenden.</string>
+    <string name="escape">Zurück/Abbruch.</string>
 </resources>

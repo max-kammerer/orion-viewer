@@ -20,6 +20,12 @@
 
 <!--Author: Johannes Römer-->
 <resources>
-    <string name="warn_msg_no_dictionary">Wörterbuch unauffindbar!</string>
-    <string name="ex_msg_operation_failed">Operation fehlgeschlagen!</string>
+    <string name="msg_dialog_search">Suchen</string>
+    <string name="msg_searching">Suchen…</string>
+    <string name="warn_text_not_found">Der gesuchte Text konnte nicht gefunden werden!</string>
+    <string name="warn_no_further_occurrences_found">Keine weiteren Treffer!</string>
+    <string name="msg_dialog_dismis">Abbrechen</string>
+    <string name="msg_error">Fehler</string>
+    <string name="msg_warning">Warnung</string>
+    <string name="msg_specify_keyword_for_search">Kein Suchbegriff angegeben!</string>
 </resources>
