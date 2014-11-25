@@ -82,12 +82,14 @@
         <item>FORA</item>
         <item>COLORDICT</item>
         <item>AARD</item>
+        <item>AARD2</item>
         <item>LINGVO</item>
   </string-array>
     <string-array name="dictionaries_desc">
         <item>Fora Dictionary</item>
         <item>Color Dict/Golden Dict</item>
         <item>Aard Dictionary</item>
+        <item>Aard2 Dictionary</item>
         <item>Abbyy Lingvo</item>
   </string-array>
 

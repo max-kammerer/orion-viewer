@@ -27,16 +27,20 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
-import pl.polidea.treeview.InMemoryTreeStateManager;
-import pl.polidea.treeview.TreeViewList;
-import universe.constellation.orion.viewer.view.OrionDrawScene;
-import universe.constellation.orion.viewer.outline.OutlineAdapter;
-import universe.constellation.orion.viewer.outline.OutlineItem;
-import universe.constellation.orion.viewer.prefs.*;
-import universe.constellation.orion.viewer.util.ColorUtil;
-
 import java.util.HashMap;
 import java.util.List;
+
+import pl.polidea.treeview.InMemoryTreeStateManager;
+import pl.polidea.treeview.TreeViewList;
+import universe.constellation.orion.viewer.outline.OutlineAdapter;
+import universe.constellation.orion.viewer.outline.OutlineItem;
+import universe.constellation.orion.viewer.prefs.GlobalOptions;
+import universe.constellation.orion.viewer.prefs.OrionApplication;
+import universe.constellation.orion.viewer.prefs.OrionBookPreferences;
+import universe.constellation.orion.viewer.prefs.OrionPreferenceActivity;
+import universe.constellation.orion.viewer.prefs.TemporaryOptions;
+import universe.constellation.orion.viewer.util.ColorUtil;
+import universe.constellation.orion.viewer.view.OrionDrawScene;
 
 /**
  * User: mike
@@ -290,12 +294,16 @@ public enum Action {
                 action = Intent.ACTION_SEARCH;
                 intent.setClassName("aarddict.android", "aarddict.android.LookupActivity");
                 queryText = "query";
-                parameter = parameter == null ? "" : parameter;
-            } else if ("LINGVO".equals(dict)) {
+                parameter = safeParameter(parameter);
+            } else if ("AARD2".equals(dict)) {
+                action = "aard2.lookup";
+                queryText = "query";
+                parameter = safeParameter(parameter);
+            }  else if ("LINGVO".equals(dict)) {
                 action = "com.abbyy.mobile.lingvo.intent.action.TRANSLATE";
                 intent.setPackage("com.abbyy.mobile.lingvo.market");
                 queryText = "com.abbyy.mobile.lingvo.intent.extra.TEXT";
-                parameter = parameter == null ? "" : parameter;
+                parameter = safeParameter(parameter);
             }
 
             if (action != null) {
@@ -312,6 +320,10 @@ public enum Action {
                     activity.showWarning(string + ": " + dict + ": " + ex.getMessage());
                 }
             }
+        }
+
+        private Object safeParameter(Object parameter) {
+            return parameter == null ? "" : parameter;
         }
     },
 
