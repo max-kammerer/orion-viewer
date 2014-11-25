@@ -1,6 +1,6 @@
 To build Orion Viewer you will need:
     android-sdk-r23+
-    gradle 1.12+
+    gradle 2.1+
 
     for building native libs you also need
         android-ndk-r9d+

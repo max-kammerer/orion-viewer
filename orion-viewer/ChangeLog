@@ -1,3 +1,8 @@
+===== 0.55.3 (Nov 25, 2014) =====
+* Updated german translation
+* Added support for AARD2 dictionary
+* Supported fast e-ink refresh on Nook GL 2013
+
 ===== 0.55.2 (Sep 27, 2014) =====
 * Fixed small errors in djvu file search
 * Tuned language switching

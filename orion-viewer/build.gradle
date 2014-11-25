@@ -9,7 +9,7 @@ if (doSigning) {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:19.1.+'
+    compile 'com.android.support:appcompat-v7:20.0.0'
     compile project(':tree-view-list-android')
     androidTestCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
