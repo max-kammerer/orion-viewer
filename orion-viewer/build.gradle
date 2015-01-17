@@ -9,14 +9,14 @@ if (doSigning) {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:20.0.0'
+    compile 'com.android.support:appcompat-v7:21.0.3'
     compile project(':tree-view-list-android')
     androidTestCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion '19.1.0'
+    compileSdkVersion 21
+    buildToolsVersion '21.1.2'
 
     defaultConfig {
         versionCode = orionVersionCode
@@ -48,8 +48,10 @@ android {
     buildTypes {
         release {
             applicationVariants.all { variant ->
-                def file = variant.outputFile
-                variant.outputFile = new File(file.parent, file.name.replace("orion-viewer-", "orion_viewer_" + defaultConfig.versionName + "_").replace("-release", ""))
+                variant.outputs.each { output ->
+                    def file = output.outputFile
+                    output.outputFile = new File(file.parent, file.name.replace("orion-viewer-", "orion_viewer_" + defaultConfig.versionName + "_").replace("-release", ""))
+                }
             }
 
             if (doSigning) {
