@@ -5,6 +5,4 @@ ext {
 
     mupdf_libs = mupdf + '/platform/android/libs'
     djvu_libs = djvu + '/android/libs/'
-    /*!!!!SPECIFY path to your ndk!!!*/
-    ndkPath = "/home/mike/devel/tools/android/android-ndk-r10/"
 }

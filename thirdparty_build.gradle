@@ -1,7 +1,11 @@
 /*CHANGE necessary properties in project.gradle*/
 apply from: 'project.gradle'
-
 defaultTasks 'buildNativeLibs'
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def ndkDir = properties.getProperty('ndkDir')
+
 
 buildscript {
     repositories { mavenCentral() }
@@ -33,7 +37,7 @@ task patchDjvu << {
 task patchAndBuildDjvu(dependsOn: [patchDjvu]) << {
     exec {
         workingDir file(djvu + "/android")
-        commandLine ndkPath + "ndk-build"
+        commandLine ndkDir + "/ndk-build"
     }
 }
 
@@ -82,7 +86,7 @@ task patchMupdf() << {
 task patchAndBuildMupdf(dependsOn: [patchMupdf]) << {
     exec {
         workingDir file(mupdf + "/platform/android")
-        commandLine ndkPath + "ndk-build"
+        commandLine ndkDir + "/ndk-build"
     }
 }
 
