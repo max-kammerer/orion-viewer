@@ -20,7 +20,7 @@ open class ActivityBaseTest : ActivityUnitTestCase<OrionViewerActivity>(javaClas
         startActivity(intent, null, null)!!.getOrionContext()!!.isTesting = true
     }
 
-    override fun getTestContext(): Context {
+    override fun getOrionTestContext(): Context {
         return getInstrumentation()!!.getContext()!!;
     }
 

@@ -23,7 +23,7 @@ open class BaseTest : AndroidTestCase(), TestUtil {
 
     public val device: AndroidDevice = AndroidDevice()
 
-    override fun getTestContext(): Context {
+    override fun getOrionTestContext(): Context {
         val m = javaClass<AndroidTestCase>().getMethod("getTestContext")
         val testContext = m.invoke(this) as Context
         return testContext

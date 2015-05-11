@@ -87,7 +87,7 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
     }
 
     fun prepareEngine(): Controller {
-        val doc = openTestDocument(TestUtil.SICP)
+        val doc = openTestBook(TestUtil.SICP)
 
         var layoutStrategy: LayoutStrategy = SimpleLayoutStrategy(doc, deviceSize)
         val renderer = SingleThreadRenderer(getActivity(), view!!, layoutStrategy, doc, Bitmap.Config.ARGB_8888)
@@ -104,7 +104,7 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
     }
 
 
-    override fun getTestContext(): Context {
+    override fun getOrionTestContext(): Context {
         return getInstrumentation()!!.getContext()!!;
     }
 }

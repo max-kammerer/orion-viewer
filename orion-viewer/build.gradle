@@ -40,9 +40,11 @@ android {
         }
 
         //test
-        androidTest.setRoot('tests')
-        androidTest.java.srcDirs += 'tests/kotlin'
-        androidTest.kotlin.srcDirs += 'tests/kotlin'
+        androidTest {
+            setRoot('androidTest')
+            java.srcDirs += 'androidTest/kotlin'
+            kotlin.srcDirs += 'androidTest/kotlin'
+        }
     }
 
     buildTypes {

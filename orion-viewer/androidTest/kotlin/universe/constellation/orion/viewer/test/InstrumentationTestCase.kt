@@ -13,7 +13,7 @@ import universe.constellation.orion.viewer.Controller
 
 open class InstrumentationTestCase : ActivityInstrumentationTestCase2<OrionViewerActivity>(javaClass<OrionViewerActivity>()), TestUtil {
 
-    override fun getTestContext(): Context {
+    override fun getOrionTestContext(): Context {
         return getInstrumentation()!!.getContext()!!
     }
 
