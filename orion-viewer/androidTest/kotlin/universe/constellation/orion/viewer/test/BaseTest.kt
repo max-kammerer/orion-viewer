@@ -19,7 +19,7 @@ import universe.constellation.orion.viewer.device.AndroidDevice
  * Date: 19.10.13
  * Time: 13:45
  */
-open class BaseTest : AndroidTestCase(), TestUtil {
+abstract class BaseTest : AndroidTestCase(), TestUtil {
 
     public val device: AndroidDevice = AndroidDevice()
 

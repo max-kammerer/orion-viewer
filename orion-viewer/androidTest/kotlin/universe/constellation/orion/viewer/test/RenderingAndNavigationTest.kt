@@ -47,8 +47,16 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
         view = MyView(getActivity().getView()!!)
     }
 
-    fun testProperPages() {
-        val controller = prepareEngine()
+    fun testProperPagesSkip() {
+        doTestProperPages(TestUtil.SICP)
+    }
+
+    fun testProperPagesAlice() {
+        doTestProperPages(TestUtil.ALICE)
+    }
+
+    fun doTestProperPages(book: String) {
+        val controller = prepareEngine(book)
         val screens = 21
 
         val nexts = arrayListOf<IntArray>()
@@ -86,8 +94,8 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
         list.add(pixels)
     }
 
-    fun prepareEngine(): Controller {
-        val doc = openTestBook(TestUtil.SICP)
+    fun prepareEngine(book: String): Controller {
+        val doc = openTestBook(book)
 
         var layoutStrategy: LayoutStrategy = SimpleLayoutStrategy(doc, deviceSize)
         val renderer = SingleThreadRenderer(getActivity(), view!!, layoutStrategy, doc, Bitmap.Config.ARGB_8888)

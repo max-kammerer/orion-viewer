@@ -11,16 +11,17 @@ import junit.framework.Assert.*
 class OpenBookTest : BaseTest() {
 
     fun testOpenScip() {
-        val doc = openTestBook(TestUtil.SICP)
-        assertNotNull(doc)
-        assertEquals(762, doc.getPageCount())
-        doc.destroy()
+        openBook(TestUtil.SICP, 762)
     }
 
     fun testOpenAlice() {
-        val doc = openTestBook(TestUtil.ALICE)
+        openBook(TestUtil.ALICE, 77)
+    }
+
+    private fun openBook(book: String, pageCount: Int) {
+        val doc = openTestBook(book)
         assertNotNull(doc)
-        assertEquals(77, doc.getPageCount())
+        assertEquals(pageCount, doc.getPageCount())
         doc.destroy()
     }
 }
