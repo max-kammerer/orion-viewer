@@ -19,6 +19,7 @@ public class OnyxDevice extends EInkDevice {
     private static Object[] updateModeEnum;
 
     private static Object fastUpdateEntry;
+    private static Object fullUpdateEntry;
 
     private static Method invalidate;
 
@@ -41,13 +42,15 @@ public class OnyxDevice extends EInkDevice {
                     if ("GU".equals(entry.toString())) {
                         fastUpdateEntry = entry;
                     }
+
+                    if ("GC".equals(entry.toString())) {
+                        fullUpdateEntry = entry;
+                    }
                     Common.d("Fast update entry " + entry);
                 }
             }
 
-            if (fastUpdateEntry != null) {
-                isSuccessful = true;
-            }
+            isSuccessful = fastUpdateEntry != null && fullUpdateEntry != null;
         } catch (Exception e) {
             Common.d(e);
         } finally {
@@ -56,18 +59,33 @@ public class OnyxDevice extends EInkDevice {
     }
 
     @Override
+    public void doFullUpdate(View view) {
+        if (successful) {
+            System.out.println("Do full update " + fullUpdateEntry);
+            doUpdate(view, fullUpdateEntry);
+        } else {
+            super.doFullUpdate(view);
+        }
+    }
+
+    @Override
     public void doPartialUpdate(View view) {
         if (successful) {
-            try {
-                invalidate.invoke(null, view, fastUpdateEntry);
-            } catch (IllegalAccessException e) {
-                Common.d(e);
-                super.doPartialUpdate(view);
-            } catch (InvocationTargetException e) {
-                Common.d(e);
-                super.doPartialUpdate(view);
-            }
+            System.out.println("Do partial update " + fastUpdateEntry);
+            doUpdate(view, fastUpdateEntry);
         } else {
+            super.doPartialUpdate(view);
+        }
+    }
+
+    private void doUpdate(View view, Object fastUpdateEntry) {
+        try {
+            invalidate.invoke(null, view, fastUpdateEntry);
+        } catch (IllegalAccessException e) {
+            Common.d(e);
+            super.doPartialUpdate(view);
+        } catch (InvocationTargetException e) {
+            Common.d(e);
             super.doPartialUpdate(view);
         }
     }
