@@ -71,6 +71,8 @@ public class OrionDrawScene extends View implements OrionImageView {
 
     private boolean showStatusBar;
 
+    private boolean drawOffPage;
+
     private int statusBarHeight = DEFAULT_STATUS_BAR_SIZE;
 
     private String title = "";
@@ -112,18 +114,11 @@ public class OrionDrawScene extends View implements OrionImageView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-//        GlobalOptions options = ((OrionViewerActivity)getContext()).getGlobalOptions();
-//        if (options.isEinkOptimization()) {
-//            if (counter < options.getEinkRefreshAfter()) {
-//                Nook2Util.setGL16Mode((Activity)getContext());
-//            } else {
-//                counter = 0;
-//            }
-//        }
-
-        long backgroundStart = System.currentTimeMillis();
-        canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), backgroundPaint);
-        Common.d("OrionView: background rendering takes " + 0.001f * (System.currentTimeMillis() - backgroundStart) + " s");
+        if (drawOffPage) {
+            long backgroundStart = System.currentTimeMillis();
+            canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), backgroundPaint);
+            Common.d("OrionView: background rendering takes " + 0.001f * (System.currentTimeMillis() - backgroundStart) + " s");
+        }
 
         canvas.save();
         canvas.translate(0f, statusBarHeight);
@@ -191,12 +186,14 @@ public class OrionDrawScene extends View implements OrionImageView {
         int textY = statusBarHeight - 3;
         int sideMargin = 5;
 
-        String textToRender;
-        int color = defaultPaint.getColor();
-        defaultPaint.setColor(Color.WHITE);
-        canvas.drawRect(0, 0, getWidth(), statusBarHeight, backgroundPaint);
-        defaultPaint.setColor(color);
+        if (drawOffPage) {
+            int color = defaultPaint.getColor();
+            defaultPaint.setColor(Color.WHITE);
+            canvas.drawRect(0, 0, getWidth(), statusBarHeight, backgroundPaint);
+            defaultPaint.setColor(color);
+        }
 
+        String textToRender;
         if (info == null) {
             textToRender =  "? /" + pageCount + " ";
         } else {
@@ -294,10 +291,6 @@ public class OrionDrawScene extends View implements OrionImageView {
         this.inScaling = false;
     }
 
-    public boolean isShowStatusBar() {
-        return showStatusBar;
-    }
-
     public void setShowOffset(boolean showOffset) {
         boolean oldOffset = this.showOffset;
         this.showOffset = showOffset;
@@ -314,6 +307,10 @@ public class OrionDrawScene extends View implements OrionImageView {
         } else {
             this.showStatusBar = showStatusBar;
         }
+    }
+
+    public void setDrawOffPage(boolean drawOffPage) {
+        this.drawOffPage = drawOffPage;
     }
 
     public void addTask(DrawTask drawTask) {

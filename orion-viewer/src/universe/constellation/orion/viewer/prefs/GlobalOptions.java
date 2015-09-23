@@ -21,6 +21,8 @@ package universe.constellation.orion.viewer.prefs;
 
 import android.content.SharedPreferences;
 import universe.constellation.orion.viewer.*;
+import universe.constellation.orion.viewer.device.EInkDevice;
+import universe.constellation.orion.viewer.view.OrionDrawScene;
 
 import java.io.Serializable;
 import java.util.*;
@@ -51,6 +53,8 @@ public class GlobalOptions implements Serializable {
     public final static String APPLY_AND_CLOSE = "APPLY_AND_CLOSE";
 
     public final static String FULL_SCREEN = "FULL_SCREEN";
+
+    public final static String DRAW_OFF_PAGE = "DRAW_OFF_PAGE";
 
     public final static String SHOW_ACTION_BAR = "SHOW_ACTION_BAR";
 
@@ -148,6 +152,10 @@ public class GlobalOptions implements Serializable {
                         OptionActions.DEBUG.doAction(activity, false, getBooleanProperty(DEBUG, false));
                     } else if (APP_LANGUAGE.equals(name)) {
                         context.setLangCode(getAppLanguage());
+                    } else if (DRAW_OFF_PAGE.equals(name)) {
+                        OrionDrawScene view = activity.getView();
+                        view.setDrawOffPage(isDrawOffPage());
+                        view.invalidate();
                     }
 
                 }
@@ -264,6 +272,10 @@ public class GlobalOptions implements Serializable {
 
     public boolean isFullScreen() {
         return getBooleanProperty(FULL_SCREEN, false);
+    }
+
+    public boolean isDrawOffPage() {
+        return getBooleanProperty(DRAW_OFF_PAGE, !(OrionApplication.instance.getDevice() instanceof EInkDevice));
     }
 
     public boolean isActionBarVisible() {
