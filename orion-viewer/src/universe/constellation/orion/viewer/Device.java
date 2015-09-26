@@ -56,6 +56,8 @@ public interface Device {
 
         public final static boolean TEXET_TB576HD = "texet".equalsIgnoreCase(MANUFACTURER) && "TB-576HD".equalsIgnoreCase(DEVICE) && "TB-576HD".equalsIgnoreCase(MODEL);
 
+        public final static boolean MAGICBOOK_BOEYE_T62D = "T62D".equalsIgnoreCase(DEVICE) && "rk30sdk".equalsIgnoreCase(MODEL);
+
 		public static String getField(String name) {
             try {
                 return (String) Build.class.getField(name).get(null);

@@ -22,6 +22,7 @@ package universe.constellation.orion.viewer;
 import android.util.Log;
 import universe.constellation.orion.viewer.device.AndroidDevice;
 import universe.constellation.orion.viewer.device.EdgeDevice;
+import universe.constellation.orion.viewer.device.MagicBookBoeyeDevice;
 import universe.constellation.orion.viewer.device.Nook2Device;
 import universe.constellation.orion.viewer.device.OnyxDevice;
 import universe.constellation.orion.viewer.device.texet.TexetTB176FLDevice;
@@ -75,6 +76,12 @@ public class Common {
             Common.d("Using Onyx Device");
             return new OnyxDevice();
         }
+
+        if (Device.Info.MAGICBOOK_BOEYE_T62D) {
+            Common.d("Using MAGICBOOK_BOEYE_T62D");
+            return new MagicBookBoeyeDevice();
+        }
+
 
         Common.d("Using default android device");
         return new AndroidDevice();

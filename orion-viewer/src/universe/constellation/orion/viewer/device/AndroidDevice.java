@@ -75,7 +75,6 @@ public class AndroidDevice implements Device {
                         return true;
                     }
             }
-
         }
 
         switch (keyCode) {
