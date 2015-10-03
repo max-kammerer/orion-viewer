@@ -21,7 +21,7 @@ class OpenBookTest : BaseTest() {
     private fun openBook(book: String, pageCount: Int) {
         val doc = openTestBook(book)
         assertNotNull(doc)
-        assertEquals(pageCount, doc.getPageCount())
+        assertEquals(pageCount, doc.pageCount)
         doc.destroy()
     }
 }

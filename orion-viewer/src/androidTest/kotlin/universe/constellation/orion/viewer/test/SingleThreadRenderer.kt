@@ -25,7 +25,7 @@ class SingleThreadRenderer(actvity: OrionViewerActivity, view: OrionImageView, l
 
 
     override fun render(lastInfo: LayoutPosition?) {
-        super<RenderThread>.render(lastInfo)
+        super.render(lastInfo)
         renderInCurrentThread(true, lastInfo!!.clone(), layout!!.getRotation());
     }
 }

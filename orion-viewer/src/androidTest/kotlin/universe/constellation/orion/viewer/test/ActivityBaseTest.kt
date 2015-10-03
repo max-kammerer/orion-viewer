@@ -11,21 +11,21 @@ import android.net.Uri
  * Date: 21.10.13
  * Time: 7:12
  */
-open class ActivityBaseTest : ActivityUnitTestCase<OrionViewerActivity>(javaClass<OrionViewerActivity>()), TestUtil {
+open class ActivityBaseTest : ActivityUnitTestCase<OrionViewerActivity>(OrionViewerActivity::class.java), TestUtil {
 
     override fun setUp() {
-        super<ActivityUnitTestCase>.setUp()
-        val intent = Intent(getInstrumentation()!!.getTargetContext()!!, javaClass<OrionViewerActivity>());
+        super.setUp()
+        val intent = Intent(instrumentation!!.targetContext!!, OrionViewerActivity::class.java);
         intent.setData(getDataPath())
-        startActivity(intent, null, null)!!.getOrionContext()!!.isTesting = true
+        startActivity(intent, null, null)!!.orionContext!!.isTesting = true
     }
 
     override fun getOrionTestContext(): Context {
-        return getInstrumentation()!!.getContext()!!;
+        return instrumentation!!.context!!;
     }
 
     override fun getActivity(): OrionViewerActivity {
-        return super<ActivityUnitTestCase>.getActivity()!!
+        return super.getActivity()!!
     }
 
     open fun getDataPath() : Uri?  {

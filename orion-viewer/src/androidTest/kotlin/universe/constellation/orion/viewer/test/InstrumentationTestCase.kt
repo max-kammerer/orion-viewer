@@ -11,17 +11,17 @@ import universe.constellation.orion.viewer.Controller
  * Time: 19:50
  */
 
-open class InstrumentationTestCase : ActivityInstrumentationTestCase2<OrionViewerActivity>(javaClass<OrionViewerActivity>()), TestUtil {
+open class InstrumentationTestCase : ActivityInstrumentationTestCase2<OrionViewerActivity>(OrionViewerActivity::class.java), TestUtil {
 
     override fun getOrionTestContext(): Context {
-        return getInstrumentation()!!.getContext()!!
+        return instrumentation!!.context!!
     }
 
     override fun getActivity(): OrionViewerActivity {
-        return super<ActivityInstrumentationTestCase2>.getActivity()!!
+        return super.getActivity()!!
     }
 
     fun getController() : Controller {
-        return getActivity().getController()!!
+        return activity.controller!!
     }
 }

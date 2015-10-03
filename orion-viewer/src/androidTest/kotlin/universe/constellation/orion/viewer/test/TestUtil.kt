@@ -15,7 +15,7 @@ import java.io.IOException
  * Time: 8:32
  */
 
-trait TestUtil {
+interface TestUtil {
 
     public fun openTestBook(relativePath: String) : DocumentWrapper {
         val fileOnSdcard = extractFileFromTestData(relativePath)
@@ -28,13 +28,13 @@ trait TestUtil {
             return outFile
         }
         try {
-            outFile.getParentFile()!!.mkdirs()
-            outFile.createNewFile()
+            outFile.parentFile!!.mkdirs()
+            outFile.createNewFile();
         } catch (e: IOException) {
-            throw RuntimeException("Couldn't create new file " + outFile.getAbsolutePath(), e)
+            throw RuntimeException("Couldn't create new file " + outFile.absolutePath, e)
         }
 
-        val input = getOrionTestContext().getAssets()!!.open(getFileUnderTestData(fileName))
+        val input = getOrionTestContext().assets!!.open(getFileUnderTestData(fileName))
         val bufferedOutputStream = FileOutputStream(outFile).buffered()
         input.buffered().copyTo(bufferedOutputStream)
         bufferedOutputStream.close()
@@ -42,7 +42,7 @@ trait TestUtil {
     }
 
     public fun getFileUnderTestData(relativePath: String): String {
-        return "testData/${relativePath}"
+        return "testData/$relativePath"
     }
 
     fun getOrionTestContext(): Context

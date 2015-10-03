@@ -1,16 +1,9 @@
 package universe.constellation.orion.viewer.test
 
-import android.view.ViewGroup.LayoutParams
-import universe.constellation.orion.viewer.OptionActions
-import junit.framework.Assert
-import android.view.WindowManager
-import android.graphics.PixelFormat
 import android.content.Intent
-import universe.constellation.orion.viewer.OrionViewerActivity
-import android.net.Uri
-import android.test.ActivityInstrumentationTestCase2
 import android.content.pm.ActivityInfo
-import android.test.UiThreadTest
+import android.net.Uri
+import junit.framework.Assert
 import java.util.concurrent.CountDownLatch
 
 /**
@@ -30,14 +23,14 @@ class RotationTest() : InstrumentationTestCase() {
         intent.setData(Uri.fromFile(file))
         setActivityIntent(intent)
 
-        val view = getActivity().getView()!!
-        val width = view.getWidth()
-        val height = view.getHeight()
+        val view = activity.view!!
+        val width = view.width
+        val height = view.height
 
         Assert.assertTrue(width != 0)
         Assert.assertTrue(height != 0)
         //OptionActions.FULL_SCREEN.doAction(getActivity(), true, false)
-        val orientation = getActivity().getResources()!!.getConfiguration().orientation;
+        val orientation = activity.resources!!.configuration.orientation;
 
         val latch = CountDownLatch(1);
         runTestOnUiThread {
@@ -45,12 +38,12 @@ class RotationTest() : InstrumentationTestCase() {
             latch.countDown();
         }
         latch.await();
-        getActivity().finish()
+        activity.finish()
 
-        Assert.assertTrue("Orintation not changed: $orientation", orientation != getActivity().getResources()!!.getConfiguration().orientation)
+        Assert.assertTrue("Orintation not changed: $orientation", orientation != activity.resources!!.configuration.orientation)
 
-        val width2 = view.getWidth()
-        val height2 = view.getHeight()
+        val width2 = view.width
+        val height2 = view.height
         Assert.assertTrue("w1: $width, w2: $width2, original orientation: $orientation", width != width2)
         Assert.assertTrue("h1: $height, h2: $$height2, original orientation: $orientation", height != height2)
     }

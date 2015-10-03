@@ -43,8 +43,8 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
     var view: MyView? = null;
 
     override fun setUp() {
-        super<ActivityBaseTest>.setUp()
-        view = MyView(getActivity().getView()!!)
+        super.setUp()
+        view = MyView(activity.view!!)
     }
 
     fun testProperPagesSkip() {
@@ -72,13 +72,13 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
         }
 
         for (i in 1..screens - 2) {
-            Assert.assertFalse("fallen on ${i}", Arrays.equals(nexts[i], nexts[i + 1]))
-            Assert.assertFalse("fallen on ${i}", Arrays.equals(prevs[i], prevs[i + 1]))
+            Assert.assertFalse("fallen on $i", Arrays.equals(nexts[i], nexts[i + 1]))
+            Assert.assertFalse("fallen on $i", Arrays.equals(prevs[i], prevs[i + 1]))
         }
 
         for (i in screens - 1 downTo 1) {
-            println("${i}")
-            Assert.assertTrue("fallen on ${i}", Arrays.equals(nexts[i], prevs[prevs.lastIndex - i]))
+            println("$i")
+            Assert.assertTrue("fallen on $i", Arrays.equals(nexts[i], prevs[prevs.lastIndex - i]))
         }
 
     }
@@ -88,8 +88,8 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
         val bitmap = view!!.data!!
         Assert.assertNotNull(bitmap)
 
-        val pixels = IntArray(bitmap.getWidth() * bitmap.getHeight())
-        bitmap.getPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight())
+        val pixels = IntArray(bitmap.width * bitmap.height)
+        bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
 
         list.add(pixels)
     }
@@ -98,21 +98,21 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
         val doc = openTestBook(book)
 
         var layoutStrategy: LayoutStrategy = SimpleLayoutStrategy(doc, deviceSize)
-        val renderer = SingleThreadRenderer(getActivity(), view!!, layoutStrategy, doc, Bitmap.Config.ARGB_8888)
-        val controller = Controller(getActivity(), doc, layoutStrategy, renderer)
+        val renderer = SingleThreadRenderer(activity, view!!, layoutStrategy, doc, Bitmap.Config.ARGB_8888)
+        val controller = Controller(activity, doc, layoutStrategy, renderer)
 
 
-        val lastPageInfo = LastPageInfo.loadBookParameters(getActivity(), "123")!!
+        val lastPageInfo = LastPageInfo.loadBookParameters(activity, "123")!!
         controller.changeOrinatation(lastPageInfo.screenOrientation)
         controller.init(lastPageInfo, deviceSize)
 
         //getSubscriptionManager()?.sendDocOpenedNotification(controller)
-        getActivity().getView()!!.setDimensionAware(controller)
+        activity.view!!.setDimensionAware(controller)
         return controller
     }
 
 
     override fun getOrionTestContext(): Context {
-        return getInstrumentation()!!.getContext()!!;
+        return instrumentation!!.context!!;
     }
 }
