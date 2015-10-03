@@ -108,8 +108,6 @@ public interface Device {
 
     int getLayoutId();
 
-    int getFileManagerLayoutId();
-
     String getDefaultDirectory();
 
     void onSetContentView();

@@ -20,11 +20,18 @@
 package universe.constellation.orion.viewer;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.view.*;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
-import universe.constellation.orion.viewer.android.TabListener;
 
 /**
  * User: mike
@@ -72,28 +79,25 @@ public class OrionHelpActivity extends OrionBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.android_file_manager);
+        super.onOrionCreate(savedInstanceState, R.layout.android_file_manager);
         initHelpScreen();
     }
 
     protected void initHelpScreen() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        HelpSimplePagerAdapter pagerAdapter = new HelpSimplePagerAdapter(getSupportFragmentManager(), 2);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(pagerAdapter);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(viewPager);
 
-        ActionBar.Tab tab = actionBar.newTab()
-                .setIcon(R.drawable.help)
-                .setTabListener(new TabListener<InfoFragment>(
-                        this, "help", InfoFragment.class));
-        actionBar.addTab(tab);
-
-
-        tab = actionBar.newTab()
-                .setIcon(R.drawable.info)
-                .setTabListener(new TabListener<AboutFragment>(
-                        this, "about", AboutFragment.class) {
-                });
-        actionBar.addTab(tab);
+        TabLayout.Tab help = tabLayout.getTabAt(0);
+        if (help != null) {
+            help.setIcon(R.drawable.help);
+        }
+        TabLayout.Tab about = tabLayout.getTabAt(1);
+        if (about != null) {
+            about.setIcon(R.drawable.info);
+        }
     }
 
 
@@ -116,4 +120,26 @@ public class OrionHelpActivity extends OrionBaseActivity {
     public boolean supportDevice() {
         return false;
     }
+}
+
+
+class HelpSimplePagerAdapter extends FragmentStatePagerAdapter {
+    private final int pageCount;
+
+    public HelpSimplePagerAdapter(FragmentManager fm, int pageCount) {
+        super(fm);
+        this.pageCount = pageCount;
+    }
+
+    @Override
+    public Fragment getItem(int i) {
+        return i == 0 ?
+                new OrionHelpActivity.InfoFragment() : new OrionHelpActivity.AboutFragment();
+    }
+
+    @Override
+    public int getCount() {
+        return pageCount;
+    }
+
 }

@@ -19,6 +19,7 @@
 
 package universe.constellation.orion.viewer;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -26,10 +27,12 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
+
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionApplication;
 
@@ -38,7 +41,7 @@ import universe.constellation.orion.viewer.prefs.OrionApplication;
  * Date: 24.12.11
  * Time: 17:00
  */
-public class OrionBaseActivity extends ActionBarActivity {
+public class OrionBaseActivity extends AppCompatActivity {
 
     public static final String DONT_OPEN_RECENT = "DONT_OPEN_RECENT";
 
@@ -46,14 +49,21 @@ public class OrionBaseActivity extends ActionBarActivity {
 
     protected SharedPreferences.OnSharedPreferenceChangeListener listener;
 
+    protected Toolbar toolbar;
+
     public OrionBaseActivity() {
         if (supportDevice()) {
             device = Common.createDevice();
         }
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        onOrionCreate(savedInstanceState, -1);
+    }
+
+    protected void onOrionCreate(Bundle savedInstanceState, int layoutId) {
         getOrionContext().applyTheme(this, getViewerType() == Device.VIEWER_ACTIVITY);
         getOrionContext().updateLanguage(getResources());
 
@@ -66,6 +76,12 @@ public class OrionBaseActivity extends ActionBarActivity {
 
         if (device != null) {
             device.onCreate(this);
+        }
+
+        if (layoutId != -1) {
+            setContentView(layoutId);
+            toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
         }
     }
 

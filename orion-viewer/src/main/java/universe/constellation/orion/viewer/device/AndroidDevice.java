@@ -146,10 +146,6 @@ public class AndroidDevice implements Device {
         return "";
     }
 
-    public int getFileManagerLayoutId() {
-        return R.layout.android_file_manager;
-    }
-
     public void onSetContentView() {
         //To change body of implemented methods use File | Settings | File Templates.
     }

@@ -25,18 +25,27 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.ListFragment;
-import android.support.v7.app.ActionBar;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import universe.constellation.orion.viewer.android.TabListener;
-import universe.constellation.orion.viewer.prefs.GlobalOptions;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.FilenameFilter;
+
+import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
 /**
  * User: mike
@@ -47,18 +56,29 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
 
     private static final String LAST_FOLDER = "LAST_FOLDER";
 
-    public static class FilesListFragment extends ListFragment {
+    public static class FoldersFragment extends Fragment {
+
+        @Nullable
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.folder_view, container, false);
+
+        }
 
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
-            ((OrionFileManagerActivity)getActivity()).createFileView(this);
+            ((OrionFileManagerActivity) getActivity()).
+                    createFileView(
+                            (ListView) getActivity().findViewById(R.id.listView),
+                            (TextView) getActivity().findViewById(R.id.path)
+                    );
         }
     }
 
     public static class RecentListFragment extends ListFragment {
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
-            ((OrionFileManagerActivity)getActivity()).createRecentView(this);
+            ((OrionFileManagerActivity) getActivity()).createRecentView(this);
         }
     }
 
@@ -69,10 +89,9 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
     private boolean justCreated;
 
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onOrionCreate(savedInstanceState, R.layout.android_file_manager);
         Common.d("Creating file manager");
 
-        setContentView(device.getFileManagerLayoutId());
         prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         globalOptions = getOrionContext().getOptions();
 
@@ -109,37 +128,30 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
             justCreated = false;
             onNewIntent(getIntent());
         }
-
-        updatePathTextView(getStartFolder());
     }
 
     private void createRecentView(ListFragment list) {
         ListView recent = list.getListView();
-        if (showRecentsAndSavePath()) {
-            recent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    GlobalOptions.RecentEntry entry = (GlobalOptions.RecentEntry) parent.getItemAtPosition(position);
-                    File file = new File(entry.getPath());
-                    if (file.exists()) {
-                        openFile(file);
-                    }
+        recent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                GlobalOptions.RecentEntry entry = (GlobalOptions.RecentEntry) parent.getItemAtPosition(position);
+                File file = new File(entry.getPath());
+                if (file.exists()) {
+                    openFile(file);
                 }
-            });
+            }
+        });
 
-            list.setListAdapter(new FileChooser(this, globalOptions.getRecentFiles()));
-        } else {
-            recent.setVisibility(View.GONE);
-        }
+        list.setListAdapter(new FileChooser(this, globalOptions.getRecentFiles()));
     }
 
-    private void createFileView(ListFragment list) {
-        ListView view = list.getListView();
-        view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    private void createFileView(ListView list, final TextView path) {
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 File file = (File) parent.getItemAtPosition(position);
                 if (file.isDirectory()) {
                     File newFolder = ((FileChooser) parent.getAdapter()).changeFolder(file);
-                    updatePathTextView(newFolder.getAbsolutePath());
+                    path.setText(newFolder.getAbsolutePath());
                 } else {
                     if (showRecentsAndSavePath()) {
                         SharedPreferences.Editor editor = prefs.edit();
@@ -151,16 +163,12 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
             }
         });
 
-
-        list.setListAdapter(new FileChooser(this, getStartFolder(), getFileNameFilter()));
-    }
-
-    private void updatePathTextView(String newPath) {
-        getSupportActionBar().setTitle(newPath);
+        path.setText(getStartFolder());
+        list.setAdapter(new FileChooser(this, getStartFolder(), getFileNameFilter()));
     }
 
     protected void openFile(File file) {
-        Common.d("Opening new book " + file.getPath());
+        Common.d("Opening new book: " + file.getPath());
 
         Intent in = new Intent(Intent.ACTION_VIEW);
         in.setClass(getApplicationContext(), OrionViewerActivity.class);
@@ -171,22 +179,21 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
 
 
     private void initFileManager() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        SimplePagerAdapter pagerAdapter = new SimplePagerAdapter(getSupportFragmentManager(), showRecentsAndSavePath() ? 2 : 1);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(pagerAdapter);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(viewPager);
 
-        ActionBar.Tab tab = actionBar.newTab()
-                .setIcon(R.drawable.folder)
-                .setTabListener(new TabListener<FilesListFragment>(
-                        this, "files", FilesListFragment.class));
-        actionBar.addTab(tab);
-
+        TabLayout.Tab folderTab = tabLayout.getTabAt(0);
+        if (folderTab != null) {
+            folderTab.setIcon(R.drawable.folder);
+        }
         if (showRecentsAndSavePath()) {
-            tab = actionBar.newTab()
-                    .setIcon(R.drawable.book)
-                    .setTabListener(new TabListener<RecentListFragment>(
-                            this, "recent", RecentListFragment.class) {
-                    });
-            actionBar.addTab(tab);
+            TabLayout.Tab recentTab = tabLayout.getTabAt(1);
+            if (recentTab != null) {
+                recentTab.setIcon(R.drawable.book);
+            }
         }
     }
 
@@ -236,4 +243,26 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
 
         return Environment.getRootDirectory().getAbsolutePath();
     }
+}
+
+
+class SimplePagerAdapter extends FragmentStatePagerAdapter {
+    private final int pageCount;
+
+    public SimplePagerAdapter(FragmentManager fm, int pageCount) {
+        super(fm);
+        this.pageCount = pageCount;
+    }
+
+    @Override
+    public Fragment getItem(int i) {
+        return i == 0 ?
+                new OrionFileManagerActivity.FoldersFragment() : new OrionFileManagerActivity.RecentListFragment();
+    }
+
+    @Override
+    public int getCount() {
+        return pageCount;
+    }
+
 }
