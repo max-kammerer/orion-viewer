@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- the theme applied to the application or activity -->
-    <style name="MyHolo"
-           parent="@style/Theme.AppCompat">
-        <item name="windowActionBarOverlay">true</item>
-        <item name="android:windowActionBarOverlay">true</item>
-    </style>
-
-    <style name="MyHoloLight"
-           parent="@style/Theme.AppCompat.Light">
-        <item name="android:windowActionBarOverlay">true</item>
-        <item name="windowActionBarOverlay">true</item>
-    </style>
-
     <color name="black">#FF000000</color>
     <color name="whitegrey">#FFF2F2F2</color>
 

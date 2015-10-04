@@ -30,6 +30,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
 import android.support.v4.internal.view.SupportMenuItem;
+import android.support.v7.widget.Toolbar;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -64,11 +65,11 @@ import java.io.File;
 
 import universe.constellation.orion.viewer.dialog.SearchDialog;
 import universe.constellation.orion.viewer.dialog.TapHelpDialog;
-import universe.constellation.orion.viewer.view.OrionDrawScene;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.selection.SelectedTextActions;
 import universe.constellation.orion.viewer.selection.SelectionAutomata;
 import universe.constellation.orion.viewer.selection.TouchAutomata;
+import universe.constellation.orion.viewer.view.OrionDrawScene;
 
 public class OrionViewerActivity extends OrionBaseActivity {
 
@@ -138,11 +139,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         getOrionContext().setViewActivity(this);
         OptionActions.FULL_SCREEN.doAction(this, !globalOptions.isFullScreen(), globalOptions.isFullScreen());
-        super.onCreate(savedInstanceState);
+        super.onOrionCreate(savedInstanceState, device.getLayoutId());
 
-        //OptionActions.SHOW_ACTION_BAR.doAction(this, !globalOptions.isActionBarVisible(), globalOptions.isActionBarVisible());
         hasActionBar = globalOptions.isActionBarVisible();
-        setContentView(device.getLayoutId());
+        OptionActions.SHOW_ACTION_BAR.doAction(this, !hasActionBar, hasActionBar);
         view = (OrionDrawScene) findViewById(R.id.view);
 
         OptionActions.SHOW_STATUS_BAR.doAction(this, !globalOptions.isStatusBarVisible(), globalOptions.isStatusBarVisible());
@@ -552,7 +552,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 zoom = (int) (10000 * controller.getCurrentPageZoom());
             } else {
                 spinnerIndex = 0;
-                textView.setText("" + (zoom /100f));
+                textView.setText(String.valueOf(zoom / 100f));
             }
             zoomSeek.setProgress(zoom / 100);
             sp.setSelection(spinnerIndex);
@@ -891,11 +891,15 @@ public class OrionViewerActivity extends OrionBaseActivity {
         return view;
     }
 
+    public Toolbar getToolbar() {
+        return toolbar;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         if (!hasActionBar) {
-            for (int i = 0; i < 6; i++) {
+            for (int i = 0; i < menu.size(); i++) {
                 SupportMenuItem item = (SupportMenuItem) menu.getItem(i);
                 item.setShowAsAction(SupportMenuItem.SHOW_AS_ACTION_NEVER);
             }
@@ -1310,17 +1314,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
         if (getGlobalOptions().isShowTapHelp() && !getOrionContext().isTesting) {
             getGlobalOptions().saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false);
             new TapHelpDialog(this).showDialog();
-        }
-
-        if (!hasActionBar) {
-            //relayout
-            getSupportActionBar().show();
-            view.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    getSupportActionBar().hide();
-                }
-            }, 300);
         }
     }
 

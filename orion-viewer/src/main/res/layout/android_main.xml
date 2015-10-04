@@ -19,15 +19,22 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent" android:layout_height="fill_parent">
 
-    <universe.constellation.orion.viewer.view.OrionDrawScene android:id="@+id/view"
-                                       android:textColor="#000000"
-                                       android:background="#FFFFFF"
-                                       android:layout_width="fill_parent"
-                                       android:layout_height="fill_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    </universe.constellation.orion.viewer.view.OrionDrawScene>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-</RelativeLayout>
+    <universe.constellation.orion.viewer.view.OrionDrawScene
+        android:id="@+id/view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:textColor="#000000"/>
+
+</LinearLayout>

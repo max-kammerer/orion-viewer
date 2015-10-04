@@ -59,7 +59,7 @@ public enum Action {
     MENU (R.string.action_menu, R.integer.action_menu) {
         @Override
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            activity.openOptionsMenu();
+            activity.getSupportActionBar().openOptionsMenu();
         }
     } ,
 
@@ -137,7 +137,7 @@ public enum Action {
                 dialog.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.collapsed);
                 dialog.setTitle(R.string.menu_outline_text);
 
-                final InMemoryTreeStateManager<Integer> manager = new InMemoryTreeStateManager<Integer>();
+                final InMemoryTreeStateManager<Integer> manager = new InMemoryTreeStateManager<>();
                 manager.setVisibleByDefault(false);
                 int navigateTo = OutlineAdapter.initializeTreeManager(manager, outline, controller.getCurrentPage());
                 TreeViewList tocTree = (TreeViewList) dialog.findViewById(R.id.mainTreeView);
@@ -464,12 +464,11 @@ public enum Action {
         }
     };
 
-    private static final HashMap<Integer, Action> actions = new HashMap<Integer, Action>();
+    private static final HashMap<Integer, Action> actions = new HashMap<>();
 
     static {
         Action [] values = values();
-        for (int i = 0; i < values.length; i++) {
-            Action value = values[i];
+        for (Action value : values) {
             actions.put(value.code, value);
         }
     }

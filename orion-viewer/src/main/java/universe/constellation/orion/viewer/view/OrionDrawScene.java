@@ -83,7 +83,7 @@ public class OrionDrawScene extends View implements OrionImageView {
 
     private boolean showOffset = true;
 
-    private List<DrawTask> tasks = new ArrayList<DrawTask>();
+    private List<DrawTask> tasks = new ArrayList<>();
 
     private Rect stuffTempRect = new Rect();
 

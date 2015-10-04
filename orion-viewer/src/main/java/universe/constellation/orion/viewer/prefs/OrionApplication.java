@@ -25,7 +25,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.support.v7.appcompat.R;
 import android.util.DisplayMetrics;
 import universe.constellation.orion.viewer.*;
 import universe.constellation.orion.viewer.bookmarks.BookmarkAccessor;
@@ -108,7 +107,7 @@ public class OrionApplication extends Application {
 
 
     public void applyTheme(Activity activity, boolean processActionBar) {
-        int themeId = getThemeId(processActionBar);
+        int themeId = getThemeId();
 
         if (themeId != -1) {
             activity.setTheme(themeId);
@@ -131,15 +130,10 @@ public class OrionApplication extends Application {
         return true;
     }
 
-    private int getThemeId(boolean processActionBar) {
-        boolean showActionBar = !processActionBar || getOptions().isActionBarVisible();
-        int themeId = -1;
-        if (!isLightTheme()) {
-            themeId = showActionBar ? R.style.Theme_AppCompat : universe.constellation.orion.viewer.R.style.MyHolo;
-        } else {
-            themeId = showActionBar ? R.style.Theme_AppCompat_Light : universe.constellation.orion.viewer.R.style.MyHoloLight;
-        }
-        return themeId;
+    private int getThemeId() {
+        return !isLightTheme() ?
+                android.support.v7.appcompat.R.style.Theme_AppCompat_NoActionBar :
+                android.support.v7.appcompat.R.style.Theme_AppCompat_Light_NoActionBar;
     }
 
     public BookmarkAccessor getBookmarkAccessor() {

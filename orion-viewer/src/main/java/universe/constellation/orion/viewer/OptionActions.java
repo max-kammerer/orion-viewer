@@ -19,6 +19,10 @@
 
 package universe.constellation.orion.viewer;
 
+import android.support.v4.internal.view.SupportMenuItem;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import java.util.HashMap;
@@ -40,12 +44,23 @@ public enum OptionActions {
 
     SHOW_ACTION_BAR("SHOW_ACTION_BAR") {
             public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
-//                if (newValue) {
-//                    activity.getSupportActionBar().show();
-//                } else {
-//                    activity.getSupportActionBar().hide();
-//                }
-//                activity.supportInvalidateOptionsMenu();
+                Toolbar toolbar = activity.getToolbar();
+                ViewGroup.LayoutParams layoutParams = toolbar.getLayoutParams();
+                if (newValue) {
+                    layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                } else {
+                    layoutParams.height = 0;
+                }
+                toolbar.setLayoutParams(layoutParams);
+                Menu menu = toolbar.getMenu();
+                menu.clear();
+                activity.onCreateOptionsMenu(menu);
+                if (!newValue) {
+                    for (int i = 0; i < menu.size(); i++) {
+                        SupportMenuItem item = (SupportMenuItem) menu.getItem(i);
+                        item.setShowAsAction(SupportMenuItem.SHOW_AS_ACTION_NEVER);
+                    }
+                }
             }
         },
 
@@ -61,8 +76,6 @@ public enum OptionActions {
          }
      },
 
-
-
     SCREEN_OVERLAPPING_HORIZONTAL("SCREEN_OVERLAPPING_HORIZONTAL") {
         public void doAction(OrionViewerActivity activity, int hor, int ver) {
             activity.getController().changeOverlap(hor, ver);
@@ -75,7 +88,7 @@ public enum OptionActions {
         }
     },
 
-    SET_CONSTRAST("contrast") {
+    SET_CONTRAST("contrast") {
         public void doAction(OrionViewerActivity activity, int oldValue, int newValue) {
             Controller controller = activity.getController();
             if (controller != null) {
