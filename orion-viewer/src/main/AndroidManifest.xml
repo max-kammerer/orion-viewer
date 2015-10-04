@@ -109,7 +109,7 @@
 
         <activity android:name=".OrionFileSelectorActivity"
                   android:label="@string/app_name"
-                  android:theme="@style/Theme.AppCompat"
+                  android:theme="@style/Theme.AppCompat.NoActionBar"
                   android:icon="@drawable/orion"/>
 
         <activity android:name=".prefs.OrionKeyBinderActivity" android:screenOrientation="behind"
@@ -151,7 +151,7 @@
                   android:label="Action List"/>
 
         <activity android:name=".OrionBookmarkActivity" android:screenOrientation="behind"
-                  android:theme="@style/Theme.AppCompat"
+                  android:theme="@style/Theme.AppCompat.NoActionBar"
                   android:label="Bookmarks"/>
 
         <activity android:name=".outline.OutlineActivity" android:screenOrientation="behind"

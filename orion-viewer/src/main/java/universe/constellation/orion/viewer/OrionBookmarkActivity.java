@@ -59,8 +59,7 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
     private long bookId;
 
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.bookmarks);
+        super.onOrionCreate(savedInstanceState, R.layout.bookmarks);
 
         onNewIntent(getIntent());
 
