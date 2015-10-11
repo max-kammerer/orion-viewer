@@ -20,19 +20,22 @@
 package universe.constellation.orion.viewer.view;
 
 import android.content.Context;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
-
-import universe.constellation.orion.viewer.Common;
-import universe.constellation.orion.viewer.LayoutPosition;
-import universe.constellation.orion.viewer.OrionImageView;
-import universe.constellation.orion.viewer.util.ColorUtil;
-import universe.constellation.orion.viewer.util.MoveUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+
+import universe.constellation.orion.viewer.Common;
+import universe.constellation.orion.viewer.LayoutPosition;
+import universe.constellation.orion.viewer.OrionImageView;
+import universe.constellation.orion.viewer.util.MoveUtil;
 
 /**
  * User: mike
@@ -41,10 +44,6 @@ import java.util.concurrent.CountDownLatch;
  */
 public class OrionDrawScene extends View implements OrionImageView {
 
-    public final static int DEFAULT_STATUS_BAR_SIZE = 20;
-
-    public final static int FONT_DELTA = 3;
-
     public Bitmap bitmap;
 
     public LayoutPosition info;
@@ -52,8 +51,6 @@ public class OrionDrawScene extends View implements OrionImageView {
     private CountDownLatch latch;
 
     private ViewDimensionAware dimensionAware;
-
-    //private int counter = 0;
 
     private float scale = 1.0f;
 
@@ -65,63 +62,43 @@ public class OrionDrawScene extends View implements OrionImageView {
 
     private Paint borderPaint;
 
-    private Paint backgroundPaint;
-
     private Paint defaultPaint;
 
-    private boolean showStatusBar;
-
-    private boolean drawOffPage;
-
-    private int statusBarHeight = DEFAULT_STATUS_BAR_SIZE;
-
-    private String title = "";
-
-    private int pageCount = 0;
-
     private boolean inScaling = false;
-
-    private boolean showOffset = true;
 
     private List<DrawTask> tasks = new ArrayList<>();
 
     private Rect stuffTempRect = new Rect();
 
-    private ColorStuff stuff;
+    private boolean inited = false;
 
     public OrionDrawScene(Context context) {
         super(context);
-        init(context);
     }
 
     public OrionDrawScene(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
     }
 
     public OrionDrawScene(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init(context);
     }
 
-    private void init(Context context) {
-        stuff = new ColorStuff(context);
-
+    void init(ColorStuff stuff) {
+        defaultPaint = stuff.bd.getPaint();
         borderPaint = stuff.borderPaint;
-        backgroundPaint = stuff.backgroundPaint;
-        defaultPaint = stuff.defaultPaint;
+        inited = true;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (drawOffPage) {
-            long backgroundStart = System.currentTimeMillis();
-            canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), backgroundPaint);
-            Common.d("OrionView: background rendering takes " + 0.001f * (System.currentTimeMillis() - backgroundStart) + " s");
+        super.onDraw(canvas);
+        if (!inited) {
+            return;
         }
 
         canvas.save();
-        canvas.translate(0f, statusBarHeight);
+        canvas.translate(0f, 0);
         if (bitmap != null && !bitmap.isRecycled()) {
             long start = System.currentTimeMillis();
             Common.d("OrionView: drawing bitmap on view...");
@@ -129,7 +106,6 @@ public class OrionDrawScene extends View implements OrionImageView {
             final float myScale = scale;
 
             if (inScaling) {
-                drawBorder(canvas, myScale, true);
                 Common.d("in scaling");
                 canvas.save();
                 canvas.translate(
@@ -143,11 +119,12 @@ public class OrionDrawScene extends View implements OrionImageView {
                     info.y.getOccupiedAreaStart(),
                     info.x.getOccupiedAreaEnd(),
                     info.y.getOccupiedAreaEnd());
+
             canvas.drawBitmap(bitmap, stuffTempRect, stuffTempRect, defaultPaint);
 
             if (inScaling) {
                 canvas.restore();
-                drawBorder(canvas, myScale, false);
+                drawBorder(canvas, myScale);
             }
 
             Common.d("OrionView: bitmap rendering takes " + 0.001f * (System.currentTimeMillis() - start) + " s");
@@ -158,20 +135,13 @@ public class OrionDrawScene extends View implements OrionImageView {
         }
         canvas.restore();
 
-        if (showStatusBar) {
-            drawStatusBar(canvas);
-        }
-
         if (latch != null) {
             latch.countDown();
         }
     }
 
-    private void drawBorder(Canvas canvas, float myScale, boolean cleanArea) {
-        Common.d(cleanArea ? "Draw: clean page area" : "Draw: draw border");
-
-        borderPaint.setColor(cleanArea ? Color.WHITE : Color.BLACK);
-        borderPaint.setStyle(cleanArea ? Paint.Style.FILL : Paint.Style.STROKE);
+    private void drawBorder(Canvas canvas, float myScale) {
+        Common.d("Draw: border");
 
         int left = (int) ((-info.x.offset - startFocus.x) * myScale + (enableMoveOnPinchZoom ? endFocus.x : startFocus.x));
         int top = (int) ((-info.y.offset - startFocus.y) * myScale + (enableMoveOnPinchZoom ? endFocus.y : startFocus.y));
@@ -182,58 +152,15 @@ public class OrionDrawScene extends View implements OrionImageView {
         canvas.drawRect(left, top, right, bottom, borderPaint);
     }
 
-    private void drawStatusBar(Canvas canvas) {
-        int textY = statusBarHeight - 3;
-        int sideMargin = 5;
-
-        if (drawOffPage) {
-            int color = defaultPaint.getColor();
-            defaultPaint.setColor(Color.WHITE);
-            canvas.drawRect(0, 0, getWidth(), statusBarHeight, backgroundPaint);
-            defaultPaint.setColor(color);
-        }
-
-        String textToRender;
-        if (info == null) {
-            textToRender =  "? /" + pageCount + " ";
-        } else {
-            textToRender = (showOffset ? "[" + pad(info.x.offset) + ":" + pad(info.y.offset) + "]  " : " ") + (info.pageNumber + 1) + "/" + pageCount + " ";
-        }
-
-        float endWidth = defaultPaint.measureText(textToRender);
-        float titleEnd = getWidth() - endWidth - sideMargin;
-        canvas.drawText(textToRender, titleEnd, textY, defaultPaint);
-        String renderTitle = title;
-        endWidth = defaultPaint.measureText(renderTitle);
-        int count = renderTitle.length();
-
-        titleEnd -= sideMargin;
-        if (endWidth > titleEnd && titleEnd > 0 && endWidth > 0) {
-            count = (int) (1.f * count / endWidth * titleEnd);
-            count -= 3;
-            if (count > 0) {
-                renderTitle = renderTitle.substring(0, count) + "...";
-            } else {
-                renderTitle = "...";
-            }
-        }
-        if (count > 0) {
-            canvas.drawText(renderTitle, sideMargin, textY, defaultPaint);
-        }
-    }
-
     @Override
     public void onNewImage(Bitmap bitmap, LayoutPosition info, CountDownLatch latch) {
         this.bitmap = bitmap;
         this.latch = latch;
         this.info = info;
-        //counter++;
     }
 
     @Override
     public void onNewBook(String title, int pageCount) {
-        this.title = title;
-        this.pageCount = pageCount;
     }
 
     public void setDimensionAware(ViewDimensionAware dimensionAware) {
@@ -252,21 +179,6 @@ public class OrionDrawScene extends View implements OrionImageView {
         }
     }
 
-    public void setColorMatrix(float [] colorMatrix) {
-        if (colorMatrix != null) {
-            ColorMatrix matrix = new ColorMatrix(colorMatrix);
-            ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
-            defaultPaint.setColorFilter(filter);
-            borderPaint.setColorFilter(filter);
-            stuff.backgroundPaint.setColorFilter(filter);
-            super.setBackgroundColor(ColorUtil.transforColor(Color.WHITE, matrix));
-        } else {
-            defaultPaint.setColorFilter(null);
-            borderPaint.setColorFilter(null);
-            stuff.backgroundPaint.setColorFilter(null);
-            super.setBackgroundColor(Color.WHITE);
-        }
-    }
 
     public boolean isDefaultColorMatrix() {
         return defaultPaint.getColorFilter() == null;
@@ -291,28 +203,6 @@ public class OrionDrawScene extends View implements OrionImageView {
         this.inScaling = false;
     }
 
-    public void setShowOffset(boolean showOffset) {
-        boolean oldOffset = this.showOffset;
-        this.showOffset = showOffset;
-        if (showOffset != oldOffset) {
-            invalidate();
-        }
-    }
-
-    public void setShowStatusBar(boolean showStatusBar) {
-        if (showStatusBar != this.showStatusBar && dimensionAware  != null) {
-            this.showStatusBar = showStatusBar;
-            Point renderingSize = getRenderingSize();
-            dimensionAware.onDimensionChanged(renderingSize.x, renderingSize.y);
-        } else {
-            this.showStatusBar = showStatusBar;
-        }
-    }
-
-    public void setDrawOffPage(boolean drawOffPage) {
-        this.drawOffPage = drawOffPage;
-    }
-
     public void addTask(DrawTask drawTask) {
         tasks.add(drawTask);
     }
@@ -322,25 +212,10 @@ public class OrionDrawScene extends View implements OrionImageView {
     }
 
     public Point getRenderingSize() {
-        if (showStatusBar) {
-            statusBarHeight = DEFAULT_STATUS_BAR_SIZE;
-        } else {
-            statusBarHeight = 0;
-        }
-        return new Point(getWidth(), getHeight() - statusBarHeight);
+        return new Point(getWidth(), getHeight());
     }
 
     public Rect getViewCoords() {
-        return new Rect(0, statusBarHeight, getWidth(), getHeight());
-    }
-
-    private String pad(int value) {
-        if (value < 10) {
-            return "  " + value;
-        } else if (value < 100) {
-            return " " + value;
-        } else {
-            return  "" + value;
-        }
+        return new Rect(0, 0, getWidth(), getHeight());
     }
 }

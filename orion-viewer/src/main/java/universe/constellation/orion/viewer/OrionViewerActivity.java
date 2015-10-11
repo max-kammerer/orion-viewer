@@ -69,7 +69,9 @@ import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.selection.SelectedTextActions;
 import universe.constellation.orion.viewer.selection.SelectionAutomata;
 import universe.constellation.orion.viewer.selection.TouchAutomata;
+import universe.constellation.orion.viewer.view.FullScene;
 import universe.constellation.orion.viewer.view.OrionDrawScene;
+import universe.constellation.orion.viewer.view.OrionStatusBarHelper;
 
 public class OrionViewerActivity extends OrionBaseActivity {
 
@@ -101,7 +103,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private final SubscriptionManager manager = new SubscriptionManager();
 
-    private OrionDrawScene view;
+    private View orionFullScene;
 
     private ViewAnimator animator;
 
@@ -131,6 +133,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private boolean hasActionBar;
 
+    private FullScene fullScene;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Common.d("Creating file manager");
@@ -143,11 +147,13 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         hasActionBar = globalOptions.isActionBarVisible();
         OptionActions.SHOW_ACTION_BAR.doAction(this, !hasActionBar, hasActionBar);
-        view = (OrionDrawScene) findViewById(R.id.view);
+
+        OrionDrawScene view = (OrionDrawScene) findViewById(R.id.view);
+        fullScene = new FullScene((ViewGroup) findViewById(R.id.orion_full_scene), view, (ViewGroup) findViewById(R.id.orion_status_bar), getOrionContext());
 
         OptionActions.SHOW_STATUS_BAR.doAction(this, !globalOptions.isStatusBarVisible(), globalOptions.isStatusBarVisible());
         OptionActions.SHOW_OFFSET_ON_STATUS_BAR.doAction(this, !globalOptions.isShowOffsetOnStatusBar(), globalOptions.isShowOffsetOnStatusBar());
-        getView().setDrawOffPage(globalOptions.isDrawOffPage());
+        getFullScene().setDrawOffPage(globalOptions.isDrawOffPage());
 
         initDialogs();
 
@@ -273,13 +279,13 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
             LayoutStrategy layoutStrategy = new SimpleLayoutStrategy(doc, device.getDeviceSize());
 
-            RenderThread renderer = new RenderThread(this, view, layoutStrategy, doc);
+            RenderThread renderer = new RenderThread(this, layoutStrategy, doc, fullScene);
 
             controller = new Controller(this, doc, layoutStrategy, renderer);
 
             controller.changeOrinatation(lastPageInfo.screenOrientation);
 
-            controller.init(lastPageInfo, view.getRenderingSize());
+            controller.init(lastPageInfo, fullScene.getDrawView().getRenderingSize());
 
             getSubscriptionManager().sendDocOpenedNotification(controller);
 
@@ -294,8 +300,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 title = title.substring(0, title.lastIndexOf("."));
             }
 
+
             device.updateTitle(title);
-            view.onNewBook(title, controller.getPageCount());
+            fullScene.onNewBook(title, controller.getPageCount());
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setTitle(title);
             }
@@ -319,6 +326,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 }
             });
             themedAlertBuilder.create().show();
+            throw new RuntimeException(e);
         }
         return doc;
     }
@@ -401,7 +409,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 if (!"".equals(pageNumberText.getText())) {
                     try {
                         int parsedInput = Integer.valueOf(pageNumberText.getText().toString());
-                        controller.drawPage(parsedInput -1);
+                        controller.drawPage(parsedInput - 1);
                     } catch (NumberFormatException ex) {
                         showError("Couldn't parse " + pageNumberText.getText(), ex);
                     }
@@ -763,7 +771,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 if (cropBorders[cropIndex] > CROP_RESTRICTION_MAX) {
                     cropBorders[cropIndex] = CROP_RESTRICTION_MAX;
                 }
-                text.setText(cropBorders[cropIndex]  + "%");
+                text.setText(cropBorders[cropIndex] + "%");
             }
         });
 
@@ -888,7 +896,15 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public OrionDrawScene getView() {
-        return view;
+        return fullScene.getDrawView();
+    }
+
+    public FullScene getFullScene() {
+        return fullScene;
+    }
+
+    public OrionStatusBarHelper getStatusBarHelper() {
+        return fullScene.getStatusBarHelper();
     }
 
     public Toolbar getToolbar() {

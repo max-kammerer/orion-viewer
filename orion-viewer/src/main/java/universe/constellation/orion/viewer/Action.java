@@ -40,6 +40,7 @@ import universe.constellation.orion.viewer.prefs.OrionBookPreferences;
 import universe.constellation.orion.viewer.prefs.OrionPreferenceActivity;
 import universe.constellation.orion.viewer.prefs.TemporaryOptions;
 import universe.constellation.orion.viewer.util.ColorUtil;
+import universe.constellation.orion.viewer.view.FullScene;
 import universe.constellation.orion.viewer.view.OrionDrawScene;
 
 /**
@@ -217,6 +218,7 @@ public enum Action {
     SWITCH_COLOR_MODE (R.string.action_switch_color_mode, R.integer.action_switch_color_mode) {
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
             OrionDrawScene view = activity.getView();
+            FullScene scene = activity.getFullScene();
             LastPageInfo currentBookParameters = activity.getOrionContext().getCurrentBookParameters();
             if (currentBookParameters != null && ColorUtil.getColorMode(currentBookParameters.colorMode) == null) {
                 activity.showLongMessage(activity.getString(R.string.select_color_mode));
@@ -224,10 +226,10 @@ public enum Action {
             }
             if (view.isDefaultColorMatrix()) {
                 if (currentBookParameters != null) {
-                    view.setColorMatrix(ColorUtil.getColorMode(currentBookParameters.colorMode));
+                    scene.setColorMatrix(ColorUtil.getColorMode(currentBookParameters.colorMode));
                 }
             } else {
-                view.setColorMatrix(null);
+                scene.setColorMatrix(null);
             }
             view.invalidate();
         }

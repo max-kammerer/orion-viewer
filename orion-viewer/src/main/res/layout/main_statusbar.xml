@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/orion_status_bar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingEnd="5dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingStart="5dp"
+    tools:showIn="@layout/android_main">
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/StatusBar"
+        android:layout_weight="1"
+        android:lines="1"
+        android:ellipsize="end"
+        android:layout_width="0dp" />
+
+    <TextView
+        android:id="@+id/offset"
+        style="@style/StatusBar"
+        android:layout_gravity="end"
+        android:paddingLeft="5dp"
+        android:typeface="monospace" />
+
+    <TextView
+        android:id="@+id/page"
+        style="@style/StatusBar"
+        android:gravity="end"
+        android:paddingLeft="5dp" />
+
+    <TextView
+        android:id="@+id/totalPages"
+        style="@style/StatusBar"
+        android:gravity="end" />
+</LinearLayout>
+
+        

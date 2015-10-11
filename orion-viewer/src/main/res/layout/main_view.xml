@@ -23,6 +23,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#00ffffff"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -30,11 +31,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <universe.constellation.orion.viewer.view.OrionDrawScene
-        android:id="@+id/view"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/orion_full_scene"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        android:textColor="#000000"/>
+        android:orientation="vertical"
+        android:background="@drawable/background">
 
+        <include layout="@layout/main_statusbar" />
+
+        <universe.constellation.orion.viewer.view.OrionDrawScene
+            android:id="@+id/view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textColor="#000000" />
+    </LinearLayout>
 </LinearLayout>

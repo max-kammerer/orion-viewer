@@ -1,5 +1,5 @@
 ext {
-    thirparty_build_root = rootDir.canonicalPath + "/../thirdparty/"
+    thirparty_build_root = rootDir.canonicalPath + "/../thirdparty-nocjk/"
     mupdf = thirparty_build_root + "/mupdf/"
     djvu = thirparty_build_root + "/djvu/"
 

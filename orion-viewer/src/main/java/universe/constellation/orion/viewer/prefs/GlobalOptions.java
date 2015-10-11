@@ -153,8 +153,9 @@ public class GlobalOptions implements Serializable {
                     } else if (APP_LANGUAGE.equals(name)) {
                         context.setLangCode(getAppLanguage());
                     } else if (DRAW_OFF_PAGE.equals(name)) {
+                        activity.getFullScene().setDrawOffPage(isDrawOffPage());
+                        //TODO ?
                         OrionDrawScene view = activity.getView();
-                        view.setDrawOffPage(isDrawOffPage());
                         view.invalidate();
                     }
 

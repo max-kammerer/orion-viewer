@@ -10,6 +10,6 @@ import android.graphics.Paint;
  */
 public interface DrawTask {
 
-    public void drawOnCanvas(Canvas canvas, Paint paint, DrawContext drawContext);
+    void drawOnCanvas(Canvas canvas, Paint paint, DrawContext drawContext);
 
 }

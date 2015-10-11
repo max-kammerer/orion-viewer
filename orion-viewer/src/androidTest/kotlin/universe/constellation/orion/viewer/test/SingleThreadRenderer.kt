@@ -1,13 +1,9 @@
 package universe.constellation.orion.viewer.test
 
-import universe.constellation.orion.viewer.RenderThread
-import universe.constellation.orion.viewer.OrionViewerActivity
-import universe.constellation.orion.viewer.view.OrionDrawScene
-import universe.constellation.orion.viewer.LayoutStrategy
-import universe.constellation.orion.viewer.DocumentWrapper
-import universe.constellation.orion.viewer.LayoutPosition
 import android.graphics.Bitmap
-import universe.constellation.orion.viewer.OrionImageView
+import android.view.ViewGroup
+import universe.constellation.orion.viewer.*
+import universe.constellation.orion.viewer.view.OrionStatusBarHelper
 
 /**
  * User: mike
@@ -16,7 +12,7 @@ import universe.constellation.orion.viewer.OrionImageView
  */
 
 class SingleThreadRenderer(actvity: OrionViewerActivity, view: OrionImageView, layout: LayoutStrategy, doc: DocumentWrapper, config: Bitmap.Config) :
-                    RenderThread(actvity, view, layout, doc, config, false) {
+                    RenderThread(actvity, view, layout, doc, config, false, OrionStatusBarHelper(actvity.findViewById(R.id.toolbar) as ViewGroup)) {
 
 
     override fun startRenreder() {

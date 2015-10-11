@@ -66,13 +66,13 @@ public enum OptionActions {
 
     SHOW_STATUS_BAR("SHOW_ACTION_BAR") {
          public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
-             activity.getView().setShowStatusBar(newValue);
+             activity.getStatusBarHelper().setShowStatusBar(newValue);
          }
      },
 
     SHOW_OFFSET_ON_STATUS_BAR("SHOW_OFFSET_ON_STATUS_BAR") {
          public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
-             activity.getView().setShowOffset(newValue);
+             activity.getStatusBarHelper().setShowOffset(newValue);
          }
      },
 

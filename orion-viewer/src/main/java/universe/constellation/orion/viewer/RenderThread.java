@@ -24,6 +24,9 @@ import android.graphics.*;
 import android.os.Debug;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
+
+import universe.constellation.orion.viewer.view.FullScene;
+import universe.constellation.orion.viewer.view.OrionStatusBarHelper;
 import universe.constellation.orion.viewer.view.Renderer;
 
 import java.util.Iterator;
@@ -47,6 +50,8 @@ public class RenderThread extends Thread implements Renderer {
 
     private OrionImageView view;
 
+    private OrionImageView statusBarHelper;
+
     private LayoutPosition currentPosition;
 
     private LayoutPosition lastEvent;
@@ -65,11 +70,11 @@ public class RenderThread extends Thread implements Renderer {
 
     private OrionViewerActivity activity;
 
-    public RenderThread(OrionViewerActivity activity, OrionImageView view, LayoutStrategy layout, DocumentWrapper doc) {
-        this(activity, view, layout, doc, createBitmapConfig(activity), true);
+    public RenderThread(OrionViewerActivity activity, LayoutStrategy layout, DocumentWrapper doc, FullScene fullScene) {
+        this(activity, fullScene.getDrawView(), layout, doc, createBitmapConfig(activity), true, fullScene.getStatusBarHelper());
     }
 
-    public RenderThread(OrionViewerActivity activity, OrionImageView view, LayoutStrategy layout, DocumentWrapper doc, Bitmap.Config config, boolean executeInSeparateThread) {
+    public RenderThread(OrionViewerActivity activity, OrionImageView view, LayoutStrategy layout, DocumentWrapper doc, Bitmap.Config config, boolean executeInSeparateThread, OrionStatusBarHelper helper) {
         this.view = view;
         this.layout = layout;
         this.doc = doc;
@@ -77,6 +82,7 @@ public class RenderThread extends Thread implements Renderer {
 
         this.bitmapConfig = config;
         this.executeInSeparateThread = executeInSeparateThread;
+        statusBarHelper = helper;
 
         Common.d("BitmapConfig is " +  bitmapConfig);
     }
@@ -251,12 +257,14 @@ public class RenderThread extends Thread implements Renderer {
                 final LayoutPosition info = curPos;
                 if (!executeInSeparateThread) {
                     view.onNewImage(bitmap, info, mutex);
+                    statusBarHelper.onNewImage(bitmap, info, mutex);
                     activity.getDevice().flushBitmap();
                     mutex.countDown();
                 } else {
                     activity.runOnUiThread(new Runnable() {
                         public void run() {
                             view.onNewImage(bitmap, info, mutex);
+                            statusBarHelper.onNewImage(bitmap, info, mutex);
                             //view.invalidate();
                             activity.getDevice().flushBitmap();
                         }

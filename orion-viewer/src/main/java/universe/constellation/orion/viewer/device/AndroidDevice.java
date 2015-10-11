@@ -139,7 +139,7 @@ public class AndroidDevice implements Device {
     }
 
     public int getLayoutId() {
-        return R.layout.android_main;
+        return R.layout.main_view;
     }
 
     public String getDefaultDirectory() {

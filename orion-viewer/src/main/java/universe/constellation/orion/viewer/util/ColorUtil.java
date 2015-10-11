@@ -59,7 +59,7 @@ public class ColorUtil {
         return COLOR_MATRICES[index];
     }
 
-    public static int transforColor(int color, ColorMatrix matrix) {
+    public static int transformColor(int color, ColorMatrix matrix) {
         int r = Color.red(color);
         int g = Color.green(color);
         int b = Color.blue(color);
