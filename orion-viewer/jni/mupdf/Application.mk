@@ -29,6 +29,7 @@ APP_OPTIM := debug
 APP_CFLAGS := -O2
 else
 APP_OPTIM := release
+APP_CFLAGS := -DNOCJK
 endif
 ifdef V8_BUILD
 APP_STL := stlport_static
