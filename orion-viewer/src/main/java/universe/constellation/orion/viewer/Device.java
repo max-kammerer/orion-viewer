@@ -19,6 +19,7 @@
 
 package universe.constellation.orion.viewer;
 
+import android.app.Activity;
 import android.graphics.Point;
 import android.os.Build;
 import android.view.KeyEvent;
@@ -32,11 +33,11 @@ import universe.constellation.orion.viewer.device.OnyxUtil;
  */
 public interface Device {
 
-    final static int DELAY = 1; //1 min
+    int DELAY = 1; //1 min
 
-    final static int VIEWER_DELAY = 10; //10 min
+    int VIEWER_DELAY = 10; //10 min void fullScreen(boolean on, Activity activity);
 
-    public static class Info {
+    class Info {
         public final static String MANUFACTURER = getField("MANUFACTURER");
         public final static String MODEL = getField("MODEL");
         public final static String DEVICE = getField("DEVICE");
@@ -56,7 +57,7 @@ public interface Device {
 
         public final static boolean TEXET_TB576HD = "texet".equalsIgnoreCase(MANUFACTURER) && "TB-576HD".equalsIgnoreCase(DEVICE) && "TB-576HD".equalsIgnoreCase(MODEL);
 
-        public final static boolean MAGICBOOK_BOEYE_T62D = "T62D".equalsIgnoreCase(DEVICE) && "rk30sdk".equalsIgnoreCase(MODEL);
+        public final static boolean RK30SDK = "rk30sdk".equalsIgnoreCase(MODEL) && ("T62D".equalsIgnoreCase(DEVICE) || DEVICE.toLowerCase().contains("onyx") );
 
 		public static String getField(String name) {
             try {
@@ -74,15 +75,15 @@ public interface Device {
     }
 
 
-    final int NEXT = 1;
+    int NEXT = 1;
 
-    final int PREV = -1;
+    int PREV = -1;
 
-    final int ESC = 10;
+    int ESC = 10;
 
-    final int DEFAULT_ACTIVITY = 0;
+    int DEFAULT_ACTIVITY = 0;
 
-    final int VIEWER_ACTIVITY = 1;
+    int VIEWER_ACTIVITY = 1;
 
     void updateTitle(String title);
 
@@ -102,8 +103,6 @@ public interface Device {
 
     void onUserInteraction();
 
-    void updatePageNumber(int current, int max);
-
     void flushBitmap();
 
     int getLayoutId();
@@ -115,4 +114,6 @@ public interface Device {
     Point getDeviceSize();
 
     boolean isDefaultDarkTheme();
+
+    void fullScreen(boolean on, Activity activity);
 }

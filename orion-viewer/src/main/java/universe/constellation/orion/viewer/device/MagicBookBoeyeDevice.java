@@ -1,7 +1,12 @@
 package universe.constellation.orion.viewer.device;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.os.Build;
 import android.view.KeyEvent;
+import android.view.View;
 
+import universe.constellation.orion.viewer.Device;
 import universe.constellation.orion.viewer.OperationHolder;
 
 /**
@@ -22,19 +27,29 @@ public class MagicBookBoeyeDevice extends EInkDevice {
     private static final int CAMERA = 212;
     private static final int SEARCH = 217;
 
+    private static final boolean isT62 = "T62D".equalsIgnoreCase(Device.Info.DEVICE);
+
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event, OperationHolder holder) {
-        switch (keyCode) {
-            case PAGE_UP:
-            case VOLUME_UP:
-                holder.value = PREV;
-                return true;
-            case PAGE_DOWN:
-            case VOLUME_DOWN:
-                holder.value = NEXT;
-                return true;
+        if (isT62) {
+            switch (keyCode) {
+                case PAGE_UP:
+                case VOLUME_UP:
+                    holder.value = PREV;
+                    return true;
+                case PAGE_DOWN:
+                case VOLUME_DOWN:
+                    holder.value = NEXT;
+                    return true;
+            }
         }
 
         return super.onKeyUp(keyCode, event, holder);
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @Override
+    public void fullScreen(boolean on, Activity activity) {
+        activity.getWindow().getDecorView().setSystemUiVisibility(on ? View.GONE : View.VISIBLE);
     }
 }

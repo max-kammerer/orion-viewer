@@ -19,6 +19,7 @@
 
 package universe.constellation.orion.viewer.device;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.PowerManager;
@@ -55,10 +56,6 @@ public class AndroidDevice implements Device {
     }
 
     public void updateTitle(String title) {
-
-    }
-
-    public void updatePageNumber(int current, int max) {
 
     }
 
@@ -168,6 +165,11 @@ public class AndroidDevice implements Device {
 
     @Override
     public void onBookClose(LastPageInfo info) {
+
+    }
+
+    @Override
+    public void fullScreen(boolean on, Activity activity) {
 
     }
 }

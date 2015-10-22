@@ -77,8 +77,8 @@ public class Common {
             return new OnyxDevice();
         }
 
-        if (Device.Info.MAGICBOOK_BOEYE_T62D) {
-            Common.d("Using MAGICBOOK_BOEYE_T62D");
+        if (Device.Info.RK30SDK) {
+            Common.d("Using RK30SDK");
             return new MagicBookBoeyeDevice();
         }
 

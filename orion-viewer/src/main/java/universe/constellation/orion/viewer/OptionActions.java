@@ -39,6 +39,7 @@ public enum OptionActions {
     FULL_SCREEN("FULL_SCREEN") {
         public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
             activity.getWindow().setFlags(newValue ? WindowManager.LayoutParams.FLAG_FULLSCREEN : 0, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            activity.getDevice().fullScreen(newValue, activity);
         }
     },
 
