@@ -105,7 +105,7 @@ public class Controller implements ViewDimensionAware {
     }
 
     public void onDimensionChanged(int newWidth, int newHeight) {
-        if (newWidth >= 0 && newHeight >= 0) {
+        if (newWidth > 0 && newHeight > 0) {
             Common.d("New screen size " + newWidth + "x" + newHeight);
 
             layout.setDimension(newWidth, newHeight);

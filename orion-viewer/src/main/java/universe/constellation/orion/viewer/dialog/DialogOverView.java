@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.graphics.Rect;
 import android.view.Gravity;
 import android.view.WindowManager;
+
+import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.view.OrionDrawScene;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 
@@ -33,6 +35,7 @@ public class DialogOverView {
         Rect rect = orionDrawScene.getViewCoords();
         int width = rect.width();
         int height = rect.height();
+        Common.d("Dialog dim: " + width + "x" + height);
         WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
         params.gravity = Gravity.BOTTOM;
         params.width = width;
