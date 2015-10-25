@@ -21,6 +21,8 @@ public class MuPDFCore
 		System.loadLibrary("mupdf");
 	}
 
+	private DocInfo info;
+
 	/* Readable members */
 	private int numPages = -1;
 	private float pageWidth;
@@ -28,12 +30,14 @@ public class MuPDFCore
 	private long globals;
 	private byte fileBuffer[];
 	private String file_format;
-    private DocInfo info;
+	private boolean isUnencryptedPDF;
+	private final boolean wasOpenedFromBuffer;
 
 	/* The native functions */
-    private native long openFile(String filename, DocInfo info);
-	private native long openBuffer();
+	private native long openFile(String filename, DocInfo info);
+	private native long openBuffer(String magic);
 	private native String fileFormatInternal();
+	private native boolean isUnencryptedPDFInternal();
 	private native int countPagesInternal();
 	private native void gotoPageInternal(int localActionPageNum);
 	private native float getPageWidth();
@@ -42,12 +46,14 @@ public class MuPDFCore
                                  float zoom,
 			int pageW, int pageH,
 			int patchX, int patchY,
-			int patchW, int patchH);
+			int patchW, int patchH,
+			long cookiePtr);
 	private native void updatePageInternal(Bitmap bitmap,
 			int page,
 			int pageW, int pageH,
 			int patchX, int patchY,
-			int patchW, int patchH);
+			int patchW, int patchH,
+			long cookiePtr);
 	private native RectF[] searchPage(String text);
 	private native TextChar[][][][] text();
 	private native byte[] textAsHtml();
@@ -58,6 +64,9 @@ public class MuPDFCore
 	private native void setFocusedWidgetChoiceSelectedInternal(String [] selected);
 	private native String [] getFocusedWidgetChoiceSelected();
 	private native String [] getFocusedWidgetChoiceOptions();
+	private native int getFocusedWidgetSignatureState();
+	private native String checkFocusedSignatureInternal();
+	private native boolean signFocusedSignatureInternal(String keyFile, String password);
 	private native int setFocusedWidgetTextInternal(String text);
 	private native String getFocusedWidgetTextInternal();
 	private native int getFocusedWidgetTypeInternal();
@@ -75,43 +84,82 @@ public class MuPDFCore
 	private native void destroying();
 	private native boolean hasChangesInternal();
 	private native void saveInternal();
+	private native long createCookie();
+	private native void destroyCookie(long cookie);
+	private native void abortCookie(long cookie);
 
-	public static native boolean javascriptSupported();
+	public native boolean javascriptSupported();
+
+	public class Cookie
+	{
+		private final long cookiePtr;
+
+		public Cookie()
+		{
+			cookiePtr = createCookie();
+			if (cookiePtr == 0)
+				throw new OutOfMemoryError();
+		}
+
+		public void abort()
+		{
+			abortCookie(cookiePtr);
+		}
+
+		public void destroy()
+		{
+			// We could do this in finalize, but there's no guarantee that
+			// a finalize will occur before the muPDF context occurs.
+			destroyCookie(cookiePtr);
+		}
+	}
 
 	public MuPDFCore(String filename) throws Exception
 	{
-        info = new DocInfo();
-        globals = openFile(filename, info);
+		info = new DocInfo();
+		globals = openFile(filename, info);
 		if (globals == 0)
 		{
 			throw new Exception(String.format("Cannot open file", filename));
 		}
 		file_format = fileFormatInternal();
-        numPages = info.getPageCount();
+		isUnencryptedPDF = isUnencryptedPDFInternal();
+		wasOpenedFromBuffer = false;
+		numPages = info.getPageCount();
 	}
 
-	public MuPDFCore(byte buffer[]) throws Exception
-	{
+	public MuPDFCore(Context context, byte buffer[], String magic) throws Exception {
 		fileBuffer = buffer;
-		globals = openBuffer();
+		globals = openBuffer(magic != null ? magic : "");
 		if (globals == 0)
 		{
 			throw new Exception("Cannot open pdf from buffer");
 		}
 		file_format = fileFormatInternal();
+		isUnencryptedPDF = isUnencryptedPDFInternal();
+		wasOpenedFromBuffer = true;
 	}
 
-	public  int countPages()
+	public int countPages()
 	{
 		if (numPages < 0)
 			numPages = countPagesSynchronized();
-
 		return numPages;
 	}
 
 	public String fileFormat()
 	{
 		return file_format;
+	}
+
+	public boolean isUnencryptedPDF()
+	{
+		return isUnencryptedPDF;
+	}
+
+	public boolean wasOpenedFromBuffer()
+	{
+		return wasOpenedFromBuffer;
 	}
 
 	private synchronized int countPagesSynchronized() {
@@ -164,48 +212,40 @@ public class MuPDFCore
         Common.d("Document destoyed!");
 	}
 
-	public synchronized Bitmap drawPage(int page,
+	public synchronized void drawPage(Bitmap bm, int page,
 			int pageW, int pageH,
 			int patchX, int patchY,
-			int patchW, int patchH) {
+			int patchW, int patchH,
+			MuPDFCore.Cookie cookie) {
 		gotoPage(page);
-		Bitmap bm = Bitmap.createBitmap(patchW, patchH, Config.ARGB_8888);
-		drawPage(bm, 1f, pageW, pageH, patchX, patchY, patchW, patchH);
-		return bm;
+		drawPage(bm, 1.0F, pageW, pageH, patchX, patchY, patchW, patchH, cookie.cookiePtr);
 	}
 
-	public synchronized Bitmap updatePage(BitmapHolder h, int page,
+	public synchronized void updatePage(Bitmap bm, int page,
 			int pageW, int pageH,
 			int patchX, int patchY,
-			int patchW, int patchH) {
-		Bitmap bm = null;
-		Bitmap old_bm = h.getBm();
-
-		if (old_bm == null)
-			return null;
-
-		bm = old_bm.copy(Bitmap.Config.ARGB_8888, false);
-		old_bm = null;
-
-		updatePageInternal(bm, page, pageW, pageH, patchX, patchY, patchW, patchH);
-		return bm;
+			int patchW, int patchH,
+			MuPDFCore.Cookie cookie) {
+		updatePageInternal(bm, page, pageW, pageH, patchX, patchY, patchW, patchH, cookie.cookiePtr);
 	}
 
-//	public synchronized PassClickResult passClickEvent(int page, float x, float y) {
-//		boolean changed = passClickEventInternal(page, x, y) != 0;
-//
-//		switch (WidgetType.values()[getFocusedWidgetTypeInternal()])
-//		{
-//		case TEXT:
-//			return new PassClickResultText(changed, getFocusedWidgetTextInternal());
-//		case LISTBOX:
-//		case COMBOBOX:
-//			return new PassClickResultChoice(changed, getFocusedWidgetChoiceOptions(), getFocusedWidgetChoiceSelected());
-//		default:
-//			return new PassClickResult(changed);
-//		}
-//
-//	}
+	public synchronized PassClickResult passClickEvent(int page, float x, float y) {
+		boolean changed = passClickEventInternal(page, x, y) != 0;
+
+		switch (WidgetType.values()[getFocusedWidgetTypeInternal()])
+		{
+		case TEXT:
+			return new PassClickResultText(changed, getFocusedWidgetTextInternal());
+		case LISTBOX:
+		case COMBOBOX:
+			return new PassClickResultChoice(changed, getFocusedWidgetChoiceOptions(), getFocusedWidgetChoiceSelected());
+		case SIGNATURE:
+			return new PassClickResultSignature(changed, getFocusedWidgetSignatureState());
+		default:
+			return new PassClickResult(changed);
+		}
+
+	}
 
 	public synchronized boolean setFocusedWidgetText(int page, String text) {
 		boolean success;
@@ -217,6 +257,14 @@ public class MuPDFCore
 
 	public synchronized void setFocusedWidgetChoiceSelected(String [] selected) {
 		setFocusedWidgetChoiceSelectedInternal(selected);
+	}
+
+	public synchronized String checkFocusedSignature() {
+		return checkFocusedSignatureInternal();
+	}
+
+	public synchronized boolean signFocusedSignature(String keyFile, String password) {
+		return signFocusedSignatureInternal(keyFile, password);
 	}
 
 	public synchronized LinkInfo [] getPageLinks(int page) {
@@ -249,22 +297,22 @@ public class MuPDFCore
         // Currently we don't need to distinguish the blocks level or
         // the spans, and we need to collect the text into words.
         ArrayList<TextWord[]> lns = new ArrayList<TextWord[]>();
-
-        for (TextChar[][][] bl: chars) {
-                    if (bl != null) {
-                        for (TextChar[][] ln: bl) {
-                            if (ln != null) {
-                                for (TextChar[] sp: ln) {
-                                    for (TextChar tc: sp) {
-                                        System.out.print(tc.c);
-                                }
-                                    System.out.println("");
-                            }
-                        }
-
-                    }
-                }
-        }
+//
+//        for (TextChar[][][] bl: chars) {
+//                    if (bl != null) {
+//                        for (TextChar[][] ln: bl) {
+//                            if (ln != null) {
+//                                for (TextChar[] sp: ln) {
+//                                    for (TextChar tc: sp) {
+//                                        System.out.print(tc.c);
+//                                }
+//                                    System.out.println("");
+//                            }
+//                        }
+//
+//                    }
+//                }
+//        }
 
         for (TextChar[][][] bl: chars) {
             if (bl != null) {
@@ -390,7 +438,7 @@ public class MuPDFCore
         gotoPage(n);
         Common.d("MuPDFCore starts rendering...");
         long start = System.currentTimeMillis();
-        drawPage(bitmap, (float)zoom, w, h, left, top, w, h);
+        drawPage(bitmap, (float)zoom, w, h, left, top, w, h, 0);
         Common.d("MuPDFCore render time takes " + n + " = " + 0.001 * (System.currentTimeMillis() - start) + " s");
     }
 

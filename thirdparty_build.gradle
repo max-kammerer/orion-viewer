@@ -54,7 +54,7 @@ task downloadMupdf << {
 
     exec {
         workingDir file(mupdf)
-        commandLine = ['git', 'checkout', '1.3']
+        commandLine = ['git', 'checkout', '1.7a']
     }
 
     exec {
@@ -84,6 +84,13 @@ task patchMupdf() << {
 }
 
 task patchAndBuildMupdf(dependsOn: [patchMupdf]) << {
+    exec {
+        workingDir file(mupdf + "/platform/android")
+        commandLine ndkDir + "/ndk-build"
+    }
+}
+
+task buildMupdf() << {
     exec {
         workingDir file(mupdf + "/platform/android")
         commandLine ndkDir + "/ndk-build"
