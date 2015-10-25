@@ -4,6 +4,8 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import junit.framework.Assert
+import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
+import universe.constellation.orion.viewer.test.framework.TestUtil
 import java.util.concurrent.CountDownLatch
 
 /**

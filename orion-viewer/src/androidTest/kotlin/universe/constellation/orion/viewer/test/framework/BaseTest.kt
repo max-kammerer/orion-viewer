@@ -1,4 +1,4 @@
-package universe.constellation.orion.viewer.test
+package universe.constellation.orion.viewer.test.framework
 
 import android.content.Context
 import android.test.AndroidTestCase

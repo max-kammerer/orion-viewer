@@ -1,10 +1,10 @@
-package universe.constellation.orion.viewer.test
+package universe.constellation.orion.viewer.test.framework
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.test.ActivityUnitTestCase
 import universe.constellation.orion.viewer.OrionViewerActivity
-import android.content.Intent
-import android.content.Context
-import android.net.Uri
 
 /**
  * User: mike

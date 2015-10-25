@@ -1,21 +1,15 @@
 package universe.constellation.orion.viewer.test
 
-import universe.constellation.orion.viewer.OrionViewerActivity
-import universe.constellation.orion.viewer.LayoutStrategy
-import universe.constellation.orion.viewer.SimpleLayoutStrategy
-import universe.constellation.orion.viewer.Controller
-import universe.constellation.orion.viewer.LastPageInfo
-import android.graphics.Point
-import android.graphics.Bitmap
 import android.content.Context
-import android.test.ActivityUnitTestCase
-import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Point
 import junit.framework.Assert
-import universe.constellation.orion.viewer.LayoutPosition
+import universe.constellation.orion.viewer.*
+import universe.constellation.orion.viewer.test.framework.ActivityBaseTest
+import universe.constellation.orion.viewer.test.framework.SingleThreadRenderer
+import universe.constellation.orion.viewer.test.framework.TestUtil
+import java.util.*
 import java.util.concurrent.CountDownLatch
-import universe.constellation.orion.viewer.OrionImageView
-import kotlin.test.assertEquals
-import java.util.Arrays
 
 /**
  * User: mike

@@ -1,6 +1,8 @@
 package universe.constellation.orion.viewer.test
 
 import junit.framework.Assert.*
+import universe.constellation.orion.viewer.test.framework.BaseTest
+import universe.constellation.orion.viewer.test.framework.TestUtil
 
 /**
  * User: mike

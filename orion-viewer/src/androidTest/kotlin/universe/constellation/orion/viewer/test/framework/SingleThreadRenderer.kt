@@ -1,9 +1,7 @@
-package universe.constellation.orion.viewer.test
+package universe.constellation.orion.viewer.test.framework
 
 import android.graphics.Bitmap
-import android.view.ViewGroup
 import universe.constellation.orion.viewer.*
-import universe.constellation.orion.viewer.view.OrionStatusBarHelper
 
 /**
  * User: mike
@@ -12,7 +10,7 @@ import universe.constellation.orion.viewer.view.OrionStatusBarHelper
  */
 
 class SingleThreadRenderer(actvity: OrionViewerActivity, view: OrionImageView, layout: LayoutStrategy, doc: DocumentWrapper, config: Bitmap.Config) :
-                    RenderThread(actvity, view, layout, doc, config, false, OrionStatusBarHelper(actvity.findViewById(R.id.toolbar) as ViewGroup)) {
+                    RenderThread(actvity, view, layout, doc, config, false, actvity.statusBarHelper) {
 
 
     override fun startRenreder() {

@@ -1,9 +1,11 @@
-package universe.constellation.orion.viewer.test
+package universe.constellation.orion.viewer.test.framework
 
-import android.test.ActivityInstrumentationTestCase2
-import universe.constellation.orion.viewer.OrionViewerActivity
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.test.ActivityInstrumentationTestCase2
 import universe.constellation.orion.viewer.Controller
+import universe.constellation.orion.viewer.OrionViewerActivity
 
 /**
  * User: mike
@@ -17,11 +19,14 @@ open class InstrumentationTestCase : ActivityInstrumentationTestCase2<OrionViewe
         return instrumentation!!.context!!
     }
 
-    override fun getActivity(): OrionViewerActivity {
-        return super.getActivity()!!
-    }
-
     fun getController() : Controller {
         return activity.controller!!
+    }
+
+    fun startActivityWithBook(book: String) {
+        val file = extractFileFromTestData(book)
+        val intent = Intent();
+        intent.setData(Uri.fromFile(file))
+        setActivityIntent(intent)
     }
 }

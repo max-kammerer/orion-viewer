@@ -1,12 +1,11 @@
-package universe.constellation.orion.viewer.test
+package universe.constellation.orion.viewer.test.framework
 
+import android.content.Context
+import android.os.Environment
 import universe.constellation.orion.viewer.DocumentWrapper
 import universe.constellation.orion.viewer.FileUtil
 import java.io.File
 import java.io.FileOutputStream
-import android.content.Context
-import android.test.AndroidTestCase
-import android.os.Environment
 import java.io.IOException
 
 /**
