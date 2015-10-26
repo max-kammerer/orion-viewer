@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.Device;
+import universe.constellation.orion.viewer.LayoutPosition;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.android.touch.AndroidScaleWrapper;
 import universe.constellation.orion.viewer.android.touch.OldAdroidScaleWrapper;
@@ -57,6 +58,7 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
     private Point endFocus = new Point();
 
     private float curScale = 1f;
+    private LayoutPosition info;
 
     private ScaleDetectorWrapper gestureDetector;
 
@@ -98,6 +100,7 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
             action = -100;
         }
 
+        OrionDrawScene view = getView();
         switch (currentState) {
             case UNDEFINED:
                 if (PinchEvents.START_SCALE == pinch) {
@@ -116,14 +119,30 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                 if (pinch != null) {
                     nextState = States.PINCH_ZOOM;
                 } else  if (ACTION_MOVE == action || ACTION_UP == action) {
+                    int width = view.getWidth();
+                    if (insideViewWidth(view.info)) {
+                        last0.x = start0.x;
+                    } else {
+                        int delta = last0.x - start0.x;
+                        int offset = -info.x.offset;
+                        if (delta < 0) {
+                            if (offset + info.x.pageDimension + delta < width) {
+                                last0.x = start0.x - offset - info.x.pageDimension + width;
+                            }
+                        } else {
+                            if (offset + delta > 0) {
+                                last0.x = start0.x - offset;
+                            }
+                        }
+                    }
                     if (action == ACTION_UP) {
-                        getView().afterScaling();
+                        view.afterScaling();
                         activity.getController().translateAndZoom(false, 1f, -last0.x + start0.x, -last0.y + start0.y);
                         nextState = States.UNDEFINED;
                     } else {
-                        getView().beforeScaling();
-                        getView().doScale(1f, start0, last0, true);
-                        getView().postInvalidate();
+                        view.beforeScaling();
+                        view.doScale(1f, start0, last0, true);
+                        view.postInvalidate();
                     }
                     processed = true;
                 }
@@ -192,8 +211,8 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                             boolean isLongClick = (SystemClock.uptimeMillis() - startTime) > TIME_DELTA;
 
                             if (last0.x != -1 && last0.y != -1) {
-                                int width = getView().getWidth();
-                                int height = getView().getHeight();
+                                int width = view.getWidth();
+                                int height = view.getHeight();
 
                                 int i = 3 * last0.y / height;
                                 int j = 3 * last0.x / width;
@@ -222,16 +241,16 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                             curScale *= gestureDetector.getScaleFactor();
                             endFocus.x = (int) gestureDetector.getFocusX();
                             endFocus.y = (int) gestureDetector.getFocusY();
-                            getView().beforeScaling();
-                            getView().doScale(curScale, startFocus, endFocus, enableTouchMoveOnPinchZoom);
-                            getView().postInvalidate();
+                            view.beforeScaling();
+                            view.doScale(curScale, startFocus, endFocus, enableTouchMoveOnPinchZoom);
+                            view.postInvalidate();
                             //System.out.println(endFocus.x + " onscale " + endFocus.y);
                             break;
                         case END_SCALE:
                             nextState = States.UNDEFINED;
                             float newX = MoveUtil.calcOffset(startFocus.x, endFocus.x, curScale, enableTouchMoveOnPinchZoom);
                             float newY = MoveUtil.calcOffset(startFocus.y, endFocus.y, curScale, enableTouchMoveOnPinchZoom);
-                            getView().afterScaling();
+                            view.afterScaling();
                             //There is no start scale event!!!!
                             if (Device.Info.TEXET_TB176FL) {
                                 curScale *= gestureDetector.getScaleFactor();
@@ -258,6 +277,7 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                     endFocus.y = startFocus.y;
                     processed = true;
                     break;
+                case DO_MOVE: info = view.info.clone();
             }
         }
         currentState = nextState;
@@ -265,6 +285,7 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
     }
 
     public void reset() {
+        info = null;
         curScale = 1f;
         currentState = States.UNDEFINED;
         prevState = States.UNDEFINED;
@@ -304,5 +325,12 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                 Common.d(e);
             }
         }
+    }
+
+    private boolean insideViewWidth(LayoutPosition info) {
+        if (info == null) {
+            return false;
+        }
+        return info.x.pageDimension <= getView().getWidth();
     }
 }
