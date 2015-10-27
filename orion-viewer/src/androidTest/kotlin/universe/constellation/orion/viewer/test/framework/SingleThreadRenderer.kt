@@ -10,7 +10,7 @@ import universe.constellation.orion.viewer.*
  */
 
 class SingleThreadRenderer(actvity: OrionViewerActivity, view: OrionImageView, layout: LayoutStrategy, doc: DocumentWrapper, config: Bitmap.Config) :
-                    RenderThread(actvity, view, layout, doc, config, false, actvity.statusBarHelper) {
+                    RenderThread(actvity, layout, doc, false, actvity.fullScene) {
 
 
     override fun startRenreder() {

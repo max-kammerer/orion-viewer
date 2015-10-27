@@ -19,19 +19,17 @@
 
 package universe.constellation.orion.viewer;
 
-import android.content.Context;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.os.Debug;
-import android.util.DisplayMetrics;
-import android.view.WindowManager;
-
-import universe.constellation.orion.viewer.view.FullScene;
-import universe.constellation.orion.viewer.view.OrionStatusBarHelper;
-import universe.constellation.orion.viewer.view.Renderer;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.concurrent.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
+import universe.constellation.orion.viewer.view.FullScene;
+import universe.constellation.orion.viewer.view.Renderer;
 
 /**
  * User: mike
@@ -46,11 +44,7 @@ public class RenderThread extends Thread implements Renderer {
 
     protected LayoutStrategy layout;
 
-    private LinkedList<CacheInfo> cachedBitmaps = new LinkedList<CacheInfo>();
-
-    private OrionImageView view;
-
-    private OrionImageView statusBarHelper;
+    private LinkedList<CacheInfo> cachedBitmaps = new LinkedList<>();
 
     private LayoutPosition currentPosition;
 
@@ -58,58 +52,25 @@ public class RenderThread extends Thread implements Renderer {
 
     protected DocumentWrapper doc;
 
-    private final Bitmap.Config bitmapConfig;
-
     private boolean executeInSeparateThread;
-
-    private boolean clearCache;
 
     private boolean stopped;
 
-    private boolean paused;
-
     private OrionViewerActivity activity;
 
+    private FullScene fullScene;
+
     public RenderThread(OrionViewerActivity activity, LayoutStrategy layout, DocumentWrapper doc, FullScene fullScene) {
-        this(activity, fullScene.getDrawView(), layout, doc, createBitmapConfig(activity), true, fullScene.getStatusBarHelper());
+        this(activity, layout, doc, true, fullScene);
     }
 
-    public RenderThread(OrionViewerActivity activity, OrionImageView view, LayoutStrategy layout, DocumentWrapper doc, Bitmap.Config config, boolean executeInSeparateThread, OrionStatusBarHelper helper) {
-        this.view = view;
+    public RenderThread(OrionViewerActivity activity, LayoutStrategy layout, DocumentWrapper doc, boolean executeInSeparateThread, FullScene scene) {
         this.layout = layout;
         this.doc = doc;
         this.activity = activity;
-
-        this.bitmapConfig = config;
         this.executeInSeparateThread = executeInSeparateThread;
-        statusBarHelper = helper;
-
-        Common.d("BitmapConfig is " +  bitmapConfig);
+        this.fullScene = scene;
         Common.d("RenderThread was created successfully");
-    }
-
-    public static Bitmap.Config createBitmapConfig(OrionViewerActivity activity) {
-        WindowManager manager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
-        if (manager == null) {
-            return Bitmap.Config.ARGB_8888;
-        }
-
-        DisplayMetrics metrics = new DisplayMetrics();
-        manager.getDefaultDisplay().getMetrics(metrics);
-
-        Common.d("PixelFormat is " +  manager.getDefaultDisplay().getPixelFormat());
-
-        switch (manager.getDefaultDisplay().getPixelFormat()) {
-            case PixelFormat.A_8:
-                return Bitmap.Config.ALPHA_8;
-            case PixelFormat.RGB_565:
-                return  Bitmap.Config.RGB_565;
-            case PixelFormat.RGBA_4444:
-                return  Bitmap.Config.ARGB_4444;
-            case PixelFormat.RGBA_8888:
-            default:
-                return  Bitmap.Config.ARGB_8888;
-        }
     }
 
     @Override
@@ -165,7 +126,6 @@ public class RenderThread extends Thread implements Renderer {
     @Override
     public void onResume() {
         synchronized (this) {
-            paused = false;
             notify();
         }
     }
@@ -180,15 +140,6 @@ public class RenderThread extends Thread implements Renderer {
 
             int rotation;
             synchronized (this) {
-//                if (paused) {
-//                    try {
-//                        wait();
-//                    } catch (InterruptedException e) {
-//                        Common.d(e);
-//                    }
-//                    continue;
-//                }
-
                 if (lastEvent != null) {
                     currentPosition = lastEvent;
                     lastEvent = null;
@@ -258,16 +209,13 @@ public class RenderThread extends Thread implements Renderer {
 
                 final LayoutPosition info = curPos;
                 if (!executeInSeparateThread) {
-                    view.onNewImage(bitmap, info, mutex);
-                    statusBarHelper.onNewImage(bitmap, info, mutex);
+                    fullScene.onNewImage(bitmap, info, mutex);
                     activity.getDevice().flushBitmap();
                     mutex.countDown();
                 } else {
                     activity.runOnUiThread(new Runnable() {
                         public void run() {
-                            view.onNewImage(bitmap, info, mutex);
-                            statusBarHelper.onNewImage(bitmap, info, mutex);
-                            //view.invalidate();
+                            fullScene.onNewImage(bitmap, info, mutex);
                             activity.getDevice().flushBitmap();
                         }
                     });
@@ -305,33 +253,15 @@ public class RenderThread extends Thread implements Renderer {
             }
         }
         if (bitmap == null) {
-            Common.d("Creating Bitmap " + bitmapConfig + " " + screenWidth + "x" + screenHeight + "...");
             bitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888);
         } else {
-            Common.d("Cached ");
+            Common.d("Using cached bitmap " + bitmap);
         }
-
-//        cacheCanvas.setMatrix(null);
-//        if (rotation != 0) {
-//            int rotationShift = (screenHeight - screenWidth) / 2;
-//            cacheCanvas.rotate(-rotation * 90, screenHeight / 2, screenWidth / 2);
-//            cacheCanvas.translate(-rotation * rotationShift, -rotation * rotationShift);
-//        }
 
         Point leftTopCorner = layout.convertToPoint(curPos);
 
 
         doc.renderPage(curPos.pageNumber, bitmap, curPos.docZoom, width, height, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + width, leftTopCorner.y + height);
-
-//        long startTime = System.currentTimeMillis();
-
-//        cacheCanvas.setBitmap(bitmap);
-//        Rect src = new Rect(0, 0, width, height);
-//        Rect dest = new Rect(0, 0, width, height);
-//        cacheCanvas.drawBitmap(renderBitmap, src, dest, new Paint());
-//
-//        long endTime = System.currentTimeMillis();
-//        Common.d("Drawing bitmap in cache " + 0.001 * (endTime - startTime) + " s");
 
         resultEntry = new CacheInfo(curPos, bitmap);
         return resultEntry;
