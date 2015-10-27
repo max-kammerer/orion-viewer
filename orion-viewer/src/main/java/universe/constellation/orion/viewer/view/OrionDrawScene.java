@@ -35,6 +35,7 @@ import java.util.concurrent.CountDownLatch;
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.LayoutPosition;
 import universe.constellation.orion.viewer.OrionImageView;
+import universe.constellation.orion.viewer.rendering.PageView;
 import universe.constellation.orion.viewer.util.MoveUtil;
 
 /**
@@ -60,17 +61,15 @@ public class OrionDrawScene extends View implements OrionImageView {
 
     private boolean enableMoveOnPinchZoom;
 
-    private Paint borderPaint;
-
-    private Paint defaultPaint;
-
     private boolean inScaling = false;
 
     private List<DrawTask> tasks = new ArrayList<>();
 
-    private Rect stuffTempRect = new Rect();
-
     private boolean inited = false;
+
+    private PageView pageView = null;
+
+    private ColorStuff stuff;
 
     public OrionDrawScene(Context context) {
         super(context);
@@ -85,8 +84,7 @@ public class OrionDrawScene extends View implements OrionImageView {
     }
 
     void init(ColorStuff stuff) {
-        defaultPaint = stuff.bd.getPaint();
-        borderPaint = stuff.borderPaint;
+        this.stuff = stuff;
         inited = true;
     }
 
@@ -114,23 +112,17 @@ public class OrionDrawScene extends View implements OrionImageView {
                 canvas.scale(myScale, myScale);
             }
 
-            stuffTempRect.set(
-                    info.x.getOccupiedAreaStart(),
-                    info.y.getOccupiedAreaStart(),
-                    info.x.getOccupiedAreaEnd(),
-                    info.y.getOccupiedAreaEnd());
-
-            canvas.drawBitmap(bitmap, stuffTempRect, stuffTempRect, defaultPaint);
+            pageView.draw(canvas, stuff);
 
             if (inScaling) {
+                pageView.drawBorder(canvas, stuff);
                 canvas.restore();
-                drawBorder(canvas, myScale);
             }
 
             Common.d("OrionView: bitmap rendering takes " + 0.001f * (System.currentTimeMillis() - start) + " s");
 
             for (DrawTask drawTask : tasks) {
-                drawTask.drawOnCanvas(canvas, defaultPaint, null);
+                drawTask.drawOnCanvas(canvas, stuff.bd.getPaint(), null);
             }
         }
         canvas.restore();
@@ -140,23 +132,17 @@ public class OrionDrawScene extends View implements OrionImageView {
         }
     }
 
-    private void drawBorder(Canvas canvas, float myScale) {
-        Common.d("Draw: border");
-
-        int left = (int) ((-info.x.offset - startFocus.x) * myScale + (enableMoveOnPinchZoom ? endFocus.x : startFocus.x));
-        int top = (int) ((-info.y.offset - startFocus.y) * myScale + (enableMoveOnPinchZoom ? endFocus.y : startFocus.y));
-
-        int right = (int) (left + info.x.pageDimension * myScale);
-        int bottom = (int) (top + info.y.pageDimension * myScale);
-
-        canvas.drawRect(left, top, right, bottom, borderPaint);
-    }
 
     @Override
     public void onNewImage(Bitmap bitmap, LayoutPosition info, CountDownLatch latch) {
         this.bitmap = bitmap;
         this.latch = latch;
         this.info = info;
+        if (pageView == null || pageView.getPageNum() != info.pageNumber) {
+            pageView = new PageView(info.pageNumber);
+        }
+        pageView.setBitmap(bitmap);
+        pageView.setPosition(info);
     }
 
     @Override
@@ -181,7 +167,7 @@ public class OrionDrawScene extends View implements OrionImageView {
 
 
     public boolean isDefaultColorMatrix() {
-        return defaultPaint.getColorFilter() == null;
+        return stuff.bd.getPaint().getColorFilter() == null;
     }
 
     public Bitmap getBitmap() {
