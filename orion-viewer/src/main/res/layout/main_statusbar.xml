@@ -25,14 +25,15 @@
         android:id="@+id/offset"
         style="@style/StatusBar"
         android:layout_gravity="end"
-        android:paddingLeft="5dp"
-        android:typeface="monospace" />
+        android:paddingLeft="2dp"
+        android:typeface="monospace"
+        android:fontFamily="monospace" />
 
     <TextView
         android:id="@+id/page"
         style="@style/StatusBar"
         android:gravity="end"
-        android:paddingLeft="5dp" />
+        android:paddingLeft="2dp" />
 
     <TextView
         android:id="@+id/totalPages"
