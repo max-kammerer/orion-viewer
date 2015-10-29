@@ -1,5 +1,10 @@
 ext {
-    thirparty_build_root = rootDir.canonicalPath + "/../thirdparty-nocjk/"
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    ndkDir = properties.getProperty('ndk.dir')
+    thirparty_folder = properties.getProperty('thirdparty.dir')
+
+    thirparty_build_root = rootDir.canonicalPath + "/" + thirparty_folder
     mupdf = thirparty_build_root + "/mupdf/"
     djvu = thirparty_build_root + "/djvu/"
 

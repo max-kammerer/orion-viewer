@@ -2,11 +2,6 @@
 apply from: 'project.gradle'
 defaultTasks 'buildNativeLibs'
 
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-def ndkDir = properties.getProperty('ndkDir')
-
-
 buildscript {
     repositories { mavenCentral() }
 }
