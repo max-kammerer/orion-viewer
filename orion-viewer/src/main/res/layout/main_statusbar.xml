@@ -27,7 +27,8 @@
         android:layout_gravity="end"
         android:paddingLeft="2dp"
         android:typeface="monospace"
-        android:fontFamily="monospace" />
+        android:fontFamily="monospace"
+        android:textSize="11sp"/>
 
     <TextView
         android:id="@+id/page"

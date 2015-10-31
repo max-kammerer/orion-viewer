@@ -36,9 +36,10 @@ class OrionStatusBarHelper(val view: ViewGroup) : OrionImageView {
     }
 
     private fun pad(value: Int): String {
-        if (value < 10) {
+        val pValue = Math.abs(value)
+        if (pValue < 10) {
             return "  " + value
-        } else if (value < 100) {
+        } else if (pValue < 100) {
             return " " + value
         } else {
             return "" + value
