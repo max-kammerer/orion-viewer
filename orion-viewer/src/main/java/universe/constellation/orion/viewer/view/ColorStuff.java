@@ -53,7 +53,7 @@ public class ColorStuff {
         bd = new BitmapDrawable(context.getResources(), bitmap);
         bd.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
         borderPaint.setColor(Color.BLACK);
-        borderPaint.setStrokeWidth(2);
+        borderPaint.setStrokeWidth(3);
         borderPaint.setStyle(Paint.Style.STROKE);
     }
 
