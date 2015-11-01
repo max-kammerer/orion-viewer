@@ -169,7 +169,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         return zoom;
     }
 
-    public boolean changeMargins(int leftMargin, int topMargin, int rightMargin, int bottomMargin, boolean enableEven, int leftEvenMargin, int rightEvenMargin) {
+    public boolean changeCropMargins(int leftMargin, int topMargin, int rightMargin, int bottomMargin, boolean enableEven, int leftEvenMargin, int rightEvenMargin) {
         if (leftMargin != this.leftMargin || rightMargin != this.rightMargin || topMargin != this.topMargin || bottomMargin != this.bottomMargin
                 || leftEvenMargin != this.leftEvenMargin || rightEvenMargin != this.rightEvenMargin || this.enableEvenCrop != enableEven) {
             this.leftMargin = leftMargin;
@@ -205,7 +205,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
 
     public void init(LastPageInfo info, GlobalOptions options) {
-        changeMargins(info.leftMargin, info.topMargin, info.rightMargin, info.bottomMargin, info.enableEvenCropping, info.leftEvenMargin, info.rightEventMargin);
+        changeCropMargins(info.leftMargin, info.topMargin, info.rightMargin, info.bottomMargin, info.enableEvenCropping, info.leftEvenMargin, info.rightEventMargin);
         changeRotation(info.rotation);
         changeZoom(info.zoom);
         changeNavigation(info.walkOrder);

@@ -174,12 +174,12 @@ public class Controller implements ViewDimensionAware {
      }
 
     //left, top, right, bottom
-    public void changeMargins(int [] margins) {
-        changeMargins(margins[0], margins[2], margins[1], margins[3], layout.isEnableEvenCrop(), margins[4], margins[5]);
+    public void changeCropMargins(int[] margins) {
+        changeCropMargins(margins[0], margins[2], margins[1], margins[3], layout.isEnableEvenCrop(), margins[4], margins[5]);
     }
 
-    public void changeMargins(int leftMargin, int topMargin, int rightMargin, int bottomMargin, boolean isEven, int leftEvenMargin, int rightEvenMargin) {
-        if (layout.changeMargins(leftMargin, topMargin, rightMargin, bottomMargin, isEven, leftEvenMargin, rightEvenMargin)) {
+    public void changeCropMargins(int leftMargin, int topMargin, int rightMargin, int bottomMargin, boolean isEven, int leftEvenMargin, int rightEvenMargin) {
+        if (layout.changeCropMargins(leftMargin, topMargin, rightMargin, bottomMargin, isEven, leftEvenMargin, rightEvenMargin)) {
             layout.reset(layoutInfo, layoutInfo.pageNumber);
             sendViewChangeNotification();
         }
