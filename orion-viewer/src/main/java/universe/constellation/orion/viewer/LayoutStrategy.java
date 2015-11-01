@@ -67,14 +67,6 @@ public interface LayoutStrategy {
 
     void setDimension(int width, int height);
 
-    int getLeftMargin();
-
-    int getTopMargin();
-
-    int getRightMargin();
-
-    int getBottomMargin();
-
     boolean isEnableEvenCrop();
 
     PageWalker getWalker();

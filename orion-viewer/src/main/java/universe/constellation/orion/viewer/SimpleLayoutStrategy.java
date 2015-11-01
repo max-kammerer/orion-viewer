@@ -248,22 +248,6 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         viewHeight = height;
     }
 
-    public int getLeftMargin() {
-        return leftMargin;
-    }
-
-    public int getTopMargin() {
-        return topMargin;
-    }
-
-    public int getRightMargin() {
-        return rightMargin;
-    }
-
-    public int getBottomMargin() {
-        return bottomMargin;
-    }
-
     @Override
     public PageWalker getWalker() {
         return walker;
