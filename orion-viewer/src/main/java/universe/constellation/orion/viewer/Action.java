@@ -521,6 +521,6 @@ public enum Action {
         if (margins[index] < OrionViewerActivity.CROP_RESTRICTION_MIN) {
             margins[index] = OrionViewerActivity.CROP_RESTRICTION_MIN;
         }
-        controller.changeMargins(margins);
+        controller.changeCropMargins(margins);
     }
 }

@@ -727,7 +727,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         preview.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 onApplyAction();
-                controller.changeMargins(cropBorders[0], cropBorders[2], cropBorders[1], cropBorders[3], checkBox.isChecked(), cropBorders[4], cropBorders[5]);
+                controller.changeCropMargins(cropBorders[0], cropBorders[2], cropBorders[1], cropBorders[3], checkBox.isChecked(), cropBorders[4], cropBorders[5]);
             }
         });
 
