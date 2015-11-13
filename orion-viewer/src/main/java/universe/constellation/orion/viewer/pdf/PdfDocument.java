@@ -57,7 +57,7 @@ public class PdfDocument implements DocumentWrapper {
     }
 
     public void destroy() {
-        core.freeMemory();
+        core.onDestroy();
     }
 
     public String getTitle() {

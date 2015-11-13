@@ -37,6 +37,7 @@
 #define LINE_THICKNESS (0.07f)
 #define INK_THICKNESS (4.0f)
 #define SMALL_FLOAT (0.00001)
+#define PROOF_RESOLUTION (300)
 
 enum
 {
@@ -292,6 +293,15 @@ JNI_FN(MuPDFCore_openFile)(JNIEnv * env, jobject thiz, jstring jfilename, jobjec
 	//glo->resolution = 160;
 	glo->resolution = 72;
 	glo->alerts_initialised = 0;
+
+#ifdef DEBUG
+	/* Try and send stdout/stderr to file in debug builds. This
+	 * path may not work on all platforms, but it works on the
+	 * LG G3, and it's no worse than not redirecting it anywhere
+	 * on anything else. */
+	freopen("/storage/emulated/0/Download/stdout.txt", "a", stdout);
+	freopen("/storage/emulated/0/Download/stderr.txt", "a", stderr);
+#endif
 
 	filename = (*env)->GetStringUTFChars(env, jfilename, NULL);
 	if (filename == NULL)
@@ -2165,9 +2175,9 @@ JNI_FN(MuPDFCore_getFocusedWidgetChoiceOptions)(JNIEnv * env, jobject thiz)
 	fz_var(opts);
 	fz_try(ctx)
 	{
-		nopts = pdf_choice_widget_options(ctx, idoc, focus, NULL);
+		nopts = pdf_choice_widget_options(ctx, idoc, focus, 0, NULL);
 		opts = fz_malloc(ctx, nopts * sizeof(*opts));
-		(void)pdf_choice_widget_options(ctx, idoc, focus, opts);
+		(void)pdf_choice_widget_options(ctx, idoc, focus, 0, opts);
 	}
 	fz_catch(ctx)
 	{
@@ -2696,6 +2706,194 @@ JNI_FN(MuPDFCore_abortCookie)(JNIEnv * env, jobject thiz, jlong cookiePtr)
 	if (cookie != NULL)
 		cookie->abort = 1;
 }
+
+static char *tmp_gproof_path(char *path)
+{
+	FILE *f;
+	int i;
+	char *buf = malloc(strlen(path) + 20 + 1);
+	if (!buf)
+		return NULL;
+
+	for (i = 0; i < 10000; i++)
+	{
+		sprintf(buf, "%s.%d.gproof", path, i);
+
+		LOGE("Trying for %s\n", buf);
+		f = fopen(buf, "r");
+		if (f != NULL)
+		{
+			fclose(f);
+			continue;
+		}
+
+		f = fopen(buf, "w");
+		if (f != NULL)
+		{
+			fclose(f);
+			break;
+		}
+	}
+	if (i == 10000)
+	{
+		LOGE("Failed to find temp gproof name");
+		free(buf);
+		return NULL;
+	}
+
+	LOGE("Rewritten to %s\n", buf);
+	return buf;
+}
+
+JNIEXPORT jstring JNICALL
+JNI_FN(MuPDFCore_startProofInternal)(JNIEnv * env, jobject thiz, int inResolution)
+{
+#ifdef SUPPORT_GPROOF
+	globals *glo = get_globals(env, thiz);
+	fz_context *ctx = glo->ctx;
+	char *tmp;
+	jstring ret;
+
+	if (!glo->doc || !glo->current_path)
+		return NULL;
+
+	tmp = tmp_gproof_path(glo->current_path);
+	if (!tmp)
+		return NULL;
+
+	int theResolution = PROOF_RESOLUTION;
+	if (inResolution != 0)
+		theResolution = inResolution;
+
+	fz_try(ctx)
+	{
+		fz_write_gproof_file(ctx, glo->current_path, glo->doc, tmp, theResolution, "", "");
+
+		LOGE("Creating %s\n", tmp);
+		ret = (*env)->NewStringUTF(env, tmp);
+	}
+	fz_always(ctx)
+	{
+		free(tmp);
+	}
+	fz_catch(ctx)
+	{
+		ret = NULL;
+	}
+	return ret;
+#else
+	return NULL;
+#endif
+}
+
+JNIEXPORT void JNICALL
+JNI_FN(MuPDFCore_endProofInternal)(JNIEnv * env, jobject thiz, jstring jfilename)
+{
+#ifdef SUPPORT_GPROOF
+	globals *glo = get_globals(env, thiz);
+	fz_context *ctx = glo->ctx;
+	const char *tmp;
+
+	if (!glo->doc || !glo->current_path || jfilename == NULL)
+		return;
+
+	tmp = (*env)->GetStringUTFChars(env, jfilename, NULL);
+	if (tmp)
+	{
+		LOGE("Deleting %s\n", tmp);
+
+		unlink(tmp);
+		(*env)->ReleaseStringUTFChars(env, jfilename, tmp);
+	}
+#endif
+}
+
+JNIEXPORT jboolean JNICALL
+JNI_FN(MuPDFCore_gprfSupportedInternal)(JNIEnv * env)
+{
+#ifdef SUPPORT_GPROOF
+	return JNI_TRUE;
+#else
+	return JNI_FALSE;
+#endif
+}
+
+JNIEXPORT int JNICALL
+JNI_FN(MuPDFCore_getNumSepsOnPageInternal)(JNIEnv *env, jobject thiz, int page)
+{
+	globals *glo = get_globals(env, thiz);
+	fz_context *ctx = glo->ctx;
+	int i;
+
+	for (i = 0; i < NUM_CACHE; i++)
+	{
+		if (glo->pages[i].page != NULL && glo->pages[i].number == page)
+			break;
+	}
+	if (i == NUM_CACHE)
+		return 0;
+
+	LOGE("Counting seps on page %d", page);
+
+	return fz_count_separations_on_page(ctx, glo->pages[i].page);
+}
+
+JNIEXPORT void JNICALL
+JNI_FN(MuPDFCore_controlSepOnPageInternal)(JNIEnv *env, jobject thiz, int page, int sep, jboolean disable)
+{
+	globals *glo = get_globals(env, thiz);
+	fz_context *ctx = glo->ctx;
+	int i;
+
+	for (i = 0; i < NUM_CACHE; i++)
+	{
+		if (glo->pages[i].page != NULL && glo->pages[i].number == page)
+			break;
+	}
+	if (i == NUM_CACHE)
+		return;
+
+	fz_control_separation_on_page(ctx, glo->pages[i].page, sep, disable);
+}
+
+JNIEXPORT jobject JNICALL
+JNI_FN(MuPDFCore_getSepInternal)(JNIEnv *env, jobject thiz, int page, int sep)
+{
+	globals *glo = get_globals(env, thiz);
+	fz_context *ctx = glo->ctx;
+	const char *name;
+	char rgba[4];
+	unsigned int bgra;
+	unsigned int cmyk;
+	jobject jname;
+	jclass sepClass;
+	jmethodID ctor;
+	int i;
+
+	for (i = 0; i < NUM_CACHE; i++)
+	{
+		if (glo->pages[i].page != NULL && glo->pages[i].number == page)
+			break;
+	}
+	if (i == NUM_CACHE)
+		return NULL;
+
+	/* MuPDF returns RGBA as bytes. Android wants a packed BGRA int. */
+	name = fz_get_separation_on_page(ctx, glo->pages[i].page, sep, (unsigned int *)(&rgba[0]), &cmyk);
+	bgra = (rgba[0] << 16) | (rgba[1]<<8) | rgba[2] | (rgba[3]<<24);
+	jname = name ? (*env)->NewStringUTF(env, name) : NULL;
+
+	sepClass = (*env)->FindClass(env, PACKAGENAME "/Separation");
+	if (sepClass == NULL)
+		return NULL;
+
+	ctor = (*env)->GetMethodID(env, sepClass, "<init>", "(Ljava/lang/String;II)V");
+	if (ctor == NULL)
+		return NULL;
+
+	return (*env)->NewObject(env, sepClass, ctor, jname, bgra, cmyk);
+}
+
 
 JNIEXPORT void JNICALL
 JNI_FN(MuPDFCore_getPageInfo)(JNIEnv *env, jobject thiz, int page, jobject info)

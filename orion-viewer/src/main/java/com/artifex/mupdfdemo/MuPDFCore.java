@@ -1,24 +1,32 @@
 package com.artifex.mupdfdemo;
-import java.util.ArrayList;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.PointF;
 import android.graphics.RectF;
+
+import java.util.ArrayList;
 
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.DocInfo;
 import universe.constellation.orion.viewer.PageInfo;
 
-import java.util.ArrayList;
-
-
 public class MuPDFCore
 {
 	/* load our native library */
+	private static boolean gs_so_available = false;
 	static {
 		System.loadLibrary("mupdf");
+		if (false && gprfSupportedInternal())
+		{
+			try {
+				System.loadLibrary("gs");
+				gs_so_available = true;
+			}
+			catch (UnsatisfiedLinkError e) {
+				gs_so_available = false;
+			}
+		}
 	}
 
 	private DocInfo info;
@@ -34,6 +42,7 @@ public class MuPDFCore
 	private final boolean wasOpenedFromBuffer;
 
 	/* The native functions */
+	private static native boolean gprfSupportedInternal();
 	private native long openFile(String filename, DocInfo info);
 	private native long openBuffer(String magic);
 	private native String fileFormatInternal();
@@ -87,6 +96,12 @@ public class MuPDFCore
 	private native long createCookie();
 	private native void destroyCookie(long cookie);
 	private native void abortCookie(long cookie);
+
+	private native String startProofInternal(int resolution);
+	private native void endProofInternal(String filename);
+	private native int getNumSepsOnPageInternal(int page);
+	private native int controlSepOnPageInternal(int page, int sep, boolean disable);
+	private native Separation getSepInternal(int page, int sep);
 
 	public native boolean javascriptSupported();
 
@@ -411,35 +426,64 @@ public class MuPDFCore
 		saveInternal();
 	}
 
-    public native void setContrast(int contrast);
-    public native void setThreshold(int threshold);
-    private native void getPageInfo(int pageNum, PageInfo info);
+	public synchronized String startProof(int resolution) {
+		return startProofInternal(resolution);
+	}
 
-    public synchronized PageInfo getPageInfo(int page) {
-        PageInfo info = new PageInfo();
-        getPageInfo(page, info);
-        System.out.println("Page info: " + info.width + "x" + info.height);
-        return info;
-    }
+	public synchronized void endProof(String filename) {
+		endProofInternal(filename);
+	}
 
-    public void freeMemory() {
-        onDestroy();
-    }
+	public static boolean gprfSupported() {
+		if (gs_so_available == false)
+			return false;
+		return gprfSupportedInternal();
+	}
 
-    public DocInfo getInfo() {
-        return info;
-    }
+	public boolean canProof()
+	{
+		String format = fileFormat();
+		if (format.contains("PDF"))
+			return true;
+		return false;
+	}
 
-    public int getPageCount() {
-        return info.getPageCount();
-    }
+	public synchronized int getNumSepsOnPage(int page) {
+		return getNumSepsOnPageInternal(page);
+	}
 
-    public synchronized void renderPage(int n, Bitmap bitmap, double zoom, int left, int top, int w, int h) {
-        gotoPage(n);
-        Common.d("MuPDFCore starts rendering...");
-        long start = System.currentTimeMillis();
-        drawPage(bitmap, (float)zoom, w, h, left, top, w, h, 0);
-        Common.d("MuPDFCore render time takes " + n + " = " + 0.001 * (System.currentTimeMillis() - start) + " s");
-    }
+	public synchronized int controlSepOnPage(int page, int sep, boolean disable) {
+		return controlSepOnPageInternal(page, sep, disable);
+	}
 
+	public synchronized Separation getSep(int page, int sep) {
+		return getSepInternal(page, sep);
+	}
+
+	public native void setContrast(int contrast);
+	public native void setThreshold(int threshold);
+	private native void getPageInfo(int pageNum, PageInfo info);
+
+	public synchronized PageInfo getPageInfo(int page) {
+		PageInfo info = new PageInfo();
+		getPageInfo(page, info);
+		System.out.println("Page info: " + info.width + "x" + info.height);
+		return info;
+	}
+
+	public DocInfo getInfo() {
+		return info;
+	}
+
+	public int getPageCount() {
+		return info.getPageCount();
+	}
+
+	public synchronized void renderPage(int n, Bitmap bitmap, double zoom, int left, int top, int w, int h) {
+		gotoPage(n);
+		Common.d("MuPDFCore starts rendering...");
+		long start = System.currentTimeMillis();
+		drawPage(bitmap, (float)zoom, w, h, left, top, w, h, 0);
+		Common.d("MuPDFCore render time takes " + n + " = " + 0.001 * (System.currentTimeMillis() - start) + " s");
+	}
 }
