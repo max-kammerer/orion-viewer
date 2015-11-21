@@ -24,7 +24,7 @@ android {
         versionName = orionVersionName
 
         minSdkVersion 7
-        targetSdkVersion 23
+        targetSdkVersion 21
 
         testApplicationId "universe.constellation.orion.viewer.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
