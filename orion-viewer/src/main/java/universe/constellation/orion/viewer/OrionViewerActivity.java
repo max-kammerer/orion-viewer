@@ -318,15 +318,23 @@ public class OrionViewerActivity extends OrionBaseActivity {
             if (doc != null) {
                 doc.destroy();
             }
-            AlertDialog.Builder themedAlertBuilder = createThemedAlertBuilder().setMessage("Error while opening " + filePath + ": " + e.getMessage() + " " + e.getCause());
+            AlertDialog.Builder themedAlertBuilder = createThemedAlertBuilder().setMessage("Error while opening " + filePath + ": " + e.getMessage() + " cause of " + e.getCause());
+            final Exception exception = e;
             themedAlertBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     finish();
+                    throw new RuntimeException(exception);
+                }
+            });
+            themedAlertBuilder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    finish();
+                    throw new RuntimeException(exception);
                 }
             });
             themedAlertBuilder.create().show();
-            throw new RuntimeException(e);
         }
         return doc;
     }
