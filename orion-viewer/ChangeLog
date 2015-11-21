@@ -1,3 +1,7 @@
+===== 0.59.0 (Nov 21, 2015) =====
+* Fixed problems with android 6 support
+* Added restrictions to move operation
+
 ===== 0.58.0 (Oct 29, 2015) =====
 * mupdf lib upgraded to 1.7a
     ** tiff format support
