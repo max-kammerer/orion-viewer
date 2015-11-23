@@ -49,7 +49,7 @@ public class DjvuDocument implements DocumentWrapper {
         openDocument(fileName);
     }
 
-    public boolean openDocument(String fileName) {
+    public synchronized boolean openDocument(String fileName) {
         pageCount = openFile(fileName);
         return true;
     }
@@ -58,7 +58,7 @@ public class DjvuDocument implements DocumentWrapper {
         return pageCount;
     }
 
-    public PageInfo getPageInfo(int pageNum) {
+    public synchronized PageInfo getPageInfo(int pageNum) {
         PageInfo info = new PageInfo();
         long start = System.currentTimeMillis();
         getPageInfo(pageNum, info);
@@ -66,14 +66,14 @@ public class DjvuDocument implements DocumentWrapper {
         return info;
     }
 
-    public void renderPage(int pageNumber, Bitmap bitmap, double zoom, int w, int h, int left, int top, int right, int bottom) {
+    public synchronized void renderPage(int pageNumber, Bitmap bitmap, double zoom, int w, int h, int left, int top, int right, int bottom) {
         gotoPage(pageNumber);
         long start = System.currentTimeMillis();
         drawPage(bitmap, (float) zoom, right - left, bottom - top, left, top, right - left, bottom - top);
         Common.d("Page " + pageNumber + " rendering takes = " + 0.001 * (System.currentTimeMillis() - start) + " s");
     }
 
-    public void destroy() {
+    public synchronized void destroy() {
         destroying();
     }
 
