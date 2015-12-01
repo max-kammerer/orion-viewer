@@ -3,7 +3,7 @@ To build Orion Viewer you will need:
     gradle 2.4+
 
     for building native libs you also need
-        android-ndk-r10e
+        android-ndk-r9d
         git 1.9+
         linux make util for building mupdf 3rd party libs (cygwin or mingw for windows system)
 
