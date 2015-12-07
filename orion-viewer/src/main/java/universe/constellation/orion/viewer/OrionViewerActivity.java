@@ -259,13 +259,13 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
 
             Common.stopLogger();
-            openFile(file);
+            openFile(file, intent);
         } else /*if (intent.getAction().endsWith("MAIN"))*/ {
             //TODO error
         }
     }
 
-    public DocumentWrapper openFile(String filePath) {
+    private DocumentWrapper openFile(String filePath, final Intent intent) {
         DocumentWrapper doc = null;
         Common.d("Trying to open file: " + filePath);
 
@@ -324,14 +324,14 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     finish();
-                    throw new RuntimeException(exception);
+                    throw new RuntimeException("Exception on processing " + intent, exception);
                 }
             });
             themedAlertBuilder.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
                     finish();
-                    throw new RuntimeException(exception);
+                    throw new RuntimeException("Exception on processing " + intent, exception);
                 }
             });
             themedAlertBuilder.create().show();
