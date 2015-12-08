@@ -1269,7 +1269,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     public class MyArrayAdapter extends ArrayAdapter implements SpinnerAdapter {
 
         public MyArrayAdapter() {
-            super(OrionViewerActivity.this, android.R.layout.simple_spinner_dropdown_item, OrionViewerActivity.this.getResources().getTextArray(R.array.fits));
+            super(OrionViewerActivity.this, R.layout.support_simple_spinner_dropdown_item, OrionViewerActivity.this.getResources().getTextArray(R.array.fits));
         }
 
         @Override

@@ -132,8 +132,8 @@ public class OrionApplication extends Application {
 
     private int getThemeId() {
         return !isLightTheme() ?
-                android.support.v7.appcompat.R.style.Theme_AppCompat_NoActionBar :
-                android.support.v7.appcompat.R.style.Theme_AppCompat_Light_NoActionBar;
+                R.style.Theme_AppCompat_NoActionBar :
+                R.style.Theme_AppCompat_Light_NoActionBar;
     }
 
     public BookmarkAccessor getBookmarkAccessor() {
