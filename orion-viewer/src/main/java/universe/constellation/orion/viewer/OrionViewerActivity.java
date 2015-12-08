@@ -63,6 +63,7 @@ import android.widget.ViewAnimator;
 
 import java.io.File;
 
+import universe.constellation.orion.viewer.android.FileUtils;
 import universe.constellation.orion.viewer.dialog.SearchDialog;
 import universe.constellation.orion.viewer.dialog.TapHelpDialog;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
@@ -225,26 +226,12 @@ public class OrionViewerActivity extends OrionBaseActivity {
         Uri uri = intent.getData();
         if (uri != null) {
             Common.d("File URI  = " + uri.toString());
+            String path = null;
             if ("content".equalsIgnoreCase(uri.getScheme())) {
-                Cursor cursor = null;
-                try {
-                    cursor = getContentResolver().query(uri, new String[]{"_data"}, null, null, null);
-                    if (cursor.moveToFirst()) {
-                        String str = cursor.getString(0);
-                        if (str != null) {
-                            uri = Uri.parse(str);
-                        }
-                    }
-                } catch (Exception e) {
-                    Common.d(e);
-                } finally {
-                    if (cursor != null) {
-                        cursor.close();
-                    }
-                }
+                path = FileUtils.getPath(this, uri);
             }
 
-            String file = uri.getPath();
+            String file = path != null ? path : uri.getPath();
 
             if (controller != null) {
                 if (lastPageInfo!= null) {
