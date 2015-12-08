@@ -135,7 +135,7 @@ public class MuPDFCore
 		globals = openFile(filename, info);
 		if (globals == 0)
 		{
-			throw new Exception(String.format("Cannot open file", filename));
+			throw new Exception("Cannot open file: " + filename);
 		}
 		file_format = fileFormatInternal();
 		isUnencryptedPDF = isUnencryptedPDFInternal();
