@@ -106,13 +106,11 @@ public class GlobalOptions implements Serializable {
 
     private LinkedList<RecentEntry> recentFiles;
 
-    private SharedPreferences prefs;
+    protected final SharedPreferences prefs;
 
     private SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener;
 
     private Map<String, Object> prefValues = new HashMap<String, Object>();
-
-    private List<PrefListener> prefListener = new ArrayList<PrefListener>();
 
     GlobalOptions(final OrionApplication context, SharedPreferences preferences, boolean loadRecents) {
         prefs = preferences;
@@ -421,8 +419,6 @@ public class GlobalOptions implements Serializable {
     public int getScreenBacklightTimeout(int defaultValue) {
         return getIntFromStringProperty(SCREEN_BACKLIGHT_TIMEOUT, defaultValue);
     }
-
-
 
 //    public void subscribe(PrefListener listener) {
 //        prefListener.add(listener);

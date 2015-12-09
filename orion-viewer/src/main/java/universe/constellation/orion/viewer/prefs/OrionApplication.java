@@ -21,6 +21,7 @@ package universe.constellation.orion.viewer.prefs;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
@@ -28,6 +29,7 @@ import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import universe.constellation.orion.viewer.*;
 import universe.constellation.orion.viewer.bookmarks.BookmarkAccessor;
+import universe.constellation.orion.viewer.device.EInkDevice;
 
 import java.util.Locale;
 
@@ -62,6 +64,17 @@ public class OrionApplication extends Application {
         instance = this;
         super.onCreate();
         setLangCode(getOptions().getAppLanguage());
+
+        if (device instanceof EInkDevice && getOptions().isShowTapHelp()) {
+            try {
+                SharedPreferences prefs = getOptions().prefs;
+                SharedPreferences.Editor edit = prefs.edit();
+                edit.putBoolean(GlobalOptions.DRAW_OFF_PAGE, false);
+                edit.commit();
+            } catch (Exception e) {
+                Common.d(e);
+            }
+        }
     }
 
     public void setLangCode(String langCode) {
