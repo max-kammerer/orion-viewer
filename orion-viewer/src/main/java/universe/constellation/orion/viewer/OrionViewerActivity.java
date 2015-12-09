@@ -20,7 +20,6 @@
 package universe.constellation.orion.viewer;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,6 +28,7 @@ import android.os.Bundle;
 import android.os.Debug;
 import android.support.v4.internal.view.SupportMenuItem;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -75,7 +75,7 @@ import universe.constellation.orion.viewer.view.OrionStatusBarHelper;
 
 public class OrionViewerActivity extends OrionBaseActivity {
 
-    private Dialog dialog;
+    private AppCompatDialog dialog;
 
     public static final int OPEN_BOOKMARK_ACTIVITY_RESULT = 1;
 
@@ -974,8 +974,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public void initOptionDialog() {
-        dialog = createThemedDialog();
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog = new AppCompatDialog(this);
+        dialog.supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.android_dialog);
         animator = ((ViewAnimator)dialog.findViewById(R.id.viewanim));
 
