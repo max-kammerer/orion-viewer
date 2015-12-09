@@ -46,8 +46,9 @@ public class OnyxDevice extends EInkDevice {
                     if ("GC".equals(entry.toString())) {
                         fullUpdateEntry = entry;
                     }
-                    Common.d("Fast update entry " + entry);
                 }
+                Common.d("Fast update entry " + fastUpdateEntry);
+                Common.d("Full update entry " + fullUpdateEntry);
             }
 
             isSuccessful = fastUpdateEntry != null && fullUpdateEntry != null;
