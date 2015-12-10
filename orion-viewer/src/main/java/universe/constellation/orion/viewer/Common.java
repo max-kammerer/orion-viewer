@@ -25,6 +25,7 @@ import universe.constellation.orion.viewer.device.EdgeDevice;
 import universe.constellation.orion.viewer.device.MagicBookBoeyeDevice;
 import universe.constellation.orion.viewer.device.Nook2Device;
 import universe.constellation.orion.viewer.device.OnyxDevice;
+import universe.constellation.orion.viewer.device.SonyPrsT1AndT2;
 import universe.constellation.orion.viewer.device.texet.TexetTB176FLDevice;
 import universe.constellation.orion.viewer.device.texet.TexetTB576HDDevice;
 import universe.constellation.orion.viewer.device.texet.TexetTb138Device;
@@ -50,6 +51,11 @@ public class Common {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+
+        if(Device.Info.SONY_PRS_T1_T2) {
+            Common.d("Using SonyPrsT1AndT2");
+            return new SonyPrsT1AndT2();
         }
 
         if(Device.Info.TEXET_TB_138) {

@@ -8,7 +8,7 @@ import universe.constellation.orion.viewer.prefs.GlobalOptions;
 /**
  * Created by mike on 9/9/14.
  */
-public abstract class EInkDevice extends AndroidDevice {
+public abstract class EInkDevice extends EInkDeviceWithoutFastRefresh {
 
     protected int counter;
 

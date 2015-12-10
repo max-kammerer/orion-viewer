@@ -61,19 +61,6 @@ public class AndroidDevice implements Device {
 
     public boolean onKeyUp(int keyCode, KeyEvent event, OperationHolder holder) {
         //check mapped keys
-        if (Info.SONY_PRS_T1_T2) {
-            if (keyCode == 0) {
-                 switch (event.getScanCode()) {
-                    case 105:
-                        holder.value = PREV;
-                        return true;
-                    case 106:
-                        holder.value = NEXT;
-                        return true;
-                    }
-            }
-        }
-
         switch (keyCode) {
             case KeyEvent.KEYCODE_SOFT_LEFT:
             case KeyEvent.KEYCODE_DPAD_LEFT:

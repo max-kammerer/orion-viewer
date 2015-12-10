@@ -38,7 +38,7 @@ import universe.constellation.orion.viewer.LastPageInfo;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.R;
 import universe.constellation.orion.viewer.bookmarks.BookmarkAccessor;
-import universe.constellation.orion.viewer.device.EInkDevice;
+import universe.constellation.orion.viewer.device.EInkDeviceWithoutFastRefresh;
 
 /**
  * User: mike
@@ -73,7 +73,7 @@ public class OrionApplication extends Application {
         GlobalOptions options = getOptions();
         setLangCode(options.getAppLanguage());
 
-        if (device instanceof EInkDevice) {
+        if (device instanceof EInkDeviceWithoutFastRefresh) {
             String version = options.getVersion();
             if (options.isShowTapHelp() || VersionUtilKt.isVersionEquals("0.0.0", version)) {
                 try {

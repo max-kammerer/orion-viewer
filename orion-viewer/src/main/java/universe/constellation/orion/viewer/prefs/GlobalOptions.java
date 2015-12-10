@@ -20,12 +20,19 @@
 package universe.constellation.orion.viewer.prefs;
 
 import android.content.SharedPreferences;
-import universe.constellation.orion.viewer.*;
-import universe.constellation.orion.viewer.device.EInkDevice;
-import universe.constellation.orion.viewer.view.OrionDrawScene;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+
+import universe.constellation.orion.viewer.Common;
+import universe.constellation.orion.viewer.OptionActions;
+import universe.constellation.orion.viewer.OrionViewerActivity;
+import universe.constellation.orion.viewer.PageWalker;
+import universe.constellation.orion.viewer.device.EInkDeviceWithoutFastRefresh;
+import universe.constellation.orion.viewer.view.OrionDrawScene;
 
 /**
  * User: mike
@@ -276,7 +283,7 @@ public class GlobalOptions implements Serializable {
     }
 
     public boolean isDrawOffPage() {
-        return getBooleanProperty(DRAW_OFF_PAGE, !(OrionApplication.instance.getDevice() instanceof EInkDevice));
+        return getBooleanProperty(DRAW_OFF_PAGE, !(OrionApplication.instance.getDevice() instanceof EInkDeviceWithoutFastRefresh));
     }
 
     public boolean isActionBarVisible() {
