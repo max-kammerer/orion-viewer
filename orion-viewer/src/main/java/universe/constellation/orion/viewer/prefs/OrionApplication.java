@@ -27,11 +27,18 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
-import universe.constellation.orion.viewer.*;
-import universe.constellation.orion.viewer.bookmarks.BookmarkAccessor;
-import universe.constellation.orion.viewer.device.EInkDevice;
 
 import java.util.Locale;
+
+import universe.constellation.orion.viewer.BuildConfig;
+import universe.constellation.orion.viewer.Common;
+import universe.constellation.orion.viewer.Controller;
+import universe.constellation.orion.viewer.Device;
+import universe.constellation.orion.viewer.LastPageInfo;
+import universe.constellation.orion.viewer.OrionViewerActivity;
+import universe.constellation.orion.viewer.R;
+import universe.constellation.orion.viewer.bookmarks.BookmarkAccessor;
+import universe.constellation.orion.viewer.device.EInkDevice;
 
 /**
  * User: mike
@@ -63,16 +70,21 @@ public class OrionApplication extends Application {
     public void onCreate() {
         instance = this;
         super.onCreate();
-        setLangCode(getOptions().getAppLanguage());
+        GlobalOptions options = getOptions();
+        setLangCode(options.getAppLanguage());
 
-        if (device instanceof EInkDevice && getOptions().isShowTapHelp()) {
-            try {
-                SharedPreferences prefs = getOptions().prefs;
-                SharedPreferences.Editor edit = prefs.edit();
-                edit.putBoolean(GlobalOptions.DRAW_OFF_PAGE, false);
-                edit.commit();
-            } catch (Exception e) {
-                Common.d(e);
+        if (device instanceof EInkDevice) {
+            String version = options.getVersion();
+            if (options.isShowTapHelp() || VersionUtilKt.isVersionEquals("0.0.0", version)) {
+                try {
+                    SharedPreferences prefs = options.prefs;
+                    SharedPreferences.Editor edit = prefs.edit();
+                    edit.putBoolean(GlobalOptions.DRAW_OFF_PAGE, false);
+                    edit.putString(GlobalOptions.VERSION, BuildConfig.VERSION_NAME);
+                    edit.commit();
+                } catch (Exception e) {
+                    Common.d(e);
+                }
             }
         }
     }

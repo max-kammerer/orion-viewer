@@ -104,6 +104,8 @@ public class GlobalOptions implements Serializable {
 
     public final static String ENABLE_MOVE_ON_PINCH_ZOOM = "ENABLE_MOVE_ON_PINCH_ZOOM";
 
+    public final static String VERSION = "VERSION";
+
     private LinkedList<RecentEntry> recentFiles;
 
     protected final SharedPreferences prefs;
@@ -419,6 +421,11 @@ public class GlobalOptions implements Serializable {
     public int getScreenBacklightTimeout(int defaultValue) {
         return getIntFromStringProperty(SCREEN_BACKLIGHT_TIMEOUT, defaultValue);
     }
+
+    public String getVersion() {
+        return getStringProperty(VERSION, "0.0.0");
+    }
+
 
 //    public void subscribe(PrefListener listener) {
 //        prefListener.add(listener);
