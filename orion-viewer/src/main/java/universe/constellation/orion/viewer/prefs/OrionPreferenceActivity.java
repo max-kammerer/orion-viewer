@@ -19,8 +19,11 @@
 
 package universe.constellation.orion.viewer.prefs;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.DialogPreference;
 import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
@@ -58,22 +61,22 @@ public class OrionPreferenceActivity extends PreferenceActivity {
         }
     }
 
-//    @SuppressWarnings("deprecation")
-//    @Override
-//    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-//        super.onPreferenceTreeClick(preferenceScreen, preference);
-//        if (preference != null) {
-//            if (preference instanceof PreferenceScreen)
-//                if (((PreferenceScreen) preference).getDialog() != null)
-//                    ((PreferenceScreen) preference).getDialog().getWindow().getDecorView().setBackgroundDrawable(this.getWindow().getDecorView().getBackground().getConstantState().newDrawable());
-//
-//            if (preference instanceof DialogPreference)
-//                if (((DialogPreference) preference).getDialog() != null)
-//                    ((DialogPreference) preference).getDialog().getWindow().getDecorView().setBackgroundDrawable(this.getWindow().getDecorView().getBackground().getConstantState().newDrawable());
-//        }
-//        return false;
-//    }
-//
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+        super.onPreferenceTreeClick(preferenceScreen, preference);
+        if (preference != null && getOrionContext().getSdkVersion() < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            if (preference instanceof PreferenceScreen)
+                if (((PreferenceScreen) preference).getDialog() != null)
+                    ((PreferenceScreen) preference).getDialog().getWindow().getDecorView().setBackgroundDrawable(this.getWindow().getDecorView().getBackground().getConstantState().newDrawable());
+
+            if (preference instanceof DialogPreference)
+                if (((DialogPreference) preference).getDialog() != null)
+                    ((DialogPreference) preference).getDialog().getWindow().getDecorView().setBackgroundDrawable(this.getWindow().getDecorView().getBackground().getConstantState().newDrawable());
+        }
+        return false;
+    }
+
 
     public OrionApplication getOrionContext() {
         return (OrionApplication) getApplicationContext();
