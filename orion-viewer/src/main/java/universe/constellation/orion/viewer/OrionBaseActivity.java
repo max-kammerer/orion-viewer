@@ -20,13 +20,13 @@
 package universe.constellation.orion.viewer;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
@@ -293,15 +293,7 @@ public class OrionBaseActivity extends AppCompatActivity {
     }
 
     public AlertDialog.Builder createThemedAlertBuilder() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        int sdkVersion = getOrionContext().getSdkVersion();
-        if (sdkVersion < 14) {
-            boolean isLightTheme = getOrionContext().isLightTheme();
-            if (isLightTheme) {
-                builder.setInverseBackgroundForced(true);
-            }
-        }
-        return builder;
+        return new AlertDialog.Builder(this);
     }
 
     public boolean isLevel5ApiEnabled() {

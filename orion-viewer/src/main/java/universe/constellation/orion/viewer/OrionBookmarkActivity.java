@@ -20,11 +20,11 @@
 package universe.constellation.orion.viewer;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.SparseBooleanArray;
 import android.view.*;
 import android.widget.*;
