@@ -32,13 +32,13 @@
     <TableRow android:gravity="center">
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:textSize="25sp" android:gravity="left|center_vertical" android:text="@string/crop_left"/>
+                  android:textSize="20sp" android:gravity="left|center_vertical" android:text="@string/crop_left"/>
 
         <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                      android:src="@drawable/minus" android:id="@+id/crop_minus"/>
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content" android:id="@+id/crop_value"
-                  android:textSize="25sp" android:gravity="center"/>
+                  android:textSize="20sp" android:gravity="center"/>
         <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                      android:src="@drawable/plus" android:id="@+id/crop_plus"/>
     </TableRow>
@@ -46,13 +46,13 @@
     <TableRow android:gravity="center">
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:textSize="25sp" android:gravity="left|center_vertical" android:text="@string/crop_right"/>
+                  android:textSize="20sp" android:gravity="left|center_vertical" android:text="@string/crop_right"/>
 
         <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                      android:src="@drawable/minus" android:id="@+id/crop_minus"/>
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content" android:id="@+id/crop_value"
-                  android:textSize="25sp" android:gravity="center"/>
+                  android:textSize="20sp" android:gravity="center"/>
         <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
                      android:src="@drawable/plus" android:id="@+id/crop_plus"/>
     </TableRow>

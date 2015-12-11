@@ -53,7 +53,7 @@
                              android:src="@drawable/minus" android:id="@+id/page_picker_minus"/>
                 <EditText android:layout_width="wrap_content"
                           android:layout_height="wrap_content" android:id="@+id/page_picker_message"
-                          android:textSize="22sp" android:maxLength="5" android:inputType="number"
+                          android:textSize="20sp" android:maxLength="5" android:inputType="number"
                           android:selectAllOnFocus="true"/>
 
                 <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -97,14 +97,14 @@
 
             <Spinner android:id="@+id/zoom_spinner" android:entries="@array/fits"
                                                android:layout_width="wrap_content"
-                                               android:layout_height="fill_parent" android:textSize="22sp" />
+                                               android:layout_height="fill_parent" android:textSize="20sp" />
 
         </LinearLayout>
         <!--</HorizontalScrollView>-->
 
         <SeekBar android:id="@+id/zoom_picker_seeker"
                  android:minWidth="100dp" android:layout_height="wrap_content"
-                 android:layout_width="fill_parent" android:layout_margin="5dp"></SeekBar>
+                 android:layout_width="fill_parent" android:layout_margin="5dp"/>
 
         <LinearLayout android:orientation="horizontal"
                       android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="10dp"
