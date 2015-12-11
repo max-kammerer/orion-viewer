@@ -282,16 +282,6 @@ public class OrionBaseActivity extends AppCompatActivity {
         builder.create().show();
     }
 
-    public Dialog createThemedDialog() {
-        int sdkVersion = getOrionContext().getSdkVersion();
-        if (sdkVersion >= 14) {
-            return new Dialog(this);
-        } else {
-            boolean isLightTheme = getOrionContext().isLightTheme();
-            return new Dialog(this, isLightTheme ? R.style.dialog_light : R.style.dialog_dark);
-        }
-    }
-
     public AlertDialog.Builder createThemedAlertBuilder() {
         return new AlertDialog.Builder(this);
     }

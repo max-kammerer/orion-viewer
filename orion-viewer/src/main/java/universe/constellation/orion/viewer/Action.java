@@ -19,10 +19,11 @@
 
 package universe.constellation.orion.viewer;
 
-import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.support.v7.app.AppCompatDialog;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
@@ -128,15 +129,17 @@ public enum Action {
 
     SHOW_OUTLINE (R.string.action_outline, R.integer.action_open_outline) {
 		public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-			Common.d("In Show Outline!");
+			Common.d("Show Outline...");
 			OutlineItem[] outline = controller.getOutline();
 
 			if (outline != null && outline.length != 0) {
-                final Dialog dialog = activity.createThemedDialog();
-                dialog.requestWindowFeature(Window.FEATURE_LEFT_ICON);
+                final AppCompatDialog dialog = new AppCompatDialog(activity);
+                dialog.supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.outline);
-                dialog.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.collapsed);
-                dialog.setTitle(R.string.menu_outline_text);
+
+                final Toolbar toolbar = (Toolbar) dialog.findViewById(R.id.toolbar);
+                toolbar.setTitle(R.string.menu_outline_text);
+                toolbar.setLogo(R.drawable.collapsed);
 
                 final InMemoryTreeStateManager<Integer> manager = new InMemoryTreeStateManager<>();
                 manager.setVisibleByDefault(false);
@@ -148,26 +151,21 @@ public enum Action {
                 tocTree.setSelection(navigateTo);
                 dialog.setCanceledOnTouchOutside(true);
                 dialog.show();
-                View titleField = dialog.findViewById(android.R.id.title);
-                if (titleField == null) {
-                    return;
-                }
 
-                final View clickView = titleField.getParent() instanceof View ? (View) titleField.getParent() : titleField;
-                clickView.setOnClickListener(new View.OnClickListener() {
+                toolbar.setOnClickListener(new View.OnClickListener() {
 
                     boolean expanded = false;
 
                     @Override
                     public void onClick(View v) {
                         if (expanded) {
-                            dialog.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.collapsed);
+                            toolbar.setLogo(R.drawable.collapsed);
                             List<Integer> children = manager.getChildren(null);
                             for (Integer child : children) {
                                 manager.collapseChildren(child);
                             }
                         } else {
-                            dialog.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.expanded);
+                            toolbar.setLogo(R.drawable.expanded);
                             manager.expandEverythingBelow(null);
                         }
 
