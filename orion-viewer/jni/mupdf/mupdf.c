@@ -294,15 +294,6 @@ JNI_FN(MuPDFCore_openFile)(JNIEnv * env, jobject thiz, jstring jfilename, jobjec
 	glo->resolution = 72;
 	glo->alerts_initialised = 0;
 
-#ifdef DEBUG
-	/* Try and send stdout/stderr to file in debug builds. This
-	 * path may not work on all platforms, but it works on the
-	 * LG G3, and it's no worse than not redirecting it anywhere
-	 * on anything else. */
-	freopen("/storage/emulated/0/Download/stdout.txt", "a", stdout);
-	freopen("/storage/emulated/0/Download/stderr.txt", "a", stderr);
-#endif
-
 	filename = (*env)->GetStringUTFChars(env, jfilename, NULL);
 	if (filename == NULL)
 	{
