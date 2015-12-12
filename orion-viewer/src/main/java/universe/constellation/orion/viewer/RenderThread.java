@@ -85,6 +85,7 @@ public class RenderThread extends Thread implements Renderer {
         statusBarHelper = helper;
 
         Common.d("BitmapConfig is " +  bitmapConfig);
+        Common.d("RenderThread was created successfully");
     }
 
     public static Bitmap.Config createBitmapConfig(OrionViewerActivity activity) {
@@ -123,6 +124,7 @@ public class RenderThread extends Thread implements Renderer {
 
     @Override
     public void startRenreder() {
+        Common.d("Starting renderer");
         start();
     }
 

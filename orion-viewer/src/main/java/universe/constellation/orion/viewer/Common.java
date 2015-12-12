@@ -19,6 +19,7 @@
 
 package universe.constellation.orion.viewer;
 
+import android.os.Build;
 import android.util.Log;
 import universe.constellation.orion.viewer.device.AndroidDevice;
 import universe.constellation.orion.viewer.device.EdgeDevice;
@@ -42,6 +43,8 @@ public class Common {
     public static final boolean ENABLE2SCREEN = true;
 
     public static Device createDevice() {
+        logDeviceInfo();
+
         if (ENABLE2SCREEN) {
             try {
                  if (Device.Info.EDGE) {
@@ -152,4 +155,13 @@ public class Common {
     public static String memoryInMB(long memoryInBytes) {
         return "" + memoryInBytes/1024/1024 + "Mb";
     }
+
+    public static void logDeviceInfo() {
+        Common.d("Orion Viewer " + BuildConfig.VERSION_NAME);
+        Common.d("Device: " + Device.Info.DEVICE);
+        Common.d("Model: " + Device.Info.MODEL);
+        Common.d("Manufacturer:  " + Device.Info.MANUFACTURER);
+        Common.d("Android version :  " + Build.VERSION.CODENAME + " " + Build.VERSION.RELEASE);
+    }
+
 }

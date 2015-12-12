@@ -58,7 +58,7 @@ public class Controller implements ViewDimensionAware {
     private boolean hasPendingEvents = false;
 
     public Controller(OrionViewerActivity activity, DocumentWrapper doc, LayoutStrategy layout, Renderer renderer) {
-        Common.d("Controller created");
+        Common.d("Creating controller...");
         this.activity = activity;
         this.doc = doc;
         this.layout = layout;
@@ -80,6 +80,7 @@ public class Controller implements ViewDimensionAware {
 
         //activity.getOrionContext().getOptions().subscribe(prefListener);
         activity.getSubscriptionManager().addDocListeners(listener);
+        Common.d("Controller was created successfully");
     }
 
     public void drawPage(int page) {
