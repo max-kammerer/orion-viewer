@@ -44,7 +44,7 @@ public class FileChooser extends ArrayAdapter {
 
     private File currentFolder;
 
-    private static FilenameFilter filter;
+    private FilenameFilter filter;
 
     public static FilenameFilter DEFAULT_FILTER = new FilenameFilter() {
         public boolean accept(File dir, String filename) {
@@ -56,10 +56,6 @@ public class FileChooser extends ArrayAdapter {
                 || name.endsWith(".tiff") || name.endsWith(".tif") /*|| name.endsWith(".png") || name.endsWith(".jpeg") || name.endsWith(".jpg")*/;
         }
     };
-
-    public FileChooser(Context context, String folder) {
-        this(context, folder, DEFAULT_FILTER);
-    }
 
 
     public FileChooser(Context context, String folder, FilenameFilter filter) {
