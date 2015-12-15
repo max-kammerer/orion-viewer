@@ -93,8 +93,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     public static final int ADD_BOOKMARK_SCREEN = 5;
 
-    public static final int HELP_SCREEN = 100;
-
     public static final int CROP_RESTRICTION_MIN = -10;
 
     private static final int CROP_DELTA = 10;
@@ -102,8 +100,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
     public static final int CROP_RESTRICTION_MAX = 40;
 
     private final SubscriptionManager manager = new SubscriptionManager();
-
-    private View orionFullScene;
 
     private ViewAnimator animator;
 
@@ -837,7 +833,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             return super.onKeyUp(keyCode,  event);
         }
 
-        return processKey(keyCode, event, false) ? true : super.onKeyUp(keyCode,  event);
+        return processKey(keyCode, event, false) || super.onKeyUp(keyCode, event);
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {

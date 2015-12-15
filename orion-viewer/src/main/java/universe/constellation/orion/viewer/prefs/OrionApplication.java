@@ -72,7 +72,7 @@ public class OrionApplication extends Application {
         super.onCreate();
         GlobalOptions options = getOptions();
         setLangCode(options.getAppLanguage());
-
+        Common.logOrionAndDeviceInfo();
         if (device instanceof EInkDeviceWithoutFastRefresh) {
             String version = options.getVersion();
             if (options.isShowTapHelp() || VersionUtilKt.isVersionEquals("0.0.0", version)) {

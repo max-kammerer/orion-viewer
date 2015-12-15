@@ -9,11 +9,11 @@ import android.view.KeyEvent;
  */
 public class SafeApi {
 
-    public static final void doTrackEvent(KeyEvent event) {
+    public static void doTrackEvent(KeyEvent event) {
         event.startTracking();
     }
 
-    public static final boolean isCanceled(KeyEvent event) {
+    public static boolean isCanceled(KeyEvent event) {
         return event.isCanceled();
     }
 

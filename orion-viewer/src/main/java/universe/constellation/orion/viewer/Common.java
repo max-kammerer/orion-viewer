@@ -43,8 +43,6 @@ public class Common {
     public static final boolean ENABLE2SCREEN = true;
 
     public static Device createDevice() {
-        logDeviceInfo();
-
         if (ENABLE2SCREEN) {
             try {
                  if (Device.Info.EDGE) {
@@ -156,7 +154,7 @@ public class Common {
         return "" + memoryInBytes/1024/1024 + "Mb";
     }
 
-    public static void logDeviceInfo() {
+    public static void logOrionAndDeviceInfo() {
         Common.d("Orion Viewer " + BuildConfig.VERSION_NAME);
         Common.d("Device: " + Device.Info.DEVICE);
         Common.d("Model: " + Device.Info.MODEL);

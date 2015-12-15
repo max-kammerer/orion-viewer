@@ -128,7 +128,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
             return super.onKeyUp(keyCode, event);
         }
 
-        return processKey(keyCode, event, false) ? true : super.onKeyUp(keyCode, event);
+        return processKey(keyCode, event, false) || super.onKeyUp(keyCode, event);
     }
 
     public boolean onKeyLongPress(int keyCode, KeyEvent event) {
