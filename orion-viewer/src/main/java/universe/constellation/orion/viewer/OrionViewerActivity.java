@@ -226,32 +226,36 @@ public class OrionViewerActivity extends OrionBaseActivity {
         if (uri != null) {
             Common.d("File URI  = " + uri.toString());
             String path = null;
-            if ("content".equalsIgnoreCase(uri.getScheme())) {
-                path = FileUtils.getPath(this, uri);
-            }
-
-            String file = path != null ? path : uri.getPath();
-
-            if (controller != null) {
-                if (lastPageInfo!= null) {
-                    if (lastPageInfo.openingFileName.equals(file)) {
-                        //keep controller
-                        controller.drawPage();
-                        return;
-                    }
+            try {
+                if ("content".equalsIgnoreCase(uri.getScheme())) {
+                    path = FileUtils.getPath(this, uri);
                 }
 
-                destroyContollerAndBook();
-            }
+                String file = path != null ? path : uri.getPath();
 
-            Common.stopLogger();
-            openFile(file, intent);
+                if (controller != null) {
+                    if (lastPageInfo != null) {
+                        if (lastPageInfo.openingFileName.equals(file)) {
+                            //keep controller
+                            controller.drawPage();
+                            return;
+                        }
+                    }
+
+                    destroyContollerAndBook();
+                }
+
+                Common.stopLogger();
+                openFile(file);
+            } catch (Exception e) {
+                showAlertWithExceptionThrow(intent, e);
+            }
         } else /*if (intent.getAction().endsWith("MAIN"))*/ {
             //TODO error
         }
     }
 
-    private DocumentWrapper openFile(String filePath, final Intent intent) {
+    private DocumentWrapper openFile(String filePath) throws Exception {
         DocumentWrapper doc = null;
         Common.d("Trying to open file: " + filePath);
 
@@ -304,25 +308,28 @@ public class OrionViewerActivity extends OrionBaseActivity {
             if (doc != null) {
                 doc.destroy();
             }
-            AlertDialog.Builder themedAlertBuilder = createThemedAlertBuilder().setMessage("Error while opening " + filePath + ": " + e.getMessage() + " cause of " + e.getCause());
-            final Exception exception = e;
-            themedAlertBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                    throw new RuntimeException("Exception on processing " + intent, exception);
-                }
-            });
-            themedAlertBuilder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    finish();
-                    throw new RuntimeException("Exception on processing " + intent, exception);
-                }
-            });
-            themedAlertBuilder.create().show();
+            throw e;
         }
         return doc;
+    }
+
+    private void showAlertWithExceptionThrow(final Intent intent, final Exception e) {
+        AlertDialog.Builder themedAlertBuilder = createThemedAlertBuilder().setMessage("Error while opening " + intent + ": " + e.getMessage() + " cause of " + e.getCause());
+        themedAlertBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+                throw new RuntimeException("Exception on processing " + intent, e);
+            }
+        });
+        themedAlertBuilder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                finish();
+                throw new RuntimeException("Exception on processing " + intent, e);
+            }
+        });
+        themedAlertBuilder.create().show();
     }
 
 
