@@ -88,7 +88,7 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
     private boolean justCreated;
 
     protected void onCreate(Bundle savedInstanceState) {
-        super.onOrionCreate(savedInstanceState, R.layout.android_file_manager);
+        super.onOrionCreate(savedInstanceState, R.layout.file_manager);
         Common.d("Creating file manager");
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

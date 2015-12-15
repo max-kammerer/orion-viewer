@@ -134,7 +134,7 @@
                 android:scrollbars="vertical"
                 android:orientation="vertical">
 
-                <include layout="@layout/crops"/>
+                <include layout="@layout/crop"/>
 
             </ScrollView>
 
@@ -148,7 +148,7 @@
                 android:orientation="vertical">
 
 
-                <include layout="@layout/crops_even"/>
+                <include layout="@layout/crop_even"/>
 
             </ScrollView>
         </ViewAnimator>

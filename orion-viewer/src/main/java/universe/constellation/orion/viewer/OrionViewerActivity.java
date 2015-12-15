@@ -979,7 +979,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     public void initOptionDialog() {
         dialog = new AppCompatDialog(this);
         dialog.supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.android_dialog);
+        dialog.setContentView(R.layout.options_dialog);
         animator = ((ViewAnimator)dialog.findViewById(R.id.viewanim));
 
         getView().setOnTouchListener(new View.OnTouchListener() {

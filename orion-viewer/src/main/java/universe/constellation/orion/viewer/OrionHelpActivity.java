@@ -25,7 +25,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,7 +42,7 @@ public class OrionHelpActivity extends OrionBaseActivity {
     public static class InfoFragment extends Fragment {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.android_general_help, container, false);
+            return inflater.inflate(R.layout.general_help, container, false);
         }
 
         @Override
@@ -62,7 +61,7 @@ public class OrionHelpActivity extends OrionBaseActivity {
     public static class AboutFragment extends Fragment {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.android_about, container, false);
+            return inflater.inflate(R.layout.about, container, false);
         }
 
         @Override
@@ -79,7 +78,7 @@ public class OrionHelpActivity extends OrionBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onOrionCreate(savedInstanceState, R.layout.android_file_manager);
+        super.onOrionCreate(savedInstanceState, R.layout.file_manager);
         initHelpScreen();
     }
 
