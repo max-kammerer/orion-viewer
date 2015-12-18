@@ -41,6 +41,11 @@
     <string name="crop_right">Right</string>
     <string name="crop_top">Top</string>
     <string name="crop_bottom">Bottom</string>
+
+    <string name="crop_experimental">Experimental feature</string>
+    <string name="crop_auto">Auto crop</string>
+    <string name="crop_warning">Use manual crop for better performance</string>
+
     <string name="rotate_0">0 degree</string>
     <string name="rotate_90">90 degree</string>
     <string name="rotate_270">270 degree</string>

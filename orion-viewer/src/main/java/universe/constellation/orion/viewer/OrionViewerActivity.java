@@ -43,9 +43,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.CheckedTextView;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -55,14 +53,14 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import java.io.File;
 
 import universe.constellation.orion.viewer.android.FileUtils;
+import universe.constellation.orion.viewer.dialog.CropDialog;
+import universe.constellation.orion.viewer.dialog.CropDialogBuilderKt;
 import universe.constellation.orion.viewer.dialog.SearchDialog;
 import universe.constellation.orion.viewer.dialog.TapHelpDialog;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
@@ -93,9 +91,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     public static final int ADD_BOOKMARK_SCREEN = 5;
 
-    public static final int CROP_RESTRICTION_MIN = -10;
-
     private static final int CROP_DELTA = 10;
+
+    public static final int CROP_RESTRICTION_MIN = -10;
 
     public static final int CROP_RESTRICTION_MAX = 40;
 
@@ -130,6 +128,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
     private boolean hasActionBar;
 
     private FullScene fullScene;
+
+    private CropDialog cropDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -166,33 +166,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         initZoomScreen();
 
-        initCropScreen();
-
         initPageLayoutScreen();
 
         initAddBookmarkScreen();
-    }
-
-    public void updateCrops() {
-        controller.getMargins(cropBorders);
-        TableLayout cropTable = (TableLayout) findMyViewById(R.id.crop_borders);
-        for (int i = 0; i < cropTable.getChildCount(); i++) {
-            TableRow row = (TableRow) cropTable.getChildAt(i);
-            TextView valueView = (TextView) row.findViewById(R.id.crop_value);
-            valueView.setText(cropBorders[i] + "%");
-        }
-
-        TableLayout cropTable2 = (TableLayout) findMyViewById(R.id.crop_borders_even);
-        int index = 4;
-        for (int i = 0; i < cropTable2.getChildCount(); i++) {
-            if (cropTable2.getChildAt(i) instanceof  TableRow) {
-                TableRow row = (TableRow) cropTable2.getChildAt(i);
-                TextView valueView = (TextView) row.findViewById(R.id.crop_value);
-                valueView.setText(cropBorders[index] + "%");
-                index++;
-            }
-        }
-        ((CheckBox)findMyViewById(R.id.crop_even_flag)).setChecked(controller.isEvenCropEnabled());
     }
 
     public void updatePageLayout() {
@@ -571,13 +547,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
         ImageButton close = (ImageButton) findMyViewById(R.id.options_close);
         close.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-//                int did = ((RadioGroup) findMyViewById(R.id.directionGroup)).getCheckedRadioButtonId();
-//                int lid = ((RadioGroup) findMyViewById(R.id.layoutGroup)).getCheckedRadioButtonId();
-//                controller.setDirectionAndLayout(did == R.id.direction1 ? 0 : 1, lid == R.id.layout1 ? 0 : lid == R.id.layout2 ? 1 : 2);
-                //main menu
                 onAnimatorCancel();
                 updatePageLayout();
-                //animator.setDisplayedChild(MAIN_SCREEN);
             }
         });
 
@@ -643,147 +614,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     }
 
-
-    public void initCropScreen() {
-        TableLayout cropTable = (TableLayout) findMyViewById(R.id.crop_borders);
-
-        getSubscriptionManager().addDocListeners(new DocumentViewAdapter(){
-            @Override
-            public void documentOpened(Controller controller) {
-                updateCrops();
-            }
-        });
-
-        for (int i = 0; i < cropTable.getChildCount(); i++) {
-            TableRow row = (TableRow) cropTable.getChildAt(i);
-            row.findViewById(R.id.crop_plus);
-
-            TextView valueView = (TextView) row.findViewById(R.id.crop_value);
-            ImageButton plus = (ImageButton) row.findViewById(R.id.crop_plus);
-            ImageButton minus = (ImageButton) row.findViewById(R.id.crop_minus);
-            linkCropButtonsAndText(minus, plus, valueView, i);
-        }
-
-        //even cropping
-        int index = 4;
-        final TableLayout cropTable2 = (TableLayout) findMyViewById(R.id.crop_borders_even);
-        for (int i = 0; i < cropTable2.getChildCount(); i++) {
-            View child = cropTable2.getChildAt(i);
-            if (child instanceof  TableRow) {
-                TableRow row = (TableRow) child;
-                row.findViewById(R.id.crop_plus);
-                TextView valueView = (TextView) row.findViewById(R.id.crop_value);
-                ImageButton plus = (ImageButton) row.findViewById(R.id.crop_plus);
-                ImageButton minus = (ImageButton) row.findViewById(R.id.crop_minus);
-                linkCropButtonsAndText(minus, plus, valueView, index);
-                index++;
-                for (int j = 0; j < row.getChildCount(); j++) {
-                    View v = row.getChildAt(j);
-                    v.setEnabled(false);
-                }
-            }
-        }
-
-
-        final ImageButton switchEven = (ImageButton) findMyViewById(R.id.crop_even_button);
-        if (switchEven != null) {
-            final ViewAnimator cropAnim = (ViewAnimator) findMyViewById(R.id.crop_animator);
-            switchEven.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    cropAnim.setDisplayedChild((cropAnim.getDisplayedChild() + 1) % 2);
-                    switchEven.setImageResource(cropAnim.getDisplayedChild() == 0 ? R.drawable.next : R.drawable.prev);
-                }
-            });
-        }
-
-        final CheckBox checkBox = (CheckBox) findMyViewById(R.id.crop_even_flag);
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                for (int i = 0; i < cropTable2.getChildCount(); i++) {
-                    View child = cropTable2.getChildAt(i);
-                    if (child instanceof  TableRow) {
-                        TableRow row = (TableRow) child;
-                        for (int j = 0; j < row.getChildCount(); j++) {
-                            View rowChild = row.getChildAt(j);
-                            rowChild.setEnabled(isChecked);
-                        }
-                    }
-                }
-            }
-        });
-
-//        if (Device.Info.NOOK2) {
-//            TextView tv = (TextView) findMyViewById(R.id.navigation_title);
-//            int color = tv.getTextColors().getDefaultColor();
-//            checkBox.setTextColor(color);
-//        }
-
-
-        ImageButton preview = (ImageButton) findMyViewById(R.id.crop_preview);
-        preview.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                onApplyAction();
-                controller.changeCropMargins(cropBorders[0], cropBorders[2], cropBorders[1], cropBorders[3], checkBox.isChecked(), cropBorders[4], cropBorders[5]);
-            }
-        });
-
-        ImageButton close = (ImageButton) findMyViewById(R.id.crop_close);
-        close.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //main menu
-                onAnimatorCancel();
-                //reset if canceled
-                updateCrops();
-            }
-        });
-    }
-
-    public void linkCropButtonsAndText(final ImageButton minus, final ImageButton plus, final TextView text, final int cropIndex) {
-        minus.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //main menu
-                if (cropBorders[cropIndex] != CROP_RESTRICTION_MIN) {
-                    cropBorders[cropIndex] = cropBorders[cropIndex] - 1;
-                    text.setText(cropBorders[cropIndex] + "%");
-                }
-            }
-        });
-
-        minus.setOnLongClickListener(new View.OnLongClickListener() {
-            public boolean onLongClick(View v) {
-                cropBorders[cropIndex] = cropBorders[cropIndex] - CROP_DELTA;
-                if (cropBorders[cropIndex] < CROP_RESTRICTION_MIN) {
-                    cropBorders[cropIndex] = CROP_RESTRICTION_MIN;
-                }
-                text.setText(cropBorders[cropIndex] + "%");
-                return true;
-            }
-        });
-
-        plus.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //main menu
-                //int value = Integer.valueOf(text.getText().toString());
-                cropBorders[cropIndex] = cropBorders[cropIndex] + 1;
-                if (cropBorders[cropIndex] > CROP_RESTRICTION_MAX) {
-                    cropBorders[cropIndex] = CROP_RESTRICTION_MAX;
-                }
-                text.setText(cropBorders[cropIndex] + "%");
-            }
-        });
-
-        plus.setOnLongClickListener(new View.OnLongClickListener() {
-            public boolean onLongClick(View v) {
-                cropBorders[cropIndex] = cropBorders[cropIndex] + CROP_DELTA;
-                if (cropBorders[cropIndex] > CROP_RESTRICTION_MAX) {
-                    cropBorders[cropIndex] = CROP_RESTRICTION_MAX;
-                }
-                text.setText(cropBorders[cropIndex] + "%");
-                return true;
-            }
-        });
-    }
-
     protected void onResume() {
         isResumed = true;
         super.onResume();
@@ -829,7 +659,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public boolean onKeyUp(int keyCode, KeyEvent event) {
+        L.log("onKeyUp key = " + keyCode + " " + SafeApi.isCanceled(event) + " " + doTrack(keyCode));
         if(isLevel5ApiEnabled() && SafeApi.isCanceled(event)) {
+            L.log("Tracking = " + keyCode);
             return super.onKeyUp(keyCode,  event);
         }
 
@@ -837,7 +669,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        L.log("onKeyDown = " + keyCode + " " + SafeApi.isCanceled(event) + " " + doTrack(keyCode)) ;
         if (isLevel5ApiEnabled() && doTrack(keyCode)) {
+            L.log("Tracking = " + keyCode);
             SafeApi.doTrackEvent(event);
             return true;
         }
@@ -1220,10 +1054,15 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public void showOrionDialog(int screenId, Action action, Object parameter) {
+        if (screenId == CROP_SCREEN) {
+            controller.getMargins(cropBorders);
+            CropDialog cropDialog = CropDialogBuilderKt.create(this, cropBorders, controller.isEvenCropEnabled());
+            cropDialog.show();
+            return;
+        }
         if (screenId != -1) {
             switch (screenId) {
                 case ROTATION_SCREEN: updateRotation(); break;
-                case CROP_SCREEN: updateCrops(); break;
                 case PAGE_LAYOUT_SCREEN: updatePageLayout();
                 case PAGE_SCREEN: updatePageSeeker(); break;
                 case ZOOM_SCREEN: updateZoom(); break;

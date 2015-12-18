@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!--<android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        app:layout_scrollFlags="scroll|enterAlways">-->
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/sliding_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            app:layout_scrollFlags="scroll|enterAlways" />
+    <!--</android.support.v7.widget.Toolbar>-->
+
+    <ViewAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:id="@+id/viewanim">
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:isScrollContainer="true"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbarStyle="outsideInset"
+            android:scrollbars="vertical"
+            android:orientation="vertical">
+
+            <include layout="@layout/crop"/>
+
+        </ScrollView>
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:isScrollContainer="true"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbarStyle="outsideInset"
+            android:scrollbars="vertical"
+            android:orientation="vertical">
+
+            <include layout="@layout/crop_even"/>
+
+        </ScrollView>
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:isScrollContainer="true"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbarStyle="outsideInset"
+            android:scrollbars="vertical"
+            android:orientation="vertical">
+
+            <include layout="@layout/crop_auto"/>
+
+        </ScrollView>
+
+    </ViewAnimator>
+
+    <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
+        android:layout_width="fill_parent" android:gravity="right" android:layout_margin="10dp" android:id="@+id/crop_buttons">
+
+        <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:src="@drawable/view" android:id="@+id/crop_preview"/>
+
+        <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:src="@drawable/revert" android:id="@+id/crop_close"/>
+    </LinearLayout>
+</LinearLayout>
