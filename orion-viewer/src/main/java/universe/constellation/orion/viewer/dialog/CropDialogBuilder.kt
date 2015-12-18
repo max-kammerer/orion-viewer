@@ -55,30 +55,19 @@ class CropDialog(var cropMargins: IntArray, val evenCrop: Boolean, val context: 
 
 
     fun initCropScreen() {
-        val cropTable = findViewById(R.id.crop_borders) as TableLayout
+        val generalCropTable = findViewById(R.id.crop_borders) as TableLayout
 
-        for (i in 0..cropTable.childCount - 1) {
-            val row = cropTable.getChildAt(i) as TableRow
-            row.findViewById(R.id.crop_plus)
-
-            val valueView = row.findViewById(R.id.crop_value) as TextView
-            val plus = row.findViewById(R.id.crop_plus) as ImageButton
-            val minus = row.findViewById(R.id.crop_minus) as ImageButton
-            linkCropButtonsAndText(minus, plus, valueView, i)
+        for (i in 0..generalCropTable.childCount - 1) {
+            linkCropButtonsAndText(i, generalCropTable.getChildAt(i) as TableRow)
         }
 
         //even cropping
-        var index = 4
-        val cropTable2 = findViewById(R.id.crop_borders_even) as TableLayout
-        for (i in 0..cropTable2.childCount - 1) {
-            val child = cropTable2.getChildAt(i)
+        val evenCropTable = findViewById(R.id.crop_borders_even) as TableLayout
+        for (i in 0..evenCropTable.childCount - 1) {
+            val child = evenCropTable.getChildAt(i)
             if (child is TableRow) {
-                child.findViewById(R.id.crop_plus)
-                val valueView = child.findViewById(R.id.crop_value) as TextView
-                val plus = child.findViewById(R.id.crop_plus) as ImageButton
-                val minus = child.findViewById(R.id.crop_minus) as ImageButton
-                linkCropButtonsAndText(minus, plus, valueView, index)
-                index++
+                linkCropButtonsAndText(i + generalCropTable.childCount, child)
+
                 for (j in 0..child.childCount - 1) {
                     val v = child.getChildAt(j)
                     v.isEnabled = false
@@ -88,12 +77,11 @@ class CropDialog(var cropMargins: IntArray, val evenCrop: Boolean, val context: 
 
         val checkBox = findViewById(R.id.crop_even_flag) as CheckBox
         checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
-            for (i in 0..cropTable2.childCount - 1) {
-                val child = cropTable2.getChildAt(i)
+            for (i in 0..evenCropTable.childCount - 1) {
+                val child = evenCropTable.getChildAt(i)
                 if (child is TableRow) {
                     for (j in 0..child.childCount - 1) {
-                        val rowChild = child.getChildAt(j)
-                        rowChild.isEnabled = isChecked
+                        child.getChildAt(j).isEnabled = isChecked
                     }
                 }
             }
@@ -107,16 +95,21 @@ class CropDialog(var cropMargins: IntArray, val evenCrop: Boolean, val context: 
 
         val close = findViewById(R.id.crop_close) as ImageButton
         close.setOnClickListener({
-            //main menu
             dismiss()
         })
 
         updateView()
     }
 
+    private fun linkCropButtonsAndText(i: Int, row: TableRow) {
+        val valueView = row.findViewById(R.id.crop_value) as TextView
+        val plus = row.findViewById(R.id.crop_plus) as ImageButton
+        val minus = row.findViewById(R.id.crop_minus) as ImageButton
+        linkCropButtonsAndText(minus, plus, valueView, i)
+    }
+
     fun linkCropButtonsAndText(minus: ImageButton, plus: ImageButton, text: TextView, cropIndex: Int) {
         minus.setOnClickListener {
-            //main menu
             if (cropMargins[cropIndex] != CROP_RESTRICTION_MIN) {
                 cropMargins[cropIndex] = cropMargins[cropIndex] - 1
                 text.text = "${cropMargins[cropIndex]}%"
@@ -133,8 +126,6 @@ class CropDialog(var cropMargins: IntArray, val evenCrop: Boolean, val context: 
         }
 
         plus.setOnClickListener {
-            //main menu
-            //int value = Integer.valueOf(text.getText().toString());
             cropMargins[cropIndex] = cropMargins[cropIndex] + 1
             if (cropMargins[cropIndex] > CROP_RESTRICTION_MAX) {
                 cropMargins[cropIndex] = CROP_RESTRICTION_MAX
