@@ -20,6 +20,8 @@
 package universe.constellation.orion.viewer;
 
 import android.graphics.Point;
+import android.graphics.Rect;
+
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
 /**
@@ -49,7 +51,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     private int layout;
 
-    public SimpleLayoutStrategy(DocumentWrapper doc, Point deviceSize) {
+    public SimpleLayoutStrategy(DocumentWrapper doc) {
         this.doc = doc;
     }
 
@@ -104,17 +106,26 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         info.pageNumber = pageNum;
 
         //original width and height without cropped margins
-        PageInfo pageInfo = doc.getPageInfo(pageNum);
+        PageInfo pageInfo = doc.getPageInfo(pageNum, cropMargins.autoCrop);
 
         boolean isEvenPage = (pageNum + 1) % 2 == 0;
         int leftMargin = cropMargins.evenCrop && isEvenPage ? cropMargins.evenLeft : cropMargins.left;
         int rightMargin = cropMargins.evenCrop && isEvenPage ? cropMargins.evenRight : cropMargins.right;
 
         info.x.marginLess = (int) (leftMargin * pageInfo.width * 0.01);
+        int marginRight = (int) (pageInfo.width * rightMargin* 0.01);
         info.y.marginLess = (int) (cropMargins.top * pageInfo.height * 0.01);
+        int marginBottom = (int) ( pageInfo.height * cropMargins.bottom * 0.01);
+        Rect autoCrop = pageInfo.autoCrop;
+        if (autoCrop != null && cropMargins.autoCrop) {
+            info.x.marginLess = autoCrop.left;
+            marginRight = pageInfo.width - autoCrop.right;
+            info.y.marginLess =  autoCrop.top;
+            marginBottom = pageInfo.height - autoCrop.bottom;
+        }
 
-        info.x.pageDimension = Math.round(pageInfo.width * (1 - 0.01f *(leftMargin + rightMargin)));
-        info.y.pageDimension = Math.round(pageInfo.height * (1- 0.01f *(cropMargins.top + cropMargins.bottom)));
+        info.x.pageDimension = Math.round(pageInfo.width - info.x.marginLess - marginRight);
+        info.y.pageDimension = Math.round(pageInfo.height - info.y.marginLess -  marginBottom);
 
         info.x.screenDimension = rotation == 0 ? viewWidth : viewHeight;
         info.y.screenDimension = rotation == 0 ? viewHeight : viewWidth;

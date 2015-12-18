@@ -58,15 +58,15 @@ public class DjvuDocument implements DocumentWrapper {
         return pageCount;
     }
 
-    public synchronized PageInfo getPageInfo(int pageNum) {
-        PageInfo info = new PageInfo();
+    public synchronized PageInfo getPageInfo(int pageNum, boolean autoCrop) {
+        PageInfo info = new PageInfo(pageNum);
         long start = System.currentTimeMillis();
         getPageInfo(pageNum, info);
         Common.d("Page " + pageNum + " info takes = " + 0.001 * (System.currentTimeMillis() - start) + " s");
         return info;
     }
 
-    public synchronized void renderPage(int pageNumber, Bitmap bitmap, double zoom, int w, int h, int left, int top, int right, int bottom) {
+    public synchronized void renderPage(int pageNumber, Bitmap bitmap, double zoom, int left, int top, int right, int bottom) {
         gotoPage(pageNumber);
         long start = System.currentTimeMillis();
         drawPage(bitmap, (float) zoom, right - left, bottom - top, left, top, right - left, bottom - top);

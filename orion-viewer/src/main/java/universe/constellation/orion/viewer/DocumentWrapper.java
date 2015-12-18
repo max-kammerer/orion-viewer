@@ -34,9 +34,9 @@ public interface DocumentWrapper {
 
     int getPageCount();
 
-    PageInfo getPageInfo(int pageNum);
+    PageInfo getPageInfo(int pageNum, boolean autoCrop);
 
-    void renderPage(int pageNumber, Bitmap bitmap, double zoom, int w, int h, int left, int top, int right, int bottom);
+    void renderPage(int pageNumber, Bitmap bitmap, double zoom, int left, int top, int right, int bottom);
 
     String getText(int pageNumber, int absoluteX, int absoluteY, int width, int height);
 
@@ -48,11 +48,11 @@ public interface DocumentWrapper {
 
 	void setThreshold(int threshold);
 	
-	public OutlineItem[] getOutline();
+	OutlineItem[] getOutline();
 
-    public boolean needPassword();
+    boolean needPassword();
 
-    public boolean authentificate(String password);
+    boolean authentificate(String password);
 
     RectF[] searchPage(int pageNumber, String text);
 }

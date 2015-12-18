@@ -77,7 +77,4 @@ void orion_updateContrast(unsigned char * data , int size) {
 	        }
         }
     }
-    
-
 }
-

@@ -465,7 +465,7 @@ public class MuPDFCore
 	private native void getPageInfo(int pageNum, PageInfo info);
 
 	public synchronized PageInfo getPageInfo(int page) {
-		PageInfo info = new PageInfo();
+		PageInfo info = new PageInfo(page);
 		getPageInfo(page, info);
 		System.out.println("Page info: " + info.width + "x" + info.height);
 		return info;
