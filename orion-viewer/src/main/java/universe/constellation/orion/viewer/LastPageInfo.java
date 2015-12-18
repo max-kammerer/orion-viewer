@@ -60,6 +60,7 @@ public class LastPageInfo implements Serializable {
     public int bottomMargin = 0;
 
     public boolean enableEvenCropping = false;
+    public boolean enableAutoCrop = false;
     public int leftEvenMargin = 0;
     public int rightEventMargin = 0;
 

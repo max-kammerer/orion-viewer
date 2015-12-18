@@ -39,9 +39,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     private DocumentWrapper doc;
 
-    private int leftMargin, topMargin, rightMargin, bottomMargin, leftEvenMargin, rightEvenMargin;
-
-    private boolean enableEvenCrop;
+    private CropMargins cropMargins = new CropMargins(0, 0, 0, 0, 0, 0, false, false);
 
     private int zoom;
 
@@ -109,14 +107,14 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         PageInfo pageInfo = doc.getPageInfo(pageNum);
 
         boolean isEvenPage = (pageNum + 1) % 2 == 0;
-        int leftMargin = enableEvenCrop && isEvenPage ? leftEvenMargin : this.leftMargin;
-        int rightMargin = enableEvenCrop && isEvenPage ? rightEvenMargin : this.rightMargin;
+        int leftMargin = cropMargins.evenCrop && isEvenPage ? cropMargins.evenLeft : cropMargins.left;
+        int rightMargin = cropMargins.evenCrop && isEvenPage ? cropMargins.evenRight : cropMargins.right;
 
         info.x.marginLess = (int) (leftMargin * pageInfo.width * 0.01);
-        info.y.marginLess = (int) (topMargin * pageInfo.height * 0.01);
+        info.y.marginLess = (int) (cropMargins.top * pageInfo.height * 0.01);
 
         info.x.pageDimension = Math.round(pageInfo.width * (1 - 0.01f *(leftMargin + rightMargin)));
-        info.y.pageDimension = Math.round(pageInfo.height * (1- 0.01f *(topMargin + bottomMargin)));
+        info.y.pageDimension = Math.round(pageInfo.height * (1- 0.01f *(cropMargins.top + cropMargins.bottom)));
 
         info.x.screenDimension = rotation == 0 ? viewWidth : viewHeight;
         info.y.screenDimension = rotation == 0 ? viewHeight : viewWidth;
@@ -169,34 +167,18 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         return zoom;
     }
 
-    public boolean changeCropMargins(int leftMargin, int topMargin, int rightMargin, int bottomMargin, boolean enableEven, int leftEvenMargin, int rightEvenMargin) {
-        if (leftMargin != this.leftMargin || rightMargin != this.rightMargin || topMargin != this.topMargin || bottomMargin != this.bottomMargin
-                || leftEvenMargin != this.leftEvenMargin || rightEvenMargin != this.rightEvenMargin || this.enableEvenCrop != enableEven) {
-            this.leftMargin = leftMargin;
-            this.rightMargin = rightMargin;
-            this.topMargin = topMargin;
-            this.bottomMargin = bottomMargin;
-            this.leftEvenMargin = leftEvenMargin;
-            this.rightEvenMargin = rightEvenMargin;
-            this.enableEvenCrop = enableEven;
+    public boolean changeCropMargins(CropMargins margins) {
+        if (!margins.equals(cropMargins)) {
+            cropMargins = margins;
             return true;
         }
+
         return false;
     }
 
 
-    public boolean isEnableEvenCrop() {
-        return enableEvenCrop;
-    }
-
-    public void getMargins(int [] margins) {
-        margins[0] = leftMargin;
-        margins[1] = rightMargin;
-        margins[2] = topMargin;
-        margins[3] = bottomMargin;
-
-        margins[4] = leftEvenMargin;
-        margins[5] = rightEvenMargin;
+    public CropMargins getMargins() {
+        return cropMargins;
     }
 
     public int getRotation() {
@@ -205,7 +187,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
 
     public void init(LastPageInfo info, GlobalOptions options) {
-        changeCropMargins(info.leftMargin, info.topMargin, info.rightMargin, info.bottomMargin, info.enableEvenCropping, info.leftEvenMargin, info.rightEventMargin);
+        changeCropMargins(new CropMargins(info.leftMargin, info.rightMargin, info.topMargin, info.bottomMargin, info.leftEvenMargin, info.rightEventMargin, info.enableEvenCropping, info.enableAutoCrop));
         changeRotation(info.rotation);
         changeZoom(info.zoom);
         changeNavigation(info.walkOrder);
@@ -217,13 +199,14 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         info.screenHeight = viewHeight;
         info.screenWidth = viewWidth;
 
-        info.leftMargin = leftMargin;
-        info.rightMargin = rightMargin;
-        info.topMargin = topMargin;
-        info.bottomMargin = bottomMargin;
-        info.leftEvenMargin = leftEvenMargin;
-        info.rightEventMargin = rightEvenMargin;
-        info.enableEvenCropping = enableEvenCrop;
+        info.leftMargin = cropMargins.left;
+        info.rightMargin = cropMargins.right;
+        info.topMargin = cropMargins.top;
+        info.bottomMargin = cropMargins.bottom;
+        info.leftEvenMargin = cropMargins.evenLeft;
+        info.rightEventMargin = cropMargins.evenRight;
+        info.enableEvenCropping = cropMargins.evenCrop;
+        info.enableAutoCrop = cropMargins.autoCrop;
 
         info.rotation = rotation;
         info.zoom = zoom;

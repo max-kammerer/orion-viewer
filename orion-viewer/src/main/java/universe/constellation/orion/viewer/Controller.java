@@ -173,24 +173,15 @@ public class Controller implements ViewDimensionAware {
          return layoutInfo.docZoom;
      }
 
-    //left, top, right, bottom
-    public void changeCropMargins(int[] margins) {
-        changeCropMargins(margins[0], margins[2], margins[1], margins[3], layout.isEnableEvenCrop(), margins[4], margins[5]);
-    }
-
-    public void changeCropMargins(int leftMargin, int topMargin, int rightMargin, int bottomMargin, boolean isEven, int leftEvenMargin, int rightEvenMargin) {
-        if (layout.changeCropMargins(leftMargin, topMargin, rightMargin, bottomMargin, isEven, leftEvenMargin, rightEvenMargin)) {
+    public void changeCropMargins(CropMargins cropMargins) {
+        if (layout.changeCropMargins(cropMargins)) {
             layout.reset(layoutInfo, layoutInfo.pageNumber);
             sendViewChangeNotification();
         }
     }
 
-    public void getMargins(int [] cropMargins) {
-        layout.getMargins(cropMargins);
-    }
-
-    public boolean isEvenCropEnabled() {
-        return layout.isEnableEvenCrop();
+    public CropMargins getMargins() {
+        return layout.getMargins();
     }
 
     public void destroy() {

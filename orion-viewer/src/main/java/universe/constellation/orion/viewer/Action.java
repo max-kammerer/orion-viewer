@@ -33,6 +33,7 @@ import java.util.List;
 
 import pl.polidea.treeview.InMemoryTreeStateManager;
 import pl.polidea.treeview.TreeViewList;
+import universe.constellation.orion.viewer.dialog.CropDialogBuilderKt;
 import universe.constellation.orion.viewer.outline.OutlineAdapter;
 import universe.constellation.orion.viewer.outline.OutlineItem;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
@@ -501,13 +502,14 @@ public enum Action {
     }
 
     protected void updateMargin(Controller controller, boolean isCrop, int index) {
-        if (controller.isEvenCropEnabled() && controller.isEvenPage()) {
+        CropMargins cropMargins = controller.getMargins();
+        if (cropMargins.evenCrop && controller.isEvenPage()) {
             if (index == 0 || index == 1) {
                 index += 4;
             }
         }
-        int [] margins = new int[6];
-        controller.getMargins(margins);
+
+        int[] margins = CropDialogBuilderKt.toDialogMargins(cropMargins);
         OrionApplication context = controller.getActivity().getOrionContext();
         TemporaryOptions tempOpts = context.getTempOptions();
         if (tempOpts.inverseCropping) {
@@ -521,6 +523,9 @@ public enum Action {
         if (margins[index] < OrionViewerActivity.CROP_RESTRICTION_MIN) {
             margins[index] = OrionViewerActivity.CROP_RESTRICTION_MIN;
         }
-        controller.changeCropMargins(margins);
+
+        controller.changeCropMargins(
+                CropDialogBuilderKt.toMargins(margins, cropMargins.evenCrop, cropMargins.autoCrop)
+        );
     }
 }

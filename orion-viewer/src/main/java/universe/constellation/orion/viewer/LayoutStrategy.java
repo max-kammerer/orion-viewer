@@ -47,9 +47,9 @@ public interface LayoutStrategy {
 
     int getZoom();
 
-    boolean changeCropMargins(int leftMargin, int topMargin, int rightMargin, int bottomMargin, boolean enableEven, int leftEvenMargin, int rightEvenMargin);
+    boolean changeCropMargins(CropMargins cropMargins);
 
-    void getMargins(int [] cropMargins);
+    CropMargins getMargins();
 
     void init(LastPageInfo info, GlobalOptions options);
 
@@ -66,8 +66,6 @@ public interface LayoutStrategy {
     boolean changePageLayout(int navigation);
 
     void setDimension(int width, int height);
-
-    boolean isEnableEvenCrop();
 
     PageWalker getWalker();
 }

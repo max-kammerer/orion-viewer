@@ -103,9 +103,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private LastPageInfo lastPageInfo;
 
-    //left, right, top, bottom
-    private int [] cropBorders = new int[6];
-
     private Controller controller;
 
     private OperationHolder operation = new OperationHolder();
@@ -1055,8 +1052,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     public void showOrionDialog(int screenId, Action action, Object parameter) {
         if (screenId == CROP_SCREEN) {
-            controller.getMargins(cropBorders);
-            CropDialog cropDialog = CropDialogBuilderKt.create(this, cropBorders, controller.isEvenCropEnabled());
+            CropDialog cropDialog = CropDialogBuilderKt.create(this, controller.getMargins());
             cropDialog.show();
             return;
         }

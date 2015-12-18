@@ -5,6 +5,7 @@ import android.support.design.widget.TabLayout
 import android.support.v7.app.AppCompatDialog
 import android.view.Window
 import android.widget.*
+import universe.constellation.orion.viewer.CropMargins
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.R
 
@@ -12,9 +13,16 @@ import universe.constellation.orion.viewer.R
  * Created by mike on 12/15/15.
  */
 
-data class CropMargins(val left: Int, val right: Int, val top: Int, val bottom: Int)
+fun CropMargins.toDialogMargins() = intArrayOf(left, right, top, bottom, evenLeft, evenRight)
 
-class CropDialog(var cropMargins: IntArray, val evenCrop: Boolean, val context: OrionViewerActivity) : AppCompatDialog(context) {
+fun IntArray.toMargins(evenCrop: Boolean, autoCrop: Boolean) =
+        CropMargins(this[0], this[1], this[2], this[3], this[4], this[5], evenCrop, autoCrop)
+
+class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : AppCompatDialog(context) {
+
+    val cropMargins = cropMargins.toDialogMargins()
+    val evenCrop = cropMargins.evenCrop
+    val autoCrop = cropMargins.autoCrop
 
     companion object {
         const val CROP_RESTRICTION_MIN = -10
@@ -87,10 +95,12 @@ class CropDialog(var cropMargins: IntArray, val evenCrop: Boolean, val context: 
             }
         }
 
+        val cropAuto = findViewById(R.id.crop_auto) as CheckBox
+
         val preview = findViewById(R.id.crop_preview) as ImageButton
         preview.setOnClickListener {
             context.onAnimatorCancel()
-            context.controller?.changeCropMargins(cropMargins[0], cropMargins[2], cropMargins[1], cropMargins[3], checkBox.isChecked, cropMargins[4], cropMargins[5])
+            context.controller?.changeCropMargins(cropMargins.toMargins(checkBox.isChecked, cropAuto.isChecked))
         }
 
         val close = findViewById(R.id.crop_close) as ImageButton
@@ -162,12 +172,13 @@ class CropDialog(var cropMargins: IntArray, val evenCrop: Boolean, val context: 
             }
         }
         (findViewById(R.id.crop_even_flag) as CheckBox).isChecked = evenCrop
+        (findViewById(R.id.crop_auto) as CheckBox).isChecked = autoCrop
     }
 
 }
 
-fun create(context: OrionViewerActivity, cropMargins: IntArray, evenCrop: Boolean): CropDialog {
-    val appCompatDialog = CropDialog(cropMargins, evenCrop, context)
+fun create(context: OrionViewerActivity, cropMargins: CropMargins): CropDialog {
+    val appCompatDialog = CropDialog(cropMargins, context)
     appCompatDialog.supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
     return appCompatDialog
 }
