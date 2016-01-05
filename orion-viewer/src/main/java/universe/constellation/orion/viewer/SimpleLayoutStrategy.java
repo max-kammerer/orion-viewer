@@ -124,8 +124,8 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
             marginBottom = pageInfo.height - autoCrop.bottom;
         }
 
-        info.x.pageDimension = Math.round(pageInfo.width - info.x.marginLess - marginRight);
-        info.y.pageDimension = Math.round(pageInfo.height - info.y.marginLess -  marginBottom);
+        info.x.pageDimension = pageInfo.width - info.x.marginLess - marginRight;
+        info.y.pageDimension = pageInfo.height - info.y.marginLess -  marginBottom;
 
         info.x.screenDimension = rotation == 0 ? viewWidth : viewHeight;
         info.y.screenDimension = rotation == 0 ? viewHeight : viewWidth;
