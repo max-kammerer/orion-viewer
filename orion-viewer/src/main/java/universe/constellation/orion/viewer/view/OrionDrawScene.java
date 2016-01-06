@@ -72,6 +72,8 @@ public class OrionDrawScene extends View implements OrionImageView {
 
     private boolean inited = false;
 
+    private ColorStuff stuff;
+
     public OrionDrawScene(Context context) {
         super(context);
     }
@@ -85,6 +87,7 @@ public class OrionDrawScene extends View implements OrionImageView {
     }
 
     void init(ColorStuff stuff) {
+        this.stuff = stuff;
         defaultPaint = stuff.bd.getPaint();
         borderPaint = stuff.borderPaint;
         inited = true;
@@ -130,7 +133,7 @@ public class OrionDrawScene extends View implements OrionImageView {
             Common.d("OrionView: bitmap rendering takes " + 0.001f * (System.currentTimeMillis() - start) + " s");
 
             for (DrawTask drawTask : tasks) {
-                drawTask.drawOnCanvas(canvas, defaultPaint, null);
+                drawTask.drawOnCanvas(canvas, stuff, null);
             }
         }
         canvas.restore();

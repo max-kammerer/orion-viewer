@@ -1,7 +1,6 @@
 package universe.constellation.orion.viewer.view;
 
 import android.graphics.Canvas;
-import android.graphics.Paint;
 
 /**
  * User: mike
@@ -10,6 +9,6 @@ import android.graphics.Paint;
  */
 public interface DrawTask {
 
-    void drawOnCanvas(Canvas canvas, Paint paint, DrawContext drawContext);
+    void drawOnCanvas(Canvas canvas, ColorStuff stuff, DrawContext drawContext);
 
 }

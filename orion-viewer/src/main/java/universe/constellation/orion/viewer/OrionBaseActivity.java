@@ -293,4 +293,8 @@ public class OrionBaseActivity extends AppCompatActivity {
     protected boolean doTrack(int keyCode) {
         return keyCode != KeyEvent.KEYCODE_MENU && keyCode != KeyEvent.KEYCODE_BACK;
     }
+
+    public Toolbar getToolbar() {
+        return toolbar;
+    }
 }

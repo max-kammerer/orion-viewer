@@ -6,22 +6,37 @@ import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.ActionBar;
-import android.view.*;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+
 import com.artifex.mupdfdemo.SearchTaskResult;
-import universe.constellation.orion.viewer.*;
-import universe.constellation.orion.viewer.view.DrawContext;
-import universe.constellation.orion.viewer.view.OrionDrawScene;
-import universe.constellation.orion.viewer.search.SearchTask;
-import universe.constellation.orion.viewer.util.Util;
-import universe.constellation.orion.viewer.view.DrawTask;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import universe.constellation.orion.viewer.Common;
+import universe.constellation.orion.viewer.Controller;
+import universe.constellation.orion.viewer.LayoutPosition;
+import universe.constellation.orion.viewer.LayoutStrategy;
+import universe.constellation.orion.viewer.OrionBaseActivity;
+import universe.constellation.orion.viewer.OrionViewerActivity;
+import universe.constellation.orion.viewer.PageWalker;
+import universe.constellation.orion.viewer.R;
+import universe.constellation.orion.viewer.search.SearchTask;
+import universe.constellation.orion.viewer.util.Util;
+import universe.constellation.orion.viewer.view.ColorStuff;
+import universe.constellation.orion.viewer.view.DrawContext;
+import universe.constellation.orion.viewer.view.DrawTask;
+import universe.constellation.orion.viewer.view.OrionDrawScene;
 
 /**
  * User: mike
@@ -50,7 +65,7 @@ public class SearchDialog extends DialogFragment {
         SearchDialog fragment = new SearchDialog();
         Bundle args = new Bundle();
         fragment.setArguments(args);
-        fragment.setStyle(STYLE_NO_FRAME, 0);
+        fragment.setStyle(STYLE_NO_FRAME, R.style.Theme_AppCompat_Light_Dialog);
         return fragment;
     }
 
@@ -59,14 +74,17 @@ public class SearchDialog extends DialogFragment {
         Dialog dialog = getDialog();
         dialog.setCanceledOnTouchOutside(true);
 
+
         Window window = dialog.getWindow();
-        window.setLayout(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.TOP;
-        ActionBar supportActionBar = ((OrionBaseActivity) getActivity()).getSupportActionBar();
-        wlp.y = supportActionBar.isShowing() ? supportActionBar.getHeight() + 5 : 5;
+        android.support.v7.widget.Toolbar toolbar = ((OrionBaseActivity) getActivity()).getToolbar();
+        wlp.y = toolbar.getHeight() + 5;
 
         window.setAttributes(wlp);
+        window.setBackgroundDrawable(new ColorDrawable(ALPHA));
 
         dialog.setContentView(R.layout.search_dialog);
         View resultView = super.onCreateView(inflater, container, savedInstanceState);
@@ -271,11 +289,14 @@ public class SearchDialog extends DialogFragment {
         }
 
         @Override
-        public void drawOnCanvas(Canvas canvas, Paint paint, DrawContext drawContext) {
+        public void drawOnCanvas(Canvas canvas, ColorStuff stuff, DrawContext drawContext) {
             if (batch != null) {
+                Paint paint = stuff.borderPaint;
                 List<RectF> rects = batch.rects;
                 int index = 0;
                 int prevAlpgha = paint.getAlpha();
+                Paint.Style style = paint.getStyle();
+                paint.setStyle(Paint.Style.FILL);
                 for (RectF rect : rects) {
                     paint.setAlpha(index++ == batch.active ? activeAlpha : generalAlpha);
                     int left = batch.lp.x.marginLess + batch.lp.x.offset;
@@ -283,6 +304,7 @@ public class SearchDialog extends DialogFragment {
                     canvas.drawRect(rect.left - left, rect.top - top, rect.right - left, rect.bottom - top, paint);
                 }
                 paint.setAlpha(prevAlpgha);
+                paint.setStyle(style);
             }
         }
     }
