@@ -31,6 +31,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 /**
  * User: mike
@@ -61,7 +62,10 @@ public class OrionHelpActivity extends OrionBaseActivity {
     public static class AboutFragment extends Fragment {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.about, container, false);
+            View view = inflater.inflate(R.layout.about, container, false);
+            TextView viewById = (TextView)view.findViewById(R.id.about_version_name);
+            viewById.setText(BuildConfig.VERSION_NAME);
+            return view;
         }
 
         @Override

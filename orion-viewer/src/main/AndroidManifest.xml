@@ -21,14 +21,12 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="universe.constellation.orion.viewer"
-          android:installLocation="auto"
-          android:versionCode="81"
-          android:versionName="@string/version_name">
+          android:installLocation="auto">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="16"/>
+    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="23"/>
 
     <supports-screens
             android:xlargeScreens="true"

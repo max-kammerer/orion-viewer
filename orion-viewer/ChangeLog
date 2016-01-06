@@ -1,4 +1,8 @@
-===== 0.61.1 (Jan 05, 2016) =====
+===== 0.61.1 (Jan 06, 2016) =====
+* Added new auto-crop option
+* Fixed font color in search dialog
+
+===== 0.61.0 (Jan 05, 2016) =====
 * Experimental auto crop
 
 ===== 0.59.3 (Dec 12, 2015) =====
