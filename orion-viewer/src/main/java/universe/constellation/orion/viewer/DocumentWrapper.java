@@ -34,7 +34,7 @@ public interface DocumentWrapper {
 
     int getPageCount();
 
-    PageInfo getPageInfo(int pageNum, boolean autoCrop);
+    PageInfo getPageInfo(int pageNum, int cropMode);
 
     void renderPage(int pageNumber, Bitmap bitmap, double zoom, int left, int top, int right, int bottom);
 

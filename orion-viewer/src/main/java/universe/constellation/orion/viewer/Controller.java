@@ -21,6 +21,7 @@ package universe.constellation.orion.viewer;
 
 import android.graphics.Point;
 
+import universe.constellation.orion.viewer.document.DocumentWithCaching;
 import universe.constellation.orion.viewer.outline.OutlineItem;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.util.ColorUtil;
@@ -176,6 +177,9 @@ public class Controller implements ViewDimensionAware {
     public void changeCropMargins(CropMargins cropMargins) {
         if (layout.changeCropMargins(cropMargins)) {
             layout.reset(layoutInfo, layoutInfo.pageNumber);
+            if (doc instanceof DocumentWithCaching) {
+                ((DocumentWithCaching) doc).resetCache();
+            }
             sendViewChangeNotification();
         }
     }

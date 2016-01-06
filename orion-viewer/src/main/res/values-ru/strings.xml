@@ -42,8 +42,10 @@
     <string name="crop_bottom">Нижнее</string>
     <string name="enable_even_crop">Отдельная обрезка для четных страниц</string>
 
-    <string name="crop_experimental">Экспериментальная опция</string>
-    <string name="crop_auto">Автоматическая обрезка</string>
+    <string name="crop_manual">Ручная обрезка</string>
+    <string name="crop_auto">Авто-обрезка</string>
+    <string name="crop_auto_manual">Авто и ручная</string>
+    <string name="crop_manual_auto">Ручная и авто</string>
     <string name="crop_warning">Используйте ручную обрезку для лучшей производительности</string>
 
     <string name="rotate_0">0 градусов</string>

@@ -20,8 +20,8 @@
 package universe.constellation.orion.viewer;
 
 import android.graphics.Point;
-import android.graphics.Rect;
 
+import universe.constellation.orion.viewer.document.DocumentWithCaching;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
 /**
@@ -41,7 +41,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     private DocumentWrapper doc;
 
-    private CropMargins cropMargins = new CropMargins(0, 0, 0, 0, 0, 0, false, false);
+    private CropMargins cropMargins = new CropMargins(0, 0, 0, 0, 0, 0, false, 0);
 
     private int zoom;
 
@@ -53,6 +53,10 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     public SimpleLayoutStrategy(DocumentWrapper doc) {
         this.doc = doc;
+        //TODO: ugly hack
+        if (doc instanceof DocumentWithCaching) {
+            ((DocumentWithCaching) doc).strategy = this;
+        }
     }
 
     public void nextPage(LayoutPosition info) {
@@ -73,6 +77,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
         Common.d("new cellX = " + info.x.offset + " cellY = " + info.y.offset);
     }
+
     public boolean changeRotation(int rotation) {
         if (this.rotation != rotation) {
             this.rotation = rotation;
@@ -101,31 +106,37 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         if (pageNum < 0) {
             pageNum = 0;
         }
-        info.rotation = rotation;
-
-        info.pageNumber = pageNum;
 
         //original width and height without cropped margins
-        PageInfo pageInfo = doc.getPageInfo(pageNum, cropMargins.autoCrop);
+        reset(info, forward, doc.getPageInfo(pageNum, cropMargins.cropMode), cropMargins.cropMode, zoom);
+    }
 
-        boolean isEvenPage = (pageNum + 1) % 2 == 0;
-        int leftMargin = cropMargins.evenCrop && isEvenPage ? cropMargins.evenLeft : cropMargins.left;
-        int rightMargin = cropMargins.evenCrop && isEvenPage ? cropMargins.evenRight : cropMargins.right;
+    @Override
+    public void reset(LayoutPosition info, boolean forward, PageInfo pageInfo, int cropMode, int zoom) {
+        info.rotation = rotation;
+        info.pageNumber = pageInfo.pageNum0;
 
-        info.x.marginLess = (int) (leftMargin * pageInfo.width * 0.01);
-        int marginRight = (int) (pageInfo.width * rightMargin* 0.01);
-        info.y.marginLess = (int) (cropMargins.top * pageInfo.height * 0.01);
-        int marginBottom = (int) ( pageInfo.height * cropMargins.bottom * 0.01);
-        Rect autoCrop = pageInfo.autoCrop;
-        if (autoCrop != null && cropMargins.autoCrop) {
-            info.x.marginLess = autoCrop.left;
-            marginRight = pageInfo.width - autoCrop.right;
-            info.y.marginLess =  autoCrop.top;
-            marginBottom = pageInfo.height - autoCrop.bottom;
+        int pageWidth = pageInfo.width;
+        int pageHeight = pageInfo.height;
+        resetMargins(info, pageWidth, pageHeight);
+
+        boolean isEvenPage = (pageInfo.pageNum0 + 1) % 2 == 0;
+        CropMode mode = CropMarginsKt.getToMode(cropMode);
+
+        AutoCropMargins autoCrop = pageInfo.autoCrop;
+        if (autoCrop != null && CropMode.AUTO_MANUAL == mode) {
+            appendAutoCropMargins(info, autoCrop);
         }
 
-        info.x.pageDimension = pageInfo.width - info.x.marginLess - marginRight;
-        info.y.pageDimension = pageInfo.height - info.y.marginLess -  marginBottom;
+        if (CropMarginsKt.hasManual(mode)) {
+            int leftMargin = cropMargins.evenCrop && isEvenPage ? cropMargins.evenLeft : cropMargins.left;
+            int rightMargin = cropMargins.evenCrop && isEvenPage ? cropMargins.evenRight : cropMargins.right;
+            appendManualMargins(info, leftMargin, rightMargin);
+        }
+
+        if (autoCrop != null && CropMarginsKt.hasAuto(mode) && CropMode.AUTO_MANUAL != mode) {
+            appendAutoCropMargins(info, autoCrop);
+        }
 
         info.x.screenDimension = rotation == 0 ? viewWidth : viewHeight;
         info.y.screenDimension = rotation == 0 ? viewHeight : viewWidth;
@@ -140,7 +151,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         info.y.marginLess = (int) (info.docZoom * info.y.marginLess);
 
         //zoomed with and height
-        info.x.pageDimension = (int)(info.docZoom * info.x.pageDimension);
+        info.x.pageDimension = (int) (info.docZoom * info.x.pageDimension);
         info.y.pageDimension = (int) (info.docZoom * info.y.pageDimension);
 
         info.x.overlap = info.x.screenDimension * HOR_OVERLAP / 100;
@@ -148,6 +159,43 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         //System.out.println("overlap " + hOverlap + " " + vOverlap);
 
         walker.reset(info, forward);
+    }
+
+    public void appendManualMargins(LayoutPosition info, int leftMargin, int rightMargin) {
+        int pageWidth = info.x.pageDimension;
+        int pageHeight = info.y.pageDimension;
+
+        int xLess = (int) (leftMargin * pageWidth * 0.01);
+        int xMore = (int) (pageWidth * rightMargin * 0.01);
+        int yLess = (int) (cropMargins.top * pageHeight * 0.01);
+        int yMore = (int) (pageHeight * cropMargins.bottom * 0.01);
+
+        info.x.marginLess += xLess;
+        info.x.marginMore += xMore;
+        info.y.marginLess += yLess;
+        info.y.marginMore += yMore;
+
+        info.x.pageDimension -= xLess + xMore;
+        info.y.pageDimension -= yLess + yMore;
+    }
+
+    public void appendAutoCropMargins(LayoutPosition info, AutoCropMargins autoCrop) {
+        info.x.marginLess += autoCrop.left;
+        info.x.marginMore += autoCrop.right;
+        info.y.marginLess += autoCrop.top;
+        info.y.marginMore += autoCrop.bottom;
+
+        info.x.pageDimension -= autoCrop.left + autoCrop.right;
+        info.y.pageDimension -= autoCrop.top + autoCrop.bottom;
+    }
+
+    public void resetMargins(LayoutPosition info, int pageWidth, int pageHeight) {
+        info.x.marginLess = 0;
+        info.y.marginLess = 0;
+        info.x.marginMore = 0;
+        info.y.marginMore = 0;
+        info.x.pageDimension = pageWidth;
+        info.y.pageDimension = pageHeight;
     }
 
     public boolean changeZoom(int zoom) {
@@ -198,7 +246,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
 
     public void init(LastPageInfo info, GlobalOptions options) {
-        changeCropMargins(new CropMargins(info.leftMargin, info.rightMargin, info.topMargin, info.bottomMargin, info.leftEvenMargin, info.rightEventMargin, info.enableEvenCropping, info.enableAutoCrop));
+        changeCropMargins(new CropMargins(info.leftMargin, info.rightMargin, info.topMargin, info.bottomMargin, info.leftEvenMargin, info.rightEventMargin, info.enableEvenCropping, info.cropMode));
         changeRotation(info.rotation);
         changeZoom(info.zoom);
         changeNavigation(info.walkOrder);
@@ -217,7 +265,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         info.leftEvenMargin = cropMargins.evenLeft;
         info.rightEventMargin = cropMargins.evenRight;
         info.enableEvenCropping = cropMargins.evenCrop;
-        info.enableAutoCrop = cropMargins.autoCrop;
+        info.cropMode = cropMargins.cropMode;
 
         info.rotation = rotation;
         info.zoom = zoom;

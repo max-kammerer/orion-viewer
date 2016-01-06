@@ -19,8 +19,6 @@
 
 package universe.constellation.orion.viewer;
 
-import android.graphics.Rect;
-
 /**
  * User: mike
  * Date: 03.11.11
@@ -34,7 +32,7 @@ public class PageInfo {
 
     public int height;
 
-    public Rect autoCrop;
+    public AutoCropMargins autoCrop;
 
     public PageInfo(int pageNum) {
         this.pageNum0 = pageNum;

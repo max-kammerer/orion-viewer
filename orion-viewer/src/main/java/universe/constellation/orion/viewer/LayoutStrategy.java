@@ -43,6 +43,8 @@ public interface LayoutStrategy {
 
     int getRotation();
 
+    void reset(LayoutPosition info, boolean forward, PageInfo pageInfo, int cropMode, int zoom);
+
     boolean changeZoom(int zoom);
 
     int getZoom();

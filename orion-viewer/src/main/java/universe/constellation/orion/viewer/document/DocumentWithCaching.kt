@@ -22,10 +22,7 @@ package universe.constellation.orion.viewer.document
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.support.v4.util.LruCache
-import universe.constellation.orion.viewer.DocumentWrapper
-import universe.constellation.orion.viewer.LayoutPosition
-import universe.constellation.orion.viewer.PageInfo
-import universe.constellation.orion.viewer.SimpleLayoutStrategy
+import universe.constellation.orion.viewer.*
 
 /**
  * User: mike
@@ -34,32 +31,39 @@ import universe.constellation.orion.viewer.SimpleLayoutStrategy
  */
 
 const private val WIDTH = 600
-const private val HEIGH = 800
+const private val HEIGHT = 800
 
 class DocumentWithCaching(val doc: DocumentWrapper) : DocumentWrapper by doc {
 
     private val cache = LruCache<Int, PageInfo?>(100)
+
     private val bitmap: Bitmap by lazy {
-        Bitmap.createBitmap(WIDTH, HEIGH, Bitmap.Config.ARGB_8888);
+        Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_8888);
     }
 
-    private val layout = SimpleLayoutStrategy(this)
+    //TODO: ugly hack
+    lateinit var strategy: SimpleLayoutStrategy;
 
     private val bitmapArray: IntArray by lazy {
-        IntArray(WIDTH * HEIGH)
+        IntArray(WIDTH * HEIGHT)
     }
 
-    override fun getPageInfo(pageNum: Int, autoCrop: Boolean): PageInfo? {
+    fun resetCache() {
+        cache.evictAll()
+    }
+
+    override fun getPageInfo(pageNum: Int, cropMode: Int): PageInfo? {
         synchronized(doc) {
             var pageInfo = cache.get(pageNum)
             if (pageInfo == null) {
-                pageInfo = doc.getPageInfo(pageNum, autoCrop)
+                pageInfo = doc.getPageInfo(pageNum, cropMode)
                 cache.put(pageNum, pageInfo)
             }
 
-            if (autoCrop && pageInfo?.autoCrop == null) {
+            if (cropMode != 0 && (pageInfo?.autoCrop == null)) {
+                Common.d("Starting auto cropping")
                 timing("Auto crop takes ") {
-                    fillAutoCropInfo(pageInfo!!)
+                    fillAutoCropInfo(pageInfo!!, cropMode)
                 }
             }
 
@@ -67,36 +71,43 @@ class DocumentWithCaching(val doc: DocumentWrapper) : DocumentWrapper by doc {
         }
     }
 
-    private fun fillAutoCropInfo(page: PageInfo) {
+    private fun fillAutoCropInfo(page: PageInfo, cropMode: Int) {
         if (page.width == 0 || page.height == 0) {
-            page.autoCrop = Rect(0, 0, page.width, page.height)
+            page.autoCrop = AutoCropMargins(0, 0, 0, 0)
             return
         }
 
-        val zoom = Math.floor(Math.sqrt(1.0 * WIDTH * HEIGH / (page.width * page.height)) * 10000) / 10000;
 
-        //TOD size calc
-        val newWidth = (zoom * page.width).toInt();
-        val newHeight = (zoom * page.height).toInt();
+        val curPos = LayoutPosition()
 
-//        val curPos = LayoutPosition()
-//        layout.reset(curPos, true)
-//        val leftTopCorner = layout.convertToPoint(curPos)
-//
-//
-//        doc.renderPage(curPos.pageNumber, bitmap, curPos.docZoom, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + width, leftTopCorner.y + height)
-        println("Calc auto crop for: ${page.width} x ${page.height}")
-        println("Calc auto crop: $newWidth x $newHeight $zoom")
+        //Crop margins to calc new width and height
+        val calcCropMode = if (cropMode.toMode.isManualBegin()) CropMode.MANUAL else CropMode.NO_MODE
+        Common.d("First reset for: ${page.width} x ${page.height}, $calcCropMode")
+        strategy.reset(curPos, true, page, calcCropMode.cropMode, 10000)
+
+        val pageWidth = curPos.x.pageDimension
+        val pageHeight = curPos.y.pageDimension
+        Common.d("Page info after first reset: $pageWidth x $pageHeight")
+        if (pageWidth == 0 || pageHeight == 0) {
+            page.autoCrop = null;
+            return;
+        }
+
+        //then try to auto crop
+        var zoomInDouble = Math.floor(Math.sqrt(1.0 * WIDTH * HEIGHT / (pageWidth * pageHeight)) * 10000) / 10000
+        strategy.reset(curPos, true, page, calcCropMode.cropMode, (zoomInDouble * 10000).toInt())
+        val newWidth = curPos.x.pageDimension;
+        val newHeight = curPos.y.pageDimension
+
+        Common.d("Page info for auto crop: $newWidth x $newHeight $zoomInDouble")
         timing("Auto crop page rendering: ") {
-            doc.renderPage(page.pageNum0, bitmap, zoom, 0, 0, newWidth, newHeight)
+            val leftTopCorner = strategy.convertToPoint(curPos)
+            doc.renderPage(curPos.pageNumber, bitmap, curPos.docZoom, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + newWidth, leftTopCorner.y + newHeight)
         }
 
         timing("Auto crop data copy: ") {
             bitmap.getPixels(bitmapArray, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
         }
-
-        println("${page.pageNum0}: ${page.width}x${page.height}")
-        println("${page.pageNum0}: $zoom $newWidth $newHeight")
 
         val margins = timing("Auto crop margins calculation: ") {
             findMargins(ArrayImage(newWidth, newHeight, bitmapArray))
@@ -104,22 +115,22 @@ class DocumentWithCaching(val doc: DocumentWrapper) : DocumentWrapper by doc {
 
         val marginsWithPadding = pad(margins, newWidth, newHeight)
 
-        page.autoCrop = Rect(
-                (marginsWithPadding.left / zoom).toInt(),
-                (marginsWithPadding.top / zoom).toInt(),
-                (marginsWithPadding.right / zoom).toInt(),
-                (marginsWithPadding.bottom / zoom).toInt()
+        page.autoCrop = AutoCropMargins(
+                (marginsWithPadding.left / zoomInDouble).toInt(),
+                (marginsWithPadding.top / zoomInDouble).toInt(),
+                (marginsWithPadding.right / zoomInDouble).toInt(),
+                (marginsWithPadding.bottom / zoomInDouble).toInt()
 
         )
-        println("Zoomed result: ${page.pageNum0}: $margins $zoom")
-        println("Unzoomed result: ${page.pageNum0}: ${page.autoCrop}")
+        Common.d("Zoomed result: ${page.pageNum0}: $margins $zoomInDouble")
+        Common.d("Unzoomed result: ${page.pageNum0}: ${page.autoCrop}")
     }
 }
 
 inline fun <R> timing(m: String,l: () -> R): R {
     var s = System.currentTimeMillis()
     val result = l()
-    println("$m = ${System.currentTimeMillis() - s} ms")
+    Common.d("$m = ${System.currentTimeMillis() - s} ms")
     return result;
 }
 
@@ -145,22 +156,21 @@ class ArrayImage(width: Int, height: Int, @JvmField val source: IntArray): Image
 }
 
 //TODO replace 5 with dp  
-fun pad(margins: Rect, newWidth: Int, newHeight: Int): Rect {
-    val newMargins = Rect(margins)
-    val widthPadding = max(newMargins.width() / 100, 5);
-    val heightPadding = max(newMargins.height() / 100, 5);
-    with(newMargins) {
-        left = max(0, left - widthPadding)
-        right = min(newWidth, right + widthPadding)
+fun pad(margins: AutoCropMargins, newWidth: Int, newHeight: Int): AutoCropMargins {
+    return with(margins) {
+        val widthPadding = max((newWidth - left - right) / 100, 5);
+        val heightPadding = max((newHeight - top - bottom) / 100, 5);
 
-        top = max(0, top - heightPadding)
-        bottom = min(newHeight, bottom + heightPadding)
+        val left = max(0, left - widthPadding)
+        val right = max(0, right - widthPadding)
+
+        val top = max(0, top - heightPadding)
+        val bottom = max(0, bottom - heightPadding)
+        AutoCropMargins(left, top, right, bottom)
     }
-
-    return newMargins
 }
 
-fun findMargins(image: ArrayImage): Rect {
+fun findMargins(image: ArrayImage): AutoCropMargins {
     timing("calc gradient") {
         calcGradient(image)
     }
@@ -201,7 +211,7 @@ fun calcGradient(image: ArrayImage) {
     }
 }
 
-fun findRectangle(grImage: ArrayImage): Rect {
+fun findRectangle(grImage: ArrayImage): AutoCropMargins {
     val height = grImage.height
     val width = grImage.width
     val source = grImage.source
@@ -273,7 +283,7 @@ fun findRectangle(grImage: ArrayImage): Rect {
         }
     }
 
-    println("data1: ${Rect(left, top, right , bottom)}")
+    Common.d("data1: ${Rect(left, top, right , bottom)}")
 
     if (right < 0) {
         right = width - 1
@@ -290,8 +300,8 @@ fun findRectangle(grImage: ArrayImage): Rect {
     }
 
     val rectangle = Rect(left, top, right, bottom)
-    println("data 2: $rectangle")
-    return rectangle
+    Common.d("data 2: $rectangle")
+    return AutoCropMargins(left, top, width - right, height - bottom)
 }
 
 inline fun gray(color: Int): Int {

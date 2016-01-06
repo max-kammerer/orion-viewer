@@ -230,7 +230,7 @@ public class TexetDevice extends EInkDevice {
 
                         Common.d("Extracting cover info ...");
 
-                        PageInfo pageInfo = originalDoc.getPageInfo(0, false);
+                        PageInfo pageInfo = originalDoc.getPageInfo(0, 0);
                         if (pageInfo.width <= 0 || pageInfo.height <= 0) {
                             Common.d("Wrong page defaultHeight: " + pageInfo.width + "x" + pageInfo.height);
                         }

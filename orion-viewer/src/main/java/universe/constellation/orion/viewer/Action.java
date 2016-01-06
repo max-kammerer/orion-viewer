@@ -525,7 +525,7 @@ public enum Action {
         }
 
         controller.changeCropMargins(
-                CropDialogBuilderKt.toMargins(margins, cropMargins.evenCrop, cropMargins.autoCrop)
+                CropDialogBuilderKt.toMargins(margins, cropMargins.evenCrop, cropMargins.cropMode)
         );
     }
 }

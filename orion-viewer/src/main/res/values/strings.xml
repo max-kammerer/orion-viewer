@@ -42,8 +42,10 @@
     <string name="crop_top">Top</string>
     <string name="crop_bottom">Bottom</string>
 
-    <string name="crop_experimental">Experimental feature</string>
     <string name="crop_auto">Auto crop</string>
+    <string name="crop_manual">Manual crop</string>
+    <string name="crop_auto_manual">Auto and manual</string>
+    <string name="crop_manual_auto">Manual and auto</string>
     <string name="crop_warning">Use manual crop for better performance</string>
 
     <string name="rotate_0">0 degree</string>

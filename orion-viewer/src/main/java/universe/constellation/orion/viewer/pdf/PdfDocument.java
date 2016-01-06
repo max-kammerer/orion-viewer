@@ -48,7 +48,7 @@ public class PdfDocument implements DocumentWrapper {
         return core.getPageCount();
     }
 
-    public PageInfo getPageInfo(int pageNum, boolean autoCrop) {
+    public PageInfo getPageInfo(int pageNum, int cropMode) {
         return core.getPageInfo(pageNum);
     }
 

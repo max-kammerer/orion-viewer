@@ -58,7 +58,7 @@ public class DjvuDocument implements DocumentWrapper {
         return pageCount;
     }
 
-    public synchronized PageInfo getPageInfo(int pageNum, boolean autoCrop) {
+    public synchronized PageInfo getPageInfo(int pageNum, int cropMode) {
         PageInfo info = new PageInfo(pageNum);
         long start = System.currentTimeMillis();
         getPageInfo(pageNum, info);

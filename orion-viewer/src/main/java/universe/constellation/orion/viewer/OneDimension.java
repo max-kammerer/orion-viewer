@@ -36,8 +36,7 @@ public class OneDimension implements Cloneable {
 
     public int marginLess;
 
-    //not used now
-    private int marginTop;
+    public int marginMore;
 
     @Override
     public int hashCode() {

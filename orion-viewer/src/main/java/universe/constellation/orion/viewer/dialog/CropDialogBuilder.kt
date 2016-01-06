@@ -3,6 +3,7 @@ package universe.constellation.orion.viewer.dialog
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v7.app.AppCompatDialog
+import android.view.View
 import android.view.Window
 import android.widget.*
 import universe.constellation.orion.viewer.CropMargins
@@ -15,14 +16,14 @@ import universe.constellation.orion.viewer.R
 
 fun CropMargins.toDialogMargins() = intArrayOf(left, right, top, bottom, evenLeft, evenRight)
 
-fun IntArray.toMargins(evenCrop: Boolean, autoCrop: Boolean) =
-        CropMargins(this[0], this[1], this[2], this[3], this[4], this[5], evenCrop, autoCrop)
+fun IntArray.toMargins(evenCrop: Boolean, cropMode: Int) =
+        CropMargins(this[0], this[1], this[2], this[3], this[4], this[5], evenCrop, cropMode)
 
 class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : AppCompatDialog(context) {
 
     val cropMargins = cropMargins.toDialogMargins()
     val evenCrop = cropMargins.evenCrop
-    val autoCrop = cropMargins.autoCrop
+    val cropMode = cropMargins.cropMode
 
     companion object {
         const val CROP_RESTRICTION_MIN = -10
@@ -95,12 +96,15 @@ class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : A
             }
         }
 
-        val cropAuto = findViewById(R.id.crop_auto) as CheckBox
-
         val preview = findViewById(R.id.crop_preview) as ImageButton
+        val radioGroup = findViewById(R.id.crop_mode) as RadioGroup
+
         preview.setOnClickListener {
             context.onAnimatorCancel()
-            context.controller?.changeCropMargins(cropMargins.toMargins(checkBox.isChecked, cropAuto.isChecked))
+            val radioButtonId = radioGroup.checkedRadioButtonId
+            val radioButton = radioGroup.findViewById(radioButtonId)
+            val mode = radioGroup.indexOfChild(radioButton)
+            context.controller?.changeCropMargins(cropMargins.toMargins(checkBox.isChecked, mode))
         }
 
         val close = findViewById(R.id.crop_close) as ImageButton
@@ -172,7 +176,9 @@ class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : A
             }
         }
         (findViewById(R.id.crop_even_flag) as CheckBox).isChecked = evenCrop
-        (findViewById(R.id.crop_auto) as CheckBox).isChecked = autoCrop
+
+        val radioGroup = findViewById(R.id.crop_mode) as RadioGroup
+        (radioGroup.getChildAt(cropMode) as RadioButton).isChecked = true
     }
 
 }

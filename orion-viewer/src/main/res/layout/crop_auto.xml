@@ -19,22 +19,54 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
-             xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical"
-    android:layout_margin="10dp">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:orientation="vertical">
 
     <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"  android:text="@string/crop_experimental"
-        android:layout_width="wrap_content"/>
+        android:text="@string/crop_warning"
+        android:textSize="20sp" />
 
-    <TextView
+    <RadioGroup
+        android:id="@+id/crop_mode"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"  android:text="@string/crop_warning"
-        android:layout_width="wrap_content"/>
+        android:layout_gravity="center"
+        android:gravity="left"
+        android:orientation="vertical">
 
-    <CheckBox android:id="@+id/crop_auto" android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:textSize="20sp" android:text="@string/crop_auto"/>
+        <RadioButton
+            android:id="@+id/manual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/crop_manual"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/crop_auto"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/manual_auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/crop_manual_auto"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/auto_manual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/crop_auto_manual"
+            android:textSize="20sp" />
+    </RadioGroup>
 
 </LinearLayout>
