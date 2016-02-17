@@ -1,3 +1,6 @@
+===== 0.61.2 (Feb 17, 2016) =====
+* Fixed error in even crop dialog
+
 ===== 0.61.1 (Jan 06, 2016) =====
 * Added new auto-crop option
 * Fixed font color in search dialog
