@@ -8,6 +8,10 @@ ext {
     mupdf = thirparty_build_root + "/mupdf/"
     djvu = thirparty_build_root + "/djvu/"
 
-    mupdf_libs = mupdf + '/platform/android/libs'
-    djvu_libs = djvu + '/android/libs/'
+
+    mupdf_libs_relative = 'platform/android/libs'
+    mupdf_libs = mupdf + mupdf_libs_relative
+
+    djvu_libs_relative = 'android/libs/'
+    djvu_libs = djvu + djvu_libs_relative
 }

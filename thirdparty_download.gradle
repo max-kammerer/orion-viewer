@@ -1,0 +1,28 @@
+/*CHANGE necessary properties in project.gradle*/
+apply from: 'project.gradle'
+apply from: 'orion-viewer/version.gradle'
+defaultTasks 'downloadNativeLibs'
+
+task packNativeLibs(type: Zip) {
+    baseName = "nativeLibs-${orionVersionName}"
+    from(djvu_libs) {
+        into("djvu/$djvu_libs_relative")
+    }
+    from(mupdf_libs) {
+        into("mupdf/$mupdf_libs_relative")
+    }
+    destinationDir file(thirparty_build_root)
+}
+
+task downloadNativeLibs() << {
+    def lastLibs = 'nativeLibs-0.61.2.zip'
+    ant.get(
+            src: "https://github.com/max-kammerer/orion-viewer/releases/download/thirdparty_0.61.2/" + lastLibs,
+            dest: thirparty_build_root
+    )
+
+    copy {
+        from zipTree(file(thirparty_build_root +"/" +lastLibs))
+        into file(thirparty_build_root)
+    }
+}
