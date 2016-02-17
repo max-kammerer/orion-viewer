@@ -72,10 +72,12 @@ class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : A
 
         //even cropping
         val evenCropTable = findViewById(R.id.crop_borders_even) as TableLayout
+        var index = 4
         for (i in 0..evenCropTable.childCount - 1) {
             val child = evenCropTable.getChildAt(i)
             if (child is TableRow) {
-                linkCropButtonsAndText(i + generalCropTable.childCount, child)
+                linkCropButtonsAndText(index, child)
+                index++
 
                 for (j in 0..child.childCount - 1) {
                     val v = child.getChildAt(j)
@@ -171,7 +173,7 @@ class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : A
             if (cropTable2.getChildAt(i) is TableRow) {
                 val row = cropTable2.getChildAt(i) as TableRow
                 val valueView = row.findViewById(R.id.crop_value) as TextView
-                valueView.text = "${cropMargins[i]}%"
+                valueView.text = "${cropMargins[index]}%"
                 index++
             }
         }
