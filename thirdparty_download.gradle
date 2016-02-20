@@ -16,6 +16,7 @@ task packNativeLibs(type: Zip) {
 
 task downloadNativeLibs() << {
     def lastLibs = 'nativeLibs-0.61.2.zip'
+    file(thirparty_build_root).mkdir()
     ant.get(
             src: "https://github.com/max-kammerer/orion-viewer/releases/download/thirdparty_0.61.2/" + lastLibs,
             dest: thirparty_build_root
