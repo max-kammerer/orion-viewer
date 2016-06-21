@@ -9,15 +9,15 @@ if (doSigning) {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:design:23.1.1'
+    compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.android.support:design:24.0.0'
     compile project(':tree-view-list-android')
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '21.1.2'
+    buildToolsVersion '24.0.0'
 
     defaultConfig {
         versionCode = orionVersionCode
