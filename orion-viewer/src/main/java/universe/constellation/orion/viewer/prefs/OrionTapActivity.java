@@ -54,7 +54,7 @@ public class OrionTapActivity extends OrionBaseActivity {
         for (int i = 0; i < table.getChildCount(); i++) {
             TableRow row = (TableRow) table.getChildAt(i);
             for (int j = 0; j < row.getChildCount(); j++) {
-                View layout = (View) row.getChildAt(j);
+                View layout = row.getChildAt(j);
                 layout.setClickable(true);
                 layout.setLongClickable(true);
                 TextView shortText = (TextView) layout.findViewById(R.id.shortClick);

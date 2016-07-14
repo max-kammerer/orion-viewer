@@ -469,7 +469,7 @@ public class GlobalOptions implements Serializable {
     }
 
     public Map<String, ?> getAllProperties() {
-        return (Map<String, ?>) prefs.getAll();
+        return prefs.getAll();
     }
 
 }

@@ -287,7 +287,7 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
                             //android bug
                             positiveDisabled = true;
                             if (importCurrent) {
-                                ((AlertDialog) dialog).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
+                                dialog.getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
                             }
                         }
 
