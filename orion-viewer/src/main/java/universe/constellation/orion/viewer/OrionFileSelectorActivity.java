@@ -32,7 +32,7 @@ import java.io.FilenameFilter;
  */
 public class OrionFileSelectorActivity extends OrionFileManagerActivity {
 
-    public static final String RESULT_FILE_NAME = "fileName";
+    static final String RESULT_FILE_NAME = "fileName";
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -57,12 +57,7 @@ public class OrionFileSelectorActivity extends OrionFileManagerActivity {
         return new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
-
-                if (new File(dir, filename).isDirectory()) {
-                    return true;
-                }
-
-                return filename.toLowerCase().endsWith(".xml");
+                return new File(dir, filename).isDirectory() || filename.toLowerCase().endsWith(".xml");
             }
         };
     }
