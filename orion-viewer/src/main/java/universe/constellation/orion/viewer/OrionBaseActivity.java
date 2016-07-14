@@ -40,9 +40,9 @@ import universe.constellation.orion.viewer.prefs.OrionApplication;
  * Date: 24.12.11
  * Time: 17:00
  */
-public class OrionBaseActivity extends AppCompatActivity {
+public abstract class OrionBaseActivity extends AppCompatActivity {
 
-    public static final String DONT_OPEN_RECENT = "DONT_OPEN_RECENT";
+    static final String DONT_OPEN_RECENT = "DONT_OPEN_RECENT";
 
     protected Device device ;
 
@@ -196,22 +196,6 @@ public class OrionBaseActivity extends AppCompatActivity {
     public void showError(String error, Exception ex) {
         Toast.makeText(this, error + ": " + ex.getMessage(), Toast.LENGTH_LONG).show();
         Common.d(ex);
-    }
-
-    class Localizer {
-        private Resources res;
-
-        public Localizer(Resources res) {
-            this.res = res;
-        }
-        public String get(String key) {
-            try {
-                int id = res.getIdentifier(key, "string", "universe.constellation.orion.viewer");
-                return res.getString(id);
-            } catch (Exception e) {
-                return key;
-            }
-        }
     }
 
     public void changeOrientation(int orientationId) {
