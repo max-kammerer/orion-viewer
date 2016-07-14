@@ -134,10 +134,10 @@ public class EdgeDevice extends AndroidDevice {
                         }
                     };
                     hsv.setHorizontalFadingEdgeEnabled(false);
-                    ViewGroup.LayoutParams lp2 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+                    ViewGroup.LayoutParams lp2 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                     parent.addView(hsv, lp2);
 
-                    lp2 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+                    lp2 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                     vsv = new ScrollView(activity);
                     vsv.setVerticalFadingEdgeEnabled(false);
                     hsv.addView(vsv, lp2);

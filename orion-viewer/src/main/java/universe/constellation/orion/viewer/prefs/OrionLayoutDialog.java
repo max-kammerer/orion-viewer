@@ -69,7 +69,7 @@ public class OrionLayoutDialog extends DialogPreference {
                 getDialog().dismiss();
             }
         });
-        lv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
+        lv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         int[] arr = getContext().getResources().getIntArray(R.array.page_layouts);
         ArrayList values = new ArrayList(arr.length);
         for (int i = 0; i < arr.length; i++) {

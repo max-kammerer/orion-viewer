@@ -47,7 +47,7 @@ public class TapHelpDialog extends DialogOverView {
 
 
                 //if (!(i == 1 && j == 1)) {
-                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     layoutParams.addRule(i == 1 && j == 1 ? RelativeLayout.ALIGN_TOP : RelativeLayout.CENTER_IN_PARENT);
                     shortText.setLayoutParams(layoutParams);
                 //}
