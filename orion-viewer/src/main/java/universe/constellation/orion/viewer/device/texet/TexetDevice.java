@@ -67,7 +67,7 @@ public class TexetDevice extends EInkDevice {
         SharedPreferences settings =
                 bmkContext.getSharedPreferences("MyPrefsFile",
                         Context.MODE_WORLD_READABLE + Context.MODE_WORLD_WRITEABLE);
-        SharedPreferences.Editor editor = null;
+        SharedPreferences.Editor editor;
 
         if (cPath == null) {
             editor = settings.edit();

@@ -220,7 +220,7 @@ public class LastPageInfo implements Serializable {
                         try {
                             String rawValue = xpp.getAttributeValue("", "value");
                             Field f = getClass().getField(name);
-                            Object value  = null;
+                            Object value;
                             Class type = f.getType();
                             if (type.equals(int.class)) {
                                 value = Integer.valueOf(rawValue);

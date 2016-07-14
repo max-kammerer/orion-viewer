@@ -521,7 +521,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         TextView textView = (TextView) findMyViewById(R.id.zoom_picker_message);
 
         Spinner sp = (Spinner) findMyViewById(R.id.zoom_spinner);
-        int spinnerIndex = sp.getSelectedItemPosition();
+        int spinnerIndex;
         zoomInternal = 1;
         try {
             int zoom = controller.getZoom10000Factor();

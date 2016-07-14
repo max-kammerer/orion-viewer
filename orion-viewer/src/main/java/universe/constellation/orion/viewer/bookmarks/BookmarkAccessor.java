@@ -176,12 +176,11 @@ public class BookmarkAccessor extends SQLiteOpenHelper {
 
     public long insertOrUpdate(String name, long size) {
         SQLiteDatabase dataBase = getReadableDatabase();
-        long id = -1;
 
         ContentValues cv = new ContentValues();
         cv.put(BOOK_NAME, name);
         cv.put(BOOK_FILE_SIZE, size);
-        id = dataBase.insert(BOOKS_TABLE_NAME, null, cv);
+        long id = dataBase.insert(BOOKS_TABLE_NAME, null, cv);
         System.out.println("insertOrUpdate " + id);
         return id;
     }

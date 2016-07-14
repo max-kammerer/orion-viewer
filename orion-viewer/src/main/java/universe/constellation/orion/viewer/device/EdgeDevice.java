@@ -105,7 +105,7 @@ public class EdgeDevice extends AndroidDevice {
             Common.d("On set content view ");
             if (activity.getViewerType() == VIEWER_ACTIVITY) {
                 final View view = activity.findViewById(R.id.view);
-                ScrollView vsv = null;
+                ScrollView vsv;
 
                 ViewGroup parent = (ViewGroup) view.getParent();
                 parent.removeView(view);

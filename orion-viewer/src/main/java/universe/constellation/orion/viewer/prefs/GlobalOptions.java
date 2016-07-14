@@ -341,7 +341,7 @@ public class GlobalOptions implements Serializable {
     public int getIntFromStringProperty(String key, int defaultValue) {
         if (!prefValues.containsKey(key)) {
             String value = prefs.getString(key, null);
-            Integer newIntValue = null;
+            Integer newIntValue;
             if (value == null || "".equals(value)) {
                 newIntValue = defaultValue;
             } else {
