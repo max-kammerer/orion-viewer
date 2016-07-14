@@ -26,13 +26,13 @@
             android:scrollbars="vertical" android:fillViewport="true">
 
 
-    <LinearLayout android:layout_height="fill_parent" android:orientation="vertical"
+    <LinearLayout android:layout_height="wrap_content" android:orientation="vertical"
                   android:layout_width="fill_parent" android:gravity="center">
 
         <HorizontalScrollView android:layout_height="wrap_content" android:layout_width="fill_parent">
 
             <LinearLayout android:layout_height="fill_parent" android:orientation="vertical"
-                          android:layout_width="fill_parent" android:gravity="center">
+                          android:layout_width="wrap_content" android:gravity="center">
 
                 <RadioGroup android:id="@+id/layoutGroup" android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
