@@ -116,15 +116,15 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (isLevel5ApiEnabled() && doTrack(keyCode)) {
-            SafeApi.doTrackEvent(event);
+        if (doTrack(keyCode)) {
+            event.startTracking();
             return true;
         }
         return super.onKeyDown(keyCode, event);
     }
 
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (isLevel5ApiEnabled() && SafeApi.isCanceled(event)) {
+        if (event.isCanceled()) {
             return super.onKeyUp(keyCode, event);
         }
 

@@ -656,8 +656,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        L.log("onKeyUp key = " + keyCode + " " + SafeApi.isCanceled(event) + " " + doTrack(keyCode));
-        if(isLevel5ApiEnabled() && SafeApi.isCanceled(event)) {
+        L.log("onKeyUp key = " + keyCode + " " + event.isCanceled() + " " + doTrack(keyCode));
+        if(event.isCanceled()) {
             L.log("Tracking = " + keyCode);
             return super.onKeyUp(keyCode,  event);
         }
@@ -666,10 +666,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        L.log("onKeyDown = " + keyCode + " " + SafeApi.isCanceled(event) + " " + doTrack(keyCode)) ;
-        if (isLevel5ApiEnabled() && doTrack(keyCode)) {
+        L.log("onKeyDown = " + keyCode + " " + event.isCanceled() + " " + doTrack(keyCode)) ;
+        if (doTrack(keyCode)) {
             L.log("Tracking = " + keyCode);
-            SafeApi.doTrackEvent(event);
+            event.startTracking();
             return true;
         }
         return super.onKeyDown(keyCode, event);

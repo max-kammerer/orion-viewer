@@ -269,10 +269,6 @@ public abstract class OrionBaseActivity extends AppCompatActivity {
         return new AlertDialog.Builder(this);
     }
 
-    public boolean isLevel5ApiEnabled() {
-        return getOrionContext().getSdkVersion() >= 5;
-    }
-
     protected boolean doTrack(int keyCode) {
         return keyCode != KeyEvent.KEYCODE_MENU && keyCode != KeyEvent.KEYCODE_BACK;
     }
