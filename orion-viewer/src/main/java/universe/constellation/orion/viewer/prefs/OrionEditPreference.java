@@ -109,7 +109,7 @@ public class OrionEditPreference extends EditTextPreference implements Preferenc
         if (value == UNDEFINED) {
             return null;
         } else {
-            return Integer.valueOf(value);
+            return value;
         }
     }
 

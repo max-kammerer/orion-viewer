@@ -58,9 +58,7 @@ class TextSelector {
 			if (line[0].bottom > mSelectBox.top && line[0].top < mSelectBox.bottom)
 				lines.add(line);
 
-		Iterator<TextWord[]> it = lines.iterator();
-		while (it.hasNext()) {
-			TextWord[] line = it.next();
+		for (TextWord[] line : lines) {
 			boolean firstLine = line[0].top < mSelectBox.top;
 			boolean lastLine = line[0].bottom > mSelectBox.bottom;
 			float start = Float.NEGATIVE_INFINITY;
@@ -371,9 +369,7 @@ public abstract class PageView extends ViewGroup {
 						paint.setStrokeWidth(INK_THICKNESS * scale);
 						paint.setColor(INK_COLOR);
 
-						Iterator<ArrayList<PointF>> it = mDrawing.iterator();
-						while (it.hasNext()) {
-							ArrayList<PointF> arc = it.next();
+						for (ArrayList<PointF> arc : mDrawing) {
 							if (arc.size() >= 2) {
 								Iterator<PointF> iit = arc.iterator();
 								p = iit.next();

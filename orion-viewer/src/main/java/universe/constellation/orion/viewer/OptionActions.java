@@ -122,8 +122,7 @@ public enum OptionActions {
 
     static {
         OptionActions[] values = values();
-        for (int i = 0; i < values.length; i++) {
-            OptionActions value = values[i];
+        for (OptionActions value : values) {
             actions.put(value.getKey(), value);
         }
     }

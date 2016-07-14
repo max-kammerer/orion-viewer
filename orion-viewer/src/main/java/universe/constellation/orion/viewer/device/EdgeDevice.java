@@ -117,7 +117,7 @@ public class EdgeDevice extends AndroidDevice {
                             Common.d("HSV onSizeChanged " + w + "x" + h);
                             if (w != 0 && h != 0 & fb != null) {
                                 boolean newPortrait = h > w;
-                                if (portrait == null || newPortrait != portrait.booleanValue()) {
+                                if (portrait == null || newPortrait != portrait) {
                                     portrait = newPortrait;
 
 //                                try {
@@ -144,8 +144,8 @@ public class EdgeDevice extends AndroidDevice {
                 } else {
                     vsv = (ScrollView) parent;
                 }
-                int newW = portrait == null || portrait.booleanValue() ? fb.getWidth() : fb.getHeight();
-                int newH = portrait == null || portrait.booleanValue() ? fb.getHeight() : fb.getWidth();
+                int newW = portrait == null || portrait ? fb.getWidth() : fb.getHeight();
+                int newH = portrait == null || portrait ? fb.getHeight() : fb.getWidth();
                 ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(newW, newH);
                 view.setMinimumWidth(newH);
                 view.setMinimumHeight(newH);

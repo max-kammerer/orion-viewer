@@ -130,11 +130,10 @@ public class LastPageInfo implements Serializable {
             serializer.attribute(nameSpace, "version", "" + CURRENT_VERSION);
 
             Field [] fields = this.getClass().getDeclaredFields();
-            for (int i = 0; i < fields.length; i++) {
-                Field field = fields[i];
+            for (Field field : fields) {
                 try {
                     int modifiers = field.getModifiers();
-                    if ((modifiers & (Modifier.TRANSIENT | Modifier.STATIC )) == 0) {
+                    if ((modifiers & (Modifier.TRANSIENT | Modifier.STATIC)) == 0) {
                         //System.out.println(field.getName());
                         writeValue(serializer, field.getName(), field.get(this).toString());
                     }

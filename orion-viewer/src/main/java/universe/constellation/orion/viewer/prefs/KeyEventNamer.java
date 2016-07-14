@@ -36,15 +36,14 @@ public class KeyEventNamer {
     private static final Map<Integer, String> key2Name = new HashMap<Integer, String>();
     static {
         try {
-        Field[] fields = KeyEvent.class.getFields();
-        for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
-            if (field.getName().startsWith("KEYCODE_")) {
-                int key = field.getInt(null);
-                String name = field.getName().substring("KEYCODE_".length());
-                key2Name.put(key, name);
+            Field[] fields = KeyEvent.class.getFields();
+            for (Field field : fields) {
+                if (field.getName().startsWith("KEYCODE_")) {
+                    int key = field.getInt(null);
+                    String name = field.getName().substring("KEYCODE_".length());
+                    key2Name.put(key, name);
+                }
             }
-        }
         } catch (Exception e) {
             Common.d(e);
         }

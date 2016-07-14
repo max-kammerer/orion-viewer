@@ -62,7 +62,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
         statusText = (TextView) findMyViewById(R.id.key_binder_message);
         defaultColor = statusText.getTextColors().getDefaultColor();
         bindedKeys = (ListView) findMyViewById(R.id.binded_keys);
-        Map<String, ?> props = getOrionContext().getKeyBinding().getAllProperties();
+        Map<String, Integer> props = (Map<String, Integer>) getOrionContext().getKeyBinding().getAllProperties();
         adapter = new KeyListAdapter(this, props);
         bindedKeys.setAdapter(adapter);
         bindedKeys.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -178,12 +178,12 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
         return false;
     }
 
-    public class KeyCodeAndAction implements Comparable<KeyCodeAndAction>{
+    class KeyCodeAndAction implements Comparable<KeyCodeAndAction>{
         private int keyCode;
         private Action action;
         private boolean isLong;
 
-        public KeyCodeAndAction(int keyCode, Action action, boolean isLong) {
+        KeyCodeAndAction(int keyCode, Action action, boolean isLong) {
             this.keyCode = keyCode;
             this.action = action;
             this.isLong = isLong;
@@ -198,17 +198,16 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
         }
     }
 
-    public class KeyListAdapter extends BaseAdapter {
+    private class KeyListAdapter extends BaseAdapter {
 
         private LayoutInflater mInflater;
 
         public ArrayList<KeyCodeAndAction> values = new ArrayList<KeyCodeAndAction>();
 
-        public KeyListAdapter(Context context, Map prefs) {
+        KeyListAdapter(Context context, Map<String, Integer> prefs) {
             mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             if (prefs != null) {
-                for (Iterator<Map.Entry<String, Integer>> iterator = prefs.entrySet().iterator(); iterator.hasNext();) {
-                    Map.Entry<String, Integer> next = iterator.next();
+                for (Map.Entry<String, Integer> next : prefs.entrySet()) {
                     String key = next.getKey();
                     Integer actionCode = next.getValue();
                     Action action = Action.getAction(actionCode);
@@ -254,7 +253,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
             return convertView;
         }
 
-        public void insertOrUpdate(KeyCodeAndAction action) {
+        void insertOrUpdate(KeyCodeAndAction action) {
             int index = Collections.binarySearch(values, action);
             if (index >= 0) {
                 values.set(index, action);
