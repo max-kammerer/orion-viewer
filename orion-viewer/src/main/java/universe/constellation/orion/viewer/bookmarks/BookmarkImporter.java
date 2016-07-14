@@ -24,7 +24,6 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 import universe.constellation.orion.viewer.Common;
-import universe.constellation.orion.viewer.OrionBaseActivity;
 import universe.constellation.orion.viewer.OrionException;
 
 import java.io.*;
@@ -41,15 +40,12 @@ public class BookmarkImporter {
 
     private String inputName;
 
-    private OrionBaseActivity activity;
-
     private Set<BookNameAndSize> books;
 
     private BookNameAndSize toBook;
 
 
-    public BookmarkImporter(OrionBaseActivity activity, BookmarkAccessor dataBase, String inputName, Set<BookNameAndSize> books, BookNameAndSize toBook) {
-        this.activity = activity;
+    public BookmarkImporter(BookmarkAccessor dataBase, String inputName, Set<BookNameAndSize> books, BookNameAndSize toBook) {
         this.dataBase = dataBase;
         this.inputName = inputName;
         this.books = books;
@@ -111,7 +107,7 @@ public class BookmarkImporter {
 
 
     //now we stay on book start tag
-    public int doBookImport(XmlPullParser xpp, BookNameAndSize book) throws OrionException {
+    private int doBookImport(XmlPullParser xpp, BookNameAndSize book) throws OrionException {
         Common.d("Importing bookmarks for " + book);
         try {
             String bookName = book.getName();

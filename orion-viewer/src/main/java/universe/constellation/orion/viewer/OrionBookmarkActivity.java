@@ -311,7 +311,7 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
     private void doImport(String fileName, Set<BookNameAndSize> books, BookNameAndSize toBook){
         Common.d("Import bookmarks " + books.size());
 
-        BookmarkImporter importer = new BookmarkImporter(this, getOrionContext().getBookmarkAccessor(), fileName, books, toBook);
+        BookmarkImporter importer = new BookmarkImporter(getOrionContext().getBookmarkAccessor(), fileName, books, toBook);
         try {
             importer.doImport();
             updateView(getOrionContext().getBookmarkAccessor().selectBookId(getOrionContext().getCurrentBookParameters().simpleFileName, getOrionContext().getCurrentBookParameters().fileSize));
@@ -371,7 +371,7 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
         return null;
     }
 
-    public Set<BookNameAndSize> getCheckedItems(ListView view) {
+    private Set<BookNameAndSize> getCheckedItems(ListView view) {
         HashSet<BookNameAndSize> result = new HashSet();
         SparseBooleanArray checked = view.getCheckedItemPositions();
         for (int i = 0; i < checked.size(); i++) {

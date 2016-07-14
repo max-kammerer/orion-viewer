@@ -17,13 +17,11 @@ import universe.constellation.orion.viewer.OrionViewerActivity;
 public class DialogOverView {
 
     protected OrionViewerActivity activity;
-    private int layoutId;
 
     protected final Dialog dialog;
 
     public DialogOverView(OrionViewerActivity activity, int layoutId, int style) {
         this.activity = activity;
-        this.layoutId = layoutId;
 
         dialog = new Dialog(activity, style);
         dialog.setContentView(layoutId);

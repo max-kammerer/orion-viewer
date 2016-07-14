@@ -120,7 +120,6 @@ public class ScaleGestureDetectorOld {
      */
     private static final float PRESSURE_THRESHOLD = 0.67f;
 
-    private final Context mContext;
     private final OnScaleGestureListener mListener;
     private boolean mGestureInProgress;
 
@@ -148,7 +147,6 @@ public class ScaleGestureDetectorOld {
     private boolean mActive0MostRecent;
 
     public ScaleGestureDetectorOld(Context context, OnScaleGestureListener listener) {
-        mContext = context;
         mListener = listener;
     }
 

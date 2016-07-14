@@ -34,8 +34,6 @@ import universe.constellation.orion.viewer.R;
  */
 public class ImageButton extends android.widget.ImageButton {
 
-    private int actionCode;
-
     private Action action;
 
     public ImageButton(Context context) {
@@ -53,10 +51,10 @@ public class ImageButton extends android.widget.ImageButton {
         initListener(attrs);
     }
 
-    public void initListener(AttributeSet attrs) {
+    private void initListener(AttributeSet attrs) {
         if (attrs != null) {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.universe_constellation_orion_viewer_android_ImageButton);
-            actionCode = a.getInt(R.styleable.universe_constellation_orion_viewer_android_ImageButton_actionId, 0);;
+            int actionCode = a.getInt(R.styleable.universe_constellation_orion_viewer_android_ImageButton_actionId, 0);
             a.recycle();
             action = Action.getAction(actionCode);
             System.out.println("action code button " + action);
