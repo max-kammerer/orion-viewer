@@ -24,10 +24,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CheckedTextView;
+import android.widget.ListView;
+import android.widget.TextView;
+
 import universe.constellation.orion.viewer.Action;
-import universe.constellation.orion.viewer.OrionBaseActivity;
-import universe.constellation.orion.viewer.OrionBookmarkActivity;
 import universe.constellation.orion.viewer.R;
 
 

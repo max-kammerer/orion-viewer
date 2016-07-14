@@ -16,7 +16,6 @@
 package universe.constellation.orion.viewer.android.touch;
 
 import android.content.Context;
-import android.util.FloatMath;
 import android.util.Log;
 import android.view.MotionEvent;
 

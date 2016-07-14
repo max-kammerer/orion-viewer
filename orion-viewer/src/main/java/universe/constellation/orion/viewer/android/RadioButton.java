@@ -22,9 +22,7 @@ package universe.constellation.orion.viewer.android;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.view.View;
-import universe.constellation.orion.viewer.Action;
-import universe.constellation.orion.viewer.OrionViewerActivity;
+
 import universe.constellation.orion.viewer.R;
 
 /**

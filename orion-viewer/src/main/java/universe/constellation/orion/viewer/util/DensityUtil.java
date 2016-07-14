@@ -1,6 +1,5 @@
 package universe.constellation.orion.viewer.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
 

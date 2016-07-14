@@ -19,8 +19,6 @@
 
 package universe.constellation.orion.viewer.bookmarks;
 
-import universe.constellation.orion.viewer.OrionBookmarkActivity;
-
 /**
 * User: mike
 * Date: 07.10.12

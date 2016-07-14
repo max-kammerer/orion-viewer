@@ -20,7 +20,6 @@
 package universe.constellation.orion.viewer;
 
 import android.app.Activity;
-import android.os.Message;
 
 /**
  * User: mike

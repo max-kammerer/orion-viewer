@@ -19,13 +19,16 @@
 
 package universe.constellation.orion.viewer.selection;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.text.ClipboardManager;
-import android.view.*;
+import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
+
 import universe.constellation.orion.viewer.Action;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.R;

@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import universe.constellation.orion.viewer.Common;
