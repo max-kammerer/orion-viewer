@@ -20,35 +20,63 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content" android:gravity="center"
-              android:layout_gravity="center" android:orientation="vertical">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <ScrollView android:layout_width="fill_parent"
-                  android:layout_height="wrap_content" android:gravity="center"
-                  android:layout_gravity="center" android:orientation="vertical" android:layout_weight="1">
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <LinearLayout android:layout_height="wrap_content" android:orientation="vertical"
-                              android:layout_width="fill_parent" >
-            <TextView android:layout_width="fill_parent"
-                                          android:layout_height="wrap_content"
-                                          android:textSize="18sp" android:id="@+id/warn_text_override" android:layout_weight="1"
-                                          android:visibility="invisible" android:textColor="#FF0000"
-                    android:text="Previous bookmark will be overriden!"/>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <EditText android:layout_width="fill_parent"
-                                      android:layout_height="wrap_content"
-                                      android:id="@+id/add_bookmark_text" android:layout_weight="1"/>
+            <TextView
+                android:id="@+id/warn_text_override"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Previous bookmark will be overriden!"
+                android:textColor="#FF0000"
+                android:textSize="18sp"
+                android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/add_bookmark_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="text" />
         </LinearLayout>
     </ScrollView>
 
-    <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
-                      android:layout_width="fill_parent" android:gravity="right" android:layout_weight="0">
-            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                         android:src="@drawable/view" android:id="@+id/add_bookmark_apply"
-                         android:layout_gravity="right"/>
-            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                         android:src="@drawable/revert" android:id="@+id/add_bookmark_close"
-                         android:layout_gravity="right"/>
-        </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/add_bookmark_apply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:src="@drawable/view" />
+
+        <ImageButton
+            android:id="@+id/add_bookmark_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:src="@drawable/revert" />
+    </LinearLayout>
 </LinearLayout>
