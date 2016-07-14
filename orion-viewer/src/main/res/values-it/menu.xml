@@ -44,6 +44,6 @@
 
     <string name="export_all_bookmarks_menu_item">Esporta tutti i segnalibri</string>
     <string name="export_bookmarks_menu_item">Esporta i segnalibri correnti</string>
-    <string name="import_all_bookmarks_menu_item">Importa tutti...</string>
-    <string name="import_current_bookmarks_menu_item">Importa da...</string>
+    <string name="import_all_bookmarks_menu_item">Importa tutti…</string>
+    <string name="import_current_bookmarks_menu_item">Importa da…</string>
 </resources>

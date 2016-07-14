@@ -21,7 +21,7 @@
 <resources>
     <string name="menu_zoom_text">Масштаб</string>
     <string name="menu_crop_text">Обрезка полей</string>
-    <string name="menu_goto_text">Перейти...</string>
+    <string name="menu_goto_text">Перейти…</string>
     <string name="menu_bookmarks_text">Закладки</string>
     <string name="menu_add_bookmark_item">Добавить закладку</string>
     <string name="menu_rotation_text">Ориентация экрана</string>
@@ -43,6 +43,6 @@
 
     <string name="export_all_bookmarks_menu_item">Экспортировать все закладки</string>
     <string name="export_bookmarks_menu_item">Экспортировать текущие закладки</string>
-    <string name="import_all_bookmarks_menu_item">Импортировать...</string>
-    <string name="import_current_bookmarks_menu_item">Дополнить из...</string>
+    <string name="import_all_bookmarks_menu_item">Импортировать…</string>
+    <string name="import_current_bookmarks_menu_item">Дополнить из…</string>
 </resources>

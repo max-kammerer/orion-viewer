@@ -47,7 +47,7 @@
     <string name="fit_width">适应宽度</string>
     <string name="fit_height">适应高度</string>
     <string name="fit_page">适应页面</string>
-    <string name="fit_custom">自定义...</string>
+    <string name="fit_custom">自定义…</string>
 
     <string name="key_binder_message">按下任意键来绑定!</string>
     <string name="key_binder_warning">无法绑定不能识别的按键, 请尝试其他按键!</string>

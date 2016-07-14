@@ -42,7 +42,7 @@
     <string name="fit_width">התאמה לרוחב</string>
     <string name="fit_height">התאמה גובה</string>
     <string name="fit_page">התאם את העמוד</string>
-    <string name="fit_custom">מותאם אישית...</string>
+    <string name="fit_custom">מותאם אישית…</string>
     <string name="key_binder_message">לחץ איזה כפתור ובחר פעולה!</string>
     <string name="key_binder_warning">לא יכל לקשור פעולה לכפתור עם קוד אפס, נסה כפתור אחר!</string>
     <string name="table_of_contents">תוכן העניינים</string>

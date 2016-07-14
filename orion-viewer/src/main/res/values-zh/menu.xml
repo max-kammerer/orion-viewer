@@ -43,6 +43,6 @@
 
     <string name="export_all_bookmarks_menu_item">导出所有书签</string>
     <string name="export_bookmarks_menu_item">导出当前书籍书签</string>
-    <string name="import_all_bookmarks_menu_item">导入...</string>
-    <string name="import_current_bookmarks_menu_item">添加...</string>
+    <string name="import_all_bookmarks_menu_item">导入…</string>
+    <string name="import_current_bookmarks_menu_item">添加…</string>
 </resources>

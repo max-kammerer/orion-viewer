@@ -34,7 +34,7 @@
     <string name="pref_dictionary">מילון</string>
     <string name="pref_e_ink_optimization">דיו דיגיטלי</string>
     <string name="pref_e_ink_fast_refresh">רענון מהיר לדיו דיגיטלי</string>
-    <string name="pref_total_refresh_after">רענון מלא לאחר ...</string>
+    <string name="pref_total_refresh_after">רענון מלא לאחר…</string>
     <string name="pref_long_crop_value">ערך חיתוך גדול</string>
     <string name="pref_long_crop_value_desc">גודל ערך חיתוך גדול (0-40%)</string>
     <string name="pref_screen_overlapping_horizontal">החיפוף במסך אופקי</string>

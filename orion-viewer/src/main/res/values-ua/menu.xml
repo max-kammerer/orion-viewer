@@ -21,7 +21,7 @@
 <resources>
     <string name="menu_zoom_text">Масштаб</string>
     <string name="menu_crop_text">Обрізка полів</string>
-    <string name="menu_goto_text">Перейти до...</string>
+    <string name="menu_goto_text">Перейти до…</string>
     <string name="menu_bookmarks_text">Закладки</string>
     <string name="menu_add_bookmark_item">Додати закладку</string>
     <string name="menu_rotation_text">Орієнтація екрану</string>
@@ -42,6 +42,6 @@
 
     <string name="export_all_bookmarks_menu_item">Експортувати всі закладки</string>
     <string name="export_bookmarks_menu_item">Експортувати поточні закладки</string>
-    <string name="import_all_bookmarks_menu_item">Імпортувати...</string>
-    <string name="import_current_bookmarks_menu_item">Додати закладки з...</string>
+    <string name="import_all_bookmarks_menu_item">Імпортувати…</string>
+    <string name="import_current_bookmarks_menu_item">Додати закладки з…</string>
 </resources>

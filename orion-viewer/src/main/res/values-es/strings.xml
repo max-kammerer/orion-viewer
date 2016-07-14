@@ -47,7 +47,7 @@
     <string name="fit_width">Adaptar a lo ancho</string>
     <string name="fit_height">Adaptar a lo largo</string>
     <string name="fit_page">Adaptar a la página</string>
-    <string name="fit_custom">Personalizar...</string>
+    <string name="fit_custom">Personalizar…</string>
 
     <string name="key_binder_message">¡Pulse una tecla y asocie una acción!</string>
     <string name="key_binder_warning">No se pudo asociar una acción con la tecla, ¡pruebe otra!</string>

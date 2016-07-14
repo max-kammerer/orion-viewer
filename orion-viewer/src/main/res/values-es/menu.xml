@@ -44,6 +44,6 @@
 
     <string name="export_all_bookmarks_menu_item">Exportar todos los marcadores</string>
     <string name="export_bookmarks_menu_item">Exportar marcadores actuales</string>
-    <string name="import_all_bookmarks_menu_item">Importar todo...</string>
-    <string name="import_current_bookmarks_menu_item">Importar de...</string>
+    <string name="import_all_bookmarks_menu_item">Importar todo…</string>
+    <string name="import_current_bookmarks_menu_item">Importar de…</string>
 </resources>

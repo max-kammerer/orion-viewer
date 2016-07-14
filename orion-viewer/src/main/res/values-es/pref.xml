@@ -42,7 +42,7 @@
     <string name="pref_dictionary">Diccionario</string>
     <string name="pref_e_ink_optimization">E-ink</string>
     <string name="pref_e_ink_fast_refresh">E-ink refresco rápido</string>
-    <string name="pref_total_refresh_after">Refresco después de...</string>
+    <string name="pref_total_refresh_after">Refresco después de…</string>
 
     <string name="pref_long_crop_value">Valor de recorte grande</string>
     <string name="pref_long_crop_value_desc">Valor de recorte grande (0-40%)</string>

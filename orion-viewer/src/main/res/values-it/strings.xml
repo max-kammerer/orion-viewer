@@ -47,7 +47,7 @@
     <string name="fit_width">Adatta larghezza</string>
     <string name="fit_height">Adatta altezza</string>
     <string name="fit_page">Adatta pagina</string>
-    <string name="fit_custom">Personalizzata...</string>
+    <string name="fit_custom">Personalizzata…</string>
 
 
     <string name="key_binder_message">Premi un tasto per associarvi un comando</string>

@@ -43,6 +43,6 @@
 
     <string name="export_all_bookmarks_menu_item">Export all bookmarks</string>
     <string name="export_bookmarks_menu_item">Export current bookmarks</string>
-    <string name="import_all_bookmarks_menu_item">Import...</string>
-    <string name="import_current_bookmarks_menu_item">Append from...</string>
+    <string name="import_all_bookmarks_menu_item">Import…</string>
+    <string name="import_current_bookmarks_menu_item">Append from…</string>
 </resources>

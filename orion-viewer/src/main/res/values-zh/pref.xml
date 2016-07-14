@@ -33,7 +33,7 @@
     <string name="pref_dictionary">字典</string>
     <string name="pref_e_ink_optimization">电子墨水</string>
     <string name="pref_e_ink_fast_refresh">电子墨水快速刷新</string>
-    <string name="pref_total_refresh_after">多少次后全刷...</string>
+    <string name="pref_total_refresh_after">多少次后全刷…</string>
 
     <string name="pref_long_crop_value">最大切边值</string>
     <string name="pref_long_crop_value_desc">最大切边的数值 (0-40%)</string>

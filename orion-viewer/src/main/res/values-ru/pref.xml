@@ -48,7 +48,7 @@
     <string name="pref_dictionary">Словарь</string>
     <string name="pref_e_ink_optimization">E-ink</string>
     <string name="pref_e_ink_fast_refresh">Быстрое обновление e-ink</string>
-    <string name="pref_total_refresh_after">Полное обновление после...</string>
+    <string name="pref_total_refresh_after">Полное обновление после…</string>
 
     <string name="pref_long_crop_value">Большая обрезка</string>
     <string name="pref_long_crop_value_desc">Значение параметра большой обрезки (0-40%)</string>

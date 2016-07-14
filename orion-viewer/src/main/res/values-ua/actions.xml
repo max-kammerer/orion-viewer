@@ -29,7 +29,7 @@
     <string name="action_zoom_page">Діалог масштабування</string>
     <string name="action_rotation_page">Діалог повороту</string>
     <string name="action_options_page">Налаштування</string>
-    <string name="action_goto_page">Перейти до ...</string>
+    <string name="action_goto_page">Перейти до…</string>
     <string name="action_dictionary">Відкрити словник</string>
     <string name="action_open">Відкрити книжку</string>
     <string name="action_add_bookmark">Додати закладку</string>
