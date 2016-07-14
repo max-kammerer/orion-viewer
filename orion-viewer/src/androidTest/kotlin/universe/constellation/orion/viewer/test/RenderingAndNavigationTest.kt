@@ -91,7 +91,7 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
     fun prepareEngine(book: String): Controller {
         val doc = openTestBook(book)
 
-        var layoutStrategy: LayoutStrategy = SimpleLayoutStrategy(doc)
+        val layoutStrategy: LayoutStrategy = SimpleLayoutStrategy(doc)
         val renderer = SingleThreadRenderer(activity, view!!, layoutStrategy, doc, Bitmap.Config.ARGB_8888)
         val controller = Controller(activity, doc, layoutStrategy, renderer)
 

@@ -59,7 +59,7 @@ class OrionStatusBarHelper(val view: ViewGroup) : OrionImageView {
         (0..panel.childCount-1).forEach {
             val child = panel.getChildAt(it)
             when(child) {
-                is TextView -> child.paint.setColorFilter(colorFilter)
+                is TextView -> child.paint.colorFilter = colorFilter
             }
         }
     }

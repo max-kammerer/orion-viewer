@@ -94,7 +94,7 @@ class DocumentWithCaching(val doc: DocumentWrapper) : DocumentWrapper by doc {
         }
 
         //then try to auto crop
-        var zoomInDouble = Math.floor(Math.sqrt(1.0 * WIDTH * HEIGHT / (pageWidth * pageHeight)) * 10000) / 10000
+        val zoomInDouble = Math.floor(Math.sqrt(1.0 * WIDTH * HEIGHT / (pageWidth * pageHeight)) * 10000) / 10000
         strategy.reset(curPos, true, page, calcCropMode.cropMode, (zoomInDouble * 10000).toInt())
         val newWidth = curPos.x.pageDimension;
         val newHeight = curPos.y.pageDimension
@@ -128,7 +128,7 @@ class DocumentWithCaching(val doc: DocumentWrapper) : DocumentWrapper by doc {
 }
 
 inline fun <R> timing(m: String,l: () -> R): R {
-    var s = System.currentTimeMillis()
+    val s = System.currentTimeMillis()
     val result = l()
     Common.d("$m = ${System.currentTimeMillis() - s} ms")
     return result;

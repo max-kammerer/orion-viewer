@@ -11,7 +11,7 @@ import universe.constellation.orion.viewer.device.AndroidDevice
  */
 abstract class BaseTest : AndroidTestCase(), TestUtil {
 
-    public val device: AndroidDevice = AndroidDevice()
+    val device: AndroidDevice = AndroidDevice()
 
     override fun getOrionTestContext(): Context {
         val m = AndroidTestCase::class.java.getMethod("getTestContext")

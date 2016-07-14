@@ -26,7 +26,7 @@ open class InstrumentationTestCase : ActivityInstrumentationTestCase2<OrionViewe
     fun startActivityWithBook(book: String) {
         val file = extractFileFromTestData(book)
         val intent = Intent();
-        intent.setData(Uri.fromFile(file))
+        intent.data = Uri.fromFile(file)
         setActivityIntent(intent)
     }
 }

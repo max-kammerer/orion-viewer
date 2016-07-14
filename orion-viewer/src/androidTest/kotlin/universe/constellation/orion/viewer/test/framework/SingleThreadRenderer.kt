@@ -9,17 +9,20 @@ import universe.constellation.orion.viewer.*
  * Time: 21:34
  */
 
-class SingleThreadRenderer(actvity: OrionViewerActivity, view: OrionImageView, layout: LayoutStrategy, doc: DocumentWrapper, config: Bitmap.Config) :
-                    RenderThread(actvity, layout, doc, false, actvity.fullScene) {
-
+class SingleThreadRenderer(
+        actvity: OrionViewerActivity,
+        view: OrionImageView,
+        layout: LayoutStrategy,
+        doc: DocumentWrapper,
+        config: Bitmap.Config
+) : RenderThread(actvity, layout, doc, false, actvity.fullScene) {
 
     override fun startRenreder() {
 
     }
 
-
     override fun render(lastInfo: LayoutPosition?) {
         super.render(lastInfo)
-        renderInCurrentThread(true, lastInfo!!.clone(), layout!!.getRotation());
+        renderInCurrentThread(true, lastInfo!!.clone(), layout!!.rotation);
     }
 }

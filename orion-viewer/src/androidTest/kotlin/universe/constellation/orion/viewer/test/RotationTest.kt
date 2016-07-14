@@ -22,7 +22,7 @@ class RotationTest() : InstrumentationTestCase() {
     fun testRotation() {
         val file = extractFileFromTestData(TestUtil.SICP)
         val intent = Intent();
-        intent.setData(Uri.fromFile(file))
+        intent.data = Uri.fromFile(file)
         setActivityIntent(intent)
 
         val view = activity.view!!

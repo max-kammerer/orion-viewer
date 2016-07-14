@@ -16,12 +16,12 @@ import java.io.IOException
 
 interface TestUtil {
 
-    public fun openTestBook(relativePath: String) : DocumentWrapper {
+    fun openTestBook(relativePath: String) : DocumentWrapper {
         val fileOnSdcard = extractFileFromTestData(relativePath)
-        return FileUtil.openFile(fileOnSdcard)!!;
+        return FileUtil.openFile(fileOnSdcard);
     }
 
-    public fun extractFileFromTestData(fileName: String): File {
+    fun extractFileFromTestData(fileName: String): File {
         val outFile = File(testFolder, fileName)
         if (outFile.exists()) {
             return outFile
@@ -40,19 +40,19 @@ interface TestUtil {
         return outFile
     }
 
-    public fun getFileUnderTestData(relativePath: String): String {
+    fun getFileUnderTestData(relativePath: String): String {
         return "testData/$relativePath"
     }
 
     fun getOrionTestContext(): Context
 
-    public companion object {
-        public val testFolder: File = File(Environment.getExternalStorageDirectory(), "orion")
+    companion object {
+        val testFolder: File = File(Environment.getExternalStorageDirectory(), "orion")
 
-        public val SICP: String = "sicp.pdf"
+        val SICP: String = "sicp.pdf"
 
-        public val ALICE: String = "aliceinw.djvu"
+        val ALICE: String = "aliceinw.djvu"
 
-        public val ORION_PKG: String = "universe.constellation.orion.viewer"
+        val ORION_PKG: String = "universe.constellation.orion.viewer"
     }
 }
