@@ -28,14 +28,17 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent" android:orientation="vertical">
 
-    <TextView android:layout_width="wrap_content"
-                              android:layout_height="wrap_content"
-                              android:id="@+id/actions_header"></TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/actions_header" />
 
 
-    <ListView android:layout_width="fill_parent"
-                              android:layout_height="wrap_content"
-                              android:id="@+id/actionsGroup" android:gravity="right"></ListView>
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/actionsGroup"
+        android:gravity="right" />
 
     <!--<RadioGroup android:id="@+id/actionsGroup" android:layout_width="fill_parent"-->
                             <!--android:layout_height="wrap_content"-->

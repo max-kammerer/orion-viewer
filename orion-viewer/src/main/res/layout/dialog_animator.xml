@@ -61,9 +61,12 @@
 
             </LinearLayout>
 
-        <SeekBar android:id="@+id/page_picker_seeker"
-                 android:minWidth="100dp" android:layout_height="wrap_content"
-                 android:layout_width="fill_parent" android:layout_margin="5dp"></SeekBar>
+        <SeekBar
+            android:id="@+id/page_picker_seeker"
+            android:minWidth="100dp"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_margin="5dp" />
 
             <LinearLayout android:orientation="horizontal"
               android:layout_width="fill_parent" android:layout_height="wrap_content"
