@@ -45,6 +45,9 @@ import universe.constellation.orion.viewer.util.ColorUtil;
 import universe.constellation.orion.viewer.view.FullScene;
 import universe.constellation.orion.viewer.view.OrionDrawScene;
 
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+
 /**
  * User: mike
  * Date: 06.01.12
@@ -376,7 +379,7 @@ public enum Action {
         @Override
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
             //controller.setRotation((controller.getRotation() - 1) % 2);
-            if (activity.getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE || activity.getRequestedOrientation() == 8) {
+            if (activity.getRequestedOrientation() == SCREEN_ORIENTATION_LANDSCAPE || activity.getRequestedOrientation() == SCREEN_ORIENTATION_REVERSE_LANDSCAPE) {
                 controller.changeOrinatation("PORTRAIT");
             } else {
                 controller.changeOrinatation("LANDSCAPE");
@@ -389,7 +392,7 @@ public enum Action {
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
             //controller.setRotation((controller.getRotation() + 1) % 2);
             boolean isLevel9 = activity.getOrionContext().getSdkVersion() >= 9;
-            if (!isLevel9 || activity.getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE || activity.getRequestedOrientation() == 8) {
+            if (!isLevel9 || activity.getRequestedOrientation() == SCREEN_ORIENTATION_LANDSCAPE || activity.getRequestedOrientation() == SCREEN_ORIENTATION_REVERSE_LANDSCAPE) {
                 ROTATE_90.doAction(controller, activity, parameter);
             } else {
                 controller.changeOrinatation("LANDSCAPE_INVERSE");
