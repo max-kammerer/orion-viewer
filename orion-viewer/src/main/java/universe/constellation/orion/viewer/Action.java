@@ -21,7 +21,6 @@ package universe.constellation.orion.viewer;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -192,7 +191,19 @@ public enum Action {
 
     SELECT_TEXT (R.string.action_select_text, R.integer.action_select_text) {
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            activity.textSelectionMode();
+            activity.textSelectionMode(false, false);
+        }
+    },
+
+    SELECT_WORD (R.string.action_select_word, R.integer.action_select_word) {
+        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+            activity.textSelectionMode(true, false);
+        }
+    },
+
+    SELECT_WORD_AND_TRANSLATE (R.string.action_select_word_and_translate, R.integer.action_select_word_and_translate) {
+        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+            activity.textSelectionMode(true, true);
         }
     },
 

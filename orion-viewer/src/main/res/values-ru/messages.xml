@@ -6,4 +6,7 @@
     <string name="warn_no_further_occurrences_found">Совпадений не найдено</string>
     <string name="msg_searching">Поиск…</string>
 
+    <string name="msg_select_text">Выделите текст!</string>
+    <string name="msg_select_word">Кликните по слову!</string>
+
 </resources>

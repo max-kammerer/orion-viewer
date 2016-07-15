@@ -6,6 +6,9 @@
     <string name="warn_no_further_occurrences_found">No further occurrences found</string>
     <string name="msg_searching">Searching…</string>
 
+    <string name="msg_select_text">Select text!</string>
+    <string name="msg_select_word">Click to word!</string>
+
     <string name="msg_error">Error</string>
     <string name="msg_warning">Warning</string>
     <string name="msg_specify_keyword_for_search">Specify keyword for search</string>

@@ -826,20 +826,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
                     return newTouchProcessor.onTouch(event);
                     //return touchListener.onTouch(event);
                 } else {
-                    boolean result = textSelection.onTouch(event);
-                    if (textSelection.isSuccessful()) {
-                        selectionMode = false;
-                        String text = controller.selectText(textSelection.getStartX(), textSelection.getStartY(), textSelection.getWidth(), textSelection.getHeight());
-                        if (text != null) {
-                            if (selectedTextActions == null) {
-                                selectedTextActions = new SelectedTextActions(OrionViewerActivity.this);
-                            }
-                            selectedTextActions.show(text);
-                        } else {
-
-                        }
-                    }
-                    return result;
+                    return textSelection.onTouch(event);
                 }
             }
         });
@@ -1030,6 +1017,16 @@ public class OrionViewerActivity extends OrionBaseActivity {
         return false;
     }
 
+    private void doubleClickAction(int x, int y) {
+//        OptionActions.
+//        long id = insertOrGetBookId();
+//        if (id != -1) {
+//            long bokmarkId = getOrionContext().getBookmarkAccessor().insertOrUpdateBookmark(id, page, text);
+//            return bokmarkId != -1;
+//        }
+    }
+
+
     long getBookId() {
         Common.d("Selecting book id...");
         LastPageInfo info = lastPageInfo;
@@ -1088,12 +1085,12 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
 
-    void textSelectionMode() {
+    void textSelectionMode(boolean isSingleSelection, boolean translate) {
         //selectionMode = true;
         if (textSelection == null) {
             textSelection = new SelectionAutomata(this);
         }
-        textSelection.startSelection();
+        textSelection.startSelection(isSingleSelection, translate);
     }
 
     private class MyArrayAdapter extends ArrayAdapter implements SpinnerAdapter {

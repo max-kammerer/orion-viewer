@@ -19,6 +19,7 @@
 
 package universe.constellation.orion.viewer.selection;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.text.ClipboardManager;
@@ -44,10 +45,10 @@ public class SelectedTextActions {
 
     private String text;
 
-    private OrionViewerActivity activity;
+    private Dialog originalDialog;
 
-    public SelectedTextActions(final OrionViewerActivity activity) {
-        this.activity = activity;
+    public SelectedTextActions(final OrionViewerActivity activity, final Dialog originalDialog) {
+        this.originalDialog = originalDialog;
         popup = new PopupWindow(activity);
         popup.setFocusable(true);
         popup.setTouchable(true);
@@ -90,7 +91,6 @@ public class SelectedTextActions {
         external_actions.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 popup.dismiss();
-
                 Intent intent = new Intent(android.content.Intent.ACTION_SEND);
                 intent.setType("text/plain");
                 intent.putExtra(android.content.Intent.EXTRA_TEXT, text);
@@ -101,18 +101,25 @@ public class SelectedTextActions {
         popup.setTouchInterceptor(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if ( event.getAction()==MotionEvent.ACTION_OUTSIDE ) {
+                if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
                     popup.dismiss();
                     return true;
                 }
                 return false;
             }
         });
+
+        popup.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                originalDialog.dismiss();
+            }
+        });
     }
 
     public void show(String text) {
         this.text = text;
-        popup.showAtLocation(activity.getView(), Gravity.CENTER, 0, 0);
+        popup.showAtLocation(originalDialog.getWindow().getDecorView(), Gravity.CENTER, 0, 0);
     }
 
 }

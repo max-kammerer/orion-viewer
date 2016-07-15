@@ -73,7 +73,6 @@
     <string name="table_of_contents">Содержание</string>
 
     <string name="warn_no_text_in_selection">В выделенном участке отсутствует текст!</string>
-    <string name="msg_select_text">Выделите текст!</string>
     <string name="warn_no_outline">Содержание отсутствует!</string>
     <string name="select_color_mode">Выберите цветовой режим для переключения</string>
 
