@@ -25,6 +25,7 @@
     <string name="pref_category_device_parameters">Настройки устройства</string>
     <string name="pref_category_add_parameters">Дополнительные параметры</string>
     <string name="pref_category_system">Системные параметры</string>
+    <string name="pref_category_quick_actions">Быстрые действия</string>
 
     <!--General Prefs-->
     <string name="pref_appearance">Внешний вид</string>
@@ -94,7 +95,8 @@
     <string name="pref_app_language">Язык приложения</string>
     <string name="pref_app_language_desc">Язык приложения. Необходим перезапуск приложения!</string>
 
-    <string name="pref_tap_zones_desc">Зоны действий: привязка операции к зонам экрана</string>
+    <string name="pref_tap_zones_desc">Привязка операции к зонам экрана</string>
+    <string name="pref_key_binder_desc">Привязка операции к клавишам</string>
 
     <string name="pref_book_threshold">Порог для водяных знаков</string>
     <string name="pref_book_threshold_desc">Порог удаления водяных знаков (по умолчанию 255)</string>

@@ -55,7 +55,7 @@ public class OrionPreferenceActivity extends PreferenceActivity {
 
         ListPreference SCREEN_ORIENTATION = (ListPreference) findPreference("SCREEN_ORIENTATION");
 
-        if (getOrionContext().getSdkVersion() < 9) {
+        if (getOrionContext().getSdkVersion() < Build.VERSION_CODES.GINGERBREAD) {
             SCREEN_ORIENTATION.setEntries(getResources().getTextArray(R.array.screen_orientation_desc));
             SCREEN_ORIENTATION.setEntryValues(getResources().getTextArray(R.array.screen_orientation));
         }

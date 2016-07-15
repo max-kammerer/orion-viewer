@@ -25,7 +25,10 @@
     <string name="pref_category_device_parameters">Device Parameters</string>
     <string name="pref_category_add_parameters">Additional Parameters</string>
     <string name="pref_category_system">System</string>
-    <string name="pref_category_move">Move</string>
+    <string name="pref_category_move">Touch Move</string>
+    <string name="pref_category_quick_actions">Quick Actions</string>
+    <string name="pref_category_behavior">Default Behavior</string>
+    <string name="pref_category_bars">Action and Status Bar</string>
 
     <!--General Prefs-->
     <string name="pref_appearance">Appearance</string>
@@ -96,7 +99,8 @@
     <string name="pref_app_language">Application Language</string>
     <string name="pref_app_language_desc">Application Language: restart application to apply!</string>
 
-    <string name="pref_tap_zones_desc">Tap Zones: link actions to screen zones.</string>
+    <string name="pref_tap_zones_desc">Link actions to screen zones</string>
+    <string name="pref_key_binder_desc">Link actions to key/buttons</string>
 
     <string name="pref_enable_touch_move">Enable touch move</string>
     <string name="pref_enable_move_on_pinch_zoom">Allow translation during pinch zoom</string>
