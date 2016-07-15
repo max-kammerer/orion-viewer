@@ -30,29 +30,31 @@ import universe.constellation.orion.viewer.OrionViewerActivity;
 */
 public class TouchAutomataOldAndroid {
 
-    public enum States {UNDEFINED, SINGLE_CLICK, LONG_CLICK, PINCH_ZOOM, DO_MOVE, DO_LIGHTING,  DO_ACTION};
+    enum States {
+        UNDEFINED, SINGLE_CLICK, LONG_CLICK, PINCH_ZOOM, DO_MOVE, DO_LIGHTING, DO_ACTION
+    }
 
     public enum PinchEvents {START_SCALE, DO_SCALE, END_SCALE};
 
-    protected static final long TIME_DELTA = 800;
+    static final long TIME_DELTA = 800;
 
-    protected States currentState = States.UNDEFINED;
+    States currentState = States.UNDEFINED;
 
-    protected States prevState = States.UNDEFINED;
+    States prevState = States.UNDEFINED;
 
-    protected States nextState = States.UNDEFINED;
+    States nextState = States.UNDEFINED;
 
-    protected long startTime;
+    long startTime;
 
-    protected Point start0 = new Point();
+    Point start0 = new Point();
 
-    protected Point last0 = new Point();
+    Point last0 = new Point();
 
     protected OrionViewerActivity activity;
 
     protected OrionDrawScene view;
 
-    public TouchAutomataOldAndroid(OrionViewerActivity activity, OrionDrawScene view) {
+    TouchAutomataOldAndroid(OrionViewerActivity activity, OrionDrawScene view) {
         this.activity = activity;
         this.view = view;
     }
@@ -60,6 +62,4 @@ public class TouchAutomataOldAndroid {
     public OrionDrawScene getView() {
         return view;
     }
-
-
 }

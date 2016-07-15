@@ -295,11 +295,11 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
         start0.y = -1;
     }
 
-    public boolean isRightHandSide(int x) {
+    private boolean isRightHandSide(int x) {
         return view.getWidth() - x < 75;
     }
 
-    public boolean isSupportLighting() {
+    private boolean isSupportLighting() {
         Device device = activity.getDevice();
         return device instanceof EInkDevice && ((EInkDevice) device).isLightingSupported();
     }
@@ -328,9 +328,6 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
     }
 
     private boolean insideViewWidth(LayoutPosition info) {
-        if (info == null) {
-            return false;
-        }
-        return info.x.pageDimension <= getView().getWidth();
+        return info != null && info.x.pageDimension <= getView().getWidth();
     }
 }
