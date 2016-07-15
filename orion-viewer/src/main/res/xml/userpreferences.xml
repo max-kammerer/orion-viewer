@@ -95,6 +95,14 @@
                     <intent android:action="universe.constellation.orion.viewer.TAP_ZONES" />
                 </PreferenceScreen>
 
+                <!--<PreferenceScreen
+                    android:key="DOUBLE_TAP_ACTION"
+                    android:persistent="false"
+                    android:summary="@string/pref_tap_zones_desc"
+                    android:title="@string/menu_tap_text">
+                    <intent android:action="universe.constellation.orion.viewer.DOUBLE_TAP" />
+                </PreferenceScreen>-->
+
                 <Preference
                     android:persistent="false"
                     android:summary="@string/pref_key_binder_desc"
