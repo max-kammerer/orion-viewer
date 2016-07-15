@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
 import android.support.v4.internal.view.SupportMenuItem;
@@ -64,6 +65,8 @@ import universe.constellation.orion.viewer.dialog.CropDialogBuilderKt;
 import universe.constellation.orion.viewer.dialog.SearchDialog;
 import universe.constellation.orion.viewer.dialog.TapHelpDialog;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
+import universe.constellation.orion.viewer.selection.NewTouchProcessor;
+import universe.constellation.orion.viewer.selection.NewTouchProcessorWithScale;
 import universe.constellation.orion.viewer.selection.SelectedTextActions;
 import universe.constellation.orion.viewer.selection.SelectionAutomata;
 import universe.constellation.orion.viewer.selection.TouchAutomata;
@@ -122,6 +125,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
     //new for new devices)
     private TouchAutomata touchListener;
 
+    private NewTouchProcessor newTouchProcessor;
+
     private boolean hasActionBar;
 
     private FullScene fullScene;
@@ -152,6 +157,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         myIntent = getIntent();
         touchListener = new TouchAutomata(this, view);
+        newTouchProcessor = getOrionContext().getSdkVersion() >= Build.VERSION_CODES.FROYO ?
+                new NewTouchProcessorWithScale(view, this) : new NewTouchProcessor(view, this);
     }
 
     private void initDialogs() {
@@ -816,7 +823,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
         getView().setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 if (!selectionMode) {
-                    return touchListener.onTouch(event);
+                    return newTouchProcessor.onTouch(event);
+                    //return touchListener.onTouch(event);
                 } else {
                     boolean result = textSelection.onTouch(event);
                     if (textSelection.isSuccessful()) {
