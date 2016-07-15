@@ -577,7 +577,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
 
-   public void initAddBookmarkScreen() {
+   private void initAddBookmarkScreen() {
         ImageButton close = (ImageButton) findMyViewById(R.id.add_bookmark_close);
         close.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -706,7 +706,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         return processKey(keyCode, event, true);
     }
 
-    public void changePage(int operation) {
+    private void changePage(int operation) {
         boolean swapKeys = globalOptions.isSwapKeys();
         int width = getView().getWidth();
         int height = getView().getHeight();
@@ -720,11 +720,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
         }
     }
 
-    public void loadGlobalOptions() {
+    private void loadGlobalOptions() {
         globalOptions = getOrionContext().getOptions();
     }
 
-    public void saveGlobalOptions() {
+    private void saveGlobalOptions() {
         Common.d("Saving global options...");
         globalOptions.saveRecents();
         Common.d("Done!");
@@ -738,7 +738,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         return fullScene;
     }
 
-    public OrionStatusBarHelper getStatusBarHelper() {
+    OrionStatusBarHelper getStatusBarHelper() {
         return fullScene.getStatusBarHelper();
     }
 
@@ -810,11 +810,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
         return true;
     }
 
-    public SubscriptionManager getSubscriptionManager() {
+    SubscriptionManager getSubscriptionManager() {
         return manager;
     }
 
-    public void initOptionDialog() {
+    private void initOptionDialog() {
         dialog = new AppCompatDialog(this);
         dialog.supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.options_dialog);
@@ -854,7 +854,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
 
-    public void doAction(Action action) {
+    private void doAction(Action action) {
         action.doAction(controller, this, null);
     }
 
@@ -872,13 +872,13 @@ public class OrionViewerActivity extends OrionBaseActivity {
         onApplyAction(false);
     }
 
-    protected void onApplyAction(boolean close) {
+    private void onApplyAction(boolean close) {
         if (close || globalOptions.isApplyAndClose()) {
             onAnimatorCancel();
         }
     }
 
-    public void initRotationScreen() {
+    private void initRotationScreen() {
         //if (getDevice() instanceof EdgeDevice) {
         if (false) {
             final RadioGroup rotationGroup = (RadioGroup) findMyViewById(R.id.rotationGroup);
@@ -971,7 +971,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             });
     }
 
-    void updateRotation() {
+    private void updateRotation() {
         RadioGroup rotationGroup = (RadioGroup) findMyViewById(R.id.rotationGroup);
         if (rotationGroup != null) { //nook case
             rotationGroup.check(controller.getRotation() == 0 ? R.id.rotate0 : controller.getRotation() == -1 ? R.id.rotate90 : R.id.rotate270);
@@ -997,7 +997,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         return controller;
     }
 
-    public void updateBrightness() {
+    private void updateBrightness() {
         WindowManager.LayoutParams params = getWindow().getAttributes();
         float oldBrightness = params.screenBrightness;
         if (globalOptions.isCustomBrightness()) {
@@ -1011,7 +1011,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         }
     }
 
-    public long insertOrGetBookId() {
+    private long insertOrGetBookId() {
         LastPageInfo info = lastPageInfo;
         Long bookId = getOrionContext().getTempOptions().bookId;
         if (bookId == null || bookId == -1) {
@@ -1021,7 +1021,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         return bookId.intValue();
     }
 
-    public boolean insertBookmark(int page, String text) {
+    private boolean insertBookmark(int page, String text) {
         long id = insertOrGetBookId();
         if (id != -1) {
             long bokmarkId = getOrionContext().getBookmarkAccessor().insertOrUpdateBookmark(id, page, text);
@@ -1030,7 +1030,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         return false;
     }
 
-    public long getBookId() {
+    long getBookId() {
         Common.d("Selecting book id...");
         LastPageInfo info = lastPageInfo;
         Long bookId = getOrionContext().getTempOptions().bookId;
@@ -1038,8 +1038,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
             bookId = getOrionContext().getBookmarkAccessor().selectBookId(info.simpleFileName, info.fileSize);
             getOrionContext().getTempOptions().bookId = bookId;
         }
-        Common.d("...book id = " + bookId.longValue());
-        return bookId.longValue();
+        Common.d("...book id = " + bookId);
+        return bookId;
     }
 
     @Override
@@ -1056,7 +1056,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         }
     }
 
-    public void showOrionDialog(int screenId, Action action, Object parameter) {
+    void showOrionDialog(int screenId, Action action, Object parameter) {
         if (screenId == CROP_SCREEN) {
             CropDialog cropDialog = CropDialogBuilderKt.create(this, controller.getMargins());
             cropDialog.show();
@@ -1088,7 +1088,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
 
-    public void textSelectionMode() {
+    void textSelectionMode() {
         //selectionMode = true;
         if (textSelection == null) {
             textSelection = new SelectionAutomata(this);
@@ -1096,9 +1096,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
         textSelection.startSelection();
     }
 
-    public class MyArrayAdapter extends ArrayAdapter implements SpinnerAdapter {
+    private class MyArrayAdapter extends ArrayAdapter implements SpinnerAdapter {
 
-        public MyArrayAdapter() {
+        MyArrayAdapter() {
             super(OrionViewerActivity.this, R.layout.support_simple_spinner_dropdown_item, OrionViewerActivity.this.getResources().getTextArray(R.array.fits));
         }
 
@@ -1114,11 +1114,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
         }
     }
 
-    public static class Nook2ListAdapter extends ArrayAdapter  {
+    private static class Nook2ListAdapter extends ArrayAdapter  {
 
         private int color;
 
-        public Nook2ListAdapter(Context context, int textViewResourceId, Object[] objects, TextView view) {
+        Nook2ListAdapter(Context context, int textViewResourceId, Object[] objects, TextView view) {
             super(context, textViewResourceId,  objects);
             this.color = view.getTextColors().getDefaultColor();
         }
@@ -1133,15 +1133,15 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private void askPassword(final Controller controller) {
         if (controller.needPassword()) {
-            AlertDialog.Builder buider = createThemedAlertBuilder();
-            buider.setTitle("Password");
+            AlertDialog.Builder builder = createThemedAlertBuilder();
+            builder.setTitle("Password");
 
             final EditText input = new EditText(this);
             input.setInputType(EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
             input.setTransformationMethod(new PasswordTransformationMethod());
-            buider.setView(input);
+            builder.setView(input);
 
-            buider.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (controller.authentificate(input.getText().toString())) {
@@ -1153,29 +1153,29 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 }
             });
 
-            buider.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                 }
             });
-            buider.create().show();
+            builder.create().show();
         }
     }
 
     //big hack
-    protected void myprocessOnActivityVisible() {
+    void myprocessOnActivityVisible() {
         if (getGlobalOptions().isShowTapHelp() && !getOrionContext().isTesting) {
             getGlobalOptions().saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false);
             new TapHelpDialog(this).showDialog();
         }
     }
 
-    public void startSearch() {
+    void startSearch() {
         SearchDialog.newInstance().show(getSupportFragmentManager(), "search");
     }
 
-    public void destroyContollerAndBook() {
+    private void destroyContollerAndBook() {
         if (lastPageInfo != null) {
             device.onBookClose(lastPageInfo);
         }
