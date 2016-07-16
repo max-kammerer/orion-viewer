@@ -10,9 +10,17 @@ import java.util.concurrent.CountDownLatch
 /**
  * Created by mike on 24.10.15.
  */
-public class FullScene(val scene: ViewGroup, val drawView: OrionDrawScene, statusaBar: ViewGroup, val context: Context) : OrionImageView {
+interface Scene : OrionImageView {
+    fun setColorMatrix(colorMatrix: FloatArray?) {
+    }
 
-    val statusBarHelper = OrionStatusBarHelper(statusaBar)
+    fun setDrawOffPage(drawOffPage: Boolean) {
+    }
+}
+
+class FullScene(val scene: ViewGroup, val drawView: OrionDrawScene, statusBar: ViewGroup, val context: Context) : Scene {
+
+    val statusBarHelper = OrionStatusBarHelper(statusBar)
 
     val colorStuff = ColorStuff(context)
 
@@ -30,12 +38,12 @@ public class FullScene(val scene: ViewGroup, val drawView: OrionDrawScene, statu
         statusBarHelper.onNewBook(title, pageCount)
     }
 
-    fun setColorMatrix(colorMatrix: FloatArray?) {
+    override fun setColorMatrix(colorMatrix: FloatArray?) {
         colorStuff.setColorMatrix(scene, colorMatrix)
         statusBarHelper.setColorMatrix(colorMatrix)
     }
 
-    fun setDrawOffPage(drawOffPage: Boolean) {
+    override fun setDrawOffPage(drawOffPage: Boolean) {
         colorStuff.renderOffPage(scene, drawOffPage)
     }
 }

@@ -28,8 +28,8 @@ import java.util.LinkedList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import universe.constellation.orion.viewer.view.FullScene;
 import universe.constellation.orion.viewer.view.Renderer;
+import universe.constellation.orion.viewer.view.Scene;
 
 /**
  * User: mike
@@ -58,13 +58,13 @@ public class RenderThread extends Thread implements Renderer {
 
     private OrionViewerActivity activity;
 
-    private FullScene fullScene;
+    private Scene fullScene;
 
-    public RenderThread(OrionViewerActivity activity, LayoutStrategy layout, DocumentWrapper doc, FullScene fullScene) {
+    RenderThread(OrionViewerActivity activity, LayoutStrategy layout, DocumentWrapper doc, Scene fullScene) {
         this(activity, layout, doc, true, fullScene);
     }
 
-    public RenderThread(OrionViewerActivity activity, LayoutStrategy layout, DocumentWrapper doc, boolean executeInSeparateThread, FullScene scene) {
+    public RenderThread(OrionViewerActivity activity, LayoutStrategy layout, DocumentWrapper doc, boolean executeInSeparateThread, Scene scene) {
         this.layout = layout;
         this.doc = doc;
         this.activity = activity;
@@ -278,7 +278,7 @@ public class RenderThread extends Thread implements Renderer {
 
     static class CacheInfo {
 
-        public CacheInfo(LayoutPosition info, Bitmap bitmap) {
+        CacheInfo(LayoutPosition info, Bitmap bitmap) {
             this.info  = info;
             this.bitmap = bitmap;
         }
@@ -296,11 +296,11 @@ public class RenderThread extends Thread implements Renderer {
             return bitmap;
         }
 
-        public boolean isValid() {
+        boolean isValid() {
             return valid;
         }
 
-        public void setValid(boolean valid) {
+        void setValid(boolean valid) {
             this.valid = valid;
         }
     }

@@ -1,7 +1,7 @@
 package universe.constellation.orion.viewer.test.framework
 
-import android.graphics.Bitmap
 import universe.constellation.orion.viewer.*
+import universe.constellation.orion.viewer.view.Scene
 
 /**
  * User: mike
@@ -10,12 +10,11 @@ import universe.constellation.orion.viewer.*
  */
 
 class SingleThreadRenderer(
-        actvity: OrionViewerActivity,
-        view: OrionImageView,
+        activity: OrionViewerActivity,
+        scene: Scene,
         layout: LayoutStrategy,
-        doc: DocumentWrapper,
-        config: Bitmap.Config
-) : RenderThread(actvity, layout, doc, false, actvity.fullScene) {
+        doc: DocumentWrapper
+) : RenderThread(activity, layout, doc, false, scene) {
 
     override fun startRenreder() {
 

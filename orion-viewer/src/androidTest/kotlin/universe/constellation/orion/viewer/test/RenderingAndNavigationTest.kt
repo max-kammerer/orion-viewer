@@ -8,6 +8,7 @@ import universe.constellation.orion.viewer.*
 import universe.constellation.orion.viewer.test.framework.ActivityBaseTest
 import universe.constellation.orion.viewer.test.framework.SingleThreadRenderer
 import universe.constellation.orion.viewer.test.framework.TestUtil
+import universe.constellation.orion.viewer.view.Scene
 import java.util.*
 import java.util.concurrent.CountDownLatch
 
@@ -19,7 +20,7 @@ import java.util.concurrent.CountDownLatch
 
 class RenderingAndNavigationTest : ActivityBaseTest() {
 
-    class MyView(val imageView: OrionImageView) : OrionImageView {
+    class MyView(val imageView: OrionImageView) : Scene {
 
         var data: Bitmap? = null
 
@@ -34,7 +35,8 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
     }
 
     val deviceSize = Point(300, 350) //to split page on two screen - page size is 663x886
-    var view: MyView? = null
+
+    lateinit var view: MyView
 
     override fun setUp() {
         super.setUp()
@@ -66,20 +68,20 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
         }
 
         (1..screens - 2).forEach { i ->
-            Assert.assertFalse("fallen on $i", Arrays.equals(nexts[i], nexts[i + 1]))
-            Assert.assertFalse("fallen on $i", Arrays.equals(prevs[i], prevs[i + 1]))
+            Assert.assertFalse("fail on $i", Arrays.equals(nexts[i], nexts[i + 1]))
+            Assert.assertFalse("fail on $i", Arrays.equals(prevs[i], prevs[i + 1]))
         }
 
         (screens - 1 downTo 1).forEach { i ->
             println("$i")
-            Assert.assertTrue("fallen on $i", Arrays.equals(nexts[i], prevs[prevs.lastIndex - i]))
+            Assert.assertTrue("fail on $i", Arrays.equals(nexts[i], prevs[prevs.lastIndex - i]))
         }
 
     }
 
     fun processBitmap(list: MutableList<IntArray>, drawer: () -> Unit) {
         drawer()
-        val bitmap = view!!.data!!
+        val bitmap = view.data!!
         Assert.assertNotNull(bitmap)
 
         val pixels = IntArray(bitmap.width * bitmap.height)
@@ -92,11 +94,11 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
         val doc = openTestBook(book)
 
         val layoutStrategy: LayoutStrategy = SimpleLayoutStrategy(doc)
-        val renderer = SingleThreadRenderer(activity, view!!, layoutStrategy, doc, Bitmap.Config.ARGB_8888)
+        val renderer = SingleThreadRenderer(activity, view, layoutStrategy, doc)
         val controller = Controller(activity, doc, layoutStrategy, renderer)
 
 
-        val lastPageInfo = LastPageInfo.loadBookParameters(activity, "123")!!
+        val lastPageInfo = LastPageInfo.loadBookParameters(activity, "123")
         controller.changeOrinatation(lastPageInfo.screenOrientation)
         controller.init(lastPageInfo, deviceSize)
 
