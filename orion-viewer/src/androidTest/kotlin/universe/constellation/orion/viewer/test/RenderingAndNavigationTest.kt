@@ -21,11 +21,11 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
 
     class MyView(val imageView: OrionImageView) : OrionImageView {
 
-        var data: Bitmap? = null;
+        var data: Bitmap? = null
 
         override fun onNewImage(bitmap: Bitmap?, info: LayoutPosition?, latch: CountDownLatch?) {
-            imageView.onNewImage(bitmap, info, latch);
-            this.data = bitmap;
+            imageView.onNewImage(bitmap, info, latch)
+            this.data = bitmap
         }
 
         override fun onNewBook(title: String?, pageCount: Int) {
@@ -33,8 +33,8 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
         }
     }
 
-    val deviceSize = Point(300, 350); //to split page on two screen - page size is 663x886
-    var view: MyView? = null;
+    val deviceSize = Point(300, 350) //to split page on two screen - page size is 663x886
+    var view: MyView? = null
 
     override fun setUp() {
         super.setUp()
@@ -54,30 +54,30 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
         val screens = 21
 
         val nexts = arrayListOf<IntArray>()
-        for (i in 1..screens) {
-            processBitmap({ controller.drawNext() }, nexts)
+        (1..screens).forEach {
+            processBitmap(nexts) { controller.drawNext() }
         }
 
         controller.drawNext()
 
         val prevs = arrayListOf<IntArray>()
-        for (i in 1..screens) {
-            processBitmap({ controller.drawPrev() }, prevs)
+        (1..screens).forEach {
+            processBitmap(prevs, { controller.drawPrev() })
         }
 
-        for (i in 1..screens - 2) {
+        (1..screens - 2).forEach { i ->
             Assert.assertFalse("fallen on $i", Arrays.equals(nexts[i], nexts[i + 1]))
             Assert.assertFalse("fallen on $i", Arrays.equals(prevs[i], prevs[i + 1]))
         }
 
-        for (i in screens - 1 downTo 1) {
+        (screens - 1 downTo 1).forEach { i ->
             println("$i")
             Assert.assertTrue("fallen on $i", Arrays.equals(nexts[i], prevs[prevs.lastIndex - i]))
         }
 
     }
 
-    fun processBitmap(drawer: Function0<Unit>, list: MutableList<IntArray>) {
+    fun processBitmap(list: MutableList<IntArray>, drawer: () -> Unit) {
         drawer()
         val bitmap = view!!.data!!
         Assert.assertNotNull(bitmap)
@@ -107,6 +107,6 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
 
 
     override fun getOrionTestContext(): Context {
-        return instrumentation!!.context!!;
+        return instrumentation!!.context!!
     }
 }
