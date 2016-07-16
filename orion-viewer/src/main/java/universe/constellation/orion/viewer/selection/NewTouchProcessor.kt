@@ -4,12 +4,10 @@ import android.graphics.Point
 import android.support.v4.view.GestureDetectorCompat
 import android.view.GestureDetector
 import android.view.MotionEvent
-import android.view.ScaleGestureDetector
 import android.widget.Toast
 import universe.constellation.orion.viewer.Common
 import universe.constellation.orion.viewer.LayoutPosition
 import universe.constellation.orion.viewer.OrionViewerActivity
-import universe.constellation.orion.viewer.android.touch.ScaleGestureDetectorOld
 import universe.constellation.orion.viewer.device.EInkDevice
 import universe.constellation.orion.viewer.util.DensityUtil
 import universe.constellation.orion.viewer.view.OrionDrawScene
@@ -48,7 +46,6 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
     }
 
     open fun onTouch(e: MotionEvent): Boolean {
-        println("state $state $nextState")
         var onTouchEvent = detector.onTouchEvent(e)
         if (e.action == MotionEvent.ACTION_UP && state == State.MOVE) {
             view.afterScaling()
@@ -108,7 +105,6 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
         if (!enableTouchMove) {
             return false
         }
-        println("onScroll $state")
 
         if (state == State.UNDEFINED) {
             info = view.info?.clone()
@@ -142,7 +138,6 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
         view.beforeScaling()
         view.doScale(1f, start0, last0, true)
         view.postInvalidate()
-        println("action " + e2.action)
         return true
     }
 
