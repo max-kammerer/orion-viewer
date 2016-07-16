@@ -94,9 +94,10 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
         return true
     }
 
-    override fun onDoubleTap(e: MotionEvent?): Boolean {
+    override fun onDoubleTap(e: MotionEvent): Boolean {
         resetNextState()
-        return false
+        activity.doubleClickAction(e.x.toInt(), e.y.toInt())
+        return true
     }
 
     override fun onLongPress(e: MotionEvent) {

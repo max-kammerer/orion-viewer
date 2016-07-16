@@ -168,5 +168,8 @@ public class DjvuDocument implements DocumentWrapper {
         return rects.get(position);
     }
 
-
+    @Override
+    public String getText(int pageNumber, int absoluteX, int absoluteY, int width, int height, boolean singleWord) {
+        return getText(pageNumber, absoluteX, absoluteY, width, height);
+    }
 }

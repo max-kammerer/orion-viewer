@@ -370,7 +370,7 @@ public class Controller implements ViewDimensionAware {
         return screenOrientation;
     }
 
-    public String selectText(int startX, int startY, int widht, int height) {
+    public String selectText(int startX, int startY, int widht, int height, boolean isSingleWord) {
         Point leftTopCorner = layout.convertToPoint(layoutInfo);
         if (widht < 0) {
             startX += widht;
@@ -380,7 +380,14 @@ public class Controller implements ViewDimensionAware {
             startY += height;
             height = - height;
         }
-        String text = doc.getText(layoutInfo.pageNumber, (int) ((leftTopCorner.x + startX) / layoutInfo.docZoom), (int) ((leftTopCorner.y +startY) / layoutInfo.docZoom), (int) (widht / layoutInfo.docZoom), (int) (height / layoutInfo.docZoom));
+        String text = doc.getText(
+                layoutInfo.pageNumber,
+                (int) ((leftTopCorner.x + startX) / layoutInfo.docZoom),
+                (int) ((leftTopCorner.y +startY) / layoutInfo.docZoom),
+                (int) (widht / layoutInfo.docZoom),
+                (int) (height / layoutInfo.docZoom),
+                isSingleWord
+        );
         if (text != null) {
             text = text.trim();
         }

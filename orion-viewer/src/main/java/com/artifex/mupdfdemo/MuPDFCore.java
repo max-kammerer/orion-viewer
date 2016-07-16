@@ -304,7 +304,7 @@ public class MuPDFCore
 		return textAsHtml();
 	}
 
-    public synchronized String textLines(int page, RectF region) {
+    public synchronized String textLines(int page, RectF region, boolean singleWord) {
         gotoPage(page);
         TextChar[][][][] chars = text();
 
@@ -343,9 +343,9 @@ public class MuPDFCore
                                 } else if (wd.textLength() > 0) {
                                     float square = wd.width() * wd.height() / 5;
                                     if (wd.setIntersect(wd, region)) {
-                                        if (wd.width() * wd.height() > square) {
+                                        if (singleWord || wd.width() * wd.height() > square) {
                                             wds.add(wd);
-                                            System.out.println(wd.getText());
+                                            //System.out.println(wd.getText());
                                         }
                                     }
                                     wd = new TextWord();
@@ -355,7 +355,7 @@ public class MuPDFCore
                             if (wd.textLength() > 0) {
                                 float square = wd.width() * wd.height() / 5;
                                 if (wd.setIntersect(wd, region)) {
-                                    if (wd.width() * wd.height() > square) {
+                                    if (singleWord || wd.width() * wd.height() > square) {
                                         wds.add(wd);
                                     }
                                 }
@@ -370,7 +370,7 @@ public class MuPDFCore
             }
         }
 
-        StringBuffer res = new StringBuffer();
+        StringBuilder res = new StringBuilder();
         for (int i = 0; i < lns.size(); i++) {
             TextWord[] textWords = lns.get(i);
             for (int j = 0; j < textWords.length; j++) {

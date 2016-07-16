@@ -18,7 +18,7 @@ public class DialogOverView {
 
     protected OrionViewerActivity activity;
 
-    protected final Dialog dialog;
+    public final Dialog dialog;
 
     public DialogOverView(OrionViewerActivity activity, int layoutId, int style) {
         this.activity = activity;

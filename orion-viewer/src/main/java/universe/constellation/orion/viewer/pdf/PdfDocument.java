@@ -72,8 +72,8 @@ public class PdfDocument implements DocumentWrapper {
 		core.setThreshold(threshold);
 	}
 
-    public String getText(int pageNumber, int absoluteX, int absoluteY, int width, int height) {
-        return core.textLines(pageNumber, new RectF(absoluteX, absoluteY, absoluteX + width, absoluteY + height));
+    public String getText(int pageNumber, int absoluteX, int absoluteY, int width, int height, boolean singleWord) {
+        return core.textLines(pageNumber, new RectF(absoluteX, absoluteY, absoluteX + width, absoluteY + height), singleWord);
     }
 
     public OutlineItem[] getOutline() {

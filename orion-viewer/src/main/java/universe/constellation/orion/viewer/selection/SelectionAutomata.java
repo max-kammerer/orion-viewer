@@ -19,13 +19,14 @@
 
 package universe.constellation.orion.viewer.selection;
 
+import android.app.Dialog;
+import android.graphics.Rect;
 import android.view.*;
 
 import universe.constellation.orion.viewer.Action;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.R;
 import universe.constellation.orion.viewer.dialog.DialogOverView;
-import universe.constellation.orion.viewer.util.DensityUtil;
 
 /**
  * User: mike
@@ -36,7 +37,7 @@ public class SelectionAutomata extends DialogOverView {
 
     private enum STATE {START, MOVING, END, CANCELED};
 
-    private final int SINGLE_WORD_AREA;
+    private final static int SINGLE_WORD_AREA = 2;
 
     private STATE state = STATE.CANCELED;
 
@@ -50,7 +51,6 @@ public class SelectionAutomata extends DialogOverView {
 
     public SelectionAutomata(final OrionViewerActivity activity) {
         super(activity, universe.constellation.orion.viewer.R.layout.text_selector, android.R.style.Theme_Translucent_NoTitleBar);
-        SINGLE_WORD_AREA = (int) DensityUtil.calcScreenSize(3, activity);
 
         selectionView = (SelectionView) dialog.findViewById(universe.constellation.orion.viewer.R.id.text_selector);
         selectionView.setOnTouchListener(new View.OnTouchListener() {
@@ -103,22 +103,27 @@ public class SelectionAutomata extends DialogOverView {
                 case CANCELED: dialog.dismiss(); break;
 
                 case END:
-                    String text = activity.getController().selectText(getStartX(), getStartY(), getWidth(), getHeight());
-                    if (text != null && !"".equals(text)) {
-                        if (isSingleWord && translate) {
-                            dialog.dismiss();
-                            Action.DICTIONARY.doAction(activity.getController(), activity, text);
-                        } else {
-                            new SelectedTextActions(activity, dialog).show(text);
-                        }
-                    } else {
-                        dialog.dismiss();
-                        activity.showFastMessage(universe.constellation.orion.viewer.R.string.warn_no_text_in_selection);
-                    }
+                    selectText(activity, isSingleWord, translate, dialog, getSelectionRectangle());
                     break;
             }
         }
         return result;
+    }
+
+    public static void selectText(OrionViewerActivity activity, boolean isSingleWord, boolean translate, Dialog dialog,
+                                  Rect rect) {
+        String text = activity.getController().selectText(rect.left, rect.top, rect.width(), rect.height(), isSingleWord);
+        if (text != null && !"".equals(text)) {
+            if (isSingleWord && translate) {
+                dialog.dismiss();
+                Action.DICTIONARY.doAction(activity.getController(), activity, text);
+            } else {
+                new SelectedTextActions(activity, dialog).show(text);
+            }
+        } else {
+            dialog.dismiss();
+            activity.showFastMessage(R.string.warn_no_text_in_selection);
+        }
     }
 
     public void startSelection(boolean isSingleWord, boolean translate) {
@@ -142,20 +147,14 @@ public class SelectionAutomata extends DialogOverView {
         return state == STATE.END;
     }
 
-    public int getStartX() {
-        return isSingleWord ? startX - SINGLE_WORD_AREA : startX;
+    private Rect getSelectionRectangle() {
+        return getSelectionRectangle(startX, startY, width, height, isSingleWord);
     }
 
-    public int getStartY() {
-        return isSingleWord ? startY - SINGLE_WORD_AREA : startY;
+    public static Rect getSelectionRectangle(int startX, int startY, int width, int height, boolean isSingleWord) {
+        int singleWordDelta = isSingleWord ? SINGLE_WORD_AREA : 0;
+        int x = startX - singleWordDelta;
+        int y = startY - singleWordDelta;
+        return new Rect(x, y, x + width + singleWordDelta, y + height + singleWordDelta);
     }
-
-    public int getWidth() {
-        return isSingleWord ? width + SINGLE_WORD_AREA : width;
-    }
-
-    public int getHeight() {
-        return isSingleWord ? height + SINGLE_WORD_AREA : height;
-    }
-
 }
