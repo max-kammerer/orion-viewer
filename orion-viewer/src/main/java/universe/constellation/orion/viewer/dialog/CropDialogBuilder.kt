@@ -44,7 +44,7 @@ class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : A
         tabLayout.addTab(tabLayout.newTab().setText("%2"))
         tabLayout.addTab(tabLayout.newTab().setText("Auto"))
 
-        tabLayout.setOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 viewAnimator.displayedChild = tab.position
             }
