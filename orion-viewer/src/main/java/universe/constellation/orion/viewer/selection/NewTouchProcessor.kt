@@ -6,10 +6,10 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.widget.Toast
 import universe.constellation.orion.viewer.Common
+import universe.constellation.orion.viewer.L
 import universe.constellation.orion.viewer.LayoutPosition
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.device.EInkDevice
-import universe.constellation.orion.viewer.util.DensityUtil
 import universe.constellation.orion.viewer.view.OrionDrawScene
 
 /**
@@ -18,6 +18,7 @@ import universe.constellation.orion.viewer.view.OrionDrawScene
 enum class State {
     UNDEFINED,
     MOVE,
+    DOUBLE_TAP,
     SCALE;
 }
 
@@ -31,10 +32,6 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
 
     private var info: LayoutPosition? = null
 
-    private val MOVE_THRESHOLD: Int = with(DensityUtil.calcScreenSize(40, activity)) {
-        (this * this).toInt()
-    }
-
     private val enableTouchMove = activity.globalOptions.isEnableTouchMove
 
     private val start0 = Point()
@@ -46,14 +43,21 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
     }
 
     open fun onTouch(e: MotionEvent): Boolean {
+        log("onTouch state = $state")
         var onTouchEvent = detector.onTouchEvent(e)
-        if (e.action == MotionEvent.ACTION_UP && state == State.MOVE) {
-            view.afterScaling()
-            activity.controller.translateAndZoom(false, 1f, (-last0.x + start0.x).toFloat(), (-last0.y + start0.y).toFloat())
-            resetNextState()
-            onTouchEvent = true
+        if (e.action == MotionEvent.ACTION_UP) {
+            if (state == State.MOVE) {
+                view.afterScaling()
+                activity.controller.translateAndZoom(false, 1f, (-last0.x + start0.x).toFloat(), (-last0.y + start0.y).toFloat())
+                resetNextState()
+                onTouchEvent = true
+            }
+            if (state == State.DOUBLE_TAP)  {
+                resetNextState()
+                onTouchEvent = true
+            }
         }
-
+        log("onTouch nextState = $nextState")
         if (nextState != state) {
            onChangingState()
         }
@@ -63,6 +67,7 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
 
     open protected fun onChangingState() {
         if (nextState == State.UNDEFINED) {
+            log("onChangingState")
             reset()
         }
     }
@@ -77,27 +82,34 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
     }
 
     open protected fun resetNextState() {
+        log("resetNextState")
         nextState = State.UNDEFINED
     }
 
     override fun onDown(e: MotionEvent?): Boolean {
-        resetNextState()
+        log("onDown")
         return true
     }
 
     override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+        log("onSingleTapConfirmed")
         resetNextState()
         doAction(e.x.toInt(), e.y.toInt(), false)
         return true
     }
 
     override fun onDoubleTap(e: MotionEvent): Boolean {
-        resetNextState()
+        log("onDoubleTap")
+        nextState = State.DOUBLE_TAP
         activity.doubleClickAction(e.x.toInt(), e.y.toInt())
         return true
     }
 
+
     override fun onLongPress(e: MotionEvent) {
+        log("onLongPress $state $nextState")
+        if (state != State.UNDEFINED) return
+
         doAction(e.x.toInt(), e.y.toInt(), true)
     }
 
@@ -185,9 +197,11 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
         }
     }
 
-
-
     private fun insideViewWidth(info: LayoutPosition?): Boolean {
         return info != null && info.x.pageDimension <= view.width
+    }
+
+    private fun log(msg: String){
+        L.log(msg)
     }
 }
