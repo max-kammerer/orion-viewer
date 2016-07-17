@@ -134,7 +134,7 @@ public class PageWalker {
 
                 if (!inInterval(newOffsetStart, dimension) && !inInterval(newOffsetEnd, dimension)) {
                     changeSecond = true;
-                    offset = reset(dir, dimension, 0);
+                    offset = reset(dir, dimension, true);
                 } else {
                     if (needAlign(dir) && (!inInterval(newOffsetStart, dimension) || !inInterval(newOffsetEnd, dimension))) {
                         offset = align(dir, dimension);
@@ -161,8 +161,8 @@ public class PageWalker {
         return changeSecond;
     }
 
-    private int reset(DIR dir, OneDimension dim, int possibleOffset) {
-        if (doCentering) {
+    private int reset(DIR dir, OneDimension dim, boolean doCentering) {
+        if (this.doCentering && doCentering) {
             if (dim.pageDimension < dim.screenDimension) {
                 return (dim.pageDimension - dim.screenDimension) / 2;
             }
@@ -197,7 +197,7 @@ public class PageWalker {
     }
 
 
-    public void reset(LayoutPosition info, boolean isNext) {
+    public void reset(LayoutPosition info, boolean isNext, boolean doCentering) {
         DIR first = isNext ? direction.first : direction.first.inverse();
         DIR second = isNext ? direction.second : direction.second.inverse();
 
@@ -206,10 +206,10 @@ public class PageWalker {
 
         boolean inverse = !direction.isLeftToRight();
         horDir = inverse ? horDir.inverse() : horDir;
-        info.x.offset = reset(horDir, info.x, 0);
+        info.x.offset = reset(horDir, info.x, doCentering);
         info.x.offset = inverse ? info.x.pageDimension - info.x.screenDimension - info.x.offset : info.x.offset;
 
-        info.y.offset = reset(vertDir, info.y, 0);
+        info.y.offset = reset(vertDir, info.y, doCentering);
     }
 
     public String getDirection() {

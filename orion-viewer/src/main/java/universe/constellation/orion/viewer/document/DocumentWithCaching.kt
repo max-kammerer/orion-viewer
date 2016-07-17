@@ -38,7 +38,7 @@ class DocumentWithCaching(val doc: DocumentWrapper) : DocumentWrapper by doc {
     private val cache = LruCache<Int, PageInfo?>(100)
 
     private val bitmap: Bitmap by lazy {
-        Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_8888);
+        Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_8888)
     }
 
     //TODO: ugly hack
@@ -89,14 +89,14 @@ class DocumentWithCaching(val doc: DocumentWrapper) : DocumentWrapper by doc {
         val pageHeight = curPos.y.pageDimension
         Common.d("Page info after first reset: $pageWidth x $pageHeight")
         if (pageWidth == 0 || pageHeight == 0) {
-            page.autoCrop = null;
-            return;
+            page.autoCrop = null
+            return
         }
 
         //then try to auto crop
         val zoomInDouble = Math.floor(Math.sqrt(1.0 * WIDTH * HEIGHT / (pageWidth * pageHeight)) * 10000) / 10000
         strategy.reset(curPos, true, page, calcCropMode.cropMode, (zoomInDouble * 10000).toInt())
-        val newWidth = curPos.x.pageDimension;
+        val newWidth = curPos.x.pageDimension
         val newHeight = curPos.y.pageDimension
 
         Common.d("Page info for auto crop: $newWidth x $newHeight $zoomInDouble")

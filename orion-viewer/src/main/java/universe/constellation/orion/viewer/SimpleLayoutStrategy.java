@@ -158,7 +158,8 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         info.y.overlap = info.y.screenDimension * VERT_OVERLAP / 100;
         //System.out.println("overlap " + hOverlap + " " + vOverlap);
 
-        walker.reset(info, forward);
+        walker.reset(info, forward, autoCrop == null ||
+                CropMode.AUTO_MANUAL == mode);
     }
 
     public void appendManualMargins(LayoutPosition info, int leftMargin, int rightMargin) {

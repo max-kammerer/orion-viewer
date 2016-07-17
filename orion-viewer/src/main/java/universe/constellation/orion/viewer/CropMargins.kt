@@ -4,7 +4,7 @@ package universe.constellation.orion.viewer
  * Created by mike on 12/18/15.
  */
 
-class AutoCropMargins(
+data class AutoCropMargins(
         @JvmField val left: Int,
         @JvmField val top: Int,
         @JvmField val right: Int,
