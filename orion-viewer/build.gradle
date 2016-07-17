@@ -28,6 +28,7 @@ android {
 
         testApplicationId "universe.constellation.orion.viewer.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
+        archivesBaseName = "orion-viewer-$versionName"
     }
 
     sourceSets {
@@ -47,7 +48,7 @@ android {
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
                     def file = output.outputFile
-                    output.outputFile = new File(file.parent, file.name.replace("orion-viewer-", "orion_viewer_" + defaultConfig.versionName + "_").replace("-release", ""))
+                    output.outputFile = new File(file.parent, file.name.replace("-release", ""))
                 }
             }
 
