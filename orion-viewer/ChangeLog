@@ -1,3 +1,8 @@
+===== 0.70.0 (Jul 17, 2016) =====
+* Fixed several bugs in auto-cropping
+* New touch processor with double tap support
+* Double tap action linked to word selection and translation action
+
 ===== 0.61.2 (Feb 17, 2016) =====
 * Fixed error in even crop dialog
 
