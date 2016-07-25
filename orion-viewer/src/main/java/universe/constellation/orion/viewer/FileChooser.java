@@ -46,14 +46,30 @@ public class FileChooser extends ArrayAdapter {
 
     private FilenameFilter filter;
 
+    private static Set<String> extensions = new HashSet<>(
+            Arrays.asList("cbz", "djvu", "djv", "pdf", "oxps", "tif", "tiff", "xps"));
+
+
     public static FilenameFilter DEFAULT_FILTER = new FilenameFilter() {
-        public boolean accept(File dir, String filename) {
-        if (new File(dir, filename).isDirectory()) {
-            return true;
+        private String getExtension(String filename) {
+            int index = filename.lastIndexOf(".");
+            if(index == -1) {
+                return "";
+            } else {
+                return filename.substring(index+1);
+            }
         }
-        String name = filename.toLowerCase();
-        return name.endsWith(".pdf") || name.endsWith(".djvu") || name.endsWith(".djv") || name.endsWith(".xps") || name.endsWith(".oxps") || name.endsWith(".cbz")
-                || name.endsWith(".tiff") || name.endsWith(".tif") /*|| name.endsWith(".png") || name.endsWith(".jpeg") || name.endsWith(".jpg")*/;
+
+        public boolean accept(File dir, String filename) {
+            if (new File(dir, filename).isDirectory()) {
+                return true;
+            }
+            if (filename.startsWith("._") || filename.equals(".DS_Store")) {
+                return false;
+            }
+
+            String extension = getExtension(filename);
+            return extensions.contains(extension.toLowerCase());
         }
     };
 
@@ -97,7 +113,7 @@ public class FileChooser extends ArrayAdapter {
         if (file.getParent() != null) {
             currentList.add(parentFile);
         }
-        File [] files = file.listFiles(filter);
+        File[] files = file.listFiles(filter);
         if (files != null) {
             currentList.addAll(Arrays.asList(files));
         }
@@ -138,9 +154,9 @@ public class FileChooser extends ArrayAdapter {
                 icon = R.drawable.folder;
             } else if (extName.endsWith("pdf")) {
                 icon = R.drawable.pdf;
-            }else if (extName.endsWith("djvu")) {
+            } else if (extName.endsWith("djvu")) {
                 icon = R.drawable.djvu;
-            } else if (extName.endsWith("cbz")  || extName.endsWith("tif") || extName.endsWith("tiff")) {
+            } else if (extName.endsWith("cbz") || extName.endsWith("tif") || extName.endsWith("tiff")) {
                 icon = R.drawable.cbz;
             } else if (extName.endsWith("xps") || extName.endsWith("oxps")) {
                 icon = R.drawable.xps;
