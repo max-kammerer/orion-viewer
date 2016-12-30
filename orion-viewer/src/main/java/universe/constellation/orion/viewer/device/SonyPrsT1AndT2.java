@@ -11,7 +11,6 @@ public class SonyPrsT1AndT2 extends EInkDeviceWithoutFastRefresh {
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event, OperationHolder holder) {
-
         if (keyCode == 0) {
             switch (event.getScanCode()) {
                 case 105:

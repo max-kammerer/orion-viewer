@@ -203,7 +203,7 @@ public class OrionApplication extends Application {
             if (controller != null) {
                 if ("walkOrder".equals(key)) {
                     controller.changetWalkOrder((String) value);
-                }if ("pageLayout".equals(key)) {
+                } else if ("pageLayout".equals(key)) {
                     controller.changetPageLayout((Integer) value);
                 } else if ("contrast".equals(key)) {
                     controller.changeContrast((Integer) value);

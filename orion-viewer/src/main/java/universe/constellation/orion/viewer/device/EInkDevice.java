@@ -10,7 +10,7 @@ import universe.constellation.orion.viewer.prefs.GlobalOptions;
  */
 public abstract class EInkDevice extends EInkDeviceWithoutFastRefresh {
 
-    protected int counter;
+    private int counter;
 
     @Override
     public void flushBitmap() {

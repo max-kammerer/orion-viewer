@@ -10,13 +10,13 @@ import universe.constellation.orion.viewer.OperationHolder;
  */
 public class Nook2Device extends EInkDevice {
 
-    protected static final int NOOK_PAGE_UP_KEY_RIGHT = 95;
+    private static final int NOOK_PAGE_UP_KEY_RIGHT = 95;
 
-    protected static final int NOOK_PAGE_DOWN_KEY_RIGHT = 94;
+    private static final int NOOK_PAGE_DOWN_KEY_RIGHT = 94;
 
-    protected static final int NOOK_PAGE_UP_KEY_LEFT = 93;
+    private static final int NOOK_PAGE_UP_KEY_LEFT = 93;
 
-    protected static final int NOOK_PAGE_DOWN_KEY_LEFT = 92;
+    private static final int NOOK_PAGE_DOWN_KEY_LEFT = 92;
 
     @Override
     public void doPartialUpdate(View view) {
