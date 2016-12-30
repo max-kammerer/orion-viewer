@@ -49,7 +49,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -67,9 +66,7 @@ import universe.constellation.orion.viewer.dialog.TapHelpDialog;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.selection.NewTouchProcessor;
 import universe.constellation.orion.viewer.selection.NewTouchProcessorWithScale;
-import universe.constellation.orion.viewer.selection.SelectedTextActions;
 import universe.constellation.orion.viewer.selection.SelectionAutomata;
-import universe.constellation.orion.viewer.selection.TouchAutomata;
 import universe.constellation.orion.viewer.view.FullScene;
 import universe.constellation.orion.viewer.view.OrionDrawScene;
 import universe.constellation.orion.viewer.view.OrionStatusBarHelper;
@@ -82,8 +79,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     public static final int ROTATION_SCREEN = 0;
 
-    public static final int MAIN_SCREEN = 0;
-
     public static final int PAGE_SCREEN = 1;
 
     public static final int ZOOM_SCREEN = 2;
@@ -93,8 +88,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
     public static final int PAGE_LAYOUT_SCREEN = 4;
 
     public static final int ADD_BOOKMARK_SCREEN = 5;
-
-    private static final int CROP_DELTA = 10;
 
     public static final int CROP_RESTRICTION_MIN = -10;
 
@@ -118,18 +111,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private SelectionAutomata selectionAutomata;
 
-    private SelectedTextActions selectedTextActions;
-
-    //new for new devices)
-    private TouchAutomata touchListener;
-
     private NewTouchProcessor newTouchProcessor;
 
     private boolean hasActionBar;
 
     private FullScene fullScene;
-
-    private CropDialog cropDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -154,7 +140,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
         initDialogs();
 
         myIntent = getIntent();
-        touchListener = new TouchAutomata(this, view);
         newTouchProcessor = getOrionContext().getSdkVersion() >= Build.VERSION_CODES.FROYO ?
                 new NewTouchProcessorWithScale(view, this) : new NewTouchProcessor(view, this);
     }
@@ -216,7 +201,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
                         }
                     }
 
-                    destroyContollerAndBook();
+                    destroyControllerAndBook();
                 }
 
                 Common.stopLogger();
@@ -640,7 +625,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         Common.d("onDestroy");
         Common.stopLogger();
 
-        destroyContollerAndBook();
+        destroyControllerAndBook();
 
         if (dialog != null) {
             dialog.dismiss();
@@ -859,88 +844,45 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     private void initRotationScreen() {
-        //if (getDevice() instanceof EdgeDevice) {
-        if (false) {
-            final RadioGroup rotationGroup = (RadioGroup) findMyViewById(R.id.rotationGroup);
+        RadioGroup rotationGroup = (RadioGroup) findMyViewById(R.id.rotationGroup);
+        rotationGroup.setVisibility(View.GONE);
 
-            rotationGroup.check(R.id.rotate0);
+        final ListView list = (ListView) findMyViewById(R.id.rotationList);
 
-            if (Device.Info.NOOK2) {
-                RadioButton r0 = (RadioButton) rotationGroup.findViewById(R.id.rotate0);
-                RadioButton r90 = (RadioButton) rotationGroup.findViewById(R.id.rotate90);
-                RadioButton r270 = (RadioButton) rotationGroup.findViewById(R.id.rotate270);
-                TextView tv = (TextView) findMyViewById(R.id.navigation_title);
-                int color = tv.getTextColors().getDefaultColor();
-                r0.setTextColor(color);
-                r90.setTextColor(color);
-                r270.setTextColor(color);
+        //set choices and replace 0 one with Application Default
+        boolean isLevel9 = getOrionContext().getSdkVersion() >= 9;
+        CharSequence[] values = getResources().getTextArray(isLevel9 ? R.array.screen_orientation_full_desc : R.array.screen_orientation_desc);
+        CharSequence[] newValues = new CharSequence[values.length];
+        System.arraycopy(values, 0, newValues, 0, values.length);
+        newValues[0] = getResources().getString(R.string.orientation_default_rotation);
+
+        list.setAdapter(Device.Info.NOOK2 ?
+                new Nook2ListAdapter(this, android.R.layout.simple_list_item_single_choice, newValues, (TextView) findMyViewById(R.id.navigation_title)) :
+                new ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, newValues));
+
+        list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        list.setItemChecked(0, true);
+
+        list.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+            public void onItemClick(android.widget.AdapterView parent, View view, int position, long id) {
+                CheckedTextView check = (CheckedTextView) view;
+                check.setChecked(!check.isChecked());
             }
+        });
 
-            getSubscriptionManager().addDocListeners(new DocumentViewAdapter() {
-                @Override
-                public void documentOpened(Controller controller) {
-                    updateRotation();
-                }
-            });
+        final CharSequence[] ORIENTATION_ARRAY = getResources().getTextArray(R.array.screen_orientation_full);
 
-
-            ImageButton apply = (ImageButton) findMyViewById(R.id.rotation_apply);
-            apply.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    onApplyAction(true);
-                    int id = rotationGroup.getCheckedRadioButtonId();
-                    controller.setRotation(id == R.id.rotate0 ? 0 : id == R.id.rotate90 ? -1 : 1);
-                }
-            });
-
-            ListView list = (ListView) findMyViewById(R.id.rotationList);
-            list.setVisibility(View.GONE);
-        } else {
-            RadioGroup rotationGroup = (RadioGroup) findMyViewById(R.id.rotationGroup);
-            rotationGroup.setVisibility(View.GONE);
-
-            final ListView list = (ListView) findMyViewById(R.id.rotationList);
-
-            //set choices and replace 0 one with Application Default
-            boolean isLevel9 = getOrionContext().getSdkVersion() >= 9;
-            CharSequence[] values = getResources().getTextArray(isLevel9 ? R.array.screen_orientation_full_desc : R.array.screen_orientation_desc);
-            CharSequence[] newValues = new CharSequence[values.length];
-            System.arraycopy(values, 0, newValues, 0, values.length);
-            newValues[0] = getResources().getString(R.string.orientation_default_rotation);
-
-            list.setAdapter(Device.Info.NOOK2 ?
-                    new Nook2ListAdapter(this, android.R.layout.simple_list_item_single_choice, newValues, (TextView) findMyViewById(R.id.navigation_title)) :
-                    new ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, newValues));
-
-            list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-            list.setItemChecked(0, true);
-
-            list.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
-                public void onItemClick(android.widget.AdapterView parent, View view, int position, long id) {
-                    CheckedTextView check = (CheckedTextView) view;
-                    check.setChecked(!check.isChecked());
-                }
-            });
-
-            final CharSequence[] ORIENTATION_ARRAY = getResources().getTextArray(R.array.screen_orientation_full);
-
-            list.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
-                public void onItemClick(android.widget.AdapterView parent, View view, int position, long id) {
-                    onApplyAction(true);
-                    String orientation = ORIENTATION_ARRAY[position].toString();
-                    controller.changeOrinatation(orientation);
-                }
-            });
+        list.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+            public void onItemClick(android.widget.AdapterView parent, View view, int position, long id) {
+                onApplyAction(true);
+                String orientation = ORIENTATION_ARRAY[position].toString();
+                controller.changeOrinatation(orientation);
+            }
+        });
 
 
-            ImageButton apply = (ImageButton) findMyViewById(R.id.rotation_apply);
-            apply.setVisibility(View.GONE);
-//            apply.setOnClickListener(new View.OnClickListener() {
-//                public void onClick(View view) {
-//                    onApplyAction(true);
-//                }
-//            });
-        }
+        ImageButton apply = (ImageButton) findMyViewById(R.id.rotation_apply);
+        apply.setVisibility(View.GONE);
 
         ImageButton cancel = (ImageButton) findMyViewById(R.id.rotation_close);
             cancel.setOnClickListener(new View.OnClickListener() {
@@ -1166,7 +1108,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         SearchDialog.newInstance().show(getSupportFragmentManager(), "search");
     }
 
-    private void destroyContollerAndBook() {
+    private void destroyControllerAndBook() {
         if (lastPageInfo != null) {
             device.onBookClose(lastPageInfo);
         }
