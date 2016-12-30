@@ -22,7 +22,6 @@ package universe.constellation.orion.viewer;
 import android.os.Build;
 import android.util.Log;
 import universe.constellation.orion.viewer.device.AndroidDevice;
-import universe.constellation.orion.viewer.device.EdgeDevice;
 import universe.constellation.orion.viewer.device.MagicBookBoeyeDevice;
 import universe.constellation.orion.viewer.device.Nook2Device;
 import universe.constellation.orion.viewer.device.OnyxDevice;
@@ -40,20 +39,7 @@ import java.io.*;
  */
 public class Common {
 
-    public static final boolean ENABLE2SCREEN = true;
-
     public static Device createDevice() {
-        if (ENABLE2SCREEN) {
-            try {
-                 if (Device.Info.EDGE) {
-                     Common.d("Using Edge device");
-                     return new EdgeDevice();
-                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
         if(Device.Info.SONY_PRS_T1_T2) {
             Common.d("Using SonyPrsT1AndT2");
             return new SonyPrsT1AndT2();
