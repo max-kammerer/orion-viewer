@@ -20,7 +20,7 @@ import java.util.concurrent.CountDownLatch
 
 class RenderingAndNavigationTest : ActivityBaseTest() {
 
-    class MyView(val imageView: OrionImageView) : Scene {
+    class MyView(val imageView: BookAndImageListener) : Scene {
 
         var data: Bitmap? = null
 

@@ -4,13 +4,13 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.view.ViewGroup
 import universe.constellation.orion.viewer.LayoutPosition
-import universe.constellation.orion.viewer.OrionImageView
+import universe.constellation.orion.viewer.BookAndImageListener
 import java.util.concurrent.CountDownLatch
 
 /**
  * Created by mike on 24.10.15.
  */
-interface Scene : OrionImageView {
+interface Scene : BookAndImageListener {
     fun setColorMatrix(colorMatrix: FloatArray?) {
     }
 
