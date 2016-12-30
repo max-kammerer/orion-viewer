@@ -5,12 +5,14 @@ import android.graphics.Bitmap
 import android.view.ViewGroup
 import universe.constellation.orion.viewer.LayoutPosition
 import universe.constellation.orion.viewer.BookAndImageListener
+import universe.constellation.orion.viewer.OrionBookListener
+import universe.constellation.orion.viewer.OrionImageListener
 import java.util.concurrent.CountDownLatch
 
 /**
  * Created by mike on 24.10.15.
  */
-interface Scene : BookAndImageListener {
+interface Scene : OrionImageListener {
     fun setColorMatrix(colorMatrix: FloatArray?) {
     }
 
@@ -18,7 +20,7 @@ interface Scene : BookAndImageListener {
     }
 }
 
-class FullScene(val scene: ViewGroup, val drawView: OrionDrawScene, statusBar: ViewGroup, val context: Context) : Scene {
+class FullScene(val scene: ViewGroup, val drawView: OrionDrawScene, statusBar: ViewGroup, val context: Context) : Scene, OrionBookListener {
 
     val statusBarHelper = OrionStatusBarHelper(statusBar)
 
@@ -33,8 +35,7 @@ class FullScene(val scene: ViewGroup, val drawView: OrionDrawScene, statusBar: V
         statusBarHelper.onNewImage(bitmap, info, latch)
     }
 
-    override fun onNewBook(title: String, pageCount: Int) {
-        drawView.onNewBook(title, pageCount)
+    override fun onNewBook(title: String?, pageCount: Int) {
         statusBarHelper.onNewBook(title, pageCount)
     }
 

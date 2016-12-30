@@ -33,8 +33,8 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import universe.constellation.orion.viewer.Common;
+import universe.constellation.orion.viewer.OrionImageListener;
 import universe.constellation.orion.viewer.LayoutPosition;
-import universe.constellation.orion.viewer.BookAndImageListener;
 import universe.constellation.orion.viewer.util.MoveUtil;
 
 /**
@@ -42,7 +42,7 @@ import universe.constellation.orion.viewer.util.MoveUtil;
  * Date: 16.10.11
  * Time: 13:52
  */
-public class OrionDrawScene extends View implements BookAndImageListener {
+public class OrionDrawScene extends View implements OrionImageListener {
 
     public Bitmap bitmap;
 
@@ -160,10 +160,6 @@ public class OrionDrawScene extends View implements BookAndImageListener {
         this.bitmap = bitmap;
         this.latch = latch;
         this.info = info;
-    }
-
-    @Override
-    public void onNewBook(String title, int pageCount) {
     }
 
     public void setDimensionAware(ViewDimensionAware dimensionAware) {
