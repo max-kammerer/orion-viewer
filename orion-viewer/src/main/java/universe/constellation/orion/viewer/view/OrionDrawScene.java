@@ -34,7 +34,7 @@ import java.util.concurrent.CountDownLatch;
 
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.LayoutPosition;
-import universe.constellation.orion.viewer.OrionImageView;
+import universe.constellation.orion.viewer.BookAndImageListener;
 import universe.constellation.orion.viewer.util.MoveUtil;
 
 /**
@@ -42,7 +42,7 @@ import universe.constellation.orion.viewer.util.MoveUtil;
  * Date: 16.10.11
  * Time: 13:52
  */
-public class OrionDrawScene extends View implements OrionImageView {
+public class OrionDrawScene extends View implements BookAndImageListener {
 
     public Bitmap bitmap;
 

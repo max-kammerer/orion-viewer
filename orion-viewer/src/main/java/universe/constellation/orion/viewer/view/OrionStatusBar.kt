@@ -6,14 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import universe.constellation.orion.viewer.LayoutPosition
-import universe.constellation.orion.viewer.OrionImageView
+import universe.constellation.orion.viewer.BookAndImageListener
 import universe.constellation.orion.viewer.R
 import java.util.concurrent.CountDownLatch
 
 /**
  * Created by mike on 10/11/15.
  */
-class OrionStatusBarHelper(val view: ViewGroup) : OrionImageView {
+class OrionStatusBarHelper(val view: ViewGroup) : BookAndImageListener {
     val panel = view.findViewById(R.id.orion_status_bar) as ViewGroup
     val title = view.findViewById(R.id.title) as TextView
     val offset = view.findViewById(R.id.offset) as TextView
