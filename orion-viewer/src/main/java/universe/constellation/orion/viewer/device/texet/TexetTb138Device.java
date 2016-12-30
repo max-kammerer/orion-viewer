@@ -61,7 +61,7 @@ public class TexetTb138Device extends AndroidDevice {
     @Override
     public void flushBitmap() {
         if (activity.getView() != null) {
-            boolean result = requestEpdMode(activity.getView(), EPD_FULL);
+            boolean result = requestEpdMode(activity.getView().toView(), EPD_FULL);
             Common.d("Invoked requestEpdMode: "+result);
         }
 

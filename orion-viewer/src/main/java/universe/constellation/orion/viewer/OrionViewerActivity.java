@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -68,7 +69,6 @@ import universe.constellation.orion.viewer.selection.NewTouchProcessor;
 import universe.constellation.orion.viewer.selection.NewTouchProcessorWithScale;
 import universe.constellation.orion.viewer.selection.SelectionAutomata;
 import universe.constellation.orion.viewer.view.FullScene;
-import universe.constellation.orion.viewer.view.OrionDrawScene;
 import universe.constellation.orion.viewer.view.OrionStatusBarHelper;
 
 public class OrionViewerActivity extends OrionBaseActivity {
@@ -130,7 +130,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         hasActionBar = globalOptions.isActionBarVisible();
         OptionActions.SHOW_ACTION_BAR.doAction(this, !hasActionBar, hasActionBar);
 
-        OrionDrawScene view = (OrionDrawScene) findViewById(R.id.view);
+        OrionScene view = (OrionScene) findViewById(R.id.view);
         fullScene = new FullScene((ViewGroup) findViewById(R.id.orion_full_scene), view, (ViewGroup) findViewById(R.id.orion_status_bar), getOrionContext());
 
         OptionActions.SHOW_STATUS_BAR.doAction(this, !globalOptions.isStatusBarVisible(), globalOptions.isStatusBarVisible());
@@ -234,7 +234,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
             controller.changeOrinatation(lastPageInfo.screenOrientation);
 
-            controller.init(lastPageInfo, fullScene.getDrawView().getRenderingSize());
+            OrionScene drawView = fullScene.getDrawView();
+            controller.init(lastPageInfo, new Point(drawView.getWidth(), drawView.getHeight()));
 
             getSubscriptionManager().sendDocOpenedNotification(controller);
 
@@ -713,7 +714,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         Common.d("Done!");
     }
 
-    public OrionDrawScene getView() {
+    public OrionScene getView() {
         return fullScene.getDrawView();
     }
 

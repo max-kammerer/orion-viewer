@@ -162,8 +162,7 @@ public class GlobalOptions implements Serializable {
                     } else if (DRAW_OFF_PAGE.equals(name)) {
                         activity.getFullScene().setDrawOffPage(isDrawOffPage());
                         //TODO ?
-                        OrionDrawScene view = activity.getView();
-                        view.invalidate();
+                        activity.getView().invalidate();
                     }
 
                 }

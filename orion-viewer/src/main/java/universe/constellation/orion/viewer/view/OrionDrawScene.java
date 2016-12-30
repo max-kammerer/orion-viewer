@@ -28,13 +28,16 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import universe.constellation.orion.viewer.Common;
-import universe.constellation.orion.viewer.OrionImageListener;
 import universe.constellation.orion.viewer.LayoutPosition;
+import universe.constellation.orion.viewer.OrionScene;
 import universe.constellation.orion.viewer.util.MoveUtil;
 
 /**
@@ -42,7 +45,7 @@ import universe.constellation.orion.viewer.util.MoveUtil;
  * Date: 16.10.11
  * Time: 13:52
  */
-public class OrionDrawScene extends View implements OrionImageListener {
+public class OrionDrawScene extends View implements OrionScene {
 
     public Bitmap bitmap;
 
@@ -86,7 +89,7 @@ public class OrionDrawScene extends View implements OrionImageListener {
         super(context, attrs, defStyle);
     }
 
-    void init(ColorStuff stuff) {
+    public void init(ColorStuff stuff) {
         this.stuff = stuff;
         defaultPaint = stuff.bd.getPaint();
         borderPaint = stuff.borderPaint;
@@ -171,9 +174,8 @@ public class OrionDrawScene extends View implements OrionImageListener {
         Common.d("OrionView: onSizeChanged " + w + "x" + h);
         super.onSizeChanged(w, h, oldw, oldh);
         if (w != oldw || h != oldh) {
-            Point renderingSize = getRenderingSize();
             if (dimensionAware != null ) {
-                dimensionAware.onDimensionChanged(renderingSize.x, renderingSize.y);
+                dimensionAware.onDimensionChanged(getWidth(), getHeight());
             }
         }
     }
@@ -210,11 +212,15 @@ public class OrionDrawScene extends View implements OrionImageListener {
         tasks.remove(drawTask);
     }
 
-    public Point getRenderingSize() {
-        return new Point(getWidth(), getHeight());
+    @Nullable
+    @Override
+    public LayoutPosition getInfo() {
+        return info;
     }
 
-    public Rect getViewCoords() {
-        return new Rect(0, 0, getWidth(), getHeight());
+    @NotNull
+    @Override
+    public View toView() {
+        return this;
     }
 }

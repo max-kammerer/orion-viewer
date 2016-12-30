@@ -132,7 +132,7 @@ public abstract class OrionBaseActivity extends AppCompatActivity {
         return device;
     }
 
-    public View getView() {
+    public OrionScene getView() {
         return null;
     }
 

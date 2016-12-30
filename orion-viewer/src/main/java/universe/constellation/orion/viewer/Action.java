@@ -230,7 +230,7 @@ public enum Action {
 
     SWITCH_COLOR_MODE (R.string.action_switch_color_mode, R.integer.action_switch_color_mode) {
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            OrionDrawScene view = activity.getView();
+            OrionScene view = activity.getView();
             FullScene scene = activity.getFullScene();
             LastPageInfo currentBookParameters = activity.getOrionContext().getCurrentBookParameters();
             if (currentBookParameters != null && ColorUtil.getColorMode(currentBookParameters.colorMode) == null) {

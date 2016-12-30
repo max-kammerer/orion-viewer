@@ -28,6 +28,7 @@ import universe.constellation.orion.viewer.Controller;
 import universe.constellation.orion.viewer.LayoutPosition;
 import universe.constellation.orion.viewer.LayoutStrategy;
 import universe.constellation.orion.viewer.OrionBaseActivity;
+import universe.constellation.orion.viewer.OrionScene;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.PageWalker;
 import universe.constellation.orion.viewer.R;
@@ -36,7 +37,6 @@ import universe.constellation.orion.viewer.util.Util;
 import universe.constellation.orion.viewer.view.ColorStuff;
 import universe.constellation.orion.viewer.view.DrawContext;
 import universe.constellation.orion.viewer.view.DrawTask;
-import universe.constellation.orion.viewer.view.OrionDrawScene;
 
 /**
  * User: mike
@@ -114,7 +114,7 @@ public class SearchDialog extends DialogFragment {
             }
         });
 
-        OrionDrawScene view = controller.getActivity().getView();
+        OrionScene view = controller.getActivity().getView();
         view.addTask(lastSearchDrawler);
 
         myTask = new SearchTask(getActivity(), controller.getDoc()) {
@@ -193,7 +193,7 @@ public class SearchDialog extends DialogFragment {
             myTask.stop();
         }
 
-        OrionDrawScene view = ((OrionViewerActivity)getActivity()).getView();
+        OrionScene view = ((OrionViewerActivity)getActivity()).getView();
         view.removeTask(lastSearchDrawler);
     }
 

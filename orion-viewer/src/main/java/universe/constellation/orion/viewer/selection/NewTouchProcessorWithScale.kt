@@ -6,15 +6,15 @@ import android.support.annotation.RequiresApi
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import universe.constellation.orion.viewer.Device
+import universe.constellation.orion.viewer.OrionScene
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.util.MoveUtil
-import universe.constellation.orion.viewer.view.OrionDrawScene
 
 /**
  * Created by mike on 15.07.16.
  */
 @RequiresApi(api = Build.VERSION_CODES.FROYO)
-class NewTouchProcessorWithScale(view: OrionDrawScene, activity: OrionViewerActivity) :
+class NewTouchProcessorWithScale(view: OrionScene, activity: OrionViewerActivity) :
         NewTouchProcessor(view, activity),
         ScaleGestureDetector.OnScaleGestureListener {
 
