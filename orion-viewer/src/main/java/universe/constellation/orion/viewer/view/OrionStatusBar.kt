@@ -5,23 +5,21 @@ import android.graphics.ColorMatrixColorFilter
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import universe.constellation.orion.viewer.LayoutPosition
-import universe.constellation.orion.viewer.BookAndImageListener
-import universe.constellation.orion.viewer.R
+import universe.constellation.orion.viewer.*
 import java.util.concurrent.CountDownLatch
 
 /**
  * Created by mike on 10/11/15.
  */
-class OrionStatusBarHelper(val view: ViewGroup) : BookAndImageListener {
+class OrionStatusBarHelper(val view: ViewGroup) : OrionBookListener, OrionImageListener {
     val panel = view.findViewById(R.id.orion_status_bar) as ViewGroup
     val title = view.findViewById(R.id.title) as TextView
     val offset = view.findViewById(R.id.offset) as TextView
     val page = view.findViewById(R.id.page) as TextView
     val totalPages = view.findViewById(R.id.totalPages) as TextView
-    var info: LayoutPosition? = null;
+    var info: LayoutPosition? = null
 
-    override fun onNewBook(title: String, pageCount: Int) {
+    override fun onNewBook(title: String?, pageCount: Int) {
         this.title.text = title
         this.totalPages.text = "/$pageCount"
         this.page.text = "?"
