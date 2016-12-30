@@ -5,12 +5,8 @@ import android.support.v4.view.GestureDetectorCompat
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.widget.Toast
-import universe.constellation.orion.viewer.Common
-import universe.constellation.orion.viewer.L
-import universe.constellation.orion.viewer.LayoutPosition
-import universe.constellation.orion.viewer.OrionViewerActivity
+import universe.constellation.orion.viewer.*
 import universe.constellation.orion.viewer.device.EInkDevice
-import universe.constellation.orion.viewer.view.OrionDrawScene
 
 /**
  * Created by mike on 14.07.16.
@@ -22,7 +18,7 @@ enum class State {
     SCALE;
 }
 
-open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewerActivity) : GestureDetector.SimpleOnGestureListener() {
+open class NewTouchProcessor(val view: OrionScene, val activity: OrionViewerActivity) : GestureDetector.SimpleOnGestureListener() {
 
     val detector = GestureDetectorCompat(activity, this)
 

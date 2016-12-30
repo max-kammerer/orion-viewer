@@ -15,7 +15,7 @@ public abstract class EInkDevice extends EInkDeviceWithoutFastRefresh {
     @Override
     public void flushBitmap() {
         GlobalOptions options = ((OrionViewerActivity)activity).getGlobalOptions();
-        View view = activity.getView();
+        View view = activity.getView().toView();
         if (options.isEinkOptimization()) {
             if (counter < options.getEinkRefreshAfter()) {
                 doPartialUpdate(view);
