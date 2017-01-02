@@ -55,4 +55,6 @@ public interface DocumentWrapper {
     boolean authentificate(String password);
 
     RectF[] searchPage(int pageNumber, String text);
+
+    boolean hasCalculatedPageInfo(int pageNumber);
 }

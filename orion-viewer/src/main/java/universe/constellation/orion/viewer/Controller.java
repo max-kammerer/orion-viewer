@@ -406,7 +406,7 @@ public class Controller implements ViewDimensionAware {
         return result;
     }
 
-    public DocumentWrapper getDoc() {
+    public DocumentWrapper getDocument() {
         return doc;
     }
 
