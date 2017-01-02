@@ -172,4 +172,9 @@ public class DjvuDocument implements DocumentWrapper {
     public String getText(int pageNumber, int absoluteX, int absoluteY, int width, int height, boolean singleWord) {
         return getText(pageNumber, absoluteX, absoluteY, width, height);
     }
+
+    @Override
+    public boolean hasCalculatedPageInfo(int pageNumber) {
+        return false;
+    }
 }

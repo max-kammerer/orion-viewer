@@ -28,8 +28,10 @@ public class PageInfo {
 
     public final int pageNum0;
 
+    /*used from jni*/
     public int width;
 
+    /*used from jni*/
     public int height;
 
     public AutoCropMargins autoCrop;

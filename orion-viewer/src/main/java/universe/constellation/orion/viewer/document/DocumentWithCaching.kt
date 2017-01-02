@@ -126,6 +126,10 @@ class DocumentWithCaching(val doc: DocumentWrapper) : DocumentWrapper by doc {
         Common.d("Zoomed result: ${page.pageNum0}: $margins $zoomInDouble")
         Common.d("Unzoomed result: ${page.pageNum0}: ${page.autoCrop}")
     }
+
+    override fun hasCalculatedPageInfo(pageNumber: Int): Boolean {
+        return cache[pageNumber] != null
+    }
 }
 
 inline fun <R> timing(m: String,l: () -> R): R {

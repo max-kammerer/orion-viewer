@@ -31,15 +31,17 @@ import universe.constellation.orion.viewer.prefs.GlobalOptions;
  */
 public class SimpleLayoutStrategy implements LayoutStrategy {
 
-    public int viewWidth;
+    private int viewWidth;
 
-    public int viewHeight;
+    private int viewHeight;
 
-    public int VERT_OVERLAP = 3;
+    private int VERT_OVERLAP = 3;
 
-    public int HOR_OVERLAP = 3;
+    private int HOR_OVERLAP = 3;
 
     private DocumentWrapper doc;
+
+    private final int pageCount;
 
     private CropMargins cropMargins = new CropMargins(0, 0, 0, 0, 0, 0, false, 0);
 
@@ -51,8 +53,9 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     private int layout;
 
-    public SimpleLayoutStrategy(DocumentWrapper doc) {
+    public SimpleLayoutStrategy(DocumentWrapper doc, int pageCount) {
         this.doc = doc;
+        this.pageCount = pageCount;
         //TODO: ugly hack
         if (doc instanceof DocumentWithCaching) {
             ((DocumentWithCaching) doc).strategy = this;
@@ -61,7 +64,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     public void nextPage(LayoutPosition info) {
         if (walker.next(info)) {
-            if (info.pageNumber < doc.getPageCount() - 1) {
+            if (info.pageNumber < pageCount - 1) {
                 reset(info, info.pageNumber + 1);
             }
         }
@@ -100,8 +103,8 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
     }
 
     public void reset(LayoutPosition info, int pageNum, boolean forward) {
-        if (doc.getPageCount() - 1 < pageNum) {
-            pageNum = doc.getPageCount() - 1;
+        if (pageCount - 1 < pageNum) {
+            pageNum = pageCount - 1;
         }
         if (pageNum < 0) {
             pageNum = 0;
@@ -162,7 +165,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
                 CropMode.AUTO_MANUAL == mode);
     }
 
-    public void appendManualMargins(LayoutPosition info, int leftMargin, int rightMargin) {
+    private void appendManualMargins(LayoutPosition info, int leftMargin, int rightMargin) {
         int pageWidth = info.x.pageDimension;
         int pageHeight = info.y.pageDimension;
 
@@ -180,7 +183,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         info.y.pageDimension -= yLess + yMore;
     }
 
-    public void appendAutoCropMargins(LayoutPosition info, AutoCropMargins autoCrop) {
+    private void appendAutoCropMargins(LayoutPosition info, AutoCropMargins autoCrop) {
         info.x.marginLess += autoCrop.left;
         info.x.marginMore += autoCrop.right;
         info.y.marginLess += autoCrop.top;
@@ -190,7 +193,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         info.y.pageDimension -= autoCrop.top + autoCrop.bottom;
     }
 
-    public void resetMargins(LayoutPosition info, int pageWidth, int pageHeight) {
+    private void resetMargins(LayoutPosition info, int pageWidth, int pageHeight) {
         info.x.marginLess = 0;
         info.y.marginLess = 0;
         info.x.marginMore = 0;

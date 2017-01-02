@@ -103,4 +103,9 @@ public class PdfDocument implements DocumentWrapper {
     public RectF[] searchPage(int pageNumber, String text) {
         return core.searchPage(pageNumber, text);
     }
+
+    @Override
+    public boolean hasCalculatedPageInfo(int pageNumber) {
+        return false;
+    }
 }
