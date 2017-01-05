@@ -26,7 +26,8 @@ open class NewTouchProcessor(val view: OrionScene, val activity: OrionViewerActi
 
     protected var nextState = State.UNDEFINED
 
-    private var info: LayoutPosition? = null
+    private var pageWidth: Int? = null
+    private var xOffset: Int? = null
 
     private val enableTouchMove = activity.globalOptions.isEnableTouchMove
 
@@ -70,7 +71,8 @@ open class NewTouchProcessor(val view: OrionScene, val activity: OrionViewerActi
 
     open protected fun reset() {
         state = State.UNDEFINED
-        info = null
+        pageWidth = null
+        xOffset = null
         start0.x = -1
         start0.y = -1
         last0.x = -1
@@ -115,7 +117,10 @@ open class NewTouchProcessor(val view: OrionScene, val activity: OrionViewerActi
         }
 
         if (state == State.UNDEFINED) {
-            info = view.info?.clone()
+//            pageWidth = view.info?.x?.pageDimension
+//            xOffset = view.info?.x?.offset
+            pageWidth = view.width * 3
+            xOffset = 0
             start0.x = e1.x.toInt()
             start0.y = e1.y.toInt()
             nextState = State.MOVE
@@ -127,14 +132,14 @@ open class NewTouchProcessor(val view: OrionScene, val activity: OrionViewerActi
         last0.y = e2.y.toInt()
         val width = view.width
 
-        if (insideViewWidth(view.info)) {
+        if (insideViewWidth(pageWidth)) {
             last0.x = start0.x
         } else {
             val delta = last0.x - start0.x
-            val offset = -info!!.x.offset
+            val offset = xOffset!!
             if (delta < 0) {
-                if (offset + info!!.x.pageDimension + delta < width) {
-                    last0.x = start0.x - offset - info!!.x.pageDimension + width
+                if (offset + pageWidth!! + delta < width) {
+                    last0.x = start0.x - offset - pageWidth!! + width
                 }
             } else {
                 if (offset + delta > 0) {
@@ -193,8 +198,8 @@ open class NewTouchProcessor(val view: OrionScene, val activity: OrionViewerActi
         }
     }
 
-    private fun insideViewWidth(info: LayoutPosition?): Boolean {
-        return info != null && info.x.pageDimension <= view.width
+    private fun insideViewWidth(pageWidth: Int?): Boolean {
+        return pageWidth != null && pageWidth <= view.width
     }
 
     private fun log(msg: String){

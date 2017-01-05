@@ -65,11 +65,15 @@ import universe.constellation.orion.viewer.dialog.CropDialogBuilderKt;
 import universe.constellation.orion.viewer.dialog.SearchDialog;
 import universe.constellation.orion.viewer.dialog.TapHelpDialog;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
+import universe.constellation.orion.viewer.scene.CanvasProvider;
+import universe.constellation.orion.viewer.scene.PageProvider;
+import universe.constellation.orion.viewer.scene.Screen;
 import universe.constellation.orion.viewer.selection.NewTouchProcessor;
 import universe.constellation.orion.viewer.selection.NewTouchProcessorWithScale;
 import universe.constellation.orion.viewer.selection.SelectionAutomata;
 import universe.constellation.orion.viewer.view.FullScene;
 import universe.constellation.orion.viewer.view.OrionStatusBarHelper;
+import universe.constellation.orion.viewer.view.Scene;
 
 public class OrionViewerActivity extends OrionBaseActivity {
 
@@ -130,7 +134,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         hasActionBar = globalOptions.isActionBarVisible();
         OptionActions.SHOW_ACTION_BAR.doAction(this, !hasActionBar, hasActionBar);
 
-        OrionScene view = (OrionScene) findViewById(R.id.view);
+        OrionScene view = new Screen((CanvasProvider) findViewById(R.id.view));
         fullScene = new FullScene((ViewGroup) findViewById(R.id.orion_full_scene), view, (ViewGroup) findViewById(R.id.orion_status_bar), getOrionContext());
 
         OptionActions.SHOW_STATUS_BAR.doAction(this, !globalOptions.isStatusBarVisible(), globalOptions.isStatusBarVisible());
@@ -230,7 +234,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
             RenderThread renderer = new RenderThread(this, layoutStrategy, doc, fullScene);
 
-            controller = new Controller(this, doc, layoutStrategy, renderer);
+            Screen screen = (Screen) getView();
+            screen.clear();
+            controller = new NewController(screen, this, doc, layoutStrategy, renderer);
 
             controller.changeOrinatation(lastPageInfo.screenOrientation);
 
@@ -757,19 +763,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
             case R.id.add_bookmark_menu_item: action = Action.ADD_BOOKMARK; break;
             case R.id.goto_menu_item: action = Action.GOTO; break;
             case R.id.select_text_menu_item: action = Action.SELECT_TEXT; break;
-//            case R.id.navigation_menu_item: showOrionDialog(PAGE_LAYOUT_SCREEN, null, null);
-//                return true;
-
-//            case R.id.rotation_menu_item: action = Action.ROTATION; break;
 
             case R.id.options_menu_item: action = Action.OPTIONS; break;
 
             case R.id.book_options_menu_item: action = Action.BOOK_OPTIONS; break;
-
-//            case R.id.tap_menu_item:
-//                Intent tap = new Intent(this, OrionTapActivity.class);
-//                startActivity(tap);
-//                return true;
 
             case R.id.outline_menu_item: action = Action.SHOW_OUTLINE; break;
             case R.id.open_menu_item: action = Action.OPEN_BOOK; break;
@@ -786,9 +783,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
         if (Action.NONE != action) {
             doAction(action);
         } else {
-//            Intent intent = new Intent();
-//            intent.setClass(this, OrionHelpActivity.class);
-//            startActivity(intent);
             return super.onOptionsItemSelected(item);
         }
         return true;

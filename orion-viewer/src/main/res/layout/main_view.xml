@@ -40,7 +40,7 @@
 
         <include layout="@layout/main_statusbar" />
 
-        <universe.constellation.orion.viewer.view.OrionDrawScene
+        <universe.constellation.orion.viewer.scene.ViewCanvasProvider
             android:id="@+id/view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
