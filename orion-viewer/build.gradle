@@ -13,6 +13,7 @@ dependencies {
     compile 'com.android.support:design:24.0.0'
     compile project(':tree-view-list-android')
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile 'org.jetbrains.anko:anko-common:0.9.1'
 }
 
 android {
