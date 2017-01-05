@@ -17,27 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer;
+package universe.constellation.orion.viewer
 
 /**
  * User: mike
  * Date: 03.11.11
  * Time: 13:56
  */
-public class PageInfo {
+data class PageInfo @JvmOverloads constructor(
+        @JvmField val pageNum0: Int,
+        /*used from jni*/
+        @JvmField var width: Int = 0,
+        /*used from jni*/
+        @JvmField var height: Int = 0
+        ) {
 
-    public final int pageNum0;
-
-    /*used from jni*/
-    public int width;
-
-    /*used from jni*/
-    public int height;
-
-    public AutoCropMargins autoCrop;
-
-    public PageInfo(int pageNum) {
-        this.pageNum0 = pageNum;
-    }
-
+    @JvmField var autoCrop: AutoCropMargins? = null
 }
