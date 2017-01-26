@@ -1,8 +1,11 @@
 package universe.constellation.orion.viewer.scene
 
+import android.content.Context
 import android.graphics.*
+import android.util.AttributeSet
 import android.view.View
 import org.jetbrains.anko.displayMetrics
+import universe.constellation.orion.viewer.Common
 import universe.constellation.orion.viewer.LayoutPosition
 import universe.constellation.orion.viewer.OrionScene
 import universe.constellation.orion.viewer.view.ColorStuff
@@ -12,7 +15,7 @@ import java.util.*
 import java.util.concurrent.CountDownLatch
 
 
-class Screen(val canvasProvider: CanvasProvider): OnDraw, OrionScene {
+class Screen(val canvasProvider: CanvasProvider): OnDraw, OrionScene, ViewDimensionAware {
 
     val pages: ArrayList<LazyPage> = arrayListOf<LazyPage>()
 
@@ -26,6 +29,7 @@ class Screen(val canvasProvider: CanvasProvider): OnDraw, OrionScene {
     init {
         val displayMetrics = toView().context.applicationContext.displayMetrics
         displaySize = Dimension(displayMetrics.widthPixels, displayMetrics.heightPixels)
+        canvasProvider.addDimensionAwareListener(this)
     }
 
     /*ui thread*/
@@ -46,7 +50,7 @@ class Screen(val canvasProvider: CanvasProvider): OnDraw, OrionScene {
     }
 
     /*UI thread*/
-    fun addPage(page: LazyPage) {
+    fun getOrCreatePage(page: LazyPage) {
         val existing = pages.binarySearch { it.number0.compareTo(page.number0) }
         if (existing >= 0) {
             d("add existing page " + page)
@@ -109,6 +113,12 @@ class Screen(val canvasProvider: CanvasProvider): OnDraw, OrionScene {
         canvasProvider.invalidate()
     }
 
+    override fun onDimensionChanged(newWidth: Int, newHeight: Int) {
+        d("Screen.onDimensionChanged ${pages.size}")
+        pages.forEach { it.redraw() }
+        invalidate()
+    }
+
     override val width: Int
         get() = toView().width
     override val height: Int
@@ -117,7 +127,7 @@ class Screen(val canvasProvider: CanvasProvider): OnDraw, OrionScene {
         get() = throw UnsupportedOperationException()
 
     override fun setDimensionAware(dimensionAware: ViewDimensionAware) {
-        canvasProvider.setDimensionAware(dimensionAware)
+        canvasProvider.addDimensionAwareListener(dimensionAware)
     }
 
     override fun setOnTouchListener(listener: View.OnTouchListener) = canvasProvider.setOnTouchListener(listener)
@@ -157,5 +167,39 @@ class Screen(val canvasProvider: CanvasProvider): OnDraw, OrionScene {
         pages.clear()
         clearBitmaps()
     }
+}
 
+class ViewCanvasProvider: View, CanvasProvider  {
+
+    val listeners = arrayListOf<OnDraw>()
+
+    var dimensionAwareListeners = arrayListOf<ViewDimensionAware>()
+
+    constructor(context: Context?) : super(context)
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
+
+    override fun onDraw(canvas: Canvas) {
+        listeners.forEach { it.draw(canvas) }
+    }
+
+    override fun register(onDraw: OnDraw) {
+        listeners.add(onDraw)
+    }
+
+
+    override fun toView(): View  = this
+
+    override fun addDimensionAwareListener(dimensionAware: ViewDimensionAware) {
+        dimensionAwareListeners.add(dimensionAware)
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        Common.d("ViewCanvasProvider: onSizeChanged " + w + "x" + h)
+        super.onSizeChanged(w, h, oldw, oldh)
+        if (w != oldw || h != oldh) {
+            dimensionAwareListeners.forEach { it.onDimensionChanged(width, height) }
+        }
+    }
 }

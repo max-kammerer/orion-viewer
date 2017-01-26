@@ -3,7 +3,6 @@ package universe.constellation.orion.viewer
 import android.graphics.Bitmap
 import android.graphics.Point
 import android.graphics.Rect
-import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import universe.constellation.orion.viewer.Common.d
 import universe.constellation.orion.viewer.scene.*
@@ -18,7 +17,7 @@ class NewController(
         doc: DocumentWrapper,
         val layout: LayoutStrategy,
         renderer: Renderer
-) : Controller(activity, doc, layout, renderer), PageProvider {
+) : Controller(activity, doc, layout, renderer, false), PageProvider {
 
     lateinit var actualPage: LazyPage
     val layoutPosition: LayoutPosition = LayoutPosition()
@@ -56,7 +55,7 @@ class NewController(
     fun createLazyPage(info: LayoutPosition) : LazyPage {
         d("create lazy page: $info")
         return LazyPage(info.pageNumber, Position(0, 0), Dimension(info.x.pageDimension, info.y.pageDimension), this, screen).apply {
-            screen.addPage(this)
+            screen.getOrCreatePage(this)
         }
     }
 

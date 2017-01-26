@@ -1,12 +1,8 @@
 package universe.constellation.orion.viewer.scene
 
-import android.content.Context
 import android.graphics.*
-import android.util.AttributeSet
 import android.view.View
 import org.jetbrains.anko.uiThread
-import universe.constellation.orion.viewer.Common
-import universe.constellation.orion.viewer.Common.d
 import universe.constellation.orion.viewer.PageInfo
 import universe.constellation.orion.viewer.view.ViewDimensionAware
 
@@ -94,7 +90,15 @@ class LazyPage(val number0/*zero based*/: Int, val positionOnScreen/*absolute*/:
 
     fun redraw() {
         orionAsync {
-            val visibleRect = uiThreadAndWait { getVisibleRect() }
+
+            val visibleRect = uiThreadAndWait {
+                d("in draw async ${screen.toView().width} ${screen.toView().height} ${pageRectangle}")
+                getVisibleRect().apply {
+                    d("visible rect is $this")
+                }
+            }
+
+
             if (visibleRect != null) {
                 val bitmap: Bitmap = screen.createOrGet()
                 d("rendering $number0 $visibleRect")
@@ -107,6 +111,9 @@ class LazyPage(val number0/*zero based*/: Int, val positionOnScreen/*absolute*/:
 
             }
             else {
+                uiThread {
+                    d("bitmap invisible $pageRectangle")
+                }
                 bitmapInfo = null
             }
         }
@@ -135,8 +142,8 @@ class LazyPage(val number0/*zero based*/: Int, val positionOnScreen/*absolute*/:
     }
 
 
-    fun relayoutPage() {
-
+    fun recalculate() {
+        redraw()
     }
 }
 
@@ -157,43 +164,9 @@ interface CanvasProvider {
 
     fun toView(): View
 
-    fun setDimensionAware(dimensionAware: ViewDimensionAware)
+    fun addDimensionAwareListener(dimensionAware: ViewDimensionAware)
 }
 
-class ViewCanvasProvider: View, CanvasProvider {
-
-    val listeners = arrayListOf<OnDraw>()
-
-    var dimensionAwareListener: ViewDimensionAware? = null
-
-    constructor(context: Context?) : super(context)
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
-
-    override fun onDraw(canvas: Canvas) {
-        listeners.forEach { it.draw(canvas) }
-    }
-
-    override fun register(onDraw: OnDraw) {
-        listeners.add(onDraw)
-    }
-
-
-    override fun toView(): View  = this
-
-    override fun setDimensionAware(dimensionAware: ViewDimensionAware) {
-        this.dimensionAwareListener = dimensionAware
-    }
-
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        Common.d("OrionView: onSizeChanged " + w + "x" + h)
-        super.onSizeChanged(w, h, oldw, oldh)
-        if (w != oldw || h != oldh) {
-            dimensionAwareListener?.onDimensionChanged(width, height)
-        }
-    }
-}
 
 fun Canvas.translate(p: Position) {
     translate(-p.x.toFloat(), -p.y.toFloat())

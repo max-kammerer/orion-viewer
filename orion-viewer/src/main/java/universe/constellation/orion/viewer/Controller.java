@@ -59,6 +59,10 @@ public class Controller implements ViewDimensionAware {
     private boolean hasPendingEvents = false;
 
     public Controller(OrionViewerActivity activity, DocumentWrapper doc, LayoutStrategy layout, Renderer renderer) {
+        this(activity, doc, layout, renderer, true);
+    }
+
+    public Controller(OrionViewerActivity activity, DocumentWrapper doc, LayoutStrategy layout, Renderer renderer, boolean subscribe) {
         Common.d("Creating controller...");
         this.activity = activity;
         this.doc = doc;
@@ -79,8 +83,10 @@ public class Controller implements ViewDimensionAware {
             }
         };
 
-        //activity.getOrionContext().getOptions().subscribe(prefListener);
-        activity.getSubscriptionManager().addDocListeners(listener);
+        if (subscribe) {
+            //activity.getOrionContext().getOptions().subscribe(prefListener);
+            activity.getSubscriptionManager().addDocListeners(listener);
+        }
         Common.d("Controller was created successfully");
     }
 
