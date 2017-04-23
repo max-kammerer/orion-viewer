@@ -1,7 +1,7 @@
 LOCAL_PATH := $(call my-dir)
 TOP_LOCAL_PATH := $(LOCAL_PATH)
 
-MUPDF_ROOT := ../..
+MUPDF_ROOT := ../../..
 
 ifdef NDK_PROFILER
 include android-ndk-profiler.mk
@@ -18,8 +18,9 @@ LOCAL_C_INCLUDES := \
 	jni/andprof \
 	$(MUPDF_ROOT)/include \
 	$(MUPDF_ROOT)/source/fitz \
-	$(MUPDF_ROOT)/source/pdf
-LOCAL_CFLAGS := -DORION_PDF
+	$(MUPDF_ROOT)/source/pdf \
+    $(MUPDF_ROOT)/platform/java
+LOCAL_CFLAGS := -DHAVE_ANDROID -DORION_PDF
 LOCAL_MODULE    := mupdf
 LOCAL_SRC_FILES := mupdf.c \
 		    orion_bitmap.c
