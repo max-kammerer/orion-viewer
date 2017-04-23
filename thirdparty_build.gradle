@@ -49,7 +49,7 @@ task downloadMupdf << {
 
     exec {
         workingDir file(mupdf)
-        commandLine = ['git', 'checkout', '1.9a']
+        commandLine = ['git', 'checkout', '1.10a']
     }
 
     exec {

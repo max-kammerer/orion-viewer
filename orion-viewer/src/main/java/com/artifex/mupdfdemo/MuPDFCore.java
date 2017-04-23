@@ -290,7 +290,7 @@ public class MuPDFCore
 		return getWidgetAreasInternal(page);
 	}
 
-	public synchronized Annotation [] getAnnoations(int page) {
+	public synchronized Annotation [] getAnnotations(int page) {
 		return getAnnotationsInternal(page);
 	}
 

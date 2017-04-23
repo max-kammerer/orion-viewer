@@ -553,7 +553,6 @@ public class MuPDFPageView extends PageView implements MuPDFView {
 		return true;
 	}
 
-
 	@Override
 	protected CancellableTaskDefinition<Void, Void> getDrawPageTask(final Bitmap bm, final int sizeX, final int sizeY,
 			final int patchX, final int patchY, final int patchWidth, final int patchHeight) {
@@ -612,7 +611,7 @@ public class MuPDFPageView extends PageView implements MuPDFView {
 		mLoadAnnotations = new AsyncTask<Void,Void,Annotation[]> () {
 			@Override
 			protected Annotation[] doInBackground(Void... params) {
-				return mCore.getAnnoations(mPageNumber);
+				return mCore.getAnnotations(mPageNumber);
 			}
 
 			@Override

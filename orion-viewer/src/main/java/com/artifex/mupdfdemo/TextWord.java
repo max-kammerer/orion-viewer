@@ -3,11 +3,11 @@ package com.artifex.mupdfdemo;
 import android.graphics.RectF;
 
 public class TextWord extends RectF {
-	private StringBuffer w;
+	private StringBuilder w;
 
 	public TextWord() {
 		super();
-		w = new StringBuffer();
+		w = new StringBuilder();
 	}
 
 	public void Add(TextChar tc) {
@@ -15,7 +15,7 @@ public class TextWord extends RectF {
 		w = w.append(tc.c);
 	}
 
-    public StringBuffer getText() {
+    public StringBuilder getText() {
         return w;
     }
 

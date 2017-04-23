@@ -44,7 +44,6 @@
 //
 //		mPurpose = PICK_KEY_FILE.equals(getIntent().getAction()) ? Purpose.PickKeyFile : Purpose.PickPDF;
 //
-//
 //		String storageState = Environment.getExternalStorageState();
 //
 //		if (!Environment.MEDIA_MOUNTED.equals(storageState)
@@ -107,6 +106,8 @@
 //							if (fname.endsWith(".cbz"))
 //								return true;
 //							if (fname.endsWith(".epub"))
+//								return true;
+//							if (fname.endsWith(".fb2"))
 //								return true;
 //							if (fname.endsWith(".png"))
 //								return true;
@@ -201,7 +202,7 @@
 //
 //		position -= mDirs.length;
 //
-//		Uri uri = Uri.parse(mFiles[position].getAbsolutePath());
+//		Uri uri = Uri.fromFile(mFiles[position]);
 //		Intent intent = new Intent(this,MuPDFActivity.class);
 //		intent.setAction(Intent.ACTION_VIEW);
 //		intent.setData(uri);
