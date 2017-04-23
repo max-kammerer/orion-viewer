@@ -49,7 +49,7 @@ task downloadMupdf << {
 
     exec {
         workingDir file(mupdf)
-        commandLine = ['git', 'checkout', '1.8']
+        commandLine = ['git', 'checkout', '1.9a']
     }
 
     exec {
@@ -63,7 +63,7 @@ task downloadMupdf << {
 }
 
 task downloadAndMakeMupdf(dependsOn: downloadMupdf) << {
-    /*For more details see mupdf/platform/android/ReadMe.txt*/
+    /*For more details see mupdf/platform/android/viewer/ReadMe.txt*/
     exec {
         workingDir file(mupdf)
         commandLine 'make'
@@ -72,7 +72,7 @@ task downloadAndMakeMupdf(dependsOn: downloadMupdf) << {
 }
 
 task patchMupdf() << {
-    ant.copy(todir: mupdf + "/platform/android/jni", overwrite: true, preservelastmodified: true) {
+    ant.copy(todir: mupdf + "/platform/android/viewer/jni", overwrite: true, preservelastmodified: true) {
         fileset(dir : 'orion-viewer/jni/mupdf')
         fileset(dir : 'orion-viewer/jni/common')
     }
@@ -80,14 +80,14 @@ task patchMupdf() << {
 
 task patchAndBuildMupdf(dependsOn: [patchMupdf]) << {
     exec {
-        workingDir file(mupdf + "/platform/android")
+        workingDir file(mupdf + "/platform/android/viewer")
         commandLine ndkDir + "/ndk-build"
     }
 }
 
 task buildMupdf() << {
     exec {
-        workingDir file(mupdf + "/platform/android")
+        workingDir file(mupdf + "/platform/android/viewer")
         commandLine ndkDir + "/ndk-build"
     }
 }
