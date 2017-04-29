@@ -1,3 +1,7 @@
+===== 0.71.0 (Apr 29, 2017) =====
+* Mupdf updated to 1.10a
+* Fixed permission checking in file manager for Android 6.0+
+
 ===== 0.70.0 (Jul 17, 2016) =====
 * Fixed several bugs in auto-cropping
 * New touch processor with double tap support
