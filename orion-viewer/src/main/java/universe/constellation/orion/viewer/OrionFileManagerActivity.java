@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -38,6 +39,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -98,6 +100,24 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
 
         justCreated = true;
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (Permissions.REQUEST_CODE_ASK_PERMISSIONS == requestCode) {
+            System.out.println("Permission callback...");
+            ListView list = (ListView) findViewById(R.id.listView);
+            ListAdapter adapter = list.getAdapter();
+            if (list != null && adapter instanceof FileChooser) {
+                File currentFolder = ((FileChooser) adapter).getCurrentFolder();
+                if (currentFolder != null) {
+                    System.out.println("Refreshing view");
+                    ((FileChooser) adapter).changeFolder(new File(currentFolder.getAbsolutePath()));
+                }
+            }
+        }
+    }
+
 
     protected void onNewIntent(Intent intent) {
         Common.d("OrionFileManager: On new intent " + intent);

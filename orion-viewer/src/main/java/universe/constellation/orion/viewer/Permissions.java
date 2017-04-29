@@ -9,7 +9,7 @@ import android.os.Build;
  * Created by mike on 11/23/15.
  */
 public class Permissions {
-    private final static int REQUEST_CODE_ASK_PERMISSIONS = 111;
+    public final static int REQUEST_CODE_ASK_PERMISSIONS = 111;
 
     public static void checkReadPermission(Activity activity) {
         if (Build.VERSION.SDK_INT >= 23) {
