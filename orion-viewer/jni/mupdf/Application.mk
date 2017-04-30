@@ -30,10 +30,9 @@ APP_CFLAGS := -O2
 else
 ifdef DEBUG
 APP_OPTIM := debug
-APP_CFLAGS := -DDEBUG -DNOCJK
+APP_CFLAGS := -DDEBUG
 else
 APP_OPTIM := release
-APP_CFLAGS := -DNOCJK
 endif
 endif
 ifdef V8_BUILD
@@ -43,7 +42,7 @@ ifdef MEMENTO
 APP_CFLAGS += -DMEMENTO -DMEMENTO_LEAKONLY
 APP_STL = gnustl_static
 endif
-
+APP_CFLAGS += -DTOFU_NOTO -DTOFU_CJK
 # If the ndk is r8b then workaround bug by uncommenting the following line
 #NDK_TOOLCHAIN_VERSION=4.4.3
 

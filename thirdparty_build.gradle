@@ -43,13 +43,15 @@ patchDjvu.mustRunAfter downloadDjvu
 
 /*MUPDF CHAIN*/
 task downloadMupdf << {
+    def version = "1.11"
+
     exec {
         commandLine = ['git', 'clone', 'git://git.ghostscript.com/mupdf.git', mupdf]
     }
 
     exec {
         workingDir file(mupdf)
-        commandLine = ['git', 'checkout', '1.10a']
+        commandLine = ['git', 'checkout', version]
     }
 
     exec {
@@ -59,6 +61,15 @@ task downloadMupdf << {
     exec {
         workingDir file(mupdf)
         commandLine 'git', 'submodule', 'update'
+    }
+
+    exec {
+        commandLine = ['git', 'clone', 'git://git.ghostscript.com/mupdf-android-viewer-old.git', mupdfAndroid]
+    }
+
+    exec {
+        workingDir file(mupdfAndroid)
+        commandLine = ['git', 'checkout', version]
     }
 }
 
@@ -72,7 +83,7 @@ task downloadAndMakeMupdf(dependsOn: downloadMupdf) << {
 }
 
 task patchMupdf() << {
-    ant.copy(todir: mupdf + "/platform/android/viewer/jni", overwrite: true, preservelastmodified: true) {
+    ant.copy(todir: mupdfAndroid + "/jni", overwrite: true, preservelastmodified: true) {
         fileset(dir : 'orion-viewer/jni/mupdf')
         fileset(dir : 'orion-viewer/jni/common')
     }
@@ -80,14 +91,14 @@ task patchMupdf() << {
 
 task patchAndBuildMupdf(dependsOn: [patchMupdf]) << {
     exec {
-        workingDir file(mupdf + "/platform/android/viewer")
+        workingDir file(mupdfAndroid)
         commandLine ndkDir + "/ndk-build"
     }
 }
 
 task buildMupdf() << {
     exec {
-        workingDir file(mupdf + "/platform/android/viewer")
+        workingDir file(mupdfAndroid)
         commandLine ndkDir + "/ndk-build"
     }
 }

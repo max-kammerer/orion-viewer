@@ -1,7 +1,7 @@
 LOCAL_PATH := $(call my-dir)
 TOP_LOCAL_PATH := $(LOCAL_PATH)
 
-MUPDF_ROOT := ../../..
+MUPDF_ROOT := ../mupdf
 
 ifdef NDK_PROFILER
 include android-ndk-profiler.mk
@@ -36,7 +36,7 @@ endif
 
 LOCAL_LDLIBS := -lm -llog -ljnigraphics
 ifdef CRYPTO_BUILD
-LOCAL_LDLIBS += -L$(MUPDF_ROOT)/thirdparty/openssl/android -lcrypto
+LOCAL_LDLIBS += -L$(MUPDF_ROOT)/thirdparty/openssl-$(APP_ABI)/lib -lcrypto
 endif
 
 include $(BUILD_SHARED_LIBRARY)

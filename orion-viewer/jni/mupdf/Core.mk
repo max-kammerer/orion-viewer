@@ -11,7 +11,7 @@ include $(CLEAR_VARS)
 
 LOCAL_ARM_MODE := arm
 
-MY_ROOT := ../../..
+MY_ROOT := ../mupdf
 
 LOCAL_CFLAGS += -Wall -Wno-uninitialized
 
@@ -36,7 +36,7 @@ LOCAL_C_INCLUDES := \
 	$(MY_ROOT)/thirdparty/harfbuzz/src \
 	$(MY_ROOT)/thirdparty/jbig2dec \
 	$(MY_ROOT)/thirdparty/openjpeg/src/lib/openjp2 \
-	$(MY_ROOT)/thirdparty/jpeg \
+	$(MY_ROOT)/thirdparty/libjpeg \
 	$(MY_ROOT)/thirdparty/mujs \
 	$(MY_ROOT)/thirdparty/zlib \
 	$(MY_ROOT)/thirdparty/freetype/include \
@@ -48,16 +48,14 @@ LOCAL_C_INCLUDES := \
 	$(MY_ROOT)/source/img \
 	$(MY_ROOT)/source/tiff \
 	$(MY_ROOT)/scripts/freetype \
-	$(MY_ROOT)/scripts/jpeg \
+	$(MY_ROOT)/scripts/libjpeg \
 	$(MY_ROOT)/generated \
 	$(MY_ROOT)/resources \
 	$(MY_ROOT)/include \
 	$(MY_ROOT)
-ifdef V8_BUILD
-LOCAL_C_INCLUDES += $(MY_ROOT)/thirdparty/$(V8)/include
-endif
+
 ifdef CRYPTO_BUILD
-LOCAL_C_INCLUDES += $(MY_ROOT)/thirdparty/openssl/include
+LOCAL_C_INCLUDES += $(MY_ROOT)/thirdparty/openssl-$(APP_ABI)/include
 endif
 
 LOCAL_MODULE := mupdfcore
@@ -70,11 +68,6 @@ LOCAL_SRC_FILES := \
 	$(wildcard $(MY_ROOT)/source/gprf/*.c) \
 	$(wildcard $(MY_ROOT)/source/html/*.c) \
 	$(wildcard $(MY_ROOT)/generated/*.c)
-
-ifdef FZ_ENABLE_GPRF
-LOCAL_SHARED_LIBRARIES := gsso
-endif
-LOCAL_LDLIBS := -lm -llog -ljnigraphics
 
 LOCAL_SRC_FILES := $(addprefix ../, $(LOCAL_SRC_FILES))
 
