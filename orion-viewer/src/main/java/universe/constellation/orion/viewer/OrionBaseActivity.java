@@ -31,6 +31,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionApplication;
 
@@ -41,7 +42,7 @@ import universe.constellation.orion.viewer.prefs.OrionApplication;
  */
 public abstract class OrionBaseActivity extends AppCompatActivity {
 
-    static final String DONT_OPEN_RECENT = "DONT_OPEN_RECENT";
+    public static final String DONT_OPEN_RECENT = "DONT_OPEN_RECENT";
 
     protected Device device ;
 

@@ -93,7 +93,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".OrionFileManagerActivity"
+        <activity android:name=".filemanager.OrionFileManagerActivity"
                   android:label="@string/app_name"
                   android:theme="@style/Theme.AppCompat.NoActionBar"
                   android:launchMode="singleTask"

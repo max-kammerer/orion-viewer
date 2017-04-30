@@ -1,7 +1,7 @@
 /*
  * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
  *
- * Copyright (C) 2011-2013  Michael Bogdanov & Co
+ * Copyright (C) 2011-2017 Michael Bogdanov & Co
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer;
+package universe.constellation.orion.viewer.filemanager;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -46,6 +46,11 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.FilenameFilter;
 
+import universe.constellation.orion.viewer.Common;
+import universe.constellation.orion.viewer.OrionBaseActivity;
+import universe.constellation.orion.viewer.OrionViewerActivity;
+import universe.constellation.orion.viewer.Permissions;
+import universe.constellation.orion.viewer.R;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
 /**
@@ -108,11 +113,11 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
             System.out.println("Permission callback...");
             ListView list = (ListView) findViewById(R.id.listView);
             ListAdapter adapter = list.getAdapter();
-            if (list != null && adapter instanceof FileChooser) {
-                File currentFolder = ((FileChooser) adapter).getCurrentFolder();
+            if (list != null && adapter instanceof FileChooserAdapter) {
+                File currentFolder = ((FileChooserAdapter) adapter).getCurrentFolder();
                 if (currentFolder != null) {
                     System.out.println("Refreshing view");
-                    ((FileChooser) adapter).changeFolder(new File(currentFolder.getAbsolutePath()));
+                    ((FileChooserAdapter) adapter).changeFolder(new File(currentFolder.getAbsolutePath()));
                 }
             }
         }
@@ -161,7 +166,7 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
             }
         });
 
-        list.setListAdapter(new FileChooser(this, globalOptions.getRecentFiles()));
+        list.setListAdapter(new RecentListAdapter(this, globalOptions.getRecentFiles()));
     }
 
     private void createFileView(ListView list, final TextView path) {
@@ -169,7 +174,7 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 File file = (File) parent.getItemAtPosition(position);
                 if (file.isDirectory()) {
-                    File newFolder = ((FileChooser) parent.getAdapter()).changeFolder(file);
+                    File newFolder = ((FileChooserAdapter) parent.getAdapter()).changeFolder(file);
                     path.setText(newFolder.getAbsolutePath());
                 } else {
                     if (showRecentsAndSavePath()) {
@@ -183,7 +188,7 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
         });
 
         path.setText(getStartFolder());
-        list.setAdapter(new FileChooser(this, getStartFolder(), getFileNameFilter()));
+        list.setAdapter(new FileChooserAdapter(this, getStartFolder(), getFileNameFilter()));
     }
 
     protected void openFile(File file) {
@@ -240,7 +245,7 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
     }
 
     public FilenameFilter getFileNameFilter() {
-        return FileChooser.DEFAULT_FILTER;
+        return FileChooserAdapter.DEFAULT_FILTER;
     }
 
     public String getStartFolder() {

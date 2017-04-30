@@ -33,6 +33,7 @@ import java.util.List;
 import pl.polidea.treeview.InMemoryTreeStateManager;
 import pl.polidea.treeview.TreeViewList;
 import universe.constellation.orion.viewer.dialog.CropDialogBuilderKt;
+import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity;
 import universe.constellation.orion.viewer.outline.OutlineAdapter;
 import universe.constellation.orion.viewer.outline.OutlineItem;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
@@ -42,7 +43,6 @@ import universe.constellation.orion.viewer.prefs.OrionPreferenceActivity;
 import universe.constellation.orion.viewer.prefs.TemporaryOptions;
 import universe.constellation.orion.viewer.util.ColorUtil;
 import universe.constellation.orion.viewer.view.FullScene;
-import universe.constellation.orion.viewer.view.OrionDrawScene;
 
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
