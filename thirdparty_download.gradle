@@ -9,13 +9,13 @@ task packNativeLibs(type: Zip) {
         into("djvu/$djvu_libs_relative")
     }
     from(mupdf_libs) {
-        into("mupdf/$mupdf_libs_relative")
+        into("mupdf-android-viewer-old/$mupdf_libs_relative")
     }
     destinationDir file(thirparty_build_root)
 }
 
 task downloadNativeLibs() << {
-    def lastLibs = 'nativeLibs-0.71.0.zip'
+    def lastLibs = 'nativeLibs-0.72.0.zip'
     file(thirparty_build_root).mkdir()
     ant.get(
             src: "https://github.com/max-kammerer/orion-viewer/releases/download/thirdparty_0.61.2/" + lastLibs,
