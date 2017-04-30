@@ -104,12 +104,14 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
         initFileManager();
 
         justCreated = true;
+
+        Permissions.checkReadPermission(this);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (Permissions.REQUEST_CODE_ASK_PERMISSIONS == requestCode) {
+        if (Permissions.INSTANCE.ORION_ASK_PERMISSION_CODE == requestCode) {
             System.out.println("Permission callback...");
             ListView list = (ListView) findViewById(R.id.listView);
             ListAdapter adapter = list.getAdapter();

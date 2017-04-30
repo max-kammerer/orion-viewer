@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
@@ -117,6 +118,10 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private FullScene fullScene;
 
+    private boolean hasReadPermissions = false;
+
+    private Intent lastIntent = null;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Common.d("Creating file manager");
@@ -142,7 +147,29 @@ public class OrionViewerActivity extends OrionBaseActivity {
         myIntent = getIntent();
         newTouchProcessor = getOrionContext().getSdkVersion() >= Build.VERSION_CODES.FROYO ?
                 new NewTouchProcessorWithScale(view, this) : new NewTouchProcessor(view, this);
+
+        hasReadPermissions = Permissions.checkReadPermission(this);
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (Permissions.ORION_ASK_PERMISSION_CODE == requestCode && !hasReadPermissions) {
+            System.out.println("Permission callback...");
+            int i = 0;
+            while(i < permissions.length) {
+                if (android.Manifest.permission.READ_EXTERNAL_STORAGE.equals(permissions[i]) &&
+                        grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                    hasReadPermissions = true;
+                    onNewIntent(lastIntent);
+                    lastIntent = null;
+                    return;
+                }
+                i++;
+            }
+        }
+    }
+
 
     private void initDialogs() {
         initOptionDialog();
@@ -180,6 +207,11 @@ public class OrionViewerActivity extends OrionBaseActivity {
         Common.d("Runtime.getRuntime().totalMemory() = " + Runtime.getRuntime().totalMemory());
         Common.d("Debug.getNativeHeapSize() = " + Debug.getNativeHeapSize());
         Common.d("OVA: on new intent " + intent);
+        if (!hasReadPermissions) {
+            Common.d("OVA: Waiting for read permissions");
+            lastIntent = intent;
+            return;
+        }
 
         Uri uri = intent.getData();
         if (uri != null) {

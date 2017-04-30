@@ -82,9 +82,6 @@ public abstract class OrionBaseActivity extends AppCompatActivity {
             toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
         }
-        Common.d("Checking permissions");
-        Permissions.checkReadPermission(this);
-        Common.d("Permissions checked");
     }
 
     @Override
