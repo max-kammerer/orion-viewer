@@ -12,4 +12,12 @@
         <item name="@android:background">@color/whitegrey</item>
         <item name="@android:textColor">@color/black</item>
     </style>
+
+    <style name="AppTheme" parent="Theme.AppCompat">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+    </style>
+
+    <style name="AppTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+    </style>
 </resources>

@@ -134,7 +134,7 @@
                   android:label="My Preferences"/>
 
         <activity android:name=".prefs.OrionBookPreferences" android:screenOrientation="behind"
-                  android:theme="@style/Theme.AppCompat"
+                  android:theme="@style/AppTheme"
                   android:label="My Preferences"/>
 
         <activity android:name=".prefs.OrionTapActivity" android:screenOrientation="behind"
