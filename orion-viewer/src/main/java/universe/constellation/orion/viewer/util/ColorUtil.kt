@@ -16,7 +16,6 @@ object ColorUtil {
                     0.0f, 0.0f, 0.0f, 1.0f, 0.0f
             ),
 
-            /* COLOR_MODE_BLACK_ON_YELLOWISH */
             "CM_BLACK_ON_YELLOWISH" to floatArrayOf(
                     0.94f, 0.02f, 0.02f, 0.0f, 0.0f,
                     0.02f, 0.86f, 0.02f, 0.0f, 0.0f,
@@ -24,7 +23,6 @@ object ColorUtil {
                     0.00f, 0.00f, 0.00f, 1.0f, 0.0f
             ),
 
-            /* COLOR_MODE_BLACK_ON_GREYISH */
             "CM_GRAYSCALE_LIGHT" to floatArrayOf(
                     0.27f, 0.54f, 0.09f, 0.0f, 0.0f,
                     0.27f, 0.54f, 0.09f, 0.0f, 0.0f,
