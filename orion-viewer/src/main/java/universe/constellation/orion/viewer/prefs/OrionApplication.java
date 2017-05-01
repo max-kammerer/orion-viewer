@@ -131,16 +131,12 @@ public class OrionApplication extends Application {
     }
 
 
-    public void applyTheme(Activity activity, boolean processActionBar) {
+    public void applyTheme(Activity activity) {
         int themeId = getThemeId();
 
         if (themeId != -1) {
             activity.setTheme(themeId);
         }
-    }
-
-    public void applyTheme(Activity activity) {
-        applyTheme(activity, false);
     }
 
     public boolean isLightTheme() {

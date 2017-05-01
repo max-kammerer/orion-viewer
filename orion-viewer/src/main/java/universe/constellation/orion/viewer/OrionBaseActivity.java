@@ -63,7 +63,7 @@ public abstract class OrionBaseActivity extends AppCompatActivity {
     }
 
     protected void onOrionCreate(Bundle savedInstanceState, int layoutId) {
-        getOrionContext().applyTheme(this, getViewerType() == Device.VIEWER_ACTIVITY);
+        getOrionContext().applyTheme(this);
         getOrionContext().updateLanguage(getResources());
 
         if (this instanceof OrionViewerActivity || this instanceof OrionFileManagerActivity) {
