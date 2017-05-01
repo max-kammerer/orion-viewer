@@ -176,6 +176,7 @@
         <item>@string/color_mode_grayscale_light</item>
         <item>@string/color_mode_grayscale</item>
         <item>@string/color_mode_grayscale_dark</item>
+        <item>@string/color_mode_white_on_blue</item>
     </string-array>
 
     <string-array name="color_mode">
@@ -185,5 +186,7 @@
         <item>CM_GRAYSCALE_LIGHT</item>
         <item>CM_GRAYSCALE</item>
         <item>CM_GRAYSCALE_DARK</item>
+        <item>CM_WHITE_ON_BLUE</item>
+        <!--<item>CM_YELLOW_ON_BLACK</item>-->
     </string-array>
 </resources>

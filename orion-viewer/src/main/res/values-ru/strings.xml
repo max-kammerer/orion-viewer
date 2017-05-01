@@ -82,6 +82,7 @@
     <string name="color_mode_grayscale_light">Градации серого на сероватом фоне</string>
     <string name="color_mode_grayscale">Градации серого на сером фоне </string>
     <string name="color_mode_grayscale_dark">Градации серого на темносером фоне</string>
+    <string name="color_mode_white_on_blue">Белый на синем фоне</string>
 
     <string name="msg_error">Ошибка</string>
     <string name="msg_warning">Предупреждение</string>

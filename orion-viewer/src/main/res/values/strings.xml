@@ -81,5 +81,7 @@
     <string name="color_mode_grayscale_light">Grayscale on greyish background</string>
     <string name="color_mode_grayscale">Grayscale on gray background</string>
     <string name="color_mode_grayscale_dark">Grayscale on dark gray background</string>
+    <string name="color_mode_yellow_on_dark">Yellow on black background</string>
+    <string name="color_mode_white_on_blue">White on blue background</string>
     <string name="select_color_mode">Select color mode to switch</string>
 </resources>

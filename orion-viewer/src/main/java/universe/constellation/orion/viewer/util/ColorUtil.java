@@ -8,36 +8,51 @@ import android.graphics.ColorMatrix;
  */
 public class ColorUtil {
     private static final float[][] COLOR_MATRICES = {
-            null, /* COLOR_MODE_NORMAL */
+            /* COLOR_MODE_NORMAL */
+            null,
+
+            /* COLOR_MODE_INVERT */
             {
-                    -1.0f, 0.0f, 0.0f, 1.0f, 1.0f, /* COLOR_MODE_INVERT */
+                    -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
                     0.0f, -1.0f, 0.0f, 1.0f, 1.0f,
                     0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
                     0.0f, 0.0f, 0.0f, 1.0f, 0.0f},
 
+            /* COLOR_MODE_BLACK_ON_YELLOWISH */
             {
-                    0.94f, 0.02f, 0.02f, 0.0f, 0.0f, /* COLOR_MODE_BLACK_ON_YELLOWISH */
+                    0.94f, 0.02f, 0.02f, 0.0f, 0.0f,
                     0.02f, 0.86f, 0.02f, 0.0f, 0.0f,
                     0.02f, 0.02f, 0.74f, 0.0f, 0.0f,
-                    0.0f, 0.0f, 0.0f, 1.0f, 0.0f},
+                    0.00f, 0.00f, 0.00f, 1.0f, 0.0f},
 
+            /* COLOR_MODE_BLACK_ON_GREYISH */
             {
-                    0.27f, 0.54f, 0.09f, 0.0f, 0.0f, /* COLOR_MODE_BLACK_ON_GREYISH */
                     0.27f, 0.54f, 0.09f, 0.0f, 0.0f,
                     0.27f, 0.54f, 0.09f, 0.0f, 0.0f,
-                    0.0f, 0.0f, 0.0f, 1.0f, 0.0f},
+                    0.27f, 0.54f, 0.09f, 0.0f, 0.0f,
+                    0.00f, 0.00f, 0.00f, 1.0f, 0.0f},
 
+            /* COLOR_MODE_BLACK_ON_LIGHT_GRAY */
             {
-                    0.215f, 0.45f, 0.08f, 0.0f, 0.0f, /* COLOR_MODE_BLACK_ON_LIGHT_GRAY */
                     0.215f, 0.45f, 0.08f, 0.0f, 0.0f,
                     0.215f, 0.45f, 0.08f, 0.0f, 0.0f,
-                    0.0f, 0.0f, 0.0f, 1.0f, 0.0f },
+                    0.215f, 0.45f, 0.08f, 0.0f, 0.0f,
+                    0.000f, 0.00f, 0.00f, 1.0f, 0.0f},
 
+            /* COLOR_MODE_BLACK_ON_GRAY */
             {
-                    0.15f, 0.3f, 0.05f, 0.0f, 0.0f, /* COLOR_MODE_BLACK_ON_GRAY */
-                    0.15f, 0.3f, 0.05f, 0.0f, 0.0f,
-                    0.15f, 0.3f, 0.05f, 0.0f, 0.0f,
-                    0.0f, 0.0f, 0.0f, 1.0f, 0.0f},
+                    0.15f, 0.30f, 0.05f, 0.0f, 0.0f,
+                    0.15f, 0.30f, 0.05f, 0.0f, 0.0f,
+                    0.15f, 0.30f, 0.05f, 0.0f, 0.0f,
+                    0.00f, 0.00f, 0.00f, 1.0f, 0.0f
+            },
+
+            /* COLOR_WHITE_ON_BLUE */
+            {
+                    -0.94f, -0.02f, -0.02f, 1.0f, 1.0f,
+                    -0.02f, -0.86f, -0.02f, 1.0f, 1.0f,
+                    -0.02f, -0.02f, -0.74f, 1.0f, 1.0f,
+                    0.00f, 0.00f, 0.00f, 1.0f, 0.0f},
     };
 
     public static float[] getColorMode(String type) {
@@ -52,9 +67,13 @@ public class ColorUtil {
             index = 3;
         } else if ("CM_GRAYSCALE".equals(type)) {
             index = 4;
-        }  else if ("CM_GRAYSCALE_DARK".equals(type)) {
+        } else if ("CM_GRAYSCALE_DARK".equals(type)) {
             index = 5;
-        }
+        } else if ("CM_WHITE_ON_BLUE".equals(type)) {
+            index = 6;
+        }/* else if ("CM_YELLOW_ON_BLACK".equals(type)) {
+            index = 7;
+        }*/
 
         return COLOR_MATRICES[index];
     }
@@ -65,10 +84,10 @@ public class ColorUtil {
         int b = Color.blue(color);
         int a = Color.alpha(color);
 
-        int [] array = new int [4];
+        int[] array = new int[4];
         float[] transformation = matrix.getArray();
         for (int i = 0; i < array.length; i++) {
-            int shift = i*5;
+            int shift = i * 5;
             array[i] = (int) (r * transformation[shift + 0] + g * transformation[shift + 1] + b * transformation[shift + 2] + a * transformation[shift + 3] + transformation[shift + 4]);
         }
         return Color.argb(array[3], array[0], array[1], array[2]);
