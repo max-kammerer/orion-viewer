@@ -1,7 +1,7 @@
 /*
  * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
  *
- * Copyright (C) 2011-2013  Michael Bogdanov & Co
+ * Copyright (C) 2011-2017 Michael Bogdanov & Co
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,14 +40,29 @@ class OrionListPreference @JvmOverloads constructor(context: Context, attrs: Att
     }
 
     override fun onSetInitialValue(restoreValue: Boolean, defaultValue: Any?) {
-        super.onSetInitialValue(if (isCurrentBookOption) true else restoreValue, defaultValue)
+        orionState.onSetInitialValue = true
+        try {
+            super.onSetInitialValue(if (isCurrentBookOption) true else restoreValue, defaultValue)
+        } finally {
+            orionState.onSetInitialValue = false
+        }
     }
 
     override fun persistString(value: String): Boolean {
+        persistValue(value)
+        return isCurrentBookOption || super.persistString(value)
+    }
+
+    override fun persistInt(value: Int): Boolean {
+        persistValue(value.toString())
+        return isCurrentBookOption || super.persistInt(value)
+    }
+
+    override fun getPersistedInt(defaultReturnValue: Int): Int {
         if (isCurrentBookOption) {
-            return OrionPreferenceUtil.persistValue(this, value)
+            return OrionPreferenceUtil.getPersistedInt(this, defaultReturnValue)
         } else {
-            return super.persistString(value)
+            return super.getPersistedInt(defaultReturnValue)
         }
     }
 

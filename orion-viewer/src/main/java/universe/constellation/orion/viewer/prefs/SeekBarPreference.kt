@@ -1,3 +1,22 @@
+/*
+ * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
+ *
+ * Copyright (C) 2011-2017 Michael Bogdanov & Co
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package universe.constellation.orion.viewer.prefs
 
 
@@ -89,26 +108,6 @@ class SeekBarPreference @JvmOverloads constructor(context: Context, attrs: Attri
         return String.format(summary, value)
     }
 
-    override fun onSetInitialValue(restoreValue: Boolean, defaultValue: Any?) {
-        super.onSetInitialValue(if (isCurrentBookOption) true else restoreValue, defaultValue)
-    }
-
-    override fun persistInt(value: Int): Boolean {
-        if (isCurrentBookOption) {
-            return OrionPreferenceUtil.persistValue(this, "" + value)
-        } else {
-            return super.persistInt(value)
-        }
-    }
-
-    override fun getPersistedInt(defaultReturnValue: Int): Int {
-        if (isCurrentBookOption) {
-            return OrionPreferenceUtil.getPersistedInt(this, defaultReturnValue)
-        } else {
-            return super.getPersistedInt(defaultReturnValue)
-        }
-    }
-
     override fun onProgressChanged(seek: SeekBar, value: Int, fromTouch: Boolean) {
         // Update current value
         mCurrentValue = value + minValue
@@ -122,6 +121,41 @@ class SeekBarPreference @JvmOverloads constructor(context: Context, attrs: Attri
 
     override fun onStopTrackingTouch(seek: SeekBar) {
         // Not used
+    }
+
+    override fun onSetInitialValue(restoreValue: Boolean, defaultValue: Any?) {
+        orionState.onSetInitialValue = true
+        try {
+            super.onSetInitialValue(if (isCurrentBookOption) true else restoreValue, defaultValue)
+        } finally {
+            orionState.onSetInitialValue = false
+        }
+    }
+
+    override fun persistString(value: String): Boolean {
+        persistValue(value)
+        return isCurrentBookOption || super.persistString(value)
+    }
+
+    override fun persistInt(value: Int): Boolean {
+        persistValue(value.toString())
+        return isCurrentBookOption || super.persistInt(value)
+    }
+
+    override fun getPersistedInt(defaultReturnValue: Int): Int {
+        if (isCurrentBookOption) {
+            return OrionPreferenceUtil.getPersistedInt(this, defaultReturnValue)
+        } else {
+            return super.getPersistedInt(defaultReturnValue)
+        }
+    }
+
+    override fun getPersistedString(defaultReturnValue: String?): String? {
+        if (isCurrentBookOption) {
+            return OrionPreferenceUtil.getPersistedString(this, defaultReturnValue)
+        } else {
+            return super.getPersistedString(defaultReturnValue)
+        }
     }
 
     companion object {

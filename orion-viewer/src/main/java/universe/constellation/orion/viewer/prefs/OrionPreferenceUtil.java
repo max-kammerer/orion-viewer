@@ -34,18 +34,21 @@ import java.lang.reflect.Field;
 public class OrionPreferenceUtil {
 
     public static boolean persistValue(Preference pref, String value) {
-        OrionApplication appContext = (OrionApplication) pref.getContext().getApplicationContext();
-        LastPageInfo info = appContext.getCurrentBookParameters();
+        return persistValue((OrionApplication) pref.getContext().getApplicationContext(), pref.getKey(), value);
+    }
+
+    public static boolean persistValue(OrionApplication context, String key, String value) {
+        LastPageInfo info = context.getCurrentBookParameters();
         if (info != null) {
             try {
-                Field f = info.getClass().getDeclaredField(pref.getKey());
+                Field f = info.getClass().getDeclaredField(key);
                 Class clazz = f.getType();
                 Object resultValue = value;
                 if (int.class.equals(clazz)) {
                     resultValue = Integer.valueOf(value);
                 }
                 f.set(info, resultValue);
-                ((OrionApplication) appContext.getApplicationContext()).processBookOptionChange(pref.getKey(), resultValue);
+                ((OrionApplication) context.getApplicationContext()).processBookOptionChange(key, resultValue);
                 return true;
             } catch (Exception e) {
                 Common.d(e);

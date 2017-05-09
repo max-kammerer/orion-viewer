@@ -1,7 +1,7 @@
 /*
  * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
  *
- * Copyright (C) 2011-2013  Michael Bogdanov & Co
+ * Copyright (C) 2011-2017 Michael Bogdanov & Co
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,8 +31,7 @@ import universe.constellation.orion.viewer.R
 
 
 class OrionLayoutDialog @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-        DialogPreference(context, attrs), OrionBookPreference
-{
+        DialogPreference(context, attrs), OrionBookPreference {
 
     override val orionState = State()
 
@@ -52,7 +51,7 @@ class OrionLayoutDialog @JvmOverloads constructor(context: Context, attrs: Attri
 
     override fun onCreateDialogView(): View {
         val lv = ListView(context)
-        lv.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+        lv.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             this@OrionLayoutDialog.position = position
             onClick(dialog, DialogInterface.BUTTON_POSITIVE)
             dialog.dismiss()
@@ -69,14 +68,6 @@ class OrionLayoutDialog @JvmOverloads constructor(context: Context, attrs: Attri
         return a.getInt(index, 0)
     }
 
-    override fun onSetInitialValue(restorePersistedValue: Boolean, defaultValue: Any) {
-        if (isCurrentBookOption || restorePersistedValue) {
-            position = getPersistedInt(0)
-        } else {
-            position = defaultValue as Int
-        }
-    }
-
     override fun onBindDialogView(view: View) {
         (view as ListView).setItemChecked(position, true)
         super.onBindDialogView(view)
@@ -90,20 +81,27 @@ class OrionLayoutDialog @JvmOverloads constructor(context: Context, attrs: Attri
         }
     }
 
-    override fun persistInt(value: Int): Boolean {
-        if (isCurrentBookOption) {
-            return OrionPreferenceUtil.persistValue(this, "" + value)
-        } else {
-            return super.persistInt(value)
+    override fun onSetInitialValue(restoreValue: Boolean, defaultValue: Any?) {
+        orionState.onSetInitialValue = true
+        try {
+            if (isCurrentBookOption || restoreValue) {
+                position = getPersistedInt(0)
+            } else {
+                position = defaultValue as Int
+            }
+        } finally {
+            orionState.onSetInitialValue = false
         }
     }
 
     override fun persistString(value: String): Boolean {
-        if (isCurrentBookOption) {
-            return OrionPreferenceUtil.persistValue(this, value)
-        } else {
-            return super.persistString(value)
-        }
+        persistValue(value)
+        return isCurrentBookOption || super.persistString(value)
+    }
+
+    override fun persistInt(value: Int): Boolean {
+        persistValue(value.toString())
+        return isCurrentBookOption || super.persistInt(value)
     }
 
     override fun getPersistedInt(defaultReturnValue: Int): Int {
@@ -114,7 +112,6 @@ class OrionLayoutDialog @JvmOverloads constructor(context: Context, attrs: Attri
         }
     }
 
-
     override fun getPersistedString(defaultReturnValue: String?): String? {
         if (isCurrentBookOption) {
             return OrionPreferenceUtil.getPersistedString(this, defaultReturnValue)
@@ -123,20 +120,17 @@ class OrionLayoutDialog @JvmOverloads constructor(context: Context, attrs: Attri
         }
     }
 
-    inner class LayoutAdapter(context: Context, res: Int, textViewResourceId: Int, objects: List<*>) :
+    class LayoutAdapter(context: Context, res: Int, textViewResourceId: Int, objects: List<*>) :
             ArrayAdapter<Any>(context, res, textViewResourceId, objects) {
 
         private val images = intArrayOf(R.drawable.navigation1, R.drawable.navigation2, R.drawable.navigation3)
 
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            var convertView = convertView
-            convertView = super.getView(position, convertView, parent)
-            val view = convertView!!.findViewById(android.R.id.text1) as CheckedTextView
-            view.text = ""
-            val button = convertView.findViewById(R.id.ibutton) as ImageView
-            button.setImageResource(images[position])
-
-            return convertView
-        }
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View =
+                super.getView(position, convertView, parent).apply {
+                    val view = findViewById(android.R.id.text1) as CheckedTextView
+                    view.text = ""
+                    val button = findViewById(R.id.ibutton) as ImageView
+                    button.setImageResource(images[position])
+                }
     }
 }

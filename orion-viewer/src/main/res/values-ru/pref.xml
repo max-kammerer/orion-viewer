@@ -85,7 +85,7 @@
     <string name="pref_page_layout">@string/menu_navigation_text</string>
 
     <string name="pref_default_book_setting">Параметры по умолчанию для книги</string>
-    <string name="pref_default_book_setting_desc">Будут применяться при открытии новой книги. Для уже открытых используйте \'Настройки книги\'</string>
+    <string name="pref_default_book_setting_desc">Будут применены также и к открытой книге!</string>
     <string name="book_pref_title">Настройки для открытой книги</string>
     <string name="application_settings_title">Настройки приложения</string>
 

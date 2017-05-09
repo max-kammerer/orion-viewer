@@ -79,7 +79,6 @@
 
     <string name="application_settings_title">Impostazioni applicazione</string>
     <string name="pref_default_book_setting">Impostazioni predefinite libri</string>
-    <string name="pref_default_book_setting_desc">Saranno applicate solo a nuovi libri. Per quelli correnti, usare \'Impostazioni libro\'</string>
 
     <string name="book_pref_title">Impostazioni libro corrente</string>
 

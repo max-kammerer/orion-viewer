@@ -1,7 +1,7 @@
 /*
  * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
  *
- * Copyright (C) 2011-2013  Michael Bogdanov & Co
+ * Copyright (C) 2011-2017 Michael Bogdanov & Co
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,7 +87,7 @@ class OrionEditPreference @JvmOverloads constructor(context: Context, attrs: Att
     }
 
     private fun getIntegerOrNull(array: TypedArray, id: Int): Int? {
-        val UNDEFINED = -10000
+        val UNDEFINED = Int.MIN_VALUE
         val value = array.getInt(id, UNDEFINED)
         if (value == UNDEFINED) {
             return null
@@ -97,15 +97,22 @@ class OrionEditPreference @JvmOverloads constructor(context: Context, attrs: Att
     }
 
     override fun onSetInitialValue(restoreValue: Boolean, defaultValue: Any?) {
-        super.onSetInitialValue(if (isCurrentBookOption) true else restoreValue, defaultValue)
+        orionState.onSetInitialValue = true
+        try {
+            super.onSetInitialValue(if (isCurrentBookOption) true else restoreValue, defaultValue)
+        } finally {
+            orionState.onSetInitialValue = false
+        }
     }
 
     override fun persistString(value: String): Boolean {
-        if (isCurrentBookOption) {
-            return OrionPreferenceUtil.persistValue(this, value)
-        } else {
-            return super.persistString(value)
-        }
+        persistValue(value)
+        return isCurrentBookOption || super.persistString(value)
+    }
+
+    override fun persistInt(value: Int): Boolean {
+        persistValue(value.toString())
+        return isCurrentBookOption || super.persistInt(value)
     }
 
     override fun getPersistedInt(defaultReturnValue: Int): Int {
@@ -115,7 +122,6 @@ class OrionEditPreference @JvmOverloads constructor(context: Context, attrs: Att
             return super.getPersistedInt(defaultReturnValue)
         }
     }
-
 
     override fun getPersistedString(defaultReturnValue: String?): String? {
         if (isCurrentBookOption) {

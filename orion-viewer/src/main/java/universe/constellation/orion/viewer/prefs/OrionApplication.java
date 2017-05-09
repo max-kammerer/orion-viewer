@@ -209,6 +209,8 @@ public class OrionApplication extends Application {
                     controller.changeOrinatation((String) value);
                 } else if ("colorMode".equals(key)) {
                     controller.changeColorMode((String) value, true);
+                } else if ("zoom".equals(key)) {
+                    controller.changeZoom((Integer) value);
                 }
             }
         }

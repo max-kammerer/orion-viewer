@@ -79,7 +79,6 @@
 
     <string name="application_settings_title">Opciones de la aplicación</string>
     <string name="pref_default_book_setting">Opciones por defecto del libro</string>
-    <string name="pref_default_book_setting_desc">Se aplicará únicamente a los libros nuevos. Para el libro actual utilice \'Opciones de libro\'</string>
 
     <string name="book_pref_title">Opciones del libro actual</string>
 

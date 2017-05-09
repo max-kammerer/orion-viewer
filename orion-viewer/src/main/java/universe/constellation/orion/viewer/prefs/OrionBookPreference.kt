@@ -24,20 +24,21 @@ import universe.constellation.orion.viewer.LastPageInfo
 
 sealed class BookPreferenceKey(
         val prefKey: String,
-        val bookKey: String?
+        val bookKey: String
 ) {
-    object ZOOM: BookPreferenceKey("DEFAULT_ZOOM", null/*only in general properties*/)
-    object PAGE_LAYOUT: BookPreferenceKey("PAGE_LAYOUT", LastPageInfo::pageLayout.name)
-    object WALK_ORDER: BookPreferenceKey("WALK_ORDER", LastPageInfo::walkOrder.name)
-    object SCREEN_ORIENTATION: BookPreferenceKey("SCREEN_ORIENTATION", LastPageInfo::screenOrientation.name)
-    object COLOR_MODE: BookPreferenceKey("COLOR_MODE", LastPageInfo::colorMode.name)
-    object CONTRAST: BookPreferenceKey("DEFAULT_CONTRAST_2", LastPageInfo::contrast.name)
-    object THRESHOLD: BookPreferenceKey("THRESHOLD", LastPageInfo::threshold.name)
+    object ZOOM : BookPreferenceKey("DEFAULT_ZOOM", LastPageInfo::zoom.name)
+    object PAGE_LAYOUT : BookPreferenceKey("PAGE_LAYOUT", LastPageInfo::pageLayout.name)
+    object WALK_ORDER : BookPreferenceKey("WALK_ORDER", LastPageInfo::walkOrder.name)
+    object SCREEN_ORIENTATION : BookPreferenceKey("SCREEN_ORIENTATION", LastPageInfo::screenOrientation.name)
+    object COLOR_MODE : BookPreferenceKey("COLOR_MODE", LastPageInfo::colorMode.name)
+    object CONTRAST : BookPreferenceKey("DEFAULT_CONTRAST", LastPageInfo::contrast.name)
+    object THRESHOLD : BookPreferenceKey("THRESHOLD", LastPageInfo::threshold.name)
 }
 
 class State {
     var isCurrentBookOption: Boolean = false
     lateinit var bookPreferenceKey: BookPreferenceKey
+    var onSetInitialValue: Boolean = false
 }
 
 interface OrionBookPreference {
@@ -58,4 +59,12 @@ interface OrionBookPreference {
 
     val BookPreferenceKey.key
         get() = if (isCurrentBookOption) bookKey else prefKey
+
+    fun Preference.persistValue(value: String) {
+        if (!orionState.onSetInitialValue) {
+            OrionPreferenceUtil.persistValue(
+                    this.context.applicationContext as OrionApplication, orionKey.bookKey, value
+            )
+        }
+    }
 }

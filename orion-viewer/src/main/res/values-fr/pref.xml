@@ -86,7 +86,6 @@
 
     <string name="application_settings_title">Configuration</string>
     <string name="pref_default_book_setting">Réglages pour livre</string>
-    <string name="pref_default_book_setting_desc">Seulement pour nouveau livre. Pour livre déjà vu utiliser Options pour livre</string>
 
     <string name="book_pref_title">Options pour livre</string>
 

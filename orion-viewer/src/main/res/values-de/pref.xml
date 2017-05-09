@@ -44,7 +44,6 @@
     <string name="pref_enable_touch_move">Verschieben mittels Touchscreen aktivieren</string>
     <string name="pref_enable_move_on_pinch_zoom">Verschieben bei Zwei-Finger-Zoom zulassen</string>
     <string name="pref_default_book_setting">Standardeinstellungen</string>
-    <string name="pref_default_book_setting_desc">Gilt nur für neu geöffnete Dateien. Für das aktuelle Dokument sind die \'Dokumenteinstellungen\' zu verwenden.</string>
     <string name="pref_walk_order">Anzeigemodus</string>
     <string name="pref_page_layout">Seitenaufteilung</string>
     <string name="pref_bookDefaultZoom">Zoomen</string>
