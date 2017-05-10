@@ -42,7 +42,7 @@ ifdef MEMENTO
 APP_CFLAGS += -DMEMENTO -DMEMENTO_LEAKONLY
 APP_STL = gnustl_static
 endif
-APP_CFLAGS += -DTOFU_NOTO -DTOFU_CJK
+APP_CFLAGS += -DTOFU_NOTO -DTOFU_CJK -DTOFU_SIL
 # If the ndk is r8b then workaround bug by uncommenting the following line
 #NDK_TOOLCHAIN_VERSION=4.4.3
 
