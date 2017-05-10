@@ -1,7 +1,7 @@
 /*
  * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
  *
- * Copyright (C) 2011-2013  Michael Bogdanov & Co
+ * Copyright (C) 2011-2017 Michael Bogdanov & Co
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ class OrionBookPreferences : DSLPreferenceActivity() {
                         title = R.string.pref_bookDefaultZoom.stringRes
                         summary = R.string.pref_bookDefaultZoom.stringRes
                         dialogTitle = R.string.pref_bookDefaultZoom.stringRes
-                        setDefaultValue(0)
+                        setDefaultValue("0")
 
                         entries = R.array.default_zoom_option_desc.stringArray
                         entryValues = R.array.default_zoom_option.stringArray
@@ -111,15 +111,23 @@ class OrionBookPreferences : DSLPreferenceActivity() {
                     entryValues = R.array.color_mode.stringArray
                 }
 
-                preference<SeekBarPreference> {
+                preference<OrionListPreference> {
                     isCurrentBookOption = !isGeneral
                     orionKey = CONTRAST
                     title = R.string.pref_book_contrast.stringRes
                     summary = R.string.pref_book_contrast_desc.stringRes
 
-                    minValue = 1
-                    maxValue = 200
-                    defaultSeekValue = 100
+                    val values = Array(17) { index ->
+                        when {
+                            index <= 5 -> 10 + index * 15
+                            index <= 12 -> 100 + (index - 6) * 50
+                            else -> 500 + (index - 12) * 100
+                        }.toString()
+                    }
+
+                    entries = values
+                    entryValues = values
+                    setDefaultValue("100")
                 }
 
                 if (!isGeneral) {

@@ -48,14 +48,13 @@ JNICALL Java_universe_constellation_orion_viewer_djvu_DjvuDocument_setThreshold(
 
 #endif
 
-void orion_setContrast(JNIEnv * env, jobject thiz, jint contrast1)
-{
-    LOGI("Set contrast : %i",contrast1);
-    contrast=contrast1;
-    float kgamma=100.0f/contrast1;
+void orion_setContrast(JNIEnv *env, jobject thiz, jint contrast1) {
+    LOGI("Set contrast : %i", contrast1);
+    contrast = contrast1;
+    float kgamma = contrast1 / 100.0f;
     int i;
-    for(i=0;i<256;i++) {
-        orion_gamma[i]=pow(i/255.0f,kgamma)*255;
+    for (i = 0; i < 256; i++) {
+        orion_gamma[i] = pow(i / 255.0f, kgamma) * 255;
     }
 }
 

@@ -1,7 +1,7 @@
 /*
  * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
  *
- * Copyright (C) 2011-2013  Michael Bogdanov & Co
+ * Copyright (C) 2011-2017 Michael Bogdanov & Co
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ import java.lang.reflect.Modifier;
  */
 public class LastPageInfo implements Serializable {
 
-    public static final int CURRENT_VERSION = 4;
+    public static final int CURRENT_VERSION = 5;
 
     public int screenWidth;
     public int screenHeight;
@@ -292,13 +292,13 @@ public class LastPageInfo implements Serializable {
             }
         }
 
-//        if (localVersion < 5) {
-//            if ("newOffsetX".equals(name) || "newOffsetY".equals(name)) {
-//                System.out.println("Property " + name + " upgraded");
-//                localVersion = 5;
-//                value = 0;
-//            }
-//        }
+        if (localVersion < 5) {
+            if ("contrast".equals(name)) {
+                System.out.println("Property " + name + " upgraded");
+                localVersion = 5;
+                value = 100;
+            }
+        }
 
         return value;
     }
