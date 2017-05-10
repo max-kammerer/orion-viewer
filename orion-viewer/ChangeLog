@@ -1,3 +1,9 @@
+===== 0.73.0 (May 13, 2017) =====
+* Inverted contrast scale
+* Added new default book options
+* Apply default book options to current opened book on change
+* Added new color scheme
+
 ===== 0.72.0 (Apr 30, 2017) =====
 * Mupdf updated to 1.11 + removed additional fonts
 * Fixed permission checking in document view for Android 6.0+
