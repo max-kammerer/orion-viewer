@@ -258,7 +258,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
             doc = FileUtil.openFile(filePath);
 
-            LayoutStrategy layoutStrategy = new SimpleLayoutStrategy(doc, doc.getPageCount());
+            LayoutStrategy layoutStrategy = SimpleLayoutStrategy.create(doc);
 
             RenderThread renderer = new RenderThread(this, layoutStrategy, doc, fullScene);
 

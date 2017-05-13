@@ -50,7 +50,7 @@ class DocumentWithCaching(val doc: DocumentWrapper) : DocumentWrapper by doc {
         cache.evictAll()
     }
 
-    override fun getPageInfo(pageNum: Int, cropMode: Int): PageInfo? {
+    override fun getPageInfo(pageNum: Int, cropMode: Int): PageInfo {
         synchronized(doc) {
             var pageInfo = cache.get(pageNum)
             if (pageInfo == null) {
@@ -58,7 +58,7 @@ class DocumentWithCaching(val doc: DocumentWrapper) : DocumentWrapper by doc {
                 cache.put(pageNum, pageInfo)
             }
 
-            if (cropMode != 0 && (pageInfo?.autoCrop == null)) {
+            if (cropMode != 0 && (pageInfo.autoCrop == null)) {
                 timing("Full auto crop") {
                     fillAutoCropInfo(pageInfo!!, cropMode)
                 }
