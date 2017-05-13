@@ -39,7 +39,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     private int HOR_OVERLAP = 3;
 
-    private DocumentWrapper doc;
+    private PageInfoProvider pageInfoProvider;
 
     private final int pageCount;
 
@@ -53,13 +53,18 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
 
     private int layout;
 
-    public SimpleLayoutStrategy(DocumentWrapper doc, int pageCount) {
-        this.doc = doc;
+    private SimpleLayoutStrategy(PageInfoProvider pageInfoProvider, int pageCount) {
+        this.pageInfoProvider = pageInfoProvider;
         this.pageCount = pageCount;
-        //TODO: ugly hack
+    }
+
+    public static SimpleLayoutStrategy create(DocumentWrapper doc) {
+        SimpleLayoutStrategy simpleLayoutStrategy = new SimpleLayoutStrategy(doc, doc.getPageCount());
         if (doc instanceof DocumentWithCaching) {
-            ((DocumentWithCaching) doc).strategy = this;
+            //TODO: ugly hack
+            ((DocumentWithCaching) doc).strategy = simpleLayoutStrategy;
         }
+        return simpleLayoutStrategy;
     }
 
     public void nextPage(LayoutPosition info) {
@@ -111,7 +116,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         }
 
         //original width and height without cropped margins
-        reset(info, forward, doc.getPageInfo(pageNum, cropMargins.cropMode), cropMargins.cropMode, zoom, true);
+        reset(info, forward, pageInfoProvider.getPageInfo(pageNum, cropMargins.cropMode), cropMargins.cropMode, zoom, true);
     }
 
     @Override
