@@ -23,6 +23,8 @@ import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceScreen
 import universe.constellation.orion.viewer.R
+import universe.constellation.orion.viewer.R.array.*
+import universe.constellation.orion.viewer.R.string.*
 import universe.constellation.orion.viewer.android.DSLPreferenceActivity
 import universe.constellation.orion.viewer.prefs.BookPreferenceKey.*
 
@@ -43,79 +45,79 @@ class OrionBookPreferences : DSLPreferenceActivity() {
     companion object {
         fun DSLPreferenceActivity.bookPreferences(preferenceScreen: PreferenceScreen, isGeneral: Boolean) {
             preferenceScreen.category {
-                title = if (!isGeneral) R.string.book_pref_title.stringRes else R.string.pref_default_book_setting.stringRes
+                title = (if (!isGeneral) book_pref_title else pref_default_book_setting).stringRes
 
                 preference<OrionListPreference> {
                     isCurrentBookOption = !isGeneral
                     orionKey = SCREEN_ORIENTATION
-                    title = R.string.pref_screen_orientation.stringRes
-                    summary = R.string.pref_book_screen_orientation.stringRes
-                    dialogTitle = R.string.pref_screen_orientation.stringRes
+                    title = pref_screen_orientation.stringRes
+                    summary = pref_book_screen_orientation.stringRes
+                    dialogTitle = pref_screen_orientation.stringRes
                     setDefaultValue("DEFAULT")
 
                     val isSDK9 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD
-                    (if (isSDK9) R.array.screen_orientation_full_desc else R.array.screen_orientation_desc).stringArray.let {
+                    (if (isSDK9) screen_orientation_full_desc else screen_orientation_desc).stringArray.let {
                         if (!isGeneral) {
-                            it[0] = R.string.orientation_default_rotation.stringRes
+                            it[0] = orientation_default_rotation.stringRes
                         }
                         entries = it
                     }
-                    entryValues = (if (isSDK9) R.array.screen_orientation_full else R.array.screen_orientation).stringArray
+                    entryValues = (if (isSDK9) screen_orientation_full else screen_orientation).stringArray
                 }
 
                 if (isGeneral) {
                     preference<OrionListPreference> {
                         isCurrentBookOption = !isGeneral
                         orionKey = ZOOM
-                        title = R.string.pref_bookDefaultZoom.stringRes
-                        summary = R.string.pref_bookDefaultZoom.stringRes
-                        dialogTitle = R.string.pref_bookDefaultZoom.stringRes
+                        title = pref_bookDefaultZoom.stringRes
+                        summary = pref_bookDefaultZoom.stringRes
+                        dialogTitle = pref_bookDefaultZoom.stringRes
                         setDefaultValue("0")
 
-                        entries = R.array.default_zoom_option_desc.stringArray
-                        entryValues = R.array.default_zoom_option.stringArray
+                        entries = default_zoom_option_desc.stringArray
+                        entryValues = default_zoom_option.stringArray
                     }
                 }
 
                 preference<OrionLayoutDialog> {
                     isCurrentBookOption = !isGeneral
                     orionKey = PAGE_LAYOUT
-                    title = R.string.pref_page_layout.stringRes
-                    summary = R.string.pref_page_layout.stringRes
-                    dialogTitle = R.string.pref_page_layout.stringRes
+                    title = pref_page_layout.stringRes
+                    summary = pref_page_layout.stringRes
+                    dialogTitle = pref_page_layout.stringRes
                     setDefaultValue(0)
                 }
 
                 preference<OrionListPreference> {
                     isCurrentBookOption = !isGeneral
                     orionKey = WALK_ORDER
-                    title = R.string.pref_walk_order.stringRes
-                    summary = R.string.pref_walk_order.stringRes
-                    dialogTitle = R.string.pref_walk_order.stringRes
-                    setDefaultValue(R.string.ABCD.stringRes)
+                    title = pref_walk_order.stringRes
+                    summary = pref_walk_order.stringRes
+                    dialogTitle = pref_walk_order.stringRes
+                    setDefaultValue(ABCD.stringRes)
                     setDialogIcon(R.drawable.walk_order)
 
-                    entries = R.array.walk_orders_desc.stringArray
-                    entryValues = R.array.walk_orders.stringArray
+                    entries = walk_orders_desc.stringArray
+                    entryValues = walk_orders.stringArray
                 }
 
                 preference<OrionListPreference> {
                     isCurrentBookOption = !isGeneral
                     orionKey = COLOR_MODE
-                    title = R.string.pref_color_mode.stringRes
-                    summary = R.string.pref_color_mode.stringRes
-                    dialogTitle = R.string.pref_color_mode.stringRes
+                    title = pref_color_mode.stringRes
+                    summary = pref_color_mode.stringRes
+                    dialogTitle = pref_color_mode.stringRes
                     setDefaultValue("CM_NORMAL")
 
-                    entries = R.array.color_mode_desc.stringArray
-                    entryValues = R.array.color_mode.stringArray
+                    entries = color_mode_desc.stringArray
+                    entryValues = color_mode.stringArray
                 }
 
                 preference<OrionListPreference> {
                     isCurrentBookOption = !isGeneral
                     orionKey = CONTRAST
-                    title = R.string.pref_book_contrast.stringRes
-                    summary = R.string.pref_book_contrast_desc.stringRes
+                    title = pref_book_contrast.stringRes
+                    summary = pref_book_contrast_desc.stringRes
 
                     val values = Array(17) { index ->
                         when {
@@ -134,8 +136,8 @@ class OrionBookPreferences : DSLPreferenceActivity() {
                     preference<SeekBarPreference> {
                         isCurrentBookOption = !isGeneral
                         orionKey = THRESHOLD
-                        title = R.string.pref_book_threshold.stringRes
-                        summary = R.string.pref_book_threshold_desc.stringRes
+                        title = pref_book_threshold.stringRes
+                        summary = pref_book_threshold_desc.stringRes
 
                         minValue = 1
                         maxValue = 255
