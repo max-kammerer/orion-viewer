@@ -25,14 +25,11 @@ import android.graphics.Rect
 import android.support.v4.util.LruCache
 import universe.constellation.orion.viewer.*
 
-/**
- * User: mike
- * Date: 15.10.11
- * Time: 9:53
- */
+private const val WIDTH = 600
+private const val HEIGHT = 800
 
-const private val WIDTH = 600
-const private val HEIGHT = 800
+private const val THRESHOLD = 255 - 10
+private const val VOTE_THRESHOLD = 3
 
 class DocumentWithCaching(val doc: DocumentWrapper) : DocumentWrapper by doc {
 
@@ -43,7 +40,7 @@ class DocumentWithCaching(val doc: DocumentWrapper) : DocumentWrapper by doc {
     }
 
     //TODO: ugly hack
-    lateinit var strategy: SimpleLayoutStrategy;
+    lateinit var strategy: SimpleLayoutStrategy
 
     private val bitmapArray: IntArray by lazy {
         IntArray(WIDTH * HEIGHT)
@@ -63,7 +60,7 @@ class DocumentWithCaching(val doc: DocumentWrapper) : DocumentWrapper by doc {
 
             if (cropMode != 0 && (pageInfo?.autoCrop == null)) {
                 Common.d("Starting auto cropping")
-                timing("Auto crop takes ") {
+                timing("Full auto crop") {
                     fillAutoCropInfo(pageInfo!!, cropMode)
                 }
             }
@@ -101,16 +98,16 @@ class DocumentWithCaching(val doc: DocumentWrapper) : DocumentWrapper by doc {
         val newHeight = curPos.y.pageDimension
 
         Common.d("Page info for auto crop: $newWidth x $newHeight $zoomInDouble")
-        timing("Auto crop page rendering: ") {
+        timing("Auto crop page rendering") {
             val leftTopCorner = strategy.convertToPoint(curPos)
             doc.renderPage(curPos.pageNumber, bitmap, curPos.docZoom, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + newWidth, leftTopCorner.y + newHeight)
         }
 
-        timing("Auto crop data copy: ") {
+        timing("Auto crop data copy") {
             bitmap.getPixels(bitmapArray, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
         }
 
-        val margins = timing("Auto crop margins calculation: ") {
+        val margins = timing("Auto crop margins calculation") {
             findMargins(ArrayImage(newWidth, newHeight, bitmapArray))
         }
 
@@ -132,15 +129,12 @@ class DocumentWithCaching(val doc: DocumentWrapper) : DocumentWrapper by doc {
     }
 }
 
-inline fun <R> timing(m: String,l: () -> R): R {
-    val s = System.currentTimeMillis()
-    val result = l()
-    Common.d("$m = ${System.currentTimeMillis() - s} ms")
-    return result;
+inline fun <R> timing(message: String, l: () -> R): R {
+    val start = System.currentTimeMillis()
+    return l().also {
+        Common.d("$message  - ${System.currentTimeMillis() - start} ms")
+    }
 }
-
-inline fun THRESHOLD(): Int = 245 //255 - 10
-inline fun VOTE_THESHOLD(): Int = 3
 
 abstract class Image(val width: Int, val height: Int) {
 
@@ -163,8 +157,8 @@ class ArrayImage(width: Int, height: Int, @JvmField val source: IntArray): Image
 //TODO replace 5 with dp  
 fun pad(margins: AutoCropMargins, newWidth: Int, newHeight: Int): AutoCropMargins {
     return with(margins) {
-        val widthPadding = max((newWidth - left - right) / 100, 5);
-        val heightPadding = max((newHeight - top - bottom) / 100, 5);
+        val widthPadding = max((newWidth - left - right) / 100, 5)
+        val heightPadding = max((newHeight - top - bottom) / 100, 5)
 
         val left = max(0, left - widthPadding)
         val right = max(0, right - widthPadding)
@@ -176,11 +170,11 @@ fun pad(margins: AutoCropMargins, newWidth: Int, newHeight: Int): AutoCropMargin
 }
 
 fun findMargins(image: ArrayImage): AutoCropMargins {
-    timing("calc gradient") {
+    timing("Calc gradient") {
         calcGradient(image)
     }
 
-    return timing("find rectangle") {
+    return timing("Find rectangle") {
         findRectangle(image)
     }
 }
@@ -200,7 +194,7 @@ fun calcGradient(image: ArrayImage) {
             val gradient = 255 - (abs(curInGray - gray(source[cur + 1])) + abs(curInGray - gray(source[cur + stroke]))) / 2
             source[cur] = rgb(gradient, gradient, gradient)
         }
-        shift += stroke;
+        shift += stroke
     }
 
     shift = (height - 1) * stroke
@@ -210,6 +204,7 @@ fun calcGradient(image: ArrayImage) {
     }
 
     val w = width - 1
+    //TODO until
     for (h in 0..height - 1) {
         val cur = w + h * stroke
         source[cur] = source[cur - 1]
@@ -235,8 +230,8 @@ fun findRectangle(grImage: ArrayImage): AutoCropMargins {
             for (i in -1..1) {
                 for (j in -1..1) {
                     val index = w + i + (h + j) * stroke
-                    val value = red(source[index]);
-                    if (value <= THRESHOLD()) {
+                    val value = red(source[index])
+                    if (value <= THRESHOLD) {
                         votes++
                     }
                 }
@@ -278,7 +273,7 @@ fun findRectangle(grImage: ArrayImage): AutoCropMargins {
     for (h in 0..height - 1) {
         for (w in 0..width - 1) {
             val curIndex = w + h * stroke
-            if (alpha(source[curIndex]) <= 255 - VOTE_THESHOLD()) {
+            if (alpha(source[curIndex]) <= 255 - VOTE_THRESHOLD) {
                 left = min(left, w)
                 right = max(right, w)
 
@@ -310,7 +305,7 @@ fun findRectangle(grImage: ArrayImage): AutoCropMargins {
 }
 
 inline fun gray(color: Int): Int {
-    return (306 * red(color) + 601 * green(color) + 117 * blue(color))/1000;
+    return (306 * red(color) + 601 * green(color) + 117 * blue(color))/1000
 }
 
 inline fun alpha(color: Int): Int {
@@ -347,5 +342,5 @@ inline fun min(i1: Int, i2: Int): Int {
 }
 
 inline fun abs(i: Int): Int {
-    return if ((i >= 0)) i else -i
+    return if (i >= 0) i else -i
 }
