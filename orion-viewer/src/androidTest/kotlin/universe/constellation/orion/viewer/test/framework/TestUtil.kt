@@ -18,7 +18,7 @@ interface TestUtil {
 
     fun openTestBook(relativePath: String) : DocumentWrapper {
         val fileOnSdcard = extractFileFromTestData(relativePath)
-        return FileUtil.openFile(fileOnSdcard);
+        return FileUtil.openFile(fileOnSdcard)
     }
 
     fun extractFileFromTestData(fileName: String): File {
@@ -28,7 +28,7 @@ interface TestUtil {
         }
         try {
             outFile.parentFile!!.mkdirs()
-            outFile.createNewFile();
+            outFile.createNewFile()
         } catch (e: IOException) {
             throw RuntimeException("Couldn't create new file " + outFile.absolutePath, e)
         }

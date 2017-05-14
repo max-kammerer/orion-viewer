@@ -5,11 +5,7 @@ import universe.constellation.orion.viewer.selection.SelectionAutomata
 import universe.constellation.orion.viewer.test.framework.BaseTest
 import universe.constellation.orion.viewer.test.framework.TestUtil
 
-/**
- * Created by mike on 25.10.15.
- */
-
-class SelectionTest() : BaseTest() {
+class SelectionTest : BaseTest() {
 
     fun testSicp() {
         val book = openTestBook(TestUtil.SICP)
