@@ -103,6 +103,8 @@ public class GlobalOptions implements Serializable {
 
     public final static String PAGE_LAYOUT = "PAGE_LAYOUT";
 
+    public final static String COLOR_MODE = "COLOR_MODE";
+
     public final static String SHOW_TAP_HELP = "SHOW_TAP_HELP";
 
     public final static String SCREEN_BACKLIGHT_TIMEOUT = "SCREEN_BACKLIGHT_TIMEOUT";
@@ -422,6 +424,10 @@ public class GlobalOptions implements Serializable {
 
     public int getPageLayout() {
         return getInt(PAGE_LAYOUT, 0);
+    }
+
+    public String getColorMode() {
+        return getStringProperty(COLOR_MODE, "CM_NORMAL");
     }
 
     public int getScreenBacklightTimeout(int defaultValue) {

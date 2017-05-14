@@ -30,7 +30,7 @@ sealed class BookPreferenceKey(
     object PAGE_LAYOUT : BookPreferenceKey(GlobalOptions.PAGE_LAYOUT, LastPageInfo::pageLayout.name)
     object WALK_ORDER : BookPreferenceKey(GlobalOptions.WALK_ORDER, LastPageInfo::walkOrder.name)
     object SCREEN_ORIENTATION : BookPreferenceKey(GlobalOptions.SCREEN_ORIENTATION, LastPageInfo::screenOrientation.name)
-    object COLOR_MODE : BookPreferenceKey("COLOR_MODE", LastPageInfo::colorMode.name)
+    object COLOR_MODE : BookPreferenceKey(GlobalOptions.COLOR_MODE, LastPageInfo::colorMode.name)
     object CONTRAST : BookPreferenceKey(GlobalOptions.DEFAULT_CONTRAST, LastPageInfo::contrast.name)
     object THRESHOLD : BookPreferenceKey("THRESHOLD", LastPageInfo::threshold.name)
 }
