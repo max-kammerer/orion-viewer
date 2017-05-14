@@ -33,10 +33,6 @@ import java.lang.reflect.Field;
  */
 public class OrionPreferenceUtil {
 
-    public static boolean persistValue(Preference pref, String value) {
-        return persistValue((OrionApplication) pref.getContext().getApplicationContext(), pref.getKey(), value);
-    }
-
     public static boolean persistValue(OrionApplication context, String key, String value) {
         LastPageInfo info = context.getCurrentBookParameters();
         if (info != null) {
@@ -51,7 +47,7 @@ public class OrionPreferenceUtil {
                 ((OrionApplication) context.getApplicationContext()).processBookOptionChange(key, resultValue);
                 return true;
             } catch (Exception e) {
-                Common.d(e);
+                Common.d("Error on persisting value", e);
             }
         }
         return false;
@@ -63,10 +59,9 @@ public class OrionPreferenceUtil {
         if (info != null) {
             try {
                 Field f = info.getClass().getDeclaredField(pref.getKey());
-                Integer value = (Integer) f.get(info);
-                return value;
+                return (Integer) f.get(info);
             } catch (Exception e) {
-                Common.d(e);
+                Common.d("Error on read value", e);
             }
         }
         return defaultReturnValue;
@@ -77,10 +72,9 @@ public class OrionPreferenceUtil {
         if (info != null) {
             try {
                 Field f = info.getClass().getDeclaredField(pref.getKey());
-                String value = f.get(info).toString();
-                return value;
+                return f.get(info).toString();
             } catch (Exception e) {
-                Common.d(e);
+                Common.d("Error on read value", e);
             }
         }
         return defaultReturnValue;

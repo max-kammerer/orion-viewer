@@ -97,7 +97,7 @@ public class LastPageInfo implements Serializable {
         try {
             successfull = lastPageInfo.load(activity, fileData);
         } catch (Exception e) {
-            Common.d(e);
+            Common.d("Error on restore book options", e);
         }
 
         if (!successfull) {
