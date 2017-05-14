@@ -6,7 +6,7 @@ import android.support.annotation.ColorInt
 
 object ColorUtil {
 
-    private val COLOR_MATRICES: Map<String, FloatArray?> = mapOf(
+    private val COLOR_MATRICES: Map<String, FloatArray?> = linkedMapOf(
             "CM_NORMAL" to null,
 
             "CM_INVERTED" to floatArrayOf(

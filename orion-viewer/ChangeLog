@@ -1,3 +1,6 @@
+===== 0.73.2 (May 15, 2017) =====
+* Fixed compatibility with android 2.1-2.2
+
 ===== 0.73.1 (May 14, 2017) =====
 * Fixed crash or reading default contrast option
 
