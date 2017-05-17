@@ -41,7 +41,7 @@ val Int.toMode: CropMode
         }
     }
 
-fun CropMode.isManualBegin() = this == CropMode.MANUAL || this == CropMode.MANUAL_AUTO
+fun CropMode.isManualFirst() = this == CropMode.MANUAL || this == CropMode.MANUAL_AUTO
 fun CropMode.hasManual() = this == CropMode.MANUAL || this == CropMode.MANUAL_AUTO || this == CropMode.AUTO_MANUAL
-fun CropMode.isAutoBegin() = this == CropMode.AUTO || this == CropMode.AUTO_MANUAL
+fun CropMode.isAutoFirst() = this == CropMode.AUTO || this == CropMode.AUTO_MANUAL
 fun CropMode.hasAuto() = this == CropMode.AUTO || this == CropMode.AUTO_MANUAL || this == CropMode.MANUAL_AUTO

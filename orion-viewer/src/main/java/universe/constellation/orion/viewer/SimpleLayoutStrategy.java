@@ -111,11 +111,11 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         }
 
         //original width and height without cropped margins
-        reset(info, forward, doc.getPageInfo(pageNum, cropMargins.cropMode), cropMargins.cropMode, zoom);
+        reset(info, forward, doc.getPageInfo(pageNum, cropMargins.cropMode), cropMargins.cropMode, zoom, true);
     }
 
     @Override
-    public void reset(LayoutPosition info, boolean forward, PageInfo pageInfo, int cropMode, int zoom) {
+    public void reset(LayoutPosition info, boolean forward, PageInfo pageInfo, int cropMode, int zoom, boolean doCentering) {
         info.rotation = rotation;
         info.pageNumber = pageInfo.pageNum0;
 
@@ -161,8 +161,7 @@ public class SimpleLayoutStrategy implements LayoutStrategy {
         info.y.overlap = info.y.screenDimension * VERT_OVERLAP / 100;
         //System.out.println("overlap " + hOverlap + " " + vOverlap);
 
-        walker.reset(info, forward, autoCrop == null ||
-                CropMode.AUTO_MANUAL == mode);
+        walker.reset(info, forward, doCentering);
     }
 
     private void appendManualMargins(LayoutPosition info, int leftMargin, int rightMargin) {

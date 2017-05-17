@@ -59,7 +59,6 @@ class DocumentWithCaching(val doc: DocumentWrapper) : DocumentWrapper by doc {
             }
 
             if (cropMode != 0 && (pageInfo?.autoCrop == null)) {
-                Common.d("Starting auto cropping")
                 timing("Full auto crop") {
                     fillAutoCropInfo(pageInfo!!, cropMode)
                 }
@@ -78,36 +77,39 @@ class DocumentWithCaching(val doc: DocumentWrapper) : DocumentWrapper by doc {
 
         val curPos = LayoutPosition()
 
-        //Crop margins to calc new width and height
-        val calcCropMode = if (cropMode.toMode.isManualBegin()) CropMode.MANUAL else CropMode.NO_MODE
-        Common.d("First reset for: ${page.width} x ${page.height}, $calcCropMode")
-        strategy.reset(curPos, true, page, calcCropMode.cropMode, 10000)
+        //Crop manual/no mode margins to calc new width and height
+        val firstCropMode = if (cropMode.toMode.isManualFirst()) CropMode.MANUAL else CropMode.NO_MODE
+        Common.d("Calculating first reset with page = $page with cropMode = $firstCropMode")
+        strategy.reset(curPos, true, page, firstCropMode.cropMode, 10000, false)
 
-        val pageWidth = curPos.x.pageDimension
-        val pageHeight = curPos.y.pageDimension
-        Common.d("Page info after first reset: $pageWidth x $pageHeight")
-        if (pageWidth == 0 || pageHeight == 0) {
+        val pageWidth1R = curPos.x.pageDimension
+        val pageHeight1R = curPos.y.pageDimension
+        Common.d("Cur pos 1R = $curPos")
+        Common.d("New dimension: $pageWidth1R x $pageHeight1R")
+
+        if (pageWidth1R == 0 || pageHeight1R == 0) {
             page.autoCrop = null
             return
         }
 
-        //then try to auto crop
-        val zoomInDouble = Math.floor(Math.sqrt(1.0 * WIDTH * HEIGHT / (pageWidth * pageHeight)) * 10000) / 10000
-        strategy.reset(curPos, true, page, calcCropMode.cropMode, (zoomInDouble * 10000).toInt())
+        //zoom page to fit crop screen
+        val zoomInDouble = Math.floor(Math.sqrt(1.0 * WIDTH * HEIGHT / (pageWidth1R * pageHeight1R)) * 10000) / 10000
+        strategy.reset(curPos, true, page, firstCropMode.cropMode, (zoomInDouble * 10000).toInt(), false)
         val newWidth = curPos.x.pageDimension
         val newHeight = curPos.y.pageDimension
 
-        Common.d("Page info for auto crop: $newWidth x $newHeight $zoomInDouble")
-        timing("Auto crop page rendering") {
+        Common.d("Cur pos for crop screen: $newWidth x $newHeight $zoomInDouble")
+
+        timing("Render page for auto crop processing") {
             val leftTopCorner = strategy.convertToPoint(curPos)
             doc.renderPage(curPos.pageNumber, bitmap, curPos.docZoom, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + newWidth, leftTopCorner.y + newHeight)
         }
 
-        timing("Auto crop data copy") {
+        timing("Extract pixels from bitmap") {
             bitmap.getPixels(bitmapArray, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
         }
 
-        val margins = timing("Auto crop margins calculation") {
+        val margins = timing("Calculate margins") {
             findMargins(ArrayImage(newWidth, newHeight, bitmapArray))
         }
 
@@ -130,9 +132,10 @@ class DocumentWithCaching(val doc: DocumentWrapper) : DocumentWrapper by doc {
 }
 
 inline fun <R> timing(message: String, l: () -> R): R {
+    Common.d("Starting task '$message'...")
     val start = System.currentTimeMillis()
     return l().also {
-        Common.d("$message  - ${System.currentTimeMillis() - start} ms")
+        Common.d("Task '$message' is finished in ${System.currentTimeMillis() - start} ms")
     }
 }
 

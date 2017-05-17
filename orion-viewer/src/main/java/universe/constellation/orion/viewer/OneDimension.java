@@ -59,12 +59,12 @@ public class OneDimension implements Cloneable {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        return super.clone();    //To change body of overridden methods use File | Settings | File Templates.
+        return super.clone();
     }
 
     @Override
     public String toString() {
-        return "[offset = " + offset + " pageDimension = " + pageDimension + "]";
+        return "[offset = " + offset + " pageDimension = " + pageDimension + " marginLess = " + marginLess + " marginMore = " + marginMore + "]";
     }
 
     public int getOccupiedAreaStart() {
