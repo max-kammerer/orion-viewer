@@ -18,12 +18,12 @@ task downloadNativeLibs() << {
     def lastVersion = '0.73.0'
     file(thirparty_build_root).mkdir()
     ant.get(
-            src: "https://github.com/max-kammerer/orion-viewer/releases/download/$lastVersion/nativeLibs-$lastVersion.zip",
+            src: "https://github.com/max-kammerer/orion-viewer/releases/download/$lastVersion/nativeLibs-${lastVersion}.zip",
             dest: thirparty_build_root
     )
 
     copy {
-        from zipTree(file(thirparty_build_root +"/nativeLibs-$lastVersion.zip"))
+        from zipTree(file(thirparty_build_root +"/nativeLibs-${lastVersion}.zip"))
         into file(thirparty_build_root)
     }
 }
