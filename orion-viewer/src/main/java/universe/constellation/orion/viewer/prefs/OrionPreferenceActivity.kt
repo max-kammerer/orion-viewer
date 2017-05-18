@@ -53,14 +53,6 @@ class OrionPreferenceActivity : DSLPreferenceActivity() {
         bookPreferences.nested {
             bookPreferences(this@nested, true)
         }
-
-
-        val SCREEN_ORIENTATION = findPreference("SCREEN_ORIENTATION") as ListPreference
-
-        if (orionContext.sdkVersion < Build.VERSION_CODES.GINGERBREAD) {
-            SCREEN_ORIENTATION.entries = resources.getTextArray(R.array.screen_orientation_desc)
-            SCREEN_ORIENTATION.entryValues = resources.getTextArray(R.array.screen_orientation)
-        }
     }
 
     override fun onPreferenceTreeClick(preferenceScreen: PreferenceScreen, preference: Preference?): Boolean {
