@@ -29,7 +29,7 @@ import universe.constellation.orion.viewer.R
 
 import java.util.regex.Pattern
 
-class OrionBookEditPreference @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+open class OrionEditPreference @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
         EditTextPreference(context, attrs), Preference.OnPreferenceChangeListener, OrionBookPreference {
     override val orionState: State = State()
 
@@ -95,6 +95,13 @@ class OrionBookEditPreference @JvmOverloads constructor(context: Context, attrs:
             return value
         }
     }
+}
+
+
+class OrionBookEditPreference @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+        OrionEditPreference(context, attrs), OrionBookPreference {
+
+    override val orionState: State = State()
 
     override fun onSetInitialValue(restoreValue: Boolean, defaultValue: Any?) {
         orionState.onSetInitialValue = true
