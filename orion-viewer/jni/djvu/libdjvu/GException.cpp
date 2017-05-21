@@ -60,6 +60,7 @@
 # pragma implementation
 #endif
 
+#include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -256,21 +257,16 @@ GExceptionHandler::rethrow(void)
 // This is not activated when C++ memory management
 // is overidden.  The overriding functions handle
 // memory exceptions by themselves.
-# if defined(_MSC_VER)
-// Microsoft is different!
-static int throw_memory_error(size_t) { G_THROW(GException::outofmemory); return 0; }
-static int (*old_handler)(size_t) = _set_new_handler(throw_memory_error);
-# else // !_MSC_VER
-// Standard C++
 static void throw_memory_error() { G_THROW(GException::outofmemory); }
-#  if !defined(WIN32) && !defined(__CYGWIN32__) && !defined(OS2)
+# if defined(WIN32) || defined(__CYGWIN32__) || defined(OS2)
+static void (*old_handler)() = std::set_new_handler(throw_memory_error);
+# else 
 #   ifdef HAVE_STDINCLUDES
 static void (*old_handler)() = std::set_new_handler(throw_memory_error);
 #   else
 //static void (*old_handler)() = set_new_handler(throw_memory_error);
-#   endif // HAVE_STDINCLUDES
-#  endif // ! WIN32
-# endif // !_MSC_VER
+#  endif // HAVE_STDINCLUDES
+# endif // ! WIN32
 #endif // !NEED_DJVU_MEMORY
 
 

@@ -73,6 +73,7 @@
 #include "GOS.h"
 #include "GURL.h"
 #include "DjVuMessage.h"
+#include <stddef.h>
 #include <fcntl.h>
 #if defined(WIN32) || defined(__CYGWIN32__)
 # include <io.h>
@@ -84,7 +85,6 @@
 # endif
 #endif
 
-# include <errno.h>
 #ifdef UNIX
 # include <sys/types.h>
 # include <sys/stat.h>
@@ -648,7 +648,7 @@ ByteStream::Stdio::init(const char mode[])
 static FILE *
 urlfopen(const GURL &url,const char mode[])
 {
-#ifdef WIN32
+#if defined(WIN32)
   FILE *retval=0;
   const GUTF8String filename(url.UTF8Filename());
   wchar_t *wfilename;
@@ -666,6 +666,8 @@ urlfopen(const GURL &url,const char mode[])
 	}
   }
   return retval?retval:fopen((const char *)url.NativeFilename(),mode);
+#elif defined(__APPLE__)
+  return fopen((const char *)url.UTF8Filename(),mode);
 #else
   return fopen((const char *)url.original,mode);
 #endif
@@ -675,7 +677,11 @@ urlfopen(const GURL &url,const char mode[])
 static int
 urlopen(const GURL &url, const int mode, const int perm)
 {
+#if defined(__APPLE__)
+  return open((const char *)url.UTF8Filename(),mode,perm);
+#else
   return open((const char *)url.original,mode,perm);
+#endif
 }
 #endif /* UNIX */
 
