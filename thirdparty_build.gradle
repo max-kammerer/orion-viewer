@@ -14,7 +14,8 @@ task downloadDjvu << {
 
     exec {
         workingDir file(djvu)
-        commandLine = ['git', 'checkout', 'release.3.5.26']
+        //f8e23c4e3ffc0a010c58f829b586a4718f210477 between 3.5.26 and 27 - deadlock fix
+        commandLine = ['git', 'checkout', 'f8e23c4e3ffc0a010c58f829b586a4718f210477']
     }
 }
 

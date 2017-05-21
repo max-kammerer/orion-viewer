@@ -323,7 +323,7 @@ END_ANONYMOUS_NAMESPACE
 static pthread_key_t gctls_key;
 static pthread_once_t gctls_once;
 static void gctls_destroy(void* arg) {
-  delete (gctls_t*)arg;
+  CSLOCK(locker); delete (gctls_t*)arg;
 }
 static void gctls_key_alloc() {
   pthread_key_create(&gctls_key, gctls_destroy);
@@ -609,14 +609,14 @@ minilisp_acquire_gc_lock(miniexp_t x)
 miniexp_t
 minilisp_release_gc_lock(miniexp_t x)
 {
-  CSLOCK(locker);
-  if (gc.lock > 0)
-    if (--gc.lock == 0)
-      if (gc.request > 0)
-        {
-          minivar_t v = x;
+  minivar_t v = x;
+  {
+    CSLOCK(locker);
+    if (gc.lock > 0)
+      if (--gc.lock == 0)
+        if (gc.request > 0)
           gc_run();
-        }
+  }
   return x;
 }
 
@@ -1619,7 +1619,7 @@ miniexp_pname(miniexp_t p, int width)
         r = miniexp_string((const char*)io.data[0]);
       delete [] (char*)(io.data[0]);
     }
-  G_CATCH(ex)
+  G_CATCH_ALL
     {
       delete [] (char*)(io.data[0]);
     }
