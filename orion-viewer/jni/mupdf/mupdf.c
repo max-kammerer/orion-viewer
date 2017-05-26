@@ -316,7 +316,7 @@ JNI_FN(MuPDFCore_openFile)(JNIEnv * env, jobject thiz, jstring jfilename, jobjec
 	}
 
 	/* 128 MB store for low memory devices. Tweak as necessary. */
-	glo->ctx = ctx = fz_new_context(NULL, NULL, 48 << 20);
+	glo->ctx = ctx = fz_new_context(NULL, NULL, 64 << 20);
 	if (!ctx)
 	{
 		LOGE("Failed to initialise context");
