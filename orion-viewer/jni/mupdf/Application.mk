@@ -8,7 +8,7 @@
 
 # Version X+1: armeabi-v7a (Much faster due to the availability of hardware
 # FP, but cannot be run in the emulator).
-APP_PLATFORM=android-8
+APP_PLATFORM=android-14
 APP_ABI := armeabi armeabi-v7a x86 mips
 
 # Version X+2: x86 (Requires android-9, so a change needs to be made in
