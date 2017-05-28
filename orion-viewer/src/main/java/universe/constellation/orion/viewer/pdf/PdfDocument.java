@@ -95,7 +95,7 @@ public class PdfDocument implements DocumentWrapper {
     }
 
     @Override
-    public boolean authentificate(String password) {
+    public boolean authenticate(String password) {
         return core.authenticatePassword(password);
     }
 

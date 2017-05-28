@@ -335,7 +335,7 @@ class Controller(
     }
 
     fun authenticate(password: String): Boolean {
-        return document.authentificate(password).also {
+        return document.authenticate(password).also {
             if (it) {
                 sendViewChangeNotification()
             }
