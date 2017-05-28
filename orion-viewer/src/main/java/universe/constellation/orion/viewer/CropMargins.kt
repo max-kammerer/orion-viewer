@@ -7,14 +7,14 @@ data class AutoCropMargins(
         @JvmField val bottom: Int)
 
 data class CropMargins(
-        @JvmField val left: Int,
-        @JvmField val right: Int,
-        @JvmField val top: Int,
-        @JvmField val bottom: Int,
-        @JvmField val evenLeft: Int,
-        @JvmField val evenRight: Int,
-        @JvmField val evenCrop: Boolean,
-        @JvmField val cropMode: Int)
+        @JvmField val left: Int = 0,
+        @JvmField val right: Int = 0,
+        @JvmField val top: Int = 0,
+        @JvmField val bottom: Int = 0,
+        @JvmField val evenLeft: Int = 0,
+        @JvmField val evenRight: Int = 0,
+        @JvmField val evenCrop: Boolean = false,
+        @JvmField val cropMode: Int = CropMode.MANUAL.cropMode)
 
 enum class CropMode(@JvmField val cropMode: Int) {
     NO_MODE(-1),
