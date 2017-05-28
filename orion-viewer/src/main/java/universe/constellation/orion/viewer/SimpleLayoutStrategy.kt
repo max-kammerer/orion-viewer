@@ -48,7 +48,7 @@ class SimpleLayoutStrategy private constructor(
     override var rotation: Int = 0
         private set
 
-    override var walker = PageWalker("default", this)
+    override var walker = PageWalker("default".walkOrder, this)
         private set
 
     override var layout: Int = 0
@@ -201,25 +201,26 @@ class SimpleLayoutStrategy private constructor(
         return false
     }
 
-    override fun changeNavigation(walkOrder: String): Boolean {
-        if (walkOrder.walkOrder != walker.order) {
-            walker = PageWalker(walkOrder, this)
+    override fun changeWalkOrder(walkOrder: String): Boolean {
+        val newWalkOrder = walkOrder.walkOrder
+        if (newWalkOrder != walker.order) {
+            walker = PageWalker(newWalkOrder, this)
             return true
         }
         return false
     }
 
-    override fun changePageLayout(navigation: Int): Boolean {
-        if (this.layout != navigation) {
-            this.layout = navigation
+    override fun changePageLayout(pageLayout: Int): Boolean {
+        if (this.layout != pageLayout) {
+            this.layout = pageLayout
             return true
         }
         return false
     }
 
-    override fun changeCropMargins(margins: CropMargins): Boolean {
-        if (margins != this.margins) {
-            this.margins = margins
+    override fun changeCropMargins(cropMargins: CropMargins): Boolean {
+        if (cropMargins != this.margins) {
+            this.margins = cropMargins
             return true
         }
 
@@ -231,7 +232,7 @@ class SimpleLayoutStrategy private constructor(
         changeCropMargins(CropMargins(info.leftMargin, info.rightMargin, info.topMargin, info.bottomMargin, info.leftEvenMargin, info.rightEventMargin, info.enableEvenCropping, info.cropMode))
         changeRotation(info.rotation)
         changeZoom(info.zoom)
-        changeNavigation(info.walkOrder)
+        changeWalkOrder(info.walkOrder)
         changePageLayout(info.pageLayout)
         changeOverlapping(options.horizontalOverlapping, options.verticalOverlapping)
     }
