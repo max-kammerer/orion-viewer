@@ -28,7 +28,20 @@ interface PageInfoProvider {
     fun getPageInfo(pageNum: Int, cropMode: Int): PageInfo
 }
 
-interface DocumentWrapper : PageInfoProvider {
+/**
+ * Perform contrast transformation and pixel filtering in native part
+ * (it's more efficient)
+ * */
+interface ImagePostProcessor {
+
+    /* filter watermark-pixels, see orion_bitmap.c */
+    fun setThreshold(threshold: Int)
+
+    /* contrast transformation will be applied to rendered image, see orion_bitmap.c */
+    fun setContrast(contrast: Int)
+}
+
+interface DocumentWrapper : PageInfoProvider, ImagePostProcessor {
 
     val pageCount: Int
 
@@ -45,10 +58,6 @@ interface DocumentWrapper : PageInfoProvider {
     fun getText(pageNumber: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): String?
 
     fun destroy()
-
-    fun setContrast(contrast: Int)
-
-    fun setThreshold(threshold: Int)
 
     fun needPassword(): Boolean
 
