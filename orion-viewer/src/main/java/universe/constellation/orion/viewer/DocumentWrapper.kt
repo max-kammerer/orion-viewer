@@ -25,14 +25,18 @@ import universe.constellation.orion.viewer.outline.OutlineItem
 
 
 interface PageInfoProvider {
-    fun getPageInfo(pageNum: Int, cropMode: Int = CropMode.NO_MODE.cropMode/*TODO?*/): PageInfo
+    fun getPageInfo(pageNum: Int, cropMode: Int): PageInfo
 }
 
 interface DocumentWrapper : PageInfoProvider {
 
-    fun openDocument(fileName: String): Boolean
-
     val pageCount: Int
+
+    val title: String?
+
+    val outline: Array<OutlineItem>?
+
+    fun openDocument(fileName: String): Boolean
 
     override fun getPageInfo(pageNum: Int, cropMode: Int): PageInfo
 
@@ -42,13 +46,9 @@ interface DocumentWrapper : PageInfoProvider {
 
     fun destroy()
 
-    val title: String?
-
     fun setContrast(contrast: Int)
 
     fun setThreshold(threshold: Int)
-
-    val outline: Array<OutlineItem>?
 
     fun needPassword(): Boolean
 
