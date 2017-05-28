@@ -21,7 +21,7 @@ package universe.constellation.orion.viewer
 
 import universe.constellation.orion.viewer.PageWalker.*
 
-class PageWalker(directionString: String, private val layout: SimpleLayoutStrategy) {
+class PageWalker(orderString: String, private val layout: SimpleLayoutStrategy) {
 
     enum class DIR constructor(@JvmField val delta: Int) {
         //X, Y, -X, -Y
@@ -54,15 +54,15 @@ class PageWalker(directionString: String, private val layout: SimpleLayoutStrate
 
     private val doCentering = true
 
-    var direction = directionString.walkOrder
+    var order = orderString.walkOrder
         private set
 
     fun next(info: LayoutPosition): Boolean {
-        return next(info, direction.first, direction.second)
+        return next(info, order.first, order.second)
     }
 
     fun prev(info: LayoutPosition): Boolean {
-        return next(info, direction.first.inverse(), direction.second.inverse())
+        return next(info, order.first.inverse(), order.second.inverse())
     }
 
     //true if should show prev/next page
@@ -79,7 +79,7 @@ class PageWalker(directionString: String, private val layout: SimpleLayoutStrate
             val dimension = if (i == 1) first else second
             var dir = if (i == 1) firstDir else secondDir
 
-            val inverseX = dir.isX() && !direction.isLeftToRight
+            val inverseX = dir.isX() && !order.isLeftToRight
             var offset = if (inverseX) dimension.pageDimension - dimension.offset - dimension.screenDimension else dimension.offset
             dir = if (inverseX) dir.inverse() else dir
 
@@ -155,13 +155,13 @@ class PageWalker(directionString: String, private val layout: SimpleLayoutStrate
 
 
     fun reset(info: LayoutPosition, isNext: Boolean, doCentering: Boolean) {
-        val first = if (isNext) direction.first else direction.first.inverse()
-        val second = if (isNext) direction.second else direction.second.inverse()
+        val first = if (isNext) order.first else order.first.inverse()
+        val second = if (isNext) order.second else order.second.inverse()
 
         var horDir = if (first.isX()) first else second
         val vertDir = if (first.isX()) second else first
 
-        val inverse = !direction.isLeftToRight
+        val inverse = !order.isLeftToRight
         horDir = if (inverse) horDir.inverse() else horDir
         info.x.offset = reset(horDir, info.x, doCentering)
         info.x.offset = if (inverse) info.x.pageDimension - info.x.screenDimension - info.x.offset else info.x.offset
@@ -170,7 +170,7 @@ class PageWalker(directionString: String, private val layout: SimpleLayoutStrate
     }
 
     fun getDirection(): String {
-        return direction.name
+        return order.name
     }
 
 }
