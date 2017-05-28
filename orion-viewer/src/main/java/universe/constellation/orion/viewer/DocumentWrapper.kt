@@ -52,7 +52,7 @@ interface DocumentWrapper : PageInfoProvider {
 
     fun needPassword(): Boolean
 
-    fun authentificate(password: String): Boolean
+    fun authenticate(password: String): Boolean
 
     fun searchPage(pageNumber: Int, text: String): Array<RectF>?
 
