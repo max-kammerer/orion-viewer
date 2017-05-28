@@ -257,12 +257,12 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
             return lastOpenedDir;
         }
 
-        String path = Environment.getExternalStorageDirectory().getPath() + "/" + device.getDefaultDirectory();
+        String path = Environment.getExternalStorageDirectory().getPath() + "/";
         if (new File(path).exists()) {
             return path;
         }
 
-        String path1 = "/system/media/sdcard/" + device.getDefaultDirectory();
+        String path1 = "/system/media/sdcard/";
         if (new File(path1).exists()) {
             return path1;
         }
