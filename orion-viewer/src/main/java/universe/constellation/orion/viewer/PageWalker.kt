@@ -1,7 +1,7 @@
 /*
  * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
  *
- * Copyright (C) 2011-2013  Michael Bogdanov & Co
+ * Copyright (C) 2011-2017  Michael Bogdanov & Co
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,203 +17,161 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer;
+package universe.constellation.orion.viewer
 
-/**
- * User: mike
- * Date: 29.08.12
- * Time: 12:58
- */
-public class PageWalker {
+class PageWalker(directionString: String, private val layout: SimpleLayoutStrategy) {
 
-    public static enum DIR {
+    enum class DIR constructor(@JvmField val delta: Int) {
         //X, Y, -X, -Y
-        X (1), Y(1), X_M(-1), Y_M(-1);
+        X(1), Y(1), X_M(-1), Y_M(-1);
 
-        private final int delta;
+        fun inverse() =
+                when (this) {
+                    X -> X_M
+                    X_M -> X
+                    Y -> Y_M
+                    Y_M -> Y
+                }
 
-        DIR(int delta) {
-            this.delta = delta;
-        }
+        fun isX() = this == X_M || this == X
 
-        public DIR inverse() {
-            switch (this) {
-                case X : return X_M;
-                case X_M: return X;
-                case Y: return Y_M;
-                case Y_M: return Y;
-            }
-            return X;
-        }
+        fun toLeftOrUp() = this == X_M || this == Y_M
 
-        public boolean isX() {
-            return this == X_M || this == X;
-        }
-
-        public boolean toLeftOrUp() {
-            return this == X_M || this == Y_M;
-        }
-
-        public boolean toRightOrDown() {
-            return this == X || this == Y;
-        }
+        fun toRightOrDown() = this == X || this == Y
     }
 
-    public static enum WALK_ORDER {
+    enum class WALK_ORDER constructor(@JvmField val code: Int, @JvmField val first: DIR, @JvmField val second: DIR) {
 
-        ABCD (0, DIR.X, DIR.Y), ACBD (1, DIR.Y, DIR.X), BADC(2, DIR.X_M, DIR.Y), BDAC (3, DIR.Y, DIR.X_M);
+        ABCD(0, DIR.X, DIR.Y), ACBD(1, DIR.Y, DIR.X), BADC(2, DIR.X_M, DIR.Y), BDAC(3, DIR.Y, DIR.X_M);
 
-        private final DIR first;
+        fun code(): String = name
 
-        private final DIR second;
-
-        WALK_ORDER(int code, DIR first, DIR second) {
-            this.first = first;
-            this.second = second;
-        }
-
-        public String code() {
-            return this.name();
-        }
-
-        public boolean isLeftToRight() {
-            return this == ABCD || this == ACBD;
-        }
-    };
-
-    private boolean doCentering = true;
-
-    private WALK_ORDER direction;
-
-    private SimpleLayoutStrategy layout;
-
-    public PageWalker(String direction, SimpleLayoutStrategy layout) {
-        WALK_ORDER [] values = WALK_ORDER.values();
-        this.direction = WALK_ORDER.ABCD;
-        for (int i = 0; i < values.length; i++) {
-            WALK_ORDER value = values[i];
-            if (value.code().equals(direction)) {
-                this.direction = value;
-                break;
-            }
-        }
-        this.layout = layout;
+        val isLeftToRight: Boolean
+            get() = this == ABCD || this == ACBD
     }
 
-    public boolean next(LayoutPosition info) {
-        return next(info, direction.first, direction.second);
+    private val doCentering = true
+
+    private var direction =
+            WALK_ORDER.values().firstOrNull {
+                it.code() == directionString
+            } ?: WALK_ORDER.ABCD
+
+
+    fun next(info: LayoutPosition): Boolean {
+        return next(info, direction.first, direction.second)
     }
 
-    public boolean prev(LayoutPosition info) {
-        return next(info, direction.first.inverse(), direction.second.inverse());
+    fun prev(info: LayoutPosition): Boolean {
+        return next(info, direction.first.inverse(), direction.second.inverse())
     }
 
     //true if should show prev/next page
-    private boolean next(LayoutPosition info, DIR firstDir, DIR secondDir) {
-        boolean isX = firstDir.isX();
-        OneDimension first = isX ? info.x : info.y;
-        OneDimension second = isX ? info.y : info.x;
+    private fun next(info: LayoutPosition, firstDir: DIR, secondDir: DIR): Boolean {
+        val isX = firstDir.isX()
+        val first = if (isX) info.x else info.y
+        val second = if (isX) info.y else info.x
 
-        boolean changeSecond = true;
-        int newFirstOffset = -1;
-        int newSecondOffset = -1;
+        var changeSecond = true
+        var newFirstOffset = -1
+        var newSecondOffset = -1
 
-        for (int i = 1; i <= 2; i ++) {
-            OneDimension dimension = i == 1 ? first : second;
-            DIR dir = i == 1 ? firstDir : secondDir;
+        for (i in 1..2) {
+            val dimension = if (i == 1) first else second
+            var dir = if (i == 1) firstDir else secondDir
 
-            boolean inverseX = dir.isX() && !direction.isLeftToRight();
-            int offset = inverseX ? dimension.pageDimension - dimension.offset - dimension.screenDimension: dimension.offset;
-            dir = inverseX ? dir.inverse() : dir;
+            val inverseX = dir.isX() && !direction.isLeftToRight
+            var offset = if (inverseX) dimension.pageDimension - dimension.offset - dimension.screenDimension else dimension.offset
+            dir = if (inverseX) dir.inverse() else dir
 
             if (changeSecond) {
-                changeSecond = false;
+                changeSecond = false
 
-                int newOffsetStart = offset + dimension.screenDimension * dir.delta;
-                int newOffsetEnd = newOffsetStart + dimension.screenDimension - 1;
+                val newOffsetStart = offset + dimension.screenDimension * dir.delta
+                val newOffsetEnd = newOffsetStart + dimension.screenDimension - 1
 
                 if (!inInterval(newOffsetStart, dimension) && !inInterval(newOffsetEnd, dimension)) {
-                    changeSecond = true;
-                    offset = reset(dir, dimension, true);
+                    changeSecond = true
+                    offset = reset(dir, dimension, true)
                 } else {
                     if (needAlign(dir) && (!inInterval(newOffsetStart, dimension) || !inInterval(newOffsetEnd, dimension))) {
-                        offset = align(dir, dimension);
+                        offset = align(dir, dimension)
                     } else {
-                        offset = newOffsetStart - dimension.overlap * dir.delta;
+                        offset = newOffsetStart - dimension.overlap * dir.delta
                     }
                 }
             }
 
-            offset = inverseX ? dimension.pageDimension - offset - dimension.screenDimension: offset;
+            offset = if (inverseX) dimension.pageDimension - offset - dimension.screenDimension else offset
 
             if (i == 1) {
-                newFirstOffset = offset;
+                newFirstOffset = offset
             } else {
-                newSecondOffset = offset;
+                newSecondOffset = offset
             }
         }
 
         if (!changeSecond) {
-            (isX ? info.x : info.y).offset = newFirstOffset;
-            second.offset = newSecondOffset;
+            (if (isX) info.x else info.y).offset = newFirstOffset
+            second.offset = newSecondOffset
         }
 
-        return changeSecond;
+        return changeSecond
     }
 
-    private int reset(DIR dir, OneDimension dim, boolean doCentering) {
+    private fun reset(dir: DIR, dim: OneDimension, doCentering: Boolean): Int {
         if (this.doCentering && doCentering) {
             if (dim.pageDimension < dim.screenDimension) {
-                return (dim.pageDimension - dim.screenDimension) / 2;
+                return (dim.pageDimension - dim.screenDimension) / 2
             }
         }
 
         if (dir.toRightOrDown() || dim.pageDimension <= dim.screenDimension || dim.screenDimension == 0) {
-            return 0;
+            return 0
         } else {
             if (!needAlign(dir)) {
-                return  ((dim.pageDimension - dim.overlap) / (dim.screenDimension - dim.overlap)) * (dim.screenDimension - dim.overlap);
+                return (dim.pageDimension - dim.overlap) / (dim.screenDimension - dim.overlap) * (dim.screenDimension - dim.overlap)
             } else {
-                return dim.pageDimension - dim.screenDimension;
+                return dim.pageDimension - dim.screenDimension
             }
         }
     }
 
 
-    private int align(DIR dir, OneDimension dim) {
+    private fun align(dir: DIR, dim: OneDimension): Int {
         if (dir.toRightOrDown()) {
-            return dim.pageDimension - dim.screenDimension;
+            return dim.pageDimension - dim.screenDimension
         } else {
-            return 0;
+            return 0
         }
     }
 
-    private boolean needAlign(DIR dir) {
-        return dir.isX() && layout.getLayout() != 0 || (!dir.isX() && layout.getLayout() == 1);
+    private fun needAlign(dir: DIR): Boolean {
+        return dir.isX() && layout.layout != 0 || !dir.isX() && layout.layout == 1
     }
 
-    private boolean inInterval(int value, OneDimension dim) {
-        return value >= 0 && value < dim.pageDimension;
+    private fun inInterval(value: Int, dim: OneDimension): Boolean {
+        return value >= 0 && value < dim.pageDimension
     }
 
 
-    public void reset(LayoutPosition info, boolean isNext, boolean doCentering) {
-        DIR first = isNext ? direction.first : direction.first.inverse();
-        DIR second = isNext ? direction.second : direction.second.inverse();
+    fun reset(info: LayoutPosition, isNext: Boolean, doCentering: Boolean) {
+        val first = if (isNext) direction.first else direction.first.inverse()
+        val second = if (isNext) direction.second else direction.second.inverse()
 
-        DIR horDir = first.isX() ? first : second;
-        DIR vertDir = first.isX() ? second : first;
+        var horDir = if (first.isX()) first else second
+        val vertDir = if (first.isX()) second else first
 
-        boolean inverse = !direction.isLeftToRight();
-        horDir = inverse ? horDir.inverse() : horDir;
-        info.x.offset = reset(horDir, info.x, doCentering);
-        info.x.offset = inverse ? info.x.pageDimension - info.x.screenDimension - info.x.offset : info.x.offset;
+        val inverse = !direction.isLeftToRight
+        horDir = if (inverse) horDir.inverse() else horDir
+        info.x.offset = reset(horDir, info.x, doCentering)
+        info.x.offset = if (inverse) info.x.pageDimension - info.x.screenDimension - info.x.offset else info.x.offset
 
-        info.y.offset = reset(vertDir, info.y, doCentering);
+        info.y.offset = reset(vertDir, info.y, doCentering)
     }
 
-    public String getDirection() {
-        return direction.name();
+    fun getDirection(): String {
+        return direction.name
     }
 
 }
