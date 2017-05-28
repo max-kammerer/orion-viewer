@@ -61,6 +61,7 @@ import android.widget.ViewAnimator;
 import java.io.File;
 
 import universe.constellation.orion.viewer.android.FileUtils;
+import universe.constellation.orion.viewer.device.Device;
 import universe.constellation.orion.viewer.dialog.CropDialog;
 import universe.constellation.orion.viewer.dialog.CropDialogBuilderKt;
 import universe.constellation.orion.viewer.dialog.SearchDialog;

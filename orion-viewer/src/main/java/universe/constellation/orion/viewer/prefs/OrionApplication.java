@@ -33,7 +33,7 @@ import java.util.Locale;
 import universe.constellation.orion.viewer.BuildConfig;
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.Controller;
-import universe.constellation.orion.viewer.Device;
+import universe.constellation.orion.viewer.device.Device;
 import universe.constellation.orion.viewer.LastPageInfo;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.R;
