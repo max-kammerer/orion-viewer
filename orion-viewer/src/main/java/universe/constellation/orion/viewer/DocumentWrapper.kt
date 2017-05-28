@@ -21,8 +21,12 @@ package universe.constellation.orion.viewer
 
 import android.graphics.Bitmap
 import android.graphics.RectF
-import universe.constellation.orion.viewer.outline.OutlineItem
 
+class OutlineItem(
+        @JvmField val level: Int,
+        @JvmField val title: String,
+        @JvmField val page: Int
+)
 
 interface PageInfoProvider {
     fun getPageInfo(pageNum: Int, cropMode: Int): PageInfo

@@ -27,7 +27,7 @@ import java.util.List;
 
 import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.DocumentWrapper;
-import universe.constellation.orion.viewer.outline.OutlineItem;
+import universe.constellation.orion.viewer.OutlineItem;
 import universe.constellation.orion.viewer.PageInfo;
 
 /**
