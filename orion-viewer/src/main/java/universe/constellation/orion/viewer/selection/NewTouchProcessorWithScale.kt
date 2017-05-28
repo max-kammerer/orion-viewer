@@ -5,7 +5,7 @@ import android.os.Build
 import android.support.annotation.RequiresApi
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
-import universe.constellation.orion.viewer.Device
+import universe.constellation.orion.viewer.device.Device
 import universe.constellation.orion.viewer.OrionScene
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.util.MoveUtil

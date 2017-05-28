@@ -31,6 +31,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import universe.constellation.orion.viewer.device.Device;
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionApplication;
