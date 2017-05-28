@@ -70,5 +70,5 @@ interface Document : PageInfoProvider, ImagePostProcessor {
 
     fun searchPage(pageNumber: Int, text: String): Array<RectF>?
 
-    fun hasCalculatedPageInfo(pageNumber: Int): Boolean
+    fun hasCalculatedPageInfo(pageNumber: Int): Boolean = false
 }
