@@ -165,7 +165,7 @@ public class RenderThread extends Thread implements Renderer {
                     Common.d("Future index is " + futureIndex);
                     if (futureIndex != 0) {
                         curPos = curPos.clone();
-                        layout.nextPage(curPos);
+                        LayoutStrategy.Companion.calcPageLayout(layout, curPos, true, doc.getPageCount());
                     }
                 }
             }

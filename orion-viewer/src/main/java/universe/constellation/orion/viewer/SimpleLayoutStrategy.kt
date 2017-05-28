@@ -54,23 +54,21 @@ class SimpleLayoutStrategy private constructor(
     override var layout: Int = 0
         private set
 
-    override fun nextPage(pos: LayoutPosition) {
+    override fun nextPage(pos: LayoutPosition): Int {
         if (walker.next(pos, layout)) {
-            if (pos.pageNumber < pageCount - 1) {
-                reset(pos, pos.pageNumber + 1)
-            }
+            return 1
         }
         Common.d("new position: $pos")
+        return 0
     }
 
-    override fun prevPage(pos: LayoutPosition) {
+    override fun prevPage(pos: LayoutPosition): Int {
         if (walker.prev(pos, layout)) {
-            if (pos.pageNumber > 0) {
-                reset(pos, pos.pageNumber - 1, false)
-            }
+            return -1
         }
 
         Common.d("new position: $pos")
+        return 0
     }
 
     override fun changeRotation(rotation: Int): Boolean {
@@ -154,6 +152,7 @@ class SimpleLayoutStrategy private constructor(
         //System.out.println("overlap " + hOverlap + " " + vOverlap);
 
         walker.reset(info, forward, doCentering, layout)
+        Common.d("new position after reset: $info")
     }
 
     private fun appendManualMargins(info: LayoutPosition, leftMargin: Int, rightMargin: Int) {
