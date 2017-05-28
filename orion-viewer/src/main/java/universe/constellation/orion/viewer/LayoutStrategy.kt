@@ -34,9 +34,9 @@ interface LayoutStrategy {
 
     val walker: PageWalker
 
-    fun nextPage(pos: LayoutPosition)
+    fun nextPage(pos: LayoutPosition): Int
 
-    fun prevPage(pos: LayoutPosition)
+    fun prevPage(pos: LayoutPosition): Int
 
     fun reset(pos: LayoutPosition, pageNumber: Int)
 
@@ -63,4 +63,27 @@ interface LayoutStrategy {
     fun changePageLayout(pageLayout: Int): Boolean
 
     fun setDimension(width: Int, height: Int)
+
+    companion object {
+        fun LayoutStrategy.calcPageLayout(layoutInfo: LayoutPosition, nextNotPrev: Boolean, pageCount: Int) {
+            val result =
+                    if (nextNotPrev)
+                        nextPage(layoutInfo)
+                    else
+                        prevPage(layoutInfo)
+
+            when (result) {
+                0 -> return
+                1 ->
+                    if (layoutInfo.pageNumber < pageCount - 1) {
+                        reset(layoutInfo, layoutInfo.pageNumber + 1)
+                    }
+                -1 ->
+                    if (layoutInfo.pageNumber > 0) {
+                        reset(layoutInfo, layoutInfo.pageNumber - 1, false)
+                    }
+                else -> throw RuntimeException("Unknown result $result")
+            }
+        }
+    }
 }
