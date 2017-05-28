@@ -65,6 +65,7 @@ import universe.constellation.orion.viewer.dialog.CropDialog;
 import universe.constellation.orion.viewer.dialog.CropDialogBuilderKt;
 import universe.constellation.orion.viewer.dialog.SearchDialog;
 import universe.constellation.orion.viewer.dialog.TapHelpDialog;
+import universe.constellation.orion.viewer.document.Document;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.selection.NewTouchProcessor;
 import universe.constellation.orion.viewer.selection.NewTouchProcessorWithScale;
@@ -246,8 +247,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
         }
     }
 
-    private DocumentWrapper openFile(String filePath) throws Exception {
-        DocumentWrapper doc = null;
+    private Document openFile(String filePath) throws Exception {
+        Document doc = null;
         Common.d("Trying to open file: " + filePath);
 
         getOrionContext().onNewBook(filePath);

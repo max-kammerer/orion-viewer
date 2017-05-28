@@ -26,8 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import universe.constellation.orion.viewer.Common;
-import universe.constellation.orion.viewer.DocumentWrapper;
-import universe.constellation.orion.viewer.OutlineItem;
+import universe.constellation.orion.viewer.document.Document;
+import universe.constellation.orion.viewer.document.OutlineItem;
 import universe.constellation.orion.viewer.PageInfo;
 
 /**
@@ -35,7 +35,7 @@ import universe.constellation.orion.viewer.PageInfo;
  * Date: 22.11.11
  * Time: 10:42
  */
-public class DjvuDocument implements DocumentWrapper {
+public class DjvuDocument implements Document {
 
     static {
 		System.loadLibrary("djvu");

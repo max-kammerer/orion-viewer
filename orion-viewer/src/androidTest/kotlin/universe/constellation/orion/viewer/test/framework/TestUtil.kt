@@ -2,7 +2,7 @@ package universe.constellation.orion.viewer.test.framework
 
 import android.content.Context
 import android.os.Environment
-import universe.constellation.orion.viewer.DocumentWrapper
+import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.FileUtil
 import java.io.File
 import java.io.FileOutputStream
@@ -16,7 +16,7 @@ import java.io.IOException
 
 interface TestUtil {
 
-    fun openTestBook(relativePath: String) : DocumentWrapper {
+    fun openTestBook(relativePath: String) : Document {
         val fileOnSdcard = extractFileFromTestData(relativePath)
         return FileUtil.openFile(fileOnSdcard)
     }

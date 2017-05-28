@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import universe.constellation.orion.viewer.Common;
-import universe.constellation.orion.viewer.DocumentWrapper;
+import universe.constellation.orion.viewer.document.Document;
 import universe.constellation.orion.viewer.LastPageInfo;
 import universe.constellation.orion.viewer.PageInfo;
 import universe.constellation.orion.viewer.device.EInkDevice;
@@ -27,7 +27,7 @@ public class TexetDevice extends EInkDevice {
 
 
     @Override
-    public void onNewBook(LastPageInfo info, DocumentWrapper document) {
+    public void onNewBook(LastPageInfo info, Document document) {
         try {
             String coverFileName = getIconFileName(info.simpleFileName, info.fileSize);
             shtampTexetFile(info.openingFileName, info.simpleFileName, "", "" + info.totalPages, "" + info.pageNumber, coverFileName);
@@ -210,14 +210,14 @@ public class TexetDevice extends EInkDevice {
         }
     }
 
-    public void rememberCover(final String coverFileName, final DocumentWrapper doc) {
+    public void rememberCover(final String coverFileName, final Document doc) {
         if (coverFileName != null && coverFileName.length() != 0 && !new File(coverFileName).exists()) {
             Common.d("Writing cover to " + coverFileName);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        DocumentWrapper originalDoc = doc;
+                        Document originalDoc = doc;
                         if (doc instanceof DocumentWithCaching) {
                             originalDoc = ((DocumentWithCaching) doc).getDoc();
                         }

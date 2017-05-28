@@ -25,6 +25,7 @@ import android.os.Build;
 import android.view.KeyEvent;
 
 import universe.constellation.orion.viewer.device.OnyxUtil;
+import universe.constellation.orion.viewer.document.Document;
 
 /**
  * User: mike
@@ -91,7 +92,7 @@ public interface Device {
 
     void onCreate(OrionBaseActivity activity);
 
-    void onNewBook(LastPageInfo info, DocumentWrapper document);
+    void onNewBook(LastPageInfo info, Document document);
 
     void onBookClose(LastPageInfo info);
 

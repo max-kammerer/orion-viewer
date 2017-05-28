@@ -1,6 +1,7 @@
 package universe.constellation.orion.viewer
 
 import universe.constellation.orion.viewer.djvu.DjvuDocument
+import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.DocumentWithCaching
 import universe.constellation.orion.viewer.pdf.PdfDocument
 
@@ -19,7 +20,7 @@ object FileUtil {
 
     @JvmStatic
     @Throws(Exception::class)
-    fun openFile(fileName: String): DocumentWrapper {
+    fun openFile(fileName: String): Document {
         return DocumentWithCaching(
                 if (FileUtil.isDjvuFile(fileName.toLowerCase())) {
                     DjvuDocument(fileName)
@@ -31,7 +32,7 @@ object FileUtil {
 
     @JvmStatic
     @Throws(Exception::class)
-    fun openFile(fileName: File): DocumentWrapper {
+    fun openFile(fileName: File): Document {
         return openFile(fileName.absolutePath)
     }
 
