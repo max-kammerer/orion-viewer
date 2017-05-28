@@ -20,6 +20,7 @@
 package universe.constellation.orion.viewer
 
 import android.graphics.Point
+import universe.constellation.orion.viewer.Common.d
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.DocumentWithCaching
 import universe.constellation.orion.viewer.document.OutlineItem
@@ -215,7 +216,6 @@ class Controller(
             layoutInfo.y.offset = info.newOffsetY
 
             lastScreenSize = Point(info.screenWidth, info.screenHeight)
-            screenOrientation = info.screenOrientation
             changeOrinatation(screenOrientation)
             changeColorMode(info.colorMode, false)
 
@@ -288,7 +288,7 @@ class Controller(
 
     fun changeOrinatation(orientationId: String) {
         screenOrientation = orientationId
-        println("New orientation " + screenOrientation)
+        d("New orientation $screenOrientation")
         var realOrintationId = orientationId
         if ("DEFAULT" == orientationId) {
             realOrintationId = activity.applicationDefaultOrientation
