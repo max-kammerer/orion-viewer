@@ -71,11 +71,9 @@ interface Device {
 
 
         @JvmField
-        val version = Build.VERSION.INCREMENTAL
+        val version: String = Build.VERSION.INCREMENTAL
 
     }
-
-    fun updateTitle(title: String?)
 
     fun onKeyUp(keyCode: Int, event: KeyEvent, operation: OperationHolder): Boolean
 
@@ -94,10 +92,6 @@ interface Device {
     fun onUserInteraction()
 
     fun flushBitmap()
-
-    val layoutId: Int
-
-    fun onSetContentView()
 
     val isDefaultDarkTheme: Boolean
 
