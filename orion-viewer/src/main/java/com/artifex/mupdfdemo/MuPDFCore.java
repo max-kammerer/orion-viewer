@@ -8,7 +8,7 @@ import android.graphics.RectF;
 import java.util.ArrayList;
 
 import universe.constellation.orion.viewer.Common;
-import universe.constellation.orion.viewer.DocInfo;
+import universe.constellation.orion.viewer.pdf.DocInfo;
 import universe.constellation.orion.viewer.PageInfo;
 
 public class MuPDFCore
@@ -140,7 +140,7 @@ public class MuPDFCore
 		file_format = fileFormatInternal();
 		isUnencryptedPDF = isUnencryptedPDFInternal();
 		wasOpenedFromBuffer = false;
-		numPages = info.getPageCount();
+		numPages = info.pageCount;
 	}
 
 	public MuPDFCore(Context context, byte buffer[], String magic) throws Exception {
@@ -476,7 +476,7 @@ public class MuPDFCore
 	}
 
 	public int getPageCount() {
-		return info.getPageCount();
+		return info.pageCount;
 	}
 
 	public synchronized void renderPage(int n, Bitmap bitmap, double zoom, int left, int top, int w, int h) {
