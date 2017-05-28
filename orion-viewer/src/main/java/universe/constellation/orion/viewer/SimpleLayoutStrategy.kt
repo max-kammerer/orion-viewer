@@ -202,7 +202,7 @@ class SimpleLayoutStrategy private constructor(
     }
 
     override fun changeNavigation(walkOrder: String): Boolean {
-        if (walkOrder.walkOrder != walker.direction) {
+        if (walkOrder.walkOrder != walker.order) {
             walker = PageWalker(walkOrder, this)
             return true
         }
@@ -251,7 +251,7 @@ class SimpleLayoutStrategy private constructor(
 
         info.rotation = rotation
         info.zoom = zoom
-        info.walkOrder = walker.direction.name
+        info.walkOrder = walker.order.name
         info.pageLayout = layout
     }
 
