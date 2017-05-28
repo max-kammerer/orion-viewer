@@ -32,8 +32,6 @@ interface LayoutStrategy {
 
     val layout: Int
 
-    val walkOrder: String
-
     val walker: PageWalker
 
     fun nextPage(pos: LayoutPosition)
