@@ -249,13 +249,13 @@ class Controller(
         get() = layoutStrategy.layout
 
     fun setDirectionAndLayout(walkOrder: String, pageLayout: Int) {
-        if (layoutStrategy.changeNavigation(walkOrder) or layoutStrategy.changePageLayout(pageLayout)) {
+        if (layoutStrategy.changeWalkOrder(walkOrder) or layoutStrategy.changePageLayout(pageLayout)) {
             sendViewChangeNotification()
         }
     }
 
     fun changetWalkOrder(walkOrder: String) {
-        if (layoutStrategy.changeNavigation(walkOrder)) {
+        if (layoutStrategy.changeWalkOrder(walkOrder)) {
             sendViewChangeNotification()
         }
     }
