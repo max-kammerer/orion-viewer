@@ -10,7 +10,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 import universe.constellation.orion.viewer.Common;
-import universe.constellation.orion.viewer.Device;
 
 import android.app.Activity;
 
@@ -35,7 +34,7 @@ public class Nook2Util {
     public static final int MODE_ACTIVE_ALL = 4;
     public static final int MODE_ONESHOT_ALL = 5;
 
-    private static final boolean NOOK_12_13 = Device.Info.NOOK2 && (Device.Info.getVersion().startsWith("1.2") || Device.Info.getVersion().startsWith("1.3"));
+    private static final boolean NOOK_12_13 = Device.Info.NOOK2 && (Device.Info.version.startsWith("1.2") || Device.Info.version.startsWith("1.3"));
 
     private static Class epdControllerClass;
 

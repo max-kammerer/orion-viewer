@@ -6,12 +6,8 @@ import android.os.Build;
 import android.view.KeyEvent;
 import android.view.View;
 
-import universe.constellation.orion.viewer.Device;
 import universe.constellation.orion.viewer.OperationHolder;
 
-/**
- * Created by mike on 9/26/15.
- */
 public class MagicBookBoeyeDevice extends EInkDevice {
 
     private static final int MENU = 59;

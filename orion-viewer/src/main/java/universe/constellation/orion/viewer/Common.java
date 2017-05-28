@@ -22,6 +22,7 @@ package universe.constellation.orion.viewer;
 import android.os.Build;
 import android.util.Log;
 import universe.constellation.orion.viewer.device.AndroidDevice;
+import universe.constellation.orion.viewer.device.Device;
 import universe.constellation.orion.viewer.device.MagicBookBoeyeDevice;
 import universe.constellation.orion.viewer.device.Nook2Device;
 import universe.constellation.orion.viewer.device.OnyxDevice;
