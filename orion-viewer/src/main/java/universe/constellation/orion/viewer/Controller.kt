@@ -242,7 +242,7 @@ class Controller(
     }
 
     val direction: String
-        get() = layoutStrategy.walkOrder
+        get() = layoutStrategy.walker.direction.name
 
     val layout: Int
         get() = layoutStrategy.layout

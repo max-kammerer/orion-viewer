@@ -17,289 +17,261 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer;
+package universe.constellation.orion.viewer
 
-import android.graphics.Point;
+import android.graphics.Point
 
-import universe.constellation.orion.viewer.document.DocumentWithCaching;
-import universe.constellation.orion.viewer.prefs.GlobalOptions;
+import universe.constellation.orion.viewer.document.DocumentWithCaching
+import universe.constellation.orion.viewer.prefs.GlobalOptions
 
-/**
- * User: mike
- * Date: 15.10.11
- * Time: 13:18
- */
-public class SimpleLayoutStrategy implements LayoutStrategy {
+class SimpleLayoutStrategy private constructor(
+        private val pageInfoProvider: PageInfoProvider,
+        private val pageCount: Int
+) : LayoutStrategy {
 
-    private int viewWidth;
+    private var viewWidth = 0
 
-    private int viewHeight;
+    private var viewHeight = 0
 
-    private int VERT_OVERLAP = 3;
+    private var VERTICAL_OVERLAP = 3
 
-    private int HOR_OVERLAP = 3;
+    private var HORIZONTAL_OVERLAP = 3
 
-    private PageInfoProvider pageInfoProvider;
+    override var margins = CropMargins(0, 0, 0, 0, 0, 0, false, 0)
+        private set
 
-    private final int pageCount;
+    override var zoom: Int = 0
+        private set
 
-    private CropMargins cropMargins = new CropMargins(0, 0, 0, 0, 0, 0, false, 0);
+    override var rotation: Int = 0
+        private set
 
-    private int zoom;
+    override var walker = PageWalker("default", this)
+        private set
 
-    private int rotation;
+    override var layout: Int = 0
+        private set
 
-    private PageWalker walker = new PageWalker("default", this);
-
-    private int layout;
-
-    private SimpleLayoutStrategy(PageInfoProvider pageInfoProvider, int pageCount) {
-        this.pageInfoProvider = pageInfoProvider;
-        this.pageCount = pageCount;
-    }
-
-    public static SimpleLayoutStrategy create(DocumentWrapper doc) {
-        SimpleLayoutStrategy simpleLayoutStrategy = new SimpleLayoutStrategy(doc, doc.getPageCount());
-        if (doc instanceof DocumentWithCaching) {
-            //TODO: ugly hack
-            ((DocumentWithCaching) doc).strategy = simpleLayoutStrategy;
-        }
-        return simpleLayoutStrategy;
-    }
-
-    public void nextPage(LayoutPosition info) {
-        if (walker.next(info)) {
-            if (info.pageNumber < pageCount - 1) {
-                reset(info, info.pageNumber + 1);
+    override fun nextPage(pos: LayoutPosition) {
+        if (walker.next(pos)) {
+            if (pos.pageNumber < pageCount - 1) {
+                reset(pos, pos.pageNumber + 1)
             }
         }
-        Common.d("new cellX = " + info.x.offset + " cellY = " + info.y.offset);
+        Common.d("new position: $pos")
     }
 
-    public void prevPage(LayoutPosition info) {
-        if (walker.prev(info)) {
-            if (info.pageNumber > 0) {
-                reset(info, info.pageNumber - 1, false);
+    override fun prevPage(pos: LayoutPosition) {
+        if (walker.prev(pos)) {
+            if (pos.pageNumber > 0) {
+                reset(pos, pos.pageNumber - 1, false)
             }
         }
 
-        Common.d("new cellX = " + info.x.offset + " cellY = " + info.y.offset);
+        Common.d("new position: $pos")
     }
 
-    public boolean changeRotation(int rotation) {
+    override fun changeRotation(rotation: Int): Boolean {
         if (this.rotation != rotation) {
-            this.rotation = rotation;
-            return true;
+            this.rotation = rotation
+            return true
         }
-        return false;
+        return false
     }
 
-    public boolean changeOverlapping(int horizontal, int vertical) {
-        if (HOR_OVERLAP != horizontal || VERT_OVERLAP != vertical) {
-            HOR_OVERLAP = horizontal;
-            VERT_OVERLAP = vertical;
-            return true;
+    override fun changeOverlapping(horizontal: Int, vertical: Int): Boolean {
+        if (HORIZONTAL_OVERLAP != horizontal || VERTICAL_OVERLAP != vertical) {
+            HORIZONTAL_OVERLAP = horizontal
+            VERTICAL_OVERLAP = vertical
+            return true
         }
-        return false;
+        return false
     }
 
-    public void reset(LayoutPosition info, int pageNum) {
-        reset(info, pageNum, true);
+    override fun reset(pos: LayoutPosition, pageNumber: Int) {
+        reset(pos, pageNumber, true)
     }
 
-    public void reset(LayoutPosition info, int pageNum, boolean forward) {
+    override fun reset(pos: LayoutPosition, pageNumber: Int, forward: Boolean) {
+        var pageNum = pageNumber
         if (pageCount - 1 < pageNum) {
-            pageNum = pageCount - 1;
+            pageNum = pageCount - 1
         }
         if (pageNum < 0) {
-            pageNum = 0;
+            pageNum = 0
         }
 
         //original width and height without cropped margins
-        reset(info, forward, pageInfoProvider.getPageInfo(pageNum, cropMargins.cropMode), cropMargins.cropMode, zoom, true);
+        reset(pos, forward, pageInfoProvider.getPageInfo(pageNum, margins.cropMode), margins.cropMode, zoom, true)
     }
 
-    @Override
-    public void reset(LayoutPosition info, boolean forward, PageInfo pageInfo, int cropMode, int zoom, boolean doCentering) {
-        info.rotation = rotation;
-        info.pageNumber = pageInfo.pageNum0;
+    override fun reset(info: LayoutPosition, forward: Boolean, pageInfo: PageInfo, cropMode: Int, zoom: Int, doCentering: Boolean) {
+        info.rotation = rotation
+        info.pageNumber = pageInfo.pageNum0
 
-        int pageWidth = pageInfo.width;
-        int pageHeight = pageInfo.height;
-        resetMargins(info, pageWidth, pageHeight);
+        val pageWidth = pageInfo.width
+        val pageHeight = pageInfo.height
+        resetMargins(info, pageWidth, pageHeight)
 
-        boolean isEvenPage = (pageInfo.pageNum0 + 1) % 2 == 0;
-        CropMode mode = CropMarginsKt.getToMode(cropMode);
+        val isEvenPage = (pageInfo.pageNum0 + 1) % 2 == 0
+        val mode = cropMode.toMode
 
-        AutoCropMargins autoCrop = pageInfo.autoCrop;
-        if (autoCrop != null && CropMode.AUTO_MANUAL == mode) {
-            appendAutoCropMargins(info, autoCrop);
+        val autoCrop = pageInfo.autoCrop
+        if (autoCrop != null && CropMode.AUTO_MANUAL === mode) {
+            appendAutoCropMargins(info, autoCrop)
         }
 
-        if (CropMarginsKt.hasManual(mode)) {
-            int leftMargin = cropMargins.evenCrop && isEvenPage ? cropMargins.evenLeft : cropMargins.left;
-            int rightMargin = cropMargins.evenCrop && isEvenPage ? cropMargins.evenRight : cropMargins.right;
-            appendManualMargins(info, leftMargin, rightMargin);
+        if (mode.hasManual()) {
+            val leftMargin = if (margins.evenCrop && isEvenPage) margins.evenLeft else margins.left
+            val rightMargin = if (margins.evenCrop && isEvenPage) margins.evenRight else margins.right
+            appendManualMargins(info, leftMargin, rightMargin)
         }
 
-        if (autoCrop != null && CropMarginsKt.hasAuto(mode) && CropMode.AUTO_MANUAL != mode) {
-            appendAutoCropMargins(info, autoCrop);
+        if (autoCrop != null && mode.hasAuto() && CropMode.AUTO_MANUAL !== mode) {
+            appendAutoCropMargins(info, autoCrop)
         }
 
-        info.x.screenDimension = rotation == 0 ? viewWidth : viewHeight;
-        info.y.screenDimension = rotation == 0 ? viewHeight : viewWidth;
+        info.x.screenDimension = if (rotation == 0) viewWidth else viewHeight
+        info.y.screenDimension = if (rotation == 0) viewHeight else viewWidth
 
-        info.screenWidth = viewWidth;
-        info.screenHeight = viewHeight;
+        info.screenWidth = viewWidth
+        info.screenHeight = viewHeight
 
         //set zoom and zoom margins and dimensions
-        info.setDocZoom(zoom);
+        info.setDocZoom(zoom)
 
-        info.x.marginLess = (int) (info.docZoom * info.x.marginLess);
-        info.y.marginLess = (int) (info.docZoom * info.y.marginLess);
+        info.x.marginLess = (info.docZoom * info.x.marginLess).toInt()
+        info.y.marginLess = (info.docZoom * info.y.marginLess).toInt()
 
         //zoomed with and height
-        info.x.pageDimension = (int) (info.docZoom * info.x.pageDimension);
-        info.y.pageDimension = (int) (info.docZoom * info.y.pageDimension);
+        info.x.pageDimension = (info.docZoom * info.x.pageDimension).toInt()
+        info.y.pageDimension = (info.docZoom * info.y.pageDimension).toInt()
 
-        info.x.overlap = info.x.screenDimension * HOR_OVERLAP / 100;
-        info.y.overlap = info.y.screenDimension * VERT_OVERLAP / 100;
+        info.x.overlap = info.x.screenDimension * HORIZONTAL_OVERLAP / 100
+        info.y.overlap = info.y.screenDimension * VERTICAL_OVERLAP / 100
         //System.out.println("overlap " + hOverlap + " " + vOverlap);
 
-        walker.reset(info, forward, doCentering);
+        walker.reset(info, forward, doCentering)
     }
 
-    private void appendManualMargins(LayoutPosition info, int leftMargin, int rightMargin) {
-        int pageWidth = info.x.pageDimension;
-        int pageHeight = info.y.pageDimension;
+    private fun appendManualMargins(info: LayoutPosition, leftMargin: Int, rightMargin: Int) {
+        val pageWidth = info.x.pageDimension
+        val pageHeight = info.y.pageDimension
 
-        int xLess = (int) (leftMargin * pageWidth * 0.01);
-        int xMore = (int) (pageWidth * rightMargin * 0.01);
-        int yLess = (int) (cropMargins.top * pageHeight * 0.01);
-        int yMore = (int) (pageHeight * cropMargins.bottom * 0.01);
+        val xLess = (leftMargin.toDouble() * pageWidth.toDouble() * 0.01).toInt()
+        val xMore = (pageWidth.toDouble() * rightMargin.toDouble() * 0.01).toInt()
+        val yLess = (margins.top.toDouble() * pageHeight.toDouble() * 0.01).toInt()
+        val yMore = (pageHeight.toDouble() * margins.bottom.toDouble() * 0.01).toInt()
 
-        info.x.marginLess += xLess;
-        info.x.marginMore += xMore;
-        info.y.marginLess += yLess;
-        info.y.marginMore += yMore;
+        info.x.marginLess += xLess
+        info.x.marginMore += xMore
+        info.y.marginLess += yLess
+        info.y.marginMore += yMore
 
-        info.x.pageDimension -= xLess + xMore;
-        info.y.pageDimension -= yLess + yMore;
+        info.x.pageDimension -= xLess + xMore
+        info.y.pageDimension -= yLess + yMore
     }
 
-    private void appendAutoCropMargins(LayoutPosition info, AutoCropMargins autoCrop) {
-        info.x.marginLess += autoCrop.left;
-        info.x.marginMore += autoCrop.right;
-        info.y.marginLess += autoCrop.top;
-        info.y.marginMore += autoCrop.bottom;
+    private fun appendAutoCropMargins(info: LayoutPosition, autoCrop: AutoCropMargins) {
+        info.x.marginLess += autoCrop.left
+        info.x.marginMore += autoCrop.right
+        info.y.marginLess += autoCrop.top
+        info.y.marginMore += autoCrop.bottom
 
-        info.x.pageDimension -= autoCrop.left + autoCrop.right;
-        info.y.pageDimension -= autoCrop.top + autoCrop.bottom;
+        info.x.pageDimension -= autoCrop.left + autoCrop.right
+        info.y.pageDimension -= autoCrop.top + autoCrop.bottom
     }
 
-    private void resetMargins(LayoutPosition info, int pageWidth, int pageHeight) {
-        info.x.marginLess = 0;
-        info.y.marginLess = 0;
-        info.x.marginMore = 0;
-        info.y.marginMore = 0;
-        info.x.pageDimension = pageWidth;
-        info.y.pageDimension = pageHeight;
+    private fun resetMargins(info: LayoutPosition, pageWidth: Int, pageHeight: Int) {
+        info.x.marginLess = 0
+        info.y.marginLess = 0
+        info.x.marginMore = 0
+        info.y.marginMore = 0
+        info.x.pageDimension = pageWidth
+        info.y.pageDimension = pageHeight
     }
 
-    public boolean changeZoom(int zoom) {
+    override fun changeZoom(zoom: Int): Boolean {
         if (this.zoom != zoom) {
-            this.zoom = zoom;
-            return true;
+            this.zoom = zoom
+            return true
         }
-        return false;
+        return false
     }
 
-    public boolean changeNavigation(String walkOrder) {
-        if (walkOrder != null && !walkOrder.equals(walker.getDirection())) {
-            walker = new PageWalker(walkOrder, this);
-            return true;
+    override fun changeNavigation(walkOrder: String): Boolean {
+        if (walkOrder.walkOrder != walker.direction) {
+            walker = PageWalker(walkOrder, this)
+            return true
         }
-        return false;
+        return false
     }
 
-    public boolean changePageLayout(int navigation) {
+    override fun changePageLayout(navigation: Int): Boolean {
         if (this.layout != navigation) {
-            this.layout = navigation;
-            return true;
+            this.layout = navigation
+            return true
         }
-        return false;
+        return false
     }
 
-    public int getZoom() {
-        return zoom;
-    }
-
-    public boolean changeCropMargins(CropMargins margins) {
-        if (!margins.equals(cropMargins)) {
-            cropMargins = margins;
-            return true;
+    override fun changeCropMargins(margins: CropMargins): Boolean {
+        if (margins != this.margins) {
+            this.margins = margins
+            return true
         }
 
-        return false;
+        return false
     }
 
 
-    public CropMargins getMargins() {
-        return cropMargins;
+    override fun init(info: LastPageInfo, options: GlobalOptions) {
+        changeCropMargins(CropMargins(info.leftMargin, info.rightMargin, info.topMargin, info.bottomMargin, info.leftEvenMargin, info.rightEventMargin, info.enableEvenCropping, info.cropMode))
+        changeRotation(info.rotation)
+        changeZoom(info.zoom)
+        changeNavigation(info.walkOrder)
+        changePageLayout(info.pageLayout)
+        changeOverlapping(options.horizontalOverlapping, options.verticalOverlapping)
     }
 
-    public int getRotation() {
-        return rotation;
+    override fun serialize(info: LastPageInfo) {
+        info.screenHeight = viewHeight
+        info.screenWidth = viewWidth
+
+        info.leftMargin = margins.left
+        info.rightMargin = margins.right
+        info.topMargin = margins.top
+        info.bottomMargin = margins.bottom
+        info.leftEvenMargin = margins.evenLeft
+        info.rightEventMargin = margins.evenRight
+        info.enableEvenCropping = margins.evenCrop
+        info.cropMode = margins.cropMode
+
+        info.rotation = rotation
+        info.zoom = zoom
+        info.walkOrder = walker.direction.name
+        info.pageLayout = layout
     }
 
-
-    public void init(LastPageInfo info, GlobalOptions options) {
-        changeCropMargins(new CropMargins(info.leftMargin, info.rightMargin, info.topMargin, info.bottomMargin, info.leftEvenMargin, info.rightEventMargin, info.enableEvenCropping, info.cropMode));
-        changeRotation(info.rotation);
-        changeZoom(info.zoom);
-        changeNavigation(info.walkOrder);
-        changePageLayout(info.pageLayout);
-        changeOverlapping(options.getHorizontalOverlapping(), options.getVerticalOverlapping());
+    override fun convertToPoint(pos: LayoutPosition): Point {
+        return Point(pos.x.marginLess + pos.x.offset, pos.y.marginLess + pos.y.offset)
     }
 
-    public void serialize(LastPageInfo info) {
-        info.screenHeight = viewHeight;
-        info.screenWidth = viewWidth;
-
-        info.leftMargin = cropMargins.left;
-        info.rightMargin = cropMargins.right;
-        info.topMargin = cropMargins.top;
-        info.bottomMargin = cropMargins.bottom;
-        info.leftEvenMargin = cropMargins.evenLeft;
-        info.rightEventMargin = cropMargins.evenRight;
-        info.enableEvenCropping = cropMargins.evenCrop;
-        info.cropMode = cropMargins.cropMode;
-
-        info.rotation = rotation;
-        info.zoom = zoom;
-        info.walkOrder = walker.getDirection();
-        info.pageLayout = layout;
+    override fun setDimension(width: Int, height: Int) {
+        viewWidth = width
+        viewHeight = height
     }
 
-    public Point convertToPoint(LayoutPosition pos) {
-        return new Point(pos.x.marginLess + pos.x.offset, pos.y.marginLess + pos.y.offset);
-    }
+    companion object {
 
-    public int getLayout() {
-        return layout;
-    }
-
-    public String getWalkOrder() {
-        return walker.getDirection();
-    }
-
-    public void setDimension(int width, int height) {
-        viewWidth = width;
-        viewHeight = height;
-    }
-
-    @Override
-    public PageWalker getWalker() {
-        return walker;
+        @JvmStatic
+        fun create(doc: DocumentWrapper): SimpleLayoutStrategy {
+            val simpleLayoutStrategy = SimpleLayoutStrategy(doc, doc.pageCount)
+            if (doc is DocumentWithCaching) {
+                //TODO: ugly hack
+                doc.strategy = simpleLayoutStrategy
+            }
+            return simpleLayoutStrategy
+        }
     }
 }
