@@ -112,8 +112,6 @@ public interface Device {
 
     void onSetContentView();
 
-    Point getDeviceSize();
-
     boolean isDefaultDarkTheme();
 
     void fullScreen(boolean on, Activity activity);

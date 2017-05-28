@@ -135,12 +135,6 @@ public class AndroidDevice implements Device {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public Point getDeviceSize() {
-        Display display = activity.getWindowManager().getDefaultDisplay();
-        return new Point(display.getWidth(), display.getHeight());
-
-    }
-
     @Override
     public boolean isDefaultDarkTheme() {
         return true;
