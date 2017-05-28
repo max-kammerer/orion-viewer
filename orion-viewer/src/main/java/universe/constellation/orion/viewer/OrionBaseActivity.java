@@ -158,15 +158,6 @@ public abstract class OrionBaseActivity extends AppCompatActivity {
         return (OrionApplication) getApplicationContext();
     }
 
-    @Override
-    public void setContentView(int layoutResID) {
-        super.setContentView(layoutResID);
-        if (device != null) {
-            device.onSetContentView();
-        }
-    }
-
-
     public void showWarning(String warning) {
         Toast.makeText(this, warning, Toast.LENGTH_SHORT).show();
     }
