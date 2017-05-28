@@ -58,9 +58,9 @@ interface LayoutStrategy {
 
     fun convertToPoint(pos: LayoutPosition): Point
 
-    fun changeNavigation(walkOrder: String): Boolean
+    fun changeWalkOrder(walkOrder: String): Boolean
 
-    fun changePageLayout(navigation: Int): Boolean
+    fun changePageLayout(pageLayout: Int): Boolean
 
     fun setDimension(width: Int, height: Int)
 }

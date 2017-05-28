@@ -21,7 +21,7 @@ package universe.constellation.orion.viewer
 
 import universe.constellation.orion.viewer.PageWalker.*
 
-class PageWalker(orderString: String, private val layout: SimpleLayoutStrategy) {
+class PageWalker(val order: WALK_ORDER, private val layout: SimpleLayoutStrategy) {
 
     enum class DIR constructor(@JvmField val delta: Int) {
         //X, Y, -X, -Y
@@ -53,9 +53,6 @@ class PageWalker(orderString: String, private val layout: SimpleLayoutStrategy) 
     }
 
     private val doCentering = true
-
-    var order = orderString.walkOrder
-        private set
 
     fun next(info: LayoutPosition): Boolean {
         return next(info, order.first, order.second)
@@ -167,10 +164,6 @@ class PageWalker(orderString: String, private val layout: SimpleLayoutStrategy) 
         info.x.offset = if (inverse) info.x.pageDimension - info.x.screenDimension - info.x.offset else info.x.offset
 
         info.y.offset = reset(vertDir, info.y, doCentering)
-    }
-
-    fun getDirection(): String {
-        return order.name
     }
 
 }
