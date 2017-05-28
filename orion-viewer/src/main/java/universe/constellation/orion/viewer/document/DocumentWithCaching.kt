@@ -31,7 +31,7 @@ private const val HEIGHT = 800
 private const val THRESHOLD = 255 - 10
 private const val VOTE_THRESHOLD = 3
 
-class DocumentWithCaching(val doc: DocumentWrapper) : DocumentWrapper by doc {
+class DocumentWithCaching(val doc: Document) : Document by doc {
 
     private val cache = LruCache<Int, PageInfo?>(100)
 

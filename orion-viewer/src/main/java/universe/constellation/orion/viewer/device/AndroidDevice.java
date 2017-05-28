@@ -26,6 +26,7 @@ import android.os.PowerManager;
 import android.view.Display;
 import android.view.KeyEvent;
 import universe.constellation.orion.viewer.*;
+import universe.constellation.orion.viewer.document.Document;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
 /**
@@ -146,7 +147,7 @@ public class AndroidDevice implements Device {
     }
 
     @Override
-    public void onNewBook(LastPageInfo info, DocumentWrapper document) {
+    public void onNewBook(LastPageInfo info, Document document) {
 
     }
 

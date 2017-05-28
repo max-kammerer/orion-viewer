@@ -28,6 +28,7 @@ import java.util.LinkedList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import universe.constellation.orion.viewer.document.Document;
 import universe.constellation.orion.viewer.view.Renderer;
 import universe.constellation.orion.viewer.view.Scene;
 
@@ -50,7 +51,7 @@ public class RenderThread extends Thread implements Renderer {
 
     private LayoutPosition lastEvent;
 
-    protected DocumentWrapper doc;
+    protected Document doc;
 
     private boolean executeInSeparateThread;
 
@@ -60,11 +61,11 @@ public class RenderThread extends Thread implements Renderer {
 
     private Scene fullScene;
 
-    RenderThread(OrionViewerActivity activity, LayoutStrategy layout, DocumentWrapper doc, Scene fullScene) {
+    RenderThread(OrionViewerActivity activity, LayoutStrategy layout, Document doc, Scene fullScene) {
         this(activity, layout, doc, true, fullScene);
     }
 
-    public RenderThread(OrionViewerActivity activity, LayoutStrategy layout, DocumentWrapper doc, boolean executeInSeparateThread, Scene scene) {
+    public RenderThread(OrionViewerActivity activity, LayoutStrategy layout, Document doc, boolean executeInSeparateThread, Scene scene) {
         this.layout = layout;
         this.doc = doc;
         this.activity = activity;

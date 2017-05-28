@@ -32,7 +32,7 @@ import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.Controller;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.R;
-import universe.constellation.orion.viewer.OutlineItem;
+import universe.constellation.orion.viewer.document.OutlineItem;
 
 public class OutlineAdapter extends AbstractTreeViewAdapter<Integer> {
     private final OutlineItem items[];

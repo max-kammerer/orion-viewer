@@ -20,8 +20,10 @@
 package universe.constellation.orion.viewer
 
 import android.graphics.Point
+import universe.constellation.orion.viewer.document.Document
 
 import universe.constellation.orion.viewer.document.DocumentWithCaching
+import universe.constellation.orion.viewer.document.PageInfoProvider
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 
 class SimpleLayoutStrategy private constructor(
@@ -265,7 +267,7 @@ class SimpleLayoutStrategy private constructor(
     companion object {
 
         @JvmStatic
-        fun create(doc: DocumentWrapper): SimpleLayoutStrategy {
+        fun create(doc: Document): SimpleLayoutStrategy {
             val simpleLayoutStrategy = SimpleLayoutStrategy(doc, doc.pageCount)
             if (doc is DocumentWithCaching) {
                 //TODO: ugly hack

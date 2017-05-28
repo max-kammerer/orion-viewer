@@ -1,6 +1,7 @@
 package universe.constellation.orion.viewer.test.framework
 
 import universe.constellation.orion.viewer.*
+import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.view.Scene
 
 /**
@@ -13,7 +14,7 @@ class SingleThreadRenderer(
         activity: OrionViewerActivity,
         scene: Scene,
         layout: LayoutStrategy,
-        doc: DocumentWrapper
+        doc: Document
 ) : RenderThread(activity, layout, doc, false, scene) {
 
     override fun startRenreder() {
