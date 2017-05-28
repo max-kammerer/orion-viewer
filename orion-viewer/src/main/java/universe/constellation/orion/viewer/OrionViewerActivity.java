@@ -132,7 +132,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
         getOrionContext().setViewActivity(this);
         OptionActions.FULL_SCREEN.doAction(this, !globalOptions.isFullScreen(), globalOptions.isFullScreen());
-        super.onOrionCreate(savedInstanceState, device.getLayoutId());
+        super.onOrionCreate(savedInstanceState, R.layout.main_view);
 
         hasActionBar = globalOptions.isActionBarVisible();
         OptionActions.SHOW_ACTION_BAR.doAction(this, !hasActionBar, hasActionBar);
@@ -285,7 +285,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
 
 
-            device.updateTitle(title);
             fullScene.onNewBook(title, controller.getPageCount());
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setTitle(title);

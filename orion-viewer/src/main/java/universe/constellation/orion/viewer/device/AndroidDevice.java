@@ -54,10 +54,6 @@ public class AndroidDevice implements Device {
         this.wakeLockType = wakeLockType;
     }
 
-    public void updateTitle(String title) {
-
-    }
-
     public boolean onKeyUp(int keyCode, KeyEvent event, OperationHolder holder) {
         //check mapped keys
         switch (keyCode) {
@@ -93,7 +89,7 @@ public class AndroidDevice implements Device {
     }
 
     public void onDestroy() {
-        
+
     }
 
     public void onPause() {
@@ -119,14 +115,6 @@ public class AndroidDevice implements Device {
         if (activity.getView() != null) {
             activity.getView().invalidate();
         }
-    }
-
-    public int getLayoutId() {
-        return R.layout.main_view;
-    }
-
-    public void onSetContentView() {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
