@@ -1110,7 +1110,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if (controller.authentificate(input.getText().toString())) {
+                    if (controller.authenticate(input.getText().toString())) {
                         dialog.dismiss();
                     } else {
                         askPassword(controller);

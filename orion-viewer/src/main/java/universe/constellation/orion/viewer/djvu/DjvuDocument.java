@@ -121,7 +121,7 @@ public class DjvuDocument implements DocumentWrapper {
     }
 
     @Override
-    public boolean authentificate(String password) {
+    public boolean authenticate(String password) {
         return true;
     }
 
