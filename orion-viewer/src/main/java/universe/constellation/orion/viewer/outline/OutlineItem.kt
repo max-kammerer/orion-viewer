@@ -17,22 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer.outline;
+package universe.constellation.orion.viewer.outline
 
-/**
- * User: mike
- * Date: 14.07.12
- * Time: 21:15
- */
-public class OutlineItem {
-    public final int    level;
-   	public final String title;
-   	public final int    page;
-
-   	public OutlineItem(int _level, String _title, int _page) {
-   		level = _level;
-   		title = _title;
-   		page  = _page;
-   	}
-
-}
+class OutlineItem(
+        @JvmField val level: Int,
+        @JvmField val title: String,
+        @JvmField val page: Int
+)
