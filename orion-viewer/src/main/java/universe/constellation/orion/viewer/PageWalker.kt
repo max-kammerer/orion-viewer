@@ -35,11 +35,11 @@ class PageWalker(val order: WALK_ORDER) {
                     Y_M -> Y
                 }
 
-        fun isX() = this == X_M || this == X
+        fun isX() = this === X_M || this === X
 
-        fun toLeftOrUp() = this == X_M || this == Y_M
+        fun toLeftOrUp() = this === X_M || this === Y_M
 
-        fun toRightOrDown() = this == X || this == Y
+        fun toRightOrDown() = this === X || this === Y
     }
 
     enum class WALK_ORDER constructor(@JvmField val code: Int, @JvmField val first: DIR, @JvmField val second: DIR) {
@@ -49,7 +49,7 @@ class PageWalker(val order: WALK_ORDER) {
         fun code(): String = name
 
         val isLeftToRight: Boolean
-            get() = this == ABCD || this == ACBD
+            get() = this === ABCD || this === ACBD
     }
 
     private val doCentering = true
