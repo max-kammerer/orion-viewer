@@ -37,7 +37,7 @@ class SimpleLayoutStrategy private constructor(
 
     private var HORIZONTAL_OVERLAP = 3
 
-    override var margins = CropMargins(0, 0, 0, 0, 0, 0, false, 0)
+    override var margins = CropMargins()
         private set
 
     override var zoom: Int = 0
