@@ -21,7 +21,7 @@ package universe.constellation.orion.viewer
 
 import universe.constellation.orion.viewer.PageWalker.*
 
-class PageWalker(val order: WALK_ORDER, private val layout: SimpleLayoutStrategy) {
+class PageWalker(val order: WALK_ORDER) {
 
     enum class DIR constructor(@JvmField val delta: Int) {
         //X, Y, -X, -Y
@@ -54,16 +54,16 @@ class PageWalker(val order: WALK_ORDER, private val layout: SimpleLayoutStrategy
 
     private val doCentering = true
 
-    fun next(info: LayoutPosition): Boolean {
-        return next(info, order.first, order.second)
+    fun next(info: LayoutPosition, layout: Int): Boolean {
+        return next(info, order.first, order.second, layout)
     }
 
-    fun prev(info: LayoutPosition): Boolean {
-        return next(info, order.first.inverse(), order.second.inverse())
+    fun prev(info: LayoutPosition, layout: Int): Boolean {
+        return next(info, order.first.inverse(), order.second.inverse(), layout)
     }
 
     //true if should show prev/next page
-    private fun next(info: LayoutPosition, firstDir: DIR, secondDir: DIR): Boolean {
+    private fun next(info: LayoutPosition, firstDir: DIR, secondDir: DIR, layout: Int): Boolean {
         val isX = firstDir.isX()
         val first = if (isX) info.x else info.y
         val second = if (isX) info.y else info.x
@@ -88,9 +88,9 @@ class PageWalker(val order: WALK_ORDER, private val layout: SimpleLayoutStrategy
 
                 if (!inInterval(newOffsetStart, dimension) && !inInterval(newOffsetEnd, dimension)) {
                     changeSecond = true
-                    offset = reset(dir, dimension, true)
+                    offset = reset(dir, dimension, true, layout)
                 } else {
-                    if (needAlign(dir) && (!inInterval(newOffsetStart, dimension) || !inInterval(newOffsetEnd, dimension))) {
+                    if (needAlign(dir, layout) && (!inInterval(newOffsetStart, dimension) || !inInterval(newOffsetEnd, dimension))) {
                         offset = align(dir, dimension)
                     } else {
                         offset = newOffsetStart - dimension.overlap * dir.delta
@@ -115,7 +115,7 @@ class PageWalker(val order: WALK_ORDER, private val layout: SimpleLayoutStrategy
         return changeSecond
     }
 
-    private fun reset(dir: DIR, dim: OneDimension, doCentering: Boolean): Int {
+    private fun reset(dir: DIR, dim: OneDimension, doCentering: Boolean, layout: Int): Int {
         if (this.doCentering && doCentering) {
             if (dim.pageDimension < dim.screenDimension) {
                 return (dim.pageDimension - dim.screenDimension) / 2
@@ -125,7 +125,7 @@ class PageWalker(val order: WALK_ORDER, private val layout: SimpleLayoutStrategy
         if (dir.toRightOrDown() || dim.pageDimension <= dim.screenDimension || dim.screenDimension == 0) {
             return 0
         } else {
-            if (!needAlign(dir)) {
+            if (!needAlign(dir, layout)) {
                 return (dim.pageDimension - dim.overlap) / (dim.screenDimension - dim.overlap) * (dim.screenDimension - dim.overlap)
             } else {
                 return dim.pageDimension - dim.screenDimension
@@ -142,8 +142,8 @@ class PageWalker(val order: WALK_ORDER, private val layout: SimpleLayoutStrategy
         }
     }
 
-    private fun needAlign(dir: DIR): Boolean {
-        return dir.isX() && layout.layout != 0 || !dir.isX() && layout.layout == 1
+    private fun needAlign(dir: DIR, layout: Int): Boolean {
+        return dir.isX() && layout != 0 || !dir.isX() && layout == 1
     }
 
     private fun inInterval(value: Int, dim: OneDimension): Boolean {
@@ -151,7 +151,7 @@ class PageWalker(val order: WALK_ORDER, private val layout: SimpleLayoutStrategy
     }
 
 
-    fun reset(info: LayoutPosition, isNext: Boolean, doCentering: Boolean) {
+    fun reset(info: LayoutPosition, isNext: Boolean, doCentering: Boolean, layout: Int) {
         val first = if (isNext) order.first else order.first.inverse()
         val second = if (isNext) order.second else order.second.inverse()
 
@@ -160,10 +160,10 @@ class PageWalker(val order: WALK_ORDER, private val layout: SimpleLayoutStrategy
 
         val inverse = !order.isLeftToRight
         horDir = if (inverse) horDir.inverse() else horDir
-        info.x.offset = reset(horDir, info.x, doCentering)
+        info.x.offset = reset(horDir, info.x, doCentering, layout)
         info.x.offset = if (inverse) info.x.pageDimension - info.x.screenDimension - info.x.offset else info.x.offset
 
-        info.y.offset = reset(vertDir, info.y, doCentering)
+        info.y.offset = reset(vertDir, info.y, doCentering, layout)
     }
 
 }

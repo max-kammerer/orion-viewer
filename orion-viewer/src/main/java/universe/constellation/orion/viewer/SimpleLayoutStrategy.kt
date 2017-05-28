@@ -48,14 +48,14 @@ class SimpleLayoutStrategy private constructor(
     override var rotation: Int = 0
         private set
 
-    override var walker = PageWalker("default".walkOrder, this)
+    override var walker = PageWalker("default".walkOrder)
         private set
 
     override var layout: Int = 0
         private set
 
     override fun nextPage(pos: LayoutPosition) {
-        if (walker.next(pos)) {
+        if (walker.next(pos, layout)) {
             if (pos.pageNumber < pageCount - 1) {
                 reset(pos, pos.pageNumber + 1)
             }
@@ -64,7 +64,7 @@ class SimpleLayoutStrategy private constructor(
     }
 
     override fun prevPage(pos: LayoutPosition) {
-        if (walker.prev(pos)) {
+        if (walker.prev(pos, layout)) {
             if (pos.pageNumber > 0) {
                 reset(pos, pos.pageNumber - 1, false)
             }
@@ -153,7 +153,7 @@ class SimpleLayoutStrategy private constructor(
         info.y.overlap = info.y.screenDimension * VERTICAL_OVERLAP / 100
         //System.out.println("overlap " + hOverlap + " " + vOverlap);
 
-        walker.reset(info, forward, doCentering)
+        walker.reset(info, forward, doCentering, layout)
     }
 
     private fun appendManualMargins(info: LayoutPosition, leftMargin: Int, rightMargin: Int) {
@@ -204,7 +204,7 @@ class SimpleLayoutStrategy private constructor(
     override fun changeWalkOrder(walkOrder: String): Boolean {
         val newWalkOrder = walkOrder.walkOrder
         if (newWalkOrder != walker.order) {
-            walker = PageWalker(newWalkOrder, this)
+            walker = PageWalker(newWalkOrder)
             return true
         }
         return false

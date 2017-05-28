@@ -126,7 +126,7 @@ public class SearchDialog extends DialogFragment {
                 PageWalker walker = layoutStrategy.getWalker();
                 layoutStrategy.reset(position, result.pageNumber, forward);
 
-                List<SubBatch> subBatches = prepareResults(result, forward, position, walker);
+                List<SubBatch> subBatches = prepareResults(result, forward, position, walker, layoutStrategy);
                 lastPosition = forward ? 0 : subBatches.size() -1;
                 screens = subBatches;
 
@@ -135,7 +135,7 @@ public class SearchDialog extends DialogFragment {
                 drawBatch(toShow, controller);
             }
 
-            private List<SubBatch> prepareResults(SearchTaskResult result, boolean forward, LayoutPosition position, PageWalker walker) {
+            private List<SubBatch> prepareResults(SearchTaskResult result, boolean forward, LayoutPosition position, PageWalker walker, LayoutStrategy layoutStrategy) {
                 List<SubBatch> screens = new ArrayList<SubBatch>();
                 RectF[] searchBoxes = result.searchBoxes;
 
@@ -164,7 +164,7 @@ public class SearchDialog extends DialogFragment {
                     if (!sb.rects.isEmpty()) {
                         screens.add(sb);
                     }
-                } while (forward ? !walker.next(position) : !walker.prev(position));
+                } while (forward ? !walker.next(position, layoutStrategy.getLayout()) : !walker.prev(position, layoutStrategy.getLayout()));
 
                 if (screens.isEmpty()) {
                     Common.d("Adding fake batch");
