@@ -9,7 +9,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import com.artifex.mupdfdemo.SearchTaskResult;
 import universe.constellation.orion.viewer.Common;
-import universe.constellation.orion.viewer.DocumentWrapper;
+import universe.constellation.orion.viewer.document.Document;
 import universe.constellation.orion.viewer.R;
 
 /**
@@ -39,12 +39,12 @@ public abstract class SearchTask {
 
     private static final int SEARCH_PROGRESS_DELAY = 200;
     private final Context mContext;
-    private final DocumentWrapper document;
+    private final Document document;
     private final Handler mHandler;
     private final AlertDialog.Builder mAlertBuilder;
     private AsyncTask<Void, Integer, SearchTaskResult> mSearchTask;
 
-    public SearchTask(Context context, DocumentWrapper document) {
+    public SearchTask(Context context, Document document) {
         mContext = context;
         this.document = document;
         mHandler = new Handler();

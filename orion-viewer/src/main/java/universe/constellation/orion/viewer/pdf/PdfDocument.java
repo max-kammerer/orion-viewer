@@ -22,8 +22,8 @@ package universe.constellation.orion.viewer.pdf;
 import android.graphics.Bitmap;
 import android.graphics.RectF;
 import com.artifex.mupdfdemo.MuPDFCore;
-import universe.constellation.orion.viewer.DocumentWrapper;
-import universe.constellation.orion.viewer.OutlineItem;
+import universe.constellation.orion.viewer.document.Document;
+import universe.constellation.orion.viewer.document.OutlineItem;
 import universe.constellation.orion.viewer.PageInfo;
 
 
@@ -32,7 +32,7 @@ import universe.constellation.orion.viewer.PageInfo;
  * Date: 16.10.11
  * Time: 17:57
  */
-public class PdfDocument implements DocumentWrapper {
+public class PdfDocument implements Document {
 
     private MuPDFCore core;
 

@@ -1,7 +1,7 @@
 /*
  * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
  *
- * Copyright (C) 2011-2013  Michael Bogdanov & Co
+ * Copyright (C) 2011-2017 Michael Bogdanov & Co
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,10 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer
+package universe.constellation.orion.viewer.document
 
 import android.graphics.Bitmap
 import android.graphics.RectF
+import universe.constellation.orion.viewer.PageInfo
 
 class OutlineItem(
         @JvmField val level: Int,
@@ -45,7 +46,7 @@ interface ImagePostProcessor {
     fun setContrast(contrast: Int)
 }
 
-interface DocumentWrapper : PageInfoProvider, ImagePostProcessor {
+interface Document : PageInfoProvider, ImagePostProcessor {
 
     val pageCount: Int
 
