@@ -21,9 +21,7 @@ package universe.constellation.orion.viewer.device;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Point;
 import android.os.PowerManager;
-import android.view.Display;
 import android.view.KeyEvent;
 import universe.constellation.orion.viewer.*;
 import universe.constellation.orion.viewer.document.Document;
@@ -125,10 +123,6 @@ public class AndroidDevice implements Device {
 
     public int getLayoutId() {
         return R.layout.main_view;
-    }
-
-    public String getDefaultDirectory() {
-        return "";
     }
 
     public void onSetContentView() {
