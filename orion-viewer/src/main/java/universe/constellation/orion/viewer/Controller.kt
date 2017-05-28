@@ -21,7 +21,6 @@ package universe.constellation.orion.viewer
 
 import android.graphics.Point
 import universe.constellation.orion.viewer.document.DocumentWithCaching
-import universe.constellation.orion.viewer.outline.OutlineItem
 import universe.constellation.orion.viewer.util.ColorUtil
 import universe.constellation.orion.viewer.view.Renderer
 import universe.constellation.orion.viewer.view.ViewDimensionAware

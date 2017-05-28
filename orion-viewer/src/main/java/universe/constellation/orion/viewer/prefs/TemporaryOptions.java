@@ -19,7 +19,7 @@
 
 package universe.constellation.orion.viewer.prefs;
 
-import universe.constellation.orion.viewer.outline.OutlineItem;
+import universe.constellation.orion.viewer.OutlineItem;
 
 /**
  * User: mike

@@ -23,7 +23,7 @@ import android.graphics.Bitmap;
 import android.graphics.RectF;
 import com.artifex.mupdfdemo.MuPDFCore;
 import universe.constellation.orion.viewer.DocumentWrapper;
-import universe.constellation.orion.viewer.outline.OutlineItem;
+import universe.constellation.orion.viewer.OutlineItem;
 import universe.constellation.orion.viewer.PageInfo;
 
 
