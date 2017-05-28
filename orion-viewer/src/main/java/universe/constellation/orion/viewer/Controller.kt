@@ -21,6 +21,7 @@ package universe.constellation.orion.viewer
 
 import android.graphics.Point
 import universe.constellation.orion.viewer.Common.d
+import universe.constellation.orion.viewer.LayoutStrategy.Companion.calcPageLayout
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.DocumentWithCaching
 import universe.constellation.orion.viewer.document.OutlineItem
@@ -116,12 +117,12 @@ class Controller(
     }
 
     fun drawNext() {
-        layoutStrategy.nextPage(layoutInfo)
+        layoutStrategy.calcPageLayout(layoutInfo, true, pageCount)
         drawPage(layoutInfo)
     }
 
     fun drawPrev() {
-        layoutStrategy.prevPage(layoutInfo)
+        layoutStrategy.calcPageLayout(layoutInfo, false, pageCount)
         drawPage(layoutInfo)
     }
 
