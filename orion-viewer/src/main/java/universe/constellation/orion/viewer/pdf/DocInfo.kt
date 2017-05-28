@@ -1,7 +1,7 @@
 /*
  * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
  *
- * Copyright (C) 2011-2013  Michael Bogdanov & Co
+ * Copyright (C) 2011-2017 Michael Bogdanov & Co
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,30 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer;
+package universe.constellation.orion.viewer.pdf
 
-/**
- * User: mike
- * Date: 14.12.11
- * Time: 16:37
- */
-public class DocInfo {
+class DocInfo {
 
-    public int pageCount;
+    @JvmField var pageCount: Int = 0
 
-    public String title;
+    @JvmField var title: String? = null
 
-    public String fileName;
-
-    public DocInfo() {
-
-    }
-
-    public int getPageCount() {
-        return pageCount;
-    }
-
-    public String getTitle() {
-        return title;
-    }
+    @JvmField var fileName: String? = null
 }
