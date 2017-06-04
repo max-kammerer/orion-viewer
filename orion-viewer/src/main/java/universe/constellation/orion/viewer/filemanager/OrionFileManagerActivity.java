@@ -111,13 +111,13 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (Permissions.INSTANCE.ORION_ASK_PERMISSION_CODE == requestCode) {
+        if (Permissions.ORION_ASK_PERMISSION_CODE == requestCode) {
             System.out.println("Permission callback...");
             ListView list = (ListView) findViewById(R.id.listView);
-            ListAdapter adapter = list.getAdapter();
-            if (list != null && adapter instanceof FileChooserAdapter) {
-                File currentFolder = ((FileChooserAdapter) adapter).getCurrentFolder();
-                if (currentFolder != null) {
+            if (list != null) {
+                ListAdapter adapter = list.getAdapter();
+                if (adapter instanceof FileChooserAdapter) {
+                    File currentFolder = ((FileChooserAdapter) adapter).getCurrentFolder();
                     System.out.println("Refreshing view");
                     ((FileChooserAdapter) adapter).changeFolder(new File(currentFolder.getAbsolutePath()));
                 }
