@@ -1,3 +1,7 @@
+===== 0.74.1 (Jun 04, 2017) =====
+* Fixed fail on pinch zoom
+* Fixed fail on permission update
+
 ===== 0.74.0 (May 26, 2017) =====
 * Update djvulibre to 3.5.26
     ** Fixed hang on djvu page rendering on Android 7
