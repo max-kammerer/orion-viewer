@@ -35,6 +35,10 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_openFile(JNIEnv * env
 
 	LOGI("Opening document: %s", fileName);
 	doc = ddjvu_document_create_by_filename_utf8(context, fileName, 0);
+
+    LOGI("Start decoding document: %p", doc);
+    while (ddjvu_document_decoding_status(doc) < DDJVU_JOB_OK);
+
 	LOGI("Doc opened: %p", doc);
 
 	int pageNum = 0;
@@ -58,6 +62,10 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_gotoPageInternal(JNIE
 	    page = NULL;
 	}
 	page = ddjvu_page_create_by_pageno(doc, pageNum);
+
+    LOGI("Start decoding page: %d", pageNum);
+	while(!ddjvu_page_decoding_done(page));
+	LOGI("End decoding page: %d", pageNum);
 }
 
 JNIEXPORT void JNICALL
@@ -76,8 +84,17 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_getPageInfo(JNIEnv *e
 	ddjvu_page_release(mypage);
 	*/
 
+    ddjvu_status_t r;
 	ddjvu_pageinfo_t dinfo;
 	ddjvu_document_get_pageinfo(doc, pageNum, &dinfo);
+	while ((r=ddjvu_document_get_pageinfo(doc, pageNum, &dinfo))<DDJVU_JOB_OK) {}
+         //handle_ddjvu_messages(ctx, TRUE);
+
+    if (r>=DDJVU_JOB_FAILED) {
+        LOGI("Page info get fail!");
+        //signal_error();
+        return;
+    }
 	
 	jclass cls = (*env)->GetObjectClass(env, info);
 	jfieldID width = (*env)->GetFieldID(env, cls, "width", "I");
@@ -175,7 +192,7 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_drawPage(JNIEnv *env,
 
     ddjvu_format_set_y_direction(pixelFormat, TRUE);
 
-    char * buffer = &(((unsigned char *)pixels)[shift*4]);
+    char * buffer = &(((char *)pixels)[shift*4]);
     jboolean result = ddjvu_page_render(page, DDJVU_RENDER_COLOR, &pageRect, &targetRect, pixelFormat, pageW * 4, buffer);
 
 	ddjvu_format_release(pixelFormat);
@@ -231,121 +248,184 @@ typedef struct OutlineItem_s OutlineItem;
 
 
 
-JNIEXPORT jobjectArray JNICALL Java_universe_constellation_orion_viewer_djvu_DjvuDocument_getOutline(JNIEnv * env, jobject thiz) 
+int buildTOC(miniexp_t expr, list * myList, int level, JNIEnv * env, jclass olClass, jmethodID ctor)
+{
+    while(miniexp_consp(expr))
+    {
+        miniexp_t s = miniexp_car(expr);
+        expr = miniexp_cdr(expr);
+        if (miniexp_consp(s) &&
+            miniexp_consp(miniexp_cdr(s)) &&
+            miniexp_stringp(miniexp_car(s)) &&
+            miniexp_stringp(miniexp_cadr(s)) )
+        {
+            // fill item
+            const char *name = miniexp_to_str(miniexp_car(s));
+            const char *page = miniexp_to_str(miniexp_cadr(s));
+            //starts with #
+
+            int pageno = -1;
+            if (page[0] == '#') {
+                pageno = ddjvu_document_search_pageno(doc, &page[1]);
+            }
+
+            if (pageno < 0) {
+                LOGI("Page %s", page);
+            }
+
+            if (name == NULL) {return -1;}
+
+            OutlineItem * element = (OutlineItem *) malloc(sizeof(OutlineItem));
+            element->title = name;
+            element->page = pageno;
+            element->level = level;
+
+            list_item * next = (list_item *) malloc(sizeof(list_item));
+            next->item = element;
+            next->next = NULL;
+            myList->tail->next = next;
+            myList->tail = next;
+
+            // recursion
+            buildTOC(miniexp_cddr(s), myList, level+1, env, olClass, ctor);
+        }
+    }
+    return 0;
+}
+
+
+JNIEXPORT jobjectArray JNICALL Java_universe_constellation_orion_viewer_djvu_DjvuDocument_getOutline(JNIEnv * env, jobject thiz)
 {
   miniexp_t outline = ddjvu_document_get_outline(doc);
-  
-  if (outline == miniexp_dummy || outline == NULL) {    
+
+  if (outline == miniexp_dummy || outline == NULL) {
       return NULL;
   }
-    
+
   if (!miniexp_consp(outline) || miniexp_car(outline) != miniexp_symbol("bookmarks"))
   {
      LOGI("Outlines is empty");
   }
-      
-  list_item * root = (list_item *) malloc(sizeof(list_item)); 
+
+  list_item * root = (list_item *) malloc(sizeof(list_item));
   root->next = NULL;
-  
+
   list * myList = (list *) malloc(sizeof(list));
   myList->head = root;
   myList->tail = root;
-  
+
   jclass        olClass;
   jmethodID     ctor;
 
   olClass = (*env)->FindClass(env, "universe/constellation/orion/viewer/outline/OutlineItem");
   if (olClass == NULL) return NULL;
   ctor = (*env)->GetMethodID(env, olClass, "<init>", "(ILjava/lang/String;I)V");
-  if (ctor == NULL) return NULL;  
-  
+  if (ctor == NULL) return NULL;
+
   buildTOC(miniexp_cdr(outline), myList, 0, env, olClass, ctor);
-  
+
   list_item * next = myList->head;
   int size = 0;
-  while (next->next != NULL) {    
+  while (next->next != NULL) {
     next = next->next;
     size++;
   }
-  
+
   LOGI("Outline has %i entries", size);
-  
+
   jobjectArray arr = (*env)->NewObjectArray(env, size, olClass, NULL);
   if (arr == NULL) {
     return NULL;
   }
-  
+
   next = root->next;
-  int pos = 0;  
-    
-  while (next != NULL) {    
+  int pos = 0;
+
+  while (next != NULL) {
     OutlineItem * item = next->item;
     jstring title = (*env)->NewStringUTF(env, item->title);
     //shift pageno to zero based
     jobject element = (*env)->NewObject(env, olClass, ctor, item->level, title, item->page);
-    (*env)->SetObjectArrayElement(env, arr, pos, element);    
-    (*env)->DeleteLocalRef(env, title);    
+    (*env)->SetObjectArrayElement(env, arr, pos, element);
+    (*env)->DeleteLocalRef(env, title);
     (*env)->DeleteLocalRef(env, element);
-    
-    free(item);    
+
+    free(item);
     list_item * next2 = next->next;
     free(next);
     next = next2;
-    pos++;    
+    pos++;
   }
 
   free(root);
   free(myList);
 
-  return arr;  
+  return arr;
 }
 
 
-int buildTOC(miniexp_t expr, list * myList, int level, JNIEnv * env, jclass olClass, jmethodID ctor)
-{   
-  while(miniexp_consp(expr))
-    {
-      miniexp_t s = miniexp_car(expr);
-      expr = miniexp_cdr(expr);
-      if (miniexp_consp(s) &&
-          miniexp_consp(miniexp_cdr(s)) &&
-          miniexp_stringp(miniexp_car(s)) &&
-          miniexp_stringp(miniexp_cadr(s)) )
-        {
-          // fill item
-          const char *name = miniexp_to_str(miniexp_car(s));
-          const char *page = miniexp_to_str(miniexp_cadr(s));
-          //starts with #
 
-          int pageno = -1;
-          if (page[0] == '#') {
-              pageno = ddjvu_document_search_pageno(doc, &page[1]);
-          }
+//sumatrapdf code
+int extractText(miniexp_t item, Arraylist list, fz_bbox * target) {
+    miniexp_t type = miniexp_car(item);
 
-          if (pageno < 0) {
-            LOGI("Page %s", page);
-          }
+    if (!miniexp_symbolp(type))
+        return 0;
 
-          if (name == NULL) {return -1;}
+    item = miniexp_cdr(item);
 
-          OutlineItem * element = (OutlineItem *) malloc(sizeof(OutlineItem));
-          element->title = name;
-          element->page = pageno;
-          element->level = level;
+    if (!miniexp_numberp(miniexp_car(item))) return 0;
+    int x0 = miniexp_to_int(miniexp_car(item)); item = miniexp_cdr(item);
+    if (!miniexp_numberp(miniexp_car(item))) return 0;
+    int y0 = miniexp_to_int(miniexp_car(item)); item = miniexp_cdr(item);
+    if (!miniexp_numberp(miniexp_car(item))) return 0;
+    int x1 = miniexp_to_int(miniexp_car(item)); item = miniexp_cdr(item);
+    if (!miniexp_numberp(miniexp_car(item))) return 0;
+    int y1 = miniexp_to_int(miniexp_car(item)); item = miniexp_cdr(item);
+    //RectI rect = RectI::FromXY(x0, y0, x1, y1);
+    fz_bbox rect = {x0 , y0 , x1 , y1};
 
-          list_item * next = (list_item *) malloc(sizeof(list_item));
-          next->item = element;
-          next->next = NULL;
-          myList->tail->next = next;
-          myList->tail = next;
-	  	  
-          // recursion
-          buildTOC(miniexp_cddr(s), myList, level+1, env, olClass, ctor);	  
+    miniexp_t str = miniexp_car(item);
+
+    if (miniexp_stringp(str) && !miniexp_cdr(item)) {
+        fz_bbox inters = fz_intersect_bbox(rect, *target);
+        //LOGI("Start text extraction: rectangle=[%d,%d,%d,%d] %s", rect.x0, rect.y0, rect.x1, rect.y1, content);
+        if (!fz_is_empty_bbox(inters)) {
+            const char *content = miniexp_to_str(str);
+
+            while (*content) {
+                arraylist_add(list, *content++);
+            }
+
+            //        if (value) {
+            //            size_t len = str::Len(value);
+            //            // TODO: split the rectangle into individual parts per glyph
+            //            for (size_t i = 0; i < len; i++)
+            //                coords.Append(RectI(rect.x, rect.y, rect.dx, rect.dy));
+            //            extracted.AppendAndFree(value);
+            //        }
+            if (miniexp_symbol("word") == type) {
+                arraylist_add(list, ' ');
+                //coords.Append(RectI(rect.x + rect.dx, rect.y, 2, rect.dy));
+            }
+            else if (miniexp_symbol("char") != type) {
+                arraylist_add(list, '\n');
+                //            extracted.Append(lineSep);
+                //            for (size_t i = 0; i < str::Len(lineSep); i++)
+                //                coords.Append(RectI());
+            }
         }
+        item = miniexp_cdr(item);
     }
-    return 0;
-}
 
+    while (miniexp_consp(str)) {
+        extractText(str, list, target);
+        item = miniexp_cdr(item);
+        str = miniexp_car(item);
+    }
+
+    return !item;
+}
 
 
 JNIEXPORT jstring JNICALL
@@ -388,69 +468,6 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_getText(JNIEnv *env, 
     arraylist_free(values);
 
     return result;
-}
-
-
-//sumatrapdf code
-int extractText(miniexp_t item, Arraylist list, fz_bbox * target) {
-    miniexp_t type = miniexp_car(item);
-
-    if (!miniexp_symbolp(type))
-        return 0;
-
-    item = miniexp_cdr(item);
-
-    if (!miniexp_numberp(miniexp_car(item))) return 0;
-    int x0 = miniexp_to_int(miniexp_car(item)); item = miniexp_cdr(item);
-    if (!miniexp_numberp(miniexp_car(item))) return 0;
-    int y0 = miniexp_to_int(miniexp_car(item)); item = miniexp_cdr(item);
-    if (!miniexp_numberp(miniexp_car(item))) return 0;
-    int x1 = miniexp_to_int(miniexp_car(item)); item = miniexp_cdr(item);
-    if (!miniexp_numberp(miniexp_car(item))) return 0;
-    int y1 = miniexp_to_int(miniexp_car(item)); item = miniexp_cdr(item);
-    //RectI rect = RectI::FromXY(x0, y0, x1, y1);
-    fz_bbox rect = {x0 , y0 , x1 , y1};
-
-    miniexp_t str = miniexp_car(item);
-
-    if (miniexp_stringp(str) && !miniexp_cdr(item)) {
-        fz_bbox inters = fz_intersect_bbox(rect, *target);
-            //LOGI("Start text extraction: rectangle=[%d,%d,%d,%d] %s", rect.x0, rect.y0, rect.x1, rect.y1, content);
-        if (!fz_is_empty_bbox(inters)) {
-            const char *content = miniexp_to_str(str);
-
-            while (*content) {
-                arraylist_add(list, *content++);
-            }
-
-    //        if (value) {
-    //            size_t len = str::Len(value);
-    //            // TODO: split the rectangle into individual parts per glyph
-    //            for (size_t i = 0; i < len; i++)
-    //                coords.Append(RectI(rect.x, rect.y, rect.dx, rect.dy));
-    //            extracted.AppendAndFree(value);
-    //        }
-            if (miniexp_symbol("word") == type) {
-                arraylist_add(list, ' ');
-                //coords.Append(RectI(rect.x + rect.dx, rect.y, 2, rect.dy));
-            }
-            else if (miniexp_symbol("char") != type) {
-                arraylist_add(list, '\n');
-    //            extracted.Append(lineSep);
-    //            for (size_t i = 0; i < str::Len(lineSep); i++)
-    //                coords.Append(RectI());
-            }
-        }
-        item = miniexp_cdr(item);
-    }
-
-    while (miniexp_consp(str)) {
-        extractText(str, list, target);
-        item = miniexp_cdr(item);
-        str = miniexp_car(item);
-    }
-
-    return !item;
 }
 
 static int qMax(int a, int b) {
