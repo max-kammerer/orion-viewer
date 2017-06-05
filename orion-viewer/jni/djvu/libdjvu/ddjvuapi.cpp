@@ -2857,7 +2857,7 @@ complain(GUTF8String opt, const char *msg)
     message = "Parsing \"" + opt + "\": " + msg;
   else
     message = msg;
-  G_EMTHROW(GException((const char*)message));
+  G_RETHROW(GException((const char*)message));
 }
 
 ddjvu_job_t *

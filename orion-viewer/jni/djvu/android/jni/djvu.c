@@ -35,6 +35,11 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_openFile(JNIEnv * env
 
 	LOGI("Opening document: %s", fileName);
 	doc = ddjvu_document_create_by_filename_utf8(context, fileName, 0);
+
+    while (ddjvu_document_decoding_status(doc) < DDJVU_JOB_OK) {
+        LOGI("Decoding document");
+    }
+
 	LOGI("Doc opened: %p", doc);
 
 	int pageNum = 0;
@@ -58,6 +63,12 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_gotoPageInternal(JNIE
 	    page = NULL;
 	}
 	page = ddjvu_page_create_by_pageno(doc, pageNum);
+
+    LOGI("Start decoding page: %d", pageNum);
+	while(!ddjvu_page_decoding_done(page)) {
+
+	}
+	LOGI("End decoding page: %d", pageNum);
 }
 
 JNIEXPORT void JNICALL
@@ -76,8 +87,17 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_getPageInfo(JNIEnv *e
 	ddjvu_page_release(mypage);
 	*/
 
+    ddjvu_status_t r;
 	ddjvu_pageinfo_t dinfo;
 	ddjvu_document_get_pageinfo(doc, pageNum, &dinfo);
+	while ((r=ddjvu_document_get_pageinfo(doc, pageNum, &dinfo))<DDJVU_JOB_OK) {}
+         //handle_ddjvu_messages(ctx, TRUE);
+
+   if (r>=DDJVU_JOB_FAILED) {
+        LOGI("Page info get fail!");
+        //signal_error();
+        return;
+    }
 	
 	jclass cls = (*env)->GetObjectClass(env, info);
 	jfieldID width = (*env)->GetFieldID(env, cls, "width", "I");
