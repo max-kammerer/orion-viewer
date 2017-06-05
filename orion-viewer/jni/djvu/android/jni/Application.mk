@@ -6,3 +6,6 @@ APP_PLATFORM=android-14
 APP_OPTIM := release
 LOCAL_ARM_MODE := arm
 APP_STL := system
+
+APP_CPPFLAGS += -fexceptions
+APP_STL := gnustl_static

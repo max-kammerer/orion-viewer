@@ -39,6 +39,16 @@ Arraylist arraylist_create()
   return list;
 }
 
+int arraylist_size(const Arraylist list)
+{
+  return list->_size;
+}
+
+int arraylist_is_empty(const Arraylist list)
+{
+  return (0 == arraylist_size(list));
+}
+
 int arraylist_add(const Arraylist list, Object object)
 {
   int old_size = arraylist_size(list);
@@ -47,26 +57,16 @@ int arraylist_add(const Arraylist list, Object object)
 
   (list->_size)++;
   if (old_size == list->_current_capacity)
-    {      
+    {
       new_capacity = list->_current_capacity + ARRAYLIST_CAPACITY_DELTA;
       new_data = malloc(object_size * new_capacity);
       memcpy(new_data, list->_data, object_size * old_size);
       free(list->_data);
       (list->_data) = new_data;
-      list->_current_capacity = new_capacity;     
+      list->_current_capacity = new_capacity;
     }
   (list->_data)[old_size] = object;
   return 1;
-}
-
-int arraylist_is_empty(const Arraylist list)
-{
-  return (0 == arraylist_size(list));
-}
-
-int arraylist_size(const Arraylist list)
-{
-  return list->_size;
 }
 
 Object arraylist_get(const Arraylist list, const int index)
