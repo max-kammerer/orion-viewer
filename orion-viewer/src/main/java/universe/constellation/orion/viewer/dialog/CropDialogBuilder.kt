@@ -9,10 +9,6 @@ import universe.constellation.orion.viewer.CropMargins
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.R
 
-/**
- * Created by mike on 12/15/15.
- */
-
 fun CropMargins.toDialogMargins() = intArrayOf(left, right, top, bottom, evenLeft, evenRight)
 
 fun IntArray.toMargins(evenCrop: Boolean, cropMode: Int) =
@@ -86,7 +82,7 @@ class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : A
         }
 
         val checkBox = findViewById(R.id.crop_even_flag) as CheckBox
-        checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
+        checkBox.setOnCheckedChangeListener { _, isChecked ->
             for (i in 0..evenCropTable.childCount - 1) {
                 val child = evenCropTable.getChildAt(i)
                 if (child is TableRow) {

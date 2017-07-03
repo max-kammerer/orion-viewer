@@ -68,8 +68,8 @@ class SeekBarPreference @JvmOverloads constructor(context: Context, attrs: Attri
         val view = inflater.inflate(R.layout.dialog_slider, null)
 
         // Setup minimum and maximum text labels
-        (view.findViewById(R.id.min_value) as TextView).text = Integer.toString(minValue)
-        (view.findViewById(R.id.max_value) as TextView).text = Integer.toString(maxValue)
+        (view.findViewById(R.id.min_value) as TextView).text = minValue.toString()
+        (view.findViewById(R.id.max_value) as TextView).text = maxValue.toString()
 
         // Setup SeekBar
         mSeekBar = view.findViewById(R.id.seek_bar) as SeekBar
@@ -79,7 +79,7 @@ class SeekBarPreference @JvmOverloads constructor(context: Context, attrs: Attri
 
         // Setup text label for current value
         mValueText = view.findViewById(R.id.current_value) as TextView
-        mValueText!!.text = Integer.toString(mCurrentValue)
+        mValueText!!.text = mCurrentValue.toString()
 
         return view
     }
@@ -113,7 +113,7 @@ class SeekBarPreference @JvmOverloads constructor(context: Context, attrs: Attri
         // Update current value
         mCurrentValue = value + minValue
         // Update label with current value
-        mValueText!!.text = Integer.toString(mCurrentValue)
+        mValueText!!.text = mCurrentValue.toString()
     }
 
     override fun onStartTrackingTouch(seek: SeekBar) {
