@@ -105,7 +105,8 @@ class SeekBarPreference @JvmOverloads constructor(context: Context, attrs: Attri
         // Format summary string with current value
         val summary = super.getSummary().toString()
         val value = getPersistedInt(defaultSeekValue)
-        return String.format(summary, value)
+        //android 2.1
+        return java.lang.String.format(summary, value)
     }
 
     override fun onProgressChanged(seek: SeekBar, value: Int, fromTouch: Boolean) {
