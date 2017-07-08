@@ -1,5 +1,5 @@
 project.ext {
-    orionVersionCode = 142
-    orionVersionName = "0.74.1"
+    orionVersionCode = 146
+    orionVersionName = "0.74.2"
     doSigning = new File("orion-viewer/signing.gradle").exists()
 }

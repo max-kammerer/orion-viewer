@@ -1,3 +1,6 @@
+===== 0.74.2 (Jul 08, 2017) =====
+* Fixed compatibility with android 2.1
+
 ===== 0.74.1 (Jun 04, 2017) =====
 * Fixed fail on pinch zoom
 * Fixed fail on permission update
