@@ -22,6 +22,8 @@ package universe.constellation.orion.viewer.djvu;
 import android.graphics.Bitmap;
 import android.graphics.RectF;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +31,7 @@ import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.document.Document;
 import universe.constellation.orion.viewer.document.OutlineItem;
 import universe.constellation.orion.viewer.PageInfo;
+import universe.constellation.orion.viewer.pdf.DocInfo;
 
 /**
  * User: mike
@@ -41,27 +44,33 @@ public class DjvuDocument implements Document {
 		System.loadLibrary("djvu");
 	}
 
-    private int pageCount;
-
     private int lastPage = -1;
+    private long doc = 0;
+    private long context = 0;
+    private final DocInfo docInfo = new DocInfo();
 
-    public DjvuDocument(String fileName) {
-        openDocument(fileName);
+    @Nullable
+    @Override
+    public OutlineItem[] getOutline() {
+        return getOutline(doc);
     }
 
-    public synchronized boolean openDocument(String fileName) {
-        pageCount = openFile(fileName);
-        return true;
+    public DjvuDocument(String fileName) {
+        context = initContext();
+        docInfo.fileName = fileName;
+        if (context == 0) throw new RuntimeException("Can't create djvu context");
+        doc = openFile(fileName, docInfo, context);
+        if (doc == 0) throw new RuntimeException("Can't open file " + fileName);
     }
 
     public int getPageCount() {
-        return pageCount;
+        return docInfo.pageCount;
     }
 
-    public synchronized PageInfo getPageInfo(int pageNum, int cropMode) {
+    public PageInfo getPageInfo(int pageNum, int cropMode) {
         PageInfo info = new PageInfo(pageNum);
         long start = System.currentTimeMillis();
-        getPageInfo(pageNum, info);
+        getPageInfo(doc, pageNum, info);
         Common.d("Page " + pageNum + " info takes = " + 0.001 * (System.currentTimeMillis() - start) + " s");
         return info;
     }
@@ -69,37 +78,38 @@ public class DjvuDocument implements Document {
     public synchronized void renderPage(int pageNumber, Bitmap bitmap, double zoom, int left, int top, int right, int bottom) {
         gotoPage(pageNumber);
         long start = System.currentTimeMillis();
-        drawPage(bitmap, (float) zoom, right - left, bottom - top, left, top, right - left, bottom - top);
+        drawPage(doc, bitmap, (float) zoom, right - left, bottom - top, left, top, right - left, bottom - top);
         Common.d("Page " + pageNumber + " rendering takes = " + 0.001 * (System.currentTimeMillis() - start) + " s");
     }
 
     public synchronized void destroy() {
-        destroying();
+        destroying(doc, context);
     }
 
     private synchronized void gotoPage(int page) {
         if(lastPage != page) {
             Common.d("Changing page...");
             long start = System.currentTimeMillis();
-            if (page > pageCount-1)
-                page = pageCount-1;
+            if (page > docInfo.pageCount - 1)
+                page = docInfo.pageCount - 1;
             else if (page < 0)
                 page = 0;
-            gotoPageInternal(page);
+            gotoPageInternal(doc, page);
 
             lastPage = page;
             Common.d("Page changing takes " + page + " = " + 0.001 * (System.currentTimeMillis() - start));
         }
 	}
 
-    private static synchronized native int openFile(String filename);
-	private static synchronized  native void gotoPageInternal(int localActionPageNum);
-	private static synchronized  native int getPageInfo(int pageNum, PageInfo info);
+    private static native long initContext();
+    private static native long openFile(String filename, DocInfo info, long context);
+	private static synchronized native void gotoPageInternal(long doc, int localActionPageNum);
+	private static native int getPageInfo(long doc, int pageNum, PageInfo info);
 
-	public static synchronized  native boolean drawPage(Bitmap birmap, float zoom, int pageW, int pageH,
+	public static synchronized  native boolean drawPage(long doc, Bitmap bitmap, float zoom, int pageW, int pageH,
 			int patchX, int patchY,
 			int patchW, int patchH);
-	public static synchronized  native void destroying();
+	public static synchronized  native void destroying(long doc, long context);
 
     public String getTitle() {
         return null;
@@ -109,11 +119,11 @@ public class DjvuDocument implements Document {
 
 	public native void setThreshold(int threshold);
 
-	public native OutlineItem[] getOutline();
+	public native OutlineItem[] getOutline(long doc);
 
-    public native String getText(int pageNumber, int absoluteX, int absoluteY, int width, int height);
+    public native String getText(long doc, int pageNumber, int absoluteX, int absoluteY, int width, int height);
 
-    private static synchronized native boolean getPageText(int pageNumber, ArrayList stringBuilder, ArrayList positions);
+    private static synchronized native boolean getPageText(long doc, int pageNumber, ArrayList stringBuilder, ArrayList positions);
 
     @Override
     public boolean needPassword() {
@@ -131,7 +141,7 @@ public class DjvuDocument implements Document {
 
         ArrayList<String> strings = new ArrayList(500);
         ArrayList<RectF> positions = new ArrayList(500);
-        getPageText(pageNumber, strings, positions);
+        getPageText(doc, pageNumber, strings, positions);
 
         int prevIndex = 0;
         ArrayList<Integer> indexes = new ArrayList<Integer>(500);
@@ -170,7 +180,7 @@ public class DjvuDocument implements Document {
 
     @Override
     public String getText(int pageNumber, int absoluteX, int absoluteY, int width, int height, boolean singleWord) {
-        return getText(pageNumber, absoluteX, absoluteY, width, height);
+        return getText(doc, pageNumber, absoluteX, absoluteY, width, height);
     }
 
     @Override

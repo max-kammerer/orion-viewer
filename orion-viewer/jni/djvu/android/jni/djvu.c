@@ -21,41 +21,68 @@
 extern void orion_updateContrast(unsigned char *, int);
 
 /* Globals */
-ddjvu_context_t *context = NULL;
-ddjvu_document_t *doc = NULL;
+//ddjvu_context_t *context = NULL;
+//ddjvu_document_t *doc = NULL;
 ddjvu_page_t *page = NULL;
 
+static inline jlong jlong_cast(void *p)
+{
+    return (jlong)(intptr_t)p;
+}
 
-JNIEXPORT int JNICALL
-Java_universe_constellation_orion_viewer_djvu_DjvuDocument_openFile(JNIEnv * env, jobject thiz, jstring jfileName)
-{  
-	page = NULL;
-	context = ddjvu_context_create("orion");
-	const char * fileName = (*env)->GetStringUTFChars(env, jfileName, 0);
 
-	LOGI("Opening document: %s", fileName);
-	doc = ddjvu_document_create_by_filename_utf8(context, fileName, 0);
+JNIEXPORT jlong JNICALL
+Java_universe_constellation_orion_viewer_djvu_DjvuDocument_initContext(JNIEnv * env, jobject thiz)
+{
+    LOGI("Creating context");
+    return jlong_cast(ddjvu_context_create("orion"));
+}
+
+JNIEXPORT jlong JNICALL
+Java_universe_constellation_orion_viewer_djvu_DjvuDocument_openFile(JNIEnv * env, jobject thiz, jstring jfileName, jobject docInfo, jlong contextl) {
+    page = NULL;
+    ddjvu_context_t *context = (ddjvu_context_t *) contextl;
+    const char *fileName = (*env)->GetStringUTFChars(env, jfileName, 0);
+
+    LOGI("Opening document: %s", fileName);
+    ddjvu_document_t *doc = ddjvu_document_create_by_filename_utf8(context, fileName, 0);
 
     LOGI("Start decoding document: %p", doc);
-    while (ddjvu_document_decoding_status(doc) < DDJVU_JOB_OK);
+    ddjvu_status_t r;
+    while ((r = ddjvu_document_decoding_status(doc)) < DDJVU_JOB_OK);
 
-	LOGI("Doc opened: %p", doc);
+    if (r == DDJVU_JOB_OK) {
+        LOGI("Doc opened successfully: %p", doc);
 
-	int pageNum = 0;
-	
-	if (doc) {
-		pageNum =  ddjvu_document_get_pagenum(doc);
-	}
+        int pageNum = 0;
 
-	LOGI("Page count = %i", pageNum);
+        if (doc) {
+            pageNum = ddjvu_document_get_pagenum(doc);
+        }
 
-	return 	pageNum;
+        LOGI("Page count = %i", pageNum);
+
+        jclass cls = (*env)->GetObjectClass(env, docInfo);
+        jfieldID pageCountF = (*env)->GetFieldID(env, cls, "pageCount", "I");
+        //jfieldID titleF = (*env)->GetFieldID(env, cls, "title", "Ljava/lang/String;");
+        (*env)->SetIntField(env, docInfo, pageCountF, pageNum);
+        //    if (title) {
+        //        (*env)->SetObjectField(env, docInfo, titleF, ((*env)->NewStringUTF(env, title)));
+        //    }
+    } else {
+        LOGI("Error during document opening: %p", doc);
+        ddjvu_document_release(doc);
+        doc = NULL;
+    }
+
+    return jlong_cast(doc);
 }
 
 
 JNIEXPORT void JNICALL
-Java_universe_constellation_orion_viewer_djvu_DjvuDocument_gotoPageInternal(JNIEnv *env, jobject thiz, int pageNum)
+Java_universe_constellation_orion_viewer_djvu_DjvuDocument_gotoPageInternal(JNIEnv *env, jobject thiz, jlong docl, int pageNum)
 {
+    ddjvu_document_t * doc = (ddjvu_document_t *) docl;
 	LOGI("Opening page: %d", pageNum);
 	if (page != NULL) {
 	    ddjvu_page_release(page);
@@ -69,7 +96,7 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_gotoPageInternal(JNIE
 }
 
 JNIEXPORT void JNICALL
-Java_universe_constellation_orion_viewer_djvu_DjvuDocument_getPageInfo(JNIEnv *env, jobject thiz, int pageNum, jobject info)
+Java_universe_constellation_orion_viewer_djvu_DjvuDocument_getPageInfo(JNIEnv *env, jobject thiz, jlong docl, int pageNum, jobject info)
 {
 	
 	clock_t start, end;
@@ -84,6 +111,7 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_getPageInfo(JNIEnv *e
 	ddjvu_page_release(mypage);
 	*/
 
+    ddjvu_document_t * doc = (ddjvu_document_t *) docl;
     ddjvu_status_t r;
 	ddjvu_pageinfo_t dinfo;
 	ddjvu_document_get_pageinfo(doc, pageNum, &dinfo);
@@ -108,10 +136,11 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_getPageInfo(JNIEnv *e
 }
 
 JNIEXPORT jboolean JNICALL
-Java_universe_constellation_orion_viewer_djvu_DjvuDocument_drawPage(JNIEnv *env, jobject thiz, jobject bitmap,
+Java_universe_constellation_orion_viewer_djvu_DjvuDocument_drawPage(JNIEnv *env, jobject thiz, jlong docl, jobject bitmap,
         float zoom,
 		int pageW, int pageH, int patchX, int patchY, int patchW, int patchH)
 {
+    ddjvu_context_t * doc = (ddjvu_context_t *) docl;
 	LOGI("==================Start Rendering==============");
 	int ret;
 	AndroidBitmapInfo info;
@@ -206,7 +235,7 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_drawPage(JNIEnv *env,
 
 
 JNIEXPORT void JNICALL
-Java_universe_constellation_orion_viewer_djvu_DjvuDocument_destroying(JNIEnv * env, jobject thiz)
+Java_universe_constellation_orion_viewer_djvu_DjvuDocument_destroying(JNIEnv * env, jobject thiz, jlong doc, jlong context)
 {
 	LOGI("Closing doc...");	
 	
@@ -214,13 +243,13 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_destroying(JNIEnv * e
 		ddjvu_page_release(page);
 		page = NULL;
 	}
-	if (doc != NULL) {
-		ddjvu_document_release(doc);
-		doc = NULL;
+
+	if (doc != 0) {
+		ddjvu_document_release((ddjvu_document_t *) doc);
 	}
-	if (context != NULL) {
-		ddjvu_context_release(context);
-		context = context;
+
+	if (context != 0) {
+		ddjvu_context_release((ddjvu_context_t *) context);
 	}
 }
 
@@ -248,7 +277,7 @@ typedef struct OutlineItem_s OutlineItem;
 
 
 
-int buildTOC(miniexp_t expr, list * myList, int level, JNIEnv * env, jclass olClass, jmethodID ctor)
+int buildTOC(ddjvu_document_t * doc, miniexp_t expr, list * myList, int level, JNIEnv * env, jclass olClass, jmethodID ctor)
 {
     while(miniexp_consp(expr))
     {
@@ -287,80 +316,80 @@ int buildTOC(miniexp_t expr, list * myList, int level, JNIEnv * env, jclass olCl
             myList->tail = next;
 
             // recursion
-            buildTOC(miniexp_cddr(s), myList, level+1, env, olClass, ctor);
+            buildTOC(doc, miniexp_cddr(s), myList, level+1, env, olClass, ctor);
         }
     }
     return 0;
 }
 
 
-JNIEXPORT jobjectArray JNICALL Java_universe_constellation_orion_viewer_djvu_DjvuDocument_getOutline(JNIEnv * env, jobject thiz)
+JNIEXPORT jobjectArray JNICALL Java_universe_constellation_orion_viewer_djvu_DjvuDocument_getOutline(JNIEnv * env, jobject thiz, jlong docl)
 {
-  miniexp_t outline = ddjvu_document_get_outline(doc);
+    ddjvu_document_t *doc = (ddjvu_document_t *) docl;
+    miniexp_t outline = ddjvu_document_get_outline(doc);
 
-  if (outline == miniexp_dummy || outline == NULL) {
-      return NULL;
-  }
+    if (outline == miniexp_dummy || outline == NULL) {
+        return NULL;
+    }
 
-  if (!miniexp_consp(outline) || miniexp_car(outline) != miniexp_symbol("bookmarks"))
-  {
-     LOGI("Outlines is empty");
-  }
+    if (!miniexp_consp(outline) || miniexp_car(outline) != miniexp_symbol("bookmarks")) {
+        LOGI("Outlines is empty");
+    }
 
-  list_item * root = (list_item *) malloc(sizeof(list_item));
-  root->next = NULL;
+    list_item *root = (list_item *) malloc(sizeof(list_item));
+    root->next = NULL;
 
-  list * myList = (list *) malloc(sizeof(list));
-  myList->head = root;
-  myList->tail = root;
+    list *myList = (list *) malloc(sizeof(list));
+    myList->head = root;
+    myList->tail = root;
 
-  jclass        olClass;
-  jmethodID     ctor;
+    jclass olClass;
+    jmethodID ctor;
 
-  olClass = (*env)->FindClass(env, "universe/constellation/orion/viewer/outline/OutlineItem");
-  if (olClass == NULL) return NULL;
-  ctor = (*env)->GetMethodID(env, olClass, "<init>", "(ILjava/lang/String;I)V");
-  if (ctor == NULL) return NULL;
+    olClass = (*env)->FindClass(env, "universe/constellation/orion/viewer/outline/OutlineItem");
+    if (olClass == NULL) return NULL;
+    ctor = (*env)->GetMethodID(env, olClass, "<init>", "(ILjava/lang/String;I)V");
+    if (ctor == NULL) return NULL;
 
-  buildTOC(miniexp_cdr(outline), myList, 0, env, olClass, ctor);
+    buildTOC(doc, miniexp_cdr(outline), myList, 0, env, olClass, ctor);
 
-  list_item * next = myList->head;
-  int size = 0;
-  while (next->next != NULL) {
-    next = next->next;
-    size++;
-  }
+    list_item *next = myList->head;
+    int size = 0;
+    while (next->next != NULL) {
+        next = next->next;
+        size++;
+    }
 
-  LOGI("Outline has %i entries", size);
+    LOGI("Outline has %i entries", size);
 
-  jobjectArray arr = (*env)->NewObjectArray(env, size, olClass, NULL);
-  if (arr == NULL) {
-    return NULL;
-  }
+    jobjectArray arr = (*env)->NewObjectArray(env, size, olClass, NULL);
+    if (arr == NULL) {
+        return NULL;
+    }
 
-  next = root->next;
-  int pos = 0;
+    next = root->next;
+    int pos = 0;
 
-  while (next != NULL) {
-    OutlineItem * item = next->item;
-    jstring title = (*env)->NewStringUTF(env, item->title);
-    //shift pageno to zero based
-    jobject element = (*env)->NewObject(env, olClass, ctor, item->level, title, item->page);
-    (*env)->SetObjectArrayElement(env, arr, pos, element);
-    (*env)->DeleteLocalRef(env, title);
-    (*env)->DeleteLocalRef(env, element);
+    while (next != NULL) {
+        OutlineItem *item = next->item;
+        jstring title = (*env)->NewStringUTF(env, item->title);
+        //shift pageno to zero based
+        jobject element = (*env)->NewObject(env, olClass, ctor, item->level, title, item->page);
+        (*env)->SetObjectArrayElement(env, arr, pos, element);
+        (*env)->DeleteLocalRef(env, title);
+        (*env)->DeleteLocalRef(env, element);
 
-    free(item);
-    list_item * next2 = next->next;
-    free(next);
-    next = next2;
-    pos++;
-  }
+        free(item);
+        list_item *next2 = next->next;
+        free(next);
+        next = next2;
+        pos++;
+    }
 
-  free(root);
-  free(myList);
+    free(root);
+    free(myList);
 
-  return arr;
+    return arr;
 }
 
 
@@ -429,10 +458,10 @@ int extractText(miniexp_t item, Arraylist list, fz_bbox * target) {
 
 
 JNIEXPORT jstring JNICALL
-Java_universe_constellation_orion_viewer_djvu_DjvuDocument_getText(JNIEnv *env, jobject thiz, int pageNumber,
+Java_universe_constellation_orion_viewer_djvu_DjvuDocument_getText(JNIEnv *env, jobject thiz, jlong docl, int pageNumber,
 		int startX, int startY, int width, int height)
 {
-
+    ddjvu_document_t * doc = (ddjvu_document_t *) docl;
     LOGI("==================Start Text Extraction==============");
 
     miniexp_t pagetext;
@@ -594,10 +623,11 @@ static jboolean miniexp_get_text(JNIEnv * env, miniexp_t exp, jobject stringBuil
   return 1;
 }
 
-JNIEXPORT jboolean JNICALL Java_universe_constellation_orion_viewer_djvu_DjvuDocument_getPageText(JNIEnv *env, jobject thiz,
+JNIEXPORT jboolean JNICALL Java_universe_constellation_orion_viewer_djvu_DjvuDocument_getPageText(JNIEnv *env, jobject thiz, jlong  docl,
                                                                                   jint pageNumber, jobject stringBuilder, jobject positionList)
 {
     LOGI("Start Page Text Extraction %i", pageNumber);
+    ddjvu_document_t * doc = (ddjvu_document_t *) docl;
 
     miniexp_t pagetext;
     while ((pagetext=ddjvu_document_get_pagetext(doc, pageNumber, "word"))==miniexp_dummy) {

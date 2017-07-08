@@ -54,8 +54,6 @@ interface Document : PageInfoProvider, ImagePostProcessor {
 
     val outline: Array<OutlineItem>?
 
-    fun openDocument(fileName: String): Boolean
-
     override fun getPageInfo(pageNum: Int, cropMode: Int): PageInfo
 
     fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int)
