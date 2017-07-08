@@ -129,14 +129,6 @@ class DocumentWithCaching(val doc: Document) : Document by doc {
     override fun hasCalculatedPageInfo(pageNumber: Int): Boolean = cache[pageNumber] != null
 }
 
-inline fun <R> timing(message: String, l: () -> R): R {
-    Common.d("Starting task '$message'...")
-    val start = System.currentTimeMillis()
-    return l().also {
-        Common.d("Task '$message' is finished in ${System.currentTimeMillis() - start} ms")
-    }
-}
-
 abstract class Image(val width: Int, val height: Int) {
 
     abstract operator fun get(h: Int, w: Int): Int
