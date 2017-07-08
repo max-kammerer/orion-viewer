@@ -28,27 +28,23 @@ import universe.constellation.orion.viewer.pdf.DocInfo
 import universe.constellation.orion.viewer.timing
 import java.util.*
 
-/**
- * User: mike
- * Date: 22.11.11
- * Time: 10:42
- */
 class DjvuDocument(fileName: String) : Document {
 
     private var lastPage = -1
-    private var doc: Long = 0
-    private var context: Long = 0
+    private var lastPagePointer = 0L
+    private var docPointer = 0L
+    private var contextPointer = 0L
     private val docInfo = DocInfo()
 
     override val outline: Array<OutlineItem>?
-        get() = getOutline(doc)
+        get() = getOutline(docPointer)
 
     init {
-        context = initContext()
+        contextPointer = initContext()
         docInfo.fileName = fileName
-        if (context == 0L) throw RuntimeException("Can't create djvu context").also { destroy() }
-        doc = openFile(fileName, docInfo, context)
-        if (doc == 0L) throw RuntimeException("Can't open file " + fileName).also { destroy() }
+        if (contextPointer == 0L) throw RuntimeException("Can't create djvu contextPointer").also { destroy() }
+        docPointer = openFile(fileName, docInfo, contextPointer)
+        if (docPointer == 0L) throw RuntimeException("Can't open file " + fileName).also { destroy() }
     }
 
     override val pageCount: Int
@@ -57,30 +53,37 @@ class DjvuDocument(fileName: String) : Document {
     override fun getPageInfo(pageNum: Int, cropMode: Int) =
             PageInfo(pageNum).also {
                 timing("Page $pageNum info calculation") {
-                    getPageInfo(doc, pageNum, it)
+                    getPageInfo(docPointer, pageNum, it)
                 }
             }
 
     @Synchronized
     override fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int) {
-        gotoPage(pageNumber)
+        val pagePointer = gotoPage(pageNumber)
         timing("Page $pageNumber rendering") {
-            drawPage(doc, bitmap, zoom.toFloat(), right - left, bottom - top, left, top, right - left, bottom - top)
+            drawPage(docPointer, pagePointer, bitmap, zoom.toFloat(), right - left, bottom - top, left, top, right - left, bottom - top)
         }
     }
 
     @Synchronized
     override fun destroy() {
-        destroying(doc, context)
-        doc = 0
-        context = 0
+        releasePage()
+        destroying(docPointer, contextPointer)
+        docPointer = 0
+        contextPointer = 0
+    }
+
+    fun releasePage() {
+        releasePage(lastPagePointer)
+        lastPagePointer = 0
     }
 
     @Synchronized
-    private fun gotoPage(page: Int) {
+    private fun gotoPage(page: Int): Long {
         if (lastPage != page) {
             timing("Changing page...") {
-                gotoPageInternal(doc,
+                releasePage()
+                lastPagePointer = gotoPageInternal(docPointer,
                         if (page > docInfo.pageCount - 1)
                             docInfo.pageCount - 1
                         else if (page < 0)
@@ -90,18 +93,17 @@ class DjvuDocument(fileName: String) : Document {
                 lastPage = page
             }
         }
+        return lastPagePointer
     }
 
     override val title: String?
         get() = null
 
     override external fun setContrast(contrast: Int)
-
     override external fun setThreshold(threshold: Int)
-
     external fun getOutline(doc: Long): Array<OutlineItem>
-
     external fun getText(doc: Long, pageNumber: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int): String
+    external fun releasePage(page: Long)
 
     override fun needPassword(): Boolean {
         return false
@@ -117,7 +119,7 @@ class DjvuDocument(fileName: String) : Document {
 
         val strings = ArrayList<String>(500)
         val positions = ArrayList<RectF>(500)
-        getPageText(doc, pageNumber, strings, positions)
+        getPageText(docPointer, pageNumber, strings, positions)
 
         var prevIndex = 0
         val indexes = ArrayList<Int>(500)
@@ -155,7 +157,7 @@ class DjvuDocument(fileName: String) : Document {
     }
 
     override fun getText(pageNumber: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): String? {
-        return getText(doc, pageNumber, absoluteX, absoluteY, width, height)
+        return getText(docPointer, pageNumber, absoluteX, absoluteY, width, height)
     }
 
     override fun hasCalculatedPageInfo(pageNumber: Int): Boolean {
@@ -174,26 +176,21 @@ class DjvuDocument(fileName: String) : Document {
         @JvmStatic
         external fun openFile(filename: String, info: DocInfo, context: Long): Long
 
-
-        @Synchronized
         @JvmStatic
-        external fun gotoPageInternal(doc: Long, localActionPageNum: Int)
+        external fun gotoPageInternal(doc: Long, pageNum: Int): Long
 
         @JvmStatic
         external fun getPageInfo(doc: Long, pageNum: Int, info: PageInfo): Int
 
         @JvmStatic
-        @Synchronized
-        external fun drawPage(doc: Long, bitmap: Bitmap, zoom: Float, pageW: Int, pageH: Int,
+        external fun drawPage(doc: Long, page: Long, bitmap: Bitmap, zoom: Float, pageW: Int, pageH: Int,
                               patchX: Int, patchY: Int,
                               patchW: Int, patchH: Int): Boolean
 
         @JvmStatic
-        @Synchronized
         external fun destroying(doc: Long, context: Long)
 
         @JvmStatic
-        @Synchronized
         external fun getPageText(doc: Long, pageNumber: Int, stringBuilder: ArrayList<*>, positions: ArrayList<*>): Boolean
     }
 }
