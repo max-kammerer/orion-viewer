@@ -23,7 +23,7 @@ extern void orion_updateContrast(unsigned char *, int);
 /* Globals */
 //ddjvu_context_t *context = NULL;
 //ddjvu_document_t *doc = NULL;
-ddjvu_page_t *page = NULL;
+//ddjvu_page_t *page = NULL;
 
 static inline jlong jlong_cast(void *p)
 {
@@ -40,7 +40,6 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_initContext(JNIEnv * 
 
 JNIEXPORT jlong JNICALL
 Java_universe_constellation_orion_viewer_djvu_DjvuDocument_openFile(JNIEnv * env, jobject thiz, jstring jfileName, jobject docInfo, jlong contextl) {
-    page = NULL;
     ddjvu_context_t *context = (ddjvu_context_t *) contextl;
     const char *fileName = (*env)->GetStringUTFChars(env, jfileName, 0);
 
@@ -79,20 +78,18 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_openFile(JNIEnv * env
 }
 
 
-JNIEXPORT void JNICALL
+JNIEXPORT jlong JNICALL
 Java_universe_constellation_orion_viewer_djvu_DjvuDocument_gotoPageInternal(JNIEnv *env, jobject thiz, jlong docl, int pageNum)
 {
     ddjvu_document_t * doc = (ddjvu_document_t *) docl;
 	LOGI("Opening page: %d", pageNum);
-	if (page != NULL) {
-	    ddjvu_page_release(page);
-	    page = NULL;
-	}
-	page = ddjvu_page_create_by_pageno(doc, pageNum);
+    ddjvu_page_t * page = ddjvu_page_create_by_pageno(doc, pageNum);
 
-    LOGI("Start decoding page: %d", pageNum);
+    LOGI("Start decoding page: %p", page);
 	while(!ddjvu_page_decoding_done(page));
-	LOGI("End decoding page: %d", pageNum);
+	LOGI("End decoding page: %p", page);
+
+    return jlong_cast(page);
 }
 
 JNIEXPORT void JNICALL
@@ -136,11 +133,13 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_getPageInfo(JNIEnv *e
 }
 
 JNIEXPORT jboolean JNICALL
-Java_universe_constellation_orion_viewer_djvu_DjvuDocument_drawPage(JNIEnv *env, jobject thiz, jlong docl, jobject bitmap,
+Java_universe_constellation_orion_viewer_djvu_DjvuDocument_drawPage(JNIEnv *env, jobject thiz, jlong docl, jlong pagel, jobject bitmap,
         float zoom,
 		int pageW, int pageH, int patchX, int patchY, int patchW, int patchH)
 {
-    ddjvu_context_t * doc = (ddjvu_context_t *) docl;
+    ddjvu_document_t * doc = (ddjvu_document_t *) docl;
+    ddjvu_page_t * page = (ddjvu_page_t *) pagel;
+
 	LOGI("==================Start Rendering==============");
 	int ret;
 	AndroidBitmapInfo info;
@@ -238,19 +237,23 @@ JNIEXPORT void JNICALL
 Java_universe_constellation_orion_viewer_djvu_DjvuDocument_destroying(JNIEnv * env, jobject thiz, jlong doc, jlong context)
 {
 	LOGI("Closing doc...");	
-	
-	if (page != NULL) {
-		ddjvu_page_release(page);
-		page = NULL;
-	}
 
 	if (doc != 0) {
 		ddjvu_document_release((ddjvu_document_t *) doc);
 	}
 
+    LOGI("Closing context...");
 	if (context != 0) {
 		ddjvu_context_release((ddjvu_context_t *) context);
 	}
+}
+
+JNIEXPORT void JNICALL
+Java_universe_constellation_orion_viewer_djvu_DjvuDocument_releasePage(JNIEnv * env, jobject thiz, jlong page)
+{
+    if (page != 0) {
+        ddjvu_page_release((ddjvu_page_t *)page);
+    }
 }
 
 
