@@ -35,12 +35,10 @@ class OrionStatusBarHelper(val view: ViewGroup) : OrionBookListener, OrionImageL
 
     private fun pad(value: Int): String {
         val pValue = Math.abs(value)
-        if (pValue < 10) {
-            return "  " + value
-        } else if (pValue < 100) {
-            return " " + value
-        } else {
-            return "" + value
+        return when {
+            pValue < 10 -> "  $value"
+            pValue < 100 -> " $value"
+            else -> "$value"
         }
     }
 
@@ -54,7 +52,7 @@ class OrionStatusBarHelper(val view: ViewGroup) : OrionBookListener, OrionImageL
 
     fun setColorMatrix(colorMatrix: FloatArray?) {
         val colorFilter = if (colorMatrix == null) null else ColorMatrixColorFilter(colorMatrix)
-        (0..panel.childCount-1).forEach {
+        (0 until panel.childCount).forEach {
             val child = panel.getChildAt(it)
             when(child) {
                 is TextView -> child.paint.colorFilter = colorFilter

@@ -15,8 +15,7 @@ abstract class BaseTest : AndroidTestCase(), TestUtil {
 
     override fun getOrionTestContext(): Context {
         val m = AndroidTestCase::class.java.getMethod("getTestContext")
-        val testContext = m.invoke(this) as Context
-        return testContext
+        return m.invoke(this) as Context
     }
 
 }

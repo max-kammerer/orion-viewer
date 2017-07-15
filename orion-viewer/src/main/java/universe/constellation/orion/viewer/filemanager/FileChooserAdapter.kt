@@ -72,7 +72,7 @@ class FileChooserAdapter constructor(
         }
 
         currentList.sortWith (
-            Comparator<File> { f1, f2 ->
+            Comparator { f1, f2 ->
                 if (f1.isDirectory && !f2.isDirectory || !f1.isDirectory && f2.isDirectory) {
                     return@Comparator if (f1.isDirectory) -1 else 1
                 }

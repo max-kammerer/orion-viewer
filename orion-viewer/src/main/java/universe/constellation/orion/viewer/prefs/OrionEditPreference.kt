@@ -89,10 +89,10 @@ open class OrionEditPreference @JvmOverloads constructor(context: Context, attrs
     private fun getIntegerOrNull(array: TypedArray, id: Int): Int? {
         val UNDEFINED = Int.MIN_VALUE
         val value = array.getInt(id, UNDEFINED)
-        if (value == UNDEFINED) {
-            return null
+        return if (value == UNDEFINED) {
+            null
         } else {
-            return value
+            value
         }
     }
 }
@@ -123,18 +123,18 @@ class OrionBookEditPreference @JvmOverloads constructor(context: Context, attrs:
     }
 
     override fun getPersistedInt(defaultReturnValue: Int): Int {
-        if (isCurrentBookOption) {
-            return OrionPreferenceUtil.getPersistedInt(this, defaultReturnValue)
+        return if (isCurrentBookOption) {
+            OrionPreferenceUtil.getPersistedInt(this, defaultReturnValue)
         } else {
-            return super.getPersistedInt(defaultReturnValue)
+            super.getPersistedInt(defaultReturnValue)
         }
     }
 
     override fun getPersistedString(defaultReturnValue: String?): String? {
-        if (isCurrentBookOption) {
-            return OrionPreferenceUtil.getPersistedString(this, defaultReturnValue)
+        return if (isCurrentBookOption) {
+            OrionPreferenceUtil.getPersistedString(this, defaultReturnValue)
         } else {
-            return super.getPersistedString(defaultReturnValue)
+            super.getPersistedString(defaultReturnValue)
         }
     }
 }

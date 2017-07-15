@@ -26,15 +26,13 @@ enum class CropMode(@JvmField val cropMode: Int) {
 
 
 val Int.toMode: CropMode
-    get() {
-        return when (this) {
-            -1 -> CropMode.NO_MODE
-            0 -> CropMode.MANUAL
-            1 -> CropMode.AUTO
-            2 -> CropMode.MANUAL_AUTO
-            3 -> CropMode.AUTO_MANUAL
-            else -> throw RuntimeException("Unknown mode $this")
-        }
+    get() = when (this) {
+        -1 -> CropMode.NO_MODE
+        0 -> CropMode.MANUAL
+        1 -> CropMode.AUTO
+        2 -> CropMode.MANUAL_AUTO
+        3 -> CropMode.AUTO_MANUAL
+        else -> throw RuntimeException("Unknown mode $this")
     }
 
 fun CropMode.isManualFirst() = this == CropMode.MANUAL || this == CropMode.MANUAL_AUTO

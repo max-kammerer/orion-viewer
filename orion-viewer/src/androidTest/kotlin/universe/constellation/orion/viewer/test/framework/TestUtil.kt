@@ -40,9 +40,7 @@ interface TestUtil {
         return outFile
     }
 
-    fun getFileUnderTestData(relativePath: String): String {
-        return "testData/$relativePath"
-    }
+    fun getFileUnderTestData(relativePath: String): String = "testData/$relativePath"
 
     fun getOrionTestContext(): Context
 

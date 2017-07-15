@@ -84,10 +84,10 @@ class OrionLayoutDialog @JvmOverloads constructor(context: Context, attrs: Attri
     override fun onSetInitialValue(restoreValue: Boolean, defaultValue: Any?) {
         orionState.onSetInitialValue = true
         try {
-            if (isCurrentBookOption || restoreValue) {
-                position = getPersistedInt(0)
+            position = if (isCurrentBookOption || restoreValue) {
+                getPersistedInt(0)
             } else {
-                position = defaultValue as Int
+                defaultValue as Int
             }
         } finally {
             orionState.onSetInitialValue = false
@@ -105,18 +105,18 @@ class OrionLayoutDialog @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     override fun getPersistedInt(defaultReturnValue: Int): Int {
-        if (isCurrentBookOption) {
-            return OrionPreferenceUtil.getPersistedInt(this, defaultReturnValue)
+        return if (isCurrentBookOption) {
+            OrionPreferenceUtil.getPersistedInt(this, defaultReturnValue)
         } else {
-            return super.getPersistedInt(defaultReturnValue)
+            super.getPersistedInt(defaultReturnValue)
         }
     }
 
     override fun getPersistedString(defaultReturnValue: String?): String? {
-        if (isCurrentBookOption) {
-            return OrionPreferenceUtil.getPersistedString(this, defaultReturnValue)
+        return if (isCurrentBookOption) {
+            OrionPreferenceUtil.getPersistedString(this, defaultReturnValue)
         } else {
-            return super.getPersistedString(defaultReturnValue)
+            super.getPersistedString(defaultReturnValue)
         }
     }
 
