@@ -54,7 +54,7 @@ class Controller(
     init {
         Common.d("Creating controller...")
 
-        renderer.startRenreder()
+        renderer.startRenderer()
 
         listener = object : DocumentViewAdapter() {
             override fun viewParametersChanged() {

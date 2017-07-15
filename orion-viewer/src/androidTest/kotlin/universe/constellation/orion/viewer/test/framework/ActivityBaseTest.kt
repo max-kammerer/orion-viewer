@@ -15,20 +15,14 @@ open class ActivityBaseTest : ActivityUnitTestCase<OrionViewerActivity>(OrionVie
 
     override fun setUp() {
         super.setUp()
-        val intent = Intent(instrumentation!!.targetContext!!, OrionViewerActivity::class.java);
+        val intent = Intent(instrumentation!!.targetContext!!, OrionViewerActivity::class.java)
         intent.data = getDataPath()
         startActivity(intent, null, null)!!.orionContext!!.isTesting = true
     }
 
-    override fun getOrionTestContext(): Context {
-        return instrumentation!!.context!!;
-    }
+    override fun getOrionTestContext(): Context = instrumentation!!.context!!
 
-    override fun getActivity(): OrionViewerActivity {
-        return super.getActivity()!!
-    }
+    override fun getActivity(): OrionViewerActivity = super.getActivity()!!
 
-    open fun getDataPath() : Uri?  {
-        return null;
-    }
+    open fun getDataPath() : Uri? = null
 }

@@ -15,17 +15,13 @@ import universe.constellation.orion.viewer.OrionViewerActivity
 
 open class InstrumentationTestCase : ActivityInstrumentationTestCase2<OrionViewerActivity>(OrionViewerActivity::class.java), TestUtil {
 
-    override fun getOrionTestContext(): Context {
-        return instrumentation!!.context!!
-    }
+    override fun getOrionTestContext(): Context = instrumentation!!.context!!
 
-    fun getController() : Controller {
-        return activity.controller!!
-    }
+    fun getController() : Controller = activity.controller!!
 
     fun startActivityWithBook(book: String) {
         val file = extractFileFromTestData(book)
-        val intent = Intent();
+        val intent = Intent()
         intent.data = Uri.fromFile(file)
         setActivityIntent(intent)
     }

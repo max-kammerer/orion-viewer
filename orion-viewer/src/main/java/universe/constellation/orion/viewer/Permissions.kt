@@ -29,13 +29,13 @@ object Permissions {
     val ORION_ASK_PERMISSION_CODE = 111
 
     @JvmStatic
-    fun checkReadPermission(activity: Activity): Boolean =
+    fun checkReadPermission(activity: Activity) =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 checkPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)
             else true
 
     @JvmStatic
-    fun checkWritePermission(activity: Activity): Boolean =
+    fun checkWritePermission(activity: Activity) =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 checkPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
             else true

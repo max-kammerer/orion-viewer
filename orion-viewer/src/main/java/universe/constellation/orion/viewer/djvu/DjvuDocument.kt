@@ -73,7 +73,7 @@ class DjvuDocument(fileName: String) : Document {
         contextPointer = 0
     }
 
-    fun releasePage() {
+    private fun releasePage() {
         releasePage(lastPagePointer)
         lastPagePointer = 0
     }
@@ -84,11 +84,11 @@ class DjvuDocument(fileName: String) : Document {
             timing("Changing page...") {
                 releasePage()
                 lastPagePointer = gotoPageInternal(docPointer,
-                        if (page > docInfo.pageCount - 1)
-                            docInfo.pageCount - 1
-                        else if (page < 0)
-                            0
-                        else page
+                        when {
+                            page > docInfo.pageCount - 1 -> docInfo.pageCount - 1
+                            page < 0 -> 0
+                            else -> page
+                        }
                 )
                 lastPage = page
             }
@@ -105,17 +105,12 @@ class DjvuDocument(fileName: String) : Document {
     external fun getText(doc: Long, pageNumber: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int): String
     external fun releasePage(page: Long)
 
-    override fun needPassword(): Boolean {
-        return false
-    }
+    override fun needPassword() = false
 
-    override fun authenticate(password: String): Boolean {
-        return true
-    }
+    override fun authenticate(password: String) = true
 
     override fun searchPage(pageNumber: Int, text: String): Array<RectF>? {
-        var text = text
-        text = text.toLowerCase()
+        val textToSearch = text.toLowerCase()
 
         val strings = ArrayList<String>(500)
         val positions = ArrayList<RectF>(500)
@@ -125,10 +120,10 @@ class DjvuDocument(fileName: String) : Document {
         val indexes = ArrayList<Int>(500)
         val builder = StringBuilder()
         for (i in positions.indices) {
-            val string = strings.get(i)
+            val string = strings[i]
             builder.append(string.toLowerCase())
             val length = builder.length
-            for (j in prevIndex..length - 1) {
+            for (j in prevIndex until length) {
                 indexes.add(i)
             }
             prevIndex = length
@@ -136,16 +131,17 @@ class DjvuDocument(fileName: String) : Document {
 
         val searchFrom = 0
         val result = ArrayList<RectF>()
-        var i = builder.indexOf(text, searchFrom)
+        val textLength = textToSearch.length
+        var i = builder.indexOf(textToSearch, searchFrom)
         while (i != -1) {
             val start = indexes[i]
-            val end = indexes[i + text.length - 1]
+            val end = indexes[i + textLength - 1]
 
             val rectF = RectF(getSafeRectInPosition(positions, start))
             rectF.union(getSafeRectInPosition(positions, end))
             result.add(rectF)
-            i = i + text.length
-            i = builder.indexOf(text, i)
+            i += textLength
+            i = builder.indexOf(textToSearch, i)
         }
 
         return result.toTypedArray()
@@ -156,13 +152,10 @@ class DjvuDocument(fileName: String) : Document {
         return rects[position]
     }
 
-    override fun getText(pageNumber: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): String? {
-        return getText(docPointer, pageNumber, absoluteX, absoluteY, width, height)
-    }
+    override fun getText(pageNumber: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean) =
+            getText(docPointer, pageNumber, absoluteX, absoluteY, width, height)
 
-    override fun hasCalculatedPageInfo(pageNumber: Int): Boolean {
-        return false
-    }
+    override fun hasCalculatedPageInfo(pageNumber: Int): Boolean = false
 
     companion object {
 

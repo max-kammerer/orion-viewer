@@ -17,12 +17,12 @@ class SingleThreadRenderer(
         doc: Document
 ) : RenderThread(activity, layout, doc, false, scene) {
 
-    override fun startRenreder() {
+    override fun startRenderer() {
 
     }
 
     override fun render(lastInfo: LayoutPosition?) {
         super.render(lastInfo)
-        renderInCurrentThread(true, lastInfo!!.clone(), layout!!.rotation);
+        renderInCurrentThread(true, lastInfo!!.clone(), layout!!.rotation)
     }
 }
