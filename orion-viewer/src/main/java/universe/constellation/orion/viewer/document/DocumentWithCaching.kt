@@ -126,9 +126,7 @@ class DocumentWithCaching(val doc: DocumentWrapper) : DocumentWrapper by doc {
         Common.d("Unzoomed result: ${page.pageNum0}: ${page.autoCrop}")
     }
 
-    override fun hasCalculatedPageInfo(pageNumber: Int): Boolean {
-        return cache[pageNumber] != null
-    }
+    override fun hasCalculatedPageInfo(pageNumber: Int): Boolean = cache[pageNumber] != null
 }
 
 inline fun <R> timing(message: String, l: () -> R): R {
@@ -148,9 +146,7 @@ abstract class Image(val width: Int, val height: Int) {
 
 class ArrayImage(width: Int, height: Int, @JvmField val source: IntArray): Image(width, height) {
 
-    override operator fun get(h: Int, w: Int): Int {
-        return source[w + h * width]
-    }
+    override operator fun get(h: Int, w: Int): Int = source[w + h * width]
 
     override operator fun set(h: Int, w: Int, color: Int) {
         source[w + h * width] = color
@@ -201,14 +197,14 @@ fun calcGradient(image: ArrayImage) {
     }
 
     shift = (height - 1) * stroke
-    for (w in 0..width - 2) {
+    for (w in 0 until width - 1) {
         val cur = w + shift
         source[cur] = source[cur - stroke]
     }
 
     val w = width - 1
     //TODO until
-    for (h in 0..height - 1) {
+    for (h in 0 until height) {
         val cur = w + h * stroke
         source[cur] = source[cur - 1]
     }
@@ -273,8 +269,8 @@ fun findRectangle(grImage: ArrayImage): AutoCropMargins {
     //        }
     //    }
 
-    for (h in 0..height - 1) {
-        for (w in 0..width - 1) {
+    for (h in 0 until height) {
+        for (w in 0 until width) {
             val curIndex = w + h * stroke
             if (alpha(source[curIndex]) <= 255 - VOTE_THRESHOLD) {
                 left = min(left, w)
@@ -307,43 +303,25 @@ fun findRectangle(grImage: ArrayImage): AutoCropMargins {
     return AutoCropMargins(left, top, width - right, height - bottom)
 }
 
-inline fun gray(color: Int): Int {
-    return (306 * red(color) + 601 * green(color) + 117 * blue(color))/1000
-}
+inline fun gray(color: Int): Int = (306 * red(color) + 601 * green(color) + 117 * blue(color))/1000
 
-inline fun alpha(color: Int): Int {
-    return color.ushr(24)
-}
+inline fun alpha(color: Int): Int = color.ushr(24)
 
-inline fun red(color: Int): Int {
-    return (color shr 16) and 255
-}
+inline fun red(color: Int): Int = (color shr 16) and 255
 
-inline fun green(color: Int): Int {
-    return (color shr 8) and 255
-}
+inline fun green(color: Int): Int = (color shr 8) and 255
 
-inline fun blue(color: Int): Int {
-    return color and 255
-}
+inline fun blue(color: Int): Int = color and 255
 
-inline fun rgb(red: Int, green: Int, blue: Int): Int {
-    return (255 shl 24) or (red shl 16) or (green shl 8) or blue
-}
+inline fun rgb(red: Int, green: Int, blue: Int): Int =
+        (255 shl 24) or (red shl 16) or (green shl 8) or blue
 
 
-inline fun agray(alpha: Int, gray: Int): Int {
-    return (alpha shl 24) or (gray shl 16) or (gray shl 8) or gray
-}
+inline fun agray(alpha: Int, gray: Int): Int =
+        (alpha shl 24) or (gray shl 16) or (gray shl 8) or gray
 
-inline fun max(i1: Int, i2: Int): Int {
-    return if (i1 > i2) i1 else i2
-}
+inline fun max(i1: Int, i2: Int): Int = if (i1 > i2) i1 else i2
 
-inline fun min(i1: Int, i2: Int): Int {
-    return if (i1 < i2) i1 else i2
-}
+inline fun min(i1: Int, i2: Int): Int = if (i1 < i2) i1 else i2
 
-inline fun abs(i: Int): Int {
-    return if (i >= 0) i else -i
-}
+inline fun abs(i: Int): Int = if (i >= 0) i else -i
