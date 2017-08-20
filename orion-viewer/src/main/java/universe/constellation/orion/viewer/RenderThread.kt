@@ -17,292 +17,236 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer;
+package universe.constellation.orion.viewer
 
-import android.graphics.Bitmap;
-import android.graphics.Point;
-import android.os.Debug;
+import android.graphics.Bitmap
+import android.graphics.Point
+import android.os.Debug
+import java.util.LinkedList
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
-import universe.constellation.orion.viewer.document.Document;
-import universe.constellation.orion.viewer.view.Renderer;
-import universe.constellation.orion.viewer.view.Scene;
+import universe.constellation.orion.viewer.document.Document
+import universe.constellation.orion.viewer.view.Renderer
+import universe.constellation.orion.viewer.view.Scene
 
 /**
  * User: mike
  * Date: 19.10.11
  * Time: 9:52
  */
-public class RenderThread extends Thread implements Renderer {
+open class RenderThread(private val activity: OrionViewerActivity, protected var layout: LayoutStrategy, protected var doc: Document, private val executeInSeparateThread: Boolean, private val fullScene: Scene) : Thread(), Renderer {
 
-    private static final int CACHE_SIZE = 4;
+    private val cachedBitmaps = LinkedList<CacheInfo>()
 
-    private static final int FUTURE_COUNT = 1;
+    private var currentPosition: LayoutPosition? = null
 
-    protected LayoutStrategy layout;
+    private var lastEvent: LayoutPosition? = null
 
-    private LinkedList<CacheInfo> cachedBitmaps = new LinkedList<>();
+    private var stopped: Boolean = false
 
-    private LayoutPosition currentPosition;
+    internal constructor(activity: OrionViewerActivity, layout: LayoutStrategy, doc: Document, fullScene: Scene) : this(activity, layout, doc, true, fullScene) {}
 
-    private LayoutPosition lastEvent;
-
-    protected Document doc;
-
-    private boolean executeInSeparateThread;
-
-    private boolean stopped;
-
-    private OrionViewerActivity activity;
-
-    private Scene fullScene;
-
-    RenderThread(OrionViewerActivity activity, LayoutStrategy layout, Document doc, Scene fullScene) {
-        this(activity, layout, doc, true, fullScene);
+    init {
+        Common.d("RenderThread was created successfully")
     }
 
-    public RenderThread(OrionViewerActivity activity, LayoutStrategy layout, Document doc, boolean executeInSeparateThread, Scene scene) {
-        this.layout = layout;
-        this.doc = doc;
-        this.activity = activity;
-        this.executeInSeparateThread = executeInSeparateThread;
-        this.fullScene = scene;
-        Common.d("RenderThread was created successfully");
-    }
-
-    @Override
-    public void invalidateCache() {
-        synchronized (this) {
-            for (CacheInfo next : cachedBitmaps) {
-                next.setValid(false);
+    override fun invalidateCache() {
+        synchronized(this) {
+            for (next in cachedBitmaps) {
+                next.isValid = false
             }
-            Common.d("Cache invalidated");
+            Common.d("Cache invalidated")
         }
     }
 
-    @Override
-    public void startRenderer() {
-        Common.d("Starting renderer");
-        start();
+    override fun startRenderer() {
+        Common.d("Starting renderer")
+        start()
     }
 
-    public void cleanCache() {
-        synchronized (this) {
-            //if(clearCache) {
-              //  clearCache = false;
-                for (CacheInfo cacheInfo : cachedBitmaps) {
-                    //cacheInfo.bitmap.recycle();
-                    cacheInfo.bitmap = null;
-                }
-
-                Common.d("Allocated heap size: " + Common.memoryInMB(Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()));
-                cachedBitmaps.clear();
-                Common.d("Cache is cleared!");
-            //}
-            currentPosition = null;
-            //clearCache = true;
+    fun cleanCache() {
+        synchronized(this) {
+            Common.d("Allocated heap size: " + Common.memoryInMB(Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()))
+            cachedBitmaps.clear()
+            Common.d("Cache is cleared!")
+            currentPosition = null
         }
     }
 
-    @Override
-    public void stopRenderer() {
-        synchronized (this) {
-            stopped = true;
-            cleanCache();
-            notify();
+    override fun stopRenderer() {
+        synchronized(this) {
+            stopped = true
+            cleanCache()
+            (this as java.lang.Object).notify()
         }
     }
 
-    @Override
-    public void onPause() {
-//        synchronized (this) {
-//            paused = true;
-//        }
+    override fun onPause() {
+        //        synchronized (this) {
+        //            paused = true;
+        //        }
     }
 
-    @Override
-    public void onResume() {
-        synchronized (this) {
-            notify();
+    override fun onResume() {
+        synchronized(this) {
+            (this as java.lang.Object).notify()
         }
     }
 
-    public void run() {
-        int futureIndex = 0;
-        LayoutPosition curPos = null;
+    override fun run() {
+        var futureIndex = 0
+        var curPos: LayoutPosition? = null
 
-        while (!stopped) {
+         while (!stopped) {
 
-            Common.d("Allocated heap size " + Common.memoryInMB(Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()));
+            Common.d("Allocated heap size " + Common.memoryInMB(Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()))
 
-            int rotation;
-            synchronized (this) {
+            var rotation = 0
+            val doContinue = synchronized(this) {
                 if (lastEvent != null) {
-                    currentPosition = lastEvent;
-                    lastEvent = null;
-                    futureIndex = 0;
-                    curPos = currentPosition;
+                    currentPosition = lastEvent
+                    lastEvent = null
+                    futureIndex = 0
+                    curPos = currentPosition
                 }
 
                 //keep it here
-                rotation = layout.getRotation();
+                rotation = layout.rotation
 
-                if (currentPosition == null || futureIndex > FUTURE_COUNT || currentPosition.screenWidth == 0 || currentPosition.screenHeight == 0) {
+                if (currentPosition == null || futureIndex > FUTURE_COUNT || currentPosition!!.screenWidth == 0 || currentPosition!!.screenHeight == 0) {
                     try {
-                        Common.d("WAITING...");
-                        wait();
-                    } catch (InterruptedException e) {
-                        Common.d(e);
+                        Common.d("WAITING...")
+                        (this as java.lang.Object).wait()
+                    } catch (e: InterruptedException) {
+                        Common.d(e)
                     }
-                    Common.d("AWAKENING!!!");
-                    continue;
+
+                    Common.d("AWAKENING!!!")
+                    true
                 } else {
                     //will cache next page
-                    Common.d("Future index is " + futureIndex);
+                    Common.d("Future index is " + futureIndex)
                     if (futureIndex != 0) {
-                        curPos = curPos.clone();
-                        LayoutStrategy.Companion.calcPageLayout(layout, curPos, true, doc.getPageCount());
+                        curPos = curPos!!.clone()
+                        layout.calcPageLayout( curPos!!, true, doc.pageCount)
                     }
+                    false
                 }
             }
+             if (doContinue) continue
 
-            Common.d("rotation = " + rotation);
-            renderInCurrentThread(futureIndex == 0, curPos, rotation);
-            futureIndex++;
+            Common.d("rotation = $rotation")
+            renderInCurrentThread(futureIndex == 0, curPos, rotation)
+            futureIndex++
         }
     }
 
-    protected Bitmap renderInCurrentThread(boolean flushBitmap, LayoutPosition curPos, int rotation) {
-        CacheInfo resultEntry = null;
-        Common.d("Orion: rendering position: " + curPos);
+    protected fun renderInCurrentThread(flushBitmap: Boolean, curPos: LayoutPosition?, rotation: Int): Bitmap {
+        var resultEntry: CacheInfo? = null
+        Common.d("Orion: rendering position: $curPos")
         if (curPos != null) {
             //try to find result in cache
-            for (Iterator<CacheInfo> iterator = cachedBitmaps.iterator(); iterator.hasNext(); ) {
-                CacheInfo cacheInfo =  iterator.next();
-                if (cacheInfo.isValid() && cacheInfo.info.equals(curPos)) {
-                    resultEntry = cacheInfo;
+            val iterator = cachedBitmaps.iterator()
+            while (iterator.hasNext()) {
+                val cacheInfo = iterator.next()
+                if (cacheInfo.isValid && cacheInfo.info == curPos) {
+                    resultEntry = cacheInfo
                     //relocate info to end of cache
-                    iterator.remove();
-                    cachedBitmaps.add(cacheInfo);
-                    break;
+                    iterator.remove()
+                    cachedBitmaps.add(cacheInfo)
+                    break
                 }
             }
 
 
             if (resultEntry == null) {
                 //render page
-                resultEntry = render(curPos, rotation);
+                resultEntry = render(curPos, rotation)
 
-                synchronized (this) {
-                    cachedBitmaps.add(resultEntry);
+                synchronized(this) {
+                    cachedBitmaps.add(resultEntry!!)
                 }
             }
 
 
             if (flushBitmap) {
-                final Bitmap bitmap = resultEntry.bitmap;
-                Common.d("Sending Bitmap");
-                final CountDownLatch mutex = new CountDownLatch(1);
+                val bitmap = resultEntry.bitmap
+                Common.d("Sending Bitmap")
+                val mutex = CountDownLatch(1)
 
-                final LayoutPosition info = curPos;
                 if (!executeInSeparateThread) {
-                    fullScene.onNewImage(bitmap, info, mutex);
-                    activity.getDevice().flushBitmap();
-                    mutex.countDown();
+                    fullScene.onNewImage(bitmap, curPos, mutex)
+                    activity.getDevice().flushBitmap()
+                    mutex.countDown()
                 } else {
-                    activity.runOnUiThread(new Runnable() {
-                        public void run() {
-                            fullScene.onNewImage(bitmap, info, mutex);
-                            activity.getDevice().flushBitmap();
-                        }
-                    });
+                    activity.runOnUiThread {
+                        fullScene.onNewImage(bitmap, curPos, mutex)
+                        activity.getDevice().flushBitmap()
+                    }
                 }
 
                 try {
-                    mutex.await(1, TimeUnit.SECONDS);
-                } catch (InterruptedException e) {
-                    Common.d(e);
+                    mutex.await(1, TimeUnit.SECONDS)
+                } catch (e: InterruptedException) {
+                    Common.d(e)
                 }
+
             }
         }
 
-        return resultEntry.bitmap;
+        return resultEntry!!.bitmap
     }
 
-    private CacheInfo render(LayoutPosition curPos, int rotation) {
-        CacheInfo resultEntry;
-        int width = curPos.x.screenDimension;
-        int height = curPos.y.screenDimension;
+    private fun render(curPos: LayoutPosition, rotation: Int): CacheInfo {
+        val resultEntry: CacheInfo
+        val width = curPos.x.screenDimension
+        val height = curPos.y.screenDimension
 
-        int screenWidth = curPos.screenWidth;
-        int screenHeight = curPos.screenHeight;
+        val screenWidth = curPos.screenWidth
+        val screenHeight = curPos.screenHeight
 
-        Bitmap bitmap = null;
-        if (cachedBitmaps.size() >= CACHE_SIZE) {
-            CacheInfo info = cachedBitmaps.removeFirst();
-            info.setValid(true);
+        var bitmap: Bitmap? = null
+        if (cachedBitmaps.size >= CACHE_SIZE) {
+            val info = cachedBitmaps.removeFirst()
+            info.isValid = false
 
-            if (screenWidth == info.bitmap.getWidth() && screenHeight == info.bitmap.getHeight() /*|| rotation != 0 && width == info.bitmap.getHeight() && height == info.bitmap.getWidth()*/) {
-                bitmap = info.bitmap;
+            if (screenWidth == info.bitmap.width && screenHeight == info.bitmap.height /*|| rotation != 0 && width == info.bitmap.getHeight() && height == info.bitmap.getWidth()*/) {
+                bitmap = info.bitmap
             } else {
-                info.bitmap.recycle(); //todo recycle from ui
-                info.bitmap = null;
+                info.bitmap.recycle() //todo recycle from ui
             }
         }
         if (bitmap == null) {
-            bitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888);
+            bitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888)
         } else {
-            Common.d("Using cached bitmap " + bitmap);
+            Common.d("Using cached bitmap " + bitmap)
         }
 
-        Point leftTopCorner = layout.convertToPoint(curPos);
+        val leftTopCorner = layout.convertToPoint(curPos)
 
 
-        doc.renderPage(curPos.pageNumber, bitmap, curPos.docZoom, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + width, leftTopCorner.y + height);
+        doc.renderPage(curPos.pageNumber, bitmap!!, curPos.docZoom, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + width, leftTopCorner.y + height)
 
-        resultEntry = new CacheInfo(curPos, bitmap);
-        return resultEntry;
+        resultEntry = CacheInfo(curPos, bitmap)
+        return resultEntry
     }
 
-    @Override
-    public void render(LayoutPosition lastInfo) {
-        lastInfo = lastInfo.clone();
-        synchronized (this) {
-            lastEvent = lastInfo;
-            notify();
+    override fun render(lastInfo: LayoutPosition) {
+        val lastInfo = lastInfo.clone()
+        synchronized(this) {
+            lastEvent = lastInfo
+            (this as java.lang.Object).notify()
         }
     }
 
-    static class CacheInfo {
+    private class CacheInfo(val info: LayoutPosition, val bitmap: Bitmap) {
+        var isValid = true
+    }
 
-        CacheInfo(LayoutPosition info, Bitmap bitmap) {
-            this.info  = info;
-            this.bitmap = bitmap;
-        }
+    companion object {
+        private const val CACHE_SIZE = 4
 
-        private LayoutPosition info;
-        private Bitmap bitmap;
-
-        private boolean valid = true;
-
-        public LayoutPosition getInfo() {
-            return info;
-        }
-
-        public Bitmap getBitmap() {
-            return bitmap;
-        }
-
-        boolean isValid() {
-            return valid;
-        }
-
-        void setValid(boolean valid) {
-            this.valid = valid;
-        }
+        private const val FUTURE_COUNT = 1
     }
 }
