@@ -13,11 +13,12 @@ dependencies {
     compile 'com.android.support:design:25.3.1'
     compile project(':tree-view-list-android')
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    //compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.18'
 }
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '26.0.0'
+    buildToolsVersion '26.0.1'
 
     defaultConfig {
         versionCode = orionVersionCode
@@ -47,8 +48,9 @@ android {
         release {
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
-                    def file = output.outputFile
-                    output.outputFile = new File(file.parent, file.name.replace("-release", ""))
+                    if (variant.name == "release") {
+                        outputFileName = "orion-viewer--${variant.version}-${variant.name}.apk"
+                    }
                 }
             }
 
@@ -58,30 +60,36 @@ android {
         }
     }
 
+    flavorDimensions "arch"
+
     productFlavors {
         arm5 {
             versionCode = 0
             ndk {
                 abiFilter "armeabi"
             }
+            dimension "arch"
         }
         arm7 {
             versionCode = 1
             ndk {
                 abiFilter "armeabi-v7a"
             }
+            dimension "arch"
         }
         x86 {
             versionCode = 2
             ndk {
                 abiFilter "x86"
             }
+            dimension "arch"
         }
         mips {
             versionCode = 3
             ndk {
                 abiFilter "mips"
             }
+            dimension "arch"
         }
     }
 
@@ -97,4 +105,9 @@ android {
     }
 
     lintOptions { abortOnError false }
+}
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
 }
