@@ -68,17 +68,17 @@ class SeekBarPreference @JvmOverloads constructor(context: Context, attrs: Attri
         val view = inflater.inflate(R.layout.dialog_slider, null)
 
         // Setup minimum and maximum text labels
-        (view.findViewById(R.id.min_value) as TextView).text = minValue.toString()
-        (view.findViewById(R.id.max_value) as TextView).text = maxValue.toString()
+        view.findViewById<TextView>(R.id.min_value).text = minValue.toString()
+        view.findViewById<TextView>(R.id.max_value).text = maxValue.toString()
 
         // Setup SeekBar
-        mSeekBar = view.findViewById(R.id.seek_bar) as SeekBar
+        mSeekBar = view.findViewById<SeekBar>(R.id.seek_bar)!!
         mSeekBar!!.max = maxValue - minValue
         mSeekBar!!.progress = mCurrentValue - minValue
         mSeekBar!!.setOnSeekBarChangeListener(this)
 
         // Setup text label for current value
-        mValueText = view.findViewById(R.id.current_value) as TextView
+        mValueText = view.findViewById<TextView>(R.id.current_value)!!
         mValueText!!.text = mCurrentValue.toString()
 
         return view

@@ -9,15 +9,15 @@ if (doSigning) {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:appcompat-v7:26.0.2'
+    compile 'com.android.support:design:26.0.2'
     compile project(':tree-view-list-android')
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     //compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.18'
 }
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion '26.0.1'
 
     defaultConfig {
