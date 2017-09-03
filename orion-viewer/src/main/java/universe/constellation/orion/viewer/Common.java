@@ -24,9 +24,7 @@ import android.util.Log;
 import universe.constellation.orion.viewer.device.AndroidDevice;
 import universe.constellation.orion.viewer.device.Device;
 import universe.constellation.orion.viewer.device.MagicBookBoeyeDevice;
-import universe.constellation.orion.viewer.device.Nook2Device;
 import universe.constellation.orion.viewer.device.OnyxDevice;
-import universe.constellation.orion.viewer.device.SonyPrsT1AndT2;
 import universe.constellation.orion.viewer.device.texet.TexetTB176FLDevice;
 import universe.constellation.orion.viewer.device.texet.TexetTB576HDDevice;
 import universe.constellation.orion.viewer.device.texet.TexetTb138Device;
@@ -41,11 +39,6 @@ import java.io.*;
 public class Common {
 
     public static Device createDevice() {
-        if(Device.Info.SONY_PRS_T1_T2) {
-            Common.d("Using SonyPrsT1AndT2");
-            return new SonyPrsT1AndT2();
-        }
-
         if(Device.Info.TEXET_TB_138) {
             Common.d("Using TexetTb138Device");
             return new TexetTb138Device();
@@ -59,11 +52,6 @@ public class Common {
         if(Device.Info.TEXET_TB576HD) {
             Common.d("Using TEXET_TB576HD");
             return new TexetTB576HDDevice();
-        }
-
-        if(Device.Info.NOOK2) {
-            Common.d("Using Nook2");
-            return new Nook2Device();
         }
 
         if (Device.Info.ONYX_DEVICE) {
