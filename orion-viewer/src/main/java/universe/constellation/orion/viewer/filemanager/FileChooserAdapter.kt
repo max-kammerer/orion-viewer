@@ -94,10 +94,10 @@ class FileChooserAdapter constructor(
             val name = data.name
 
             val icon = if(isDirectory) R.drawable.folder else getIconByNameExtension(name)
-            val fileIcon = newConvertView!!.findViewById(R.id.fileImage) as ImageView
+            val fileIcon = newConvertView!!.findViewById<ImageView>(R.id.fileImage)
             fileIcon.setImageResource(icon)
 
-            val fileName = newConvertView.findViewById(R.id.fileName) as TextView
+            val fileName = newConvertView.findViewById<TextView>(R.id.fileName)
             fileName.text = name
         }
 

@@ -3,6 +3,7 @@ package universe.constellation.orion.viewer.dialog
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v7.app.AppCompatDialog
+import android.view.View
 import android.view.Window
 import android.widget.*
 import universe.constellation.orion.viewer.CropMargins
@@ -31,8 +32,8 @@ class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : A
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.crop_dialog)
 
-        val viewAnimator = findViewById(R.id.viewanim) as ViewAnimator
-        val tabLayout = findViewById(R.id.sliding_tabs) as TabLayout
+        val viewAnimator = findViewById<View>(R.id.viewanim) as ViewAnimator
+        val tabLayout = findViewById<View>(R.id.sliding_tabs) as TabLayout
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.crop))
         /*tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.crop))
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.crop))*/
@@ -59,14 +60,14 @@ class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : A
 
 
     fun initCropScreen() {
-        val generalCropTable = findViewById(R.id.crop_borders) as TableLayout
+        val generalCropTable = findViewById<View>(R.id.crop_borders) as TableLayout
 
         for (i in 0 until generalCropTable.childCount) {
             linkCropButtonsAndText(i, generalCropTable.getChildAt(i) as TableRow)
         }
 
         //even cropping
-        val evenCropTable = findViewById(R.id.crop_borders_even) as TableLayout
+        val evenCropTable = findViewById<View>(R.id.crop_borders_even) as TableLayout
         var index = 4
         for (i in 0 until evenCropTable.childCount) {
             val child = evenCropTable.getChildAt(i)
@@ -81,7 +82,7 @@ class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : A
             }
         }
 
-        val checkBox = findViewById(R.id.crop_even_flag) as CheckBox
+        val checkBox = findViewById<View>(R.id.crop_even_flag) as CheckBox
         checkBox.setOnCheckedChangeListener { _, isChecked ->
             for (i in 0 until evenCropTable.childCount) {
                 val child = evenCropTable.getChildAt(i)
@@ -93,18 +94,18 @@ class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : A
             }
         }
 
-        val preview = findViewById(R.id.crop_preview) as ImageButton
-        val radioGroup = findViewById(R.id.crop_mode) as RadioGroup
+        val preview = findViewById<View>(R.id.crop_preview) as ImageButton
+        val radioGroup = findViewById<View>(R.id.crop_mode) as RadioGroup
 
         preview.setOnClickListener {
             context.onAnimatorCancel()
             val radioButtonId = radioGroup.checkedRadioButtonId
-            val radioButton = radioGroup.findViewById(radioButtonId)
+            val radioButton = radioGroup.findViewById<View>(radioButtonId)
             val mode = radioGroup.indexOfChild(radioButton)
             context.controller?.changeCropMargins(cropMargins.toMargins(checkBox.isChecked, mode))
         }
 
-        val close = findViewById(R.id.crop_close) as ImageButton
+        val close = findViewById<View>(R.id.crop_close) as ImageButton
         close.setOnClickListener({
             dismiss()
         })
@@ -113,9 +114,9 @@ class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : A
     }
 
     private fun linkCropButtonsAndText(i: Int, row: TableRow) {
-        val valueView = row.findViewById(R.id.crop_value) as TextView
-        val plus = row.findViewById(R.id.crop_plus) as ImageButton
-        val minus = row.findViewById(R.id.crop_minus) as ImageButton
+        val valueView = row.findViewById<View>(R.id.crop_value) as TextView
+        val plus = row.findViewById<View>(R.id.crop_plus) as ImageButton
+        val minus = row.findViewById<View>(R.id.crop_minus) as ImageButton
         linkCropButtonsAndText(minus, plus, valueView, i)
     }
 
@@ -155,26 +156,26 @@ class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : A
     }
 
     fun updateView() {
-        val cropTable = findViewById(R.id.crop_borders) as TableLayout
+        val cropTable = findViewById<View>(R.id.crop_borders) as TableLayout
         for (i in 0 until cropTable.childCount) {
             val row = cropTable.getChildAt(i) as TableRow
-            val valueView = row.findViewById(R.id.crop_value) as TextView
+            val valueView = row.findViewById<View>(R.id.crop_value) as TextView
             valueView.text = "${cropMargins[i]}%"
         }
 
-        val cropTable2 = findViewById(R.id.crop_borders_even) as TableLayout
+        val cropTable2 = findViewById<View>(R.id.crop_borders_even) as TableLayout
         var index = 4
         for (i in 0 until cropTable2.childCount) {
             if (cropTable2.getChildAt(i) is TableRow) {
                 val row = cropTable2.getChildAt(i) as TableRow
-                val valueView = row.findViewById(R.id.crop_value) as TextView
+                val valueView = row.findViewById<View>(R.id.crop_value) as TextView
                 valueView.text = "${cropMargins[index]}%"
                 index++
             }
         }
-        (findViewById(R.id.crop_even_flag) as CheckBox).isChecked = evenCrop
+        (findViewById<View>(R.id.crop_even_flag) as CheckBox).isChecked = evenCrop
 
-        val radioGroup = findViewById(R.id.crop_mode) as RadioGroup
+        val radioGroup = findViewById<View>(R.id.crop_mode) as RadioGroup
         (radioGroup.getChildAt(cropMode) as RadioButton).isChecked = true
     }
 

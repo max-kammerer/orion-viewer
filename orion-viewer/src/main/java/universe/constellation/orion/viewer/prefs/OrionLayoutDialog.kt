@@ -127,9 +127,9 @@ class OrionLayoutDialog @JvmOverloads constructor(context: Context, attrs: Attri
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View =
                 super.getView(position, convertView, parent).apply {
-                    val view = findViewById(android.R.id.text1) as CheckedTextView
+                    val view = findViewById<CheckedTextView>(android.R.id.text1)
                     view.text = ""
-                    val button = findViewById(R.id.ibutton) as ImageView
+                    val button = findViewById<ImageView>(R.id.ibutton)
                     button.setImageResource(images[position])
                 }
     }
