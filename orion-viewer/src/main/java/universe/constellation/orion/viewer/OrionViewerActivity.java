@@ -890,9 +890,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         System.arraycopy(values, 0, newValues, 0, values.length);
         newValues[0] = getResources().getString(R.string.orientation_default_rotation);
 
-        list.setAdapter(Device.Info.NOOK2 ?
-                new Nook2ListAdapter(this, android.R.layout.simple_list_item_single_choice, newValues, (TextView) findMyViewById(R.id.navigation_title)) :
-                new ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, newValues));
+        list.setAdapter(new ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, newValues));
 
         list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         list.setItemChecked(0, true);

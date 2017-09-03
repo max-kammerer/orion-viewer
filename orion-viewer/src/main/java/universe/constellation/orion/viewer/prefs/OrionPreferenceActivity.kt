@@ -55,21 +55,6 @@ class OrionPreferenceActivity : DSLPreferenceActivity() {
         }
     }
 
-    override fun onPreferenceTreeClick(preferenceScreen: PreferenceScreen, preference: Preference?): Boolean {
-        super.onPreferenceTreeClick(preferenceScreen, preference)
-        if (preference != null && Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            if (preference is PreferenceScreen)
-                if (preference.dialog != null)
-                    preference.dialog.window!!.decorView.setBackgroundDrawable(this.window.decorView.background.constantState!!.newDrawable())
-
-            if (preference is DialogPreference)
-                if (preference.dialog != null)
-                    preference.dialog.window!!.decorView.setBackgroundDrawable(this.window.decorView.background.constantState!!.newDrawable())
-        }
-        return false
-    }
-
     val orionContext: OrionApplication
         get() = applicationContext as OrionApplication
-
 }

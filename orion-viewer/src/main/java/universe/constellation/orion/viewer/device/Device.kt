@@ -41,13 +41,7 @@ interface Device {
         val HARDWARE = getField("HARDWARE")
 
         @JvmField
-        val NOOK2 = "barnesandnoble" == MANUFACTURER.toLowerCase() && ("NOOK" == MODEL || "BNRV500" == MODEL || "BNRV350" == MODEL || "BNRV300" == MODEL || "unknown" == MODEL) && "zoom2" == DEVICE.toLowerCase()
-
-        @JvmField
         val ONYX_DEVICE = "ONYX".equals(MANUFACTURER, ignoreCase = true) && OnyxUtil.isEinkDevice()
-
-        @JvmField
-        val SONY_PRS_T1_T2 = "sony" == MANUFACTURER.toLowerCase() && ("PRS-T1" == MODEL || "PRS-T2" == MODEL)
 
         @JvmField
         val TEXET_TB_138 = "texet".equals(DEVICE, ignoreCase = true) && "rk29sdk".equals(MODEL, ignoreCase = true)
