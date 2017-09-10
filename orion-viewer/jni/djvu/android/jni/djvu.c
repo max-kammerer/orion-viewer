@@ -111,7 +111,6 @@ Java_universe_constellation_orion_viewer_djvu_DjvuDocument_getPageInfo(JNIEnv *e
     ddjvu_document_t * doc = (ddjvu_document_t *) docl;
     ddjvu_status_t r;
 	ddjvu_pageinfo_t dinfo;
-	ddjvu_document_get_pageinfo(doc, pageNum, &dinfo);
 	while ((r=ddjvu_document_get_pageinfo(doc, pageNum, &dinfo))<DDJVU_JOB_OK) {}
          //handle_ddjvu_messages(ctx, TRUE);
 
@@ -661,8 +660,11 @@ JNIEXPORT jboolean JNICALL Java_universe_constellation_orion_viewer_djvu_DjvuDoc
     if (ctor == NULL) return 0;
 
     int state = -1;
+
     ddjvu_pageinfo_t dinfo;
-    ddjvu_document_get_pageinfo(doc, pageNumber, &dinfo);
+    ddjvu_status_t r;
+    while ((r=ddjvu_document_get_pageinfo(doc, pageNumber, &dinfo))<DDJVU_JOB_OK) {}
+         //handle_ddjvu_messages(ctx, TRUE);
 
     return miniexp_get_text(env, pagetext, stringBuilder, positionList, &state, rectFClass, ctor, addToList, dinfo.height);
 }
