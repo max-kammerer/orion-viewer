@@ -269,7 +269,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             controller.changeOrinatation(lastPageInfo.screenOrientation);
 
             OrionScene drawView = fullScene.getDrawView();
-            controller.init(lastPageInfo, new Point(drawView.getWidth(), drawView.getHeight()));
+            controller.init(lastPageInfo, new Point(drawView.getSceneWidth(), drawView.getSceneHeight()));
 
             getSubscriptionManager().sendDocOpenedNotification(controller);
 
@@ -725,8 +725,8 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private void changePage(int operation) {
         boolean swapKeys = globalOptions.isSwapKeys();
-        int width = getView().getWidth();
-        int height = getView().getHeight();
+        int width = getView().getSceneWidth();
+        int height = getView().getSceneHeight();
         boolean landscape = width > height || controller.getRotation() != 0; /*second condition for nook and alex*/
         if (controller != null) {
             if (operation == Device.NEXT && (!landscape || !swapKeys) || swapKeys && operation == Device.PREV && landscape) {

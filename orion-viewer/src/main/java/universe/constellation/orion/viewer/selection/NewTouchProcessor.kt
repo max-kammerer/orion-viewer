@@ -125,7 +125,7 @@ open class NewTouchProcessor(val view: OrionScene, val activity: OrionViewerActi
 
         last0.x = e2.x.toInt()
         last0.y = e2.y.toInt()
-        val width = view.width
+        val width = view.sceneWidth
 
         if (insideViewWidth(view.info)) {
             last0.x = start0.x
@@ -150,8 +150,8 @@ open class NewTouchProcessor(val view: OrionScene, val activity: OrionViewerActi
     }
 
     private fun doAction(x: Int, y: Int, isLongClick: Boolean) {
-        val width = view.width
-        val height = view.height
+        val width = view.sceneWidth
+        val height = view.sceneHeight
 
         val i = 3 * y / height
         val j = 3 * x / width
@@ -161,7 +161,7 @@ open class NewTouchProcessor(val view: OrionScene, val activity: OrionViewerActi
     }
 
     private fun isRightHandSide(x: Int): Boolean {
-        return view.width - x < 75
+        return view.sceneWidth - x < 75
     }
 
     private fun isSupportLighting(): Boolean {
@@ -194,7 +194,7 @@ open class NewTouchProcessor(val view: OrionScene, val activity: OrionViewerActi
     }
 
     private fun insideViewWidth(info: LayoutPosition?): Boolean {
-        return info != null && info.x.pageDimension <= view.width
+        return info != null && info.x.pageDimension <= view.sceneWidth
     }
 
     private fun log(msg: String){
