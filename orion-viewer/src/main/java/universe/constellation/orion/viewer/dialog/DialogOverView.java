@@ -30,7 +30,7 @@ public class DialogOverView {
 
     protected void initDialogSize() {
         OrionScene view = activity.getView();
-        Rect rect = new Rect(0, 0, view.getWidth(), view.getHeight());
+        Rect rect = new Rect(0, 0, view.getSceneWidth(), view.getSceneHeight());
         int width = rect.width();
         int height = rect.height();
         Common.d("Dialog dim: " + width + "x" + height);

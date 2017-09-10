@@ -36,9 +36,9 @@ interface OrionScene : OrionImageListener {
 
     fun invalidate()
 
-    val width: Int
+    val sceneWidth: Int
 
-    val height: Int
+    val sceneHeight: Int
 
     val info: LayoutPosition?
 
