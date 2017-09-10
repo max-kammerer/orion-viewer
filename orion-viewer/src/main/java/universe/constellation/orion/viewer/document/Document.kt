@@ -56,6 +56,10 @@ interface Document : PageInfoProvider, ImagePostProcessor {
 
     override fun getPageInfo(pageNum: Int, cropMode: Int): PageInfo
 
+    fun loadPage(pageNum: Int): Long
+
+    fun releasePage(pagePointer: Long)
+
     fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int)
 
     fun getText(pageNumber: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): String?

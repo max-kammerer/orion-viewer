@@ -103,7 +103,8 @@ class DjvuDocument(fileName: String) : Document {
     override external fun setThreshold(threshold: Int)
     external fun getOutline(doc: Long): Array<OutlineItem>
     external fun getText(doc: Long, pageNumber: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int): String
-    external fun releasePage(page: Long)
+
+    external override fun releasePage(pagePointer: Long)
 
     override fun needPassword() = false
 

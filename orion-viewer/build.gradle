@@ -13,11 +13,12 @@ dependencies {
     compile 'com.android.support:design:26.0.2'
     compile project(':tree-view-list-android')
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    //compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.18'
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.18'
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.18'
 }
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 25
     buildToolsVersion '26.0.1'
 
     defaultConfig {

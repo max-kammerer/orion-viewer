@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -289,7 +290,10 @@ public class SearchDialog extends DialogFragment {
         }
 
         @Override
-        public void drawOnCanvas(Canvas canvas, ColorStuff stuff, DrawContext drawContext) {
+        public void drawOnCanvas(
+                @NonNull Canvas canvas,
+                @NonNull ColorStuff stuff,
+                @NonNull DrawContext drawContext) {
             if (batch != null) {
                 Paint paint = stuff.borderPaint;
                 List<RectF> rects = batch.rects;
