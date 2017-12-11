@@ -19,13 +19,10 @@
 
 package universe.constellation.orion.viewer;
 
-import android.os.Build;
 import android.util.Log;
 
 import java.io.FileWriter;
 import java.io.PrintWriter;
-
-import universe.constellation.orion.viewer.device.Device;
 
 /**
  * User: mike
@@ -80,14 +77,6 @@ public class Common {
             e.printStackTrace(writer);
             writer.write("\n");
         }
-    }
-
-    public static void logOrionAndDeviceInfo() {
-        Common.d("Orion Viewer " + BuildConfig.VERSION_NAME);
-        Common.d("Device: " + Device.Info.DEVICE);
-        Common.d("Model: " + Device.Info.MODEL);
-        Common.d("Manufacturer:  " + Device.Info.MANUFACTURER);
-        Common.d("Android version :  " + Build.VERSION.CODENAME + " " + Build.VERSION.RELEASE);
     }
 
 }

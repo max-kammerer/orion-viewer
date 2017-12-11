@@ -89,7 +89,7 @@ class OrionApplication : Application() {
         instance = this
         super.onCreate()
         setLangCode(options.appLanguage)
-        Common.logOrionAndDeviceInfo()
+        logOrionAndDeviceInfo()
         if (device is EInkDeviceWithoutFastRefresh) {
             val version = options.version
             if (options.isShowTapHelp || isVersionEquals("0.0.0", version)) {
@@ -169,6 +169,17 @@ class OrionApplication : Application() {
     }
 
     companion object {
+        var instance: OrionApplication by Delegates.notNull()
+            private set
+
+        fun logOrionAndDeviceInfo() {
+            log("Orion Viewer " + BuildConfig.VERSION_NAME)
+            log("Device: " + Device.Info.DEVICE)
+            log("Model: " + Device.Info.MODEL)
+            log("Manufacturer:  " + Device.Info.MANUFACTURER)
+            log("Android version :  " + Build.VERSION.CODENAME + " " + Build.VERSION.RELEASE)
+        }
+
         @JvmStatic
         fun createDevice(): Device {
             if (Device.Info.TEXET_TB_138) {
@@ -200,7 +211,5 @@ class OrionApplication : Application() {
             log("Using default android device")
             return AndroidDevice()
         }
-        var instance: OrionApplication by Delegates.notNull()
-            private set
     }
 }
