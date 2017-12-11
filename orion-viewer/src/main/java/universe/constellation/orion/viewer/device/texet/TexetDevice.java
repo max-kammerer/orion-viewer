@@ -7,6 +7,8 @@ import android.text.format.Time;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -40,11 +42,11 @@ public class TexetDevice extends EInkDevice {
     }
 
     @Override
-    public void onBookClose(LastPageInfo info) {
-        super.onBookClose(info);
+    public void onBookClose(int currentPage, int pageCount) {
+        super.onBookClose(currentPage, pageCount);
 
         try {
-            shtampTexetFile(null, null, null, "" + info.totalPages, "" + info.pageNumber, null);
+            shtampTexetFile(null, null, null, "" + pageCount, "" + currentPage + 1, null);
         } catch (Exception e) {
             log(e);
             Toast.makeText(activity, "Error on parameters update on book close: " + e.getMessage(), Toast.LENGTH_SHORT).show();

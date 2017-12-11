@@ -72,7 +72,7 @@ interface Device {
 
     fun onNewBook(info: LastPageInfo, document: Document)
 
-    fun onBookClose(info: LastPageInfo)
+    fun onBookClose(currentPage: Int, pageCount: Int)
 
     fun onDestroy()
 

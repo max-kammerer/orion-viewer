@@ -1143,7 +1143,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private void destroyControllerAndBook() {
         if (lastPageInfo != null) {
-            device.onBookClose(lastPageInfo);
+            device.onBookClose(lastPageInfo.pageNumber, lastPageInfo.totalPages);
         }
         if (controller != null) {
             controller.destroy();

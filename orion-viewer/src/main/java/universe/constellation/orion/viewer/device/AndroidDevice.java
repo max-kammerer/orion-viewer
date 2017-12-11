@@ -23,6 +23,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.PowerManager;
 import android.view.KeyEvent;
+
+import org.jetbrains.annotations.NotNull;
+
 import universe.constellation.orion.viewer.*;
 import universe.constellation.orion.viewer.document.Document;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
@@ -128,7 +131,7 @@ public class AndroidDevice implements Device {
     }
 
     @Override
-    public void onBookClose(LastPageInfo info) {
+    public void onBookClose(int currentPage, int pageCount) {
 
     }
 
