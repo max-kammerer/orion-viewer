@@ -12,13 +12,14 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.0.2'
     compile 'com.android.support:design:26.0.2'
     compile project(':tree-view-list-android')
+    compile project(':common')
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     //compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.18'
 }
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.1'
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         versionCode = orionVersionCode
