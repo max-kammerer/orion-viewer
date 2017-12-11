@@ -31,6 +31,7 @@ interface Logger {
 val logger = object : Logger {}
 
 fun log(m: String) = logger.log(m)
+fun log(e: Exception) = logger.log("", e)
 
 fun log(m: String, e: Exception) {
     logger.log(m, e)
