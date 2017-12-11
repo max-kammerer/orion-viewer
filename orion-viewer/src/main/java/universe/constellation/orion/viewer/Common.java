@@ -21,15 +21,11 @@ package universe.constellation.orion.viewer;
 
 import android.os.Build;
 import android.util.Log;
-import universe.constellation.orion.viewer.device.AndroidDevice;
-import universe.constellation.orion.viewer.device.Device;
-import universe.constellation.orion.viewer.device.MagicBookBoeyeDevice;
-import universe.constellation.orion.viewer.device.OnyxDevice;
-import universe.constellation.orion.viewer.device.texet.TexetTB176FLDevice;
-import universe.constellation.orion.viewer.device.texet.TexetTB576HDDevice;
-import universe.constellation.orion.viewer.device.texet.TexetTb138Device;
 
-import java.io.*;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+
+import universe.constellation.orion.viewer.device.Device;
 
 /**
  * User: mike
@@ -37,37 +33,6 @@ import java.io.*;
  * Time: 11:54
  */
 public class Common {
-
-    public static Device createDevice() {
-        if(Device.Info.TEXET_TB_138) {
-            Common.d("Using TexetTb138Device");
-            return new TexetTb138Device();
-        }
-
-        if(Device.Info.TEXET_TB176FL) {
-            Common.d("Using TEXET_TB176FL");
-            return new TexetTB176FLDevice();
-        }
-
-        if(Device.Info.TEXET_TB576HD) {
-            Common.d("Using TEXET_TB576HD");
-            return new TexetTB576HDDevice();
-        }
-
-        if (Device.Info.ONYX_DEVICE) {
-            Common.d("Using Onyx Device");
-            return new OnyxDevice();
-        }
-
-        if (Device.Info.RK30SDK) {
-            Common.d("Using RK30SDK");
-            return new MagicBookBoeyeDevice();
-        }
-
-
-        Common.d("Using default android device");
-        return new AndroidDevice();
-    }
 
     public static final String LAST_OPENED_DIRECTORY = "LAST_OPENED_DIR";
 

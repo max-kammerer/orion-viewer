@@ -27,7 +27,10 @@ import android.os.Build
 import android.preference.PreferenceManager
 import universe.constellation.orion.viewer.*
 import universe.constellation.orion.viewer.bookmarks.BookmarkAccessor
-import universe.constellation.orion.viewer.device.EInkDeviceWithoutFastRefresh
+import universe.constellation.orion.viewer.device.*
+import universe.constellation.orion.viewer.device.texet.TexetTB176FLDevice
+import universe.constellation.orion.viewer.device.texet.TexetTB576HDDevice
+import universe.constellation.orion.viewer.device.texet.TexetTb138Device
 import java.util.*
 import kotlin.properties.Delegates
 
@@ -55,7 +58,7 @@ class OrionApplication : Application() {
 
     var currentBookParameters: LastPageInfo? = null
 
-    val device = Common.createDevice()
+    val device = createDevice()
 
     var isTesting = false
 
@@ -166,6 +169,37 @@ class OrionApplication : Application() {
     }
 
     companion object {
+        @JvmStatic
+        fun createDevice(): Device {
+            if (Device.Info.TEXET_TB_138) {
+                log("Using TexetTb138Device")
+                return TexetTb138Device()
+            }
+
+            if (Device.Info.TEXET_TB176FL) {
+                log("Using TEXET_TB176FL")
+                return TexetTB176FLDevice()
+            }
+
+            if (Device.Info.TEXET_TB576HD) {
+                log("Using TEXET_TB576HD")
+                return TexetTB576HDDevice()
+            }
+
+            if (Device.Info.ONYX_DEVICE) {
+                log("Using Onyx Device")
+                return OnyxDevice()
+            }
+
+            if (Device.Info.RK30SDK) {
+                log("Using RK30SDK")
+                return MagicBookBoeyeDevice()
+            }
+
+
+            log("Using default android device")
+            return AndroidDevice()
+        }
         var instance: OrionApplication by Delegates.notNull()
             private set
     }

@@ -53,7 +53,7 @@ public abstract class OrionBaseActivity extends AppCompatActivity {
 
     public OrionBaseActivity() {
         if (supportDevice()) {
-            device = Common.createDevice();
+            device = OrionApplication.createDevice();
         }
     }
 
