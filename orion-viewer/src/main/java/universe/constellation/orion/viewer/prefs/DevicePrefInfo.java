@@ -50,14 +50,14 @@ public class DevicePrefInfo extends DialogPreference {
     protected void onBindDialogView(View view) {
         super.onBindDialogView(view);
 
-        TextView tv = (TextView) view.findViewById(R.id.MANUFACTURER);
-        tv.setText(Device.Info.MANUFACTURER);
+        TextView tv = view.findViewById(R.id.MANUFACTURER);
+        tv.setText(OrionApplication.MANUFACTURER);
         tv = (TextView) view.findViewById(R.id.MODEL);
-        tv.setText(Device.Info.MODEL);
+        tv.setText(OrionApplication.MODEL);
         tv = (TextView) view.findViewById(R.id.DEVICE);
-        tv.setText(Device.Info.DEVICE);
+        tv.setText(OrionApplication.DEVICE);
         tv = (TextView) view.findViewById(R.id.HARDWARE);
-        tv.setText(Device.Info.HARDWARE);
+        tv.setText(OrionApplication.HARDWARE);
 
 //        tv = (TextView) view.findViewById(R.id.MEMORY);
 //

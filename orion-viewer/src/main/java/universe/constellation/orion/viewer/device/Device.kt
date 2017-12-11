@@ -20,51 +20,13 @@
 package universe.constellation.orion.viewer.device
 
 import android.app.Activity
-import android.os.Build
 import android.view.KeyEvent
-import universe.constellation.orion.viewer.*
+import universe.constellation.orion.viewer.LastPageInfo
+import universe.constellation.orion.viewer.OperationHolder
+import universe.constellation.orion.viewer.OrionBaseActivity
 import universe.constellation.orion.viewer.document.Document
 
 interface Device {
-
-    object Info {
-        @JvmField
-        val MANUFACTURER = getField("MANUFACTURER")
-        @JvmField
-        val MODEL = getField("MODEL")
-        @JvmField
-        val DEVICE = getField("DEVICE")
-        @JvmField
-        val HARDWARE = getField("HARDWARE")
-
-        @JvmField
-        val ONYX_DEVICE = "ONYX".equals(MANUFACTURER, ignoreCase = true) && OnyxUtil.isEinkDevice()
-
-        @JvmField
-        val TEXET_TB_138 = "texet".equals(DEVICE, ignoreCase = true) && "rk29sdk".equals(MODEL, ignoreCase = true)
-
-        @JvmField
-        val TEXET_TB176FL = "texet".equals(MANUFACTURER, ignoreCase = true) && "TB-176FL".equals(DEVICE, ignoreCase = true) && "TB-176FL".equals(MODEL, ignoreCase = true)
-
-        @JvmField
-        val TEXET_TB576HD = "texet".equals(MANUFACTURER, ignoreCase = true) && "TB-576HD".equals(DEVICE, ignoreCase = true) && "TB-576HD".equals(MODEL, ignoreCase = true)
-
-        @JvmField
-        val RK30SDK = "rk30sdk".equals(MODEL, ignoreCase = true) && ("T62D".equals(DEVICE, ignoreCase = true) || DEVICE.toLowerCase().contains("onyx"))
-
-        fun getField(name: String): String =
-                try {
-                    Build::class.java.getField(name).get(null) as String
-                } catch (e: Exception) {
-                    log("Exception on extracting Build property:" + name)
-                    ""
-                }
-
-
-        @JvmField
-        val version: String = Build.VERSION.INCREMENTAL
-
-    }
 
     fun onKeyUp(keyCode: Int, event: KeyEvent, operation: OperationHolder): Boolean
 

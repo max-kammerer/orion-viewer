@@ -31,6 +31,7 @@ import universe.constellation.orion.viewer.android.touch.AndroidScaleWrapper;
 import universe.constellation.orion.viewer.android.touch.OldAdroidScaleWrapper;
 import universe.constellation.orion.viewer.android.touch.ScaleDetectorWrapper;
 import universe.constellation.orion.viewer.device.EInkDevice;
+import universe.constellation.orion.viewer.prefs.OrionApplication;
 import universe.constellation.orion.viewer.util.DensityUtil;
 import universe.constellation.orion.viewer.util.MoveUtil;
 import universe.constellation.orion.viewer.view.OrionDrawScene;
@@ -252,7 +253,7 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                             float newY = MoveUtil.calcOffset(startFocus.y, endFocus.y, curScale, enableTouchMoveOnPinchZoom);
                             view.afterScaling();
                             //There is no start scale event!!!!
-                            if (Device.Info.TEXET_TB176FL) {
+                            if (OrionApplication.TEXET_TB176FL) {
                                 curScale *= gestureDetector.getScaleFactor();
                             }
                             activity.getController().translateAndZoom(true, curScale, newX, newY);

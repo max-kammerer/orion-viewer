@@ -7,6 +7,7 @@ import android.view.KeyEvent;
 import android.view.View;
 
 import universe.constellation.orion.viewer.OperationHolder;
+import universe.constellation.orion.viewer.prefs.OrionApplication;
 
 public class MagicBookBoeyeDevice extends EInkDevice {
 
@@ -23,7 +24,7 @@ public class MagicBookBoeyeDevice extends EInkDevice {
     private static final int CAMERA = 212;
     private static final int SEARCH = 217;
 
-    private static final boolean isT62 = "T62D".equalsIgnoreCase(Device.Info.DEVICE);
+    private static final boolean isT62 = "T62D".equalsIgnoreCase(OrionApplication.DEVICE);
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event, OperationHolder holder) {

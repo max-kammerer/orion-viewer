@@ -5,14 +5,11 @@ import android.os.Build
 import android.support.annotation.RequiresApi
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
-import universe.constellation.orion.viewer.device.Device
 import universe.constellation.orion.viewer.OrionScene
 import universe.constellation.orion.viewer.OrionViewerActivity
+import universe.constellation.orion.viewer.prefs.OrionApplication
 import universe.constellation.orion.viewer.util.MoveUtil
 
-/**
- * Created by mike on 15.07.16.
- */
 @RequiresApi(api = Build.VERSION_CODES.FROYO)
 class NewTouchProcessorWithScale(view: OrionScene, activity: OrionViewerActivity) :
         NewTouchProcessor(view, activity),
@@ -64,7 +61,7 @@ class NewTouchProcessorWithScale(view: OrionScene, activity: OrionViewerActivity
         val newY = MoveUtil.calcOffset(startFocus.y, endFocus.y, curScale, enableTouchMoveOnPinchZoom)
         view.afterScaling()
         //There is no start scale event!!!!
-        if (Device.Info.TEXET_TB176FL) {
+        if (OrionApplication.TEXET_TB176FL) {
             curScale *= detector.scaleFactor
         }
         activity.controller.translateAndZoom(true, curScale, newX, newY)
