@@ -117,18 +117,6 @@ public class Common {
         }
     }
 
-    public static void i(String message) {
-        Common.d(message);
-    }
-
-    public static String getPrefKey(int keyCode, boolean isLong) {
-        return keyCode + (isLong ? "long" : "");
-    }
-
-    public static String memoryInMB(long memoryInBytes) {
-        return "" + memoryInBytes/1024/1024 + "Mb";
-    }
-
     public static void logOrionAndDeviceInfo() {
         Common.d("Orion Viewer " + BuildConfig.VERSION_NAME);
         Common.d("Device: " + Device.Info.DEVICE);

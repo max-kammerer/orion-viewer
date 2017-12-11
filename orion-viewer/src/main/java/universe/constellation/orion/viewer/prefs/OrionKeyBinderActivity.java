@@ -102,7 +102,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
             int code = data.getIntExtra("code", 0);
             int keyCode = data.getIntExtra("keyCode", 0);
             boolean isLong = data.getBooleanExtra("isLong", false);
-            String prefKey = Common.getPrefKey(keyCode, isLong);
+            String prefKey = UtilKt.getPrefKey(keyCode, isLong);
             Action action = Action.getAction(code);
             if (action == Action.NONE) {
                 getOrionContext().getKeyBinding().removePreference(prefKey);
@@ -152,7 +152,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
 
     private void selectAction(int keyCode, boolean isLong) {
         Intent intent = new Intent(this, ActionListActivity.class);
-        intent.putExtra("code", getOrionContext().getKeyBinding().getInt(Common.getPrefKey(keyCode, isLong), 0));
+        intent.putExtra("code", getOrionContext().getKeyBinding().getInt(UtilKt.getPrefKey(keyCode, isLong), 0));
         intent.putExtra("type", 2);
         intent.putExtra("keyCode", keyCode);
         intent.putExtra("isLong", isLong);

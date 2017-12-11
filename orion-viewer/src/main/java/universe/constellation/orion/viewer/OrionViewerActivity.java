@@ -702,7 +702,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     private boolean processKey(int keyCode, KeyEvent event, boolean isLong) {
         L.log("key = " + keyCode + " isLong = " + isLong);
 
-        int actionCode = getOrionContext().getKeyBinding().getInt(Common.getPrefKey(keyCode, isLong), -1);
+        int actionCode = getOrionContext().getKeyBinding().getInt(UtilKt.getPrefKey(keyCode, isLong), -1);
         if (actionCode != -1) {
             Action action = Action.getAction(actionCode);
             switch (action) {

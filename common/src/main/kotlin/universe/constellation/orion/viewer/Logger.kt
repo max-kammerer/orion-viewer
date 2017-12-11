@@ -19,7 +19,19 @@
 
 package universe.constellation.orion.viewer
 
+interface Logger {
+    fun log(m: String) = println(m)
 
-fun getPrefKey(keyCode: Int, isLong: Boolean): String {
-    return keyCode.toString() + if (isLong) "long" else ""
+    fun log(m: String, e: Exception) {
+        println(m)
+        e.printStackTrace()
+    }
+}
+
+val logger = object : Logger {}
+
+fun log(m: String) = logger.log(m)
+
+fun log(m: String, e: Exception) {
+    logger.log(m, e)
 }

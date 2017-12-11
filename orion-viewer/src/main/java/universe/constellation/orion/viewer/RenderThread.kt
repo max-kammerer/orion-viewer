@@ -20,7 +20,6 @@
 package universe.constellation.orion.viewer
 
 import android.graphics.Bitmap
-import android.graphics.Point
 import android.os.Debug
 import java.util.LinkedList
 import java.util.concurrent.CountDownLatch
@@ -67,7 +66,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
 
     fun cleanCache() {
         synchronized(this) {
-            Common.d("Allocated heap size: " + Common.memoryInMB(Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()))
+            Common.d("Allocated heap size: " + memoryInMB(Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()))
             cachedBitmaps.clear()
             Common.d("Cache is cleared!")
             currentPosition = null
@@ -100,7 +99,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
 
          while (!stopped) {
 
-            Common.d("Allocated heap size " + Common.memoryInMB(Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()))
+            Common.d("Allocated heap size " + memoryInMB(Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()))
 
             var rotation = 0
             val doContinue = synchronized(this) {

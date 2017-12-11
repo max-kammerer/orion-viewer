@@ -19,14 +19,24 @@
 
 package universe.constellation.orion.viewer
 
-import universe.constellation.orion.viewer.Common.d
-
-inline fun <T> task(name: String, task: () -> T) {
-    d("Starting $name task...")
-    task()
-    d("Task $name is finished!")
-}
-
 /*pages are zero based*/
 val Int.isZeroBasedEvenPage: Boolean
     get() = this % 2 == 1
+
+inline fun <T> task(name: String, task: () -> T) {
+    log("Starting $name task...")
+    task()
+    log("Task $name is finished!")
+}
+
+inline fun <R> timing(message: String, l: () -> R): R {
+    Common.d("Starting task '$message'...")
+    val start = System.currentTimeMillis()
+    return l().also {
+        log("Task '$message' is finished in ${System.currentTimeMillis() - start} ms")
+    }
+}
+
+fun memoryInMB(memoryInBytes: Long): String {
+    return "${memoryInBytes / 1024 / 1024}Mb"
+}
