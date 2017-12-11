@@ -29,9 +29,10 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import universe.constellation.orion.viewer.Action;
-import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.OrionBaseActivity;
 import universe.constellation.orion.viewer.R;
+
+import static universe.constellation.orion.viewer.LoggerKt.log;
 
 /**
  * User: mike
@@ -113,7 +114,7 @@ public class OrionTapActivity extends OrionBaseActivity {
 
                 int i = index / 3;
                 int j = index % 3;
-                Common.d(index + " " + i + " " + j);
+                log(index + " " + i + " " + j);
                 SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor ed = pref.edit();
                 ed.putInt(getKey(i, j, isLong), action.getCode());

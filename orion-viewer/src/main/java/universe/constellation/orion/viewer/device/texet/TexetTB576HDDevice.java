@@ -9,8 +9,9 @@ import android.view.View;
 
 import java.lang.reflect.Method;
 
-import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.OperationHolder;
+
+import static universe.constellation.orion.viewer.LoggerKt.log;
 
 /**
  * Created by mike on 9/16/14.
@@ -29,20 +30,20 @@ public class TexetTB576HDDevice extends TexetDevice {
         try {
             texetBacklight0 = PowerManager.class.getMethod("setBacklight", int.class, Context.class);
         } catch (Exception e) {
-            Common.d(e);
+            log(e);
         }
 
         try {
             texetBacklight1 = PowerManager.class.getMethod("setBacklight", int.class);
         } catch (Exception e) {
-            Common.d(e);
+            log(e);
         }
 
         try {
             invalidateScreen = View.class.getMethod("postInvalidate", int.class);
             isMethodFound = true;
         } catch (Exception e) {
-            Common.d(e);
+            log(e);
         }
     }
 
@@ -101,7 +102,7 @@ public class TexetTB576HDDevice extends TexetDevice {
             try {
                 invalidateScreen.invoke(view, 98);
             } catch (Exception e) {
-                Common.d(e);
+                log(e);
                 super.doFullUpdate(view);
             }
         } else {

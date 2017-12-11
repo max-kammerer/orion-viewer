@@ -22,10 +22,7 @@ package universe.constellation.orion.viewer.device
 import android.app.Activity
 import android.os.Build
 import android.view.KeyEvent
-import universe.constellation.orion.viewer.Common
-import universe.constellation.orion.viewer.LastPageInfo
-import universe.constellation.orion.viewer.OperationHolder
-import universe.constellation.orion.viewer.OrionBaseActivity
+import universe.constellation.orion.viewer.*
 import universe.constellation.orion.viewer.document.Document
 
 interface Device {
@@ -59,7 +56,7 @@ interface Device {
                 try {
                     Build::class.java.getField(name).get(null) as String
                 } catch (e: Exception) {
-                    Common.d("Exception on extracting Build property:" + name)
+                    log("Exception on extracting Build property:" + name)
                     ""
                 }
 

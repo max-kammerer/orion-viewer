@@ -22,7 +22,7 @@ package universe.constellation.orion.viewer
 interface Logger {
     fun log(m: String) = println(m)
 
-    fun log(m: String, e: Exception) {
+    fun log(m: String?, e: Exception) {
         println(m)
         e.printStackTrace()
     }
@@ -32,7 +32,7 @@ val logger = object : Logger {}
 
 fun log(m: String) = logger.log(m)
 
-fun log(e: Exception) = logger.log("", e)
+fun log(e: Exception) = logger.log(e.message, e)
 
 fun log(m: String, e: Exception) {
     logger.log(m, e)

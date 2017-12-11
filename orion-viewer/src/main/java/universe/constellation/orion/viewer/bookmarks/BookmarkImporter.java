@@ -23,11 +23,13 @@ package universe.constellation.orion.viewer.bookmarks;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
-import universe.constellation.orion.viewer.Common;
+
 import universe.constellation.orion.viewer.OrionException;
 
 import java.io.*;
 import java.util.Set;
+
+import static universe.constellation.orion.viewer.LoggerKt.log;
 
 /**
  * User: mike
@@ -98,7 +100,7 @@ public class BookmarkImporter {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    Common.d(e);
+                    log(e);
                 }
             }
         }
@@ -108,7 +110,7 @@ public class BookmarkImporter {
 
     //now we stay on book start tag
     private int doBookImport(XmlPullParser xpp, BookNameAndSize book) throws OrionException {
-        Common.d("Importing bookmarks for " + book);
+        log("Importing bookmarks for " + book);
         try {
             String bookName = book.getName();
             long bookSize = book.getSize();

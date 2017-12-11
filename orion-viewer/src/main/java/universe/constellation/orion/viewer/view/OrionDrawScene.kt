@@ -20,21 +20,15 @@
 package universe.constellation.orion.viewer.view
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Point
-import android.graphics.Rect
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
-
-import java.util.ArrayList
-import java.util.concurrent.CountDownLatch
-
-import universe.constellation.orion.viewer.Common
 import universe.constellation.orion.viewer.LayoutPosition
 import universe.constellation.orion.viewer.OrionScene
+import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.util.MoveUtil
+import java.util.*
+import java.util.concurrent.CountDownLatch
 
 class OrionDrawScene : View, OrionScene {
 
@@ -91,12 +85,12 @@ class OrionDrawScene : View, OrionScene {
         canvas.translate(0f, 0f)
         if (bitmap != null && !bitmap!!.isRecycled) {
             val start = System.currentTimeMillis()
-            Common.d("OrionView: drawing bitmap on view...")
+            log("OrionView: drawing bitmap on view...")
 
             val myScale = scale
 
             if (inScaling) {
-                Common.d("in scaling")
+                log("in scaling")
                 canvas.save()
                 canvas.translate(
                         -MoveUtil.calcOffset(startFocus!!.x, endFocus!!.x, myScale, enableMoveOnPinchZoom),
@@ -117,7 +111,7 @@ class OrionDrawScene : View, OrionScene {
                 drawBorder(canvas, myScale)
             }
 
-            Common.d("OrionView: bitmap rendering takes " + 0.001f * (System.currentTimeMillis() - start) + " s")
+            log("OrionView: bitmap rendering takes " + 0.001f * (System.currentTimeMillis() - start) + " s")
 
             for (drawTask in tasks) {
                 drawTask.drawOnCanvas(canvas, stuff, null)
@@ -131,7 +125,7 @@ class OrionDrawScene : View, OrionScene {
     }
 
     private fun drawBorder(canvas: Canvas, myScale: Float) {
-        Common.d("Draw: border")
+        log("Draw: border")
 
         val left = ((-info!!.x.offset - startFocus!!.x) * myScale + if (enableMoveOnPinchZoom) endFocus!!.x else startFocus!!.x).toInt()
         val top = ((-info!!.y.offset - startFocus!!.y) * myScale + if (enableMoveOnPinchZoom) endFocus!!.y else startFocus!!.y).toInt()
@@ -153,7 +147,7 @@ class OrionDrawScene : View, OrionScene {
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        Common.d("OrionView: onSizeChanged " + w + "x" + h)
+        log("OrionView: onSizeChanged " + w + "x" + h)
         super.onSizeChanged(w, h, oldw, oldh)
         if (w != oldw || h != oldh) {
             if (dimensionAware != null) {

@@ -8,9 +8,6 @@ import android.widget.Toast
 import universe.constellation.orion.viewer.*
 import universe.constellation.orion.viewer.device.EInkDevice
 
-/**
- * Created by mike on 14.07.16.
- */
 enum class State {
     UNDEFINED,
     MOVE,
@@ -187,7 +184,7 @@ open class NewTouchProcessor(val view: OrionScene, val activity: OrionViewerActi
             } catch (e: Exception) {
                 toast!!.setText("Error " + e.message + " " + e.cause)
                 toast!!.show()
-                Common.d(e)
+                log(e)
             }
 
         }
@@ -195,9 +192,5 @@ open class NewTouchProcessor(val view: OrionScene, val activity: OrionViewerActi
 
     private fun insideViewWidth(info: LayoutPosition?): Boolean {
         return info != null && info.x.pageDimension <= view.sceneWidth
-    }
-
-    private fun log(msg: String){
-        L.log(msg)
     }
 }

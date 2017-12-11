@@ -23,7 +23,6 @@ import com.artifex.mupdfdemo.SearchTaskResult;
 import java.util.ArrayList;
 import java.util.List;
 
-import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.Controller;
 import universe.constellation.orion.viewer.LayoutPosition;
 import universe.constellation.orion.viewer.LayoutStrategy;
@@ -37,6 +36,8 @@ import universe.constellation.orion.viewer.util.Util;
 import universe.constellation.orion.viewer.view.ColorStuff;
 import universe.constellation.orion.viewer.view.DrawContext;
 import universe.constellation.orion.viewer.view.DrawTask;
+
+import static universe.constellation.orion.viewer.LoggerKt.log;
 
 /**
  * User: mike
@@ -167,7 +168,7 @@ public class SearchDialog extends DialogFragment {
                 } while (forward ? !walker.next(position, layoutStrategy.getLayout()) : !walker.prev(position, layoutStrategy.getLayout()));
 
                 if (screens.isEmpty()) {
-                    Common.d("Adding fake batch");
+                    log("Adding fake batch");
                     SubBatch sb = new SubBatch();
                     sb.lp = position.clone();
                     screens.add(sb);
@@ -189,7 +190,7 @@ public class SearchDialog extends DialogFragment {
     public void onDestroyView() {
         super.onDestroyView();
         if (myTask != null) {
-            Common.d("Stopping search task");
+            log("Stopping search task");
             myTask.stop();
         }
 
@@ -238,7 +239,7 @@ public class SearchDialog extends DialogFragment {
         }
 
         if (performRealSearch) {
-            Common.d("Real search for " + page);
+            log("Real search for " + page);
             myTask.go(newSearch, direction, page, -1);
         } else {
             SubBatch subBatch = screens.get(lastPosition);
@@ -253,7 +254,7 @@ public class SearchDialog extends DialogFragment {
         System.out.println("lastPosition = " + lastPosition);
         System.out.println("lastIndex = " + subBatch.active);
         System.out.println("page = " + subBatch.lp.pageNumber);
-        Common.d("Rect " + subBatch.lp.toAbsoluteRect());
+        log("Rect " + subBatch.lp.toAbsoluteRect());
 
         lastSearchDrawler.setBatch(subBatch);
         controller.drawPage(subBatch.lp);

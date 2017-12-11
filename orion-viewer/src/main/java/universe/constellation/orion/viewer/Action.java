@@ -46,6 +46,7 @@ import universe.constellation.orion.viewer.view.FullScene;
 
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+import static universe.constellation.orion.viewer.LoggerKt.log;
 
 /**
  * User: mike
@@ -132,8 +133,8 @@ public enum Action {
 
     SHOW_OUTLINE (R.string.action_outline, R.integer.action_open_outline) {
 		public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-			Common.d("Show Outline...");
-			OutlineItem[] outline = controller.getOutline();
+            log("Show Outline...");
+            OutlineItem[] outline = controller.getOutline();
 
 			if (outline != null && outline.length != 0) {
                 final AppCompatDialog dialog = new AppCompatDialog(activity);
@@ -330,7 +331,7 @@ public enum Action {
                 try {
                     activity.startActivity(intent);
                 } catch (ActivityNotFoundException ex) {
-                    Common.d(ex);
+                    log(ex);
                     String string = activity.getString(R.string.warn_msg_no_dictionary);
                     activity.showWarning(string + ": " + dict + ": " + ex.getMessage());
                 }

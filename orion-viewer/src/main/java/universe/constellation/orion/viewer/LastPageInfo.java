@@ -31,6 +31,8 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+import static universe.constellation.orion.viewer.LoggerKt.log;
+
 /**
  * User: mike
  * Date: 13.09.11
@@ -97,7 +99,7 @@ public class LastPageInfo implements Serializable {
         try {
             successfull = lastPageInfo.load(activity, fileData);
         } catch (Exception e) {
-            Common.d("Error on restore book options", e);
+            log("Error on restore book options", e);
         }
 
         if (!successfull) {
@@ -139,7 +141,7 @@ public class LastPageInfo implements Serializable {
                         writeValue(serializer, field.getName(), field.get(this).toString());
                     }
                 } catch (IllegalAccessException e) {
-                    Common.d(e);
+                    log(e);
                 }
             }
 
@@ -171,14 +173,14 @@ public class LastPageInfo implements Serializable {
             serializer.endTag(nameSpace, "bookParameters");
             serializer.endDocument();
         } catch (IOException e) {
-            Common.d(e);
+            log(e);
             activity.showError("Couldn't save book preferences", e);
         } finally {
             if (writer != null) {
                 try {
                     writer.close();
                 } catch (IOException e) {
-                    Common.d(e);
+                    log(e);
                 }
             }
         }
@@ -230,17 +232,17 @@ public class LastPageInfo implements Serializable {
                             } else if (type.equals(String.class)) {
                                 value = rawValue;
                             } else {
-                                Common.d("Error on deserializing field " + name + " = " + rawValue);
+                                log("Error on deserializing field " + name + " = " + rawValue);
                                 continue;
                             }
                             getClass().getField(name).set(this, value);
                         } catch (IllegalAccessException e) {
-                            Common.d(e);
+                            log(e);
                         } catch (NoSuchFieldException e) {
                             //skip
-                            Common.d(e);
+                            log(e);
                         } catch (NumberFormatException e) {
-                            Common.d(e);
+                            log(e);
                         }
                     }
                 }

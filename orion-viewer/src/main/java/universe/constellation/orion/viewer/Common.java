@@ -24,11 +24,6 @@ import android.util.Log;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 
-/**
- * User: mike
- * Date: 13.11.11
- * Time: 11:54
- */
 public class Common {
 
     public static final String LAST_OPENED_DIRECTORY = "LAST_OPENED_DIR";

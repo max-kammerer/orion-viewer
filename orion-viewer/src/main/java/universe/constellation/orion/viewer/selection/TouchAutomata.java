@@ -24,7 +24,6 @@ import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
-import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.device.Device;
 import universe.constellation.orion.viewer.LayoutPosition;
 import universe.constellation.orion.viewer.OrionViewerActivity;
@@ -39,6 +38,7 @@ import universe.constellation.orion.viewer.view.OrionDrawScene;
 import static android.view.MotionEvent.ACTION_DOWN;
 import static android.view.MotionEvent.ACTION_MOVE;
 import static android.view.MotionEvent.ACTION_UP;
+import static universe.constellation.orion.viewer.LoggerKt.log;
 
 /**
 * User: mike
@@ -197,7 +197,7 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                     if (ACTION_MOVE == action || ACTION_UP == action) {
                         boolean doAction = false;
                         if (action == ACTION_UP) {
-                            Common.d("UP " + action);
+                            log("UP " + action);
                             doAction = true;
                         } else {
                             if (last0.x != -1 && last0.y != -1) {
@@ -207,7 +207,7 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                         }
 
                         if (doAction) {
-                            Common.d("Check event action " + action);
+                            log("Check event action " + action);
                             boolean isLongClick = (SystemClock.uptimeMillis() - startTime) > TIME_DELTA;
 
                             if (last0.x != -1 && last0.y != -1) {
@@ -322,7 +322,7 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
             } catch (Exception e) {
                 toast.setText("Error " + e.getMessage() + " " + e.getCause());
                 toast.show();
-                Common.d(e);
+                log(e);
             }
         }
     }

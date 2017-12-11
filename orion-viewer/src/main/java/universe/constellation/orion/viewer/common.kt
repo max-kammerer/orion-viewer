@@ -30,7 +30,7 @@ inline fun <T> task(name: String, task: () -> T) {
 }
 
 inline fun <R> timing(message: String, l: () -> R): R {
-    Common.d("Starting task '$message'...")
+    log("Starting task '$message'...")
     val start = System.currentTimeMillis()
     return l().also {
         log("Task '$message' is finished in ${System.currentTimeMillis() - start} ms")

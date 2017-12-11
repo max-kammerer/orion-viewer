@@ -30,6 +30,8 @@ import universe.constellation.orion.viewer.*;
 
 import java.util.*;
 
+import static universe.constellation.orion.viewer.LoggerKt.log;
+
 /**
  * User: mike
  * Date: 27.12.11
@@ -137,7 +139,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
 
     private boolean processKey(int keyCode, KeyEvent event, boolean isLong) {
         //TODO add zero keycode warning
-        Common.d("KeyBinder: on key down " + keyCode + (isLong ? " long press" : ""));
+        log("KeyBinder: on key down " + keyCode + (isLong ? " long press" : ""));
         if (keyCode == KeyEvent.KEYCODE_UNKNOWN) {
             statusText.setText(R.string.key_binder_warning);
             statusText.setTextColor(Color.RED);
@@ -219,7 +221,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
                             }
                             values.add(new KeyCodeAndAction(Integer.valueOf(key), action, isLong));
                         } catch (Exception e) {
-                            Common.d(e);
+                            log(e);
                         }
                     }
                 }

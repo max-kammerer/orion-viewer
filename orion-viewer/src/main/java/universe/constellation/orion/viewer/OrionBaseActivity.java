@@ -36,6 +36,8 @@ import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionApplication;
 
+import static universe.constellation.orion.viewer.LoggerKt.log;
+
 /**
  * User: mike
  * Date: 24.12.11
@@ -184,7 +186,7 @@ public abstract class OrionBaseActivity extends AppCompatActivity {
 
     public void showError(String error, Exception ex) {
         Toast.makeText(this, error + ": " + ex.getMessage(), Toast.LENGTH_LONG).show();
-        Common.d(ex);
+        log(ex);
     }
 
     public void changeOrientation(int orientationId) {

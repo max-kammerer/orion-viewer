@@ -7,7 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.view.View
-import universe.constellation.orion.viewer.L
+import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.util.ColorUtil
 import universe.constellation.orion.viewer.util.DensityUtil
 
@@ -36,7 +36,7 @@ class ColorStuff(context: Context) {
             if (it < 2) 2 else it
         }
 
-        L.log("Grad size is $gradsize")
+        log("Grad size is $gradsize")
         p.shader = LinearGradient(0f, 0f, 0f, gradsize.toFloat(), Color.rgb(223, 223, 223), Color.rgb(240, 240, 240), Shader.TileMode.MIRROR)
         canvas.drawRect(0f, 0f, dim.toFloat(), dim.toFloat(), p)
 

@@ -20,11 +20,12 @@
 package universe.constellation.orion.viewer.prefs;
 
 import android.view.KeyEvent;
-import universe.constellation.orion.viewer.Common;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+
+import static universe.constellation.orion.viewer.LoggerKt.log;
 
 /**
  * User: mike
@@ -45,7 +46,7 @@ public class KeyEventNamer {
                 }
             }
         } catch (Exception e) {
-            Common.d(e);
+            log(e);
         }
     }
 

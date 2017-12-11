@@ -20,8 +20,6 @@
 package universe.constellation.orion.viewer
 
 import android.graphics.Point
-import universe.constellation.orion.viewer.Common.d
-import universe.constellation.orion.viewer.calcPageLayout
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.DocumentWithCaching
 import universe.constellation.orion.viewer.document.OutlineItem
@@ -52,7 +50,7 @@ class Controller(
     private var hasPendingEvents = false
 
     init {
-        Common.d("Creating controller...")
+        log("Creating controller...")
 
         renderer.startRenderer()
 
@@ -69,7 +67,7 @@ class Controller(
         }
 
         activity.subscriptionManager.addDocListeners(listener)
-        Common.d("Controller was created successfully")
+        log("Controller was created successfully")
     }
 
     fun drawPage(page: Int) {
@@ -86,14 +84,14 @@ class Controller(
 
     fun processPendingEvents() {
         if (hasPendingEvents) {
-            Common.d("Processing pending updates...")
+            log("Processing pending updates...")
             sendViewChangeNotification()
         }
     }
 
     override fun onDimensionChanged(newWidth: Int, newHeight: Int) {
         if (newWidth > 0 && newHeight > 0) {
-            Common.d("New screen size ${newWidth}x$newHeight")
+            log("New screen size ${newWidth}x$newHeight")
 
             layoutStrategy.setDimension(newWidth, newHeight)
             val options = activity.globalOptions
@@ -127,7 +125,7 @@ class Controller(
     }
 
     fun translateAndZoom(changeZoom: Boolean, zoomScaling: Float, deltaX: Float, deltaY: Float) {
-        Common.d("zoomscaling  $changeZoom $zoomScaling  $deltaX  $deltaY")
+        log("zoomscaling  $changeZoom $zoomScaling  $deltaX  $deltaY")
         val oldOffsetX = layoutInfo.x.offset
         val oldOffsetY = layoutInfo.y.offset
         println("oldZoom  " + layoutInfo.docZoom + "  " + layoutInfo.x.offset + " x " + layoutInfo.y.offset)
@@ -171,7 +169,7 @@ class Controller(
         get() = layoutStrategy.margins
 
     fun destroy() {
-        Common.d("Destroying controller...")
+        log("Destroying controller...")
         activity.subscriptionManager.unSubscribe(listener)
         renderer.stopRenderer()
         document.destroy()
@@ -289,7 +287,7 @@ class Controller(
 
     fun changeOrinatation(orientationId: String) {
         screenOrientation = orientationId
-        d("New orientation $screenOrientation")
+        log("New orientation $screenOrientation")
         var realOrintationId = orientationId
         if ("DEFAULT" == orientationId) {
             realOrintationId = activity.applicationDefaultOrientation

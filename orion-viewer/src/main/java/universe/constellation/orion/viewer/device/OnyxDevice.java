@@ -5,7 +5,7 @@ import android.view.View;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import universe.constellation.orion.viewer.Common;
+import static universe.constellation.orion.viewer.LoggerKt.log;
 
 /**
  * Created by mike on 9/9/14.
@@ -47,13 +47,13 @@ public class OnyxDevice extends EInkDevice {
                         fullUpdateEntry = entry;
                     }
                 }
-                Common.d("Fast update entry " + fastUpdateEntry);
-                Common.d("Full update entry " + fullUpdateEntry);
+                log("Fast update entry " + fastUpdateEntry);
+                log("Full update entry " + fullUpdateEntry);
             }
 
             isSuccessful = fastUpdateEntry != null && fullUpdateEntry != null;
         } catch (Exception e) {
-            Common.d(e);
+            log(e);
         } finally {
             successful = isSuccessful;
         }
@@ -83,10 +83,10 @@ public class OnyxDevice extends EInkDevice {
         try {
             invalidate.invoke(null, view, fastUpdateEntry);
         } catch (IllegalAccessException e) {
-            Common.d(e);
+            log(e);
             super.doPartialUpdate(view);
         } catch (InvocationTargetException e) {
-            Common.d(e);
+            log(e);
             super.doPartialUpdate(view);
         }
     }

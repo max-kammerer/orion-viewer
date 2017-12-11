@@ -13,12 +13,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.document.Document;
 import universe.constellation.orion.viewer.LastPageInfo;
 import universe.constellation.orion.viewer.PageInfo;
 import universe.constellation.orion.viewer.device.EInkDevice;
 import universe.constellation.orion.viewer.document.DocumentWithCaching;
+
+import static universe.constellation.orion.viewer.LoggerKt.log;
 
 /**
  * Created by mike on 9/16/14.
@@ -33,7 +34,7 @@ public class TexetDevice extends EInkDevice {
             shtampTexetFile(info.openingFileName, info.simpleFileName, "", "" + info.totalPages, "" + info.pageNumber, coverFileName);
             rememberCover(coverFileName, document);
         } catch (Exception e) {
-            Common.d(e);
+            log(e);
             Toast.makeText(activity, "Error on new book parameters update: " + e.getMessage(), Toast.LENGTH_SHORT).show();;
         }
     }
@@ -45,7 +46,7 @@ public class TexetDevice extends EInkDevice {
         try {
             shtampTexetFile(null, null, null, "" + info.totalPages, "" + info.pageNumber, null);
         } catch (Exception e) {
-            Common.d(e);
+            log(e);
             Toast.makeText(activity, "Error on parameters update on book close: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
@@ -204,7 +205,7 @@ public class TexetDevice extends EInkDevice {
                 try {
                     stream.close();
                 } catch (IOException e) {
-                    Common.d(e);
+                    log(e);
                 }
             }
         }
@@ -212,7 +213,7 @@ public class TexetDevice extends EInkDevice {
 
     public void rememberCover(final String coverFileName, final Document doc) {
         if (coverFileName != null && coverFileName.length() != 0 && !new File(coverFileName).exists()) {
-            Common.d("Writing cover to " + coverFileName);
+            log("Writing cover to " + coverFileName);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -223,16 +224,16 @@ public class TexetDevice extends EInkDevice {
                         }
 
                         if (originalDoc.getPageCount() <= 0) {
-                            Common.d("No pages in document");
+                            log("No pages in document");
                             return;
                         }
                         int defaultHeight = 320;
 
-                        Common.d("Extracting cover info ...");
+                        log("Extracting cover info ...");
 
                         PageInfo pageInfo = originalDoc.getPageInfo(0, 0);
                         if (pageInfo.width <= 0 || pageInfo.height <= 0) {
-                            Common.d("Wrong page defaultHeight: " + pageInfo.width + "x" + pageInfo.height);
+                            log("Wrong page defaultHeight: " + pageInfo.width + "x" + pageInfo.height);
                         }
 
                         float zoom = Math.min(1.0f * defaultHeight / pageInfo.width, 1.0f * defaultHeight / pageInfo.height);
@@ -241,11 +242,11 @@ public class TexetDevice extends EInkDevice {
                         Bitmap bm = Bitmap.createBitmap(sizeX, sizeY, Bitmap.Config.ARGB_8888);
                         int xDelta = -(sizeX - (int)(zoom * pageInfo.width))/2;
                         int yDelta = -(sizeY - (int)(zoom * pageInfo.height))/2;
-                        Common.d("Cover info " + zoom + " xD: " + xDelta + " yD: " + yDelta + " bm: " + sizeX + "x" + sizeY);
+                        log("Cover info " + zoom + " xD: " + xDelta + " yD: " + yDelta + " bm: " + sizeX + "x" + sizeY);
                         originalDoc.renderPage(0, bm, zoom, xDelta, yDelta, sizeX + xDelta, sizeY + yDelta);
                         writeCover(bm, coverFileName);
                     } catch (FileNotFoundException e) {
-                        Common.d(e);
+                        log(e);
                     }
                 }
             }).run();

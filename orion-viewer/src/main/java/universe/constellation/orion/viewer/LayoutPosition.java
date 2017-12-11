@@ -21,6 +21,8 @@ package universe.constellation.orion.viewer;
 
 import android.graphics.RectF;
 
+import static universe.constellation.orion.viewer.LoggerKt.log;
+
 /**
  * User: mike
  * Date: 15.10.11
@@ -50,7 +52,7 @@ public class LayoutPosition implements Cloneable {
             lp.y = (OneDimension) lp.y.clone();
             return lp;
         } catch (CloneNotSupportedException e) {
-            Common.d(e);
+            log(e);
         }
         return null;//todo new
     }

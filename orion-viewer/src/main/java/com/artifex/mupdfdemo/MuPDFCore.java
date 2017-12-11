@@ -7,9 +7,10 @@ import android.graphics.RectF;
 
 import java.util.ArrayList;
 
-import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.pdf.DocInfo;
 import universe.constellation.orion.viewer.PageInfo;
+
+import static universe.constellation.orion.viewer.LoggerKt.log;
 
 public class MuPDFCore
 {
@@ -184,7 +185,7 @@ public class MuPDFCore
 	/* Shim function */
 	private void gotoPage(int page)
 	{
-        Common.d("Changing page to " + page + " ...");
+        log("Changing page to " + page + " ...");
         long start = System.currentTimeMillis();
 
 		if (page > numPages-1)
@@ -195,8 +196,8 @@ public class MuPDFCore
 		this.pageWidth = getPageWidth();
 		this.pageHeight = getPageHeight();
 
-        Common.d("Page " + page + " changing takes = " + 0.001 * (System.currentTimeMillis() - start) + " s");
-	}
+        log("Page " + page + " changing takes = " + 0.001 * (System.currentTimeMillis() - start) + " s");
+    }
 
 	public synchronized PointF getPageSize(int page) {
 		gotoPage(page);
@@ -221,11 +222,11 @@ public class MuPDFCore
 	}
 
 	public synchronized void onDestroy() {
-        Common.d("Destroying document...");
-		destroying();
+        log("Destroying document...");
+        destroying();
 		globals = 0;
-        Common.d("Document destoyed!");
-	}
+        log("Document destoyed!");
+    }
 
 	public synchronized void drawPage(Bitmap bm, int page,
 			int pageW, int pageH,
@@ -481,9 +482,9 @@ public class MuPDFCore
 
 	public synchronized void renderPage(int n, Bitmap bitmap, double zoom, int left, int top, int w, int h) {
 		gotoPage(n);
-		Common.d("MuPDFCore starts rendering...");
-		long start = System.currentTimeMillis();
+        log("MuPDFCore starts rendering...");
+        long start = System.currentTimeMillis();
 		drawPage(bitmap, (float)zoom, w, h, left, top, w, h, 0);
-		Common.d("MuPDFCore render time takes " + n + " = " + 0.001 * (System.currentTimeMillis() - start) + " s");
-	}
+        log("MuPDFCore render time takes " + n + " = " + 0.001 * (System.currentTimeMillis() - start) + " s");
+    }
 }

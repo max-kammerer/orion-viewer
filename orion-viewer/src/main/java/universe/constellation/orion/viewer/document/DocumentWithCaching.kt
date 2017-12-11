@@ -79,13 +79,13 @@ class DocumentWithCaching(val doc: Document) : Document by doc {
 
         //Crop manual/no mode margins to calc new width and height
         val firstCropMode = if (cropMode.toMode.isManualFirst()) CropMode.MANUAL else CropMode.NO_MODE
-        Common.d("Calculating first reset with page = $page with cropMode = $firstCropMode")
+        log("Calculating first reset with page = $page with cropMode = $firstCropMode")
         strategy.reset(curPos, true, page, firstCropMode.cropMode, 10000, false)
 
         val pageWidth1R = curPos.x.pageDimension
         val pageHeight1R = curPos.y.pageDimension
-        Common.d("Cur pos 1R = $curPos")
-        Common.d("New dimension: $pageWidth1R x $pageHeight1R")
+        log("Cur pos 1R = $curPos")
+        log("New dimension: $pageWidth1R x $pageHeight1R")
 
         if (pageWidth1R == 0 || pageHeight1R == 0) {
             page.autoCrop = null
@@ -98,7 +98,7 @@ class DocumentWithCaching(val doc: Document) : Document by doc {
         val newWidth = curPos.x.pageDimension
         val newHeight = curPos.y.pageDimension
 
-        Common.d("Cur pos for crop screen: $newWidth x $newHeight $zoomInDouble")
+        log("Cur pos for crop screen: $newWidth x $newHeight $zoomInDouble")
 
         timing("Render page for auto crop processing") {
             val leftTopCorner = strategy.convertToPoint(curPos)
@@ -122,8 +122,8 @@ class DocumentWithCaching(val doc: Document) : Document by doc {
                 (marginsWithPadding.bottom / zoomInDouble).toInt()
 
         )
-        Common.d("Zoomed result: ${page.pageNum0}: $margins $zoomInDouble")
-        Common.d("Unzoomed result: ${page.pageNum0}: ${page.autoCrop}")
+        log("Zoomed result: ${page.pageNum0}: $margins $zoomInDouble")
+        log("Unzoomed result: ${page.pageNum0}: ${page.autoCrop}")
     }
 
     override fun hasCalculatedPageInfo(pageNumber: Int): Boolean = cache[pageNumber] != null
@@ -274,7 +274,7 @@ fun findRectangle(grImage: ArrayImage): AutoCropMargins {
         }
     }
 
-    Common.d("data1: ${Rect(left, top, right , bottom)}")
+    log("data1: ${Rect(left, top, right , bottom)}")
 
     if (right < 0) {
         right = width - 1
@@ -291,7 +291,7 @@ fun findRectangle(grImage: ArrayImage): AutoCropMargins {
     }
 
     val rectangle = Rect(left, top, right, bottom)
-    Common.d("data 2: $rectangle")
+    log("data 2: $rectangle")
     return AutoCropMargins(left, top, width - right, height - bottom)
 }
 

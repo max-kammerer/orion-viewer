@@ -28,11 +28,12 @@ import pl.polidea.treeview.AbstractTreeViewAdapter;
 import pl.polidea.treeview.InMemoryTreeStateManager;
 import pl.polidea.treeview.TreeBuilder;
 import pl.polidea.treeview.TreeNodeInfo;
-import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.Controller;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.R;
 import universe.constellation.orion.viewer.document.OutlineItem;
+
+import static universe.constellation.orion.viewer.LoggerKt.log;
 
 public class OutlineAdapter extends AbstractTreeViewAdapter<Integer> {
     private final OutlineItem items[];
@@ -55,7 +56,7 @@ public class OutlineAdapter extends AbstractTreeViewAdapter<Integer> {
 
         int openAtIndex = -1;
         OutlineItem lastItem = null;
-        Common.d("OutlineAdapter:: initializeTreeManager " + currentPage);
+        log("OutlineAdapter:: initializeTreeManager " + currentPage);
         for (int i = 0; i < items.length; i++) {
             OutlineItem curItem = items[i];
             int last = i - 1;
@@ -84,7 +85,7 @@ public class OutlineAdapter extends AbstractTreeViewAdapter<Integer> {
                 resultExpandIndex += integer + 1;
             }
         }
-        Common.d("OutlineAdapter:: initializeTreeManager -- END " + openAtIndex);
+        log("OutlineAdapter:: initializeTreeManager -- END " + openAtIndex);
         return resultExpandIndex;
     }
 

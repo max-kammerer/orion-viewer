@@ -37,6 +37,8 @@ import universe.constellation.orion.viewer.bookmarks.*;
 import java.io.*;
 import java.util.*;
 
+import static universe.constellation.orion.viewer.LoggerKt.log;
+
 /**
  * User: mike
  * Date: 25.02.12
@@ -182,7 +184,7 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
                 if (!showEmptyResult) {
                     long bookId = item.getItemId() == R.id.export_all_bookmarks_menu_item ? -1 : this.bookId;
                     file = file + "." + (bookId == -1 ? "all_" : "") +  "bookmarks.xml";
-                    Common.d("Bookmarks output file: " + file);
+                    log("Bookmarks output file: " + file);
 
                     BookmarkExporter exporter = new BookmarkExporter(getOrionContext().getBookmarkAccessor(), file);
                     try {
@@ -222,7 +224,7 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
                 showWarning("File name is empty");
                 return;
             } else {
-                Common.d("To import " + fileName);
+                log("To import " + fileName);
                 List<BookNameAndSize> books = listBooks(fileName);
                 if (books == null) {
                     return;
@@ -309,7 +311,7 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
     }
 
     private void doImport(String fileName, Set<BookNameAndSize> books, BookNameAndSize toBook){
-        Common.d("Import bookmarks " + books.size());
+        log("Import bookmarks " + books.size());
 
         BookmarkImporter importer = new BookmarkImporter(getOrionContext().getBookmarkAccessor(), fileName, books, toBook);
         try {
@@ -364,7 +366,7 @@ public class OrionBookmarkActivity extends OrionBaseActivity {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    Common.d(e);
+                    log(e);
                 }
             }
         }

@@ -2,11 +2,13 @@ package universe.constellation.orion.viewer.device.texet;
 
 import android.view.KeyEvent;
 import android.view.View;
-import universe.constellation.orion.viewer.Common;
+
 import universe.constellation.orion.viewer.OperationHolder;
 import universe.constellation.orion.viewer.device.AndroidDevice;
 
 import java.lang.reflect.Method;
+
+import static universe.constellation.orion.viewer.LoggerKt.log;
 
 /**
  *
@@ -28,9 +30,9 @@ public class TexetTb138Device extends AndroidDevice {
         Method requestEpdModeMethod;
         try {
             requestEpdModeMethod = View.class.getMethod("requestEpdMode", int.class);
-            Common.d("request epd method = " + requestEpdModeMethod);
+            log("request epd method = " + requestEpdModeMethod);
         } catch (NoSuchMethodException e) {
-            Common.d("Method requestEpdMode(int) not found", e);
+            log("Method requestEpdMode(int) not found", e);
             requestEpdModeMethod = null;
         }
         theRequestEpdModeMethod = requestEpdModeMethod;
@@ -62,7 +64,7 @@ public class TexetTb138Device extends AndroidDevice {
     public void flushBitmap() {
         if (activity.getView() != null) {
             boolean result = requestEpdMode(activity.getView().toView(), EPD_FULL);
-            Common.d("Invoked requestEpdMode: "+result);
+            log("Invoked requestEpdMode: "+result);
         }
 
         super.flushBitmap();
@@ -73,7 +75,7 @@ public class TexetTb138Device extends AndroidDevice {
         try {
             return (Boolean)theRequestEpdModeMethod.invoke(aView, aMode);
         } catch (Exception e) {
-            Common.d("Can't invoke method: "+ theRequestEpdModeMethod, e);
+            log("Can't invoke method: "+ theRequestEpdModeMethod, e);
             return false;
         }
     }

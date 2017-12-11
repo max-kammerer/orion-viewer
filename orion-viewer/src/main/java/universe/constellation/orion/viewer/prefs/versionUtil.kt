@@ -1,10 +1,6 @@
 package universe.constellation.orion.viewer.prefs
 
-import universe.constellation.orion.viewer.Common
-
-/**
- * Created by mike on 12/10/15.
- */
+import universe.constellation.orion.viewer.log
 
 fun isVersionEquals(constVersion: String, checkingVersion: String) = constVersion == checkingVersion
 
@@ -21,7 +17,7 @@ fun isVersionLess(constVersion: String, checkingVersion: String): Boolean {
         }
 
     } catch (e: NumberFormatException) {
-        Common.d(e)
+        log(e)
     }
 
     return false

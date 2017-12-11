@@ -32,7 +32,8 @@ import universe.constellation.orion.viewer.OptionActions;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.PageWalker;
 import universe.constellation.orion.viewer.device.EInkDeviceWithoutFastRefresh;
-import universe.constellation.orion.viewer.view.OrionDrawScene;
+
+import static universe.constellation.orion.viewer.LoggerKt.log;
 
 /**
  * User: mike
@@ -140,7 +141,7 @@ public class GlobalOptions implements Serializable {
 
         onSharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             public void onSharedPreferenceChanged(SharedPreferences preferences, String name) {
-                Common.d("onSharedPreferenceChanged " + name);
+                log("onSharedPreferenceChanged " + name);
                 Object oldValue = prefValues.remove(name);
 
                 OrionViewerActivity activity = context.getViewActivity();

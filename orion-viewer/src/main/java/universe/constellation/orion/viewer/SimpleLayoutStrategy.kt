@@ -58,7 +58,7 @@ class SimpleLayoutStrategy private constructor(
         if (walker.next(pos, layout)) {
             return 1
         }
-        Common.d("new position: $pos")
+        log("new position: $pos")
         return 0
     }
 
@@ -67,7 +67,7 @@ class SimpleLayoutStrategy private constructor(
             return -1
         }
 
-        Common.d("new position: $pos")
+        log("new position: $pos")
         return 0
     }
 
@@ -152,7 +152,7 @@ class SimpleLayoutStrategy private constructor(
         //System.out.println("overlap " + hOverlap + " " + vOverlap);
 
         walker.reset(info, forward, doCentering, layout)
-        Common.d("new position after reset: $info")
+        log("new position after reset: $info")
     }
 
     private fun appendManualMargins(info: LayoutPosition, leftMargin: Int, rightMargin: Int) {

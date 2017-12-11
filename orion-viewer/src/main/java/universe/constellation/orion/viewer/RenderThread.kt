@@ -47,7 +47,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
     internal constructor(activity: OrionViewerActivity, layout: LayoutStrategy, doc: Document, fullScene: Scene) : this(activity, layout, doc, true, fullScene) {}
 
     init {
-        Common.d("RenderThread was created successfully")
+        log("RenderThread was created successfully")
     }
 
     override fun invalidateCache() {
@@ -55,20 +55,20 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
             for (next in cachedBitmaps) {
                 next.isValid = false
             }
-            Common.d("Cache invalidated")
+            log("Cache invalidated")
         }
     }
 
     override fun startRenderer() {
-        Common.d("Starting renderer")
+        log("Starting renderer")
         start()
     }
 
     fun cleanCache() {
         synchronized(this) {
-            Common.d("Allocated heap size: " + memoryInMB(Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()))
+            log("Allocated heap size: " + memoryInMB(Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()))
             cachedBitmaps.clear()
-            Common.d("Cache is cleared!")
+            log("Cache is cleared!")
             currentPosition = null
         }
     }
@@ -99,7 +99,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
 
          while (!stopped) {
 
-            Common.d("Allocated heap size " + memoryInMB(Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()))
+            log("Allocated heap size " + memoryInMB(Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()))
 
             var rotation = 0
             val doContinue = synchronized(this) {
@@ -115,17 +115,17 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
 
                 if (currentPosition == null || futureIndex > FUTURE_COUNT || currentPosition!!.screenWidth == 0 || currentPosition!!.screenHeight == 0) {
                     try {
-                        Common.d("WAITING...")
+                        log("WAITING...")
                         (this as java.lang.Object).wait()
                     } catch (e: InterruptedException) {
-                        Common.d(e)
+                        log(e)
                     }
 
-                    Common.d("AWAKENING!!!")
+                    log("AWAKENING!!!")
                     true
                 } else {
                     //will cache next page
-                    Common.d("Future index is " + futureIndex)
+                    log("Future index is " + futureIndex)
                     if (futureIndex != 0) {
                         curPos = curPos!!.clone()
                         layout.calcPageLayout( curPos!!, true, doc.pageCount)
@@ -135,7 +135,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
             }
              if (doContinue) continue
 
-            Common.d("rotation = $rotation")
+            log("rotation = $rotation")
             renderInCurrentThread(futureIndex == 0, curPos, rotation)
             futureIndex++
         }
@@ -143,7 +143,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
 
     protected fun renderInCurrentThread(flushBitmap: Boolean, curPos: LayoutPosition?, rotation: Int): Bitmap {
         var resultEntry: CacheInfo? = null
-        Common.d("Orion: rendering position: $curPos")
+        log("Orion: rendering position: $curPos")
         if (curPos != null) {
             //try to find result in cache
             val iterator = cachedBitmaps.iterator()
@@ -171,7 +171,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
 
             if (flushBitmap) {
                 val bitmap = resultEntry.bitmap
-                Common.d("Sending Bitmap")
+                log("Sending Bitmap")
                 val mutex = CountDownLatch(1)
 
                 if (!executeInSeparateThread) {
@@ -188,7 +188,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
                 try {
                     mutex.await(1, TimeUnit.SECONDS)
                 } catch (e: InterruptedException) {
-                    Common.d(e)
+                    log(e)
                 }
 
             }
@@ -219,7 +219,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
         if (bitmap == null) {
             bitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888)
         } else {
-            Common.d("Using cached bitmap " + bitmap)
+            log("Using cached bitmap " + bitmap)
         }
 
         val leftTopCorner = layout.convertToPoint(curPos)

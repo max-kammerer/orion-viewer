@@ -2,7 +2,7 @@ package universe.constellation.orion.viewer.device;
 
 import java.lang.reflect.Method;
 
-import universe.constellation.orion.viewer.Common;
+import static universe.constellation.orion.viewer.LoggerKt.log;
 
 /**
  * Created by mike on 9/12/14.
@@ -18,15 +18,15 @@ public class OnyxUtil {
 
             Method controllerGetter = epdControllerClass.getDeclaredMethod("getDeviceController");
             Object controller = controllerGetter.invoke(deviceInfo);
-            Common.d("Onyx controller is " + controller);
+            log("Onyx controller is " + controller);
 
             Method isEInkScreen = controller.getClass().getDeclaredMethod("isEInkScreen");
             Object isEinkResult = isEInkScreen.invoke(controller);
-            Common.d("Onyx isEinkResult is " + isEinkResult);
+            log("Onyx isEinkResult is " + isEinkResult);
 
             return ((Boolean) isEinkResult);
         } catch (Exception e) {
-            Common.d(e);
+            log(e);
         }
         return false;
     }

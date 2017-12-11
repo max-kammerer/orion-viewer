@@ -45,7 +45,7 @@ object Permissions {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val hasPermission = activity.checkSelfPermission(permission)
             if (hasPermission != PackageManager.PERMISSION_GRANTED) {
-                Common.d("Request permission " + permission)
+                log("Request permission " + permission)
                 activity.requestPermissions(arrayOf(permission), ORION_ASK_PERMISSION_CODE)
                 return false
             }

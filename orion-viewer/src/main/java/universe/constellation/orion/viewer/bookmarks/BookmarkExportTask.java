@@ -54,7 +54,7 @@
 //        if (!showEmptyResult) {
 //            long bookId = operation == EXPORT_ALL ? -1 : currentBookId;
 //            File file = file + "." + (bookId == -1 ? "all_" : "") +  "bookmarks.xml";
-//            Common.d("Bookmarks output file: " + file);
+//            log("Bookmarks output file: " + file);
 //
 //            if (new File(file).exists()) {
 //                if (!showAlert("File already exists!", "File " + file + " already exists. Do you want to overwrite it?")) {

@@ -26,6 +26,8 @@ import universe.constellation.orion.viewer.LastPageInfo;
 
 import java.lang.reflect.Field;
 
+import static universe.constellation.orion.viewer.LoggerKt.log;
+
 /**
  * User: mike
  * Date: 07.09.12
@@ -47,7 +49,7 @@ public class OrionPreferenceUtil {
                 ((OrionApplication) context.getApplicationContext()).processBookOptionChange(key, resultValue);
                 return true;
             } catch (Exception e) {
-                Common.d("Error on persisting value", e);
+                log("Error on persisting value", e);
             }
         }
         return false;
@@ -61,7 +63,7 @@ public class OrionPreferenceUtil {
                 Field f = info.getClass().getDeclaredField(pref.getKey());
                 return (Integer) f.get(info);
             } catch (Exception e) {
-                Common.d("Error on read value", e);
+                log("Error on read value", e);
             }
         }
         return defaultReturnValue;
@@ -74,7 +76,7 @@ public class OrionPreferenceUtil {
                 Field f = info.getClass().getDeclaredField(pref.getKey());
                 return f.get(info).toString();
             } catch (Exception e) {
-                Common.d("Error on read value", e);
+                log("Error on read value", e);
             }
         }
         return defaultReturnValue;

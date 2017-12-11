@@ -8,9 +8,11 @@ import android.graphics.RectF;
 import android.os.AsyncTask;
 import android.os.Handler;
 import com.artifex.mupdfdemo.SearchTaskResult;
-import universe.constellation.orion.viewer.Common;
+
 import universe.constellation.orion.viewer.document.Document;
 import universe.constellation.orion.viewer.R;
+
+import static universe.constellation.orion.viewer.LoggerKt.log;
 
 /**
 * User: mike
@@ -55,7 +57,7 @@ public abstract class SearchTask {
 
     public void stop() {
         if (mSearchTask != null) {
-            Common.d("Stopping search thread");
+            log("Stopping search thread");
             mSearchTask.cancel(true);
             mSearchTask = null;
         }
@@ -100,10 +102,10 @@ public abstract class SearchTask {
             protected void onPostExecute(SearchTaskResult result) {
                 progressDialog.cancel();
                 if (result != null) {
-                    Common.d("On result");
+                    log("On result");
                     onResult(true, result);
                 } else {
-                    Common.d("fail");
+                    log("fail");
                     mAlertBuilder.setTitle(SearchTaskResult.get() == null ? R.string.warn_text_not_found: R.string.warn_no_further_occurrences_found);
                     AlertDialog alert = mAlertBuilder.create();
                     alert.setButton(AlertDialog.BUTTON_POSITIVE, mContext.getString(R.string.msg_dialog_dismis),

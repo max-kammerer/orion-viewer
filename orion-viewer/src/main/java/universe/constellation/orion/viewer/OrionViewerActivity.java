@@ -34,7 +34,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -73,6 +72,8 @@ import universe.constellation.orion.viewer.selection.NewTouchProcessorWithScale;
 import universe.constellation.orion.viewer.selection.SelectionAutomata;
 import universe.constellation.orion.viewer.view.FullScene;
 import universe.constellation.orion.viewer.view.OrionStatusBarHelper;
+
+import static universe.constellation.orion.viewer.LoggerKt.log;
 
 public class OrionViewerActivity extends OrionBaseActivity {
 
@@ -126,7 +127,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Common.d("Creating file manager");
+        log("Creating file manager");
 
         loadGlobalOptions();
 
@@ -206,18 +207,18 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     protected void onNewIntent(Intent intent) {
-        Common.d("Runtime.getRuntime().totalMemory() = " + Runtime.getRuntime().totalMemory());
-        Common.d("Debug.getNativeHeapSize() = " + Debug.getNativeHeapSize());
-        Common.d("OVA: on new intent " + intent);
+        log("Runtime.getRuntime().totalMemory() = " + Runtime.getRuntime().totalMemory());
+        log("Debug.getNativeHeapSize() = " + Debug.getNativeHeapSize());
+        log("OVA: on new intent " + intent);
         if (!hasReadPermissions) {
-            Common.d("OVA: Waiting for read permissions");
+            log("OVA: Waiting for read permissions");
             lastIntent = intent;
             return;
         }
 
         Uri uri = intent.getData();
         if (uri != null) {
-            Common.d("File URI  = " + uri.toString());
+            log("File URI  = " + uri.toString());
             String path = null;
             try {
                 if ("content".equalsIgnoreCase(uri.getScheme())) {
@@ -250,7 +251,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private Document openFile(String filePath) throws Exception {
         Document doc = null;
-        Common.d("Trying to open file: " + filePath);
+        log("Trying to open file: " + filePath);
 
         getOrionContext().onNewBook(filePath);
         try {
@@ -297,7 +298,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             askPassword(controller);
 
         } catch (Exception e) {
-            Common.d(e);
+            log(e);
             if (doc != null) {
                 doc.destroy();
             }
@@ -640,7 +641,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         super.onResume();
         updateBrightness();
 
-        Common.d("onResume");
+        log("onResume");
         if (myIntent != null) {
             //starting creation intent
             onNewIntent(myIntent);
@@ -656,7 +657,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     protected void onDestroy() {
         super.onDestroy();
-        Common.d("onDestroy");
+        log("onDestroy");
         Common.stopLogger();
 
         destroyControllerAndBook();
@@ -673,16 +674,16 @@ public class OrionViewerActivity extends OrionBaseActivity {
                 controller.serialize(lastPageInfo);
                 lastPageInfo.save(this);
             } catch (Exception ex) {
-                Log.e(Common.LOGTAG, ex.getMessage(), ex);
+                log(ex);
             }
        }
         saveGlobalOptions();
     }
 
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        L.log("onKeyUp key = " + keyCode + " " + event.isCanceled() + " " + doTrack(keyCode));
+        log("onKeyUp key = " + keyCode + " " + event.isCanceled() + " " + doTrack(keyCode));
         if(event.isCanceled()) {
-            L.log("Tracking = " + keyCode);
+            log("Tracking = " + keyCode);
             return super.onKeyUp(keyCode,  event);
         }
 
@@ -690,9 +691,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        L.log("onKeyDown = " + keyCode + " " + event.isCanceled() + " " + doTrack(keyCode)) ;
+        log("onKeyDown = " + keyCode + " " + event.isCanceled() + " " + doTrack(keyCode));
         if (doTrack(keyCode)) {
-            L.log("Tracking = " + keyCode);
+            log("Tracking = " + keyCode);
             event.startTracking();
             return true;
         }
@@ -700,7 +701,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     private boolean processKey(int keyCode, KeyEvent event, boolean isLong) {
-        L.log("key = " + keyCode + " isLong = " + isLong);
+        log("key = " + keyCode + " isLong = " + isLong);
 
         int actionCode = getOrionContext().getKeyBinding().getInt(UtilKt.getPrefKey(keyCode, isLong), -1);
         if (actionCode != -1) {
@@ -742,9 +743,9 @@ public class OrionViewerActivity extends OrionBaseActivity {
     }
 
     private void saveGlobalOptions() {
-        Common.d("Saving global options...");
+        log("Saving global options...");
         globalOptions.saveRecents();
-        Common.d("Done!");
+        log("Done!");
     }
 
     public OrionScene getView() {
@@ -849,7 +850,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     public void doAction(int code) {
         Action action = Action.getAction(code);
         doAction(action);
-        Common.d("Code action " + code);
+        log("Code action " + code);
     }
 
 
@@ -993,14 +994,14 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
 
     long getBookId() {
-        Common.d("Selecting book id...");
+        log("Selecting book id...");
         LastPageInfo info = lastPageInfo;
         Long bookId = getOrionContext().getTempOptions().bookId;
         if (bookId == null || bookId == -1) {
             bookId = getOrionContext().getBookmarkAccessor().selectBookId(info.simpleFileName, info.fileSize);
             getOrionContext().getTempOptions().bookId = bookId;
         }
-        Common.d("...book id = " + bookId);
+        log("...book id = " + bookId);
         return bookId;
     }
 

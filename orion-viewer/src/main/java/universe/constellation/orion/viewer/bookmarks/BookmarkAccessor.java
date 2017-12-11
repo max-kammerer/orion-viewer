@@ -24,11 +24,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import universe.constellation.orion.viewer.Common;
+
 import universe.constellation.orion.viewer.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static universe.constellation.orion.viewer.LoggerKt.log;
 
 /**
  * User: mike
@@ -134,7 +136,7 @@ public class BookmarkAccessor extends SQLiteOpenHelper {
 
     //pageNum is zero based!
     public String selectExistingBookmark(long bookId, int pageNum, String defaultText) {
-        Common.d("Selecting existing bookmark: bookId = " + bookId + " pagenum = " + pageNum);
+        log("Selecting existing bookmark: bookId = " + bookId + " pagenum = " + pageNum);
         SQLiteDatabase dataBase = getReadableDatabase();
         Cursor c = null;
         try {
@@ -187,7 +189,7 @@ public class BookmarkAccessor extends SQLiteOpenHelper {
 
 
     public long insertOrUpdateBookmark(long bookId, int page, String text) {
-        Common.d("Inserting bookmark for book " + bookId + " and page " + (page + 1));
+        log("Inserting bookmark for book " + bookId + " and page " + (page + 1));
         SQLiteDatabase dataBase = getReadableDatabase();
         Cursor c = null;
         long bookmarkId = -1;
@@ -218,20 +220,20 @@ public class BookmarkAccessor extends SQLiteOpenHelper {
             bookmarkId = dataBase.insert(BOOKMARKS_TABLE_NAME, null, cv);
         }
 
-        Common.d("Inserted bookmarkdId = " + bookmarkId);
+        log("Inserted bookmarkdId = " + bookmarkId);
         return bookmarkId;
 
     }
 
     public void deleteBookmark(long bookmarkId) {
-        Common.d("Deleting bookmark " + bookmarkId);
+        log("Deleting bookmark " + bookmarkId);
         SQLiteDatabase dataBase = getReadableDatabase();
 
         ContentValues cv = new ContentValues();
         cv.put(BOOKMARK_ID, bookmarkId);
         int rows = dataBase.delete(BOOKMARKS_TABLE_NAME, BOOKMARK_ID + " = " + bookmarkId, null);
 
-        Common.d("Affected rows: " + rows);
+        log("Affected rows: " + rows);
     }
 
 

@@ -53,6 +53,8 @@ import universe.constellation.orion.viewer.Permissions;
 import universe.constellation.orion.viewer.R;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
+import static universe.constellation.orion.viewer.LoggerKt.log;
+
 /**
  * User: mike
  * Date: 24.12.11
@@ -96,7 +98,7 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onOrionCreate(savedInstanceState, R.layout.file_manager);
-        Common.d("Creating file manager");
+        log("Creating file manager");
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         globalOptions = getOrionContext().getOptions();
@@ -127,7 +129,7 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
 
 
     protected void onNewIntent(Intent intent) {
-        Common.d("OrionFileManager: On new intent " + intent);
+        log("OrionFileManager: On new intent " + intent);
 
         boolean dontStartRecent = intent.getBooleanExtra(DONT_OPEN_RECENT, false);
         if (!dontStartRecent && globalOptions.isOpenRecentBook()) {
@@ -135,7 +137,7 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
                 GlobalOptions.RecentEntry entry = globalOptions.getRecentFiles().get(0);
                 File book = new File(entry.getPath());
                 if (book.exists()) {
-                    Common.d("Opening recent book");
+                    log("Opening recent book");
                     openFile(book);
                 }
             }
@@ -194,7 +196,7 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
     }
 
     protected void openFile(File file) {
-        Common.d("Opening new book: " + file.getPath());
+        log("Opening new book: " + file.getPath());
 
         Intent in = new Intent(Intent.ACTION_VIEW);
         in.setClass(getApplicationContext(), OrionViewerActivity.class);
