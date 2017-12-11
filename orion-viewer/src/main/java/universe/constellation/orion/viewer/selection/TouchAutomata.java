@@ -120,7 +120,7 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                     nextState = States.PINCH_ZOOM;
                 } else  if (ACTION_MOVE == action || ACTION_UP == action) {
                     int width = view.getWidth();
-                    if (insideViewWidth(view.info)) {
+                    if (insideViewWidth(view.getInfo())) {
                         last0.x = start0.x;
                     } else {
                         int delta = last0.x - start0.x;
@@ -277,7 +277,7 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                     endFocus.y = startFocus.y;
                     processed = true;
                     break;
-                case DO_MOVE: info = view.info.clone();
+                case DO_MOVE: info = view.getInfo().clone();
             }
         }
         currentState = nextState;

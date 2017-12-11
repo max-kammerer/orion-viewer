@@ -17,210 +17,185 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer.view;
+package universe.constellation.orion.viewer.view
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Point;
-import android.graphics.Rect;
-import android.util.AttributeSet;
-import android.view.View;
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Point
+import android.graphics.Rect
+import android.util.AttributeSet
+import android.view.View
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import java.util.ArrayList
+import java.util.concurrent.CountDownLatch
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
+import universe.constellation.orion.viewer.Common
+import universe.constellation.orion.viewer.LayoutPosition
+import universe.constellation.orion.viewer.OrionScene
+import universe.constellation.orion.viewer.util.MoveUtil
 
-import universe.constellation.orion.viewer.Common;
-import universe.constellation.orion.viewer.LayoutPosition;
-import universe.constellation.orion.viewer.OrionScene;
-import universe.constellation.orion.viewer.util.MoveUtil;
+class OrionDrawScene : View, OrionScene {
 
-/**
- * User: mike
- * Date: 16.10.11
- * Time: 13:52
- */
-public class OrionDrawScene extends View implements OrionScene {
+    var bitmap: Bitmap? = null
 
-    public Bitmap bitmap;
+    override var info: LayoutPosition? = null
 
-    public LayoutPosition info;
+    private var latch: CountDownLatch? = null
 
-    private CountDownLatch latch;
+    private var dimensionAware: ViewDimensionAware? = null
 
-    private ViewDimensionAware dimensionAware;
+    private var scale = 1.0f
 
-    private float scale = 1.0f;
+    private var startFocus: Point? = null
 
-    private Point startFocus;
+    private var endFocus: Point? = null
 
-    private Point endFocus;
+    private var enableMoveOnPinchZoom: Boolean = false
 
-    private boolean enableMoveOnPinchZoom;
+    private var borderPaint: Paint? = null
 
-    private Paint borderPaint;
+    private var defaultPaint: Paint? = null
 
-    private Paint defaultPaint;
+    private var inScaling = false
 
-    private boolean inScaling = false;
+    private val tasks = ArrayList<DrawTask>()
 
-    private List<DrawTask> tasks = new ArrayList<>();
+    private val stuffTempRect = Rect()
 
-    private Rect stuffTempRect = new Rect();
+    private var inited = false
 
-    private boolean inited = false;
+    private lateinit var stuff: ColorStuff
 
-    private ColorStuff stuff;
+    constructor(context: Context) : super(context)
 
-    public OrionDrawScene(Context context) {
-        super(context);
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+
+    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
+
+    override fun init(colorStuff: ColorStuff) {
+        this.stuff = colorStuff
+        defaultPaint = colorStuff.bd.paint
+        borderPaint = colorStuff.borderPaint
+        inited = true
     }
 
-    public OrionDrawScene(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public OrionDrawScene(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-    }
-
-    public void init(ColorStuff stuff) {
-        this.stuff = stuff;
-        defaultPaint = stuff.bd.getPaint();
-        borderPaint = stuff.borderPaint;
-        inited = true;
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
         if (!inited) {
-            return;
+            return
         }
 
-        canvas.save();
-        canvas.translate(0f, 0);
-        if (bitmap != null && !bitmap.isRecycled()) {
-            long start = System.currentTimeMillis();
-            Common.d("OrionView: drawing bitmap on view...");
+        canvas.save()
+        canvas.translate(0f, 0f)
+        if (bitmap != null && !bitmap!!.isRecycled) {
+            val start = System.currentTimeMillis()
+            Common.d("OrionView: drawing bitmap on view...")
 
-            final float myScale = scale;
+            val myScale = scale
 
             if (inScaling) {
-                Common.d("in scaling");
-                canvas.save();
+                Common.d("in scaling")
+                canvas.save()
                 canvas.translate(
-                        -MoveUtil.calcOffset(startFocus.x, endFocus.x, myScale, enableMoveOnPinchZoom),
-                        -MoveUtil.calcOffset(startFocus.y, endFocus.y, myScale, enableMoveOnPinchZoom));
-                canvas.scale(myScale, myScale);
+                        -MoveUtil.calcOffset(startFocus!!.x, endFocus!!.x, myScale, enableMoveOnPinchZoom),
+                        -MoveUtil.calcOffset(startFocus!!.y, endFocus!!.y, myScale, enableMoveOnPinchZoom))
+                canvas.scale(myScale, myScale)
             }
 
             stuffTempRect.set(
-                    info.x.getOccupiedAreaStart(),
-                    info.y.getOccupiedAreaStart(),
-                    info.x.getOccupiedAreaEnd(),
-                    info.y.getOccupiedAreaEnd());
+                    info!!.x.occupiedAreaStart,
+                    info!!.y.occupiedAreaStart,
+                    info!!.x.occupiedAreaEnd,
+                    info!!.y.occupiedAreaEnd)
 
-            canvas.drawBitmap(bitmap, stuffTempRect, stuffTempRect, defaultPaint);
+            canvas.drawBitmap(bitmap!!, stuffTempRect, stuffTempRect, defaultPaint)
 
             if (inScaling) {
-                canvas.restore();
-                drawBorder(canvas, myScale);
+                canvas.restore()
+                drawBorder(canvas, myScale)
             }
 
-            Common.d("OrionView: bitmap rendering takes " + 0.001f * (System.currentTimeMillis() - start) + " s");
+            Common.d("OrionView: bitmap rendering takes " + 0.001f * (System.currentTimeMillis() - start) + " s")
 
-            for (DrawTask drawTask : tasks) {
-                drawTask.drawOnCanvas(canvas, stuff, null);
+            for (drawTask in tasks) {
+                drawTask.drawOnCanvas(canvas, stuff, null)
             }
         }
-        canvas.restore();
+        canvas.restore()
 
         if (latch != null) {
-            latch.countDown();
+            latch!!.countDown()
         }
     }
 
-    private void drawBorder(Canvas canvas, float myScale) {
-        Common.d("Draw: border");
+    private fun drawBorder(canvas: Canvas, myScale: Float) {
+        Common.d("Draw: border")
 
-        int left = (int) ((-info.x.offset - startFocus.x) * myScale + (enableMoveOnPinchZoom ? endFocus.x : startFocus.x));
-        int top = (int) ((-info.y.offset - startFocus.y) * myScale + (enableMoveOnPinchZoom ? endFocus.y : startFocus.y));
+        val left = ((-info!!.x.offset - startFocus!!.x) * myScale + if (enableMoveOnPinchZoom) endFocus!!.x else startFocus!!.x).toInt()
+        val top = ((-info!!.y.offset - startFocus!!.y) * myScale + if (enableMoveOnPinchZoom) endFocus!!.y else startFocus!!.y).toInt()
 
-        int right = (int) (left + info.x.pageDimension * myScale);
-        int bottom = (int) (top + info.y.pageDimension * myScale);
+        val right = (left + info!!.x.pageDimension * myScale).toInt()
+        val bottom = (top + info!!.y.pageDimension * myScale).toInt()
 
-        canvas.drawRect(left, top, right, bottom, borderPaint);
+        canvas.drawRect(left.toFloat(), top.toFloat(), right.toFloat(), bottom.toFloat(), borderPaint!!)
     }
 
-    @Override
-    public void onNewImage(Bitmap bitmap, LayoutPosition info, CountDownLatch latch) {
-        this.bitmap = bitmap;
-        this.latch = latch;
-        this.info = info;
+    override fun onNewImage(bitmap: Bitmap?, info: LayoutPosition?, latch: CountDownLatch?) {
+        this.bitmap = bitmap
+        this.latch = latch
+        this.info = info
     }
 
-    public void setDimensionAware(ViewDimensionAware dimensionAware) {
-        this.dimensionAware = dimensionAware;
+    override fun setDimensionAware(dimensionAware: ViewDimensionAware) {
+        this.dimensionAware = dimensionAware
     }
 
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        Common.d("OrionView: onSizeChanged " + w + "x" + h);
-        super.onSizeChanged(w, h, oldw, oldh);
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        Common.d("OrionView: onSizeChanged " + w + "x" + h)
+        super.onSizeChanged(w, h, oldw, oldh)
         if (w != oldw || h != oldh) {
-            if (dimensionAware != null ) {
-                dimensionAware.onDimensionChanged(getWidth(), getHeight());
+            if (dimensionAware != null) {
+                dimensionAware!!.onDimensionChanged(width, height)
             }
         }
     }
 
 
-    public boolean isDefaultColorMatrix() {
-        return defaultPaint.getColorFilter() == null;
+    override fun isDefaultColorMatrix(): Boolean {
+        return defaultPaint!!.colorFilter == null
     }
 
-    public Bitmap getBitmap() {
-        return bitmap;
+    override fun doScale(scale: Float, startFocus: Point, endFocus: Point, enableMoveOnPinchZoom: Boolean) {
+        this.scale = scale
+        this.startFocus = startFocus
+        this.endFocus = endFocus
+        this.enableMoveOnPinchZoom = enableMoveOnPinchZoom
     }
 
-    public void doScale(float scale, Point startFocus, Point endFocus, boolean enableMoveOnPinchZoom) {
-        this.scale = scale;
-        this.startFocus = startFocus;
-        this.endFocus = endFocus;
-        this.enableMoveOnPinchZoom = enableMoveOnPinchZoom;
+    override fun beforeScaling() {
+        inScaling = true
     }
 
-    public void beforeScaling() {
-        inScaling = true;
+    override fun afterScaling() {
+        this.inScaling = false
     }
 
-    public void afterScaling() {
-        this.inScaling = false;
+    override fun addTask(drawTask: DrawTask) {
+        tasks.add(drawTask)
     }
 
-    public void addTask(DrawTask drawTask) {
-        tasks.add(drawTask);
+    override fun removeTask(drawTask: DrawTask) {
+        tasks.remove(drawTask)
     }
 
-    public void removeTask(DrawTask drawTask) {
-        tasks.remove(drawTask);
+    override fun toView(): View {
+        return this
     }
 
-    @Nullable
-    @Override
-    public LayoutPosition getInfo() {
-        return info;
-    }
-
-    @NotNull
-    @Override
-    public View toView() {
-        return this;
-    }
+    override val sceneWidth: Int
+        get() = width
+    override val sceneHeight: Int
+        get() = height
 }
