@@ -284,7 +284,7 @@ public class GlobalOptions implements Serializable {
     }
 
     public boolean isDrawOffPage() {
-        return getBooleanProperty(DRAW_OFF_PAGE, !(OrionApplication.instance.getDevice() instanceof EInkDeviceWithoutFastRefresh));
+        return getBooleanProperty(DRAW_OFF_PAGE, !(OrionApplication.Companion.getInstance().getDevice() instanceof EInkDeviceWithoutFastRefresh));
     }
 
     public boolean isActionBarVisible() {

@@ -495,7 +495,7 @@ public enum Action {
 
     Action(int nameId, int resId) {
         this.name = nameId;
-        this.code = OrionApplication.instance.getResources().getInteger(resId);
+        this.code = OrionApplication.Companion.getInstance().getResources().getInteger(resId);
     }
 
     public int getName() {

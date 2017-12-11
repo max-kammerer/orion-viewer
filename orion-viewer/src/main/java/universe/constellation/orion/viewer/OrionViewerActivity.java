@@ -1130,7 +1130,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     //big hack
     void myprocessOnActivityVisible() {
-        if (getGlobalOptions().isShowTapHelp() && !getOrionContext().isTesting) {
+        if (getGlobalOptions().isShowTapHelp() && !getOrionContext().isTesting()) {
             getGlobalOptions().saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false);
             new TapHelpDialog(this).showDialog();
         }

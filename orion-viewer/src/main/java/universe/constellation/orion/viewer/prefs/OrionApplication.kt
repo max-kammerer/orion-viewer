@@ -17,206 +17,156 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer.prefs;
+package universe.constellation.orion.viewer.prefs
 
-import android.app.Activity;
-import android.app.Application;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.os.Build;
-import android.preference.PreferenceManager;
-import android.util.DisplayMetrics;
-
-import java.util.Locale;
-
-import universe.constellation.orion.viewer.BuildConfig;
-import universe.constellation.orion.viewer.Common;
-import universe.constellation.orion.viewer.Controller;
-import universe.constellation.orion.viewer.device.Device;
-import universe.constellation.orion.viewer.LastPageInfo;
-import universe.constellation.orion.viewer.OrionViewerActivity;
-import universe.constellation.orion.viewer.R;
-import universe.constellation.orion.viewer.bookmarks.BookmarkAccessor;
-import universe.constellation.orion.viewer.device.EInkDeviceWithoutFastRefresh;
+import android.app.Activity
+import android.app.Application
+import android.content.Context
+import android.content.res.Resources
+import android.os.Build
+import android.preference.PreferenceManager
+import universe.constellation.orion.viewer.*
+import universe.constellation.orion.viewer.bookmarks.BookmarkAccessor
+import universe.constellation.orion.viewer.device.EInkDeviceWithoutFastRefresh
+import java.util.*
+import kotlin.properties.Delegates
 
 /**
  * User: mike
  * Date: 23.01.12
  * Time: 20:03
  */
-public class OrionApplication extends Application {
+class OrionApplication : Application() {
 
-    private GlobalOptions options;
+    val options: GlobalOptions by lazy {
+        GlobalOptions(this, PreferenceManager.getDefaultSharedPreferences(this), true)
+    }
 
-    private GlobalOptions keyBinding;
+    val keyBinding: GlobalOptions by lazy {
+        GlobalOptions(this, getSharedPreferences("key_binding", Context.MODE_PRIVATE), false)
+    }
 
-    private TemporaryOptions tempOptions;
+    var tempOptions: TemporaryOptions? = null
+        private set
 
-    public static OrionApplication instance;
+    private var bookmarkAccessor: BookmarkAccessor? = null
 
-    private BookmarkAccessor bookmarkAccessor;
+    var viewActivity: OrionViewerActivity? = null
 
-    private OrionViewerActivity viewActivity;
+    var currentBookParameters: LastPageInfo? = null
 
-    private LastPageInfo currentBookParameters;
+    val device = Common.createDevice()
 
-    private Device device = Common.createDevice();
+    var isTesting = false
 
-    public boolean isTesting = false;
+    private var langCode: String? = null
 
-    private String langCode;
+    val isLightTheme: Boolean
+        get() {
+            val theme = options.applicationTheme
+            val isDefault = !("DARK" == theme || "LIGHT" == theme)
+            val useDarkTheme = if (isDefault) device.isDefaultDarkTheme else false
 
-    public void onCreate() {
-        instance = this;
-        super.onCreate();
-        GlobalOptions options = getOptions();
-        setLangCode(options.getAppLanguage());
-        Common.logOrionAndDeviceInfo();
-        if (device instanceof EInkDeviceWithoutFastRefresh) {
-            String version = options.getVersion();
-            if (options.isShowTapHelp() || VersionUtilKt.isVersionEquals("0.0.0", version)) {
+            return if (useDarkTheme || "DARK" == theme) {
+                false
+            } else true
+
+        }
+
+    private val themeId: Int
+        get() = if (!isLightTheme)
+            R.style.Theme_AppCompat_NoActionBar
+        else
+            R.style.Theme_AppCompat_Light_NoActionBar
+
+    val sdkVersion: Int
+        get() = Build.VERSION.SDK_INT
+
+    override fun onCreate() {
+        instance = this
+        super.onCreate()
+        setLangCode(options.appLanguage)
+        Common.logOrionAndDeviceInfo()
+        if (device is EInkDeviceWithoutFastRefresh) {
+            val version = options.version
+            if (options.isShowTapHelp || isVersionEquals("0.0.0", version)) {
                 try {
-                    SharedPreferences prefs = options.prefs;
-                    SharedPreferences.Editor edit = prefs.edit();
-                    edit.putBoolean(GlobalOptions.DRAW_OFF_PAGE, false);
-                    edit.putString(GlobalOptions.VERSION, BuildConfig.VERSION_NAME);
-                    edit.commit();
-                } catch (Exception e) {
-                    Common.d(e);
+                    val prefs = options.prefs
+                    val edit = prefs.edit()
+                    edit.putBoolean(GlobalOptions.DRAW_OFF_PAGE, false)
+                    edit.putString(GlobalOptions.VERSION, BuildConfig.VERSION_NAME)
+                    edit.commit()
+                } catch (e: Exception) {
+                    log(e)
                 }
+
             }
         }
     }
 
-    public void setLangCode(String langCode) {
-        this.langCode = langCode;
-        updateLanguage(getResources());
+    fun setLangCode(langCode: String) {
+        this.langCode = langCode
+        updateLanguage(resources)
     }
 
-    public void updateLanguage(Resources res) {
+    fun updateLanguage(res: Resources) {
         try {
-            Locale defaultLocale = Locale.getDefault();
-            Common.d("Updating locale to " + langCode + " from " + defaultLocale.getLanguage());
-            DisplayMetrics dm = res.getDisplayMetrics();
-            Configuration conf = res.getConfiguration();
-            conf.locale = (langCode == null || "DEFAULT".equals(langCode)) ? defaultLocale : new Locale(langCode);
-            res.updateConfiguration(conf, dm);
-        } catch (Exception e) {
-            Common.d("Error setting locale: "  + langCode, e);
+            val defaultLocale = Locale.getDefault()
+            log("Updating locale to " + langCode + " from " + defaultLocale.language)
+            val dm = res.displayMetrics
+            val conf = res.configuration
+            conf.locale = if (langCode == null || "DEFAULT" == langCode) defaultLocale else Locale(langCode)
+            res.updateConfiguration(conf, dm)
+        } catch (e: Exception) {
+            log("Error setting locale: " + langCode!!, e)
         }
+
     }
 
-    public GlobalOptions getOptions() {
-        if (options == null) {
-            options = new GlobalOptions(this, PreferenceManager.getDefaultSharedPreferences(this), true);
-        }
-        return options;
-    }
-
-    public GlobalOptions getKeyBinding() {
-        if (keyBinding == null) {
-            keyBinding = new GlobalOptions(this, getSharedPreferences("key_binding", MODE_PRIVATE), false);
-        }
-        return keyBinding;
-    }
-
-    public void onNewBook(String fileName) {
-        tempOptions = new TemporaryOptions();
-        tempOptions.openedFile = fileName;
-    }
-
-    public TemporaryOptions getTempOptions() {
-        return tempOptions;
+    fun onNewBook(fileName: String) {
+        tempOptions = TemporaryOptions().also { it.openedFile = fileName }
     }
 
 
-    public void applyTheme(Activity activity) {
-        int themeId = getThemeId();
+    fun applyTheme(activity: Activity) {
+        val themeId = themeId
 
         if (themeId != -1) {
-            activity.setTheme(themeId);
+            activity.setTheme(themeId)
         }
     }
 
-    public boolean isLightTheme() {
-        String theme = getOptions().getApplicationTheme();
-        boolean isDefault = !("DARK".equals(theme) || "LIGHT".equals(theme));
-        boolean useDarkTheme = isDefault ? device.isDefaultDarkTheme() : false;
-
-        if (useDarkTheme || "DARK".equals(theme)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private int getThemeId() {
-        return !isLightTheme() ?
-                R.style.Theme_AppCompat_NoActionBar :
-                R.style.Theme_AppCompat_Light_NoActionBar;
-    }
-
-    public BookmarkAccessor getBookmarkAccessor() {
+    fun getBookmarkAccessor(): BookmarkAccessor {
         if (bookmarkAccessor == null) {
-            bookmarkAccessor = new BookmarkAccessor(this);
+            bookmarkAccessor = BookmarkAccessor(this)
         }
-        return bookmarkAccessor;
+        return bookmarkAccessor!!
     }
 
-    public void destroyDb() {
+    fun destroyDb() {
         if (bookmarkAccessor != null) {
-            bookmarkAccessor.close();
-            bookmarkAccessor = null;
+            bookmarkAccessor!!.close()
+            bookmarkAccessor = null
         }
-    }
-
-    public int getSdkVersion() {
-		return Build.VERSION.SDK_INT;
-	}
-
-    public LastPageInfo getCurrentBookParameters() {
-        return currentBookParameters;
-    }
-
-    public void setCurrentBookParameters(LastPageInfo currentBookParameters) {
-        this.currentBookParameters = currentBookParameters;
-    }
-
-
-    public OrionViewerActivity getViewActivity() {
-        return viewActivity;
-    }
-
-    public void setViewActivity(OrionViewerActivity viewActivity) {
-        this.viewActivity = viewActivity;
     }
 
     //temporary hack
-    public void processBookOptionChange(String key, Object value) {
-        if (viewActivity != null) {
-            Controller controller = viewActivity.getController();
-            if (controller != null) {
-                if ("walkOrder".equals(key)) {
-                    controller.changetWalkOrder((String) value);
-                } else if ("pageLayout".equals(key)) {
-                    controller.changetPageLayout((Integer) value);
-                } else if ("contrast".equals(key)) {
-                    controller.changeContrast((Integer) value);
-                } else if ("threshold".equals(key)) {
-                    controller.changeThreshhold((Integer) value);
-                } else if ("screenOrientation".equals(key)) {
-                    controller.changeOrinatation((String) value);
-                } else if ("colorMode".equals(key)) {
-                    controller.changeColorMode((String) value, true);
-                } else if ("zoom".equals(key)) {
-                    controller.changeZoom((Integer) value);
-                }
+    fun processBookOptionChange(key: String, value: Any) {
+        viewActivity?.controller?.run {
+            when (key) {
+                "walkOrder" -> changetWalkOrder(value as String)
+                "pageLayout" -> changetPageLayout(value as Int)
+                "contrast" -> changeContrast(value as Int)
+                "threshold" -> changeThreshhold(value as Int)
+                "screenOrientation" -> changeOrinatation(value as String)
+                "colorMode" -> changeColorMode(value as String, true)
+                "zoom" -> changeZoom(value as Int)
             }
         }
     }
 
-    public Device getDevice() {
-        return device;
+    companion object {
+        var instance: OrionApplication by Delegates.notNull()
+            private set
     }
 }
