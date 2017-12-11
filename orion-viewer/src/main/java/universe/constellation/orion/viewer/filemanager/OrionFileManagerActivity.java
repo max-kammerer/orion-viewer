@@ -62,6 +62,8 @@ import static universe.constellation.orion.viewer.LoggerKt.log;
  */
 public class OrionFileManagerActivity extends OrionBaseActivity {
 
+    public static final String  LAST_OPENED_DIRECTORY = "LAST_OPENED_DIR";
+
     private static final String LAST_FOLDER = "LAST_FOLDER";
 
     public static class FoldersFragment extends Fragment {
@@ -183,7 +185,7 @@ public class OrionFileManagerActivity extends OrionBaseActivity {
                 } else {
                     if (showRecentsAndSavePath()) {
                         SharedPreferences.Editor editor = prefs.edit();
-                        editor.putString(Common.LAST_OPENED_DIRECTORY, file.getParentFile().getAbsolutePath());
+                        editor.putString(LAST_OPENED_DIRECTORY, file.getParentFile().getAbsolutePath());
                         editor.commit();
                     }
                     openFile(file);

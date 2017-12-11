@@ -27,11 +27,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
-import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.OptionActions;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.PageWalker;
 import universe.constellation.orion.viewer.device.EInkDeviceWithoutFastRefresh;
+import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity;
 
 import static universe.constellation.orion.viewer.LoggerKt.log;
 
@@ -179,7 +179,7 @@ public class GlobalOptions implements Serializable {
 
 
     public String getLastOpenedDirectory() {
-        return getStringProperty(Common.LAST_OPENED_DIRECTORY, null);
+        return getStringProperty(OrionFileManagerActivity.LAST_OPENED_DIRECTORY, null);
     }
 
     public void addRecentEntry(RecentEntry newEntry) {
@@ -450,7 +450,7 @@ public class GlobalOptions implements Serializable {
 //            try {
 //                prefListener1.onPreferenceChanged(this, key, oldValue);
 //            } catch (Exception e) {
-//                Common.d(e);
+//                log(e);
 //                //TODO show error
 //            }
 //        }
