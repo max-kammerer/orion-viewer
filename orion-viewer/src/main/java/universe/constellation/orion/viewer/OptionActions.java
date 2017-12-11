@@ -110,9 +110,9 @@ public enum OptionActions {
     DEBUG("DEBUG") {
         public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
             if (newValue) {
-                Common.startLogger(activity.getOrionContext().getCurrentBookParameters().openingFileName + ".trace");
+                AndroidLogger.startLogger(activity.getOrionContext().getCurrentBookParameters().openingFileName + ".trace");
             } else {
-                Common.stopLogger();
+                AndroidLogger.stopLogger();
             }
         }
     };

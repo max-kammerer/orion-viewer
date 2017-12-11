@@ -86,6 +86,7 @@ class OrionApplication : Application() {
         get() = Build.VERSION.SDK_INT
 
     override fun onCreate() {
+        logger = AndroidLogger
         instance = this
         super.onCreate()
         setLangCode(options.appLanguage)

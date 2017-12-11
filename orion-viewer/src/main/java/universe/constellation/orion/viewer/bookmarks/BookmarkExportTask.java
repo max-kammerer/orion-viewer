@@ -20,7 +20,7 @@
 //package universe.constellation.orion.viewer.bookmarks;
 //
 //import android.os.AsyncTask;
-//import universe.constellation.orion.viewer.Common;
+//import universe.constellation.orion.viewer.AndroidLogger;
 //import universe.constellation.orion.viewer.R;
 //
 //import java.io.File;

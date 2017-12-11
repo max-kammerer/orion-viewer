@@ -239,7 +239,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
                     destroyControllerAndBook();
                 }
 
-                Common.stopLogger();
+                AndroidLogger.stopLogger();
                 openFile(file);
             } catch (Exception e) {
                 showAlertWithExceptionThrow(intent, e);
@@ -658,7 +658,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         log("onDestroy");
-        Common.stopLogger();
+        AndroidLogger.stopLogger();
 
         destroyControllerAndBook();
 

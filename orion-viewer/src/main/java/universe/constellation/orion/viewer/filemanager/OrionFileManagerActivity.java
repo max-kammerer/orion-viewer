@@ -46,7 +46,6 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.FilenameFilter;
 
-import universe.constellation.orion.viewer.Common;
 import universe.constellation.orion.viewer.OrionBaseActivity;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.Permissions;

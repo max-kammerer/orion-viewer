@@ -28,7 +28,7 @@ interface Logger {
     }
 }
 
-val logger = object : Logger {}
+var logger = object : Logger {}
 
 fun log(m: String) = logger.log(m)
 

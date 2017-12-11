@@ -21,7 +21,7 @@ package universe.constellation.orion.viewer.prefs;
 
 
 import android.preference.Preference;
-import universe.constellation.orion.viewer.Common;
+
 import universe.constellation.orion.viewer.LastPageInfo;
 
 import java.lang.reflect.Field;
