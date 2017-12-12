@@ -38,6 +38,7 @@ import universe.constellation.orion.viewer.view.DrawContext;
 import universe.constellation.orion.viewer.view.DrawTask;
 
 import static universe.constellation.orion.viewer.LoggerKt.log;
+import static universe.constellation.orion.viewer.UtilKt.toAbsoluteRect;
 
 /**
  * User: mike
@@ -149,7 +150,7 @@ public class SearchDialog extends DialogFragment {
                 do {
                     SubBatch sb = new SubBatch();
                     sb.lp = position.deepCopy();
-                    RectF screenArea = position.toAbsoluteRect();
+                    RectF screenArea = toAbsoluteRect(position);
                     System.out.println("Area " + screenArea);
                     for (RectF searchBox : searchBoxes) {
                         float square1 = searchBox.width() * searchBox.height();
@@ -254,7 +255,7 @@ public class SearchDialog extends DialogFragment {
         System.out.println("lastPosition = " + lastPosition);
         System.out.println("lastIndex = " + subBatch.active);
         System.out.println("page = " + subBatch.lp.getPageNumber());
-        log("Rect " + subBatch.lp.toAbsoluteRect());
+        log("Rect " + toAbsoluteRect(subBatch.lp));
 
         lastSearchDrawler.setBatch(subBatch);
         controller.drawPage(subBatch.lp);

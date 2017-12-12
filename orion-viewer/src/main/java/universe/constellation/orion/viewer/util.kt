@@ -19,7 +19,15 @@
 
 package universe.constellation.orion.viewer
 
+import android.graphics.RectF
+
 
 fun getPrefKey(keyCode: Int, isLong: Boolean): String {
     return keyCode.toString() + if (isLong) "long" else ""
+}
+
+fun LayoutPosition.toAbsoluteRect(): RectF {
+    val left = x.offset + x.marginLess
+    val top = y.offset + y.marginLess
+    return RectF(left.toFloat(), top.toFloat(), (left + x.screenDimension).toFloat(), (top + y.screenDimension).toFloat())///
 }

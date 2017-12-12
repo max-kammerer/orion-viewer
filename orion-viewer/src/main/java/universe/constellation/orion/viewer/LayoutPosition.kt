@@ -19,8 +19,6 @@
 
 package universe.constellation.orion.viewer
 
-import android.graphics.RectF
-
 /**
  * User: mike
  * Date: 15.10.11
@@ -52,11 +50,5 @@ data class LayoutPosition(
         } else {
             docZoom = (0.0001f * zoom).toDouble()
         }
-    }
-
-    fun toAbsoluteRect(): RectF {
-        val left = x.offset + x.marginLess
-        val top = y.offset + y.marginLess
-        return RectF(left.toFloat(), top.toFloat(), (left + x.screenDimension).toFloat(), (top + y.screenDimension).toFloat())///
     }
 }
