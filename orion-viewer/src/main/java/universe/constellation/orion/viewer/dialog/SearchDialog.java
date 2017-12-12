@@ -142,13 +142,13 @@ public class SearchDialog extends DialogFragment {
 
                 for (RectF searchBox : searchBoxes) {
                     System.out.println("Scaling rect " + searchBox);
-                    Util.scale(searchBox, position.docZoom);
+                    Util.scale(searchBox, position.getDocZoom());
                 }
 
                 RectF temp = new RectF();
                 do {
                     SubBatch sb = new SubBatch();
-                    sb.lp = position.clone();
+                    sb.lp = position.deepCopy();
                     RectF screenArea = position.toAbsoluteRect();
                     System.out.println("Area " + screenArea);
                     for (RectF searchBox : searchBoxes) {
@@ -170,7 +170,7 @@ public class SearchDialog extends DialogFragment {
                 if (screens.isEmpty()) {
                     log("Adding fake batch");
                     SubBatch sb = new SubBatch();
-                    sb.lp = position.clone();
+                    sb.lp = position.deepCopy();
                     screens.add(sb);
                 }
                 return screens;
@@ -253,7 +253,7 @@ public class SearchDialog extends DialogFragment {
         System.out.println("lastDirectionOnSearch = " + lastDirectionOnSearch);
         System.out.println("lastPosition = " + lastPosition);
         System.out.println("lastIndex = " + subBatch.active);
-        System.out.println("page = " + subBatch.lp.pageNumber);
+        System.out.println("page = " + subBatch.lp.getPageNumber());
         log("Rect " + subBatch.lp.toAbsoluteRect());
 
         lastSearchDrawler.setBatch(subBatch);
@@ -300,8 +300,8 @@ public class SearchDialog extends DialogFragment {
                 paint.setStyle(Paint.Style.FILL);
                 for (RectF rect : rects) {
                     paint.setAlpha(index++ == batch.active ? activeAlpha : generalAlpha);
-                    int left = batch.lp.x.marginLess + batch.lp.x.offset;
-                    int top = batch.lp.y.marginLess + batch.lp.y.offset;
+                    int left = batch.lp.getX().getMarginLess() + batch.lp.getX().getOffset();
+                    int top = batch.lp.getY().getMarginLess() + batch.lp.getY().getOffset();
                     canvas.drawRect(rect.left - left, rect.top - top, rect.right - left, rect.bottom - top, paint);
                 }
                 paint.setAlpha(prevAlpgha);

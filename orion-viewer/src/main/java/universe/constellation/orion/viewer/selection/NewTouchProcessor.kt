@@ -112,7 +112,7 @@ open class NewTouchProcessor(val view: OrionScene, val activity: OrionViewerActi
         }
 
         if (state == State.UNDEFINED) {
-            info = view.info?.clone() ?: return true
+            info = view.info?.deepCopy() ?: return true
             start0.x = e1.x.toInt()
             start0.y = e1.y.toInt()
             nextState = State.MOVE

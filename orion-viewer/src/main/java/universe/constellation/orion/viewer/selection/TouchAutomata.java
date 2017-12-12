@@ -125,10 +125,10 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                         last0.x = start0.x;
                     } else {
                         int delta = last0.x - start0.x;
-                        int offset = -info.x.offset;
+                        int offset = -info.getX().getOffset();
                         if (delta < 0) {
-                            if (offset + info.x.pageDimension + delta < width) {
-                                last0.x = start0.x - offset - info.x.pageDimension + width;
+                            if (offset + info.getX().getPageDimension() + delta < width) {
+                                last0.x = start0.x - offset - info.getX().getPageDimension() + width;
                             }
                         } else {
                             if (offset + delta > 0) {
@@ -278,7 +278,7 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
                     endFocus.y = startFocus.y;
                     processed = true;
                     break;
-                case DO_MOVE: info = view.getInfo().clone();
+                case DO_MOVE: info = view.getInfo().deepCopy();
             }
         }
         currentState = nextState;
@@ -329,6 +329,6 @@ public class TouchAutomata extends TouchAutomataOldAndroid {
     }
 
     private boolean insideViewWidth(LayoutPosition info) {
-        return info != null && info.x.pageDimension <= getView().getWidth();
+        return info != null && info.getX().getPageDimension() <= getView().getWidth();
     }
 }

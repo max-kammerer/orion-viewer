@@ -127,7 +127,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
                     //will cache next page
                     log("Future index is " + futureIndex)
                     if (futureIndex != 0) {
-                        curPos = curPos!!.clone()
+                        curPos = curPos!!.deepCopy()
                         layout.calcPageLayout( curPos!!, true, doc.pageCount)
                     }
                     false
@@ -232,7 +232,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
     }
 
     override fun render(lastInfo: LayoutPosition) {
-        val lastInfo = lastInfo.clone()
+        val lastInfo = lastInfo.deepCopy()
         synchronized(this) {
             lastEvent = lastInfo
             (this as java.lang.Object).notify()

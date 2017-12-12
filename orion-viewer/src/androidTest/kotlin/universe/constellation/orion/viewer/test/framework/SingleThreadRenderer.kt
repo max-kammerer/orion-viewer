@@ -23,6 +23,6 @@ class SingleThreadRenderer(
 
     override fun render(lastInfo: LayoutPosition) {
         super.render(lastInfo)
-        renderInCurrentThread(true, lastInfo.clone(), layout.rotation)
+        renderInCurrentThread(true, lastInfo.deepCopy(), layout.rotation)
     }
 }
