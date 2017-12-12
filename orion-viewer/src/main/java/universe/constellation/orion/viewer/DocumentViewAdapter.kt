@@ -17,27 +17,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer;
+package universe.constellation.orion.viewer
 
-/**
- * User: mike
- * Date: 14.11.11
- * Time: 15:13
- */
-public class DocumentViewAdapter implements DocumentViewListener {
-    public void documentOpened(Controller controller) {
+open class DocumentViewAdapter : DocumentViewListener {
+    override fun documentOpened(controller: Controller) {
 
     }
 
-    public void documentClosed() {
+    override fun documentClosed() {
 
     }
 
-    public void pageChanged(int newPage, int pageCount) {
+    override fun pageChanged(newPage: Int, pageCount: Int) {
 
     }
 
-    public void viewParametersChanged() {
+    override fun viewParametersChanged() {
 
     }
 }

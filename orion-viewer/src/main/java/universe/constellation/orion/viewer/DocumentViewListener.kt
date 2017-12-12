@@ -17,20 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer;
+package universe.constellation.orion.viewer
 
-/**
- * User: mike
- * Date: 13.11.11
- * Time: 17:31
- */
-public interface DocumentViewListener {
+interface DocumentViewListener {
 
-    public void documentOpened(Controller controller);
+    fun documentOpened(controller: Controller)
 
-    public void documentClosed();
+    fun documentClosed()
 
-    public void pageChanged(int newPage, int pageCount);
+    fun pageChanged(newPage: Int, pageCount: Int)
 
-    public void viewParametersChanged();
+    fun viewParametersChanged()
 }
