@@ -3,8 +3,9 @@ package universe.constellation.orion.viewer.device;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Build;
-import android.view.KeyEvent;
 import android.view.View;
+
+import org.jetbrains.annotations.NotNull;
 
 import universe.constellation.orion.viewer.OperationHolder;
 import universe.constellation.orion.viewer.prefs.OrionApplication;
@@ -27,7 +28,7 @@ public class MagicBookBoeyeDevice extends EInkDevice {
     private static final boolean isT62 = "T62D".equalsIgnoreCase(OrionApplication.DEVICE);
 
     @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event, OperationHolder holder) {
+    public boolean onKeyUp(int keyCode, boolean isLongPress, @NotNull OperationHolder holder) {
         if (isT62) {
             switch (keyCode) {
                 case PAGE_UP:
@@ -41,7 +42,7 @@ public class MagicBookBoeyeDevice extends EInkDevice {
             }
         }
 
-        return super.onKeyUp(keyCode, event, holder);
+        return super.onKeyUp(keyCode, isLongPress, holder);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)

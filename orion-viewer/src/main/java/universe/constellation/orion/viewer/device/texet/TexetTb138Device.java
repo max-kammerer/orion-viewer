@@ -1,12 +1,13 @@
 package universe.constellation.orion.viewer.device.texet;
 
-import android.view.KeyEvent;
 import android.view.View;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.lang.reflect.Method;
 
 import universe.constellation.orion.viewer.OperationHolder;
 import universe.constellation.orion.viewer.device.AndroidDevice;
-
-import java.lang.reflect.Method;
 
 import static universe.constellation.orion.viewer.LoggerKt.log;
 
@@ -41,7 +42,7 @@ public class TexetTb138Device extends AndroidDevice {
 
 
     @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event, OperationHolder holder) {
+    public boolean onKeyUp(int keyCode, boolean isLongPress, @NotNull OperationHolder holder) {
 
         switch (keyCode) {
             // button '>' on the left and the right side
@@ -55,15 +56,15 @@ public class TexetTb138Device extends AndroidDevice {
                 return true;
 
             default:
-                return super.onKeyUp(keyCode, event, holder);
+                return super.onKeyUp(keyCode, isLongPress, holder);
 
         }
     }
 
     @Override
     public void flushBitmap() {
-        if (activity.getView() != null) {
-            boolean result = requestEpdMode(activity.getView().toView(), EPD_FULL);
+        if (getActivity().getView() != null) {
+            boolean result = requestEpdMode(getActivity().getView().toView(), EPD_FULL);
             log("Invoked requestEpdMode: "+result);
         }
 

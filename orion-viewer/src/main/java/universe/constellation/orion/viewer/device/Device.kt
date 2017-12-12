@@ -19,24 +19,19 @@
 
 package universe.constellation.orion.viewer.device
 
-import android.app.Activity
-import android.view.KeyEvent
-import universe.constellation.orion.viewer.LastPageInfo
 import universe.constellation.orion.viewer.OperationHolder
-import universe.constellation.orion.viewer.OrionBaseActivity
+import universe.constellation.orion.viewer.ShortFileInfo
 import universe.constellation.orion.viewer.document.Document
 
 interface Device {
 
-    fun onKeyUp(keyCode: Int, event: KeyEvent, operation: OperationHolder): Boolean
+    fun onKeyUp(keyCode: Int, isLongPress: Boolean, operation: OperationHolder): Boolean
 
-    fun onCreate(activity: OrionBaseActivity)
+    fun onNewBook(info: ShortFileInfo, document: Document) {}
 
-    fun onNewBook(info: LastPageInfo, document: Document)
+    fun onBookClose(currentPage: Int, pageCount: Int) {}
 
-    fun onBookClose(currentPage: Int, pageCount: Int)
-
-    fun onDestroy()
+    fun onDestroy() {}
 
     fun onPause()
 
@@ -44,11 +39,9 @@ interface Device {
 
     fun onUserInteraction()
 
-    fun flushBitmap()
+    fun flushBitmap() {}
 
     val isDefaultDarkTheme: Boolean
-
-    fun fullScreen(on: Boolean, activity: Activity)
 
     companion object {
 

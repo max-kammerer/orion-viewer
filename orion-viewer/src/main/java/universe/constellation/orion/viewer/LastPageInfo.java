@@ -21,6 +21,8 @@ package universe.constellation.orion.viewer;
 
 import android.content.Context;
 import android.util.Xml;
+
+import org.jetbrains.annotations.NotNull;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -33,12 +35,7 @@ import java.lang.reflect.Modifier;
 
 import static universe.constellation.orion.viewer.LoggerKt.log;
 
-/**
- * User: mike
- * Date: 13.09.11
- * Time: 12:19 //test
- */
-public class LastPageInfo implements Serializable {
+public class LastPageInfo implements Serializable, ShortFileInfo {
 
     public static final int CURRENT_VERSION = 5;
 
@@ -187,11 +184,11 @@ public class LastPageInfo implements Serializable {
     }
 
     public static void writeValue(XmlSerializer serializer, String name, int value) throws IOException {
-        writeValue(serializer, name, "" + value);
+        writeValue(serializer, name, Integer.toString(value));
     }
 
     public static void writeValue(XmlSerializer serializer, String name, boolean value) throws IOException {
-        writeValue(serializer, name, "" + Boolean.toString(value));
+        writeValue(serializer, name, Boolean.toString(value));
     }
 
     public static void writeValue(XmlSerializer serializer, String name, String value) throws IOException {
@@ -304,5 +301,27 @@ public class LastPageInfo implements Serializable {
         }
 
         return value;
+    }
+
+    @Override
+    public int getCurrentPage() {
+        return pageNumber;
+    }
+
+    @NotNull
+    @Override
+    public String getFileName() {
+        return openingFileName;
+    }
+
+    @NotNull
+    @Override
+    public String getSimpleFileName() {
+        return simpleFileName;
+    }
+
+    @Override
+    public long getFileSize() {
+        return fileSize;
     }
 }

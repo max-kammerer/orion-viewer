@@ -25,7 +25,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
-import universe.constellation.orion.viewer.device.Device;
 import universe.constellation.orion.viewer.R;
 
 /**

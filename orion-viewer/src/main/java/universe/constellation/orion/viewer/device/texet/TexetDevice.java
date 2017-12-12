@@ -15,29 +15,26 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import universe.constellation.orion.viewer.document.Document;
-import universe.constellation.orion.viewer.LastPageInfo;
 import universe.constellation.orion.viewer.PageInfo;
+import universe.constellation.orion.viewer.ShortFileInfo;
 import universe.constellation.orion.viewer.device.EInkDevice;
+import universe.constellation.orion.viewer.document.Document;
 import universe.constellation.orion.viewer.document.DocumentWithCaching;
 
 import static universe.constellation.orion.viewer.LoggerKt.log;
 
-/**
- * Created by mike on 9/16/14.
- */
 public class TexetDevice extends EInkDevice {
 
 
     @Override
-    public void onNewBook(LastPageInfo info, Document document) {
+    public void onNewBook(@NotNull ShortFileInfo info, @NotNull Document document) {
         try {
-            String coverFileName = getIconFileName(info.simpleFileName, info.fileSize);
-            shtampTexetFile(info.openingFileName, info.simpleFileName, "", "" + info.totalPages, "" + info.pageNumber, coverFileName);
+            String coverFileName = getIconFileName(info.getSimpleFileName(), info.getFileSize());
+            shtampTexetFile(info.getFileName(), info.getSimpleFileName(), "", "" + document.getPageCount(), "" + info.getCurrentPage(), coverFileName);
             rememberCover(coverFileName, document);
         } catch (Exception e) {
             log(e);
-            Toast.makeText(activity, "Error on new book parameters update: " + e.getMessage(), Toast.LENGTH_SHORT).show();;
+            Toast.makeText(getActivity(), "Error on new book parameters update: " + e.getMessage(), Toast.LENGTH_SHORT).show();;
         }
     }
 
@@ -49,7 +46,7 @@ public class TexetDevice extends EInkDevice {
             shtampTexetFile(null, null, null, "" + pageCount, "" + currentPage + 1, null);
         } catch (Exception e) {
             log(e);
-            Toast.makeText(activity, "Error on parameters update on book close: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Error on parameters update on book close: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -64,7 +61,7 @@ public class TexetDevice extends EInkDevice {
                 myTime.monthDay, myTime.month + 1, myTime.year, myTime.hour, myTime.minute, myTime.second);
 
         Context bmkContext =
-                activity.getApplicationContext().createPackageContext("com.android.systemui", Context.CONTEXT_IGNORE_SECURITY);
+                getActivity().getApplicationContext().createPackageContext("com.android.systemui", Context.CONTEXT_IGNORE_SECURITY);
 
 
         SharedPreferences settings =

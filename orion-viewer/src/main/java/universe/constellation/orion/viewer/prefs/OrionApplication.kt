@@ -182,7 +182,7 @@ class OrionApplication : Application() {
         }
 
         @JvmStatic
-        fun createDevice(): Device {
+        fun createDevice(): AndroidDevice {
             if (TEXET_TB_138) {
                 log("Using TexetTb138Device")
                 return TexetTb138Device()

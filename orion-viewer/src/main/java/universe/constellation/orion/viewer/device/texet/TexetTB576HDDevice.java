@@ -7,15 +7,14 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Method;
 
 import universe.constellation.orion.viewer.OperationHolder;
 
 import static universe.constellation.orion.viewer.LoggerKt.log;
 
-/**
- * Created by mike on 9/16/14.
- */
 public class TexetTB576HDDevice extends TexetDevice {
 
     private static Method texetBacklight0;
@@ -54,7 +53,7 @@ public class TexetTB576HDDevice extends TexetDevice {
 
     @Override
     public int doLighting(int delta) throws Exception {
-        int i = Settings.System.getInt(activity.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS);
+        int i = Settings.System.getInt(getActivity().getContentResolver(), Settings.System.SCREEN_BRIGHTNESS);
 
         i += delta;
 
@@ -63,28 +62,28 @@ public class TexetTB576HDDevice extends TexetDevice {
         if (i > 255)
             i = 255;
 
-        PowerManager pm = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
+        PowerManager pm = (PowerManager) getActivity().getSystemService(Context.POWER_SERVICE);
 
         if (texetBacklight0 != null) {
-            texetBacklight0.invoke(pm, i, activity);
+            texetBacklight0.invoke(pm, i, getActivity());
         } else if (texetBacklight1 != null){
             texetBacklight1.invoke(pm, i);
         } else {
             Log.e("texet backlight",  "not found");
         }
 
-        Settings.System.putInt(activity.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, i);
+        Settings.System.putInt(getActivity().getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, i);
 
         return i;
     }
 
     @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event, OperationHolder holder) {
+    public boolean onKeyUp(int keyCode, boolean isLongPress, @NotNull OperationHolder holder) {
         if (keyCode == KeyEvent.KEYCODE_PAGE_UP || keyCode == KeyEvent.KEYCODE_PAGE_DOWN) {
-            holder.value = event.isLongPress() ? PREV : NEXT;
+            holder.value = isLongPress ? PREV : NEXT;
             return true;
         }
-        return super.onKeyUp(keyCode, event, holder);
+        return super.onKeyUp(keyCode, isLongPress, holder);
     }
 
     @Override

@@ -31,6 +31,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import universe.constellation.orion.viewer.device.AndroidDevice;
 import universe.constellation.orion.viewer.device.Device;
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
@@ -47,7 +48,7 @@ public abstract class OrionBaseActivity extends AppCompatActivity {
 
     public static final String DONT_OPEN_RECENT = "DONT_OPEN_RECENT";
 
-    protected Device device ;
+    protected AndroidDevice device;
 
     protected SharedPreferences.OnSharedPreferenceChangeListener listener;
 
@@ -128,7 +129,7 @@ public abstract class OrionBaseActivity extends AppCompatActivity {
         }
     }
 
-    public Device getDevice() {
+    public AndroidDevice getDevice() {
         return device;
     }
 
