@@ -714,7 +714,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
         }
 
         if (device.onKeyUp(keyCode, event.isLongPress(), operation)) {
-            changePage(operation.value);
+            changePage(operation.getValue());
             return true;
         }
         return false;

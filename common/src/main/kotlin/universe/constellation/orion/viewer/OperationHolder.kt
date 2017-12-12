@@ -17,13 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer;
+package universe.constellation.orion.viewer
 
-/**
- * User: mike
- * Date: 18.10.11
- * Time: 11:23
- */
-public class OperationHolder {
-    public int value;
+
+class OperationHolder {
+    var value: Int = 0
 }

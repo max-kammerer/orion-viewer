@@ -80,7 +80,7 @@ public class TexetTB576HDDevice extends TexetDevice {
     @Override
     public boolean onKeyUp(int keyCode, boolean isLongPress, @NotNull OperationHolder holder) {
         if (keyCode == KeyEvent.KEYCODE_PAGE_UP || keyCode == KeyEvent.KEYCODE_PAGE_DOWN) {
-            holder.value = isLongPress ? PREV : NEXT;
+            holder.setValue(isLongPress ? PREV : NEXT);
             return true;
         }
         return super.onKeyUp(keyCode, isLongPress, holder);

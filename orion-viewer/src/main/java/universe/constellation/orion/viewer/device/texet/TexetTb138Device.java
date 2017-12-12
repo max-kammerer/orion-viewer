@@ -47,12 +47,12 @@ public class TexetTb138Device extends AndroidDevice {
         switch (keyCode) {
             // button '>' on the left and the right side
             case 144: //KeyEvent.KEYCODE_NUMPAD_0:
-                holder.value = NEXT;
+                holder.setValue(NEXT);
                 return true;
 
             // button '<' on the left and the right side
             case 143: //KeyEvent.KEYCODE_NUM_LOCK:
-                holder.value = PREV;
+                holder.setValue(PREV);
                 return true;
 
             default:
