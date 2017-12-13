@@ -1,1 +1,1 @@
-include ":common",":orion-viewer", ':tree-view-list-android'
+include ":orion-viewer", ':tree-view-list-android'
