@@ -61,7 +61,7 @@ class DocumentWithCaching(val doc: Document) : Document by doc {
 
             if (cropMode != 0 && (pageInfo.autoCrop == null)) {
                 timing("Full auto crop") {
-                    fillAutoCropInfo(pageInfo!!, cropMode)
+                    fillAutoCropInfo(pageInfo, cropMode)
                 }
             }
 
@@ -179,8 +179,8 @@ fun calcGradient(image: ArrayImage) {
     val stroke = width
 
     var shift = 0
-    for (h in 0..height - 2) {
-        for (w in 0..width - 2) {
+    for (h in 0 until height - 1) {
+        for (w in 0 until width - 1) {
             val cur = w + shift
             val curInGray = gray(source[cur])
             val gradient = 255 - (abs(curInGray - gray(source[cur + 1])) + abs(curInGray - gray(source[cur + stroke]))) / 2
@@ -196,7 +196,6 @@ fun calcGradient(image: ArrayImage) {
     }
 
     val w = width - 1
-    //TODO until
     for (h in 0 until height) {
         val cur = w + h * stroke
         source[cur] = source[cur - 1]
@@ -215,8 +214,8 @@ fun findRectangle(grImage: ArrayImage): AutoCropMargins {
     var bottom = -1
 
     //calc votes
-    for (h in 1..height - 2) {
-        for (w in 1..width - 2) {
+    for (h in 1 until height - 1) {
+        for (w in 1 until width - 1) {
             val curIndex = w + h * stroke
             var votes = 0
             for (i in -1..1) {

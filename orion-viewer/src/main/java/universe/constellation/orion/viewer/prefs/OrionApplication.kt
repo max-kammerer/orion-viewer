@@ -70,9 +70,7 @@ class OrionApplication : Application() {
             val isDefault = !("DARK" == theme || "LIGHT" == theme)
             val useDarkTheme = if (isDefault) device.isDefaultDarkTheme else false
 
-            return if (useDarkTheme || "DARK" == theme) {
-                false
-            } else true
+            return !(useDarkTheme || "DARK" == theme)
 
         }
 

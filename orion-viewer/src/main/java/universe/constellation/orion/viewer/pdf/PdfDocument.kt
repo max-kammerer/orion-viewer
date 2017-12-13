@@ -30,8 +30,6 @@ class PdfDocument @Throws(Exception::class) constructor(fileName: String) : Docu
 
     private val core: MuPDFCore = MuPDFCore(fileName)
 
-    private fun openDocument(fileName: String) = true
-
     override val pageCount: Int
         get() = core.pageCount
 
