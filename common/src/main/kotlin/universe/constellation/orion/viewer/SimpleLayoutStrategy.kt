@@ -24,6 +24,7 @@ import universe.constellation.orion.viewer.document.Document
 
 import universe.constellation.orion.viewer.document.DocumentWithCaching
 import universe.constellation.orion.viewer.document.PageInfoProvider
+import universe.constellation.orion.viewer.layout.State
 
 class SimpleLayoutStrategy private constructor(
         private val pageInfoProvider: PageInfoProvider,
@@ -226,7 +227,7 @@ class SimpleLayoutStrategy private constructor(
     }
 
 
-    override fun init(info: LastPageInfo, options: PageOptions) {
+    override fun init(info: State, options: PageOptions) {
         changeCropMargins(CropMargins(info.leftMargin, info.rightMargin, info.topMargin, info.bottomMargin, info.leftEvenMargin, info.rightEventMargin, info.enableEvenCropping, info.cropMode))
         changeRotation(info.rotation)
         changeZoom(info.zoom)
