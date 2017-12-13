@@ -25,7 +25,7 @@ import android.view.MotionEvent;
 import android.widget.Toast;
 
 import universe.constellation.orion.viewer.device.Device;
-import universe.constellation.orion.viewer.LayoutPosition;
+import universe.constellation.orion.viewer.layout.LayoutPosition;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.android.touch.AndroidScaleWrapper;
 import universe.constellation.orion.viewer.android.touch.OldAdroidScaleWrapper;

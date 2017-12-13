@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.view.ViewGroup
 import universe.constellation.orion.viewer.*
+import universe.constellation.orion.viewer.layout.LayoutPosition
 import java.util.concurrent.CountDownLatch
 
 /**

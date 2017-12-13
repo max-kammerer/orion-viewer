@@ -17,18 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer
+package universe.constellation.orion.viewer.layout
 
-import android.graphics.RectF
-import universe.constellation.orion.viewer.layout.LayoutPosition
-
-
-fun getPrefKey(keyCode: Int, isLong: Boolean): String {
-    return keyCode.toString() + if (isLong) "long" else ""
-}
-
-fun LayoutPosition.toAbsoluteRect(): RectF {
-    val left = x.offset + x.marginLess
-    val top = y.offset + y.marginLess
-    return RectF(left.toFloat(), top.toFloat(), (left + x.screenDimension).toFloat(), (top + y.screenDimension).toFloat())///
-}
+data class CropMargins(
+        @JvmField val left: Int = 0,
+        @JvmField val right: Int = 0,
+        @JvmField val top: Int = 0,
+        @JvmField val bottom: Int = 0,
+        @JvmField val evenLeft: Int = 0,
+        @JvmField val evenRight: Int = 0,
+        @JvmField val evenCrop: Boolean = false,
+        @JvmField val cropMode: Int = CropMode.MANUAL.cropMode)

@@ -23,7 +23,7 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
-import universe.constellation.orion.viewer.LayoutPosition
+import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.OrionScene
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.util.MoveUtil

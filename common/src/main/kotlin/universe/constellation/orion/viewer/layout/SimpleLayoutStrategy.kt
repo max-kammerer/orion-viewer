@@ -1,7 +1,7 @@
 /*
  * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
  *
- * Copyright (C) 2011-2013  Michael Bogdanov & Co
+ * Copyright (C) 2011-2017 Michael Bogdanov & Co
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,14 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer
+package universe.constellation.orion.viewer.layout
 
 import android.graphics.Point
+import universe.constellation.orion.viewer.*
 import universe.constellation.orion.viewer.document.Document
 
 import universe.constellation.orion.viewer.document.DocumentWithCaching
 import universe.constellation.orion.viewer.document.PageInfoProvider
-import universe.constellation.orion.viewer.layout.State
 
 class SimpleLayoutStrategy private constructor(
         private val pageInfoProvider: PageInfoProvider,

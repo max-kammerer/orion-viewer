@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import universe.constellation.orion.viewer.*
+import universe.constellation.orion.viewer.layout.LayoutPosition
 import java.util.concurrent.CountDownLatch
 
 class OrionStatusBarHelper(val view: ViewGroup) : OrionBookListener, OrionImageListener {

@@ -1,6 +1,6 @@
 package universe.constellation.orion.viewer.view;
 
-import universe.constellation.orion.viewer.LayoutPosition;
+import universe.constellation.orion.viewer.layout.LayoutPosition;
 
 /**
  * User: mike

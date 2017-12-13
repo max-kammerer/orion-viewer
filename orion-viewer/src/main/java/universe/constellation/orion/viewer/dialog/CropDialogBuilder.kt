@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatDialog
 import android.view.View
 import android.view.Window
 import android.widget.*
-import universe.constellation.orion.viewer.CropMargins
+import universe.constellation.orion.viewer.layout.CropMargins
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.R
 

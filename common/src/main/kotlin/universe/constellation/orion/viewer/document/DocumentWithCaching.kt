@@ -24,6 +24,7 @@ import android.graphics.Bitmap
 import android.graphics.Rect
 import android.support.v4.util.LruCache
 import universe.constellation.orion.viewer.*
+import universe.constellation.orion.viewer.layout.*
 
 private const val WIDTH = 600
 private const val HEIGHT = 800

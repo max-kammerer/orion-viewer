@@ -2,6 +2,8 @@ package universe.constellation.orion.viewer.test.framework
 
 import universe.constellation.orion.viewer.*
 import universe.constellation.orion.viewer.document.Document
+import universe.constellation.orion.viewer.layout.LayoutPosition
+import universe.constellation.orion.viewer.layout.LayoutStrategy
 import universe.constellation.orion.viewer.view.Scene
 
 /**

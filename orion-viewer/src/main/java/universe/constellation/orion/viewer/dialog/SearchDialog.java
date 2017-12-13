@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import universe.constellation.orion.viewer.Controller;
-import universe.constellation.orion.viewer.LayoutPosition;
-import universe.constellation.orion.viewer.LayoutStrategy;
+import universe.constellation.orion.viewer.layout.LayoutPosition;
+import universe.constellation.orion.viewer.layout.LayoutStrategy;
 import universe.constellation.orion.viewer.OrionBaseActivity;
 import universe.constellation.orion.viewer.OrionScene;
 import universe.constellation.orion.viewer.OrionViewerActivity;

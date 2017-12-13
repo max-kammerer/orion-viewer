@@ -66,6 +66,8 @@ import universe.constellation.orion.viewer.dialog.CropDialogBuilderKt;
 import universe.constellation.orion.viewer.dialog.SearchDialog;
 import universe.constellation.orion.viewer.dialog.TapHelpDialog;
 import universe.constellation.orion.viewer.document.Document;
+import universe.constellation.orion.viewer.layout.LayoutStrategy;
+import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.selection.NewTouchProcessor;
 import universe.constellation.orion.viewer.selection.NewTouchProcessorWithScale;

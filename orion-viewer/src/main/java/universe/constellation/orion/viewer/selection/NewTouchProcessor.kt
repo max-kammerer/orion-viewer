@@ -7,6 +7,7 @@ import android.view.MotionEvent
 import android.widget.Toast
 import universe.constellation.orion.viewer.*
 import universe.constellation.orion.viewer.device.EInkDevice
+import universe.constellation.orion.viewer.layout.LayoutPosition
 
 enum class State {
     UNDEFINED,

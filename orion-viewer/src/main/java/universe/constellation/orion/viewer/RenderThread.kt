@@ -26,6 +26,9 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
 import universe.constellation.orion.viewer.document.Document
+import universe.constellation.orion.viewer.layout.LayoutPosition
+import universe.constellation.orion.viewer.layout.LayoutStrategy
+import universe.constellation.orion.viewer.layout.calcPageLayout
 import universe.constellation.orion.viewer.view.Renderer
 import universe.constellation.orion.viewer.view.Scene
 

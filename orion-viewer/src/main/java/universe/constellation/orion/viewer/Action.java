@@ -35,6 +35,7 @@ import pl.polidea.treeview.TreeViewList;
 import universe.constellation.orion.viewer.dialog.CropDialogBuilderKt;
 import universe.constellation.orion.viewer.document.OutlineItem;
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity;
+import universe.constellation.orion.viewer.layout.CropMargins;
 import universe.constellation.orion.viewer.outline.OutlineAdapter;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionApplication;

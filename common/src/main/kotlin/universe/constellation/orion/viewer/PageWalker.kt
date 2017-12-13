@@ -20,6 +20,8 @@
 package universe.constellation.orion.viewer
 
 import universe.constellation.orion.viewer.PageWalker.*
+import universe.constellation.orion.viewer.layout.LayoutPosition
+import universe.constellation.orion.viewer.layout.OneDimension
 
 class PageWalker(val order: WALK_ORDER) {
 

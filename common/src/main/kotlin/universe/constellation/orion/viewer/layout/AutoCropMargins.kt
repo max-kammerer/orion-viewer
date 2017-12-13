@@ -1,7 +1,7 @@
 /*
  * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
  *
- * Copyright (C) 2011-2013  Michael Bogdanov & Co
+ * Copyright (C) 2011-2017 Michael Bogdanov & Co
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,22 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer
+package universe.constellation.orion.viewer.layout
 
-data class OneDimension(
-        var offset: Int = 0,
-        var pageDimension: Int = 0,
-        var screenDimension: Int = 0,
-        var marginLess: Int = 0
-) {
-
-    var overlap: Int = 0
-
-    var marginMore: Int = 0
-
-    val occupiedAreaStart: Int
-        get() = Math.max(0, -offset)
-
-    val occupiedAreaEnd: Int
-        get() = if (pageDimension - offset - screenDimension < 0) pageDimension - offset else screenDimension
-}
+data class AutoCropMargins(
+        @JvmField val left: Int,
+        @JvmField val top: Int,
+        @JvmField val right: Int,
+        @JvmField val bottom: Int)

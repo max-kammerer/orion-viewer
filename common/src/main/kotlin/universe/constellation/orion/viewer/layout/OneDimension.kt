@@ -1,7 +1,7 @@
 /*
  * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
  *
- * Copyright (C) 2011-2017 Michael Bogdanov & Co
+ * Copyright (C) 2011-2013  Michael Bogdanov & Co
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,18 +17,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer
+package universe.constellation.orion.viewer.layout
 
-import android.graphics.RectF
-import universe.constellation.orion.viewer.layout.LayoutPosition
+data class OneDimension(
+        var offset: Int = 0,
+        var pageDimension: Int = 0,
+        var screenDimension: Int = 0,
+        var marginLess: Int = 0
+) {
 
+    var overlap: Int = 0
 
-fun getPrefKey(keyCode: Int, isLong: Boolean): String {
-    return keyCode.toString() + if (isLong) "long" else ""
-}
+    var marginMore: Int = 0
 
-fun LayoutPosition.toAbsoluteRect(): RectF {
-    val left = x.offset + x.marginLess
-    val top = y.offset + y.marginLess
-    return RectF(left.toFloat(), top.toFloat(), (left + x.screenDimension).toFloat(), (top + y.screenDimension).toFloat())///
+    val occupiedAreaStart: Int
+        get() = Math.max(0, -offset)
+
+    val occupiedAreaEnd: Int
+        get() = if (pageDimension - offset - screenDimension < 0) pageDimension - offset else screenDimension
 }

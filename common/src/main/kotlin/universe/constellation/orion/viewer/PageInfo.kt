@@ -19,6 +19,8 @@
 
 package universe.constellation.orion.viewer
 
+import universe.constellation.orion.viewer.layout.AutoCropMargins
+
 /**
  * User: mike
  * Date: 03.11.11

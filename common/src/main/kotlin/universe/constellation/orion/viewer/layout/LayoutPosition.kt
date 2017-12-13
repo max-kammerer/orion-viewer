@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer
+package universe.constellation.orion.viewer.layout
 
 /**
  * User: mike

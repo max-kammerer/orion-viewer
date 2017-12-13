@@ -5,6 +5,9 @@ import android.graphics.Bitmap
 import android.graphics.Point
 import junit.framework.Assert
 import universe.constellation.orion.viewer.*
+import universe.constellation.orion.viewer.layout.LayoutPosition
+import universe.constellation.orion.viewer.layout.LayoutStrategy
+import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
 import universe.constellation.orion.viewer.test.framework.ActivityBaseTest
 import universe.constellation.orion.viewer.test.framework.SingleThreadRenderer
 import universe.constellation.orion.viewer.test.framework.TestUtil

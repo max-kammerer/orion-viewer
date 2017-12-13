@@ -3,6 +3,7 @@ package universe.constellation.orion.viewer
 import android.graphics.Bitmap
 import android.graphics.Point
 import android.view.View
+import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.view.ColorStuff
 import universe.constellation.orion.viewer.view.DrawTask
 import universe.constellation.orion.viewer.view.ViewDimensionAware
