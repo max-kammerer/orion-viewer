@@ -29,6 +29,7 @@ import java.util.Map;
 
 import universe.constellation.orion.viewer.OptionActions;
 import universe.constellation.orion.viewer.OrionViewerActivity;
+import universe.constellation.orion.viewer.PageOptions;
 import universe.constellation.orion.viewer.PageWalker;
 import universe.constellation.orion.viewer.device.EInkDeviceWithoutFastRefresh;
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity;
@@ -40,7 +41,7 @@ import static universe.constellation.orion.viewer.LoggerKt.log;
  * Date: 26.11.11
  * Time: 16:18
  */
-public class GlobalOptions implements Serializable {
+public class GlobalOptions implements Serializable, PageOptions {
 
     public static final int MAX_RECENT_ENTRIES = 20;
 

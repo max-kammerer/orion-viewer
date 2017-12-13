@@ -20,7 +20,6 @@
 package universe.constellation.orion.viewer
 
 import android.graphics.Point
-import universe.constellation.orion.viewer.prefs.GlobalOptions
 
 interface LayoutStrategy {
 
@@ -52,7 +51,7 @@ interface LayoutStrategy {
 
     fun changeCropMargins(cropMargins: CropMargins): Boolean
 
-    fun init(info: LastPageInfo, options: GlobalOptions)
+    fun init(info: LastPageInfo, options: PageOptions)
 
     fun serialize(info: LastPageInfo)
 
