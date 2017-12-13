@@ -19,9 +19,9 @@
 
 package universe.constellation.orion.viewer.document
 
-import android.graphics.Bitmap
-import android.graphics.RectF
+import universe.constellation.orion.viewer.Bitmap
 import universe.constellation.orion.viewer.PageInfo
+import universe.constellation.orion.viewer.geometry.RectF
 
 class OutlineItem(
         @JvmField val level: Int,
