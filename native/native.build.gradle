@@ -1,0 +1,54 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://dl.bintray.com/jetbrains/kotlin-native-dependencies"
+        }
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-native-gradle-plugin:0.5"
+    }
+}
+
+apply plugin: 'konan'
+
+konan.targets = ['linux']
+
+konanArtifacts {
+    interop('gtk3') {
+
+    }
+
+    program('Gtk3Demo') {
+        libraries {
+            artifact 'gtk3'
+        }
+        srcDir "../common/src/main/kotlin"
+        srcDir "src/main/kotlin"
+
+        extraOpts("-Xmulti-platform")
+    }
+}
+
+//env LIBCLANG_DISABLE_CRASH_RECOVERY=1  -cp   org.jetbrains.kotlin.native.interop.gen.jvm.MainKt
+//-Djava.library.path=/home/mike/.konan/kotlin-native-linux-0.5/konan/lib/clangstubs/shared/:/home/mike/.konan/kotlin-native-linux-0.5/konan/lib/callbacks/shared/
+
+task generateJvmStub(type: JavaExec) {
+    def konanHome = "/home/mike/.konan/kotlin-native-linux-0.5/"
+    def konanLibs = konanHome + "/konan/lib"
+
+    main = "org.jetbrains.kotlin.native.interop.gen.jvm.MainKt"
+    classpath = fileTree(konanLibs)
+    workingDir = projectDir.path + "/src/main/stubs"
+    args "-def", projectDir.path + "/src/main/c_interop/gtk3.def"
+    systemProperties = [
+            'konan.home'       : konanHome,
+            'java.library.path': konanLibs + "/clangstubs/shared/:" + konanLibs + "/callbacks/shared/"
+
+    ]
+    environment = [
+            'LIBCLANG_DISABLE_CRASH_RECOVERY': 1
+    ]
+
+}

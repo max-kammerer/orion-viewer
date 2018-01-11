@@ -1,0 +1,19 @@
+//stub generation:
+//env LIBCLANG_DISABLE_CRASH_RECOVERY=1 java -Dkonan.home=/home/mike/.konan/kotlin-native-linux-0.5 -Djava.library.path=/home/mike/.konan/kotlin-native-linux-0.5/konan/lib/clangstubs/shared/:/home/mike/.konan/kotlin-native-linux-0.5/konan/lib/callbacks/shared/  -cp  StubGenerator.jar:kotlin-stdlib.jar:Runtime.jar:shared.jar:Indexer.jar:kotlin-reflect.jar org.jetbrains.kotlin.native.interop.gen.jvm.MainKt
+
+apply plugin: 'kotlin-platform-jvm'
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    expectedBy project(":common")
+    compile files('libs/Runtime.jar')
+}
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+sourceSets {
+    main {
+        java.srcDirs += 'src/main/stubs'
+    }
+}

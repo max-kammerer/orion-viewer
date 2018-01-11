@@ -1,0 +1,13 @@
+headers = gtk/gtk.h
+headerFilter = gtk/gtkwindow.h gtk/gtkheaderbar.h gtk/gtkwidget.h gtk/gtkapplicationwindow.h gtk/gtkapplication.h gtk/gtkcontainer.h \
+ gtk/gtkdrawingarea.h gtk/gtkbbox.h gtk/gtkbutton.h gobject/* gdk/* gio/gapplication.h \
+ cairo.h gtk/gtkstylecontext.h
+
+compilerOpts.osx = -I/usr/local/include/gtk-3.0 -I/usr/local/include/glib-2.0 -I/usr/local/lib/glib-2.0/include \
+-I/usr/local/include/pango-1.0 -I/usr/local/include/cairo -I/usr/local/include -I/usr/local/include/gdk-pixbuf-2.0 \
+-I/usr/local/include/atk-1.0
+
+compilerOpts.linux = -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/local/lib/glib-2.0/include -I/usr/lib64/glib-2.0/include -I/usr/include/gtk-3.0/ -I/usr/include/glib-2.0/  -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/atk-1.0
+
+linkerOpts.osx = -L/opt/local/lib -L/usr/local/lib -lglib-2.0 -lgdk-3.0 -lgtk-3 -lgio-2.0 -lgobject-2.0
+linkerOpts.linux = -L/usr/lib/x86_64-linux-gnu -lglib-2.0 -lgdk-3 -lgtk-3 -lgio-2.0 -lgobject-2.0 -lcairo

@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-platform-android'
 apply from: 'version.gradle'
 apply from: '../project.gradle'
 
@@ -12,7 +12,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.0.2'
     compile 'com.android.support:design:26.0.2'
     compile project(':tree-view-list-android')
-    //compile project(':common')
+    implement project(':common')
 
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     //compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.18'
@@ -38,7 +38,7 @@ android {
         main {
             jniLibs.srcDirs = [mupdf_libs, djvu_libs]
             assets.srcDirs = ['assets']
-            java.srcDirs += '../common/src/main/kotlin'
+            //java.srcDirs += '../common/src/main/kotlin'
         }
 
         //test
