@@ -24,7 +24,8 @@ interface Logger {
 
     fun log(m: String?, e: Exception) {
         println(m)
-        e.printStackTrace()
+        println(e.message)
+        //TODO: e.printStackTrace()
     }
 }
 
@@ -32,7 +33,7 @@ var logger = object : Logger {}
 
 fun log(m: String) = logger.log(m)
 
-fun log(e: Exception) = logger.log(e.message, e)
+fun log(e: kotlin.Exception) = logger.log(e.message, e)
 
 fun log(m: String, e: Exception) {
     logger.log(m, e)

@@ -20,3 +20,10 @@
 package universe.constellation.orion.viewer
 
 actual typealias Bitmap = android.graphics.Bitmap
+
+actual fun createBitmap(width: Int, height: Int) =
+        android.graphics.Bitmap.createBitmap(width, height, android.graphics.Bitmap.Config.ARGB_8888)
+
+actual typealias LruCache<K, V> = android.support.v4.util.LruCache<K, V>
+
+actual fun <K, V> createCache(size: Int): LruCache<K, V> = android.support.v4.util.LruCache<K, V>(size)

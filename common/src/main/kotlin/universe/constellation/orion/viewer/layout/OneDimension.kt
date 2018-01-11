@@ -19,6 +19,8 @@
 
 package universe.constellation.orion.viewer.layout
 
+import kotlin.math.max
+
 data class OneDimension(
         var offset: Int = 0,
         var pageDimension: Int = 0,
@@ -31,7 +33,7 @@ data class OneDimension(
     var marginMore: Int = 0
 
     val occupiedAreaStart: Int
-        get() = Math.max(0, -offset)
+        get() = max(0, -offset)
 
     val occupiedAreaEnd: Int
         get() = if (pageDimension - offset - screenDimension < 0) pageDimension - offset else screenDimension

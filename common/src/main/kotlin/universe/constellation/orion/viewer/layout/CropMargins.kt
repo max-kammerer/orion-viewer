@@ -20,11 +20,11 @@
 package universe.constellation.orion.viewer.layout
 
 data class CropMargins(
-        @JvmField val left: Int = 0,
-        @JvmField val right: Int = 0,
-        @JvmField val top: Int = 0,
-        @JvmField val bottom: Int = 0,
-        @JvmField val evenLeft: Int = 0,
-        @JvmField val evenRight: Int = 0,
-        @JvmField val evenCrop: Boolean = false,
-        @JvmField val cropMode: Int = CropMode.MANUAL.cropMode)
+        val left: Int = 0,
+        val right: Int = 0,
+        val top: Int = 0,
+        val bottom: Int = 0,
+        val evenLeft: Int = 0,
+        val evenRight: Int = 0,
+        val evenCrop: Boolean = false,
+        val cropMode: Int = CropMode.MANUAL.cropMode)

@@ -19,7 +19,7 @@
 
 package universe.constellation.orion.viewer.layout
 
-enum class CropMode(@JvmField val cropMode: Int) {
+enum class CropMode(val cropMode: Int) {
     NO_MODE(-1),
     MANUAL(0),
     AUTO(1),

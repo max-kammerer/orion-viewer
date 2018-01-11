@@ -19,6 +19,8 @@
 
 package universe.constellation.orion.viewer.layout
 
+import kotlin.math.min
+
 /**
  * User: mike
  * Date: 15.10.11
@@ -45,7 +47,7 @@ data class LayoutPosition(
             //fit height
                 -1 -> docZoom = y.screenDimension.toDouble() / y.pageDimension
             //fit page
-                -2 -> docZoom = Math.min(x.screenDimension.toDouble() / x.pageDimension, y.screenDimension.toDouble() / y.pageDimension)
+                -2 -> docZoom = min(x.screenDimension.toDouble() / x.pageDimension, y.screenDimension.toDouble() / y.pageDimension)
             }
         } else {
             docZoom = (0.0001f * zoom).toDouble()

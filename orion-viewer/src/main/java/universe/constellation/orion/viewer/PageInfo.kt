@@ -19,18 +19,16 @@
 
 package universe.constellation.orion.viewer
 
-expect class Bitmap {
-    fun getWidth(): Int
-    fun getHeight(): Int
-    open fun getPixels(bitmapArray: IntArray, i: Int, width: Int, i1: Int, i2: Int, width1: Int, height: Int)
+import universe.constellation.orion.viewer.layout.AutoCropMargins
+
+actual data class PageInfo @JvmOverloads constructor(
+        @JvmField actual val pageNum0: Int,
+        /*used from jni*/
+        @JvmField actual var width: Int = 0,
+        /*used from jni*/
+        @JvmField actual var height: Int = 0
+) {
+
+    @JvmField
+    actual var autoCrop: AutoCropMargins? = null
 }
-
-expect fun createBitmap(width: Int, height: Int): Bitmap
-
-expect class LruCache<K, V> {
-    fun evictAll()
-    operator fun get(k: K): V?
-    fun put(k: K, v: V): V
-}
-
-expect fun <K, V> createCache(size: Int): LruCache<K, V>

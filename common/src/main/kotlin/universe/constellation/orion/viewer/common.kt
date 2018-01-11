@@ -31,12 +31,15 @@ inline fun <T> task(name: String, task: () -> T) {
 
 inline fun <R> timing(message: String, l: () -> R): R {
     log("Starting task '$message'...")
-    val start = System.currentTimeMillis()
+
+    val start = currentTimeMillis()
     return l().also {
-        log("Task '$message' is finished in ${System.currentTimeMillis() - start} ms")
+        log("Task '$message' is finished in ${currentTimeMillis() - start} ms")
     }
 }
 
 fun memoryInMB(memoryInBytes: Long): String {
     return "${memoryInBytes / 1024 / 1024}Mb"
 }
+
+expect fun currentTimeMillis(): Long

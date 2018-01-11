@@ -17,20 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer
+package universe.constellation.orion.viewer.geometry
 
-expect class Bitmap {
-    fun getWidth(): Int
-    fun getHeight(): Int
-    open fun getPixels(bitmapArray: IntArray, i: Int, width: Int, i1: Int, i2: Int, width1: Int, height: Int)
-}
 
-expect fun createBitmap(width: Int, height: Int): Bitmap
-
-expect class LruCache<K, V> {
-    fun evictAll()
-    operator fun get(k: K): V?
-    fun put(k: K, v: V): V
-}
-
-expect fun <K, V> createCache(size: Int): LruCache<K, V>
+expect class Rect constructor(left: Int, top: Int, right: Int, bottom: Int)

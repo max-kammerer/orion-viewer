@@ -19,11 +19,10 @@
 
 package universe.constellation.orion.viewer.layout
 
-import android.graphics.Point
-import universe.constellation.orion.viewer.LastPageInfo
 import universe.constellation.orion.viewer.PageInfo
 import universe.constellation.orion.viewer.PageOptions
 import universe.constellation.orion.viewer.PageWalker
+import universe.constellation.orion.viewer.geometry.Point
 
 interface LayoutStrategy {
 
@@ -57,7 +56,7 @@ interface LayoutStrategy {
 
     fun init(info: State, options: PageOptions)
 
-    fun serialize(info: LastPageInfo)
+    fun serialize(info: State)
 
     fun convertToPoint(pos: LayoutPosition): Point
 

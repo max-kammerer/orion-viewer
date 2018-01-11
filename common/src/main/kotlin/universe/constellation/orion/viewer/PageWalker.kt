@@ -25,7 +25,7 @@ import universe.constellation.orion.viewer.layout.OneDimension
 
 class PageWalker(val order: WALK_ORDER) {
 
-    enum class DIR constructor(@JvmField val delta: Int) {
+    enum class DIR constructor(val delta: Int) {
         //X, Y, -X, -Y
         X(1), Y(1), X_M(-1), Y_M(-1);
 
@@ -44,7 +44,7 @@ class PageWalker(val order: WALK_ORDER) {
         fun toRightOrDown() = this === X || this === Y
     }
 
-    enum class WALK_ORDER constructor(@JvmField val code: Int, @JvmField val first: DIR, @JvmField val second: DIR) {
+    enum class WALK_ORDER constructor(val code: Int, val first: DIR, val second: DIR) {
 
         ABCD(0, DIR.X, DIR.Y), ACBD(1, DIR.Y, DIR.X), BADC(2, DIR.X_M, DIR.Y), BDAC(3, DIR.Y, DIR.X_M);
 

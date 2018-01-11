@@ -23,11 +23,11 @@ import universe.constellation.orion.viewer.Bitmap
 import universe.constellation.orion.viewer.PageInfo
 import universe.constellation.orion.viewer.geometry.RectF
 
-class OutlineItem(
-        @JvmField val level: Int,
-        @JvmField val title: String,
-        @JvmField val page: Int
-)
+expect class OutlineItem {
+    val level: Int
+    val title: String
+    val page: Int
+}
 
 interface PageInfoProvider {
     fun getPageInfo(pageNum: Int, cropMode: Int): PageInfo

@@ -519,7 +519,7 @@ public enum Action {
 
     protected void updateMargin(Controller controller, boolean isCrop, int index) {
         CropMargins cropMargins = controller.getMargins();
-        if (cropMargins.evenCrop && controller.isEvenPage()) {
+        if (cropMargins.getEvenCrop() && controller.isEvenPage()) {
             if (index == 0 || index == 1) {
                 index += 4;
             }
@@ -541,7 +541,7 @@ public enum Action {
         }
 
         controller.changeCropMargins(
-                CropDialogBuilderKt.toMargins(margins, cropMargins.evenCrop, cropMargins.cropMode)
+                CropDialogBuilderKt.toMargins(margins, cropMargins.getEvenCrop(), cropMargins.getCropMode())
         );
     }
 }

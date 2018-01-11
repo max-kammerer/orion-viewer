@@ -20,11 +20,11 @@
 @file:Suppress("NOTHING_TO_INLINE")
 package universe.constellation.orion.viewer.document
 
-import android.graphics.Bitmap
-import android.graphics.Rect
-import android.support.v4.util.LruCache
 import universe.constellation.orion.viewer.*
+import universe.constellation.orion.viewer.geometry.Rect
 import universe.constellation.orion.viewer.layout.*
+import kotlin.math.floor
+import kotlin.math.sqrt
 
 private const val WIDTH = 600
 private const val HEIGHT = 800
@@ -34,10 +34,10 @@ private const val VOTE_THRESHOLD = 3
 
 class DocumentWithCaching(val doc: Document) : Document by doc {
 
-    private val cache = LruCache<Int, PageInfo?>(100)
+    private val cache = createCache<Int, PageInfo?>(100)
 
     private val bitmap: Bitmap by lazy {
-        Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_8888)
+        createBitmap(WIDTH, HEIGHT)
     }
 
     //TODO: ugly hack
@@ -52,7 +52,7 @@ class DocumentWithCaching(val doc: Document) : Document by doc {
     }
 
     override fun getPageInfo(pageNum: Int, cropMode: Int): PageInfo {
-        synchronized(doc) {
+        return synchronized(doc) {
             var pageInfo = cache.get(pageNum)
             if (pageInfo == null) {
                 pageInfo = doc.getPageInfo(pageNum, cropMode)
@@ -65,7 +65,7 @@ class DocumentWithCaching(val doc: Document) : Document by doc {
                 }
             }
 
-            return pageInfo
+            pageInfo
         }
     }
 
@@ -94,7 +94,7 @@ class DocumentWithCaching(val doc: Document) : Document by doc {
         }
 
         //zoom page to fit crop screen
-        val zoomInDouble = Math.floor(Math.sqrt(1.0 * WIDTH * HEIGHT / (pageWidth1R * pageHeight1R)) * 10000) / 10000
+        val zoomInDouble = floor(sqrt(1.0 * WIDTH * HEIGHT / (pageWidth1R * pageHeight1R)) * 10000) / 10000
         strategy.reset(curPos, true, page, firstCropMode.cropMode, (zoomInDouble * 10000).toInt(), false)
         val newWidth = curPos.x.pageDimension
         val newHeight = curPos.y.pageDimension
@@ -107,7 +107,7 @@ class DocumentWithCaching(val doc: Document) : Document by doc {
         }
 
         timing("Extract pixels from bitmap") {
-            bitmap.getPixels(bitmapArray, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+            bitmap.getPixels(bitmapArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight())
         }
 
         val margins = timing("Calculate margins") {
@@ -137,7 +137,7 @@ abstract class Image(val width: Int, val height: Int) {
     abstract operator fun set(h: Int, w: Int, color: Int)
 }
 
-class ArrayImage(width: Int, height: Int, @JvmField val source: IntArray): Image(width, height) {
+class ArrayImage(width: Int, height: Int, val source: IntArray): Image(width, height) {
 
     override operator fun get(h: Int, w: Int): Int = source[w + h * width]
 

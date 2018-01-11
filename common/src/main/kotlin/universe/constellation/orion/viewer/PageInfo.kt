@@ -21,18 +21,9 @@ package universe.constellation.orion.viewer
 
 import universe.constellation.orion.viewer.layout.AutoCropMargins
 
-/**
- * User: mike
- * Date: 03.11.11
- * Time: 13:56
- */
-data class PageInfo @JvmOverloads constructor(
-        @JvmField val pageNum0: Int,
-        /*used from jni*/
-        @JvmField var width: Int = 0,
-        /*used from jni*/
-        @JvmField var height: Int = 0
-        ) {
-
-    @JvmField var autoCrop: AutoCropMargins? = null
+expect class PageInfo {
+    val pageNum0: Int
+    var width: Int
+    var height: Int
+    var autoCrop: AutoCropMargins?
 }

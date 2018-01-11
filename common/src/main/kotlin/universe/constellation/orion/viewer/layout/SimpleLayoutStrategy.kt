@@ -19,12 +19,11 @@
 
 package universe.constellation.orion.viewer.layout
 
-import android.graphics.Point
 import universe.constellation.orion.viewer.*
 import universe.constellation.orion.viewer.document.Document
-
 import universe.constellation.orion.viewer.document.DocumentWithCaching
 import universe.constellation.orion.viewer.document.PageInfoProvider
+import universe.constellation.orion.viewer.geometry.Point
 
 class SimpleLayoutStrategy private constructor(
         private val pageInfoProvider: PageInfoProvider,
@@ -236,7 +235,7 @@ class SimpleLayoutStrategy private constructor(
         changeOverlapping(options.horizontalOverlapping, options.verticalOverlapping)
     }
 
-    override fun serialize(info: LastPageInfo) {
+    override fun serialize(info: State) {
         info.screenHeight = viewHeight
         info.screenWidth = viewWidth
 
@@ -266,7 +265,6 @@ class SimpleLayoutStrategy private constructor(
 
     companion object {
 
-        @JvmStatic
         fun create(doc: Document): SimpleLayoutStrategy {
             val simpleLayoutStrategy = SimpleLayoutStrategy(doc, doc.pageCount)
             if (doc is DocumentWithCaching) {

@@ -20,7 +20,7 @@
 package universe.constellation.orion.viewer.layout
 
 data class AutoCropMargins(
-        @JvmField val left: Int,
-        @JvmField val top: Int,
-        @JvmField val right: Int,
-        @JvmField val bottom: Int)
+        val left: Int,
+        val top: Int,
+        val right: Int,
+        val bottom: Int)

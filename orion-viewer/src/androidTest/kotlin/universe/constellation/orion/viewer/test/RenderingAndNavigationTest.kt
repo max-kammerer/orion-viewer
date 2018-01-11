@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Point
 import junit.framework.Assert
 import universe.constellation.orion.viewer.*
+import universe.constellation.orion.viewer.document.LastPageInfo
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.LayoutStrategy
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
