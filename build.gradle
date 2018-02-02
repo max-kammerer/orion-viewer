@@ -1,13 +1,15 @@
 buildscript {
-    ext.kotlin_version = '1.2-SNAPSHOT'
+    ext.kotlin_version = '1.2.41'
     repositories {
-        mavenLocal()
-        //mavenCentral()
+        mavenCentral()
         jcenter()
         google()
+        maven {
+            url "https://dl.bintray.com/kotlin/kotlin-eap"
+        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -17,6 +19,9 @@ allprojects {
         mavenLocal()
         //mavenCentral()
         jcenter()
+        maven {
+            url "https://dl.bintray.com/kotlin/kotlin-eap"
+        }
         google()
     }
 }
