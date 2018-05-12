@@ -41,7 +41,7 @@ public class TreeViewList extends ListView {
     private boolean handleTrackballPress;
 
     public TreeViewList(final Context context, final AttributeSet attrs) {
-        this(context, attrs, R.style.treeViewListStyle);
+        this(context, attrs, android.R.attr.listViewStyle);
     }
 
     public TreeViewList(final Context context) {
