@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.Point
 import junit.framework.Assert
 import universe.constellation.orion.viewer.*
-import universe.constellation.orion.viewer.document.LastPageInfo
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.LayoutStrategy
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
@@ -15,12 +14,6 @@ import universe.constellation.orion.viewer.test.framework.TestUtil
 import universe.constellation.orion.viewer.view.Scene
 import java.util.*
 import java.util.concurrent.CountDownLatch
-
-/**
- * User: mike
- * Date: 19.10.13
- * Time: 19:57
- */
 
 class RenderingAndNavigationTest : ActivityBaseTest() {
 
