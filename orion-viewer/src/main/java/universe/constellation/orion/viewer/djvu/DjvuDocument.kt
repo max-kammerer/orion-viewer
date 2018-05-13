@@ -99,8 +99,8 @@ class DjvuDocument(fileName: String) : Document {
     override val title: String?
         get() = null
 
-    override external fun setContrast(contrast: Int)
-    override external fun setThreshold(threshold: Int)
+    external override fun setContrast(contrast: Int)
+    external override fun setThreshold(threshold: Int)
     external fun getOutline(doc: Long): Array<OutlineItem>
     external fun getText(doc: Long, pageNumber: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int): String
     external fun releasePage(page: Long)
