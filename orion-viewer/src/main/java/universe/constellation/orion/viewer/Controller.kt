@@ -60,7 +60,7 @@ class Controller(
 
         listener = object : DocumentViewAdapter() {
             override fun viewParametersChanged() {
-                if (this@Controller.activity.isResumed) {
+                if (this@Controller.activity._isResumed) {
                     this@Controller.renderer.invalidateCache()
                     drawPage(layoutInfo)
                     hasPendingEvents = false

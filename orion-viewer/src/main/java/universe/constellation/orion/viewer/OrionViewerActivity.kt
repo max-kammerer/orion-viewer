@@ -64,12 +64,14 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private val operation = OperationHolder()
 
-    var globalOptions: GlobalOptions? = null
-        private set
+    val globalOptions: GlobalOptions by lazy {
+        orionContext.options
+    }
 
     private var myIntent: Intent? = null
 
-    var isResumed: Boolean = false
+    @JvmField
+    var _isResumed: Boolean = false
 
     private val selectionAutomata: SelectionAutomata by lazy {
         SelectionAutomata(this)
@@ -79,7 +81,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private var hasActionBar: Boolean = false
 
-    var fullScene: FullScene? = null
+    lateinit var fullScene: FullScene
         private set
 
     private var hasReadPermissions = false
@@ -91,17 +93,17 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     override val view: OrionScene?
         get() = fullScene!!.drawView
 
-    internal val statusBarHelper: OrionStatusBarHelper
+    val statusBarHelper: OrionStatusBarHelper
         get() = fullScene!!.statusBarHelper
 
 
-    internal val bookId: Long
+    public val bookId: Long
         get() {
             log("Selecting book id...")
-            val info = lastPageInfo
+            val info = lastPageInfo as ShortFileInfo
             var bookId: Long? = orionContext.tempOptions!!.bookId
             if (bookId == null || bookId == -1L) {
-                bookId = orionContext.getBookmarkAccessor().selectBookId(info!!.simpleFileName, info.fileSize)
+                bookId = orionContext.getBookmarkAccessor().selectBookId(info.simpleFileName, info.fileSize)
                 orionContext.tempOptions!!.bookId = bookId
             }
             log("...book id = $bookId")
@@ -112,21 +114,19 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     public override fun onCreate(savedInstanceState: Bundle?) {
         log("Creating file manager")
 
-        loadGlobalOptions()
-
         orionContext.viewActivity = this
-        OptionActions.FULL_SCREEN.doAction(this, !globalOptions!!.isFullScreen, globalOptions!!.isFullScreen)
+        OptionActions.FULL_SCREEN.doAction(this, !globalOptions.isFullScreen, globalOptions.isFullScreen)
         super.onOrionCreate(savedInstanceState, R.layout.main_view)
 
-        hasActionBar = globalOptions!!.isActionBarVisible
+        hasActionBar = globalOptions.isActionBarVisible
         OptionActions.SHOW_ACTION_BAR.doAction(this, !hasActionBar, hasActionBar)
 
         val view = findViewById<View>(R.id.view) as OrionScene
         fullScene = FullScene(findViewById<View>(R.id.orion_full_scene) as ViewGroup, view, findViewById<View>(R.id.orion_status_bar) as ViewGroup, orionContext)
 
-        OptionActions.SHOW_STATUS_BAR.doAction(this, !globalOptions!!.isStatusBarVisible, globalOptions!!.isStatusBarVisible)
-        OptionActions.SHOW_OFFSET_ON_STATUS_BAR.doAction(this, !globalOptions!!.isShowOffsetOnStatusBar, globalOptions!!.isShowOffsetOnStatusBar)
-        fullScene!!.setDrawOffPage(globalOptions!!.isDrawOffPage)
+        OptionActions.SHOW_STATUS_BAR.doAction(this, !globalOptions.isStatusBarVisible, globalOptions.isStatusBarVisible)
+        OptionActions.SHOW_OFFSET_ON_STATUS_BAR.doAction(this, !globalOptions.isShowOffsetOnStatusBar, globalOptions.isShowOffsetOnStatusBar)
+        fullScene!!.setDrawOffPage(globalOptions.isDrawOffPage)
 
         initDialogs()
 
@@ -306,7 +306,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
 
     public override fun onPause() {
-        isResumed = false
+        _isResumed = false
         super.onPause()
         if (controller != null) {
             controller!!.onPause()
@@ -382,7 +382,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         val pageSeek = findMyViewById(R.id.page_picker_seeker) as SeekBar
         pageSeek.progress = controller!!.currentPage
         val view = findMyViewById(R.id.page_picker_message) as TextView
-        view.text = "" + (controller!!.currentPage + 1)
+        view.text = "${controller!!.currentPage + 1}"
         view.clearFocus()
         view.requestFocus()
 
@@ -449,7 +449,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             updateZoom()
         }
 
-        sp.adapter = MyArrayAdapter()
+        sp.adapter = MyArrayAdapter(applicationContext)
         sp.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 val disable = position != 0
@@ -459,7 +459,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     if (disable) {
                         zoomText.setText(parent.adapter.getItem(position) as String)
                     } else {
-                        zoomText.setText("" + (controller!!.currentPageZoom * 10000).toInt() / 100f)
+                        zoomText.setText("${(controller!!.currentPageZoom * 10000).toInt() / 100f}")
                         zoomSeek.progress = (controller!!.currentPageZoom * 100).toInt()
                     }
                     zoomInternal = oldZoomInternal
@@ -477,7 +477,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
-                //To change body of implemented methods use File | Settings | File Templates.
             }
         }
 
@@ -568,7 +567,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     override fun onResume() {
-        isResumed = true
+        _isResumed = true
         super.onResume()
         updateBrightness()
 
@@ -677,13 +676,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
     }
 
-    private fun loadGlobalOptions() {
-        globalOptions = orionContext.options
-    }
-
     private fun saveGlobalOptions() {
         log("Saving global options...")
-        globalOptions!!.saveRecents()
+        globalOptions.saveRecents()
         log("Done!")
     }
 
@@ -774,7 +769,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
 
     override fun findMyViewById(id: Int): View {
-        return dialog!!.findViewById(id)
+        return dialog!!.findViewById<View>(id) as View
     }
 
     public override fun onAnimatorCancel() {
@@ -858,7 +853,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     private fun insertOrGetBookId(): Long {
-        val info = lastPageInfo
+        val info = lastPageInfo as ShortFileInfo
         var bookId: Long? = orionContext.tempOptions!!.bookId
         if (bookId == null || bookId == -1L) {
             bookId = orionContext.getBookmarkAccessor().insertOrUpdate(info!!.simpleFileName, info.fileSize)
@@ -896,7 +891,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
     }
 
-    internal fun showOrionDialog(screenId: Int, action: Action, parameter: Any) {
+    public fun showOrionDialog(screenId: Int, action: Action, parameter: Any) {
         if (screenId == CROP_SCREEN) {
             val cropDialog = create(this, controller!!.margins)
             cropDialog.show()
@@ -931,31 +926,17 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
 
-    internal fun textSelectionMode(isSingleSelection: Boolean, translate: Boolean) {
+    public fun textSelectionMode(isSingleSelection: Boolean, translate: Boolean) {
         selectionAutomata.startSelection(isSingleSelection, translate)
     }
 
-    private inner class MyArrayAdapter internal constructor() : ArrayAdapter<*>(this@OrionViewerActivity, R.layout.support_simple_spinner_dropdown_item, this@OrionViewerActivity.resources.getTextArray(R.array.fits)), SpinnerAdapter {
+    private class MyArrayAdapter constructor(context: Context) :
+            ArrayAdapter<CharSequence>(context, R.layout.support_simple_spinner_dropdown_item, context.resources.getTextArray(R.array.fits)), SpinnerAdapter {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View =
-                convertView ?: TextView(this@OrionViewerActivity).apply {
+                convertView ?: TextView(parent.context).apply {
                     text = " % "
                 }
-    }
-
-    private class Nook2ListAdapter internal constructor(context: Context, textViewResourceId: Int, objects: Array<Any>, view: TextView) : ArrayAdapter<*>(context, textViewResourceId, objects) {
-
-        private val color: Int
-
-        init {
-            this.color = view.textColors.defaultColor
-        }
-
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val view = super.getView(position, convertView, parent)
-            (view as CheckedTextView).setTextColor(color)
-            return view
-        }
     }
 
     private fun askPassword(controller: Controller) {
@@ -977,20 +958,20 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 }
             }
 
-            builder.setNegativeButton("Cancel") { dialog, which -> dialog.dismiss() }
+            builder.setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
             builder.create().show()
         }
     }
 
     //big hack
-    internal fun myprocessOnActivityVisible() {
-        if (globalOptions!!.isShowTapHelp && !orionContext.isTesting) {
-            globalOptions!!.saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false)
+    fun myprocessOnActivityVisible() {
+        if (globalOptions.isShowTapHelp && !orionContext.isTesting) {
+            globalOptions.saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false)
             TapHelpDialog(this).showDialog()
         }
     }
 
-    internal fun startSearch() {
+    fun startSearch() {
         SearchDialog.newInstance().show(supportFragmentManager, "search")
     }
 

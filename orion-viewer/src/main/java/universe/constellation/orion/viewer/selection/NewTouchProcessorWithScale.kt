@@ -64,7 +64,7 @@ class NewTouchProcessorWithScale(view: OrionScene, activity: OrionViewerActivity
         if (OrionApplication.TEXET_TB176FL) {
             curScale *= detector.scaleFactor
         }
-        activity.controller.translateAndZoom(true, curScale, newX, newY)
+        activity.controller!!.translateAndZoom(true, curScale, newX, newY)
     }
 
     override fun onScale(detector: ScaleGestureDetector): Boolean {

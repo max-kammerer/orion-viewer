@@ -42,7 +42,7 @@ open class NewTouchProcessor(val view: OrionScene, val activity: OrionViewerActi
         if (e.action == MotionEvent.ACTION_UP) {
             if (state == State.MOVE) {
                 view.afterScaling()
-                activity.controller.translateAndZoom(false, 1f, (-last0.x + start0.x).toFloat(), (-last0.y + start0.y).toFloat())
+                activity.controller!!.translateAndZoom(false, 1f, (-last0.x + start0.x).toFloat(), (-last0.y + start0.y).toFloat())
                 resetNextState()
                 onTouchEvent = true
             }
