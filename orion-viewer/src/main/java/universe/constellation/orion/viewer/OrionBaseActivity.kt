@@ -41,7 +41,7 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
 
     protected var listener: SharedPreferences.OnSharedPreferenceChangeListener? = null
 
-    protected lateinit var toolbar: Toolbar
+    lateinit var toolbar: Toolbar
         private set
 
     open val view: OrionScene?
@@ -69,9 +69,7 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
 
         super.onCreate(savedInstanceState)
 
-        if (device != null) {
-            device!!.onCreate(this)
-        }
+        device?.onCreate(this)
 
         if (layoutId != -1) {
             setContentView(layoutId)
@@ -82,9 +80,7 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
 
     override fun onDestroy() {
         super.onDestroy()
-        if (device != null) {
-            device!!.onDestroy()
-        }
+        device?.onDestroy()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -152,31 +148,23 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
     }
 
     fun getScreenOrientation(id: String): Int {
-        var screenOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        if ("LANDSCAPE" == id) {
-            screenOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        } else if ("PORTRAIT" == id) {
-            screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        } else if ("LANDSCAPE_INVERSE" == id) {
-            screenOrientation = if (orionContext.sdkVersion < 9) ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE else 8
-        } else if ("PORTRAIT_INVERSE" == id) {
-            screenOrientation = if (orionContext.sdkVersion < 9) ActivityInfo.SCREEN_ORIENTATION_PORTRAIT else 9
+        return when (id) {
+            "LANDSCAPE" -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            "PORTRAIT" -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            "LANDSCAPE_INVERSE" -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
+            "PORTRAIT_INVERSE" -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
+            else -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
-        return screenOrientation
     }
 
     fun getScreenOrientationItemPos(id: String): Int {
-        var screenOrientation = 0
-        if ("LANDSCAPE" == id) {
-            screenOrientation = 2
-        } else if ("PORTRAIT" == id) {
-            screenOrientation = 1
-        } else if ("LANDSCAPE_INVERSE" == id) {
-            screenOrientation = if (orionContext.sdkVersion < 9) 2 else 4
-        } else if ("PORTRAIT_INVERSE" == id) {
-            screenOrientation = if (orionContext.sdkVersion < 9) 1 else 3
+        return when (id) {
+            "LANDSCAPE" -> 2
+            "PORTRAIT" -> 1
+            "LANDSCAPE_INVERSE" -> 4
+            "PORTRAIT_INVERSE" -> 3
+            else -> 0
         }
-        return screenOrientation
     }
 
     fun showAlert(title: String, message: String) {

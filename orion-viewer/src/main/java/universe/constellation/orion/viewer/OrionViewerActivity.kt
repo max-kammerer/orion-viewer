@@ -91,11 +91,10 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     private var zoomInternal = 0
 
     override val view: OrionScene?
-        get() = fullScene!!.drawView
+        get() = fullScene.drawView
 
     val statusBarHelper: OrionStatusBarHelper
-        get() = fullScene!!.statusBarHelper
-
+        get() = fullScene.statusBarHelper
 
     public val bookId: Long
         get() {
@@ -126,7 +125,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
         OptionActions.SHOW_STATUS_BAR.doAction(this, !globalOptions.isStatusBarVisible, globalOptions.isStatusBarVisible)
         OptionActions.SHOW_OFFSET_ON_STATUS_BAR.doAction(this, !globalOptions.isShowOffsetOnStatusBar, globalOptions.isShowOffsetOnStatusBar)
-        fullScene!!.setDrawOffPage(globalOptions.isDrawOffPage)
+        fullScene.setDrawOffPage(globalOptions.isDrawOffPage)
 
         initDialogs()
 
@@ -242,19 +241,19 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         try {
             lastPageInfo = LastPageInfo.loadBookParameters(this, filePath)
             orionContext.currentBookParameters = lastPageInfo
-            OptionActions.DEBUG.doAction(this, false, globalOptions!!.getBooleanProperty("DEBUG", false))
+            OptionActions.DEBUG.doAction(this, false, globalOptions.getBooleanProperty("DEBUG", false))
 
             doc = FileUtil.openFile(filePath)
 
             val layoutStrategy = SimpleLayoutStrategy.create(doc)
 
-            val renderer = RenderThread(this, layoutStrategy, doc, fullScene!!)
+            val renderer = RenderThread(this, layoutStrategy, doc, fullScene)
 
             controller = Controller(this, doc, layoutStrategy, renderer)
 
             controller!!.changeOrinatation(lastPageInfo!!.screenOrientation)
 
-            val drawView = fullScene!!.drawView
+            val drawView = fullScene.drawView
             controller!!.init(lastPageInfo!!, Point(drawView.sceneWidth, drawView.sceneHeight))
 
             subscriptionManager.sendDocOpenedNotification(controller)
@@ -271,11 +270,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             }
 
 
-            fullScene!!.onNewBook(title, controller!!.pageCount)
+            fullScene.onNewBook(title, controller!!.pageCount)
             if (supportActionBar != null) {
                 supportActionBar!!.setTitle(title)
             }
-            globalOptions!!.addRecentEntry(GlobalOptions.RecentEntry(File(filePath).absolutePath))
+            globalOptions.addRecentEntry(GlobalOptions.RecentEntry(File(filePath).absolutePath))
 
             lastPageInfo!!.totalPages = doc.pageCount
             device!!.onNewBook(lastPageInfo!!, doc)
@@ -331,11 +330,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
         val pageNumberText = findMyViewById(R.id.page_picker_message) as TextView
         //initial state
-        pageNumberText.text = "" + 1
+        pageNumberText.text = Integer.toString(1)
 
         pageSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                pageNumberText.text = "" + (progress + 1)
+                pageNumberText.text = "${progress + 1}"
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
@@ -366,7 +365,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         val page_preview = findMyViewById(R.id.page_preview) as ImageButton
         page_preview.setOnClickListener {
             onApplyAction()
-            if ("" != pageNumberText.text) {
+            if (pageNumberText.text.isNotEmpty()) {
                 try {
                     val parsedInput = Integer.valueOf(pageNumberText.text.toString())
                     controller!!.drawPage(parsedInput - 1)
@@ -397,26 +396,24 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
         val zoomSeek = findMyViewById(R.id.zoom_picker_seeker) as SeekBar
 
-        if (zoomSeek != null) {
-            zoomSeek.max = 300
-            zoomSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                    if (zoomInternal != 1) {
-                        zoomText.setText("" + progress)
-                        if (sp.selectedItemPosition != 0) {
-                            val oldInternal = zoomInternal
-                            zoomInternal = 2
-                            sp.setSelection(0)
-                            zoomInternal = oldInternal
-                        }
+        zoomSeek.max = 300
+        zoomSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                if (zoomInternal != 1) {
+                    zoomText.setText("$progress")
+                    if (sp.selectedItemPosition != 0) {
+                        val oldInternal = zoomInternal
+                        zoomInternal = 2
+                        sp.setSelection(0)
+                        zoomInternal = oldInternal
                     }
                 }
+            }
 
-                override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
 
-                override fun onStopTrackingTouch(seekBar: SeekBar) {}
-            })
-        }
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+        })
 
         subscriptionManager.addDocListeners(object : DocumentViewAdapter() {
             override fun documentOpened(controller: Controller) {
@@ -663,7 +660,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     private fun changePage(operation: Int) {
-        val swapKeys = globalOptions!!.isSwapKeys
+        val swapKeys = globalOptions.isSwapKeys
         val width = view!!.sceneWidth
         val height = view!!.sceneHeight
         val landscape = width > height || controller!!.rotation != 0 /*second condition for nook and alex*/
@@ -686,7 +683,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         menuInflater.inflate(R.menu.menu, menu)
         if (!hasActionBar) {
             for (i in 0 until menu.size()) {
-                val item = menu.getItem(i) as SupportMenuItem
+                val item = menu.getItem(i)
                 item.setShowAsAction(SupportMenuItem.SHOW_AS_ACTION_NEVER)
             }
         }
@@ -781,7 +778,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     private fun onApplyAction(close: Boolean) {
-        if (close || globalOptions!!.isApplyAndClose) {
+        if (close || globalOptions.isApplyAndClose) {
             onAnimatorCancel()
         }
     }
@@ -841,8 +838,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     private fun updateBrightness() {
         val params = window.attributes
         val oldBrightness = params.screenBrightness
-        if (globalOptions!!.isCustomBrightness) {
-            params.screenBrightness = globalOptions!!.brightness.toFloat() / 100
+        if (globalOptions.isCustomBrightness) {
+            params.screenBrightness = globalOptions.brightness.toFloat() / 100
             window.attributes = params
         } else {
             if (oldBrightness >= 0) {
@@ -856,7 +853,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         val info = lastPageInfo as ShortFileInfo
         var bookId: Long? = orionContext.tempOptions!!.bookId
         if (bookId == null || bookId == -1L) {
-            bookId = orionContext.getBookmarkAccessor().insertOrUpdate(info!!.simpleFileName, info.fileSize)
+            bookId = orionContext.getBookmarkAccessor().insertOrUpdate(info.simpleFileName, info.fileSize)
             orionContext.tempOptions!!.bookId = bookId
         }
         return bookId.toInt().toLong()
@@ -891,7 +888,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
     }
 
-    public fun showOrionDialog(screenId: Int, action: Action, parameter: Any) {
+    public fun showOrionDialog(screenId: Int, action: Action?, parameter: Any?) {
         if (screenId == CROP_SCREEN) {
             val cropDialog = create(this, controller!!.margins)
             cropDialog.show()
@@ -909,7 +906,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             }
 
             if (action === Action.ADD_BOOKMARK) {
-                val parameterText = parameter as String
+                val parameterText = parameter as String?
 
                 val page = controller!!.currentPage
                 val newText = orionContext.getBookmarkAccessor().selectExistingBookmark(bookId, page, parameterText)

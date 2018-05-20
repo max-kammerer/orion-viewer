@@ -70,26 +70,26 @@ class OrionBookmarkActivity : OrionBaseActivity(false) {
         val accessor = orionContext.getBookmarkAccessor()
         val bookmarks = accessor.selectBookmarks(bookId)
         val view = findMyViewById(R.id.bookmarks) as ListView
-        view.setAdapter(object : ArrayAdapter<Bookmark>(this, R.layout.bookmark_entry, R.id.bookmark_entry, bookmarks) {
+        view.adapter = object : ArrayAdapter<Bookmark>(this, R.layout.bookmark_entry, R.id.bookmark_entry, bookmarks) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
                 var convertView = convertView
                 convertView = super.getView(position, convertView, parent)
 
-                val item = getItem(position) as Bookmark?
+                val bookmark = getItem(position)
                 val page = convertView!!.findViewById<View>(R.id.bookmark_entry_page) as TextView
-                page.text = "" + if (item!!.page == -1) "*" else item.page + 1
+                page.text = "${if (bookmark!!.page == -1) "*" else bookmark.page + 1}"
 
                 val edit = convertView.findViewById<View>(R.id.bookmark_edit_entry) as ImageView
                 //if (edit != null)
                 edit.setOnClickListener {
                     if (position != 0) {
-                        val item = getItem(position) as Bookmark?
+                        val item = getItem(position)
 
                         val builder = createThemedAlertBuilder().setIcon(R.drawable.edit_item)
 
                         builder.setTitle("Edit Bookmark")
                         val editText = EditText(this@OrionBookmarkActivity)
-                        editText.setText(item!!.text)
+                        editText.setText(item.text)
                         builder.setView(editText)
 
                         builder.setPositiveButton("Save") { dialog, which ->
@@ -115,7 +115,7 @@ class OrionBookmarkActivity : OrionBaseActivity(false) {
                 }
                 return convertView
             }
-        })
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -226,7 +226,7 @@ class OrionBookmarkActivity : OrionBaseActivity(false) {
 
                 val importCurrent = requestCode == IMPORT_CURRRENT
 
-                Collections.sort(books)
+                books.sort()
 
                 val group = layoutInflater.inflate(R.layout.bookmark_book_list, null)
                 val tree = group.findViewById<View>(R.id.book_list) as ListView
@@ -239,7 +239,7 @@ class OrionBookmarkActivity : OrionBaseActivity(false) {
                     val toBook = BookNameAndSize(currentBookParameters.simpleFileName, currentBookParameters.fileSize)
                     doImport(fileName, getCheckedItems(tree), if (importCurrent) toBook else null)
                 }
-                builder.setNegativeButton("Cancel") { dialog, which -> dialog.dismiss() }
+                builder.setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
 
 
                 val dialog = builder.create()
@@ -304,7 +304,7 @@ class OrionBookmarkActivity : OrionBaseActivity(false) {
     }
 
 
-    fun listBooks(fileName: String): List<BookNameAndSize>? {
+    private fun listBooks(fileName: String): MutableList<BookNameAndSize>? {
         val bookNames = ArrayList<BookNameAndSize>()
         var reader: InputStreamReader? = null
         try {

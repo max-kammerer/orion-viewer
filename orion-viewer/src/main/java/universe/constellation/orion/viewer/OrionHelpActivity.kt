@@ -19,6 +19,7 @@
 
 package universe.constellation.orion.viewer
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
@@ -63,12 +64,13 @@ class OrionHelpActivity : OrionBaseActivity(false) {
         }
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onOrionCreate(savedInstanceState, R.layout.file_manager)
         initHelpScreen()
     }
 
-    protected fun initHelpScreen() {
+    private fun initHelpScreen() {
         val pagerAdapter = HelpSimplePagerAdapter(supportFragmentManager, 2)
         val viewPager = findViewById<View>(R.id.viewpager) as ViewPager
         viewPager.adapter = pagerAdapter
