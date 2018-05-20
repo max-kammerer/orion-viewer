@@ -17,1135 +17,1011 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer;
+package universe.constellation.orion.viewer
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Point;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Debug;
-import android.support.v4.internal.view.SupportMenuItem;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatDialog;
-import android.support.v7.widget.Toolbar;
-import android.text.method.PasswordTransformationMethod;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CheckedTextView;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RadioGroup;
-import android.widget.SeekBar;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
-import android.widget.TextView;
-import android.widget.ViewAnimator;
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Point
+import android.os.Build
+import android.os.Bundle
+import android.os.Debug
+import android.support.v4.internal.view.SupportMenuItem
+import android.support.v7.app.AppCompatDialog
+import android.text.method.PasswordTransformationMethod
+import android.view.*
+import android.view.inputmethod.EditorInfo
+import android.widget.*
+import universe.constellation.orion.viewer.android.FileUtils
+import universe.constellation.orion.viewer.device.Device
+import universe.constellation.orion.viewer.dialog.SearchDialog
+import universe.constellation.orion.viewer.dialog.TapHelpDialog
+import universe.constellation.orion.viewer.dialog.create
+import universe.constellation.orion.viewer.document.Document
+import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
+import universe.constellation.orion.viewer.prefs.GlobalOptions
+import universe.constellation.orion.viewer.selection.NewTouchProcessor
+import universe.constellation.orion.viewer.selection.NewTouchProcessorWithScale
+import universe.constellation.orion.viewer.selection.SelectionAutomata
+import universe.constellation.orion.viewer.view.FullScene
+import universe.constellation.orion.viewer.view.OrionStatusBarHelper
+import java.io.File
 
-import java.io.File;
+class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVITY) {
 
-import universe.constellation.orion.viewer.android.FileUtils;
-import universe.constellation.orion.viewer.device.Device;
-import universe.constellation.orion.viewer.dialog.CropDialog;
-import universe.constellation.orion.viewer.dialog.CropDialogBuilderKt;
-import universe.constellation.orion.viewer.dialog.SearchDialog;
-import universe.constellation.orion.viewer.dialog.TapHelpDialog;
-import universe.constellation.orion.viewer.document.Document;
-import universe.constellation.orion.viewer.layout.LayoutStrategy;
-import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy;
-import universe.constellation.orion.viewer.prefs.GlobalOptions;
-import universe.constellation.orion.viewer.selection.NewTouchProcessor;
-import universe.constellation.orion.viewer.selection.NewTouchProcessorWithScale;
-import universe.constellation.orion.viewer.selection.SelectionAutomata;
-import universe.constellation.orion.viewer.view.FullScene;
-import universe.constellation.orion.viewer.view.OrionStatusBarHelper;
+    private var dialog: AppCompatDialog? = null
 
-import static universe.constellation.orion.viewer.LoggerKt.log;
+    internal val subscriptionManager = SubscriptionManager()
 
-public class OrionViewerActivity extends OrionBaseActivity {
+    private var animator: ViewAnimator? = null
 
-    private AppCompatDialog dialog;
+    private var lastPageInfo: LastPageInfo? = null
 
-    public static final int OPEN_BOOKMARK_ACTIVITY_RESULT = 1;
+    var controller: Controller? = null
+        private set
 
-    public static final int ROTATION_SCREEN = 0;
+    private val operation = OperationHolder()
 
-    public static final int PAGE_SCREEN = 1;
+    var globalOptions: GlobalOptions? = null
+        private set
 
-    public static final int ZOOM_SCREEN = 2;
+    private var myIntent: Intent? = null
 
-    public static final int CROP_SCREEN = 3;
+    var isResumed: Boolean = false
 
-    public static final int PAGE_LAYOUT_SCREEN = 4;
-
-    public static final int ADD_BOOKMARK_SCREEN = 5;
-
-    public static final int CROP_RESTRICTION_MIN = -10;
-
-    public static final int CROP_RESTRICTION_MAX = 40;
-
-    private final SubscriptionManager manager = new SubscriptionManager();
-
-    private ViewAnimator animator;
-
-    private LastPageInfo lastPageInfo;
-
-    private Controller controller;
-
-    private OperationHolder operation = new OperationHolder();
-
-    private GlobalOptions globalOptions;
-
-    private Intent myIntent;
-
-    public boolean isResumed;
-
-    private SelectionAutomata selectionAutomata;
-
-    private NewTouchProcessor newTouchProcessor;
-
-    private boolean hasActionBar;
-
-    private FullScene fullScene;
-
-    private boolean hasReadPermissions = false;
-
-    private Intent lastIntent = null;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        log("Creating file manager");
-
-        loadGlobalOptions();
-
-        getOrionContext().setViewActivity(this);
-        OptionActions.FULL_SCREEN.doAction(this, !globalOptions.isFullScreen(), globalOptions.isFullScreen());
-        super.onOrionCreate(savedInstanceState, R.layout.main_view);
-
-        hasActionBar = globalOptions.isActionBarVisible();
-        OptionActions.SHOW_ACTION_BAR.doAction(this, !hasActionBar, hasActionBar);
-
-        OrionScene view = (OrionScene) findViewById(R.id.view);
-        fullScene = new FullScene((ViewGroup) findViewById(R.id.orion_full_scene), view, (ViewGroup) findViewById(R.id.orion_status_bar), getOrionContext());
-
-        OptionActions.SHOW_STATUS_BAR.doAction(this, !globalOptions.isStatusBarVisible(), globalOptions.isStatusBarVisible());
-        OptionActions.SHOW_OFFSET_ON_STATUS_BAR.doAction(this, !globalOptions.isShowOffsetOnStatusBar(), globalOptions.isShowOffsetOnStatusBar());
-        getFullScene().setDrawOffPage(globalOptions.isDrawOffPage());
-
-        initDialogs();
-
-        myIntent = getIntent();
-        newTouchProcessor = getOrionContext().getSdkVersion() >= Build.VERSION_CODES.FROYO ?
-                new NewTouchProcessorWithScale(view, this) : new NewTouchProcessor(view, this);
-
-        hasReadPermissions = Permissions.checkReadPermission(this);
+    private val selectionAutomata: SelectionAutomata by lazy {
+        SelectionAutomata(this)
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    private var newTouchProcessor: NewTouchProcessor? = null
+
+    private var hasActionBar: Boolean = false
+
+    var fullScene: FullScene? = null
+        private set
+
+    private var hasReadPermissions = false
+
+    private var lastIntent: Intent? = null
+
+    private var zoomInternal = 0
+
+    override val view: OrionScene?
+        get() = fullScene!!.drawView
+
+    internal val statusBarHelper: OrionStatusBarHelper
+        get() = fullScene!!.statusBarHelper
+
+
+    internal val bookId: Long
+        get() {
+            log("Selecting book id...")
+            val info = lastPageInfo
+            var bookId: Long? = orionContext.tempOptions!!.bookId
+            if (bookId == null || bookId == -1L) {
+                bookId = orionContext.getBookmarkAccessor().selectBookId(info!!.simpleFileName, info.fileSize)
+                orionContext.tempOptions!!.bookId = bookId
+            }
+            log("...book id = $bookId")
+            return bookId
+        }
+
+    @SuppressLint("MissingSuperCall")
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        log("Creating file manager")
+
+        loadGlobalOptions()
+
+        orionContext.viewActivity = this
+        OptionActions.FULL_SCREEN.doAction(this, !globalOptions!!.isFullScreen, globalOptions!!.isFullScreen)
+        super.onOrionCreate(savedInstanceState, R.layout.main_view)
+
+        hasActionBar = globalOptions!!.isActionBarVisible
+        OptionActions.SHOW_ACTION_BAR.doAction(this, !hasActionBar, hasActionBar)
+
+        val view = findViewById<View>(R.id.view) as OrionScene
+        fullScene = FullScene(findViewById<View>(R.id.orion_full_scene) as ViewGroup, view, findViewById<View>(R.id.orion_status_bar) as ViewGroup, orionContext)
+
+        OptionActions.SHOW_STATUS_BAR.doAction(this, !globalOptions!!.isStatusBarVisible, globalOptions!!.isStatusBarVisible)
+        OptionActions.SHOW_OFFSET_ON_STATUS_BAR.doAction(this, !globalOptions!!.isShowOffsetOnStatusBar, globalOptions!!.isShowOffsetOnStatusBar)
+        fullScene!!.setDrawOffPage(globalOptions!!.isDrawOffPage)
+
+        initDialogs()
+
+        myIntent = intent
+        newTouchProcessor = if (orionContext.sdkVersion >= Build.VERSION_CODES.FROYO)
+            NewTouchProcessorWithScale(view, this)
+        else
+            NewTouchProcessor(view, this)
+
+        hasReadPermissions = Permissions.checkReadPermission(this)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (Permissions.ORION_ASK_PERMISSION_CODE == requestCode && !hasReadPermissions) {
-            System.out.println("Permission callback...");
-            int i = 0;
-            while(i < permissions.length) {
-                if (android.Manifest.permission.READ_EXTERNAL_STORAGE.equals(permissions[i]) &&
-                        grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                    hasReadPermissions = true;
-                    onNewIntent(lastIntent);
-                    lastIntent = null;
-                    return;
+            println("Permission callback...")
+            var i = 0
+            while (i < permissions.size) {
+                if (android.Manifest.permission.READ_EXTERNAL_STORAGE == permissions[i] && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                    hasReadPermissions = true
+                    onNewIntent(lastIntent)
+                    lastIntent = null
+                    return
                 }
-                i++;
+                i++
             }
         }
     }
 
 
-    private void initDialogs() {
-        initOptionDialog();
-        initRotationScreen();
+    private fun initDialogs() {
+        initOptionDialog()
+        initRotationScreen()
 
         //page chooser
-        initPagePeekerScreen();
+        initPagePeekerScreen()
 
-        initZoomScreen();
+        initZoomScreen()
 
-        initPageLayoutScreen();
+        initPageLayoutScreen()
 
-        initAddBookmarkScreen();
+        initAddBookmarkScreen()
     }
 
-    public void updatePageLayout() {
-        String walkOrder = controller.getDirection();
-        int lid = controller.getLayout();
-        ((RadioGroup) findMyViewById(R.id.layoutGroup)).check(lid == 0 ? R.id.layout1 : lid == 1 ? R.id.layout2 : R.id.layout3);
+    fun updatePageLayout() {
+        val walkOrder = controller!!.direction
+        val lid = controller!!.layout
+        (findMyViewById(R.id.layoutGroup) as RadioGroup).check(if (lid == 0) R.id.layout1 else if (lid == 1) R.id.layout2 else R.id.layout3)
         //((RadioGroup) findMyViewById(R.id.directionGroup)).check(did == 0 ? R.id.direction1 : did == 1 ? R.id.direction2 : R.id.direction3);
 
-        RadioGroup group = (RadioGroup) findMyViewById(R.id.directionGroup);
-        for (int i = 0; i < group.getChildCount(); i++) {
-            View child = group.getChildAt(i);
-            if (child instanceof universe.constellation.orion.viewer.android.RadioButton) {
-                universe.constellation.orion.viewer.android.RadioButton button = (universe.constellation.orion.viewer.android.RadioButton) child;
-                if (walkOrder.equals(button.getWalkOrder())) {
-                    group.check(button.getId());
+        val group = findMyViewById(R.id.directionGroup) as RadioGroup
+        for (i in 0 until group.childCount) {
+            val child = group.getChildAt(i)
+            if (child is universe.constellation.orion.viewer.android.RadioButton) {
+                if (walkOrder == child.walkOrder) {
+                    group.check(child.id)
                 }
             }
         }
     }
 
-    protected void onNewIntent(Intent intent) {
-        log("Runtime.getRuntime().totalMemory() = " + Runtime.getRuntime().totalMemory());
-        log("Debug.getNativeHeapSize() = " + Debug.getNativeHeapSize());
-        log("OVA: on new intent " + intent);
+    override fun onNewIntent(intent: Intent?) {
+        log("Runtime.getRuntime().totalMemory() = " + Runtime.getRuntime().totalMemory())
+        log("Debug.getNativeHeapSize() = " + Debug.getNativeHeapSize())
+        log("OVA: on new intent " + intent!!)
         if (!hasReadPermissions) {
-            log("OVA: Waiting for read permissions");
-            lastIntent = intent;
-            return;
+            log("OVA: Waiting for read permissions")
+            lastIntent = intent
+            return
         }
 
-        Uri uri = intent.getData();
+        val uri = intent.data
         if (uri != null) {
-            log("File URI  = " + uri.toString());
-            String path = null;
+            log("File URI  = " + uri.toString())
+            var path: String? = null
             try {
-                if ("content".equalsIgnoreCase(uri.getScheme())) {
-                    path = FileUtils.getPath(this, uri);
+                if ("content".equals(uri.scheme, ignoreCase = true)) {
+                    path = FileUtils.getPath(this, uri)
                 }
 
-                String file = path != null ? path : uri.getPath();
+                val file = path ?: uri.path
 
                 if (controller != null) {
                     if (lastPageInfo != null) {
-                        if (lastPageInfo.openingFileName.equals(file)) {
+                        if (lastPageInfo!!.openingFileName == file) {
                             //keep controller
-                            controller.drawPage();
-                            return;
+                            controller!!.drawPage()
+                            return
                         }
                     }
 
-                    destroyControllerAndBook();
+                    destroyControllerAndBook()
                 }
 
-                AndroidLogger.stopLogger();
-                openFile(file);
-            } catch (Exception e) {
-                showAlertWithExceptionThrow(intent, e);
+                AndroidLogger.stopLogger()
+                openFile(file)
+            } catch (e: Exception) {
+                showAlertWithExceptionThrow(intent, e)
             }
-        } else /*if (intent.getAction().endsWith("MAIN"))*/ {
+
+        } else
+        /*if (intent.getAction().endsWith("MAIN"))*/ {
             //TODO error
         }
     }
 
-    private Document openFile(String filePath) throws Exception {
-        Document doc = null;
-        log("Trying to open file: " + filePath);
+    @Throws(Exception::class)
+    private fun openFile(filePath: String): Document {
+        var doc: Document? = null
+        log("Trying to open file: $filePath")
 
-        getOrionContext().onNewBook(filePath);
+        orionContext.onNewBook(filePath)
         try {
-            lastPageInfo = LastPageInfo.loadBookParameters(this, filePath);
-            getOrionContext().setCurrentBookParameters(lastPageInfo);
-            OptionActions.DEBUG.doAction(this, false, getGlobalOptions().getBooleanProperty("DEBUG", false));
+            lastPageInfo = LastPageInfo.loadBookParameters(this, filePath)
+            orionContext.currentBookParameters = lastPageInfo
+            OptionActions.DEBUG.doAction(this, false, globalOptions!!.getBooleanProperty("DEBUG", false))
 
-            doc = FileUtil.openFile(filePath);
+            doc = FileUtil.openFile(filePath)
 
-            LayoutStrategy layoutStrategy = SimpleLayoutStrategy.Companion.create(doc);
+            val layoutStrategy = SimpleLayoutStrategy.create(doc)
 
-            RenderThread renderer = new RenderThread(this, layoutStrategy, doc, fullScene);
+            val renderer = RenderThread(this, layoutStrategy, doc, fullScene!!)
 
-            controller = new Controller(this, doc, layoutStrategy, renderer);
+            controller = Controller(this, doc, layoutStrategy, renderer)
 
-            controller.changeOrinatation(lastPageInfo.screenOrientation);
+            controller!!.changeOrinatation(lastPageInfo!!.screenOrientation)
 
-            OrionScene drawView = fullScene.getDrawView();
-            controller.init(lastPageInfo, new Point(drawView.getSceneWidth(), drawView.getSceneHeight()));
+            val drawView = fullScene!!.drawView
+            controller!!.init(lastPageInfo!!, Point(drawView.sceneWidth, drawView.sceneHeight))
 
-            getSubscriptionManager().sendDocOpenedNotification(controller);
+            subscriptionManager.sendDocOpenedNotification(controller)
 
-            getView().setDimensionAware(controller);
+            view!!.setDimensionAware(controller!!)
 
-            controller.drawPage();
+            controller!!.drawPage()
 
-            String title = doc.getTitle();
-            if (title == null || "".equals(title)) {
-                int idx = filePath.lastIndexOf('/');
-                title = filePath.substring(idx + 1);
-                title = title.substring(0, title.lastIndexOf("."));
+            var title = doc.title
+            if (title == null || "" == title) {
+                val idx = filePath.lastIndexOf('/')
+                title = filePath.substring(idx + 1)
+                title = title.substring(0, title.lastIndexOf("."))
             }
 
 
-            fullScene.onNewBook(title, controller.getPageCount());
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().setTitle(title);
+            fullScene!!.onNewBook(title, controller!!.pageCount)
+            if (supportActionBar != null) {
+                supportActionBar!!.setTitle(title)
             }
-            globalOptions.addRecentEntry(new GlobalOptions.RecentEntry(new File(filePath).getAbsolutePath()));
+            globalOptions!!.addRecentEntry(GlobalOptions.RecentEntry(File(filePath).absolutePath))
 
-            lastPageInfo.totalPages = doc.getPageCount();
-            getDevice().onNewBook(lastPageInfo, doc);
+            lastPageInfo!!.totalPages = doc.pageCount
+            device!!.onNewBook(lastPageInfo!!, doc)
 
-            askPassword(controller);
+            askPassword(controller!!)
 
-        } catch (Exception e) {
-            log(e);
-            if (doc != null) {
-                doc.destroy();
-            }
-            throw e;
+        } catch (e: Exception) {
+            log(e)
+            doc?.destroy()
+            throw e
         }
-        return doc;
+
+        return doc
     }
 
-    private void showAlertWithExceptionThrow(final Intent intent, final Exception e) {
-        AlertDialog.Builder themedAlertBuilder = createThemedAlertBuilder().setMessage("Error while opening " + intent + ": " + e.getMessage() + " cause of " + e.getCause());
-        themedAlertBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-                throw new RuntimeException("Exception on processing " + intent, e);
-            }
-        });
-        themedAlertBuilder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                finish();
-                throw new RuntimeException("Exception on processing " + intent, e);
-            }
-        });
-        themedAlertBuilder.create().show();
+    private fun showAlertWithExceptionThrow(intent: Intent, e: Exception) {
+        val themedAlertBuilder = createThemedAlertBuilder().setMessage("Error while opening " + intent + ": " + e.message + " cause of " + e.cause)
+        themedAlertBuilder.setPositiveButton("OK") { dialog, which ->
+            finish()
+            throw RuntimeException("Exception on processing $intent", e)
+        }
+        themedAlertBuilder.setOnCancelListener {
+            finish()
+            throw RuntimeException("Exception on processing $intent", e)
+        }
+        themedAlertBuilder.create().show()
     }
 
 
-    public void onPause() {
-        isResumed = false;
-        super.onPause();
+    public override fun onPause() {
+        isResumed = false
+        super.onPause()
         if (controller != null) {
-            controller.onPause();
-            saveData();
+            controller!!.onPause()
+            saveData()
         }
     }
 
-    public void initPagePeekerScreen() {
-        final SeekBar pageSeek = (SeekBar) findMyViewById(R.id.page_picker_seeker);
+    fun initPagePeekerScreen() {
+        val pageSeek = findMyViewById(R.id.page_picker_seeker) as SeekBar
 
-        getSubscriptionManager().addDocListeners(new DocumentViewAdapter() {
-            @Override
-            public void documentOpened(Controller controller) {
-                pageSeek.setMax(controller.getPageCount() - 1);
-                pageSeek.setProgress(controller.getCurrentPage());
+        subscriptionManager.addDocListeners(object : DocumentViewAdapter() {
+            override fun documentOpened(controller: Controller) {
+                pageSeek.max = controller.pageCount - 1
+                pageSeek.progress = controller.currentPage
             }
 
-            @Override
-            public void pageChanged(int newPage, int pageCount) {
-                pageSeek.setProgress(newPage);
+            override fun pageChanged(newPage: Int, pageCount: Int) {
+                pageSeek.progress = newPage
             }
-        });
+        })
 
 
-        final TextView pageNumberText = (TextView) findMyViewById(R.id.page_picker_message);
+        val pageNumberText = findMyViewById(R.id.page_picker_message) as TextView
         //initial state
-        pageNumberText.setText("" + 1);
+        pageNumberText.text = "" + 1
 
-        pageSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                pageNumberText.setText("" + (progress + 1));
+        pageSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                pageNumberText.text = "" + (progress + 1)
             }
 
-            public void onStartTrackingTouch(SeekBar seekBar) {
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+        })
+
+        val closePagePeeker = findMyViewById(R.id.page_picker_close) as ImageButton
+
+        val plus = findMyViewById(R.id.page_picker_plus) as ImageButton
+        plus.setOnClickListener { pageSeek.incrementProgressBy(1) }
+
+        val minus = findMyViewById(R.id.page_picker_minus) as ImageButton
+        minus.setOnClickListener {
+            if (pageSeek.progress != 0) {
+                pageSeek.incrementProgressBy(-1)
             }
+        }
 
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
+        closePagePeeker.setOnClickListener {
+            //controller.drawPage(Integer.valueOf(pageNumberText.getText().toString()) - 1);
+            //main menu
+            onAnimatorCancel()
+            updatePageSeeker()
+            //animator.setDisplayedChild(MAIN_SCREEN);
+        }
 
-        ImageButton closePagePeeker = (ImageButton) findMyViewById(R.id.page_picker_close);
-
-        ImageButton plus = (ImageButton) findMyViewById(R.id.page_picker_plus);
-        plus.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                pageSeek.incrementProgressBy(1);
-            }
-        });
-
-        ImageButton minus = (ImageButton) findMyViewById(R.id.page_picker_minus);
-        minus.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (pageSeek.getProgress() != 0) {
-                    pageSeek.incrementProgressBy(-1);
+        val page_preview = findMyViewById(R.id.page_preview) as ImageButton
+        page_preview.setOnClickListener {
+            onApplyAction()
+            if ("" != pageNumberText.text) {
+                try {
+                    val parsedInput = Integer.valueOf(pageNumberText.text.toString())
+                    controller!!.drawPage(parsedInput - 1)
+                } catch (ex: NumberFormatException) {
+                    showError("Couldn't parse " + pageNumberText.text, ex)
                 }
-            }
-        });
 
-        closePagePeeker.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //controller.drawPage(Integer.valueOf(pageNumberText.getText().toString()) - 1);
-                //main menu
-                onAnimatorCancel();
-                updatePageSeeker();
-                //animator.setDisplayedChild(MAIN_SCREEN);
             }
-        });
-
-        ImageButton page_preview = (ImageButton) findMyViewById(R.id.page_preview);
-        page_preview.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                onApplyAction();
-                if (!"".equals(pageNumberText.getText())) {
-                    try {
-                        int parsedInput = Integer.valueOf(pageNumberText.getText().toString());
-                        controller.drawPage(parsedInput - 1);
-                    } catch (NumberFormatException ex) {
-                        showError("Couldn't parse " + pageNumberText.getText(), ex);
-                    }
-                }
-            }
-        });
+        }
     }
 
-    public void updatePageSeeker() {
-        SeekBar pageSeek = (SeekBar) findMyViewById(R.id.page_picker_seeker);
-        pageSeek.setProgress(controller.getCurrentPage());
-        TextView view = (TextView) findMyViewById(R.id.page_picker_message);
-        view.setText("" + (controller.getCurrentPage() + 1));
-        view.clearFocus();
-        view.requestFocus();
+    fun updatePageSeeker() {
+        val pageSeek = findMyViewById(R.id.page_picker_seeker) as SeekBar
+        pageSeek.progress = controller!!.currentPage
+        val view = findMyViewById(R.id.page_picker_message) as TextView
+        view.text = "" + (controller!!.currentPage + 1)
+        view.clearFocus()
+        view.requestFocus()
 
     }
 
-    public void initZoomScreen() {
+    fun initZoomScreen() {
         //zoom screen
 
-        final Spinner sp = (Spinner) findMyViewById(R.id.zoom_spinner);
+        val sp = findMyViewById(R.id.zoom_spinner) as Spinner
 
-        final EditText zoomText = (EditText) findMyViewById(R.id.zoom_picker_message);
+        val zoomText = findMyViewById(R.id.zoom_picker_message) as EditText
 
-        final SeekBar zoomSeek = (SeekBar) findMyViewById(R.id.zoom_picker_seeker);
+        val zoomSeek = findMyViewById(R.id.zoom_picker_seeker) as SeekBar
 
         if (zoomSeek != null) {
-            zoomSeek.setMax(300);
-            zoomSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            zoomSeek.max = 300
+            zoomSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                     if (zoomInternal != 1) {
-                        zoomText.setText("" + progress);
-                        if (sp.getSelectedItemPosition() != 0) {
-                            int oldInternal = zoomInternal;
-                            zoomInternal = 2;
-                            sp.setSelection(0);
-                            zoomInternal = oldInternal;
+                        zoomText.setText("" + progress)
+                        if (sp.selectedItemPosition != 0) {
+                            val oldInternal = zoomInternal
+                            zoomInternal = 2
+                            sp.setSelection(0)
+                            zoomInternal = oldInternal
                         }
                     }
                 }
 
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                }
+                override fun onStartTrackingTouch(seekBar: SeekBar) {}
 
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                }
-            });
+                override fun onStopTrackingTouch(seekBar: SeekBar) {}
+            })
         }
 
-        getSubscriptionManager().addDocListeners(new DocumentViewAdapter(){
-            @Override
-            public void documentOpened(Controller controller) {
-                updateZoom();
+        subscriptionManager.addDocListeners(object : DocumentViewAdapter() {
+            override fun documentOpened(controller: Controller) {
+                updateZoom()
             }
-        });
+        })
 
-        final ImageButton zplus = (ImageButton) findMyViewById(R.id.zoom_picker_plus);
-        zplus.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                zoomSeek.incrementProgressBy(1);
+        val zplus = findMyViewById(R.id.zoom_picker_plus) as ImageButton
+        zplus.setOnClickListener { zoomSeek.incrementProgressBy(1) }
+
+        val zminus = findMyViewById(R.id.zoom_picker_minus) as ImageButton
+        zminus.setOnClickListener {
+            if (zoomSeek.progress != 0) {
+                zoomSeek.incrementProgressBy(-1)
             }
-        });
+        }
 
-        final ImageButton zminus = (ImageButton) findMyViewById(R.id.zoom_picker_minus);
-        zminus.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (zoomSeek.getProgress() != 0) {
-                    zoomSeek.incrementProgressBy(-1);
-                }
-            }
-        });
+        val closeZoomPeeker = findMyViewById(R.id.zoom_picker_close) as ImageButton
+        closeZoomPeeker.setOnClickListener {
+            //main menu
+            onAnimatorCancel()
+            //updateZoom();
+        }
 
-        ImageButton closeZoomPeeker = (ImageButton) findMyViewById(R.id.zoom_picker_close);
-        closeZoomPeeker.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //main menu
-                onAnimatorCancel();
-                //updateZoom();
-            }
-        });
+        val zoom_preview = findMyViewById(R.id.zoom_preview) as ImageButton
+        zoom_preview.setOnClickListener {
+            onApplyAction()
+            val index = sp.selectedItemPosition
+            controller!!.changeZoom(if (index == 0) (java.lang.Float.parseFloat(zoomText.text.toString()) * 100).toInt() else -1 * (index - 1))
+            updateZoom()
+        }
 
-        ImageButton zoom_preview = (ImageButton) findMyViewById(R.id.zoom_preview);
-        zoom_preview.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                onApplyAction();
-                int index = sp.getSelectedItemPosition();
-                controller.changeZoom(index == 0 ? (int)(Float.parseFloat(zoomText.getText().toString()) * 100) : -1 *(index-1));
-                updateZoom();
-            }
-        });
-
-        sp.setAdapter(new MyArrayAdapter());
-        sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                boolean disable = position != 0;
-                int oldZoomInternal = zoomInternal;
+        sp.adapter = MyArrayAdapter()
+        sp.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                val disable = position != 0
+                val oldZoomInternal = zoomInternal
                 if (zoomInternal != 2) {
-                    zoomInternal = 1;
+                    zoomInternal = 1
                     if (disable) {
-                        zoomText.setText((String) parent.getAdapter().getItem(position));
+                        zoomText.setText(parent.adapter.getItem(position) as String)
                     } else {
-                        zoomText.setText("" + ((int) (controller.getCurrentPageZoom() * 10000)) / 100f);
-                        zoomSeek.setProgress((int) (controller.getCurrentPageZoom() * 100));
+                        zoomText.setText("" + (controller!!.currentPageZoom * 10000).toInt() / 100f)
+                        zoomSeek.progress = (controller!!.currentPageZoom * 100).toInt()
                     }
-                    zoomInternal = oldZoomInternal;
+                    zoomInternal = oldZoomInternal
                 }
 
-                zminus.setVisibility(disable ? View.GONE : View.VISIBLE);
-                zplus.setVisibility(disable ? View.GONE : View.VISIBLE);
+                zminus.visibility = if (disable) View.GONE else View.VISIBLE
+                zplus.visibility = if (disable) View.GONE else View.VISIBLE
 
-                zoomText.setFocusable(!disable);
-                zoomText.setFocusableInTouchMode(!disable);
+                zoomText.isFocusable = !disable
+                zoomText.isFocusableInTouchMode = !disable
 
-                final LinearLayout parent1 = (LinearLayout) zoomText.getParent();
+                val parent1 = zoomText.parent as LinearLayout
 
-                parent1.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        parent1.requestLayout();
-                    }
-                });
+                parent1.post { parent1.requestLayout() }
             }
 
-            public void onNothingSelected(AdapterView<?> parent) {
+            override fun onNothingSelected(parent: AdapterView<*>) {
                 //To change body of implemented methods use File | Settings | File Templates.
             }
-        });
+        }
 
         //by width
-        sp.setSelection(1);
+        sp.setSelection(1)
 
     }
 
-    private int zoomInternal = 0;
+    fun updateZoom() {
+        val zoomSeek = findMyViewById(R.id.zoom_picker_seeker) as SeekBar
+        val textView = findMyViewById(R.id.zoom_picker_message) as TextView
 
-    public void updateZoom() {
-        SeekBar zoomSeek = (SeekBar) findMyViewById(R.id.zoom_picker_seeker);
-        TextView textView = (TextView) findMyViewById(R.id.zoom_picker_message);
-
-        Spinner sp = (Spinner) findMyViewById(R.id.zoom_spinner);
-        int spinnerIndex;
-        zoomInternal = 1;
+        val sp = findMyViewById(R.id.zoom_spinner) as Spinner
+        val spinnerIndex: Int
+        zoomInternal = 1
         try {
-            int zoom = controller.getZoom10000Factor();
+            var zoom = controller!!.zoom10000Factor
             if (zoom <= 0) {
-                spinnerIndex = -zoom + 1;
-                zoom = (int) (10000 * controller.getCurrentPageZoom());
+                spinnerIndex = -zoom + 1
+                zoom = (10000 * controller!!.currentPageZoom).toInt()
             } else {
-                spinnerIndex = 0;
-                textView.setText(String.valueOf(zoom / 100f));
+                spinnerIndex = 0
+                textView.text = (zoom / 100f).toString()
             }
-            zoomSeek.setProgress(zoom / 100);
-            sp.setSelection(spinnerIndex);
+            zoomSeek.progress = zoom / 100
+            sp.setSelection(spinnerIndex)
         } finally {
-            zoomInternal = 0;
+            zoomInternal = 0
         }
     }
 
 
-    public void initPageLayoutScreen() {
-        ImageButton close = (ImageButton) findMyViewById(R.id.options_close);
-        close.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                onAnimatorCancel();
-                updatePageLayout();
-            }
-        });
+    fun initPageLayoutScreen() {
+        val close = findMyViewById(R.id.options_close) as ImageButton
+        close.setOnClickListener {
+            onAnimatorCancel()
+            updatePageLayout()
+        }
 
 
-        ImageButton view = (ImageButton) findMyViewById(R.id.options_apply);
-        view.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                onApplyAction();
-                RadioGroup group = ((RadioGroup) findMyViewById(R.id.directionGroup));
-                int walkOrderButtonId = group.getCheckedRadioButtonId();
-                universe.constellation.orion.viewer.android.RadioButton button = (universe.constellation.orion.viewer.android.RadioButton) group.findViewById(walkOrderButtonId);
-                int lid = ((RadioGroup) findMyViewById(R.id.layoutGroup)).getCheckedRadioButtonId();
-                controller.setDirectionAndLayout(button.getWalkOrder(), lid == R.id.layout1 ? 0 : lid == R.id.layout2 ? 1 : 2);
-            }
-        });
+        val view = findMyViewById(R.id.options_apply) as ImageButton
+        view.setOnClickListener {
+            onApplyAction()
+            val group = findMyViewById(R.id.directionGroup) as RadioGroup
+            val walkOrderButtonId = group.checkedRadioButtonId
+            val button = group.findViewById<View>(walkOrderButtonId) as universe.constellation.orion.viewer.android.RadioButton
+            val lid = (findMyViewById(R.id.layoutGroup) as RadioGroup).checkedRadioButtonId
+            controller!!.setDirectionAndLayout(button.walkOrder, if (lid == R.id.layout1) 0 else if (lid == R.id.layout2) 1 else 2)
+        }
 
-        getSubscriptionManager().addDocListeners(new DocumentViewAdapter() {
-            public void documentOpened(Controller controller) {
-                updatePageLayout();
+        subscriptionManager.addDocListeners(object : DocumentViewAdapter() {
+            override fun documentOpened(controller: Controller) {
+                updatePageLayout()
             }
-        });
+        })
     }
 
 
-   private void initAddBookmarkScreen() {
-        ImageButton close = (ImageButton) findMyViewById(R.id.add_bookmark_close);
-        close.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //main menu
-                onAnimatorCancel();
+    private fun initAddBookmarkScreen() {
+        val close = findMyViewById(R.id.add_bookmark_close) as ImageButton
+        close.setOnClickListener {
+            //main menu
+            onAnimatorCancel()
+        }
+
+
+        val view = findMyViewById(R.id.add_bookmark_apply) as ImageButton
+        view.setOnClickListener {
+            val text = findMyViewById(R.id.add_bookmark_text) as EditText
+            try {
+                insertBookmark(controller!!.currentPage, text.text.toString())
+                onApplyAction(true)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                val activity = this@OrionViewerActivity
+                val buider = createThemedAlertBuilder()
+                buider.setTitle(activity.resources.getString(R.string.ex_msg_operation_failed))
+
+                val input = EditText(activity)
+                input.setText(e.message)
+                buider.setView(input)
+
+                buider.setNeutralButton("OK") { dialog, which -> dialog.dismiss() }
+                buider.create().show()
             }
-        });
-
-
-        ImageButton view = (ImageButton) findMyViewById(R.id.add_bookmark_apply);
-        view.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                EditText text = (EditText) findMyViewById(R.id.add_bookmark_text);
-                try {
-                    insertBookmark(controller.getCurrentPage(), text.getText().toString());
-                    onApplyAction(true);
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                    OrionViewerActivity activity = OrionViewerActivity.this;
-                    AlertDialog.Builder buider = createThemedAlertBuilder();
-                    buider.setTitle(activity.getResources().getString(R.string.ex_msg_operation_failed));
-
-                    final EditText input = new EditText(activity);
-                    input.setText(e.getMessage());
-                    buider.setView(input);
-
-                    buider.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    buider.create().show();
-                }
-            }
-        });
+        }
 
     }
 
-    protected void onResume() {
-        isResumed = true;
-        super.onResume();
-        updateBrightness();
+    override fun onResume() {
+        isResumed = true
+        super.onResume()
+        updateBrightness()
 
-        log("onResume");
+        log("onResume")
         if (myIntent != null) {
             //starting creation intent
-            onNewIntent(myIntent);
-            myIntent = null;
+            onNewIntent(myIntent)
+            myIntent = null
         } else {
             if (controller != null) {
-                controller.processPendingEvents();
+                controller!!.processPendingEvents()
                 //controller.startRenderer();
-                controller.drawPage();
+                controller!!.drawPage()
             }
         }
     }
 
-    protected void onDestroy() {
-        super.onDestroy();
-        log("onDestroy");
-        AndroidLogger.stopLogger();
+    override fun onDestroy() {
+        super.onDestroy()
+        log("onDestroy")
+        AndroidLogger.stopLogger()
 
-        destroyControllerAndBook();
+        destroyControllerAndBook()
 
         if (dialog != null) {
-            dialog.dismiss();
+            dialog!!.dismiss()
         }
-        getOrionContext().destroyDb();
+        orionContext.destroyDb()
     }
 
-    private void saveData() {
-       if (controller != null) {
+    private fun saveData() {
+        if (controller != null) {
             try {
-                controller.serialize(lastPageInfo);
-                lastPageInfo.save(this);
-            } catch (Exception ex) {
-                log(ex);
+                controller!!.serialize(lastPageInfo!!)
+                lastPageInfo!!.save(this)
+            } catch (ex: Exception) {
+                log(ex)
             }
-       }
-        saveGlobalOptions();
+
+        }
+        saveGlobalOptions()
     }
 
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        log("onKeyUp key = " + keyCode + " " + event.isCanceled() + " " + doTrack(keyCode));
-        if(event.isCanceled()) {
-            log("Tracking = " + keyCode);
-            return super.onKeyUp(keyCode,  event);
+    override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
+        log("onKeyUp key = " + keyCode + " " + event.isCanceled + " " + doTrack(keyCode))
+        if (event.isCanceled) {
+            log("Tracking = $keyCode")
+            return super.onKeyUp(keyCode, event)
         }
 
-        return processKey(keyCode, event, false) || super.onKeyUp(keyCode, event);
+        return processKey(keyCode, event, false) || super.onKeyUp(keyCode, event)
     }
 
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        log("onKeyDown = " + keyCode + " " + event.isCanceled() + " " + doTrack(keyCode));
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        log("onKeyDown = " + keyCode + " " + event.isCanceled + " " + doTrack(keyCode))
         if (doTrack(keyCode)) {
-            log("Tracking = " + keyCode);
-            event.startTracking();
-            return true;
+            log("Tracking = $keyCode")
+            event.startTracking()
+            return true
         }
-        return super.onKeyDown(keyCode, event);
+        return super.onKeyDown(keyCode, event)
     }
 
-    private boolean processKey(int keyCode, KeyEvent event, boolean isLong) {
-        log("key = " + keyCode + " isLong = " + isLong);
+    private fun processKey(keyCode: Int, event: KeyEvent, isLong: Boolean): Boolean {
+        log("key = $keyCode isLong = $isLong")
 
-        int actionCode = getOrionContext().getKeyBinding().getInt(UtilKt.getPrefKey(keyCode, isLong), -1);
+        val actionCode = orionContext.keyBinding.getInt(getPrefKey(keyCode, isLong), -1)
         if (actionCode != -1) {
-            Action action = Action.getAction(actionCode);
-            switch (action) {
-                case PREV: case NEXT: changePage(action == Action.PREV ? Device.PREV : Device.NEXT); return true;
-                case NONE: break;
-                default: doAction(action); return true;
+            val action = Action.getAction(actionCode)
+            when (action) {
+                Action.PREV, Action.NEXT -> {
+                    changePage(if (action === Action.PREV) Device.PREV else Device.NEXT)
+                    return true
+                }
+                Action.NONE -> {
+                }
+                else -> {
+                    doAction(action)
+                    return true
+                }
             }
         }
 
-        if (getDevice().onKeyUp(keyCode, event.isLongPress(), operation)) {
-            changePage(operation.getValue());
-            return true;
+        if (device!!.onKeyUp(keyCode, event.isLongPress, operation)) {
+            changePage(operation.value)
+            return true
         }
-        return false;
+        return false
     }
 
-    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-        return processKey(keyCode, event, true);
+    override fun onKeyLongPress(keyCode: Int, event: KeyEvent): Boolean {
+        return processKey(keyCode, event, true)
     }
 
-    private void changePage(int operation) {
-        boolean swapKeys = globalOptions.isSwapKeys();
-        int width = getView().getSceneWidth();
-        int height = getView().getSceneHeight();
-        boolean landscape = width > height || controller.getRotation() != 0; /*second condition for nook and alex*/
+    private fun changePage(operation: Int) {
+        val swapKeys = globalOptions!!.isSwapKeys
+        val width = view!!.sceneWidth
+        val height = view!!.sceneHeight
+        val landscape = width > height || controller!!.rotation != 0 /*second condition for nook and alex*/
         if (controller != null) {
             if (operation == Device.NEXT && (!landscape || !swapKeys) || swapKeys && operation == Device.PREV && landscape) {
-                controller.drawNext();
+                controller!!.drawNext()
             } else {
-                controller.drawPrev();
+                controller!!.drawPrev()
             }
         }
     }
 
-    private void loadGlobalOptions() {
-        globalOptions = getOrionContext().getOptions();
+    private fun loadGlobalOptions() {
+        globalOptions = orionContext.options
     }
 
-    private void saveGlobalOptions() {
-        log("Saving global options...");
-        globalOptions.saveRecents();
-        log("Done!");
+    private fun saveGlobalOptions() {
+        log("Saving global options...")
+        globalOptions!!.saveRecents()
+        log("Done!")
     }
 
-    public OrionScene getView() {
-        return fullScene.getDrawView();
-    }
-
-    public FullScene getFullScene() {
-        return fullScene;
-    }
-
-    OrionStatusBarHelper getStatusBarHelper() {
-        return fullScene.getStatusBarHelper();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
         if (!hasActionBar) {
-            for (int i = 0; i < menu.size(); i++) {
-                SupportMenuItem item = (SupportMenuItem) menu.getItem(i);
-                item.setShowAsAction(SupportMenuItem.SHOW_AS_ACTION_NEVER);
+            for (i in 0 until menu.size()) {
+                val item = menu.getItem(i) as SupportMenuItem
+                item.setShowAsAction(SupportMenuItem.SHOW_AS_ACTION_NEVER)
             }
         }
-        return true;
+        return true
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Action action = Action.NONE; //will open help
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        var action = Action.NONE //will open help
 
-        switch (item.getItemId()) {
-            case R.id.exit_menu_item:
-                finish();
-                return true;
+        when (item.itemId) {
+            R.id.exit_menu_item -> {
+                finish()
+                return true
+            }
 
-            case R.id.search_menu_item: action = Action.SEARCH; break;
-            case R.id.crop_menu_item: action = Action.CROP; break;
-            case R.id.zoom_menu_item: action = Action.ZOOM; break;
-            case R.id.add_bookmark_menu_item: action = Action.ADD_BOOKMARK; break;
-            case R.id.goto_menu_item: action = Action.GOTO; break;
-            case R.id.select_text_menu_item: action = Action.SELECT_TEXT; break;
-//            case R.id.navigation_menu_item: showOrionDialog(PAGE_LAYOUT_SCREEN, null, null);
-//                return true;
+            R.id.search_menu_item -> action = Action.SEARCH
+            R.id.crop_menu_item -> action = Action.CROP
+            R.id.zoom_menu_item -> action = Action.ZOOM
+            R.id.add_bookmark_menu_item -> action = Action.ADD_BOOKMARK
+            R.id.goto_menu_item -> action = Action.GOTO
+            R.id.select_text_menu_item -> action = Action.SELECT_TEXT
+        //            case R.id.navigation_menu_item: showOrionDialog(PAGE_LAYOUT_SCREEN, null, null);
+        //                return true;
 
-//            case R.id.rotation_menu_item: action = Action.ROTATION; break;
+        //            case R.id.rotation_menu_item: action = Action.ROTATION; break;
 
-            case R.id.options_menu_item: action = Action.OPTIONS; break;
+            R.id.options_menu_item -> action = Action.OPTIONS
 
-            case R.id.book_options_menu_item: action = Action.BOOK_OPTIONS; break;
+            R.id.book_options_menu_item -> action = Action.BOOK_OPTIONS
 
-//            case R.id.tap_menu_item:
-//                Intent tap = new Intent(this, OrionTapActivity.class);
-//                startActivity(tap);
-//                return true;
+        //            case R.id.tap_menu_item:
+        //                Intent tap = new Intent(this, OrionTapActivity.class);
+        //                startActivity(tap);
+        //                return true;
 
-            case R.id.outline_menu_item: action = Action.SHOW_OUTLINE; break;
-            case R.id.open_menu_item: action = Action.OPEN_BOOK; break;
-            case R.id.open_dictionary_menu_item: action = Action.DICTIONARY; break;
+            R.id.outline_menu_item -> action = Action.SHOW_OUTLINE
+            R.id.open_menu_item -> action = Action.OPEN_BOOK
+            R.id.open_dictionary_menu_item -> action = Action.DICTIONARY
 
-            case R.id.bookmarks_menu_item:  action = Action.OPEN_BOOKMARKS; break;
-            case R.id.help_menu_item:
-                Intent intent = new Intent();
-                intent.setClass(this, OrionHelpActivity.class);
-                startActivity(intent);
-            break;
+            R.id.bookmarks_menu_item -> action = Action.OPEN_BOOKMARKS
+            R.id.help_menu_item -> {
+                val intent = Intent()
+                intent.setClass(this, OrionHelpActivity::class.java)
+                startActivity(intent)
+            }
         }
 
-        if (Action.NONE != action) {
-            doAction(action);
+        if (Action.NONE !== action) {
+            doAction(action)
         } else {
-//            Intent intent = new Intent();
-//            intent.setClass(this, OrionHelpActivity.class);
-//            startActivity(intent);
-            return super.onOptionsItemSelected(item);
+            //            Intent intent = new Intent();
+            //            intent.setClass(this, OrionHelpActivity.class);
+            //            startActivity(intent);
+            return super.onOptionsItemSelected(item)
         }
-        return true;
+        return true
     }
 
-    SubscriptionManager getSubscriptionManager() {
-        return manager;
+    private fun initOptionDialog() {
+        dialog = AppCompatDialog(this)
+        dialog!!.supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog!!.setContentView(R.layout.options_dialog)
+        animator = dialog!!.findViewById<View>(R.id.viewanim) as ViewAnimator?
+
+        view!!.setOnTouchListener(View.OnTouchListener { v, event -> newTouchProcessor!!.onTouch(event) })
+
+        dialog!!.setCanceledOnTouchOutside(true)
     }
 
-    private void initOptionDialog() {
-        dialog = new AppCompatDialog(this);
-        dialog.supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.options_dialog);
-        animator = ((ViewAnimator)dialog.findViewById(R.id.viewanim));
-
-        getView().setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                return newTouchProcessor.onTouch(event);
-            }
-        });
-
-        dialog.setCanceledOnTouchOutside(true);
-    }
-
-    public void doAction(int code) {
-        Action action = Action.getAction(code);
-        doAction(action);
-        log("Code action " + code);
+    fun doAction(code: Int) {
+        val action = Action.getAction(code)
+        doAction(action)
+        log("Code action $code")
     }
 
 
-    private void doAction(Action action) {
-        action.doAction(controller, this, null);
+    private fun doAction(action: Action) {
+        action.doAction(controller, this, null)
     }
 
 
-    protected View findMyViewById(int id) {
-        return dialog.findViewById(id);
+    override fun findMyViewById(id: Int): View {
+        return dialog!!.findViewById(id)
     }
 
-    public void onAnimatorCancel() {
-        dialog.cancel();
+    public override fun onAnimatorCancel() {
+        dialog!!.cancel()
     }
 
-    @Override
-    protected void onApplyAction() {
-        onApplyAction(false);
+    override fun onApplyAction() {
+        onApplyAction(false)
     }
 
-    private void onApplyAction(boolean close) {
-        if (close || globalOptions.isApplyAndClose()) {
-            onAnimatorCancel();
+    private fun onApplyAction(close: Boolean) {
+        if (close || globalOptions!!.isApplyAndClose) {
+            onAnimatorCancel()
         }
     }
 
-    private void initRotationScreen() {
-        RadioGroup rotationGroup = (RadioGroup) findMyViewById(R.id.rotationGroup);
-        rotationGroup.setVisibility(View.GONE);
+    private fun initRotationScreen() {
+        val rotationGroup = findMyViewById(R.id.rotationGroup) as RadioGroup
+        rotationGroup.visibility = View.GONE
 
-        final ListView list = (ListView) findMyViewById(R.id.rotationList);
+        val list = findMyViewById(R.id.rotationList) as ListView
 
         //set choices and replace 0 one with Application Default
-        boolean isLevel9 = getOrionContext().getSdkVersion() >= 9;
-        CharSequence[] values = getResources().getTextArray(isLevel9 ? R.array.screen_orientation_full_desc : R.array.screen_orientation_desc);
-        CharSequence[] newValues = new CharSequence[values.length];
-        System.arraycopy(values, 0, newValues, 0, values.length);
-        newValues[0] = getResources().getString(R.string.orientation_default_rotation);
+        val isLevel9 = orionContext.sdkVersion >= 9
+        val values = resources.getTextArray(if (isLevel9) R.array.screen_orientation_full_desc else R.array.screen_orientation_desc)
+        val newValues = arrayOfNulls<CharSequence>(values.size)
+        System.arraycopy(values, 0, newValues, 0, values.size)
+        newValues[0] = resources.getString(R.string.orientation_default_rotation)
 
-        list.setAdapter(new ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, newValues));
+        list.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, newValues)
 
-        list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        list.setItemChecked(0, true);
+        list.choiceMode = ListView.CHOICE_MODE_SINGLE
+        list.setItemChecked(0, true)
 
-        list.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
-            public void onItemClick(android.widget.AdapterView parent, View view, int position, long id) {
-                CheckedTextView check = (CheckedTextView) view;
-                check.setChecked(!check.isChecked());
-            }
-        });
-
-        final CharSequence[] ORIENTATION_ARRAY = getResources().getTextArray(R.array.screen_orientation_full);
-
-        list.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
-            public void onItemClick(android.widget.AdapterView parent, View view, int position, long id) {
-                onApplyAction(true);
-                String orientation = ORIENTATION_ARRAY[position].toString();
-                controller.changeOrinatation(orientation);
-            }
-        });
-
-
-        ImageButton apply = (ImageButton) findMyViewById(R.id.rotation_apply);
-        apply.setVisibility(View.GONE);
-
-        ImageButton cancel = (ImageButton) findMyViewById(R.id.rotation_close);
-            cancel.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    onAnimatorCancel();
-                    updateRotation();
-                }
-            });
-    }
-
-    private void updateRotation() {
-        RadioGroup rotationGroup = (RadioGroup) findMyViewById(R.id.rotationGroup);
-        if (rotationGroup != null) { //nook case
-            rotationGroup.check(controller.getRotation() == 0 ? R.id.rotate0 : controller.getRotation() == -1 ? R.id.rotate90 : R.id.rotate270);
+        list.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            val check = view as CheckedTextView
+            check.isChecked = !check.isChecked
         }
-        ListView list = (ListView) findMyViewById(R.id.rotationList);
-        if (list != null) {
-            int index = getScreenOrientationItemPos(controller.getScreenOrientation());
-            list.setItemChecked(index, true);
-            list.setSelection(index);
+
+        val ORIENTATION_ARRAY = resources.getTextArray(R.array.screen_orientation_full)
+
+        list.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            onApplyAction(true)
+            val orientation = ORIENTATION_ARRAY[position].toString()
+            controller!!.changeOrinatation(orientation)
+        }
+
+
+        val apply = findMyViewById(R.id.rotation_apply) as ImageButton
+        apply.visibility = View.GONE
+
+        val cancel = findMyViewById(R.id.rotation_close) as ImageButton
+        cancel.setOnClickListener {
+            onAnimatorCancel()
+            updateRotation()
         }
     }
 
-    @Override
-    public int getViewerType() {
-        return Device.VIEWER_ACTIVITY;
+    private fun updateRotation() {
+        val rotationGroup = findMyViewById(R.id.rotationGroup) as? RadioGroup
+        rotationGroup?.check(if (controller!!.rotation == 0) R.id.rotate0 else if (controller!!.rotation == -1) R.id.rotate90 else R.id.rotate270)
+
+        val list = findMyViewById(R.id.rotationList) as? ListView ?: return
+        val index = getScreenOrientationItemPos(controller!!.screenOrientation)
+        list.setItemChecked(index, true)
+        list.setSelection(index)
     }
 
-    public GlobalOptions getGlobalOptions() {
-        return globalOptions;
-    }
-
-    public Controller getController() {
-        return controller;
-    }
-
-    private void updateBrightness() {
-        WindowManager.LayoutParams params = getWindow().getAttributes();
-        float oldBrightness = params.screenBrightness;
-        if (globalOptions.isCustomBrightness()) {
-            params.screenBrightness = (float)globalOptions.getBrightness() / 100;
-            getWindow().setAttributes(params);
-        } else  {
+    private fun updateBrightness() {
+        val params = window.attributes
+        val oldBrightness = params.screenBrightness
+        if (globalOptions!!.isCustomBrightness) {
+            params.screenBrightness = globalOptions!!.brightness.toFloat() / 100
+            window.attributes = params
+        } else {
             if (oldBrightness >= 0) {
-                params.screenBrightness = -1;
-                getWindow().setAttributes(params);
+                params.screenBrightness = -1f
+                window.attributes = params
             }
         }
     }
 
-    private long insertOrGetBookId() {
-        LastPageInfo info = lastPageInfo;
-        Long bookId = getOrionContext().getTempOptions().bookId;
-        if (bookId == null || bookId == -1) {
-            bookId = getOrionContext().getBookmarkAccessor().insertOrUpdate(info.simpleFileName, info.fileSize);
-            getOrionContext().getTempOptions().bookId = bookId;
+    private fun insertOrGetBookId(): Long {
+        val info = lastPageInfo
+        var bookId: Long? = orionContext.tempOptions!!.bookId
+        if (bookId == null || bookId == -1L) {
+            bookId = orionContext.getBookmarkAccessor().insertOrUpdate(info!!.simpleFileName, info.fileSize)
+            orionContext.tempOptions!!.bookId = bookId
         }
-        return bookId.intValue();
+        return bookId.toInt().toLong()
     }
 
-    private boolean insertBookmark(int page, String text) {
-        long id = insertOrGetBookId();
-        if (id != -1) {
-            long bokmarkId = getOrionContext().getBookmarkAccessor().insertOrUpdateBookmark(id, page, text);
-            return bokmarkId != -1;
+    private fun insertBookmark(page: Int, text: String): Boolean {
+        val id = insertOrGetBookId()
+        if (id != -1L) {
+            val bokmarkId = orionContext.getBookmarkAccessor().insertOrUpdateBookmark(id, page, text)
+            return bokmarkId != -1L
         }
-        return false;
+        return false
     }
 
-    public void doubleClickAction(int x, int y) {
+    fun doubleClickAction(x: Int, y: Int) {
         SelectionAutomata.selectText(
-                this, true, true, getSelectionAutomata().dialog,
+                this, true, true, selectionAutomata.dialog,
                 SelectionAutomata.getSelectionRectangle(x, y, 0, 0, true)
-        );
+        )
     }
 
-
-    long getBookId() {
-        log("Selecting book id...");
-        LastPageInfo info = lastPageInfo;
-        Long bookId = getOrionContext().getTempOptions().bookId;
-        if (bookId == null || bookId == -1) {
-            bookId = getOrionContext().getBookmarkAccessor().selectBookId(info.simpleFileName, info.fileSize);
-            getOrionContext().getTempOptions().bookId = bookId;
-        }
-        log("...book id = " + bookId);
-        return bookId;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         if (requestCode == OPEN_BOOKMARK_ACTIVITY_RESULT && resultCode == Activity.RESULT_OK) {
             if (controller != null) {
-                int page = data.getIntExtra(OrionBookmarkActivity.OPEN_PAGE, -1);
+                val page = data.getIntExtra(OrionBookmarkActivity.OPEN_PAGE, -1)
                 if (page != -1) {
-                    controller.drawPage(page);
+                    controller!!.drawPage(page)
                 } else {
-                    doAction(Action.GOTO);
+                    doAction(Action.GOTO)
                 }
             }
         }
     }
 
-    void showOrionDialog(int screenId, Action action, Object parameter) {
+    internal fun showOrionDialog(screenId: Int, action: Action, parameter: Any) {
         if (screenId == CROP_SCREEN) {
-            CropDialog cropDialog = CropDialogBuilderKt.create(this, controller.getMargins());
-            cropDialog.show();
-            return;
+            val cropDialog = create(this, controller!!.margins)
+            cropDialog.show()
+            return
         }
         if (screenId != -1) {
-            switch (screenId) {
-                case ROTATION_SCREEN: updateRotation(); break;
-                case PAGE_LAYOUT_SCREEN: updatePageLayout();
-                case PAGE_SCREEN: updatePageSeeker(); break;
-                case ZOOM_SCREEN: updateZoom(); break;
+            when (screenId) {
+                ROTATION_SCREEN -> updateRotation()
+                PAGE_LAYOUT_SCREEN -> {
+                    updatePageLayout()
+                    updatePageSeeker()
+                }
+                PAGE_SCREEN -> updatePageSeeker()
+                ZOOM_SCREEN -> updateZoom()
             }
 
-            if (action == Action.ADD_BOOKMARK) {
-                String parameterText = (String) parameter;
+            if (action === Action.ADD_BOOKMARK) {
+                val parameterText = parameter as String
 
-                int page = controller.getCurrentPage();
-                String newText = getOrionContext().getBookmarkAccessor().selectExistingBookmark(getBookId(), page, parameterText);
+                val page = controller!!.currentPage
+                val newText = orionContext.getBookmarkAccessor().selectExistingBookmark(bookId, page, parameterText)
 
-                boolean notOverride = parameterText == null || parameterText.equals(newText);
-                findMyViewById(R.id.warn_text_override).setVisibility(notOverride ? View.GONE : View.VISIBLE);
+                val notOverride = parameterText == null || parameterText == newText
+                findMyViewById(R.id.warn_text_override).visibility = if (notOverride) View.GONE else View.VISIBLE
 
-                ((EditText)findMyViewById(R.id.add_bookmark_text)).setText(notOverride ? newText : parameterText);
+                (findMyViewById(R.id.add_bookmark_text) as EditText).setText(if (notOverride) newText else parameterText)
             }
 
-            animator.setDisplayedChild(screenId);
-            dialog.show();
+            animator!!.displayedChild = screenId
+            dialog!!.show()
         }
     }
 
 
-    void textSelectionMode(boolean isSingleSelection, boolean translate) {
-        getSelectionAutomata().startSelection(isSingleSelection, translate);
+    internal fun textSelectionMode(isSingleSelection: Boolean, translate: Boolean) {
+        selectionAutomata.startSelection(isSingleSelection, translate)
     }
 
-    private SelectionAutomata getSelectionAutomata() {
-        if (selectionAutomata == null) {
-            selectionAutomata = new SelectionAutomata(this);
-        }
-        return selectionAutomata;
+    private inner class MyArrayAdapter internal constructor() : ArrayAdapter<*>(this@OrionViewerActivity, R.layout.support_simple_spinner_dropdown_item, this@OrionViewerActivity.resources.getTextArray(R.array.fits)), SpinnerAdapter {
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View =
+                convertView ?: TextView(this@OrionViewerActivity).apply {
+                    text = " % "
+                }
     }
 
-    private class MyArrayAdapter extends ArrayAdapter implements SpinnerAdapter {
+    private class Nook2ListAdapter internal constructor(context: Context, textViewResourceId: Int, objects: Array<Any>, view: TextView) : ArrayAdapter<*>(context, textViewResourceId, objects) {
 
-        MyArrayAdapter() {
-            super(OrionViewerActivity.this, R.layout.support_simple_spinner_dropdown_item, OrionViewerActivity.this.getResources().getTextArray(R.array.fits));
+        private val color: Int
+
+        init {
+            this.color = view.textColors.defaultColor
         }
 
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView != null) {
-                return  convertView;
-            } else {
-                TextView view = new TextView(OrionViewerActivity.this);
-                view.setText(" % ");
-                return view;
-            }
-        }
-    }
-
-    private static class Nook2ListAdapter extends ArrayAdapter  {
-
-        private int color;
-
-        Nook2ListAdapter(Context context, int textViewResourceId, Object[] objects, TextView view) {
-            super(context, textViewResourceId,  objects);
-            this.color = view.getTextColors().getDefaultColor();
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view = super.getView(position, convertView, parent);
-            ((CheckedTextView)view).setTextColor(color);
-            return view;
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val view = super.getView(position, convertView, parent)
+            (view as CheckedTextView).setTextColor(color)
+            return view
         }
     }
 
-    private void askPassword(final Controller controller) {
+    private fun askPassword(controller: Controller) {
         if (controller.needPassword()) {
-            AlertDialog.Builder builder = createThemedAlertBuilder();
-            builder.setTitle("Password");
+            val builder = createThemedAlertBuilder()
+            builder.setTitle("Password")
 
-            final EditText input = new EditText(this);
-            input.setInputType(EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
-            input.setTransformationMethod(new PasswordTransformationMethod());
-            builder.setView(input);
+            val input = EditText(this)
+            input.inputType = EditorInfo.TYPE_TEXT_VARIATION_PASSWORD
+            input.transformationMethod = PasswordTransformationMethod()
+            builder.setView(input)
 
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (controller.authenticate(input.getText().toString())) {
-                        dialog.dismiss();
-                    } else {
-                        askPassword(controller);
-                        showWarning("Wrong password!");
-                    }
+            builder.setPositiveButton("OK") { dialog, which ->
+                if (controller.authenticate(input.text.toString())) {
+                    dialog.dismiss()
+                } else {
+                    askPassword(controller)
+                    showWarning("Wrong password!")
                 }
-            });
+            }
 
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            builder.create().show();
+            builder.setNegativeButton("Cancel") { dialog, which -> dialog.dismiss() }
+            builder.create().show()
         }
     }
 
     //big hack
-    void myprocessOnActivityVisible() {
-        if (getGlobalOptions().isShowTapHelp() && !getOrionContext().isTesting()) {
-            getGlobalOptions().saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false);
-            new TapHelpDialog(this).showDialog();
+    internal fun myprocessOnActivityVisible() {
+        if (globalOptions!!.isShowTapHelp && !orionContext.isTesting) {
+            globalOptions!!.saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false)
+            TapHelpDialog(this).showDialog()
         }
     }
 
-    void startSearch() {
-        SearchDialog.newInstance().show(getSupportFragmentManager(), "search");
+    internal fun startSearch() {
+        SearchDialog.newInstance().show(supportFragmentManager, "search")
     }
 
-    private void destroyControllerAndBook() {
+    private fun destroyControllerAndBook() {
         if (lastPageInfo != null) {
-            getDevice().onBookClose(lastPageInfo.pageNumber, lastPageInfo.totalPages);
+            device!!.onBookClose(lastPageInfo!!.pageNumber, lastPageInfo!!.totalPages)
         }
         if (controller != null) {
-            controller.destroy();
-            controller = null;
+            controller!!.destroy()
+            controller = null
         }
+    }
+
+    companion object {
+
+        const val OPEN_BOOKMARK_ACTIVITY_RESULT = 1
+
+        const val ROTATION_SCREEN = 0
+
+        const val PAGE_SCREEN = 1
+
+        const val ZOOM_SCREEN = 2
+
+        const val CROP_SCREEN = 3
+
+        const val PAGE_LAYOUT_SCREEN = 4
+
+        const val ADD_BOOKMARK_SCREEN = 5
+
+        const val CROP_RESTRICTION_MIN = -10
+
+        const val CROP_RESTRICTION_MAX = 40
     }
 }
