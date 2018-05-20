@@ -17,255 +17,198 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer;
+package universe.constellation.orion.viewer
 
-import android.annotation.SuppressLint;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
-import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Toast;
+import android.annotation.SuppressLint
+import android.content.SharedPreferences
+import android.content.pm.ActivityInfo
+import android.os.Bundle
+import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
+import android.view.KeyEvent
+import android.view.View
+import android.widget.Toast
+import universe.constellation.orion.viewer.device.AndroidDevice
+import universe.constellation.orion.viewer.device.Device
+import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
+import universe.constellation.orion.viewer.prefs.GlobalOptions
+import universe.constellation.orion.viewer.prefs.OrionApplication
 
-import universe.constellation.orion.viewer.device.AndroidDevice;
-import universe.constellation.orion.viewer.device.Device;
-import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity;
-import universe.constellation.orion.viewer.prefs.GlobalOptions;
-import universe.constellation.orion.viewer.prefs.OrionApplication;
+abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: Int = Device.DEFAULT_ACTIVITY) : AppCompatActivity() {
 
-import static universe.constellation.orion.viewer.LoggerKt.log;
+    val device: AndroidDevice? = if (createDevice) OrionApplication.createDevice() else null
 
-/**
- * User: mike
- * Date: 24.12.11
- * Time: 17:00
- */
-public abstract class OrionBaseActivity extends AppCompatActivity {
+    protected var listener: SharedPreferences.OnSharedPreferenceChangeListener? = null
 
-    public static final String DONT_OPEN_RECENT = "DONT_OPEN_RECENT";
+    protected lateinit var toolbar: Toolbar
+        private set
 
-    protected AndroidDevice device;
+    open val view: OrionScene?
+        get() = null
 
-    protected SharedPreferences.OnSharedPreferenceChangeListener listener;
+    val orionContext: OrionApplication
+        get() = applicationContext as OrionApplication
 
-    protected Toolbar toolbar;
-
-    public OrionBaseActivity() {
-        if (supportDevice()) {
-            device = OrionApplication.createDevice();
-        }
-    }
+    val applicationDefaultOrientation: String
+        get() = orionContext.options.getStringProperty(GlobalOptions.SCREEN_ORIENTATION, "DEFAULT")
 
     @SuppressLint("MissingSuperCall")
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        onOrionCreate(savedInstanceState, -1);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        onOrionCreate(savedInstanceState, -1)
     }
 
-    protected void onOrionCreate(Bundle savedInstanceState, int layoutId) {
-        getOrionContext().applyTheme(this);
-        getOrionContext().updateLanguage(getResources());
+    protected fun onOrionCreate(savedInstanceState: Bundle?, layoutId: Int) {
+        orionContext.applyTheme(this)
+        orionContext.updateLanguage(resources)
 
-        if (this instanceof OrionViewerActivity || this instanceof OrionFileManagerActivity) {
-            int screenOrientation = getScreenOrientation(getApplicationDefaultOrientation());
-            changeOrientation(screenOrientation);
+        if (this is OrionViewerActivity || this is OrionFileManagerActivity) {
+            val screenOrientation = getScreenOrientation(applicationDefaultOrientation)
+            changeOrientation(screenOrientation)
         }
 
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState)
 
         if (device != null) {
-            device.onCreate(this);
+            device!!.onCreate(this)
         }
 
         if (layoutId != -1) {
-            setContentView(layoutId);
-            toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
+            setContentView(layoutId)
+            toolbar = findViewById<View>(R.id.toolbar) as Toolbar
+            setSupportActionBar(toolbar)
         }
     }
 
-    @Override
-    protected void onDestroy () {
-        super.onDestroy();
+    override fun onDestroy() {
+        super.onDestroy()
         if (device != null) {
-            device.onDestroy();
+            device!!.onDestroy()
         }
     }
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//
-//        if (device != null) {
-//            device.onResume();
-//        }
-//    }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
         if (hasFocus) {
-            if (device != null) {
-                device.onWindowGainFocus();
-            }
+            device?.onWindowGainFocus()
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (device != null) {
-            device.onPause();
+    override fun onPause() {
+        super.onPause()
+        device?.onPause()
+    }
+
+    override fun onUserInteraction() {
+        super.onUserInteraction()
+        device?.onUserInteraction()
+    }
+
+    protected open fun findMyViewById(id: Int): View {
+        return findViewById(id)
+    }
+
+    protected open fun onAnimatorCancel() {
+
+    }
+
+    protected open fun onApplyAction() {
+
+    }
+
+    fun showWarning(warning: String) {
+        Toast.makeText(this, warning, Toast.LENGTH_SHORT).show()
+    }
+
+    fun showWarning(stringId: Int) {
+        showWarning(resources.getString(stringId))
+    }
+
+    fun showFastMessage(stringId: Int) {
+        showWarning(resources.getString(stringId))
+    }
+
+    fun showLongMessage(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+
+    fun showFastMessage(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    protected fun showError(e: Exception) {
+        showError("Error", e)
+    }
+
+    fun showError(error: String, ex: Exception) {
+        Toast.makeText(this, error + ": " + ex.message, Toast.LENGTH_LONG).show()
+        log(ex)
+    }
+
+    fun changeOrientation(orientationId: Int) {
+        println("Display orientation " + requestedOrientation + " screenOrientation " + window.attributes.screenOrientation)
+        if (requestedOrientation != orientationId) {
+            requestedOrientation = orientationId
         }
     }
 
-    @Override
-    public void onUserInteraction() {
-        super.onUserInteraction();
-        if (device != null) {
-            device.onUserInteraction();
+    fun getScreenOrientation(id: String): Int {
+        var screenOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        if ("LANDSCAPE" == id) {
+            screenOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        } else if ("PORTRAIT" == id) {
+            screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        } else if ("LANDSCAPE_INVERSE" == id) {
+            screenOrientation = if (orionContext.sdkVersion < 9) ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE else 8
+        } else if ("PORTRAIT_INVERSE" == id) {
+            screenOrientation = if (orionContext.sdkVersion < 9) ActivityInfo.SCREEN_ORIENTATION_PORTRAIT else 9
         }
+        return screenOrientation
     }
 
-    public AndroidDevice getDevice() {
-        return device;
-    }
-
-    public OrionScene getView() {
-        return null;
-    }
-
-    public int getViewerType() {
-        return Device.DEFAULT_ACTIVITY;
-    }
-
-    protected View findMyViewById(int id) {
-        return findViewById(id);
-    }
-
-    protected void onAnimatorCancel() {
-
-    }
-
-    protected void onApplyAction() {
-
-    }
-
-    public boolean supportDevice() {
-        return true;
-    }
-
-    public OrionApplication getOrionContext() {
-        return (OrionApplication) getApplicationContext();
-    }
-
-    public void showWarning(String warning) {
-        Toast.makeText(this, warning, Toast.LENGTH_SHORT).show();
-    }
-
-    public void showWarning(int stringId) {
-        showWarning(getResources().getString(stringId));
-    }
-
-    public void showFastMessage(int stringId) {
-        showWarning(getResources().getString(stringId));
-    }
-
-    public void showLongMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-    }
-
-    public void showFastMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    protected void showError(Exception e) {
-        showError("Error", e);
-    }
-
-    public void showError(String error, Exception ex) {
-        Toast.makeText(this, error + ": " + ex.getMessage(), Toast.LENGTH_LONG).show();
-        log(ex);
-    }
-
-    public void changeOrientation(int orientationId) {
-        System.out.println("Display orientation "+ getRequestedOrientation() + " screenOrientation " + getWindow().getAttributes().screenOrientation);
-        if (getRequestedOrientation() != orientationId) {
-            setRequestedOrientation(orientationId);
+    fun getScreenOrientationItemPos(id: String): Int {
+        var screenOrientation = 0
+        if ("LANDSCAPE" == id) {
+            screenOrientation = 2
+        } else if ("PORTRAIT" == id) {
+            screenOrientation = 1
+        } else if ("LANDSCAPE_INVERSE" == id) {
+            screenOrientation = if (orionContext.sdkVersion < 9) 2 else 4
+        } else if ("PORTRAIT_INVERSE" == id) {
+            screenOrientation = if (orionContext.sdkVersion < 9) 1 else 3
         }
+        return screenOrientation
     }
 
-    public int getScreenOrientation(String id) {
-        int screenOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
-        if ("LANDSCAPE".equals(id)) {
-            screenOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-        } else if ("PORTRAIT".equals(id)) {
-            screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-        } else if ("LANDSCAPE_INVERSE".equals(id)) {
-            screenOrientation = getOrionContext().getSdkVersion() < 9 ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE : 8;
-        } else if ("PORTRAIT_INVERSE".equals(id)) {
-            screenOrientation = getOrionContext().getSdkVersion() < 9 ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : 9;
-        }
-        return screenOrientation;
+    fun showAlert(title: String, message: String) {
+        val builder = createThemedAlertBuilder()
+        builder.setTitle(title)
+        builder.setMessage(message)
+
+        builder.setPositiveButton("OK") { dialog, which -> dialog.dismiss() }
+
+        builder.create().show()
     }
 
-    public int getScreenOrientationItemPos(String id) {
-        int screenOrientation = 0;
-        if ("LANDSCAPE".equals(id)) {
-            screenOrientation = 2;
-        } else if ("PORTRAIT".equals(id)) {
-            screenOrientation = 1;
-        } else if ("LANDSCAPE_INVERSE".equals(id)) {
-            screenOrientation = getOrionContext().getSdkVersion() < 9 ? 2 : 4;
-        } else if ("PORTRAIT_INVERSE".equals(id)) {
-            screenOrientation = getOrionContext().getSdkVersion() < 9 ? 1 : 3;
-        }
-        return screenOrientation;
+    fun showAlert(titleId: Int, messageId: Int) {
+        val builder = createThemedAlertBuilder()
+        builder.setTitle(titleId)
+        builder.setMessage(messageId)
+
+        builder.setPositiveButton("OK") { dialog, which -> dialog.dismiss() }
+
+        builder.create().show()
     }
 
-    public String getApplicationDefaultOrientation() {
-        return getOrionContext().getOptions().getStringProperty(GlobalOptions.SCREEN_ORIENTATION, "DEFAULT");
+    fun createThemedAlertBuilder(): AlertDialog.Builder {
+        return AlertDialog.Builder(this)
     }
 
-    public void showAlert(String title, String message) {
-        AlertDialog.Builder builder = createThemedAlertBuilder();
-        builder.setTitle(title);
-        builder.setMessage(message);
-
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
-        builder.create().show();
+    protected fun doTrack(keyCode: Int): Boolean {
+        return keyCode != KeyEvent.KEYCODE_MENU && keyCode != KeyEvent.KEYCODE_BACK
     }
 
-    public void showAlert(int titleId, int messageId) {
-        AlertDialog.Builder builder = createThemedAlertBuilder();
-        builder.setTitle(titleId);
-        builder.setMessage(messageId);
+    companion object {
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
-        builder.create().show();
-    }
-
-    public AlertDialog.Builder createThemedAlertBuilder() {
-        return new AlertDialog.Builder(this);
-    }
-
-    protected boolean doTrack(int keyCode) {
-        return keyCode != KeyEvent.KEYCODE_MENU && keyCode != KeyEvent.KEYCODE_BACK;
-    }
-
-    public Toolbar getToolbar() {
-        return toolbar;
+        const val DONT_OPEN_RECENT = "DONT_OPEN_RECENT"
     }
 }

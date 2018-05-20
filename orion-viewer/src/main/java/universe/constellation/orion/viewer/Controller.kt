@@ -302,7 +302,7 @@ class Controller(
     fun changeColorMode(colorMode: String, invalidate: Boolean) {
         activity.fullScene.setColorMatrix(ColorUtil.getColorMode(colorMode))
         if (invalidate) {
-            activity.view.invalidate()
+            activity.view?.invalidate()
         }
     }
 

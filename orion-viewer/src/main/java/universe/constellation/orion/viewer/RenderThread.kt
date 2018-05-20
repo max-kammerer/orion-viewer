@@ -179,12 +179,12 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
 
                 if (!executeInSeparateThread) {
                     fullScene.onNewImage(bitmap, curPos, mutex)
-                    activity.getDevice().flushBitmap()
+                    activity.device!!.flushBitmap()
                     mutex.countDown()
                 } else {
                     activity.runOnUiThread {
                         fullScene.onNewImage(bitmap, curPos, mutex)
-                        activity.getDevice().flushBitmap()
+                        activity.device!!.flushBitmap()
                     }
                 }
 

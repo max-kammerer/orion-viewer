@@ -103,7 +103,7 @@ public class BookmarkAccessor extends SQLiteOpenHelper {
     }
 
 
-    public List selectBookmarks(long bookId) {
+    public List<Bookmark> selectBookmarks(long bookId) {
         SQLiteDatabase dataBase = getReadableDatabase();
         ArrayList<Bookmark> bookmarks = new ArrayList<Bookmark>();
 

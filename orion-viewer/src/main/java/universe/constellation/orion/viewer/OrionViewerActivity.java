@@ -295,7 +295,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             globalOptions.addRecentEntry(new GlobalOptions.RecentEntry(new File(filePath).getAbsolutePath()));
 
             lastPageInfo.totalPages = doc.getPageCount();
-            device.onNewBook(lastPageInfo, doc);
+            getDevice().onNewBook(lastPageInfo, doc);
 
             askPassword(controller);
 
@@ -715,7 +715,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
             }
         }
 
-        if (device.onKeyUp(keyCode, event.isLongPress(), operation)) {
+        if (getDevice().onKeyUp(keyCode, event.isLongPress(), operation)) {
             changePage(operation.getValue());
             return true;
         }
@@ -760,10 +760,6 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     OrionStatusBarHelper getStatusBarHelper() {
         return fullScene.getStatusBarHelper();
-    }
-
-    public Toolbar getToolbar() {
-        return toolbar;
     }
 
     @Override
@@ -1145,7 +1141,7 @@ public class OrionViewerActivity extends OrionBaseActivity {
 
     private void destroyControllerAndBook() {
         if (lastPageInfo != null) {
-            device.onBookClose(lastPageInfo.pageNumber, lastPageInfo.totalPages);
+            getDevice().onBookClose(lastPageInfo.pageNumber, lastPageInfo.totalPages);
         }
         if (controller != null) {
             controller.destroy();
