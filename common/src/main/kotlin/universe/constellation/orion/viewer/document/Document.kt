@@ -62,9 +62,9 @@ interface Document : PageInfoProvider, ImagePostProcessor {
 
     fun destroy()
 
-    fun needPassword(): Boolean
+    fun needPassword(): Boolean = false
 
-    fun authenticate(password: String): Boolean
+    fun authenticate(password: String): Boolean = true
 
     fun searchPage(pageNumber: Int, text: String): Array<RectF>?
 
