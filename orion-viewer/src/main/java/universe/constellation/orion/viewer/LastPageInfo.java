@@ -20,6 +20,7 @@
 package universe.constellation.orion.viewer;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Xml;
 
 import org.jetbrains.annotations.NotNull;
@@ -100,21 +101,26 @@ public class LastPageInfo implements Serializable, ShortFileInfo {
         }
 
         if (!successfull) {
-            //reinit
-            lastPageInfo = new LastPageInfo();
-            GlobalOptions options = activity.getOrionContext().getOptions();
-
-            lastPageInfo.zoom = options.getDefaultZoom();
-            lastPageInfo.contrast = options.getDefaultContrast();
-            lastPageInfo.walkOrder = options.getWalkOrder();
-            lastPageInfo.pageLayout = options.getPageLayout();
-            lastPageInfo.colorMode = options.getColorMode();
+            lastPageInfo = createDefaultLastPageInfo(activity);
         }
 
         lastPageInfo.fileData = fileData;
         lastPageInfo.openingFileName = filePath;
         lastPageInfo.simpleFileName = filePath.substring(idx + 1);
         lastPageInfo.fileSize = file.length();
+        return lastPageInfo;
+    }
+
+    @NonNull
+    public static LastPageInfo createDefaultLastPageInfo(OrionBaseActivity activity) {
+        LastPageInfo lastPageInfo = new LastPageInfo();
+        GlobalOptions options = activity.getOrionContext().getOptions();
+
+        lastPageInfo.zoom = options.getDefaultZoom();
+        lastPageInfo.contrast = options.getDefaultContrast();
+        lastPageInfo.walkOrder = options.getWalkOrder();
+        lastPageInfo.pageLayout = options.getPageLayout();
+        lastPageInfo.colorMode = options.getColorMode();
         return lastPageInfo;
     }
 

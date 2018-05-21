@@ -34,12 +34,14 @@ import android.text.method.PasswordTransformationMethod
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.*
+import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.android.UI
 import universe.constellation.orion.viewer.android.FileUtils
 import universe.constellation.orion.viewer.device.Device
 import universe.constellation.orion.viewer.dialog.SearchDialog
 import universe.constellation.orion.viewer.dialog.TapHelpDialog
 import universe.constellation.orion.viewer.dialog.create
-import universe.constellation.orion.viewer.document.Document
+import universe.constellation.orion.viewer.document.StubDocument
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import universe.constellation.orion.viewer.selection.NewTouchProcessor
@@ -47,6 +49,7 @@ import universe.constellation.orion.viewer.selection.NewTouchProcessorWithScale
 import universe.constellation.orion.viewer.selection.SelectionAutomata
 import universe.constellation.orion.viewer.view.FullScene
 import universe.constellation.orion.viewer.view.OrionStatusBarHelper
+import universe.constellation.orion.viewer.view.Renderer
 import java.io.File
 
 class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVITY) {
@@ -233,61 +236,88 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     @Throws(Exception::class)
-    private fun openFile(filePath: String): Document {
-        var doc: Document? = null
-        log("Trying to open file: $filePath")
+    private fun openFile(filePath: String) {
+        val stubDocument = StubDocument(filePath, "Loading...")
+        val stubRenderer = Renderer.EMPTY
+        val stubController = Controller(this, stubDocument, SimpleLayoutStrategy.create(stubDocument), stubRenderer)
+        val drawView = fullScene.drawView
+        val stubInfo = LastPageInfo.createDefaultLastPageInfo(this)
+        stubController.changeOrinatation(stubInfo.screenOrientation)
+        stubController.init(stubInfo, Point(drawView.sceneWidth, drawView.sceneHeight))
 
-        orionContext.onNewBook(filePath)
-        try {
-            lastPageInfo = LastPageInfo.loadBookParameters(this, filePath)
-            orionContext.currentBookParameters = lastPageInfo
-            OptionActions.DEBUG.doAction(this, false, globalOptions.getBooleanProperty("DEBUG", false))
+        view!!.setDimensionAware(stubController)
+        stubController.drawPage()
+        controller = stubController
+        updateViewOnNewBook(stubDocument.title)
 
-            doc = FileUtil.openFile(filePath)
+        launch(UI) {
+            log("Trying to open file: $filePath")
 
-            val layoutStrategy = SimpleLayoutStrategy.create(doc)
-
-            val renderer = RenderThread(this, layoutStrategy, doc, fullScene)
-
-            controller = Controller(this, doc, layoutStrategy, renderer)
-
-            controller!!.changeOrinatation(lastPageInfo!!.screenOrientation)
-
-            val drawView = fullScene.drawView
-            controller!!.init(lastPageInfo!!, Point(drawView.sceneWidth, drawView.sceneHeight))
-
-            subscriptionManager.sendDocOpenedNotification(controller)
-
-            view!!.setDimensionAware(controller!!)
-
-            controller!!.drawPage()
-
-            var title = doc.title
-            if (title == null || "" == title) {
-                val idx = filePath.lastIndexOf('/')
-                title = filePath.substring(idx + 1)
-                title = title.substring(0, title.lastIndexOf("."))
+            val newDocument = try {
+                async(CommonPool) {
+                    FileUtil.openFile(filePath)
+                }.await()
+            } catch (e: Exception) {
+                log(e)
+                stubDocument.bodyText = e.message
+                stubDocument.title = e.message
+                updateViewOnNewBook(stubDocument.title)
+                return@launch
             }
 
+            try {
+                val lastPageInfo1 = async(CommonPool) { LastPageInfo.loadBookParameters(this@OrionViewerActivity, filePath) }.await()
+                lastPageInfo = lastPageInfo1
+                orionContext.currentBookParameters = lastPageInfo1
+                OptionActions.DEBUG.doAction(this@OrionViewerActivity, false, globalOptions.getBooleanProperty("DEBUG", false))
 
-            fullScene.onNewBook(title, controller!!.pageCount)
-            if (supportActionBar != null) {
-                supportActionBar!!.setTitle(title)
+                val layoutStrategy = SimpleLayoutStrategy.create(newDocument)
+
+                val renderer = RenderThread(this@OrionViewerActivity, layoutStrategy, newDocument, fullScene)
+
+                val controller1 = Controller(this@OrionViewerActivity, newDocument, layoutStrategy, renderer)
+                controller = controller1
+                stubController.destroy()
+                controller1.changeOrinatation(lastPageInfo1!!.screenOrientation)
+
+                val drawView = fullScene.drawView
+                controller1.init(lastPageInfo1, Point(drawView.sceneWidth, drawView.sceneHeight))
+
+                subscriptionManager.sendDocOpenedNotification(controller1)
+
+                view!!.setDimensionAware(controller1)
+
+                controller1.drawPage()
+
+                var title = newDocument.title
+                if (title == null || "" == title) {
+                    val idx = filePath.lastIndexOf('/')
+                    title = filePath.substring(idx + 1)
+                    title = title.substring(0, title.lastIndexOf("."))
+                }
+
+
+                updateViewOnNewBook(title)
+                globalOptions.addRecentEntry(GlobalOptions.RecentEntry(File(filePath).absolutePath))
+
+                lastPageInfo1.totalPages = newDocument.pageCount
+                device!!.onNewBook(lastPageInfo1, newDocument)
+
+                askPassword(controller1)
+                orionContext.onNewBook(filePath)
+
+            } catch (e: Exception) {
+                log(e)
+                throw e
             }
-            globalOptions.addRecentEntry(GlobalOptions.RecentEntry(File(filePath).absolutePath))
-
-            lastPageInfo!!.totalPages = doc.pageCount
-            device!!.onNewBook(lastPageInfo!!, doc)
-
-            askPassword(controller!!)
-
-        } catch (e: Exception) {
-            log(e)
-            doc?.destroy()
-            throw e
         }
+    }
 
-        return doc
+    private fun updateViewOnNewBook(title: String?) {
+        fullScene.onNewBook(title, controller!!.pageCount)
+        if (supportActionBar != null) {
+            supportActionBar!!.title = title
+        }
     }
 
     private fun showAlertWithExceptionThrow(intent: Intent, e: Exception) {
