@@ -20,6 +20,7 @@
 package universe.constellation.orion.viewer
 
 import android.graphics.Point
+import kotlinx.coroutines.experimental.Job
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.DocumentWithCaching
 import universe.constellation.orion.viewer.document.OutlineItem
@@ -35,7 +36,8 @@ class Controller(
         val activity: OrionViewerActivity,
         val document: Document,
         val layoutStrategy: LayoutStrategy,
-        private var renderer: Renderer
+        private var renderer: Renderer,
+        val rootJob: Job = Job()
 ) : ViewDimensionAware {
 
     private lateinit var layoutInfo: LayoutPosition
@@ -173,7 +175,7 @@ class Controller(
         get() = layoutStrategy.margins
 
     fun destroy() {
-        log("Destroying controller...")
+        log("Destroying controller for ${document.title}...")
         activity.subscriptionManager.unSubscribe(listener)
         renderer.stopRenderer()
         document.destroy()

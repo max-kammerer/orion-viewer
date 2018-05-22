@@ -110,7 +110,7 @@ class FileChooserAdapter constructor(
 
     companion object {
 
-        private val extensions = setOf("cbz", "djvu", "djv", "pdf", "oxps", "tif", "tiff", "xps")
+        val supportedExtensions = setOf("cbz", "djvu", "djv", "pdf", "oxps", "tif", "tiff", "xps")
 
         @JvmField
         var DEFAULT_FILTER: FilenameFilter = object : FilenameFilter {
@@ -123,7 +123,7 @@ class FileChooserAdapter constructor(
                     return false
                 }
 
-                return extensions.contains(filename.fileExtension.toLowerCase())
+                return supportedExtensions.contains(filename.fileExtension.toLowerCase())
             }
         }
     }

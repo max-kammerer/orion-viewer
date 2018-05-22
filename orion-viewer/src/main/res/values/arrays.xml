@@ -189,4 +189,10 @@
         <item>CM_WHITE_ON_BLUE</item>
         <!--<item>CM_YELLOW_ON_BLACK</item>-->
     </string-array>
+
+    <string-array name="save_options">
+        <item>@string/save_to_file</item>
+        <item>@string/open_in_temporary_file</item>
+        <item>@string/open_rececent_files</item>
+    </string-array>
 </resources>
