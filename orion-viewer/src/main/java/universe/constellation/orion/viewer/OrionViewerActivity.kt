@@ -93,7 +93,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private var zoomInternal = 0
 
-    override val view: OrionScene?
+    override val view: OrionScene
         get() = fullScene.drawView
 
     val statusBarHelper: OrionStatusBarHelper
@@ -149,7 +149,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             while (i < permissions.size) {
                 if (android.Manifest.permission.READ_EXTERNAL_STORAGE == permissions[i] && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                     hasReadPermissions = true
-                    onNewIntent(lastIntent)
+                    onNewIntent(lastIntent ?: return)
                     lastIntent = null
                     return
                 }
@@ -190,41 +190,52 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        log("Runtime.getRuntime().totalMemory() = " + Runtime.getRuntime().totalMemory())
-        log("Debug.getNativeHeapSize() = " + Debug.getNativeHeapSize())
-        log("OVA: on new intent " + intent!!)
+    override fun onNewIntent(intent: Intent) {
+        log("Runtime.getRuntime().totalMemory(): ${Runtime.getRuntime().totalMemory()}")
+        log("Debug.getNativeHeapSize(): ${Debug.getNativeHeapSize()}")
+        log("Trying to open new intent: $intent...")
         if (!hasReadPermissions) {
-            log("OVA: Waiting for read permissions")
+            log("Waiting for read permissions")
             lastIntent = intent
             return
         }
 
         val uri = intent.data
         if (uri != null) {
-            log("File URI  = " + uri.toString())
-            var path: String? = null
+            log("Try to open file by " + uri.toString())
             try {
-                if ("content".equals(uri.scheme, ignoreCase = true)) {
-                    path = FileUtils.getPath(this, uri)
-                }
+                val intentPath: String =
+                        if ("content".equals(uri.scheme, ignoreCase = true)) {
+                            try {
+                                FileUtils.getPath(this, uri)
+                            } catch (e: Exception) {
+                                log(e)
+                                null
+                            } ?: run {
+                                SaveNotification().apply {
+                                    Bundle().apply {
+                                        putString(SaveNotification.URI, uri.toString())
+                                        putString(SaveNotification.TYPE, intent.type)
+                                        arguments = this
+                                    }
 
-                val file = path ?: uri.path
 
-                if (controller != null) {
-                    if (lastPageInfo != null) {
-                        if (lastPageInfo!!.openingFileName == file) {
-                            //keep controller
-                            controller!!.drawPage()
-                            return
-                        }
+                                    show(supportFragmentManager, "save_notification")
+                                }
+                                return
+                            }
+                        } else uri.path
+
+
+                if (controller != null && lastPageInfo != null) {
+                    if (lastPageInfo!!.openingFileName == intentPath) {
+                        controller!!.drawPage()
+                        return
                     }
-
-                    destroyControllerAndBook()
                 }
 
-                AndroidLogger.stopLogger()
-                openFile(file)
+                openFileAndDestroyOldController(intentPath)
+
             } catch (e: Exception) {
                 showAlertWithExceptionThrow(intent, e)
             }
@@ -233,6 +244,14 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         /*if (intent.getAction().endsWith("MAIN"))*/ {
             //TODO error
         }
+    }
+
+    @Throws(Exception::class)
+    public fun openFileAndDestroyOldController(filePath: String) {
+        log("openFileAndDestroyOldController")
+        destroyController(controller).also { controller = null }
+        AndroidLogger.stopLogger()
+        openFile(filePath)
     }
 
     @Throws(Exception::class)
@@ -245,16 +264,16 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         stubController.changeOrinatation(stubInfo.screenOrientation)
         stubController.init(stubInfo, Point(drawView.sceneWidth, drawView.sceneHeight))
 
-        view!!.setDimensionAware(stubController)
+        view.setDimensionAware(stubController)
         stubController.drawPage()
         controller = stubController
         updateViewOnNewBook(stubDocument.title)
 
         launch(UI) {
             log("Trying to open file: $filePath")
-
+            val rootJob = Job()
             val newDocument = try {
-                async(CommonPool) {
+                async(CommonPool, parent = rootJob) {
                     FileUtil.openFile(filePath)
                 }.await()
             } catch (e: Exception) {
@@ -266,7 +285,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             }
 
             try {
-                val lastPageInfo1 = async(CommonPool) { LastPageInfo.loadBookParameters(this@OrionViewerActivity, filePath) }.await()
+                val lastPageInfo1 = async(CommonPool, parent = rootJob) { LastPageInfo.loadBookParameters(this@OrionViewerActivity, filePath) }.await()
                 lastPageInfo = lastPageInfo1
                 orionContext.currentBookParameters = lastPageInfo1
                 OptionActions.DEBUG.doAction(this@OrionViewerActivity, false, globalOptions.getBooleanProperty("DEBUG", false))
@@ -275,7 +294,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
                 val renderer = RenderThread(this@OrionViewerActivity, layoutStrategy, newDocument, fullScene)
 
-                val controller1 = Controller(this@OrionViewerActivity, newDocument, layoutStrategy, renderer)
+                val controller1 = Controller(this@OrionViewerActivity, newDocument, layoutStrategy, renderer, rootJob)
                 controller = controller1
                 stubController.destroy()
                 controller1.changeOrinatation(lastPageInfo1!!.screenOrientation)
@@ -285,17 +304,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
                 subscriptionManager.sendDocOpenedNotification(controller1)
 
-                view!!.setDimensionAware(controller1)
+                view.setDimensionAware(controller1)
 
                 controller1.drawPage()
 
-                var title = newDocument.title
-                if (title == null || "" == title) {
-                    val idx = filePath.lastIndexOf('/')
-                    title = filePath.substring(idx + 1)
-                    title = title.substring(0, title.lastIndexOf("."))
-                }
-
+                val title = newDocument.title?.takeIf { it.isNotBlank() } ?: filePath.substringAfter('/').substringBefore(".")
 
                 updateViewOnNewBook(title)
                 globalOptions.addRecentEntry(GlobalOptions.RecentEntry(File(filePath).absolutePath))
@@ -586,7 +599,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 input.setText(e.message)
                 buider.setView(input)
 
-                buider.setNeutralButton("OK") { dialog, which -> dialog.dismiss() }
+                buider.setNeutralButton("OK") { dialog, _ -> dialog.dismiss() }
                 buider.create().show()
             }
         }
@@ -601,7 +614,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         log("onResume")
         if (myIntent != null) {
             //starting creation intent
-            onNewIntent(myIntent)
+            onNewIntent(myIntent!!)
             myIntent = null
         } else {
             if (controller != null) {
@@ -617,7 +630,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         log("onDestroy")
         AndroidLogger.stopLogger()
 
-        destroyControllerAndBook()
+        destroyController(controller).also { controller = null }
 
         if (dialog != null) {
             dialog!!.dismiss()
@@ -691,8 +704,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private fun changePage(operation: Int) {
         val swapKeys = globalOptions.isSwapKeys
-        val width = view!!.sceneWidth
-        val height = view!!.sceneHeight
+        val width = view.sceneWidth
+        val height = view.sceneHeight
         val landscape = width > height || controller!!.rotation != 0 /*second condition for nook and alex*/
         if (controller != null) {
             if (operation == Device.NEXT && (!landscape || !swapKeys) || swapKeys && operation == Device.PREV && landscape) {
@@ -778,7 +791,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         dialog!!.setContentView(R.layout.options_dialog)
         animator = dialog!!.findViewById<View>(R.id.viewanim) as ViewAnimator?
 
-        view!!.setOnTouchListener(View.OnTouchListener { v, event -> newTouchProcessor!!.onTouch(event) })
+        view.setOnTouchListener(View.OnTouchListener { v, event -> newTouchProcessor!!.onTouch(event) })
 
         dialog!!.setCanceledOnTouchOutside(true)
     }
@@ -1002,13 +1015,15 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         SearchDialog.newInstance().show(supportFragmentManager, "search")
     }
 
-    private fun destroyControllerAndBook() {
-        if (lastPageInfo != null) {
-            device!!.onBookClose(lastPageInfo!!.pageNumber, lastPageInfo!!.totalPages)
-        }
-        if (controller != null) {
-            controller!!.destroy()
-            controller = null
+    private fun destroyController(controller: Controller?) {
+        controller?.let {
+            val currentPage = it.currentPage
+            val pageCount = it.document.pageCount
+            launch(CommonPool) {
+                it.rootJob.cancelAndJoin()
+                it.destroy()
+                device!!.onBookClose(currentPage, pageCount)
+            }
         }
     }
 
