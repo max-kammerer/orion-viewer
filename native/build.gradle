@@ -4,9 +4,9 @@
 apply plugin: 'kotlin-platform-jvm'
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     expectedBy project(":common")
-    compile files('libs/Runtime.jar')
+    implementation files('libs/Runtime.jar')
 }
 
 sourceCompatibility = "1.8"

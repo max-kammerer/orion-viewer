@@ -16,7 +16,7 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:0.3'
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.22.5'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.22.5'
 }
 
 android {
