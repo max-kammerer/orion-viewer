@@ -37,6 +37,12 @@
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|enterAlways" />
     </android.support.v7.widget.Toolbar>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="File Name"
+        android:id="@+id/fileName"
+        android:visibility="gone"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
