@@ -194,9 +194,4 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
     protected fun doTrack(keyCode: Int): Boolean {
         return keyCode != KeyEvent.KEYCODE_MENU && keyCode != KeyEvent.KEYCODE_BACK
     }
-
-    companion object {
-
-        const val DONT_OPEN_RECENT = "DONT_OPEN_RECENT"
-    }
 }

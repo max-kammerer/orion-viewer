@@ -36,6 +36,8 @@ import android.view.*
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import universe.constellation.orion.viewer.*
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import java.io.File
@@ -131,13 +133,19 @@ open class OrionFileManagerActivity(private val fileNameFilter: FilenameFilter =
     override fun onNewIntent(intent: Intent) {
         log("OrionFileManager: On new intent $intent")
 
-        val dontStartRecent = intent.getBooleanExtra(OrionBaseActivity.DONT_OPEN_RECENT, false)
+        if (intent.getBooleanExtra(OPEN_RECENTS_TAB, false)) {
+            findViewById<ViewPager>(R.id.viewpager).setCurrentItem(1, false)
+            return
+        }
+
+
+        val dontStartRecent = intent.getBooleanExtra(DONT_OPEN_RECENT_FILE, false)
         if (!dontStartRecent && globalOptions!!.isOpenRecentBook) {
             if (!globalOptions!!.recentFiles.isEmpty()) {
                 val entry = globalOptions!!.recentFiles[0]
                 val book = File(entry.path)
                 if (book.exists()) {
-                    log("Opening recent book")
+                    log("Opening recent book $book")
                     openFile(book)
                 }
             }
@@ -164,6 +172,8 @@ open class OrionFileManagerActivity(private val fileNameFilter: FilenameFilter =
             val file = File(entry.path)
             if (file.exists()) {
                 openFile(file)
+            } else {
+                Toast.makeText(parent.context, getString(R.string.recent_book_not_found), LENGTH_SHORT).show()
             }
         }
 
@@ -193,11 +203,13 @@ open class OrionFileManagerActivity(private val fileNameFilter: FilenameFilter =
     protected open fun openFile(file: File) {
         log("Opening new book: " + file.path)
 
-        val `in` = Intent(Intent.ACTION_VIEW)
-        `in`.setClass(applicationContext, OrionViewerActivity::class.java)
-        `in`.data = Uri.fromFile(file)
-        `in`.addCategory(Intent.CATEGORY_DEFAULT)
-        startActivity(`in`)
+        startActivity(
+            Intent(Intent.ACTION_VIEW).apply {
+                setClass(applicationContext, OrionViewerActivity::class.java)
+                data = Uri.fromFile(file)
+                addCategory(Intent.CATEGORY_DEFAULT)
+            }
+        )
     }
 
 
@@ -241,6 +253,9 @@ open class OrionFileManagerActivity(private val fileNameFilter: FilenameFilter =
 
     companion object {
 
+        const val OPEN_RECENTS_TAB = "OPEN_RECENTS_FILE"
+
+        const val DONT_OPEN_RECENT_FILE = "DONT_OPEN_RECENT_FILE"
 
         const val LAST_OPENED_DIRECTORY = "LAST_OPENED_DIR"
 
