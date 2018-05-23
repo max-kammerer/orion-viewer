@@ -15,5 +15,6 @@
     <string name="save_to_file">Save to File…</string>
     <string name="open_in_temporary_file">Open as temporary file</string>
     <string name="open_rececent_files">Open Recent files…</string>
+    <string name="recent_book_not_found">Can\'t find book!</string>
 
 </resources>
