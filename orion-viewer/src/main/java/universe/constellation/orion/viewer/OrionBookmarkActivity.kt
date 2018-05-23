@@ -45,7 +45,7 @@ class OrionBookmarkActivity : OrionBaseActivity(false) {
 
     @SuppressLint("MissingSuperCall")
     public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onOrionCreate(savedInstanceState, R.layout.bookmarks)
+        super.onOrionCreate(savedInstanceState, R.layout.bookmarks, true)
 
         onNewIntent(intent)
 
@@ -210,9 +210,9 @@ class OrionBookmarkActivity : OrionBaseActivity(false) {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
-            val fileName = data.getStringExtra(OrionFileSelectorActivity.RESULT_FILE_NAME)
+            val fileName = data!!.getStringExtra(OrionFileSelectorActivity.RESULT_FILE_NAME)
             if (fileName == null || "" == fileName) {
                 showWarning("File name is empty")
                 return

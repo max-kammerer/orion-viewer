@@ -58,7 +58,7 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
         onOrionCreate(savedInstanceState, -1)
     }
 
-    protected fun onOrionCreate(savedInstanceState: Bundle?, layoutId: Int) {
+    protected fun onOrionCreate(savedInstanceState: Bundle?, layoutId: Int, addToolbar: Boolean = true) {
         orionContext.applyTheme(this)
         orionContext.updateLanguage(resources)
 
@@ -74,7 +74,9 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
         if (layoutId != -1) {
             setContentView(layoutId)
             toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-            setSupportActionBar(toolbar)
+            if (addToolbar) {
+                setSupportActionBar(toolbar)
+            }
         }
     }
 
