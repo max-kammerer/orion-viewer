@@ -47,8 +47,12 @@ import java.io.FilenameFilter
  * Date: 24.12.11
  * Time: 16:41
  */
-open class OrionFileManagerActivity(private val fileNameFilter: FilenameFilter = FileChooserAdapter.DEFAULT_FILTER) :
-    OrionBaseActivity() {
+
+open class OrionFileManagerActivity @JvmOverloads constructor(
+    private val showRecentsAndSavePath: Boolean = true,
+    private val addToolbar: Boolean = true,
+    private val fileNameFilter: FilenameFilter = FileChooserAdapter.DEFAULT_FILTER
+) : OrionBaseActivity() {
 
     private var prefs: SharedPreferences? = null
 
@@ -101,7 +105,7 @@ open class OrionFileManagerActivity(private val fileNameFilter: FilenameFilter =
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onOrionCreate(savedInstanceState, R.layout.file_manager)
+        onOrionCreate(savedInstanceState, R.layout.file_manager, addToolbar)
         log("Creating file manager")
 
         prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
@@ -186,7 +190,7 @@ open class OrionFileManagerActivity(private val fileNameFilter: FilenameFilter =
                 val newFolder = (parent.adapter as FileChooserAdapter).changeFolder(file)
                 path.text = newFolder.absolutePath
             } else {
-                if (showRecentsAndSavePath()) {
+                if (showRecentsAndSavePath) {
                     val editor = prefs!!.edit()
                     editor.putString(LAST_OPENED_DIRECTORY, file.parentFile.absolutePath)
                     editor.commit()
@@ -213,7 +217,7 @@ open class OrionFileManagerActivity(private val fileNameFilter: FilenameFilter =
 
 
     private fun initFileManager() {
-        val pagerAdapter = SimplePagerAdapter(supportFragmentManager, if (showRecentsAndSavePath()) 2 else 1)
+        val pagerAdapter = SimplePagerAdapter(supportFragmentManager, if (showRecentsAndSavePath) 2 else 1)
         val viewPager = findViewById<ViewPager>(R.id.viewpager)
         viewPager.adapter = pagerAdapter
         val tabLayout = findViewById<TabLayout>(R.id.sliding_tabs)
@@ -221,7 +225,7 @@ open class OrionFileManagerActivity(private val fileNameFilter: FilenameFilter =
 
         val folderTab = tabLayout.getTabAt(0)
         folderTab?.setIcon(R.drawable.folder)
-        if (showRecentsAndSavePath()) {
+        if (showRecentsAndSavePath) {
             val recentTab = tabLayout.getTabAt(1)
             recentTab?.setIcon(R.drawable.book)
         }
@@ -245,11 +249,6 @@ open class OrionFileManagerActivity(private val fileNameFilter: FilenameFilter =
         return false
     }
 
-    //customizable part
-    open fun showRecentsAndSavePath(): Boolean {
-        return true
-    }
-
     companion object {
 
         const val OPEN_RECENTS_TAB = "OPEN_RECENTS_FILE"
@@ -259,6 +258,8 @@ open class OrionFileManagerActivity(private val fileNameFilter: FilenameFilter =
         const val LAST_OPENED_DIRECTORY = "LAST_OPENED_DIR"
 
         private const val LAST_FOLDER = "LAST_FOLDER"
+
+        private const val FILE_FILTER_EXTENSION = "FILE_FILTER_EXTENSION"
     }
 }
 

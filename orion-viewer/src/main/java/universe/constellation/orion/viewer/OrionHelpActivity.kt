@@ -66,7 +66,7 @@ class OrionHelpActivity : OrionBaseActivity(false) {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onOrionCreate(savedInstanceState, R.layout.file_manager)
+        onOrionCreate(savedInstanceState, R.layout.file_manager)
         initHelpScreen()
     }
 

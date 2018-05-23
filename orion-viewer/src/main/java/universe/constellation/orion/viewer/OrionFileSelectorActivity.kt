@@ -21,13 +21,35 @@ package universe.constellation.orion.viewer
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
+import android.support.v4.view.ViewPager
+import android.transition.Visibility
+import android.view.View
+import android.widget.TextView
 
 import java.io.File
 import java.io.FilenameFilter
 
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
 
+class OrionSaveFileActivity : OrionFileManagerActivity(
+    false,  false,
+    FilenameFilter { dir, filename ->
+        File(dir, filename).isDirectory
+    }) {
+
+    override fun onNewIntent(intent: Intent) {
+
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        findViewById<TextView>(R.id.fileName).visibility = View.VISIBLE
+    }
+}
+
 class OrionFileSelectorActivity : OrionFileManagerActivity(
+    false, false,
     FilenameFilter { dir, filename ->
         File(dir, filename).isDirectory || filename.toLowerCase().endsWith(".xml")
     }
@@ -36,8 +58,6 @@ class OrionFileSelectorActivity : OrionFileManagerActivity(
     override fun onNewIntent(intent: Intent) {
 
     }
-
-    override fun showRecentsAndSavePath() = false
 
     override fun openFile(file: File) {
         val result = Intent()
@@ -48,6 +68,6 @@ class OrionFileSelectorActivity : OrionFileManagerActivity(
 
     companion object {
 
-        const val RESULT_FILE_NAME = "fileName"
+        const val RESULT_FILE_NAME = "RESULT_FILE_NAME"
     }
 }
