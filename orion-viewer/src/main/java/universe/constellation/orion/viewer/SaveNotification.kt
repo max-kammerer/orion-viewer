@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -14,6 +15,7 @@ import java.io.File
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
+import universe.constellation.orion.viewer.OrionViewerActivity.Companion.SAVE_FILE_RESULT
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
 
 
@@ -28,29 +30,20 @@ open class SaveNotification : DialogFragment() {
                 .setItems(R.array.save_options) { dialog, which ->
                     val myActivity = activity as OrionViewerActivity
                     when(which) {
-                        0 -> {}
+                        0 -> {
+                            myActivity.startActivityForResult(
+                                Intent(myActivity, OrionSaveFileActivity::class.java).apply {
+                                },
+                                SAVE_FILE_RESULT
+                            )
+                        }
                         1 -> {
-                            launch(UI) {
-                                dialog.dismiss()
+                            val toFile = createTmpFile(
+                                activity!!,
+                                getExtension(uri, mimeType)
+                            )
 
-                                val progressBar = ProgressDialog(activity!!)
-                                progressBar.isIndeterminate = true
-                                progressBar.show()
-                                try {
-                                    val newFile = async(CommonPool) {
-                                        saveFileInto(
-                                            myActivity,
-                                            uri,
-                                            createTmpFile(
-                                                activity!!,
-                                                getExtension(uri, mimeType)
-                                            ).also { log("Saving file into $it") })
-                                    }.await()
-                                    myActivity.openFileAndDestroyOldController(newFile.path)
-                                } finally {
-                                    progressBar.dismiss()
-                                }
-                            }
+                            saveFileAndOpen(myActivity, uri, toFile)
                         }
                         2 -> myActivity.startActivity(
                             Intent(myActivity, OrionFileManagerActivity::class.java).apply {
@@ -71,7 +64,7 @@ open class SaveNotification : DialogFragment() {
         const val EXTENSION = "EXTENSION"
         const val TYPE = "TYPE"
 
-        fun saveFileInto(context: Context, uri: Uri, toFile: File): File {
+        private fun saveFileInto(context: Context, uri: Uri, toFile: File): File {
             toFile.mkdirs()
             toFile.createNewFile()
 
@@ -85,13 +78,37 @@ open class SaveNotification : DialogFragment() {
             return toFile
         }
 
-        fun createTmpFile(context: Context, extension: String) =
-            File.createTempFile("book", ".$extension", context.cacheDir)
+        private fun createTmpFile(context: Context, extension: String) =
+            File.createTempFile("book", ".$extension", context.cacheDir)!!
 
         fun getExtension(uri: Uri, mimeType: String?): String {
             return uri.path.substringAfterLast('.').takeIf {
                 FileChooserAdapter.supportedExtensions.contains(it)
             } ?: mimeType?.let { if (it.endsWith("djvu")) "djvu" else "pdf" } ?: error("Unknown extension $uri")
+        }
+
+        fun saveFileAndOpen(
+            myActivity: OrionViewerActivity,
+            uri: Uri,
+            toFile: File
+        ) {
+            launch(UI) {
+                val progressBar = ProgressDialog(myActivity)
+                progressBar.isIndeterminate = true
+                progressBar.show()
+                try {
+                    val newFile = async(CommonPool) {
+                        saveFileInto(
+                            myActivity,
+                            uri,
+                            toFile.also { log("Saving file into $it") }
+                        )
+                    }.await()
+                    myActivity.openFileAndDestroyOldController(newFile.path)
+                } finally {
+                    progressBar.dismiss()
+                }
+            }
         }
 
     }
