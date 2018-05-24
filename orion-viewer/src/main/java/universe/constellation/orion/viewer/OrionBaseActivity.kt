@@ -50,6 +50,10 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
     val orionContext: OrionApplication
         get() = applicationContext as OrionApplication
 
+    public val globalOptions: GlobalOptions by lazy {
+        orionContext.options
+    }
+
     val applicationDefaultOrientation: String
         get() = orionContext.options.getStringProperty(GlobalOptions.SCREEN_ORIENTATION, "DEFAULT")
 
@@ -58,7 +62,7 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
         onOrionCreate(savedInstanceState, -1)
     }
 
-    protected fun onOrionCreate(savedInstanceState: Bundle?, layoutId: Int) {
+    protected fun onOrionCreate(savedInstanceState: Bundle?, layoutId: Int, addToolbar: Boolean = true) {
         orionContext.applyTheme(this)
         orionContext.updateLanguage(resources)
 
@@ -74,7 +78,9 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
         if (layoutId != -1) {
             setContentView(layoutId)
             toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-            setSupportActionBar(toolbar)
+            if (addToolbar) {
+                setSupportActionBar(toolbar)
+            }
         }
     }
 
@@ -172,7 +178,7 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
         builder.setTitle(title)
         builder.setMessage(message)
 
-        builder.setPositiveButton("OK") { dialog, which -> dialog.dismiss() }
+        builder.setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
 
         builder.create().show()
     }
@@ -182,7 +188,7 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
         builder.setTitle(titleId)
         builder.setMessage(messageId)
 
-        builder.setPositiveButton("OK") { dialog, which -> dialog.dismiss() }
+        builder.setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
 
         builder.create().show()
     }

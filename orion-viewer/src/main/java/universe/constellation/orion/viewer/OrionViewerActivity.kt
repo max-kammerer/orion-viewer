@@ -67,9 +67,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private val operation = OperationHolder()
 
-    val globalOptions: GlobalOptions by lazy {
-        orionContext.options
-    }
 
     private var myIntent: Intent? = null
 
@@ -118,7 +115,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
         orionContext.viewActivity = this
         OptionActions.FULL_SCREEN.doAction(this, !globalOptions.isFullScreen, globalOptions.isFullScreen)
-        super.onOrionCreate(savedInstanceState, R.layout.main_view)
+        onOrionCreate(savedInstanceState, R.layout.main_view)
 
         hasActionBar = globalOptions.isActionBarVisible
         OptionActions.SHOW_ACTION_BAR.doAction(this, !hasActionBar, hasActionBar)
@@ -308,7 +305,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
                 controller1.drawPage()
 
-                val title = newDocument.title?.takeIf { it.isNotBlank() } ?: filePath.substringAfter('/').substringBefore(".")
+                val title = newDocument.title?.takeIf { it.isNotBlank() } ?: filePath.substringAfterLast('/').substringBefore(".")
 
                 updateViewOnNewBook(title)
                 globalOptions.addRecentEntry(GlobalOptions.RecentEntry(File(filePath).absolutePath))
@@ -918,10 +915,10 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         )
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == OPEN_BOOKMARK_ACTIVITY_RESULT && resultCode == Activity.RESULT_OK) {
             if (controller != null) {
-                val page = data.getIntExtra(OrionBookmarkActivity.OPEN_PAGE, -1)
+                val page = data!!.getIntExtra(OrionBookmarkActivity.OPEN_PAGE, -1)
                 if (page != -1) {
                     controller!!.drawPage(page)
                 } else {
@@ -1030,6 +1027,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     companion object {
 
         const val OPEN_BOOKMARK_ACTIVITY_RESULT = 1
+
+        const val SAVE_FILE_RESULT = 2
 
         const val ROTATION_SCREEN = 0
 
