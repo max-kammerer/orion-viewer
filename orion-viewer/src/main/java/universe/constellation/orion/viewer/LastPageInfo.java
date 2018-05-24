@@ -101,7 +101,7 @@ public class LastPageInfo implements Serializable, ShortFileInfo {
         }
 
         if (!successfull) {
-            lastPageInfo = createDefaultLastPageInfo(activity);
+            lastPageInfo = createDefaultLastPageInfo(activity.getGlobalOptions());
         }
 
         lastPageInfo.fileData = fileData;
@@ -112,9 +112,8 @@ public class LastPageInfo implements Serializable, ShortFileInfo {
     }
 
     @NonNull
-    public static LastPageInfo createDefaultLastPageInfo(OrionBaseActivity activity) {
+    public static LastPageInfo createDefaultLastPageInfo(GlobalOptions options) {
         LastPageInfo lastPageInfo = new LastPageInfo();
-        GlobalOptions options = activity.getOrionContext().getOptions();
 
         lastPageInfo.zoom = options.getDefaultZoom();
         lastPageInfo.contrast = options.getDefaultContrast();
@@ -124,11 +123,11 @@ public class LastPageInfo implements Serializable, ShortFileInfo {
         return lastPageInfo;
     }
 
-    public void save(OrionBaseActivity activity) {
+    public void save(Context context) {
         OutputStreamWriter writer = null;
         try {
             XmlSerializer serializer = Xml.newSerializer();
-            writer = new OutputStreamWriter(activity.openFileOutput(fileData, Context.MODE_PRIVATE));
+            writer = new OutputStreamWriter(context.openFileOutput(fileData, Context.MODE_PRIVATE));
             serializer.setOutput(writer);
             serializer.startDocument("UTF-8", true);
             String nameSpace = "";
@@ -176,8 +175,7 @@ public class LastPageInfo implements Serializable, ShortFileInfo {
             serializer.endTag(nameSpace, "bookParameters");
             serializer.endDocument();
         } catch (IOException e) {
-            log(e);
-            activity.showError("Couldn't save book preferences", e);
+            UIUtilsKt.showError(context, "Couldn't save book preferences $simpleFileName", e);
         } finally {
             if (writer != null) {
                 try {

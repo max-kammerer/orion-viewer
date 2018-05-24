@@ -61,8 +61,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private var animator: ViewAnimator? = null
 
-    private var lastPageInfo: LastPageInfo? = null
-
     var controller: Controller? = null
         private set
 
@@ -100,7 +98,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     public val bookId: Long
         get() {
             log("Selecting book id...")
-            val info = lastPageInfo as ShortFileInfo
+            val info = controller?.lastPageInfo as ShortFileInfo
             var bookId: Long? = orionContext.tempOptions!!.bookId
             if (bookId == null || bookId == -1L) {
                 bookId = orionContext.getBookmarkAccessor().selectBookId(info.simpleFileName, info.fileSize)
@@ -225,11 +223,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                         } else uri.path
 
 
-                if (controller != null && lastPageInfo != null) {
-                    if (lastPageInfo!!.openingFileName == intentPath) {
-                        controller!!.drawPage()
-                        return
-                    }
+                if (controller?.lastPageInfo?.openingFileName == intentPath) {
+                    controller!!.drawPage()
+                    return
                 }
 
                 openFileAndDestroyOldController(intentPath)
@@ -258,9 +254,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         val stubRenderer = Renderer.EMPTY
         val stubController = Controller(this, stubDocument, SimpleLayoutStrategy.create(stubDocument), stubRenderer)
         val drawView = fullScene.drawView
-        val stubInfo = LastPageInfo.createDefaultLastPageInfo(this)
-        stubController.changeOrinatation(stubInfo.screenOrientation)
-        stubController.init(stubInfo, Point(drawView.sceneWidth, drawView.sceneHeight))
+        stubController.init(Point(drawView.sceneWidth, drawView.sceneHeight))
 
         view.setDimensionAware(stubController)
         stubController.drawPage()
@@ -283,22 +277,20 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             }
 
             try {
-                val lastPageInfo1 = async(CommonPool, parent = rootJob) { LastPageInfo.loadBookParameters(this@OrionViewerActivity, filePath) }.await()
-                lastPageInfo = lastPageInfo1
-                orionContext.currentBookParameters = lastPageInfo1
+                val lastPageInfo = async(CommonPool, parent = rootJob) { LastPageInfo.loadBookParameters(this@OrionViewerActivity, filePath) }.await()
+                orionContext.currentBookParameters = lastPageInfo
                 OptionActions.DEBUG.doAction(this@OrionViewerActivity, false, globalOptions.getBooleanProperty("DEBUG", false))
 
                 val layoutStrategy = SimpleLayoutStrategy.create(newDocument)
 
                 val renderer = RenderThread(this@OrionViewerActivity, layoutStrategy, newDocument, fullScene)
 
-                val controller1 = Controller(this@OrionViewerActivity, newDocument, layoutStrategy, renderer, rootJob)
+                val controller1 = Controller(this@OrionViewerActivity, newDocument, layoutStrategy, renderer, lastPageInfo, rootJob)
                 controller = controller1
                 stubController.destroy()
-                controller1.changeOrinatation(lastPageInfo1!!.screenOrientation)
 
                 val drawView = fullScene.drawView
-                controller1.init(lastPageInfo1, Point(drawView.sceneWidth, drawView.sceneHeight))
+                controller1.init(Point(drawView.sceneWidth, drawView.sceneHeight))
 
                 subscriptionManager.sendDocOpenedNotification(controller1)
 
@@ -311,8 +303,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 updateViewOnNewBook(title)
                 globalOptions.addRecentEntry(GlobalOptions.RecentEntry(File(filePath).absolutePath))
 
-                lastPageInfo1.totalPages = newDocument.pageCount
-                device!!.onNewBook(lastPageInfo1, newDocument)
+                lastPageInfo.totalPages = newDocument.pageCount
+                device!!.onNewBook(lastPageInfo, newDocument)
 
                 askPassword(controller1)
                 orionContext.onNewBook(filePath)
@@ -637,15 +629,12 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     private fun saveData() {
-        if (controller != null) {
-            try {
-                controller!!.serialize(lastPageInfo!!)
-                lastPageInfo!!.save(this)
-            } catch (ex: Exception) {
-                log(ex)
-            }
-
+        try {
+            controller?.serializeAndSave()
+        } catch (ex: Exception) {
+            log(ex)
         }
+
         saveGlobalOptions()
     }
 
@@ -891,7 +880,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     private fun insertOrGetBookId(): Long {
-        val info = lastPageInfo as ShortFileInfo
+        val info = controller?.lastPageInfo as ShortFileInfo
         var bookId: Long? = orionContext.tempOptions!!.bookId
         if (bookId == null || bookId == -1L) {
             bookId = orionContext.getBookmarkAccessor().insertOrUpdate(info.simpleFileName, info.fileSize)

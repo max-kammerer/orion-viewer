@@ -97,7 +97,7 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
 
         val lastPageInfo = LastPageInfo.loadBookParameters(activity, "123")
         controller.changeOrinatation(lastPageInfo.screenOrientation)
-        controller.init(lastPageInfo, deviceSize)
+        controller.init(deviceSize)
 
         //getSubscriptionManager()?.sendDocOpenedNotification(controller)
         activity.view!!.setDimensionAware(controller)

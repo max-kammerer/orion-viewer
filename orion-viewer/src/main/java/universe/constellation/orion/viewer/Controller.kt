@@ -37,6 +37,7 @@ class Controller(
         val document: Document,
         val layoutStrategy: LayoutStrategy,
         private var renderer: Renderer,
+        val lastPageInfo: LastPageInfo = LastPageInfo.createDefaultLastPageInfo(activity.globalOptions),
         val rootJob: Job = Job()
 ) : ViewDimensionAware {
 
@@ -209,31 +210,33 @@ class Controller(
         get() = document.pageCount
 
 
-    fun init(info: LastPageInfo, dimension: Point) {
+    fun init(dimension: Point) {
+        changeOrinatation(lastPageInfo.screenOrientation)
         task("init controller") {
-            document.setContrast(info.contrast)
-            document.setThreshold(info.threshold)
+            document.setContrast(lastPageInfo.contrast)
+            document.setThreshold(lastPageInfo.threshold)
 
-            layoutStrategy.init(info, activity.globalOptions)
+            layoutStrategy.init(lastPageInfo, activity.globalOptions)
             layoutInfo = LayoutPosition()
-            layoutStrategy.reset(layoutInfo, info.pageNumber)
-            layoutInfo.x.offset = info.newOffsetX
-            layoutInfo.y.offset = info.newOffsetY
+            layoutStrategy.reset(layoutInfo, lastPageInfo.pageNumber)
+            layoutInfo.x.offset = lastPageInfo.newOffsetX
+            layoutInfo.y.offset = lastPageInfo.newOffsetY
 
-            lastScreenSize = Point(info.screenWidth, info.screenHeight)
+            lastScreenSize = Point(lastPageInfo.screenWidth, lastPageInfo.screenHeight)
             changeOrinatation(screenOrientation)
-            changeColorMode(info.colorMode, false)
+            changeColorMode(lastPageInfo.colorMode, false)
 
             onDimensionChanged(dimension.x, dimension.y)
         }
     }
 
-    fun serialize(info: LastPageInfo) {
-        layoutStrategy.serialize(info)
-        info.newOffsetX = layoutInfo.x.offset
-        info.newOffsetY = layoutInfo.y.offset
-        info.pageNumber = layoutInfo.pageNumber
-        info.screenOrientation = screenOrientation
+    fun serializeAndSave() {
+        layoutStrategy.serialize(lastPageInfo)
+        lastPageInfo.newOffsetX = layoutInfo.x.offset
+        lastPageInfo.newOffsetY = layoutInfo.y.offset
+        lastPageInfo.pageNumber = layoutInfo.pageNumber
+        lastPageInfo.screenOrientation = screenOrientation
+        lastPageInfo.save(activity)
     }
 
     fun sendViewChangeNotification() {
