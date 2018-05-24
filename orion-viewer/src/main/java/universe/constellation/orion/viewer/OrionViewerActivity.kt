@@ -55,7 +55,7 @@ import java.io.File
 
 class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVITY) {
 
-    private var dialog: AppCompatDialog? = null
+    private lateinit var dialog: AppCompatDialog
 
     internal val subscriptionManager = SubscriptionManager()
 
@@ -198,7 +198,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
         val uri = intent.data
         if (uri != null) {
-            log("Try to open file by " + uri.toString())
+            log("Try to open file by $uri")
             try {
                 val intentPath: String =
                         if ("content".equals(uri.scheme, ignoreCase = true)) {
@@ -215,21 +215,13 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                                         arguments = this
                                     }
 
-
                                     show(supportFragmentManager, "save_notification")
                                 }
                                 return
                             }
                         } else uri.path
 
-
-                if (controller?.lastPageInfo?.openingFileName == intentPath) {
-                    controller!!.drawPage()
-                    return
-                }
-
                 openFileAndDestroyOldController(intentPath)
-
             } catch (e: Exception) {
                 showAlertWithExceptionThrow(intent, e)
             }
@@ -242,6 +234,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     @Throws(Exception::class)
     public fun openFileAndDestroyOldController(filePath: String) {
+        if (controller?.lastPageInfo?.openingFileName == filePath) {
+            controller!!.drawPage()
+            return
+        }
+
         log("openFileAndDestroyOldController")
         destroyController(controller).also { controller = null }
         AndroidLogger.stopLogger()
@@ -622,9 +619,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
         destroyController(controller).also { controller = null }
 
-        if (dialog != null) {
-            dialog!!.dismiss()
-        }
+        dialog.dismiss()
+
         orionContext.destroyDb()
     }
 
@@ -774,13 +770,13 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private fun initOptionDialog() {
         dialog = AppCompatDialog(this)
-        dialog!!.supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog!!.setContentView(R.layout.options_dialog)
-        animator = dialog!!.findViewById<View>(R.id.viewanim) as ViewAnimator?
+        dialog.supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.options_dialog)
+        animator = dialog.findViewById<View>(R.id.viewanim) as ViewAnimator?
 
         view.setOnTouchListener(View.OnTouchListener { v, event -> newTouchProcessor!!.onTouch(event) })
 
-        dialog!!.setCanceledOnTouchOutside(true)
+        dialog.setCanceledOnTouchOutside(true)
     }
 
     fun doAction(code: Int) {
@@ -796,11 +792,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
 
     override fun findMyViewById(id: Int): View {
-        return dialog!!.findViewById<View>(id) as View
+        return dialog.findViewById<View>(id) as View
     }
 
     public override fun onAnimatorCancel() {
-        dialog!!.cancel()
+        dialog.cancel()
     }
 
     override fun onApplyAction() {
@@ -948,7 +944,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             }
 
             animator!!.displayedChild = screenId
-            dialog!!.show()
+            dialog.show()
         }
     }
 

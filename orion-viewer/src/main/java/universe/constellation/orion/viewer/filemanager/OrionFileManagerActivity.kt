@@ -56,8 +56,6 @@ open class OrionFileManagerActivity @JvmOverloads constructor(
 
     private var prefs: SharedPreferences? = null
 
-
-
     private var justCreated: Boolean = false
 
     private val startFolder: String
