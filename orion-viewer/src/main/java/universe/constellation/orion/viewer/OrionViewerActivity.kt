@@ -256,7 +256,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         view.setDimensionAware(stubController)
         stubController.drawPage()
         controller = stubController
-        updateViewOnNewBook(stubDocument.title)
+        updateViewOnNewBook(stubController)
 
         launch(UI) {
             log("Trying to open file: $filePath")
@@ -269,7 +269,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 log(e)
                 stubDocument.bodyText = e.message
                 stubDocument.title = e.message
-                updateViewOnNewBook(stubDocument.title)
+                updateViewOnNewBook(stubController)
                 return@launch
             }
 
@@ -295,12 +295,10 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
                 controller1.drawPage()
 
-                val title = newDocument.title?.takeIf { it.isNotBlank() } ?: filePath.substringAfterLast('/').substringBefore(".")
-
-                updateViewOnNewBook(title)
+                updateViewOnNewBook(controller1)
                 globalOptions.addRecentEntry(GlobalOptions.RecentEntry(File(filePath).absolutePath))
 
-                lastPageInfo.totalPages = newDocument.pageCount
+
                 device!!.onNewBook(lastPageInfo, newDocument)
 
                 askPassword(controller1)
@@ -313,11 +311,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
     }
 
-    private fun updateViewOnNewBook(title: String?) {
-        fullScene.onNewBook(title, controller!!.pageCount)
-        if (supportActionBar != null) {
-            supportActionBar!!.title = title
-        }
+    private fun updateViewOnNewBook(controller: Controller) {
+        val title = controller.document.title?.takeIf { it.isNotBlank() } ?: controller.lastPageInfo.simpleFileName.substringBefore(".")
+
+        fullScene.onNewBook(controller.document.title, controller.pageCount)
+        supportActionBar?.title = title
     }
 
     private fun showAlertWithExceptionThrow(intent: Intent, e: Exception) {

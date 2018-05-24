@@ -61,6 +61,8 @@ class Controller(
     init {
         log("Creating controller...")
 
+        lastPageInfo.totalPages = document.pageCount
+
         renderer.startRenderer()
 
         listener = object : DocumentViewAdapter() {

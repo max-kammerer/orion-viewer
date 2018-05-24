@@ -90,7 +90,8 @@ public class LastPageInfo implements Serializable, ShortFileInfo {
     public static LastPageInfo loadBookParameters(OrionBaseActivity activity, String filePath) {
         int idx = filePath.lastIndexOf('/');
         File file = new File(filePath);
-        String fileData = filePath.substring(idx + 1) + "." + file.length() + ".xml";
+        String simpleName = filePath.substring(idx + 1);
+        String fileData = simpleName + "." + file.length() + ".xml";
         LastPageInfo lastPageInfo = new LastPageInfo();
 
         boolean successfull = false;
@@ -106,7 +107,7 @@ public class LastPageInfo implements Serializable, ShortFileInfo {
 
         lastPageInfo.fileData = fileData;
         lastPageInfo.openingFileName = filePath;
-        lastPageInfo.simpleFileName = filePath.substring(idx + 1);
+        lastPageInfo.simpleFileName = simpleName;
         lastPageInfo.fileSize = file.length();
         return lastPageInfo;
     }
@@ -120,6 +121,7 @@ public class LastPageInfo implements Serializable, ShortFileInfo {
         lastPageInfo.walkOrder = options.getWalkOrder();
         lastPageInfo.pageLayout = options.getPageLayout();
         lastPageInfo.colorMode = options.getColorMode();
+        lastPageInfo.simpleFileName = "stub";
         return lastPageInfo;
     }
 
