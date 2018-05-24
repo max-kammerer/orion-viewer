@@ -34,6 +34,7 @@ import android.text.method.PasswordTransformationMethod
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.*
+import androidx.core.widget.toast
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
 import universe.constellation.orion.viewer.android.FileUtils
@@ -237,9 +238,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 showAlertWithExceptionThrow(intent, e)
             }
 
-        } else
-        /*if (intent.getAction().endsWith("MAIN"))*/ {
-            //TODO error
+        } else {
+            toast("Intent missing data: $intent!").show()
+            log("Intent missing data $intent")
         }
     }
 

@@ -40,15 +40,13 @@ class OrionSaveFileActivity : OrionFileManagerActivity(
         File(dir, filename).isDirectory
     }) {
 
-    private lateinit var uri: String
-
     override fun onNewIntent(intent: Intent) {
-        uri = intent.getStringExtra(SaveNotification.URI)!!
+        setIntent(intent)
     }
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        uri = intent.getStringExtra(SaveNotification.URI)!!
+        val uri = intent.getStringExtra(SaveNotification.URI)!!
         onOrionCreate(savedInstanceState, R.layout.file_selector, true)
         val fileNameView = findViewById<TextView>(R.id.fileName)
         fileNameView.visibility = View.VISIBLE
