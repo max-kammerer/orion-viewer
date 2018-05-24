@@ -24,6 +24,7 @@ import kotlinx.coroutines.experimental.Job
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.DocumentWithCaching
 import universe.constellation.orion.viewer.document.OutlineItem
+import universe.constellation.orion.viewer.document.StubDocument
 import universe.constellation.orion.viewer.layout.CropMargins
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.LayoutStrategy
@@ -38,7 +39,8 @@ class Controller(
         val layoutStrategy: LayoutStrategy,
         private var renderer: Renderer,
         val lastPageInfo: LastPageInfo = LastPageInfo.createDefaultLastPageInfo(activity.globalOptions),
-        val rootJob: Job = Job()
+        val rootJob: Job = Job(),
+        val isStub: Boolean = document is StubDocument
 ) : ViewDimensionAware {
 
     private lateinit var layoutInfo: LayoutPosition
@@ -236,7 +238,7 @@ class Controller(
         lastPageInfo.newOffsetY = layoutInfo.y.offset
         lastPageInfo.pageNumber = layoutInfo.pageNumber
         lastPageInfo.screenOrientation = screenOrientation
-        lastPageInfo.save(activity)
+        if (!isStub) lastPageInfo.save(activity)
     }
 
     fun sendViewChangeNotification() {
