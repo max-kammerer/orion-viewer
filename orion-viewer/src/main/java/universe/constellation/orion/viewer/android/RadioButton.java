@@ -22,15 +22,9 @@ package universe.constellation.orion.viewer.android;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-
 import universe.constellation.orion.viewer.R;
 
-/**
- * User: mike
- * Date: 03.09.12
- * Time: 21:44
- */
-public class RadioButton extends android.widget.RadioButton {
+public class RadioButton extends android.support.v7.widget.AppCompatRadioButton {
 
     private String walkOrder;
 
