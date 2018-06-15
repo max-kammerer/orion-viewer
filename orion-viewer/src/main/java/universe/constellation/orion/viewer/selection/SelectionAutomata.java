@@ -52,7 +52,7 @@ public class SelectionAutomata extends DialogOverView {
     public SelectionAutomata(final OrionViewerActivity activity) {
         super(activity, universe.constellation.orion.viewer.R.layout.text_selector, android.R.style.Theme_Translucent_NoTitleBar);
 
-        selectionView = (SelectionView) dialog.findViewById(universe.constellation.orion.viewer.R.id.text_selector);
+        selectionView = dialog.findViewById(R.id.text_selector);
         selectionView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
