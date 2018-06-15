@@ -34,7 +34,7 @@ public class TexetDevice extends EInkDevice {
             rememberCover(coverFileName, document);
         } catch (Exception e) {
             log(e);
-            Toast.makeText(getActivity(), "Error on new book parameters update: " + e.getMessage(), Toast.LENGTH_SHORT).show();;
+            Toast.makeText(getActivity(), "Error on new book parameters update: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

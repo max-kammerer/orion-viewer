@@ -87,9 +87,9 @@ open class OrionEditPreference @JvmOverloads constructor(context: Context, attrs
     }
 
     private fun getIntegerOrNull(array: TypedArray, id: Int): Int? {
-        val UNDEFINED = Int.MIN_VALUE
-        val value = array.getInt(id, UNDEFINED)
-        return if (value == UNDEFINED) {
+        val undefined = Int.MIN_VALUE
+        val value = array.getInt(id, undefined)
+        return if (value == undefined) {
             null
         } else {
             value

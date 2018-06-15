@@ -14,21 +14,16 @@ import universe.constellation.orion.viewer.R;
 
 import static universe.constellation.orion.viewer.LoggerKt.log;
 
-/**
-* User: mike
-* Date: 11.11.13
-* Time: 20:48
-*/
 public abstract class SearchTask {
 
     static class ProgressDialogX extends ProgressDialog {
-        public ProgressDialogX(Context context) {
+        ProgressDialogX(Context context) {
             super(context);
         }
 
         private boolean mCancelled = false;
 
-        public boolean isCancelled() {
+        boolean isCancelled() {
             return mCancelled;
         }
 
@@ -46,7 +41,7 @@ public abstract class SearchTask {
     private final AlertDialog.Builder mAlertBuilder;
     private AsyncTask<Void, Integer, SearchTaskResult> mSearchTask;
 
-    public SearchTask(Context context, Document document) {
+    protected SearchTask(Context context, Document document) {
         mContext = context;
         this.document = document;
         mHandler = new Handler();
@@ -121,7 +116,7 @@ public abstract class SearchTask {
 
             @Override
             protected void onProgressUpdate(Integer... values) {
-                progressDialog.setProgress(values[0].intValue());
+                progressDialog.setProgress(values[0]);
             }
 
             @Override

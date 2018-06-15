@@ -44,7 +44,7 @@ class DjvuDocument(fileName: String) : Document {
         docInfo.fileName = fileName
         if (contextPointer == 0L) throw RuntimeException("Can't create djvu contextPointer").also { destroy() }
         docPointer = openFile(fileName, docInfo, contextPointer)
-        if (docPointer == 0L) throw RuntimeException("Can't open file " + fileName).also { destroy() }
+        if (docPointer == 0L) throw RuntimeException("Can't open file $fileName").also { destroy() }
     }
 
     override val pageCount: Int

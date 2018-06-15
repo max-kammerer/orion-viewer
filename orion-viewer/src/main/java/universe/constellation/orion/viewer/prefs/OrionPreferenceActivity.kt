@@ -19,10 +19,9 @@
 
 package universe.constellation.orion.viewer.prefs
 
-import android.os.Build
 import android.os.Bundle
-import android.preference.*
-
+import android.preference.PreferenceCategory
+import android.preference.PreferenceScreen
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.android.DSLPreferenceActivity
 import universe.constellation.orion.viewer.device.EInkDevice
@@ -55,6 +54,6 @@ class OrionPreferenceActivity : DSLPreferenceActivity() {
         }
     }
 
-    val orionContext: OrionApplication
+    private val orionContext: OrionApplication
         get() = applicationContext as OrionApplication
 }

@@ -60,7 +60,7 @@ public class SelectedTextActions {
 
         popup.setContentView(view);
 
-        ImageButton copy_to_Clipboard = (ImageButton) view.findViewById(R.id.stext_copy_to_clipboard);
+        ImageButton copy_to_Clipboard = view.findViewById(R.id.stext_copy_to_clipboard);
         copy_to_Clipboard.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 popup.dismiss();
@@ -71,7 +71,7 @@ public class SelectedTextActions {
             }
         });
 
-        ImageButton add_bookmark = (ImageButton) view.findViewById(R.id.stext_add_bookmark);
+        ImageButton add_bookmark = view.findViewById(R.id.stext_add_bookmark);
         add_bookmark.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 popup.dismiss();
@@ -79,7 +79,7 @@ public class SelectedTextActions {
             }
         });
 
-        ImageButton open_dictionary = (ImageButton) view.findViewById(R.id.stext_open_dictionary);
+        ImageButton open_dictionary = view.findViewById(R.id.stext_open_dictionary);
         open_dictionary.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 popup.dismiss();
@@ -87,7 +87,7 @@ public class SelectedTextActions {
             }
         });
 
-        ImageButton external_actions = (ImageButton) view.findViewById(R.id.stext_send_text);
+        ImageButton external_actions = view.findViewById(R.id.stext_send_text);
         external_actions.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 popup.dismiss();

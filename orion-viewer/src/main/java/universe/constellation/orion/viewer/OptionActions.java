@@ -22,6 +22,7 @@ package universe.constellation.orion.viewer;
 import android.support.v4.internal.view.SupportMenuItem;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
@@ -58,7 +59,7 @@ public enum OptionActions {
             activity.onCreateOptionsMenu(menu);
             if (!newValue) {
                 for (int i = 0; i < menu.size(); i++) {
-                    SupportMenuItem item = (SupportMenuItem) menu.getItem(i);
+                    MenuItem item = menu.getItem(i);
                     item.setShowAsAction(SupportMenuItem.SHOW_AS_ACTION_NEVER);
                 }
             }
@@ -118,7 +119,7 @@ public enum OptionActions {
     };
 
 
-    private static final HashMap<String, OptionActions> actions = new HashMap<String, OptionActions>();
+    private static final HashMap<String, OptionActions> actions = new HashMap<>();
 
     static {
         OptionActions[] values = values();

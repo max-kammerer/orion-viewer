@@ -53,7 +53,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
 
         setContentView(R.layout.key_binder);
 
-        Button button = (Button) findViewById(R.id.reset_bind);
+        Button button = findViewById(R.id.reset_bind);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
             getOrionContext().getKeyBinding().removeAll();
@@ -204,7 +204,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
 
         private LayoutInflater mInflater;
 
-        public ArrayList<KeyCodeAndAction> values = new ArrayList<KeyCodeAndAction>();
+        public ArrayList<KeyCodeAndAction> values = new ArrayList<>();
 
         KeyListAdapter(Context context, Map<String, Integer> prefs) {
             mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -247,10 +247,10 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
                 convertView = mInflater.inflate(android.R.layout.two_line_list_item, parent, false);
             }
             KeyCodeAndAction item = getItem(position);
-            TextView action = (TextView)convertView.findViewById(android.R.id.text2);
+            TextView action = convertView.findViewById(android.R.id.text2);
             action.setText(item.action.getName());
 
-            TextView code = (TextView)convertView.findViewById(android.R.id.text1);
+            TextView code = convertView.findViewById(android.R.id.text1);
             code.setText(KeyEventNamer.getKeyName(item.keyCode) + (item.isLong ? " [long press]" : ""));
             return convertView;
         }

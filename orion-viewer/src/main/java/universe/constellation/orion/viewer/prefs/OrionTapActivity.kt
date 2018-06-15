@@ -61,10 +61,10 @@ class OrionTapActivity : OrionBaseActivity(false) {
                 if (longCode == -1) {
                     longCode = getDefaultAction(i, j, true)
                 }
-                val saction = Action.getAction(shortCode)
-                val laction = Action.getAction(longCode)
-                shortText.text = resources.getString(saction.getName())
-                longText.text = resources.getString(laction.getName())
+                val shortAction = Action.getAction(shortCode)
+                val longAction = Action.getAction(longCode)
+                shortText.text = resources.getString(shortAction.getName())
+                longText.text = resources.getString(longAction.getName())
                 val index = i * 3 + j
                 myCode[index][0] = shortCode
                 myCode[index][1] = longCode
