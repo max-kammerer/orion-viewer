@@ -22,15 +22,11 @@ package universe.constellation.orion.viewer
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.view.ViewPager
-import android.transition.Visibility
 import android.view.View
 import android.widget.TextView
-
+import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
 import java.io.File
 import java.io.FilenameFilter
-
-import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
 
 class OrionSaveFileActivity : OrionFileManagerActivity(
     false,  false,

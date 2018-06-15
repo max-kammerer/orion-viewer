@@ -47,7 +47,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
 
     private var stopped: Boolean = false
 
-    internal constructor(activity: OrionViewerActivity, layout: LayoutStrategy, doc: Document, fullScene: Scene) : this(activity, layout, doc, true, fullScene) {}
+    internal constructor(activity: OrionViewerActivity, layout: LayoutStrategy, doc: Document, fullScene: Scene) : this(activity, layout, doc, true, fullScene)
 
     init {
         log("RenderThread was created successfully")

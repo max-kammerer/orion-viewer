@@ -105,7 +105,7 @@ public class BookmarkAccessor extends SQLiteOpenHelper {
 
     public List<Bookmark> selectBookmarks(long bookId) {
         SQLiteDatabase dataBase = getReadableDatabase();
-        ArrayList<Bookmark> bookmarks = new ArrayList<Bookmark>();
+        ArrayList<Bookmark> bookmarks = new ArrayList<>();
 
         bookmarks.add(GOTO);
         Cursor cursor = null;
@@ -240,8 +240,36 @@ public class BookmarkAccessor extends SQLiteOpenHelper {
 
     public Cursor getExportedBookCursor(long bookId) {
         SQLiteDatabase dataBase = getReadableDatabase();
-        Cursor c = dataBase.rawQuery("select " + BOOKS_TABLE_NAME + "." + BOOK_ID + "," + BOOK_NAME + "," + BOOK_FILE_SIZE + ", " + BOOKMARK_PAGE + ", " + BOOKMARK_TEXT + " from " + BOOKS_TABLE_NAME + " INNER JOIN " + BOOKMARKS_TABLE_NAME + " ON " +  BOOKS_TABLE_NAME + "." + BOOK_ID + "="  + BOOKMARKS_TABLE_NAME + "." + BOOK_REF + (bookId != -1 ? " and " + BOOK_REF + " = " + bookId : "") + "  group by " + BOOKMARKS_TABLE_NAME + "." + BOOK_ID, null);
-        return c;
+        return dataBase.rawQuery(
+                "select " +
+                BOOKS_TABLE_NAME +
+                "." +
+                BOOK_ID +
+                "," +
+                BOOK_NAME +
+                "," +
+                BOOK_FILE_SIZE +
+                ", " +
+                BOOKMARK_PAGE +
+                ", " +
+                BOOKMARK_TEXT +
+                " from " +
+                BOOKS_TABLE_NAME +
+                " INNER JOIN " +
+                BOOKMARKS_TABLE_NAME +
+                " ON " +
+                BOOKS_TABLE_NAME +
+                "." +
+                BOOK_ID +
+                "=" +
+                BOOKMARKS_TABLE_NAME +
+                "." +
+                BOOK_REF +
+                (bookId != -1 ? " and " + BOOK_REF + " = " + bookId : "") +
+                "  group by " +
+                BOOKMARKS_TABLE_NAME +
+                "." +
+                BOOK_ID, null);
     }
 
 }

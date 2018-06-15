@@ -99,7 +99,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     val statusBarHelper: OrionStatusBarHelper
         get() = fullScene.statusBarHelper
 
-    public val bookId: Long
+    val bookId: Long
         get() {
             log("Selecting book id...")
             val info = lastPageInfo as ShortFileInfo
@@ -247,7 +247,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     @Throws(Exception::class)
-    public fun openFileAndDestroyOldController(filePath: String) {
+    fun openFileAndDestroyOldController(filePath: String) {
         log("openFileAndDestroyOldController")
         destroyController(controller).also { controller = null }
         AndroidLogger.stopLogger()
@@ -931,7 +931,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
     }
 
-    public fun showOrionDialog(screenId: Int, action: Action?, parameter: Any?) {
+    fun showOrionDialog(screenId: Int, action: Action?, parameter: Any?) {
         if (screenId == CROP_SCREEN) {
             val cropDialog = create(this, controller!!.margins)
             cropDialog.show()
@@ -966,7 +966,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
 
-    public fun textSelectionMode(isSingleSelection: Boolean, translate: Boolean) {
+    fun textSelectionMode(isSingleSelection: Boolean, translate: Boolean) {
         selectionAutomata.startSelection(isSingleSelection, translate)
     }
 
