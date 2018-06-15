@@ -17,7 +17,7 @@ open class ActivityBaseTest : ActivityUnitTestCase<OrionViewerActivity>(OrionVie
         super.setUp()
         val intent = Intent(instrumentation!!.targetContext!!, OrionViewerActivity::class.java)
         intent.data = getDataPath()
-        startActivity(intent, null, null)!!.orionContext!!.isTesting = true
+        startActivity(intent, null, null)!!.orionContext.isTesting = true
     }
 
     override fun getOrionTestContext(): Context = instrumentation!!.context!!

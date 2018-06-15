@@ -39,7 +39,8 @@ open class AndroidDevice @JvmOverloads constructor(
 
     lateinit var options: GlobalOptions
 
-    lateinit var keyBinding: GlobalOptions
+    private val keyBinding: GlobalOptions
+        get() = activity.orionContext.keyBinding
 
     override val isDefaultDarkTheme: Boolean
         get() = true
@@ -61,7 +62,6 @@ open class AndroidDevice @JvmOverloads constructor(
 
     open fun onCreate(activity: OrionBaseActivity) {
         options = activity.orionContext.options
-        keyBinding = activity.orionContext.keyBinding
 
         if (activity.viewerType == Device.VIEWER_ACTIVITY) {
             delay = activity.orionContext.options.getScreenBacklightTimeout(Device.VIEWER_DELAY) * 1000 * 60

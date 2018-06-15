@@ -54,6 +54,6 @@ class OrionPreferenceActivity : DSLPreferenceActivity() {
         }
     }
 
-    val orionContext: OrionApplication
+    private val orionContext: OrionApplication
         get() = applicationContext as OrionApplication
 }

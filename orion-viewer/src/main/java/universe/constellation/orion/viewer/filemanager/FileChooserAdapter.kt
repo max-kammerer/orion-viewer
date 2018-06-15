@@ -30,16 +30,10 @@ import java.io.File
 import java.io.FilenameFilter
 import java.util.*
 
-/**
- * User: mike
- * Date: 19.10.11
- * Time: 13:02
- */
-
 class FileChooserAdapter constructor(
-        context: Context,
-        startFolder: String,
-        val filter: FilenameFilter
+    context: Context,
+    startFolder: String,
+    private val filter: FilenameFilter
 ) : ArrayAdapter<File>(context, R.layout.file_entry, R.id.fileName) {
 
     private var currentList = arrayListOf<File>()
@@ -113,18 +107,15 @@ class FileChooserAdapter constructor(
         val supportedExtensions = setOf("cbz", "djvu", "djv", "pdf", "oxps", "tif", "tiff", "xps")
 
         @JvmField
-        var DEFAULT_FILTER: FilenameFilter = object : FilenameFilter {
-
-            override fun accept(dir: File, filename: String): Boolean {
-                if (File(dir, filename).isDirectory) {
-                    return true
-                }
-                if (filename.startsWith("._") || filename == ".DS_Store") {
-                    return false
-                }
-
-                return supportedExtensions.contains(filename.fileExtension.toLowerCase())
+        var DEFAULT_FILTER: FilenameFilter = FilenameFilter { dir, filename ->
+            if (File(dir, filename).isDirectory) {
+                return@FilenameFilter true
             }
+            if (filename.startsWith("._") || filename == ".DS_Store") {
+                return@FilenameFilter false
+            }
+
+            supportedExtensions.contains(filename.fileExtension.toLowerCase())
         }
     }
 }

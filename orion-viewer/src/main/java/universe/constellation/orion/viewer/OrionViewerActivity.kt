@@ -356,7 +356,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
     }
 
-    fun initPagePeekerScreen() {
+    private fun initPagePeekerScreen() {
         val pageSeek = findMyViewById(R.id.page_picker_seeker) as SeekBar
 
         subscriptionManager.addDocListeners(object : DocumentViewAdapter() {
@@ -405,8 +405,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             //animator.setDisplayedChild(MAIN_SCREEN);
         }
 
-        val page_preview = findMyViewById(R.id.page_preview) as ImageButton
-        page_preview.setOnClickListener {
+        val pagePreview = findMyViewById(R.id.page_preview) as ImageButton
+        pagePreview.setOnClickListener {
             onApplyAction()
             if (pageNumberText.text.isNotEmpty()) {
                 try {
@@ -420,7 +420,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
     }
 
-    fun updatePageSeeker() {
+    private fun updatePageSeeker() {
         val pageSeek = findMyViewById(R.id.page_picker_seeker) as SeekBar
         pageSeek.progress = controller!!.currentPage
         val view = findMyViewById(R.id.page_picker_message) as TextView
@@ -430,7 +430,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     }
 
-    fun initZoomScreen() {
+    private fun initZoomScreen() {
         //zoom screen
 
         val sp = findMyViewById(R.id.zoom_spinner) as Spinner
@@ -481,8 +481,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             //updateZoom();
         }
 
-        val zoom_preview = findMyViewById(R.id.zoom_preview) as ImageButton
-        zoom_preview.setOnClickListener {
+        val zoomPreview = findMyViewById(R.id.zoom_preview) as ImageButton
+        zoomPreview.setOnClickListener {
             onApplyAction()
             val index = sp.selectedItemPosition
             controller!!.changeZoom(if (index == 0) (java.lang.Float.parseFloat(zoomText.text.toString()) * 100).toInt() else -1 * (index - 1))
@@ -549,7 +549,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
 
-    fun initPageLayoutScreen() {
+    private fun initPageLayoutScreen() {
         val close = findMyViewById(R.id.options_close) as ImageButton
         close.setOnClickListener {
             onAnimatorCancel()

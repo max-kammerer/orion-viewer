@@ -46,7 +46,6 @@ public class RadioButton extends android.support.v7.widget.AppCompatRadioButton 
         if (attrs != null) {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.universe_constellation_orion_viewer_android_RadioButton);
             walkOrder = a.getString(R.styleable.universe_constellation_orion_viewer_android_RadioButton_walkOrder);
-            System.out.println(getClass() + " " + walkOrder);
             a.recycle();
         }
     }

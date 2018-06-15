@@ -52,7 +52,7 @@ public class OutlineAdapter extends AbstractTreeViewAdapter<Integer> {
     }
 
     static public int initializeTreeManager(InMemoryTreeStateManager<Integer> manager, OutlineItem[] items, int currentPage) {
-        TreeBuilder<Integer> builder = new TreeBuilder<Integer>(manager);
+        TreeBuilder<Integer> builder = new TreeBuilder<>(manager);
 
         int openAtIndex = -1;
         OutlineItem lastItem = null;

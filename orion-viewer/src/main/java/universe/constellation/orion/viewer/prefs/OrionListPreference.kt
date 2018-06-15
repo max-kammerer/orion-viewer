@@ -58,19 +58,17 @@ class OrionListPreference @JvmOverloads constructor(context: Context, attrs: Att
         return isCurrentBookOption || super.persistInt(value)
     }
 
-    override fun getPersistedInt(defaultReturnValue: Int): Int {
+    override fun getPersistedInt(defaultReturnValue: Int): Int =
         if (isCurrentBookOption) {
-            return OrionPreferenceUtil.getPersistedInt(this, defaultReturnValue)
+            OrionPreferenceUtil.getPersistedInt(this, defaultReturnValue)
         } else {
-            return super.getPersistedInt(defaultReturnValue)
+            super.getPersistedInt(defaultReturnValue)
         }
-    }
 
-    override fun getPersistedString(defaultReturnValue: String?): String? {
+    override fun getPersistedString(defaultReturnValue: String?): String? =
         if (isCurrentBookOption) {
-            return OrionPreferenceUtil.getPersistedString(this, defaultReturnValue)
+            OrionPreferenceUtil.getPersistedString(this, defaultReturnValue)
         } else {
-            return super.getPersistedString(defaultReturnValue)
+            super.getPersistedString(defaultReturnValue)
         }
-    }
 }

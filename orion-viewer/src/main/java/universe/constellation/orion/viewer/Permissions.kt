@@ -25,8 +25,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 
 object Permissions {
-    @JvmField
-    val ORION_ASK_PERMISSION_CODE = 111
+    const val ORION_ASK_PERMISSION_CODE = 111
 
     @JvmStatic
     fun checkReadPermission(activity: Activity) =
@@ -45,7 +44,7 @@ object Permissions {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val hasPermission = activity.checkSelfPermission(permission)
             if (hasPermission != PackageManager.PERMISSION_GRANTED) {
-                log("Request permission " + permission)
+                log("Request permission $permission")
                 activity.requestPermissions(arrayOf(permission), ORION_ASK_PERMISSION_CODE)
                 return false
             }

@@ -17,7 +17,7 @@ import java.util.concurrent.CountDownLatch
 
 class RenderingAndNavigationTest : ActivityBaseTest() {
 
-    class MyView(val imageView: OrionImageListener) : Scene, OrionBookListener {
+    class MyView(private val imageView: OrionImageListener) : Scene, OrionBookListener {
 
         var data: Bitmap? = null
 
@@ -31,13 +31,13 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
         }
     }
 
-    val deviceSize = Point(300, 350) //to split page on two screen - page size is 663x886
+    private val deviceSize = Point(300, 350) //to split page on two screen - page size is 663x886
 
-    lateinit var view: MyView
+    private lateinit var view: MyView
 
     override fun setUp() {
         super.setUp()
-        view = MyView(activity.view!!)
+        view = MyView(activity.view)
     }
 
     fun testProperPagesSkip() {
@@ -48,7 +48,7 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
         doTestProperPages(TestUtil.ALICE)
     }
 
-    fun doTestProperPages(book: String) {
+    private fun doTestProperPages(book: String) {
         val controller = prepareEngine(book)
         val screens = 21
 
@@ -61,7 +61,7 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
 
         val prevs = arrayListOf<IntArray>()
         (1..screens).forEach {
-            processBitmap(prevs, { controller.drawPrev() })
+            processBitmap(prevs) { controller.drawPrev() }
         }
 
         (1..screens - 2).forEach { i ->
@@ -76,7 +76,7 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
 
     }
 
-    fun processBitmap(list: MutableList<IntArray>, drawer: () -> Unit) {
+    private fun processBitmap(list: MutableList<IntArray>, drawer: () -> Unit) {
         drawer()
         val bitmap = view.data!!
         Assert.assertNotNull(bitmap)
@@ -87,7 +87,7 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
         list.add(pixels)
     }
 
-    fun prepareEngine(book: String): Controller {
+    private fun prepareEngine(book: String): Controller {
         val doc = openTestBook(book)
 
         val layoutStrategy: LayoutStrategy = SimpleLayoutStrategy.create(doc)
@@ -100,7 +100,7 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
         controller.init(lastPageInfo, deviceSize)
 
         //getSubscriptionManager()?.sendDocOpenedNotification(controller)
-        activity.view!!.setDimensionAware(controller)
+        activity.view.setDimensionAware(controller)
         return controller
     }
 

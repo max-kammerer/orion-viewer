@@ -38,7 +38,7 @@ public class DataBaseInsertException extends OrionException {
     }
 
     public DataBaseInsertException(String message, BookNameAndSize book) {
-          this(message, book.getName() + " " + book.buityfySize());
+          this(message, book.getName() + " " + book.beautifySize());
     }
 
 }

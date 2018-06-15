@@ -27,12 +27,7 @@ import universe.constellation.orion.viewer.Action;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.R;
 
-/**
- * User: mike
- * Date: 10.01.12
- * Time: 13:26
- */
-public class ImageButton extends android.widget.ImageButton {
+public class ImageButton extends android.support.v7.widget.AppCompatImageButton {
 
     private Action action;
 

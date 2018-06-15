@@ -19,7 +19,6 @@
 
 package universe.constellation.orion.viewer.prefs
 
-import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceScreen
 import universe.constellation.orion.viewer.R
@@ -55,14 +54,13 @@ class OrionBookPreferences : DSLPreferenceActivity() {
                     dialogTitle = pref_screen_orientation.stringRes
                     setDefaultValue("DEFAULT")
 
-                    val isSDK9 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD
-                    (if (isSDK9) screen_orientation_full_desc else screen_orientation_desc).stringArray.let {
+                    screen_orientation_full_desc.stringArray.let {
                         if (!isGeneral) {
                             it[0] = orientation_default_rotation.stringRes
                         }
                         entries = it
                     }
-                    entryValues = (if (isSDK9) screen_orientation_full else screen_orientation).stringArray
+                    entryValues = screen_orientation_full.stringArray
                 }
 
                 if (isGeneral) {

@@ -35,7 +35,7 @@ import universe.constellation.orion.viewer.dialog.DialogOverView;
  */
 public class SelectionAutomata extends DialogOverView {
 
-    private enum STATE {START, MOVING, END, CANCELED};
+    private enum STATE {START, MOVING, END, CANCELED}
 
     private final static int SINGLE_WORD_AREA = 2;
 
@@ -110,8 +110,10 @@ public class SelectionAutomata extends DialogOverView {
         return result;
     }
 
-    public static void selectText(OrionViewerActivity activity, boolean isSingleWord, boolean translate, Dialog dialog,
-                                  Rect rect) {
+    public static void selectText(
+            OrionViewerActivity activity, boolean isSingleWord, boolean translate, Dialog dialog,
+            Rect rect
+    ) {
         String text = activity.getController().selectText(rect.left, rect.top, rect.width(), rect.height(), isSingleWord);
         if (text != null && !"".equals(text)) {
             if (isSingleWord && translate) {

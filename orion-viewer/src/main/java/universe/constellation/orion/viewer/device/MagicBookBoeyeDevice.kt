@@ -34,18 +34,18 @@ class MagicBookBoeyeDevice : EInkDevice() {
 
     companion object {
 
-        private val MENU = 59
-        private val F5 = 63
-        private val HOME = 102
-        private val PAGE_UP = 104
-        private val PAGE_DOWN = 109
-        private val VOLUME_DOWN = 114
-        private val VOLUME_UP = 115
-        private val POWER = 115
-        private val NOTIFICATION = 143
-        private val BACK = 158
-        private val CAMERA = 212
-        private val SEARCH = 217
+        private const val MENU = 59
+        private const val F5 = 63
+        private const val HOME = 102
+        private const val PAGE_UP = 104
+        private const val PAGE_DOWN = 109
+        private const val VOLUME_DOWN = 114
+        private const val VOLUME_UP = 115
+        private const val POWER = 115
+        private const val NOTIFICATION = 143
+        private const val BACK = 158
+        private const val CAMERA = 212
+        private const val SEARCH = 217
 
         private val isT62 = "T62D".equals(OrionApplication.DEVICE, ignoreCase = true)
     }

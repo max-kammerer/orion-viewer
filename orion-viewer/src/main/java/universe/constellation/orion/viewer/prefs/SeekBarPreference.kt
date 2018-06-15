@@ -44,8 +44,8 @@ class SeekBarPreference @JvmOverloads constructor(context: Context, attrs: Attri
     private var mCurrentValue: Int = 0
 
     // View elements
-    private var mSeekBar: SeekBar? = null
-    private var mValueText: TextView? = null
+    private lateinit var mSeekBar: SeekBar
+    private lateinit var mValueText: TextView
     override var isCurrentBookOption: Boolean = false
 
     init {
@@ -72,14 +72,14 @@ class SeekBarPreference @JvmOverloads constructor(context: Context, attrs: Attri
         view.findViewById<TextView>(R.id.max_value).text = maxValue.toString()
 
         // Setup SeekBar
-        mSeekBar = view.findViewById<SeekBar>(R.id.seek_bar)!!
-        mSeekBar!!.max = maxValue - minValue
-        mSeekBar!!.progress = mCurrentValue - minValue
-        mSeekBar!!.setOnSeekBarChangeListener(this)
+        mSeekBar = view.findViewById(R.id.seek_bar)!!
+        mSeekBar.max = maxValue - minValue
+        mSeekBar.progress = mCurrentValue - minValue
+        mSeekBar.setOnSeekBarChangeListener(this)
 
         // Setup text label for current value
-        mValueText = view.findViewById<TextView>(R.id.current_value)!!
-        mValueText!!.text = mCurrentValue.toString()
+        mValueText = view.findViewById(R.id.current_value)!!
+        mValueText.text = mCurrentValue.toString()
 
         return view
     }
@@ -113,7 +113,7 @@ class SeekBarPreference @JvmOverloads constructor(context: Context, attrs: Attri
         // Update current value
         mCurrentValue = value + minValue
         // Update label with current value
-        mValueText!!.text = mCurrentValue.toString()
+        mValueText.text = mCurrentValue.toString()
     }
 
     override fun onStartTrackingTouch(seek: SeekBar) {
@@ -143,36 +143,34 @@ class SeekBarPreference @JvmOverloads constructor(context: Context, attrs: Attri
         return isCurrentBookOption || super.persistInt(value)
     }
 
-    override fun getPersistedInt(defaultReturnValue: Int): Int {
+    override fun getPersistedInt(defaultReturnValue: Int): Int =
         if (isCurrentBookOption) {
-            return OrionPreferenceUtil.getPersistedInt(this, defaultReturnValue)
+            OrionPreferenceUtil.getPersistedInt(this, defaultReturnValue)
         } else {
-            return super.getPersistedInt(defaultReturnValue)
+            super.getPersistedInt(defaultReturnValue)
         }
-    }
 
-    override fun getPersistedString(defaultReturnValue: String?): String? {
+    override fun getPersistedString(defaultReturnValue: String?): String? =
         if (isCurrentBookOption) {
-            return OrionPreferenceUtil.getPersistedString(this, defaultReturnValue)
+            OrionPreferenceUtil.getPersistedString(this, defaultReturnValue)
         } else {
-            return super.getPersistedString(defaultReturnValue)
+            super.getPersistedString(defaultReturnValue)
         }
-    }
 
     companion object {
 
         // Namespaces to read attributes
-        private val PREFERENCE_NS = "http://schemas.android.com/apk/res/universe.constellation.orion.viewer"
-        private val ANDROID_NS = "http://schemas.android.com/apk/res/android"
+        private const val PREFERENCE_NS = "http://schemas.android.com/apk/res/universe.constellation.orion.viewer"
+        private const val ANDROID_NS = "http://schemas.android.com/apk/res/android"
 
         // Attribute names
-        private val ATTR_DEFAULT_VALUE = "defaultValue"
-        private val ATTR_MIN_VALUE = "minValue"
-        private val ATTR_MAX_VALUE = "maxValue"
+        private const val ATTR_DEFAULT_VALUE = "defaultValue"
+        private const val ATTR_MIN_VALUE = "minValue"
+        private const val ATTR_MAX_VALUE = "maxValue"
 
         // Default values for defaults
-        private val DEFAULT_CURRENT_VALUE = 50
-        private val DEFAULT_MIN_VALUE = 0
-        private val DEFAULT_MAX_VALUE = 100
+        private const val DEFAULT_CURRENT_VALUE = 50
+        private const val DEFAULT_MIN_VALUE = 0
+        private const val DEFAULT_MAX_VALUE = 100
     }
 }

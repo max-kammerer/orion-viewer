@@ -67,9 +67,9 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
         start()
     }
 
-    fun cleanCache() {
+    private fun cleanCache() {
         synchronized(this) {
-            log("Allocated heap size: " + memoryInMB(Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()))
+            log("Allocated heap size: ${memoryInMB(Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize())}")
             cachedBitmaps.clear()
             log("Cache is cleared!")
             currentPosition = null
@@ -128,7 +128,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
                     true
                 } else {
                     //will cache next page
-                    log("Future index is " + futureIndex)
+                    log("Future index is $futureIndex")
                     if (futureIndex != 0) {
                         curPos = curPos!!.deepCopy()
                         layout.calcPageLayout( curPos!!, true, doc.pageCount)
@@ -167,7 +167,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
                 resultEntry = render(curPos, rotation)
 
                 synchronized(this) {
-                    cachedBitmaps.add(resultEntry!!)
+                    cachedBitmaps.add(resultEntry)
                 }
             }
 
@@ -222,7 +222,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
         if (bitmap == null) {
             bitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888)
         } else {
-            log("Using cached bitmap " + bitmap)
+            log("Using cached bitmap $bitmap")
         }
 
         val leftTopCorner = layout.convertToPoint(curPos)

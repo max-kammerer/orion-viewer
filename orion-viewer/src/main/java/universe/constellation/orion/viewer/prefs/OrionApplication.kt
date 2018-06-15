@@ -24,8 +24,11 @@ import android.app.Application
 import android.content.Context
 import android.content.res.Resources
 import android.os.Build
+import android.os.Build.VERSION.CODENAME
+import android.os.Build.VERSION.RELEASE
 import android.preference.PreferenceManager
 import universe.constellation.orion.viewer.*
+import universe.constellation.orion.viewer.BuildConfig.VERSION_NAME
 import universe.constellation.orion.viewer.bookmarks.BookmarkAccessor
 import universe.constellation.orion.viewer.device.*
 import universe.constellation.orion.viewer.device.texet.TexetTB176FLDevice
@@ -96,7 +99,7 @@ class OrionApplication : Application() {
                     val prefs = options.prefs
                     val edit = prefs.edit()
                     edit.putBoolean(GlobalOptions.DRAW_OFF_PAGE, false)
-                    edit.putString(GlobalOptions.VERSION, BuildConfig.VERSION_NAME)
+                    edit.putString(GlobalOptions.VERSION, VERSION_NAME)
                     edit.commit()
                 } catch (e: Exception) {
                     log(e)
@@ -114,7 +117,7 @@ class OrionApplication : Application() {
     fun updateLanguage(res: Resources) {
         try {
             val defaultLocale = Locale.getDefault()
-            log("Updating locale to " + langCode + " from " + defaultLocale.language)
+            log("Updating locale to $langCode from ${defaultLocale.language}")
             val dm = res.displayMetrics
             val conf = res.configuration
             conf.locale = if (langCode == null || "DEFAULT" == langCode) defaultLocale else Locale(langCode)
@@ -172,11 +175,11 @@ class OrionApplication : Application() {
             private set
 
         fun logOrionAndDeviceInfo() {
-            log("Orion Viewer " + BuildConfig.VERSION_NAME)
-            log("Device: " + DEVICE)
-            log("Model: " + MODEL)
-            log("Manufacturer:  " + MANUFACTURER)
-            log("Android version :  " + Build.VERSION.CODENAME + " " + Build.VERSION.RELEASE)
+            log("Orion Viewer $VERSION_NAME")
+            log("Device: $DEVICE")
+            log("Model: $MODEL")
+            log("Manufacturer:  $MANUFACTURER")
+            log("Android version :  $CODENAME $RELEASE")
         }
 
         @JvmStatic
@@ -235,12 +238,12 @@ class OrionApplication : Application() {
         @JvmField
         val RK30SDK = "rk30sdk".equals(MODEL, ignoreCase = true) && ("T62D".equals(DEVICE, ignoreCase = true) || DEVICE.toLowerCase().contains("onyx"))
 
-        fun getField(name: String): String =
+        private fun getField(name: String): String =
                 try {
                     Build::class.java.getField(name).get(null) as String
                 } catch (e: Exception) {
-                    log("Exception on extracting Build property:" + name)
-                    ""
+                    log("Exception on extracting Build property: $name")
+                    "!ERROR!"
                 }
 
 
