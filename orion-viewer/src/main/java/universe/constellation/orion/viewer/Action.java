@@ -142,14 +142,14 @@ public enum Action {
                 dialog.supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.outline);
 
-                final Toolbar toolbar = (Toolbar) dialog.findViewById(R.id.toolbar);
+                final Toolbar toolbar = dialog.findViewById(R.id.toolbar);
                 toolbar.setTitle(R.string.menu_outline_text);
                 toolbar.setLogo(R.drawable.collapsed);
 
                 final InMemoryTreeStateManager<Integer> manager = new InMemoryTreeStateManager<>();
                 manager.setVisibleByDefault(false);
                 int navigateTo = OutlineAdapter.initializeTreeManager(manager, outline, controller.getCurrentPage());
-                TreeViewList tocTree = (TreeViewList) dialog.findViewById(R.id.mainTreeView);
+                TreeViewList tocTree = dialog.findViewById(R.id.mainTreeView);
                 tocTree.setDivider(activity.getResources().getDrawable(android.R.drawable.divider_horizontal_bright));
 
                 tocTree.setAdapter(new OutlineAdapter(controller, activity, dialog, manager, outline));

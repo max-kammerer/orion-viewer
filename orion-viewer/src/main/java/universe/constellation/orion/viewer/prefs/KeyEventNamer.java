@@ -34,7 +34,8 @@ import static universe.constellation.orion.viewer.LoggerKt.log;
  */
 public class KeyEventNamer {
 
-    private static final Map<Integer, String> key2Name = new HashMap<Integer, String>();
+    private static final Map<Integer, String> key2Name = new HashMap<>();
+
     static {
         try {
             Field[] fields = KeyEvent.class.getFields();

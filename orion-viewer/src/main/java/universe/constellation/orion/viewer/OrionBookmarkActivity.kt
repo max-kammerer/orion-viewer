@@ -258,7 +258,7 @@ class OrionBookmarkActivity : OrionBaseActivity(false) {
 
                         val book = getItem(position)
                         var view = convertView!!.findViewById<View>(R.id.page) as TextView
-                        view.text = book!!.buityfySize()
+                        view.text = book!!.beautifySize()
 
                         view = convertView.findViewById<View>(R.id.title) as TextView
                         view.text = book.name

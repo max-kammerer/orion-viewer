@@ -52,7 +52,7 @@ public class ActionListActivity extends Activity {
         setContentView(R.layout.actions_selection);
 
         int type = getIntent().getIntExtra("type", 0);
-        TextView header = (TextView) findViewById(R.id.actions_header);
+        TextView header = findViewById(R.id.actions_header);
         header.setText(type == 0 ? R.string.short_click : type == 1 ? R.string.long_click : R.string.binding_click);
         final int keyCode = getIntent().getIntExtra("keyCode", 0);
         final boolean isLong = getIntent().getBooleanExtra("isLong", false);
@@ -61,7 +61,7 @@ public class ActionListActivity extends Activity {
             header.setText(header.getText().toString() + " " + name + (isLong ? " [long press]" : ""));
         }
 
-        ListView view = (ListView) findViewById(R.id.actionsGroup);
+        ListView view = findViewById(R.id.actionsGroup);
         final Action [] actions = Action.values();
         view.setAdapter(new ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, Action.values()) {
             @Override

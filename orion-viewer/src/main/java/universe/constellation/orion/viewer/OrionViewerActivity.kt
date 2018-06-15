@@ -99,7 +99,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     val statusBarHelper: OrionStatusBarHelper
         get() = fullScene.statusBarHelper
 
-    public val bookId: Long
+    val bookId: Long
         get() {
             log("Selecting book id...")
             val info = lastPageInfo as ShortFileInfo
@@ -247,7 +247,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     @Throws(Exception::class)
-    public fun openFileAndDestroyOldController(filePath: String) {
+    fun openFileAndDestroyOldController(filePath: String) {
         log("openFileAndDestroyOldController")
         destroyController(controller).also { controller = null }
         AndroidLogger.stopLogger()
@@ -328,9 +328,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private fun updateViewOnNewBook(title: String?) {
         fullScene.onNewBook(title, controller!!.pageCount)
-        if (supportActionBar != null) {
-            supportActionBar!!.title = title
-        }
+        supportActionBar?.title = title
     }
 
     private fun showAlertWithExceptionThrow(intent: Intent, e: Exception) {
@@ -356,7 +354,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
     }
 
-    fun initPagePeekerScreen() {
+    private fun initPagePeekerScreen() {
         val pageSeek = findMyViewById(R.id.page_picker_seeker) as SeekBar
 
         subscriptionManager.addDocListeners(object : DocumentViewAdapter() {
@@ -405,8 +403,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             //animator.setDisplayedChild(MAIN_SCREEN);
         }
 
-        val page_preview = findMyViewById(R.id.page_preview) as ImageButton
-        page_preview.setOnClickListener {
+        val pagePreview = findMyViewById(R.id.page_preview) as ImageButton
+        pagePreview.setOnClickListener {
             onApplyAction()
             if (pageNumberText.text.isNotEmpty()) {
                 try {
@@ -420,7 +418,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
     }
 
-    fun updatePageSeeker() {
+    private fun updatePageSeeker() {
         val pageSeek = findMyViewById(R.id.page_picker_seeker) as SeekBar
         pageSeek.progress = controller!!.currentPage
         val view = findMyViewById(R.id.page_picker_message) as TextView
@@ -430,7 +428,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     }
 
-    fun initZoomScreen() {
+    private fun initZoomScreen() {
         //zoom screen
 
         val sp = findMyViewById(R.id.zoom_spinner) as Spinner
@@ -481,8 +479,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             //updateZoom();
         }
 
-        val zoom_preview = findMyViewById(R.id.zoom_preview) as ImageButton
-        zoom_preview.setOnClickListener {
+        val zoomPreview = findMyViewById(R.id.zoom_preview) as ImageButton
+        zoomPreview.setOnClickListener {
             onApplyAction()
             val index = sp.selectedItemPosition
             controller!!.changeZoom(if (index == 0) (java.lang.Float.parseFloat(zoomText.text.toString()) * 100).toInt() else -1 * (index - 1))
@@ -549,7 +547,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
 
-    fun initPageLayoutScreen() {
+    private fun initPageLayoutScreen() {
         val close = findMyViewById(R.id.options_close) as ImageButton
         close.setOnClickListener {
             onAnimatorCancel()
@@ -849,11 +847,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             check.isChecked = !check.isChecked
         }
 
-        val ORIENTATION_ARRAY = resources.getTextArray(R.array.screen_orientation_full)
+        val orientationArray = resources.getTextArray(R.array.screen_orientation_full)
 
         list.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             onApplyAction(true)
-            val orientation = ORIENTATION_ARRAY[position].toString()
+            val orientation = orientationArray[position].toString()
             controller!!.changeOrinatation(orientation)
         }
 
@@ -931,7 +929,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
     }
 
-    public fun showOrionDialog(screenId: Int, action: Action?, parameter: Any?) {
+    fun showOrionDialog(screenId: Int, action: Action?, parameter: Any?) {
         if (screenId == CROP_SCREEN) {
             val cropDialog = create(this, controller!!.margins)
             cropDialog.show()
@@ -966,7 +964,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
 
-    public fun textSelectionMode(isSingleSelection: Boolean, translate: Boolean) {
+    fun textSelectionMode(isSingleSelection: Boolean, translate: Boolean) {
         selectionAutomata.startSelection(isSingleSelection, translate)
     }
 

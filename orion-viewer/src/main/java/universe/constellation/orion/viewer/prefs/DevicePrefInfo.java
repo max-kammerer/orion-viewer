@@ -51,11 +51,11 @@ public class DevicePrefInfo extends DialogPreference {
 
         TextView tv = view.findViewById(R.id.MANUFACTURER);
         tv.setText(OrionApplication.MANUFACTURER);
-        tv = (TextView) view.findViewById(R.id.MODEL);
+        tv = view.findViewById(R.id.MODEL);
         tv.setText(OrionApplication.MODEL);
-        tv = (TextView) view.findViewById(R.id.DEVICE);
+        tv = view.findViewById(R.id.DEVICE);
         tv.setText(OrionApplication.DEVICE);
-        tv = (TextView) view.findViewById(R.id.HARDWARE);
+        tv = view.findViewById(R.id.HARDWARE);
         tv.setText(OrionApplication.HARDWARE);
 
 //        tv = (TextView) view.findViewById(R.id.MEMORY);

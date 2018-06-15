@@ -49,13 +49,13 @@ class RecentListAdapter(context: Context, entries: List<GlobalOptions.RecentEntr
 
 fun getIconByNameExtension(name: String): Int {
     val extName = name.fileExtension.toLowerCase()
-    when (extName) {
-        "pdf" -> return R.drawable.pdf
-        "djvu", "djv" -> return R.drawable.djvu
-        "cbz", "tif", "tiff" -> return R.drawable.cbz
-        "xps", "oxps" -> return R.drawable.xps
-        "xml" -> return R.drawable.xml
-        else -> return R.drawable.djvu
+    return when (extName) {
+        "pdf" -> R.drawable.pdf
+        "djvu", "djv" -> R.drawable.djvu
+        "cbz", "tif", "tiff" -> R.drawable.cbz
+        "xps", "oxps" -> R.drawable.xps
+        "xml" -> R.drawable.xml
+        else -> R.drawable.djvu
     }
 }
 

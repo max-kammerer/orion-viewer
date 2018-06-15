@@ -20,7 +20,7 @@ public class TapHelpDialog extends DialogOverView {
     public TapHelpDialog(OrionViewerActivity activity) {
         super(activity, R.layout.tap, android.R.style.Theme_Translucent_NoTitleBar);
 
-        TableLayout table = (TableLayout) dialog.findViewById(R.id.tap_table);
+        TableLayout table = dialog.findViewById(R.id.tap_table);
         table.setBackgroundColor(0);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
@@ -29,8 +29,8 @@ public class TapHelpDialog extends DialogOverView {
             for (int j = 0; j < row.getChildCount(); j++) {
                 View layout = row.getChildAt(j);
 
-                TextView shortText = (TextView) layout.findViewById(R.id.shortClick);
-                TextView longText = (TextView) layout.findViewById(R.id.longClick);
+                TextView shortText = layout.findViewById(R.id.shortClick);
+                TextView longText = layout.findViewById(R.id.longClick);
                 longText.setVisibility(View.GONE);
 
                 int shortCode = prefs.getInt(OrionTapActivity.getKey(i, j, false), -1);
@@ -54,7 +54,7 @@ public class TapHelpDialog extends DialogOverView {
             }
         }
 
-        ImageView view = (ImageView) dialog.findViewById(R.id.tap_help_close);
+        ImageView view = dialog.findViewById(R.id.tap_help_close);
         view.setVisibility(View.VISIBLE);
         view.setClickable(true);
         view.setOnClickListener(new View.OnClickListener() {

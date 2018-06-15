@@ -123,13 +123,13 @@ public class GlobalOptions implements Serializable, PageOptions {
 
     private SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener;
 
-    private Map<String, Object> prefValues = new HashMap<String, Object>();
+    private Map<String, Object> prefValues = new HashMap<>();
 
     GlobalOptions(final OrionApplication context, SharedPreferences preferences, boolean loadRecents) {
         prefs = preferences;
 
         if (loadRecents) {
-            recentFiles = new LinkedList<RecentEntry>();
+            recentFiles = new LinkedList<>();
             for (int i = 0; i < MAX_RECENT_ENTRIES; i++) {
                 String entry = prefs.getString(RECENT_PREFIX + i, null);
                 if (entry == null) {

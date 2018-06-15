@@ -236,11 +236,11 @@ class Controller(
         info.screenOrientation = screenOrientation
     }
 
-    fun sendViewChangeNotification() {
+    private fun sendViewChangeNotification() {
         activity.subscriptionManager.sendViewChangeNotification()
     }
 
-    fun sendPageChangedNotification() {
+    private fun sendPageChangedNotification() {
         if (lastPage != layoutInfo.pageNumber) {
             lastPage = layoutInfo.pageNumber
             activity.subscriptionManager.sendPageChangedNotification(lastPage, document.pageCount)
@@ -304,7 +304,7 @@ class Controller(
     fun changeColorMode(colorMode: String, invalidate: Boolean) {
         activity.fullScene.setColorMatrix(ColorUtil.getColorMode(colorMode))
         if (invalidate) {
-            activity.view?.invalidate()
+            activity.view.invalidate()
         }
     }
 

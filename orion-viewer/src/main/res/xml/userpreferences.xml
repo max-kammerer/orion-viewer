@@ -20,7 +20,7 @@
   -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-                  xmlns:orion="http://schemas.android.com/apk/res/universe.constellation.orion.viewer"
+                  xmlns:orion="http://schemas.android.com/apk/res-auto"
                   android:title="@string/application_settings_title">
 
     <PreferenceCategory
