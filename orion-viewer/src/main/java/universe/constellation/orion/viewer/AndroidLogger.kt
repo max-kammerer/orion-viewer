@@ -26,7 +26,7 @@ import java.io.PrintWriter
 
 object AndroidLogger : Logger {
 
-    private val LOGTAG = "OrionViewer"
+    private const val LOGTAG = "OrionViewer"
 
     private var writer: PrintWriter? = null
 

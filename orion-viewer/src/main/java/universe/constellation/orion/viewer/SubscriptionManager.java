@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class SubscriptionManager {
 
-    private List<DocumentViewListener> listeners = new ArrayList<DocumentViewListener>();
+    private List<DocumentViewListener> listeners = new ArrayList<>();
 
 
      public void addDocListeners(DocumentViewListener listeners) {

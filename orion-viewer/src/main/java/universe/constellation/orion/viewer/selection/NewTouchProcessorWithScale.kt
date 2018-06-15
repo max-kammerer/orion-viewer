@@ -15,7 +15,7 @@ class NewTouchProcessorWithScale(view: OrionScene, activity: OrionViewerActivity
         NewTouchProcessor(view, activity),
         ScaleGestureDetector.OnScaleGestureListener {
 
-    val scaleDetector = ScaleGestureDetector(activity, this)
+    private val scaleDetector = ScaleGestureDetector(activity, this)
 
     private val enableTouchMoveOnPinchZoom = activity.globalOptions.isEnableMoveOnPinchZoom
 

@@ -17,9 +17,9 @@ fun IntArray.toMargins(evenCrop: Boolean, cropMode: Int) =
 
 class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : AppCompatDialog(context) {
 
-    val cropMargins = cropMargins.toDialogMargins()
-    val evenCrop = cropMargins.evenCrop
-    val cropMode = cropMargins.cropMode
+    private val cropMargins = cropMargins.toDialogMargins()
+    private val evenCrop = cropMargins.evenCrop
+    private val cropMode = cropMargins.cropMode
 
     companion object {
         const val CROP_RESTRICTION_MIN = -10
@@ -59,7 +59,7 @@ class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : A
     }
 
 
-    fun initCropScreen() {
+    private fun initCropScreen() {
         val generalCropTable = findViewById<View>(R.id.crop_borders) as TableLayout
 
         for (i in 0 until generalCropTable.childCount) {
@@ -106,9 +106,9 @@ class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : A
         }
 
         val close = findViewById<View>(R.id.crop_close) as ImageButton
-        close.setOnClickListener({
+        close.setOnClickListener {
             dismiss()
-        })
+        }
 
         updateView()
     }
@@ -120,7 +120,7 @@ class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : A
         linkCropButtonsAndText(minus, plus, valueView, i)
     }
 
-    fun linkCropButtonsAndText(minus: ImageButton, plus: ImageButton, text: TextView, cropIndex: Int) {
+    private fun linkCropButtonsAndText(minus: ImageButton, plus: ImageButton, text: TextView, cropIndex: Int) {
         minus.setOnClickListener {
             if (cropMargins[cropIndex] != CROP_RESTRICTION_MIN) {
                 cropMargins[cropIndex] = cropMargins[cropIndex] - 1
@@ -155,7 +155,7 @@ class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : A
         }
     }
 
-    fun updateView() {
+    private fun updateView() {
         val cropTable = findViewById<View>(R.id.crop_borders) as TableLayout
         for (i in 0 until cropTable.childCount) {
             val row = cropTable.getChildAt(i) as TableRow

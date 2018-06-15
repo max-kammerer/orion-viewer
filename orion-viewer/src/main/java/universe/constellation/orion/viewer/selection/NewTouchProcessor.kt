@@ -18,7 +18,7 @@ enum class State {
 
 open class NewTouchProcessor(val view: OrionScene, val activity: OrionViewerActivity) : GestureDetector.SimpleOnGestureListener() {
 
-    val detector = GestureDetectorCompat(activity, this)
+    private val detector = GestureDetectorCompat(activity, this)
 
     protected var state = State.UNDEFINED
 
@@ -59,14 +59,14 @@ open class NewTouchProcessor(val view: OrionScene, val activity: OrionViewerActi
         return onTouchEvent
     }
 
-    open protected fun onChangingState() {
+    protected open fun onChangingState() {
         if (nextState == State.UNDEFINED) {
             log("onChangingState")
             reset()
         }
     }
 
-    open protected fun reset() {
+    protected open fun reset() {
         state = State.UNDEFINED
         info = null
         start0.x = -1
@@ -75,7 +75,7 @@ open class NewTouchProcessor(val view: OrionScene, val activity: OrionViewerActi
         last0.y = -1
     }
 
-    open protected fun resetNextState() {
+    protected open fun resetNextState() {
         log("resetNextState")
         nextState = State.UNDEFINED
     }

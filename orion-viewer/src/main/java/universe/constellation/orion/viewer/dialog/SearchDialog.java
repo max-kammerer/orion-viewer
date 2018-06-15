@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -72,7 +73,7 @@ public class SearchDialog extends DialogFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Dialog dialog = getDialog();
         dialog.setCanceledOnTouchOutside(true);
 
@@ -93,10 +94,10 @@ public class SearchDialog extends DialogFragment {
 
         final Controller controller = ((OrionViewerActivity) getActivity()).getController();
 
-        searchField = (EditText) dialog.findViewById(R.id.searchText);
+        searchField = dialog.findViewById(R.id.searchText);
         searchField.getBackground().setAlpha(ALPHA);
 
-        android.widget.ImageButton button = (android.widget.ImageButton) dialog.findViewById(R.id.searchNext);
+        android.widget.ImageButton button = dialog.findViewById(R.id.searchNext);
         button.getBackground().setAlpha(ALPHA);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,7 +107,7 @@ public class SearchDialog extends DialogFragment {
             }
         });
 
-        button = (android.widget.ImageButton) dialog.findViewById(R.id.searchPrev);
+        button = dialog.findViewById(R.id.searchPrev);
         button.getBackground().setAlpha(ALPHA);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,7 +139,7 @@ public class SearchDialog extends DialogFragment {
             }
 
             private List<SubBatch> prepareResults(SearchTaskResult result, boolean forward, LayoutPosition position, PageWalker walker, LayoutStrategy layoutStrategy) {
-                List<SubBatch> screens = new ArrayList<SubBatch>();
+                List<SubBatch> screens = new ArrayList<>();
                 RectF[] searchBoxes = result.searchBoxes;
 
                 for (RectF searchBox : searchBoxes) {
@@ -268,7 +269,7 @@ public class SearchDialog extends DialogFragment {
     }
 
     private class SubBatch {
-        List<RectF> rects = new ArrayList<RectF>();
+        List<RectF> rects = new ArrayList<>();
 
         int active = -1;
 
@@ -291,7 +292,7 @@ public class SearchDialog extends DialogFragment {
         }
 
         @Override
-        public void drawOnCanvas(Canvas canvas, ColorStuff stuff, DrawContext drawContext) {
+        public void drawOnCanvas(@NonNull Canvas canvas, @NonNull ColorStuff stuff, DrawContext drawContext) {
             if (batch != null) {
                 Paint paint = stuff.getBorderPaint();
                 List<RectF> rects = batch.rects;

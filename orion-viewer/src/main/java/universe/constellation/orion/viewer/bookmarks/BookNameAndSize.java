@@ -58,7 +58,7 @@ public class BookNameAndSize implements Comparable<BookNameAndSize> {
         return id;
     }
 
-    public String buityfySize() {
+    public String beautifySize() {
         if (size < 1024) {
             return size + "b";
         }
@@ -73,7 +73,7 @@ public class BookNameAndSize implements Comparable<BookNameAndSize> {
 
     @Override
     public String toString() {
-        return name + " " + buityfySize();
+        return name + " " + beautifySize();
     }
 
     @Override

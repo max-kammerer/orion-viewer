@@ -47,10 +47,10 @@ interface TestUtil {
     companion object {
         val testFolder: File = File(Environment.getExternalStorageDirectory(), "orion")
 
-        val SICP: String = "sicp.pdf"
+        const val SICP: String = "sicp.pdf"
 
-        val ALICE: String = "aliceinw.djvu"
+        const val ALICE: String = "aliceinw.djvu"
 
-        val ORION_PKG: String = "universe.constellation.orion.viewer"
+        const val ORION_PKG: String = "universe.constellation.orion.viewer"
     }
 }
