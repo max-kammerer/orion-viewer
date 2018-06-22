@@ -1018,7 +1018,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             val currentPage = it.currentPage
             val pageCount = it.document.pageCount
             launch(CommonPool) {
-                it.rootJob.cancelAndJoin()
                 it.destroy()
                 device!!.onBookClose(currentPage, pageCount)
             }
