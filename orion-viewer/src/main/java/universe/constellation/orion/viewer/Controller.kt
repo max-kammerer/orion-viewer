@@ -21,6 +21,7 @@ package universe.constellation.orion.viewer
 
 import android.graphics.Point
 import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.cancelAndJoin
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.DocumentWithCaching
 import universe.constellation.orion.viewer.document.OutlineItem
@@ -33,11 +34,11 @@ import universe.constellation.orion.viewer.view.Renderer
 import universe.constellation.orion.viewer.view.ViewDimensionAware
 
 class Controller(
-        val activity: OrionViewerActivity,
-        val document: Document,
-        val layoutStrategy: LayoutStrategy,
-        private var renderer: Renderer,
-        val rootJob: Job = Job()
+    val activity: OrionViewerActivity,
+    val document: Document,
+    val layoutStrategy: LayoutStrategy,
+    private var renderer: Renderer,
+    private val rootJob: Job = Job()
 ) : ViewDimensionAware {
 
     private lateinit var layoutInfo: LayoutPosition
@@ -174,12 +175,12 @@ class Controller(
     val margins: CropMargins
         get() = layoutStrategy.margins
 
-    fun destroy() {
+    suspend fun destroy() {
         log("Destroying controller for ${document.title}...")
         activity.subscriptionManager.unSubscribe(listener)
+        rootJob.cancelAndJoin()
         renderer.stopRenderer()
         document.destroy()
-        System.gc()
     }
 
     fun onPause() {
