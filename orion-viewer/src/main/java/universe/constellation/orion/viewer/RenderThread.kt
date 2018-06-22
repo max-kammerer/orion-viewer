@@ -32,11 +32,6 @@ import universe.constellation.orion.viewer.layout.calcPageLayout
 import universe.constellation.orion.viewer.view.Renderer
 import universe.constellation.orion.viewer.view.Scene
 
-/**
- * User: mike
- * Date: 19.10.11
- * Time: 9:52
- */
 open class RenderThread(private val activity: OrionViewerActivity, protected var layout: LayoutStrategy, protected var doc: Document, private val executeInSeparateThread: Boolean, private val fullScene: Scene) : Thread(), Renderer {
 
     private val cachedBitmaps = LinkedList<CacheInfo>()
@@ -104,7 +99,6 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
 
             log("Allocated heap size " + memoryInMB(Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()))
 
-            var rotation = 0
             val doContinue = synchronized(this) {
                 if (lastEvent != null) {
                     currentPosition = lastEvent
@@ -112,9 +106,6 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
                     futureIndex = 0
                     curPos = currentPosition
                 }
-
-                //keep it here
-                rotation = layout.rotation
 
                 if (currentPosition == null || futureIndex > FUTURE_COUNT || currentPosition!!.screenWidth == 0 || currentPosition!!.screenHeight == 0) {
                     try {
@@ -138,13 +129,12 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
             }
              if (doContinue) continue
 
-            log("rotation = $rotation")
-            renderInCurrentThread(futureIndex == 0, curPos, rotation)
+            renderInCurrentThread(futureIndex == 0, curPos)
             futureIndex++
         }
     }
 
-    protected fun renderInCurrentThread(flushBitmap: Boolean, curPos: LayoutPosition?, rotation: Int): Bitmap {
+    protected fun renderInCurrentThread(flushBitmap: Boolean, curPos: LayoutPosition?): Bitmap {
         var resultEntry: CacheInfo? = null
         log("Orion: rendering position: $curPos")
         if (curPos != null) {
@@ -164,7 +154,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
 
             if (resultEntry == null) {
                 //render page
-                resultEntry = render(curPos, rotation)
+                resultEntry = renderInner(curPos)
 
                 synchronized(this) {
                     cachedBitmaps.add(resultEntry)
@@ -200,7 +190,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
         return resultEntry!!.bitmap
     }
 
-    private fun render(curPos: LayoutPosition, rotation: Int): CacheInfo {
+    private fun renderInner(curPos: LayoutPosition): CacheInfo {
         val resultEntry: CacheInfo
         val width = curPos.x.screenDimension
         val height = curPos.y.screenDimension
