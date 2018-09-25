@@ -17,27 +17,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer;
+package universe.constellation.orion.viewer
 
-import android.app.Activity;
+import android.app.Activity
 
-/**
- * User: mike
- * Date: 07.10.12
- * Time: 19:55
- */
-public class OrionException extends Exception {
+open class OrionException : Exception {
 
-    public OrionException(Activity activity,int messageId, String subMessage) {
-        this(activity.getResources().getString(messageId), subMessage);
-    }
+    constructor(activity: Activity, messageId: Int, subMessage: String) : this(activity.resources.getString(messageId), subMessage)
 
-    public OrionException(String message, String subMessage) {
-        super(message + ": " + subMessage);
-    }
+    constructor(message: String, subMessage: String) : super("$message: $subMessage")
 
-    public OrionException(String message, Exception e) {
-        super(message + ": " + e.getMessage(), e);
-    }
+    constructor(message: String, e: Exception) : super(message + ": " + e.message, e)
 
 }
