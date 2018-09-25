@@ -20,8 +20,8 @@
 package universe.constellation.orion.viewer
 
 import android.graphics.Point
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.cancelAndJoin
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.DocumentWithCaching
 import universe.constellation.orion.viewer.document.OutlineItem
