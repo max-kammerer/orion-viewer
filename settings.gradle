@@ -1,1 +1,2 @@
-include ':orion-viewer', ':tree-view-list-android', ':native', ':common'
+include ':orion-viewer', ':tree-view-list-android'
+//':native',

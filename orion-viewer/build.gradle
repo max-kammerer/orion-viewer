@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-platform-android'
+apply plugin: 'kotlin-multiplatform'
 apply from: 'version.gradle'
 apply from: '../project.gradle'
 
@@ -12,7 +12,6 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
     implementation project(':tree-view-list-android')
-    expectedBy project(':common')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.26.1-eap13'
@@ -116,8 +115,17 @@ android {
     }
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    kotlinOptions {
-        freeCompilerArgs = ["-Xmulti-platform"]
+kotlin {
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
+            }
+
+        }
+    }
+
+    targets {
+        fromPreset(presets.android, 'androidApp')
     }
 }
