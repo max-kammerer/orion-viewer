@@ -17,8 +17,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-apply plugin: 'kotlin-platform-common'
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.multiplatform'
+}
 
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlin_version"
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        minSdkVersion 14
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets.main.java.srcDir("src/androidLibMain/kotlin")
+}
+
+kotlin {
+    targets {
+        fromPreset(presets.android, 'androidLib')
+        //fromPreset(presets.linuxX64, 'linuxLib')
+    }
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
+            }
+        }
+
+
+        androidLibMain {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+                implementation 'com.android.support:appcompat-v7:27.1.1'
+            }
+        }
+//        linuxAppMain {
+//
+//            //kotlin.srcDir('../native/src/main')
+//        }
+    }
+
 }

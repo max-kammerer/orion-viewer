@@ -44,6 +44,7 @@ import universe.constellation.orion.viewer.dialog.create
 import universe.constellation.orion.viewer.document.StubDocument
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
 import universe.constellation.orion.viewer.prefs.GlobalOptions
+import universe.constellation.orion.viewer.prefs.initalizer
 import universe.constellation.orion.viewer.selection.NewTouchProcessor
 import universe.constellation.orion.viewer.selection.NewTouchProcessorWithScale
 import universe.constellation.orion.viewer.selection.SelectionAutomata
@@ -260,7 +261,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         val stubRenderer = Renderer.EMPTY
         val stubController = Controller(this, stubDocument, SimpleLayoutStrategy.create(stubDocument), stubRenderer)
         val drawView = fullScene.drawView
-        val stubInfo = LastPageInfo.createDefaultLastPageInfo(this)
+        val stubInfo = LastPageInfo.createDefaultLastPageInfo(initalizer(globalOptions))
         stubController.changeOrinatation(stubInfo.screenOrientation)
         stubController.init(stubInfo, Point(drawView.sceneWidth, drawView.sceneHeight))
 
@@ -285,7 +286,10 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             }
 
             try {
-                val lastPageInfo1 = async(CommonPool, parent = rootJob) { LastPageInfo.loadBookParameters(this@OrionViewerActivity, filePath) }.await()
+                val lastPageInfo1 =
+                    async(CommonPool, parent = rootJob) {
+                        LastPageInfo.loadBookParameters(this@OrionViewerActivity, filePath, initalizer(globalOptions))
+                    }.await()
                 lastPageInfo = lastPageInfo1
                 orionContext.currentBookParameters = lastPageInfo1
                 OptionActions.DEBUG.doAction(this@OrionViewerActivity, false, globalOptions.getBooleanProperty("DEBUG", false))
@@ -411,7 +415,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     val parsedInput = Integer.valueOf(pageNumberText.text.toString())
                     controller!!.drawPage(parsedInput - 1)
                 } catch (ex: NumberFormatException) {
-                    showError("Couldn't parse " + pageNumberText.text, ex)
+                    showError(this, "Couldn't parse " + pageNumberText.text, ex)
                 }
 
             }

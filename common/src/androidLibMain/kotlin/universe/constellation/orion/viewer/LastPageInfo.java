@@ -19,16 +19,18 @@
 
 package universe.constellation.orion.viewer;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Xml;
 
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 import org.jetbrains.annotations.NotNull;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
-import universe.constellation.orion.viewer.prefs.GlobalOptions;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -87,7 +89,7 @@ public class LastPageInfo implements Serializable, ShortFileInfo {
 
     }
 
-    public static LastPageInfo loadBookParameters(OrionBaseActivity activity, String filePath) {
+    public static LastPageInfo loadBookParameters(Activity activity, String filePath, Function1<LastPageInfo, Unit> defaultInitializer) {
         int idx = filePath.lastIndexOf('/');
         File file = new File(filePath);
         String fileData = filePath.substring(idx + 1) + "." + file.length() + ".xml";
@@ -101,7 +103,7 @@ public class LastPageInfo implements Serializable, ShortFileInfo {
         }
 
         if (!successfull) {
-            lastPageInfo = createDefaultLastPageInfo(activity);
+            lastPageInfo = createDefaultLastPageInfo(defaultInitializer);
         }
 
         lastPageInfo.fileData = fileData;
@@ -112,19 +114,13 @@ public class LastPageInfo implements Serializable, ShortFileInfo {
     }
 
     @NonNull
-    public static LastPageInfo createDefaultLastPageInfo(OrionBaseActivity activity) {
+    public static LastPageInfo createDefaultLastPageInfo(Function1<LastPageInfo, Unit> defaultInitializer) {
         LastPageInfo lastPageInfo = new LastPageInfo();
-        GlobalOptions options = activity.getOrionContext().getOptions();
-
-        lastPageInfo.zoom = options.getDefaultZoom();
-        lastPageInfo.contrast = options.getDefaultContrast();
-        lastPageInfo.walkOrder = options.getWalkOrder();
-        lastPageInfo.pageLayout = options.getPageLayout();
-        lastPageInfo.colorMode = options.getColorMode();
+        defaultInitializer.invoke(lastPageInfo);
         return lastPageInfo;
     }
 
-    public void save(OrionBaseActivity activity) {
+    public void save(Activity activity) {
         OutputStreamWriter writer = null;
         try {
             XmlSerializer serializer = Xml.newSerializer();
@@ -177,7 +173,7 @@ public class LastPageInfo implements Serializable, ShortFileInfo {
             serializer.endDocument();
         } catch (IOException e) {
             log(e);
-            activity.showError("Couldn't save book preferences", e);
+            UiUtilsKt.showError(activity, "Couldn't save book preferences", e);
         } finally {
             if (writer != null) {
                 try {
@@ -203,7 +199,7 @@ public class LastPageInfo implements Serializable, ShortFileInfo {
         serializer.endTag("", name);
     }
 
-    private boolean load(OrionBaseActivity activity, String filePath) {
+    private boolean load(Activity activity, String filePath) {
         InputStreamReader reader = null;
         try {
             reader = new InputStreamReader(activity.openFileInput(filePath));
@@ -255,9 +251,9 @@ public class LastPageInfo implements Serializable, ShortFileInfo {
         } catch (FileNotFoundException e) {
             //do nothing
         } catch (XmlPullParserException e) {
-            activity.showError("Couldn't parse book parameters", e);
+            UiUtilsKt.showError(activity, "Couldn't parse book parameters", e);
         } catch (IOException e) {
-            activity.showError("Couldn't parse book parameters", e);
+            UiUtilsKt.showError(activity,"Couldn't parse book parameters", e);
         } finally {
             if (reader != null) {
                 try {

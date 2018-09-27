@@ -67,30 +67,30 @@ fun activate(app: CPointer<GtkApplication>?, user_data: gpointer?) {
             })
 
 
-    createHeaderBar(window)
+    //createHeaderBar(window)
 
     gtk_widget_show_all(windowWidget)
 }
 
-private fun createHeaderBar(window: CPointer<GtkWindow>) {
-    val header = gtk_header_bar_new()!!
-    gtk_window_set_titlebar(window, header)
-    val buttonBox = gtk_button_box_new(
-            GtkOrientation.GTK_ORIENTATION_HORIZONTAL)!!
-    gtk_container_add(header.reinterpret(), buttonBox)
-
-    val button = gtk_button_new_with_label("Click me!")!!
-    g_signal_connect(button, "clicked",
-            staticCFunction { _: CPointer<GtkWidget>?, _: gpointer? ->
-                println("Clicked")
-            })
-    g_signal_connect(button, "clicked",
-            staticCFunction { widget: CPointer<GtkWidget>? ->
-                gtk_widget_destroy(widget)
-            },
-            window, G_CONNECT_SWAPPED)
-    gtk_container_add(buttonBox.reinterpret(), button)
-}
+//private fun createHeaderBar(window: CPointer<GtkWindow>) {
+//    val header = gtk_header_bar_new()!!
+//    gtk_window_set_titlebar(window, header)
+//    val buttonBox = gtk_button_box_new(
+//            GtkOrientation.GTK_ORIENTATION_HORIZONTAL)!!
+//    gtk_container_add(header.reinterpret(), buttonBox)
+//
+//    val button = gtk_button_new_with_label("Click me!")!!
+//    g_signal_connect(button, "clicked",
+//            staticCFunction { _: CPointer<GtkWidget>?, _: gpointer? ->
+//                println("Clicked")
+//            })
+//    g_signal_connect(button, "clicked",
+//            staticCFunction { widget: CPointer<GtkWidget>? ->
+//                gtk_widget_destroy(widget)
+//            },
+//            window, G_CONNECT_SWAPPED)
+//    gtk_container_add(buttonBox.reinterpret(), button)
+//}
 
 fun gtkMain(args: Array<String>): Int {
     val app = gtk_application_new("org.gtk.example", G_APPLICATION_FLAGS_NONE)!!

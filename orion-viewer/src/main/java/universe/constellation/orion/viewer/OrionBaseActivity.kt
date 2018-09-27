@@ -20,6 +20,7 @@
 package universe.constellation.orion.viewer
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.os.Bundle
@@ -133,15 +134,6 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    protected fun showError(e: Exception) {
-        showError("Error", e)
-    }
-
-    fun showError(error: String, ex: Exception) {
-        Toast.makeText(this, error + ": " + ex.message, Toast.LENGTH_LONG).show()
-        log(ex)
-    }
-
     fun changeOrientation(orientationId: Int) {
         println("Display orientation " + requestedOrientation + " screenOrientation " + window.attributes.screenOrientation)
         if (requestedOrientation != orientationId) {
@@ -196,4 +188,5 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
     protected fun doTrack(keyCode: Int): Boolean {
         return keyCode != KeyEvent.KEYCODE_MENU && keyCode != KeyEvent.KEYCODE_BACK
     }
+
 }
