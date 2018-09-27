@@ -16,7 +16,7 @@ class StubDocument(override var title: String?, var bodyText: String? = title) :
     override val outline: Array<OutlineItem> = emptyArray()
 
     override fun getPageInfo(pageNum: Int, cropMode: Int) =
-            PageInfo(0, 100, 100)
+        PageInfo(0, 100, 100)
 
     override fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int) {
         //TODO: render body text
