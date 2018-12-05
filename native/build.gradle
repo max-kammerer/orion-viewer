@@ -1,19 +1,51 @@
 //stub generation:
 //env LIBCLANG_DISABLE_CRASH_RECOVERY=1 java -Dkonan.home=/home/mike/.konan/kotlin-native-linux-0.5 -Djava.library.path=/home/mike/.konan/kotlin-native-linux-0.5/konan/lib/clangstubs/shared/:/home/mike/.konan/kotlin-native-linux-0.5/konan/lib/callbacks/shared/  -cp  StubGenerator.jar:kotlin-stdlib.jar:Runtime.jar:shared.jar:Indexer.jar:kotlin-reflect.jar org.jetbrains.kotlin.native.interop.gen.jvm.MainKt
 
-apply plugin: 'kotlin-platform-jvm'
-
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    expectedBy project(":common")
-    implementation files('libs/Runtime.jar')
+plugins {
+    id 'org.jetbrains.kotlin.multiplatform'
 }
 
-sourceCompatibility = "1.8"
-targetCompatibility = "1.8"
 
-sourceSets {
-    main {
-        java.srcDirs += 'src/main/stubs'
+//dependencies {
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+//    expectedBy project(":common")
+//    implementation files('libs/Runtime.jar')
+//}
+
+//sourceCompatibility = "1.8"
+//targetCompatibility = "1.8"
+
+//sourceSets {
+//    main {
+//        java.srcDirs += 'src/main/stubs'
+//    }
+//}
+
+kotlin {
+    targets {
+        fromPreset(presets.linuxX64, 'linuxApp') {
+            compilations.main.outputKinds 'executable'
+            //entryPoint 'main'
+        }
     }
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
+            }
+        }
+
+        linuxAppMain {
+
+            dependencies {
+                implementation files('../../thirdparty-new/kotlin-libui/libui/build/classes/kotlin/linux/main/libui.klib')
+                implementation files('../../thirdparty-new/kotlin-libui/libui/build/classes/kotlin/linux/main/libui-cinterop-libui.klib')
+
+                //implementation file(':libui')
+            }
+        }
+
+    }
+
 }
