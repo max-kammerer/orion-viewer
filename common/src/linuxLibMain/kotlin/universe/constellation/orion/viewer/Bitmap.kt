@@ -1,13 +1,21 @@
 package universe.constellation.orion.viewer
 
-actual class Bitmap {
-    actual fun getWidth(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+actual class Bitmap(private val width1: Int, private val height1: Int) {
 
-    actual fun getHeight(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    actual fun getWidth() = width1
 
-    actual open fun getPixels(bitmapArray: IntArray, i: Int, width: Int, i1: Int, i2: Int, width1: Int, height: Int) {}
+    actual fun getHeight() = height1
+
+    private val pixels: IntArray = IntArray(width1 * height1)
+
+
+    actual open fun getPixels(pixels: IntArray,
+                              offset: Int,
+                              stride: Int,
+                              x: Int,
+                              y: Int,
+                              width: Int,
+                              height: Int) {
+
+    }
 }

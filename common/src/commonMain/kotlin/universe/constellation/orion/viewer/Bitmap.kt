@@ -22,7 +22,15 @@ package universe.constellation.orion.viewer
 expect class Bitmap {
     fun getWidth(): Int
     fun getHeight(): Int
-    open fun getPixels(bitmapArray: IntArray, i: Int, width: Int, i1: Int, i2: Int, width1: Int, height: Int)
+    open fun getPixels(
+        pixels: IntArray,
+        offset: Int,
+        stride: Int,
+        x: Int,
+        y: Int,
+        width: Int,
+        height: Int
+    )
 }
 
 expect fun createBitmap(width: Int, height: Int): Bitmap

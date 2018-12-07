@@ -52,5 +52,4 @@ expect class State {
     var walkOrder: String
 
     var colorMode: String
-
 }
