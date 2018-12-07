@@ -1,69 +1,25 @@
 package universe.constellation.orion.viewer.layout
 
-actual class State {
-    actual var screenWidth: Int
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        set(value) {}
-    actual var screenHeight: Int
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        set(value) {}
-    actual var pageNumber: Int
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        set(value) {}
-    actual var rotation: Int
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        set(value) {}
-    //application default
-    actual var screenOrientation: String
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        set(value) {}
-    actual var newOffsetX: Int
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        set(value) {}
-    actual var newOffsetY: Int
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        set(value) {}
-    actual var zoom: Int
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        set(value) {}
-    actual var leftMargin: Int
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        set(value) {}
-    actual var rightMargin: Int
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        set(value) {}
-    actual var topMargin: Int
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        set(value) {}
-    actual var bottomMargin: Int
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        set(value) {}
-    actual var enableEvenCropping: Boolean
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        set(value) {}
-    actual var cropMode: Int
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        set(value) {}
-    actual var leftEvenMargin: Int
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        set(value) {}
-    actual var rightEventMargin: Int
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        set(value) {}
-    actual var pageLayout: Int
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        set(value) {}
-    actual var contrast: Int
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        set(value) {}
-    actual var threshold: Int
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        set(value) {}
-    actual var walkOrder: String
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        set(value) {}
+actual class State(
+    actual var screenWidth: Int,
+    actual var screenHeight: Int,
+    actual var pageNumber: Int,
+    actual var rotation: Int,
+    actual var screenOrientation: String,
+    actual var newOffsetX: Int,
+    actual var newOffsetY: Int,
+    actual var zoom: Int,
+    actual var leftMargin: Int,
+    actual var rightMargin: Int,
+    actual var topMargin: Int,
+    actual var bottomMargin: Int,
+    actual var enableEvenCropping: Boolean,
+    actual var cropMode: Int,
+    actual var leftEvenMargin: Int,
+    actual var rightEventMargin: Int,
+    actual var pageLayout: Int,
+    actual var contrast: Int,
+    actual var threshold: Int,
+    actual var walkOrder: String,
     actual var colorMode: String
-        get() = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        set(value) {}
-
-}
+)
