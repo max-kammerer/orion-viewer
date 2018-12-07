@@ -39,8 +39,8 @@ kotlin {
         linuxAppMain {
 
             dependencies {
-                implementation files('../../thirdparty-new/kotlin-libui/libui/build/classes/kotlin/linux/main/libui.klib')
-                implementation files('../../thirdparty-new/kotlin-libui/libui/build/classes/kotlin/linux/main/libui-cinterop-libui.klib')
+                implementation files(thirparty_build_root + "/kotlin-libui/libui/build/classes/kotlin/linux/main/libui.klib")
+                implementation files(thirparty_build_root+ "/kotlin-libui/libui/build/classes/kotlin/linux/main/libui-cinterop-libui.klib")
 
                 //implementation file(':libui')
             }
