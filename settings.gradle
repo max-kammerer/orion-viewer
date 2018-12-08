@@ -1,1 +1,2 @@
 include ':orion-viewer', ':tree-view-list-android', ':common', ':native'
+enableFeaturePreview('GRADLE_METADATA')
