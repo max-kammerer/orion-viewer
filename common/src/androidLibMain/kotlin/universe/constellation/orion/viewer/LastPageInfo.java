@@ -38,7 +38,7 @@ import java.lang.reflect.Modifier;
 
 import static universe.constellation.orion.viewer.LoggerKt.log;
 
-public class LastPageInfo implements Serializable, ShortFileInfo {
+public class LastPageInfo implements ShortFileInfo {
 
     public static final int CURRENT_VERSION = 5;
 
@@ -99,7 +99,7 @@ public class LastPageInfo implements Serializable, ShortFileInfo {
         try {
             successfull = lastPageInfo.load(activity, fileData);
         } catch (Exception e) {
-            log("Error on restore book options", e);
+            //log("Error on restore book options", e);
         }
 
         if (!successfull) {
@@ -140,57 +140,24 @@ public class LastPageInfo implements Serializable, ShortFileInfo {
                         writeValue(serializer, field.getName(), field.get(this).toString());
                     }
                 } catch (IllegalAccessException e) {
-                    log(e);
+                    //log(e);
                 }
             }
-
-
-//            writeValue(serializer, "screenWidth", screenWidth);
-//            writeValue(serializer, "screenHeight", screenHeight);
-//
-//            writeValue(serializer, "pageNumber", pageNumber);
-//            writeValue(serializer, "rotation", rotation);
-//            writeValue(serializer, "screenOrientation", screenOrientation);
-//
-//            writeValue(serializer, "newOffsetX", newOffsetX);
-//            writeValue(serializer, "newOffsetY", newOffsetY);
-//
-//            writeValue(serializer, "zoom", zoom);
-//
-//            writeValue(serializer, "leftMargin", leftMargin);
-//            writeValue(serializer, "rightMargin", rightMargin);
-//            writeValue(serializer, "topMargin", topMargin);
-//            writeValue(serializer, "bottomMargin", bottomMargin);
-//            writeValue(serializer, "leftEvenMargin", leftEvenMargin);
-//            writeValue(serializer, "rightEventMargin", rightEventMargin);
-//            writeValue(serializer, "enableEvenCropping", enableEvenCropping);
-//
-//            writeValue(serializer, "navigation", navigation);
-//            writeValue(serializer, "pageLayout", pageLayout);
-
 
             serializer.endTag(nameSpace, "bookParameters");
             serializer.endDocument();
         } catch (IOException e) {
-            log(e);
+            //log(e);
             UiUtilsKt.showError(activity, "Couldn't save book preferences", e);
         } finally {
             if (writer != null) {
                 try {
                     writer.close();
                 } catch (IOException e) {
-                    log(e);
+                    //log(e);
                 }
             }
         }
-    }
-
-    public static void writeValue(XmlSerializer serializer, String name, int value) throws IOException {
-        writeValue(serializer, name, Integer.toString(value));
-    }
-
-    public static void writeValue(XmlSerializer serializer, String name, boolean value) throws IOException {
-        writeValue(serializer, name, Boolean.toString(value));
     }
 
     public static void writeValue(XmlSerializer serializer, String name, String value) throws IOException {
@@ -236,12 +203,12 @@ public class LastPageInfo implements Serializable, ShortFileInfo {
                             }
                             getClass().getField(name).set(this, value);
                         } catch (IllegalAccessException e) {
-                            log(e);
+                            //log(e);
                         } catch (NoSuchFieldException e) {
                             //skip
-                            log(e);
+                            //log(e);
                         } catch (NumberFormatException e) {
-                            log(e);
+                            //log(e);
                         }
                     }
                 }
