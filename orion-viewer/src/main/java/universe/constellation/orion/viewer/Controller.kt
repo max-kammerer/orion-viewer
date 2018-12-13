@@ -217,7 +217,7 @@ class Controller(
 
             layoutStrategy.init(info, activity.globalOptions)
             layoutInfo = LayoutPosition()
-            layoutStrategy.reset(layoutInfo, info.pageNumber)
+            layoutStrategy.reset(layoutInfo, info.currentPage)
             layoutInfo.x.offset = info.newOffsetX
             layoutInfo.y.offset = info.newOffsetY
 
@@ -233,7 +233,7 @@ class Controller(
         layoutStrategy.serialize(info)
         info.newOffsetX = layoutInfo.x.offset
         info.newOffsetY = layoutInfo.y.offset
-        info.pageNumber = layoutInfo.pageNumber
+        info.currentPage = layoutInfo.pageNumber
         info.screenOrientation = screenOrientation
     }
 

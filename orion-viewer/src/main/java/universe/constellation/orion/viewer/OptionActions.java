@@ -111,7 +111,7 @@ public enum OptionActions {
     DEBUG("DEBUG") {
         public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
             if (newValue) {
-                AndroidLogger.startLogger(activity.getOrionContext().getCurrentBookParameters().openingFileName + ".trace");
+                AndroidLogger.startLogger(activity.getOrionContext().getCurrentBookParameters().getFileName() + ".trace");
             } else {
                 AndroidLogger.stopLogger();
             }

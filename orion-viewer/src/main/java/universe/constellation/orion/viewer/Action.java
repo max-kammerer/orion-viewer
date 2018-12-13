@@ -235,13 +235,13 @@ public enum Action {
             OrionScene view = activity.getView();
             FullScene scene = activity.getFullScene();
             LastPageInfo currentBookParameters = activity.getOrionContext().getCurrentBookParameters();
-            if (currentBookParameters != null && ColorUtil.getColorMode(currentBookParameters.colorMode) == null) {
+            if (currentBookParameters != null && ColorUtil.getColorMode(currentBookParameters.getColorMode()) == null) {
                 activity.showLongMessage(activity.getString(R.string.select_color_mode));
                 return;
             }
             if (view.isDefaultColorMatrix()) {
                 if (currentBookParameters != null) {
-                    scene.setColorMatrix(ColorUtil.getColorMode(currentBookParameters.colorMode));
+                    scene.setColorMatrix(ColorUtil.getColorMode(currentBookParameters.getColorMode()));
                 }
             } else {
                 scene.setColorMatrix(null);

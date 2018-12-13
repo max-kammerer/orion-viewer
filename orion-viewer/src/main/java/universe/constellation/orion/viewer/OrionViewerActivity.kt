@@ -229,7 +229,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
 
                 if (controller != null && lastPageInfo != null) {
-                    if (lastPageInfo!!.openingFileName == intentPath) {
+                    if (lastPageInfo!!.fileName == intentPath) {
                         controller!!.drawPage()
                         return
                     }

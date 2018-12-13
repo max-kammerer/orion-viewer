@@ -17,280 +17,258 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package universe.constellation.orion.viewer;
+package universe.constellation.orion.viewer
 
-import android.app.Activity;
-import android.content.Context;
-import android.support.annotation.NonNull;
-import android.util.Xml;
+import android.app.Activity
+import android.content.Context
+import android.util.Xml
+import org.xmlpull.v1.XmlPullParser
+import org.xmlpull.v1.XmlPullParserException
+import org.xmlpull.v1.XmlPullParserFactory
+import org.xmlpull.v1.XmlSerializer
+import java.io.*
+import java.lang.reflect.Modifier
 
-import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
-import org.jetbrains.annotations.NotNull;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-import org.xmlpull.v1.XmlSerializer;
+class LastPageInfo private constructor() : ShortFileInfo {
 
-import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+    var screenWidth: Int = 0
+    var screenHeight: Int = 0
 
-import static universe.constellation.orion.viewer.LoggerKt.log;
-
-public class LastPageInfo implements ShortFileInfo {
-
-    public static final int CURRENT_VERSION = 5;
-
-    public int screenWidth;
-    public int screenHeight;
-
-    public int pageNumber;
-    public int rotation;
+    override var currentPage: Int = 0
+    var rotation: Int = 0
 
     //application default
-    public String screenOrientation = "DEFAULT";
+    var screenOrientation = "DEFAULT"
 
-    public int newOffsetX;
-    public int newOffsetY;
+    var newOffsetX: Int = 0
+    var newOffsetY: Int = 0
 
-    public int zoom;
+    var zoom: Int = 0
 
-    public int leftMargin = 0;
-    public int rightMargin = 0;
-    public int topMargin = 0;
-    public int bottomMargin = 0;
+    var leftMargin = 0
+    var rightMargin = 0
+    var topMargin = 0
+    var bottomMargin = 0
 
-    public boolean enableEvenCropping = false;
-    public int cropMode = 0;
-    public int leftEvenMargin = 0;
-    public int rightEventMargin = 0;
+    var enableEvenCropping = false
+    var cropMode = 0
+    var leftEvenMargin = 0
+    var rightEventMargin = 0
 
-    public int pageLayout = 0;
+    var pageLayout = 0
 
-    public int contrast = 100;
-    public int threshold = 255;
+    var contrast = 100
+    var threshold = 255
 
-    public transient String fileData;
+    @Transient
+    lateinit var fileData: String
 
-    public transient long fileSize;
+    @Transient
+    override var fileSize: Long = 0
 
-    public transient String simpleFileName;
+    @Transient
+    override lateinit var simpleFileName: String
 
-    public transient String openingFileName;
+    @Transient
+    override lateinit var  fileName: String
 
-    public transient int totalPages;
+    @Transient
+    var totalPages: Int = 0
 
-    public String walkOrder = "ABCD";
+    var walkOrder = "ABCD"
 
-    public String colorMode = "CM_NORMAL";
+    var colorMode = "CM_NORMAL"
 
-    private LastPageInfo() {
-
-    }
-
-    public static LastPageInfo loadBookParameters(Activity activity, String filePath, Function1<LastPageInfo, Unit> defaultInitializer) {
-        int idx = filePath.lastIndexOf('/');
-        File file = new File(filePath);
-        String fileData = filePath.substring(idx + 1) + "." + file.length() + ".xml";
-        LastPageInfo lastPageInfo = new LastPageInfo();
-
-        boolean successfull = false;
+    fun save(activity: Activity) {
+        var writer: OutputStreamWriter? = null
         try {
-            successfull = lastPageInfo.load(activity, fileData);
-        } catch (Exception e) {
-            //log("Error on restore book options", e);
-        }
+            val serializer = Xml.newSerializer()
+            writer = OutputStreamWriter(activity.openFileOutput(fileData, Context.MODE_PRIVATE))
+            serializer.setOutput(writer)
+            serializer.startDocument("UTF-8", true)
+            val nameSpace = ""
+            serializer.startTag(nameSpace, "bookParameters")
+            serializer.attribute(nameSpace, "version", "$CURRENT_VERSION")
 
-        if (!successfull) {
-            lastPageInfo = createDefaultLastPageInfo(defaultInitializer);
-        }
-
-        lastPageInfo.fileData = fileData;
-        lastPageInfo.openingFileName = filePath;
-        lastPageInfo.simpleFileName = filePath.substring(idx + 1);
-        lastPageInfo.fileSize = file.length();
-        return lastPageInfo;
-    }
-
-    @NonNull
-    public static LastPageInfo createDefaultLastPageInfo(Function1<LastPageInfo, Unit> defaultInitializer) {
-        LastPageInfo lastPageInfo = new LastPageInfo();
-        defaultInitializer.invoke(lastPageInfo);
-        return lastPageInfo;
-    }
-
-    public void save(Activity activity) {
-        OutputStreamWriter writer = null;
-        try {
-            XmlSerializer serializer = Xml.newSerializer();
-            writer = new OutputStreamWriter(activity.openFileOutput(fileData, Context.MODE_PRIVATE));
-            serializer.setOutput(writer);
-            serializer.startDocument("UTF-8", true);
-            String nameSpace = "";
-            serializer.startTag(nameSpace, "bookParameters");
-            serializer.attribute(nameSpace, "version", "" + CURRENT_VERSION);
-
-            Field [] fields = this.getClass().getDeclaredFields();
-            for (Field field : fields) {
+            val fields = this.javaClass.declaredFields
+            for (field in fields) {
                 try {
-                    int modifiers = field.getModifiers();
-                    if ((modifiers & (Modifier.TRANSIENT | Modifier.STATIC)) == 0) {
+                    val modifiers = field.modifiers
+                    if (modifiers and (Modifier.TRANSIENT or Modifier.STATIC) == 0) {
                         //System.out.println(field.getName());
-                        writeValue(serializer, field.getName(), field.get(this).toString());
+                        writeValue(serializer, field.name, field.get(this).toString())
                     }
-                } catch (IllegalAccessException e) {
-                    //log(e);
+                } catch (e: IllegalAccessException) {
+                    log(e)
                 }
+
             }
 
-            serializer.endTag(nameSpace, "bookParameters");
-            serializer.endDocument();
-        } catch (IOException e) {
-            //log(e);
-            UiUtilsKt.showError(activity, "Couldn't save book preferences", e);
+            serializer.endTag(nameSpace, "bookParameters")
+            serializer.endDocument()
+        } catch (e: IOException) {
+            log(e)
+            showError(activity, "Couldn't save book preferences", e)
         } finally {
             if (writer != null) {
                 try {
-                    writer.close();
-                } catch (IOException e) {
-                    //log(e);
+                    writer.close()
+                } catch (e: IOException) {
+                    log(e)
                 }
+
             }
         }
     }
 
-    public static void writeValue(XmlSerializer serializer, String name, String value) throws IOException {
-        serializer.startTag("", name);
-        serializer.attribute("", "value", value);
-        serializer.endTag("", name);
-    }
-
-    private boolean load(Activity activity, String filePath) {
-        InputStreamReader reader = null;
+    private fun load(activity: Activity, filePath: String): Boolean {
+        var reader: InputStreamReader? = null
         try {
-            reader = new InputStreamReader(activity.openFileInput(filePath));
+            reader = InputStreamReader(activity.openFileInput(filePath))
 
-            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            val factory = XmlPullParserFactory.newInstance()
             //factory.setNamespaceAware(true);
-            XmlPullParser xpp = factory.newPullParser();
-            xpp.setInput(reader);
+            val xpp = factory.newPullParser()
+            xpp.setInput(reader)
 
-            int fileVersion = -1;
-            int eventType = xpp.getEventType();
+            var fileVersion = -1
+            var eventType = xpp.eventType
             while (eventType != XmlPullParser.END_DOCUMENT) {
                 if (eventType == XmlPullParser.START_TAG) {
-                    String name = xpp.getName();
+                    val name = xpp.name
 
-                    if ("bookParameters".equals(name)) {
-                        fileVersion = Integer.valueOf(xpp.getAttributeValue("", "version"));
+                    if ("bookParameters" == name) {
+                        fileVersion = Integer.valueOf(xpp.getAttributeValue("", "version"))
                     } else {
                         try {
-                            String rawValue = xpp.getAttributeValue("", "value");
-                            Field f = getClass().getField(name);
-                            Object value;
-                            Class type = f.getType();
-                            if (type.equals(int.class)) {
-                                value = Integer.valueOf(rawValue);
-                                value = upgrade(fileVersion, name, (Integer) value);
-                            } else if (type.equals(boolean.class)) {
-                                value = Boolean.valueOf(rawValue);
-                            } else if (type.equals(String.class)) {
-                                value = rawValue;
+                            val rawValue = xpp.getAttributeValue("", "value")
+                            val f = javaClass.getField(name)
+                            var value: Any?
+                            val type = f.type
+                            if (type == Int::class.javaPrimitiveType) {
+                                value = Integer.valueOf(rawValue)
+                                value = upgrade(fileVersion, name, value)
+                            } else if (type == Boolean::class.javaPrimitiveType) {
+                                value = java.lang.Boolean.valueOf(rawValue)
+                            } else if (type == String::class.java) {
+                                value = rawValue
                             } else {
-                                log("Error on deserializing field " + name + " = " + rawValue);
-                                continue;
+                                log("Error on deserializing field $name = $rawValue")
+                                continue
                             }
-                            getClass().getField(name).set(this, value);
-                        } catch (IllegalAccessException e) {
-                            //log(e);
-                        } catch (NoSuchFieldException e) {
+                            javaClass.getField(name).set(this, value)
+                        } catch (e: IllegalAccessException) {
+                            log(e)
+                        } catch (e: NoSuchFieldException) {
                             //skip
-                            //log(e);
-                        } catch (NumberFormatException e) {
-                            //log(e);
+                            log(e)
+                        } catch (e: NumberFormatException) {
+                            log(e)
                         }
+
                     }
                 }
-                eventType = xpp.next();
+                eventType = xpp.next()
             }
-            return true;
-        } catch (FileNotFoundException e) {
+            return true
+        } catch (e: FileNotFoundException) {
             //do nothing
-        } catch (XmlPullParserException e) {
-            UiUtilsKt.showError(activity, "Couldn't parse book parameters", e);
-        } catch (IOException e) {
-            UiUtilsKt.showError(activity,"Couldn't parse book parameters", e);
+        } catch (e: XmlPullParserException) {
+            showError(activity, "Couldn't parse book parameters", e)
+        } catch (e: IOException) {
+            showError(activity, "Couldn't parse book parameters", e)
         } finally {
             if (reader != null) {
                 try {
-                    reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    reader.close()
+                } catch (e: IOException) {
+                    e.printStackTrace()  //To change body of catch statement use File | Settings | File Templates.
                 }
+
             }
         }
-        return false;
+        return false
     }
 
-    public Integer upgrade(int fromVersion, String name, Integer value) {
-        int localVersion = fromVersion;
+    fun upgrade(fromVersion: Int, name: String, value: Int?): Int? {
+        var value = value
+        var localVersion = fromVersion
         if (localVersion < 2) {
-            if ("zoom".equals(name)) {
-                System.out.println("Property " + name + " upgraded");
-                localVersion = 2;
-                value = 0;
+            if ("zoom" == name) {
+                println("Property $name upgraded")
+                localVersion = 2
+                value = 0
             }
         }
 
         if (localVersion < 3) {
-            if ("rotation".equals(name)) {
-                System.out.println("Property " + name + " upgraded");
-                localVersion = 3;
-                value = 0;
+            if ("rotation" == name) {
+                println("Property $name upgraded")
+                localVersion = 3
+                value = 0
             }
         }
 
         if (localVersion < 4) {
-            if ("navigation".equals(name)) {
-                System.out.println("Property " + name + " upgraded");
-                localVersion = 4;
+            if ("navigation" == name) {
+                println("Property $name upgraded")
+                localVersion = 4
                 if (value == 1) {
-                    walkOrder = "ACBD";
+                    walkOrder = "ACBD"
                 }
             }
         }
 
         if (localVersion < 5) {
-            if ("contrast".equals(name)) {
-                System.out.println("Property " + name + " upgraded");
-                localVersion = 5;
-                value = 100;
+            if ("contrast" == name) {
+                println("Property $name upgraded")
+                localVersion = 5
+                value = 100
             }
         }
 
-        return value;
+        return value
     }
 
-    @Override
-    public int getCurrentPage() {
-        return pageNumber;
-    }
+    companion object {
 
-    @NotNull
-    @Override
-    public String getFileName() {
-        return openingFileName;
-    }
+        const val CURRENT_VERSION = 5
 
-    @NotNull
-    @Override
-    public String getSimpleFileName() {
-        return simpleFileName;
-    }
+        fun loadBookParameters(activity: Activity, filePath: String, defaultInitializer: Function1<LastPageInfo, Unit>): LastPageInfo {
+            val idx = filePath.lastIndexOf('/')
+            val file = File(filePath)
+            val fileData = filePath.substring(idx + 1) + "." + file.length() + ".xml"
+            var lastPageInfo = LastPageInfo()
 
-    @Override
-    public long getFileSize() {
-        return fileSize;
+            var successfull = false
+            try {
+                successfull = lastPageInfo.load(activity, fileData)
+            } catch (e: Exception) {
+                log("Error on restore book options", e);
+            }
+
+            if (!successfull) {
+                lastPageInfo = createDefaultLastPageInfo(defaultInitializer)
+            }
+
+            lastPageInfo.fileData = fileData
+            lastPageInfo.fileName = filePath
+            lastPageInfo.simpleFileName = filePath.substring(idx + 1)
+            lastPageInfo.fileSize = file.length()
+            return lastPageInfo
+        }
+
+        fun createDefaultLastPageInfo(defaultInitializer: Function1<LastPageInfo, Unit>): LastPageInfo {
+            val lastPageInfo = LastPageInfo()
+            defaultInitializer.invoke(lastPageInfo)
+            return lastPageInfo
+        }
+
+        @Throws(IOException::class)
+        fun writeValue(serializer: XmlSerializer, name: String, value: String) {
+            serializer.startTag("", name)
+            serializer.attribute("", "value", value)
+            serializer.endTag("", name)
+        }
     }
 }
