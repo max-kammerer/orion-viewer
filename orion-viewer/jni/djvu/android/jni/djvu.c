@@ -60,13 +60,14 @@ JNIEXPORT jlong JNICALL JNI_FN(openFile)(JNIEnv * env, jobject thiz, jstring jfi
 
         LOGI("Page count = %i", pageNum);
 
+
+        #ifdef ORION_FOR_ANDROID  
         jclass cls = (*env)->GetObjectClass(env, docInfo);
         jfieldID pageCountF = (*env)->GetFieldID(env, cls, "pageCount", "I");
-        //jfieldID titleF = (*env)->GetFieldID(env, cls, "title", "Ljava/lang/String;");
         (*env)->SetIntField(env, docInfo, pageCountF, pageNum);
-        //    if (title) {
-        //        (*env)->SetObjectField(env, docInfo, titleF, ((*env)->NewStringUTF(env, title)));
-        //    }
+        #endif
+
+
     } else {
         LOGI("Error during document opening: %p", doc);
         ddjvu_document_release(doc);
@@ -116,14 +117,18 @@ JNIEXPORT void JNICALL JNI_FN(getPageInfo)(JNIEnv *env, jobject thiz, jlong docl
         //signal_error();
         return;
     }
-	
-	jclass cls = (*env)->GetObjectClass(env, info);
-	jfieldID width = (*env)->GetFieldID(env, cls, "width", "I");
-	jfieldID height = (*env)->GetFieldID(env, cls, "height", "I");
-	(*env)->SetIntField(env, info, width, dinfo.width);
-	(*env)->SetIntField(env, info, height, dinfo.height);
-	 
-	end = clock();	
+
+
+	#ifdef ORION_FOR_ANDROID  
+    jclass cls = (*env)->GetObjectClass(env, info);
+    jfieldID width = (*env)->GetFieldID(env, cls, "width", "I");
+    jfieldID height = (*env)->GetFieldID(env, cls, "height", "I");
+    (*env)->SetIntField(env, info, width, dinfo.width);
+    (*env)->SetIntField(env, info, height, dinfo.height);
+	#endif
+
+
+	end = clock();
 	
 	LOGI("Page info get %lf s; page size = %ix%i", ((double) (end - start)) / CLOCKS_PER_SEC, dinfo.width, dinfo.height);
 }
@@ -136,12 +141,14 @@ JNIEXPORT jboolean JNICALL JNI_FN(drawPage)(JNIEnv *env, jobject thiz, jlong doc
 
 	LOGI("==================Start Rendering==============");
 	int ret;
-	AndroidBitmapInfo info;
 	void *pixels;
 	int num_pixels = pageW * pageH;
 
-	LOGI("Rendering page=%dx%d patch=[%d,%d,%d,%d]",
-			pageW, pageH, patchX, patchY, patchW, patchH);
+
+    #ifdef ORION_FOR_ANDROID 
+    AndroidBitmapInfo info;
+    LOGI("Rendering page=%dx%d patch=[%d,%d,%d,%d]",
+            pageW, pageH, patchX, patchY, patchW, patchH);
     LOGI("page: %p", page);
 
     LOGI("In native method\n");
@@ -161,6 +168,8 @@ JNIEXPORT jboolean JNICALL JNI_FN(drawPage)(JNIEnv *env, jobject thiz, jlong doc
         LOGE("AndroidBitmap_lockPixels() failed ! error=%d", ret);
         return 0;
     }
+    #endif
+
 
 			
     //float zoom = 0.0001f * zoom10000;
@@ -220,7 +229,13 @@ JNIEXPORT jboolean JNICALL JNI_FN(drawPage)(JNIEnv *env, jobject thiz, jlong doc
 	ddjvu_format_release(pixelFormat);
 
 	orion_updateContrast((unsigned char *) pixels, num_pixels*4);
+
+
+	#ifdef ORION_FOR_ANDROID
     AndroidBitmap_unlockPixels(env, bitmap);
+    #endif
+
+
 	LOGI("...Rendered");
 	
     return 1;
@@ -341,10 +356,12 @@ JNIEXPORT jobjectArray JNICALL JNI_FN(getOutline)(JNIEnv * env, jobject thiz, jl
     jclass olClass;
     jmethodID ctor;
 
+    #ifdef ORION_FOR_ANDROID
     olClass = (*env)->FindClass(env, "universe/constellation/orion/viewer/outline/OutlineItem");
     if (olClass == NULL) return NULL;
     ctor = (*env)->GetMethodID(env, olClass, "<init>", "(ILjava/lang/String;I)V");
     if (ctor == NULL) return NULL;
+    #endif
 
     buildTOC(doc, miniexp_cdr(outline), myList, 0, env, olClass, ctor);
 
@@ -367,13 +384,14 @@ JNIEXPORT jobjectArray JNICALL JNI_FN(getOutline)(JNIEnv * env, jobject thiz, jl
 
     while (next != NULL) {
         OutlineItem *item = next->item;
+        #ifdef ORION_FOR_ANDROID
         jstring title = (*env)->NewStringUTF(env, item->title);
         //shift pageno to zero based
         jobject element = (*env)->NewObject(env, olClass, ctor, item->level, title, item->page);
         (*env)->SetObjectArrayElement(env, arr, pos, element);
         (*env)->DeleteLocalRef(env, title);
         (*env)->DeleteLocalRef(env, element);
-
+        #endif
         free(item);
         list_item *next2 = next->next;
         free(next);
@@ -545,9 +563,11 @@ miniexp_get_rect(miniexp_t *r, JNIEnv * env, jclass rectFClass, jmethodID ctor, 
         return NULL;
 
     jobject rectF;
+
+    #ifdef ORION_FOR_ANDROID
     rectF = (*env)->NewObject(env, rectFClass, ctor,
                     (float)x1, (float)(pageHeight - y2), (float)x2, (float)pageHeight - y1);
-
+    #endif
     if (rectF == NULL) return NULL;
 
     //(*env)->DeleteLocalRef(env, rectF);
@@ -555,7 +575,7 @@ miniexp_get_rect(miniexp_t *r, JNIEnv * env, jclass rectFClass, jmethodID ctor, 
     return rectF;
 }
 
-
+#ifdef ORION_FOR_ANDROID
 static jboolean miniexp_get_text(JNIEnv * env, miniexp_t exp, jobject stringBuilder, jobject positions, int *state,
                         jclass rectFClass, jmethodID ctor, jmethodID addToList, int pageHeight)
 {
@@ -572,6 +592,7 @@ static jboolean miniexp_get_text(JNIEnv * env, miniexp_t exp, jobject stringBuil
 
   miniexp_t s = miniexp_car(r);
   *state = qMax(*state, typenum);
+
 
   jstring space = (*env)->NewStringUTF(env, " ");
   jstring newLine = (*env)->NewStringUTF(env, "\n");
@@ -659,3 +680,5 @@ JNIEXPORT jboolean JNICALL JNI_FN(getPageText)(JNIEnv *env, jobject thiz, jlong 
 
     return miniexp_get_text(env, pagetext, stringBuilder, positionList, &state, rectFClass, ctor, addToList, dinfo.height);
 }
+
+#endif
