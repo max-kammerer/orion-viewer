@@ -77,7 +77,7 @@ JNIEXPORT jlong JNICALL JNI_FN(openFile)(JNIEnv * env, jobject thiz, jstring jfi
 }
 
 
-JNIEXPORT jlong JNICALL JNI_FN(gotoPageInternal)(JNIEnv *env, jobject thiz, jlong docl, int pageNum)
+JNIEXPORT jlong JNICALL JNI_FN(gotoPageInternal)(JNIEnv *env, jobject thiz, jlong docl, jint pageNum)
 {
     ddjvu_document_t * doc = (ddjvu_document_t *) docl;
 	LOGI("Opening page: %d", pageNum);
@@ -90,7 +90,7 @@ JNIEXPORT jlong JNICALL JNI_FN(gotoPageInternal)(JNIEnv *env, jobject thiz, jlon
     return jlong_cast(page);
 }
 
-JNIEXPORT void JNICALL JNI_FN(getPageInfo)(JNIEnv *env, jobject thiz, jlong docl, int pageNum, jobject info)
+JNIEXPORT void JNICALL JNI_FN(getPageInfo)(JNIEnv *env, jobject thiz, jlong docl, jint pageNum, jobject info)
 {
 	
 	clock_t start, end;
@@ -129,8 +129,7 @@ JNIEXPORT void JNICALL JNI_FN(getPageInfo)(JNIEnv *env, jobject thiz, jlong docl
 }
 
 JNIEXPORT jboolean JNICALL JNI_FN(drawPage)(JNIEnv *env, jobject thiz, jlong docl, jlong pagel, jobject bitmap,
-        float zoom,
-		int pageW, int pageH, int patchX, int patchY, int patchW, int patchH)
+        jfloat zoom, jint pageW, jint pageH, jint patchX, jint patchY, jint patchW, jint patchH)
 {
     ddjvu_document_t * doc = (ddjvu_document_t *) docl;
     ddjvu_page_t * page = (ddjvu_page_t *) pagel;
@@ -273,7 +272,7 @@ typedef struct OutlineItem_s OutlineItem;
 
 
 
-int buildTOC(ddjvu_document_t * doc, miniexp_t expr, list * myList, int level, JNIEnv * env, jclass olClass, jmethodID ctor)
+int buildTOC(ddjvu_document_t * doc, miniexp_t expr, list * myList, jint level, JNIEnv * env, jclass olClass, jmethodID ctor)
 {
     while(miniexp_consp(expr))
     {
@@ -453,8 +452,8 @@ int extractText(miniexp_t item, Arraylist list, fz_bbox * target) {
 }
 
 
-JNIEXPORT jstring JNICALL JNI_FN(getText)(JNIEnv *env, jobject thiz, jlong docl, int pageNumber,
-		int startX, int startY, int width, int height)
+JNIEXPORT jstring JNICALL JNI_FN(getText)(JNIEnv *env, jobject thiz, jlong docl, jint pageNumber,
+		int startX, jint startY, jint width, jint height)
 {
     ddjvu_document_t * doc = (ddjvu_document_t *) docl;
     LOGI("==================Start Text Extraction==============");
@@ -618,8 +617,7 @@ static jboolean miniexp_get_text(JNIEnv * env, miniexp_t exp, jobject stringBuil
   return 1;
 }
 
-JNIEXPORT jboolean JNICALL JNI_FN(getPageText)(JNIEnv *env, jobject thiz, jlong  docl,
-                                                                                  jint pageNumber, jobject stringBuilder, jobject positionList)
+JNIEXPORT jboolean JNICALL JNI_FN(getPageText)(JNIEnv *env, jobject thiz, jlong  docl, jint pageNumber, jobject stringBuilder, jobject positionList)
 {
     LOGI("Start Page Text Extraction %i", pageNumber);
     ddjvu_document_t * doc = (ddjvu_document_t *) docl;
