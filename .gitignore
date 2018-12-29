@@ -9,6 +9,12 @@ signing.gradle
 # Local configuration file (sdk path, etc)
 local.properties
 
+nativeLibs/djvu/
+nativeLibs/djvuModule/.externalNativeBuild
+nativeLibs/mupdf/
+nativeLibs/mupdf-android-viewer-old/
+nativeLibs/mupdfModule/.externalNativeBuild
+android_gradle_build.json
 # built native files
 *.o
 *.so
