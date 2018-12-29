@@ -1,0 +1,125 @@
+diff --git a/libdjvu/ByteStream.cpp b/libdjvu/ByteStream.cpp
+index 4b75605..482176d 100644
+--- a/libdjvu/ByteStream.cpp
++++ b/libdjvu/ByteStream.cpp
+@@ -667,7 +667,7 @@ urlfopen(const GURL &url,const char mode[])
+ #elif defined(__APPLE__)
+   return fopen((const char *)url.UTF8Filename(),mode);
+ #else
+-  return fopen((const char *)url.NativeFilename(),mode);
++  return fopen((const char *)url.original,mode);
+ #endif
+ }
+ 
+@@ -678,7 +678,7 @@ urlopen(const GURL &url, const int mode, const int perm)
+ #if defined(__APPLE__)
+   return open((const char *)url.UTF8Filename(),mode,perm);
+ #else
+-  return open((const char *)url.NativeFilename(),mode,perm);
++  return open((const char *)url.original,mode,perm);
+ #endif
+ }
+ #endif /* UNIX */
+diff --git a/libdjvu/DjVuToPS.cpp b/libdjvu/DjVuToPS.cpp
+index f72a4c9..071d5f1 100644
+--- a/libdjvu/DjVuToPS.cpp
++++ b/libdjvu/DjVuToPS.cpp
+@@ -334,7 +334,7 @@ store_doc_prolog(ByteStream &str, int pages, int dpi, GRect *grect)
+   write(str, "%%%%CreationDate: %s", ctime(&tm));
+   // For
+ #ifdef UNIX
+-  passwd *pswd = getpwuid(getuid());
++/*  passwd *pswd = getpwuid(getuid());
+   if (pswd)
+     {
+       char *s = strchr(pswd->pw_gecos, ',');
+@@ -347,7 +347,7 @@ store_doc_prolog(ByteStream &str, int pages, int dpi, GRect *grect)
+         s = pswd->pw_name;
+       if (s)
+         write(str, "%%%%For: %s\n", s);
+-    }
++    }*/
+ #endif
+   // Language
+   write(str, "%%%%LanguageLevel: %d\n", options.get_level());
+diff --git a/libdjvu/GException.cpp b/libdjvu/GException.cpp
+index 4585ebe..b60f738 100644
+--- a/libdjvu/GException.cpp
++++ b/libdjvu/GException.cpp
+@@ -217,7 +217,7 @@ static void (*old_handler)() = std::set_new_handler(throw_memory_error);
+ #   ifdef HAVE_STDINCLUDES
+ static void (*old_handler)() = std::set_new_handler(throw_memory_error);
+ #   else
+-static void (*old_handler)() = set_new_handler(throw_memory_error);
++//static void (*old_handler)() = set_new_handler(throw_memory_error);
+ #  endif // HAVE_STDINCLUDES
+ # endif // ! WIN32
+ #endif // !NEED_DJVU_MEMORY
+diff --git a/libdjvu/GThreads.cpp b/libdjvu/GThreads.cpp
+index 0b0fe0a..f0190e1 100644
+--- a/libdjvu/GThreads.cpp
++++ b/libdjvu/GThreads.cpp
+@@ -447,7 +447,8 @@ void
+ GThread::terminate()
+ {
+   if (xentry || xarg)
+-    pthread_cancel(hthr);
++    //pthread_cancel(hthr);
++    G_THROW( "Not supported" );
+ }
+ 
+ int
+diff --git a/libdjvu/GURL.cpp b/libdjvu/GURL.cpp
+index 0e8c0fc..7c2a517 100644
+--- a/libdjvu/GURL.cpp
++++ b/libdjvu/GURL.cpp
+@@ -452,6 +452,7 @@ GURL::GURL(const GNativeString & url_in)
+ GURL::GURL(const GURL & url_in)
+   : validurl(false)
+ {
++  original = url_in.original;
+   if(url_in.is_valid())
+   {
+     url=url_in.get_string();
+@@ -475,6 +476,7 @@ GURL::operator=(const GURL & url_in)
+      url=url_in.url;
+      validurl=false;
+    }
++   original = url_in.original;
+    return *this;
+ }
+ 
+diff --git a/libdjvu/GURL.h b/libdjvu/GURL.h
+index d1ac3c9..6ead6f2 100644
+--- a/libdjvu/GURL.h
++++ b/libdjvu/GURL.h
+@@ -130,6 +130,8 @@ protected:
+       //@}
+ 
+ public:
++   const char * original;
++
+    GURL(void);
+ 
+    GURL(const GUTF8String & url_string);
+diff --git a/libdjvu/ddjvuapi.cpp b/libdjvu/ddjvuapi.cpp
+index 072db01..92f397f 100644
+--- a/libdjvu/ddjvuapi.cpp
++++ b/libdjvu/ddjvuapi.cpp
+@@ -1013,6 +1013,7 @@ ddjvu_document_create_by_filename_imp(ddjvu_context_t *ctx,
+         gurl = GURL::Filename::UTF8(filename);
+       else
+         gurl = GURL::Filename::Native(filename);
++      gurl.original = filename;
+       d = new ddjvu_document_s;
+       ref(d);
+       GMonitorLock lock(&d->monitor);
+@@ -3120,7 +3121,7 @@ ddjvu_savejob_s::notify_file_flags_changed(const DjVuFile *file,
+                                            long mask, long)
+ {
+   if (mask & (DjVuFile::ALL_DATA_PRESENT | DjVuFile::DATA_PRESENT |
+-              DjVuFile::DECODE_FAILED | DjVuFile::DECODE_STOPPED | 
++              DjVuFile::DECODE_FAILED | DjVuFile::DECODE_STOPPED |
+               DjVuFile::STOPPED ))
+     {
+       GMonitorLock lock(&monitor);
