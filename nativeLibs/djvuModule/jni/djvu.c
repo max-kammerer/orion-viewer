@@ -11,13 +11,14 @@
 #include <ddjvuapi.h>
 #include "debug.h"
 
-#include "list.c"
+#include "common/list.c"
+#include "common/orion_bitmap.c"
 #include "base_geometry.c"
 
 #define LOG_TAG "djvulib"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
-#define JNI_FN(A) Java_universe_constellation_orion_viewer_djvu ## A
+#define JNI_FN(A) Java_universe_constellation_orion_viewer_djvu_DjvuDocument_ ## A
 
 extern void orion_updateContrast(unsigned char *, int);
 

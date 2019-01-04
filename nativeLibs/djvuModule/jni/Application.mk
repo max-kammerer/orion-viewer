@@ -4,7 +4,6 @@ APP_PLATFORM=android-14
 #armeabi
 #armeabi-v7a mips x86
 APP_OPTIM := release
-LOCAL_ARM_MODE := arm
 APP_STL := system
 APP_CPPFLAGS += -fexceptions
 APP_STL := c++_static

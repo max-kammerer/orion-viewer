@@ -2,7 +2,7 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-MY_ROOT := ../..
+MY_ROOT := ../../djvu
 LOCAL_ARM_MODE := arm
 
 
@@ -11,8 +11,6 @@ LOCAL_CFLAGS += -DHAVE_PTHREAD -DNO_LIBGCC_HOOKS -DHAVE_STDINT_H -DHAVE_NAMESPAC
 
 #mbstate and wchar
 LOCAL_CFLAGS +=  -DHAS_WCHAR -DHAVE_WCHAR_H -DHAVE_MBSTATE_T  -DHAS_MBSTATE
-
-LOCAL_CFLAGS += -DORION_FOR_ANDROID
 
 #for new
 #edit DjvuGlobal

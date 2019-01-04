@@ -25,16 +25,19 @@ task patchDjvu << {
     }
 }
 
-task patchAndBuildDjvu(dependsOn: [patchDjvu]) << {
+task downloadAndPatchDjvu(dependsOn: [downloadDjvu, patchDjvu])
+
+task buildDjvu() << {
     exec {
-        workingDir file(djvu + "/android")
+        workingDir file("orion-viewer/jni/djvu/")
         commandLine ndkDir + "/ndk-build"
     }
 }
 
-task djvuChain(dependsOn: [downloadDjvu, patchAndBuildDjvu])
+task djvuChain(dependsOn: [downloadAndPatchDjvu, buildDjvu])
 
 patchDjvu.mustRunAfter downloadDjvu
+buildDjvu.mustRunAfter patchDjvu
 
 
 /*MUPDF CHAIN*/

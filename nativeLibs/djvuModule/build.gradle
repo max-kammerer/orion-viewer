@@ -1,0 +1,28 @@
+apply plugin: 'com.android.library'
+
+android {
+
+    compileSdkVersion 27
+    buildToolsVersion '28.0.3'
+
+    defaultConfig {
+
+        minSdkVersion 14
+
+        externalNativeBuild {
+            ndkBuild {
+                abiFilters 'armeabi', 'armeabi-v7a', 'x86', 'mips'
+                cppFlags "-fexceptions", "-frtti"
+                arguments "APP_STL:=c++_static"
+            }
+        }
+    }
+
+    externalNativeBuild {
+
+        ndkBuild {
+            path "jni/Android.mk"
+        }
+    }
+
+}
