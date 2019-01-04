@@ -33,13 +33,13 @@ static inline jlong jlong_cast(void *p)
 }
 
 
-JNIEXPORT jlong JNICALL JNI_FN(initContext)(JNIEnv * env, jobject thiz)
+JNIEXPORT jlong JNICALL JNI_FN(initContext)(JNIEnv * env, jclass type)
 {
     LOGI("Creating context");
     return jlong_cast(ddjvu_context_create("orion"));
 }
 
-JNIEXPORT jlong JNICALL JNI_FN(openFile)(JNIEnv * env, jobject thiz, jstring jfileName, jobject docInfo, jlong contextl) {
+JNIEXPORT jlong JNICALL JNI_FN(openFile)(JNIEnv * env, jclass type, jstring jfileName, jobject docInfo, jlong contextl) {
     ddjvu_context_t *context = (ddjvu_context_t *) contextl;
     const char *fileName = (*env)->GetStringUTFChars(env, jfileName, 0);
 
@@ -79,7 +79,7 @@ JNIEXPORT jlong JNICALL JNI_FN(openFile)(JNIEnv * env, jobject thiz, jstring jfi
 }
 
 
-JNIEXPORT jlong JNICALL JNI_FN(gotoPageInternal)(JNIEnv *env, jobject thiz, jlong docl, jint pageNum)
+JNIEXPORT jlong JNICALL JNI_FN(gotoPageInternal)(JNIEnv *env, jclass type, jlong docl, jint pageNum)
 {
     ddjvu_document_t * doc = (ddjvu_document_t *) docl;
 	LOGI("Opening page: %d", pageNum);
@@ -92,7 +92,7 @@ JNIEXPORT jlong JNICALL JNI_FN(gotoPageInternal)(JNIEnv *env, jobject thiz, jlon
     return jlong_cast(page);
 }
 
-JNIEXPORT void JNICALL JNI_FN(getPageInfo)(JNIEnv *env, jobject thiz, jlong docl, jint pageNum, jobject info)
+JNIEXPORT void JNICALL JNI_FN(getPageInfo)(JNIEnv *env, jclass type, jlong docl, jint pageNum, jobject info)
 {
 	
 	clock_t start, end;
@@ -134,7 +134,7 @@ JNIEXPORT void JNICALL JNI_FN(getPageInfo)(JNIEnv *env, jobject thiz, jlong docl
 	LOGI("Page info get %lf s; page size = %ix%i", ((double) (end - start)) / CLOCKS_PER_SEC, dinfo.width, dinfo.height);
 }
 
-JNIEXPORT jboolean JNICALL JNI_FN(drawPage)(JNIEnv *env, jobject thiz, jlong docl, jlong pagel, jobject bitmap,
+JNIEXPORT jboolean JNICALL JNI_FN(drawPage)(JNIEnv *env, jclass type, jlong docl, jlong pagel, jobject bitmap,
         jfloat zoom, jint pageW, jint pageH, jint patchX, jint patchY, jint patchW, jint patchH)
 {
     ddjvu_document_t * doc = (ddjvu_document_t *) docl;
@@ -243,7 +243,7 @@ JNIEXPORT jboolean JNICALL JNI_FN(drawPage)(JNIEnv *env, jobject thiz, jlong doc
 }
 
 
-JNIEXPORT void JNICALL JNI_FN(destroying)(JNIEnv * env, jobject thiz, jlong doc, jlong context)
+JNIEXPORT void JNICALL JNI_FN(destroying)(JNIEnv * env, jclass type, jlong doc, jlong context)
 {
 	LOGI("Closing doc...");	
 
@@ -639,7 +639,7 @@ static jboolean miniexp_get_text(JNIEnv * env, miniexp_t exp, jobject stringBuil
   return 1;
 }
 
-JNIEXPORT jboolean JNICALL JNI_FN(getPageText)(JNIEnv *env, jobject thiz, jlong  docl, jint pageNumber, jobject stringBuilder, jobject positionList)
+JNIEXPORT jboolean JNICALL JNI_FN(getPageText)(JNIEnv *env, jclass type, jlong  docl, jint pageNumber, jobject stringBuilder, jobject positionList)
 {
     LOGI("Start Page Text Extraction %i", pageNumber);
     ddjvu_document_t * doc = (ddjvu_document_t *) docl;
