@@ -27,19 +27,18 @@ extern void orion_updateContrast(unsigned char *, int);
 //ddjvu_document_t *doc = NULL;
 //ddjvu_page_t *page = NULL;
 
-static inline jlong jlong_cast(void *p)
-{
-    return (jlong)(intptr_t)p;
+static inline jlong jlong_cast(void *p) {
+    return (jlong) (intptr_t) p;
 }
 
 
-JNIEXPORT jlong JNICALL JNI_FN(initContext)(JNIEnv * env, jclass type)
-{
+JNIEXPORT jlong JNICALL JNI_FN(initContext)(JNIEnv *env, jclass type) {
     LOGI("Creating context");
     return jlong_cast(ddjvu_context_create("orion"));
 }
 
-JNIEXPORT jlong JNICALL JNI_FN(openFile)(JNIEnv * env, jclass type, jstring jfileName, jobject docInfo, jlong contextl) {
+JNIEXPORT jlong JNICALL
+JNI_FN(openFile)(JNIEnv *env, jclass type, jstring jfileName, jobject docInfo, jlong contextl) {
     ddjvu_context_t *context = (ddjvu_context_t *) contextl;
     const char *fileName = (*env)->GetStringUTFChars(env, jfileName, 0);
 
@@ -62,11 +61,11 @@ JNIEXPORT jlong JNICALL JNI_FN(openFile)(JNIEnv * env, jclass type, jstring jfil
         LOGI("Page count = %i", pageNum);
 
 
-        #ifdef ORION_FOR_ANDROID  
+#ifdef ORION_FOR_ANDROID
         jclass cls = (*env)->GetObjectClass(env, docInfo);
         jfieldID pageCountF = (*env)->GetFieldID(env, cls, "pageCount", "I");
         (*env)->SetIntField(env, docInfo, pageCountF, pageNum);
-        #endif
+#endif
 
 
     } else {
@@ -79,77 +78,79 @@ JNIEXPORT jlong JNICALL JNI_FN(openFile)(JNIEnv * env, jclass type, jstring jfil
 }
 
 
-JNIEXPORT jlong JNICALL JNI_FN(gotoPageInternal)(JNIEnv *env, jclass type, jlong docl, jint pageNum)
-{
-    ddjvu_document_t * doc = (ddjvu_document_t *) docl;
-	LOGI("Opening page: %d", pageNum);
-    ddjvu_page_t * page = ddjvu_page_create_by_pageno(doc, pageNum);
+JNIEXPORT jlong JNICALL
+JNI_FN(gotoPageInternal)(JNIEnv *env, jclass type, jlong docl, jint pageNum) {
+    ddjvu_document_t *doc = (ddjvu_document_t *) docl;
+    LOGI("Opening page: %d", pageNum);
+    ddjvu_page_t *page = ddjvu_page_create_by_pageno(doc, pageNum);
 
     LOGI("Start decoding page: %p", page);
-	while(!ddjvu_page_decoding_done(page));
-	LOGI("End decoding page: %p", page);
+    while (!ddjvu_page_decoding_done(page));
+    LOGI("End decoding page: %p", page);
 
     return jlong_cast(page);
 }
 
-JNIEXPORT void JNICALL JNI_FN(getPageInfo)(JNIEnv *env, jclass type, jlong docl, jint pageNum, jobject info)
-{
-	
-	clock_t start, end;
-	start = clock();
+JNIEXPORT void JNICALL
+JNI_FN(getPageInfo)(JNIEnv *env, jclass type, jlong docl, jint pageNum, jobject info) {
 
-	/*
-	ddjvu_page_t * mypage = ddjvu_page_create_by_pageno(doc, pageNum);
-	int pageWidth =  ddjvu_page_get_width(mypage);
-	int pageHeight = ddjvu_page_get_height(mypage);
-	//LOGI("mypage: %p", mypage);
-	
-	ddjvu_page_release(mypage);
-	*/
+    clock_t start, end;
+    start = clock();
 
-    ddjvu_document_t * doc = (ddjvu_document_t *) docl;
+    /*
+    ddjvu_page_t * mypage = ddjvu_page_create_by_pageno(doc, pageNum);
+    int pageWidth =  ddjvu_page_get_width(mypage);
+    int pageHeight = ddjvu_page_get_height(mypage);
+    //LOGI("mypage: %p", mypage);
+
+    ddjvu_page_release(mypage);
+    */
+
+    ddjvu_document_t *doc = (ddjvu_document_t *) docl;
     ddjvu_status_t r;
-	ddjvu_pageinfo_t dinfo;
-	while ((r=ddjvu_document_get_pageinfo(doc, pageNum, &dinfo))<DDJVU_JOB_OK) {}
-         //handle_ddjvu_messages(ctx, TRUE);
+    ddjvu_pageinfo_t dinfo;
+    while ((r = ddjvu_document_get_pageinfo(doc, pageNum, &dinfo)) < DDJVU_JOB_OK) {}
+    //handle_ddjvu_messages(ctx, TRUE);
 
-    if (r>=DDJVU_JOB_FAILED) {
+    if (r >= DDJVU_JOB_FAILED) {
         LOGI("Page info get fail!");
         //signal_error();
         return;
     }
 
 
-	#ifdef ORION_FOR_ANDROID  
+#ifdef ORION_FOR_ANDROID
     jclass cls = (*env)->GetObjectClass(env, info);
     jfieldID width = (*env)->GetFieldID(env, cls, "width", "I");
     jfieldID height = (*env)->GetFieldID(env, cls, "height", "I");
     (*env)->SetIntField(env, info, width, dinfo.width);
     (*env)->SetIntField(env, info, height, dinfo.height);
-	#endif
+#endif
 
 
-	end = clock();
-	
-	LOGI("Page info get %lf s; page size = %ix%i", ((double) (end - start)) / CLOCKS_PER_SEC, dinfo.width, dinfo.height);
+    end = clock();
+
+    LOGI("Page info get %lf s; page size = %ix%i", ((double) (end - start)) / CLOCKS_PER_SEC,
+         dinfo.width, dinfo.height);
 }
 
-JNIEXPORT jboolean JNICALL JNI_FN(drawPage)(JNIEnv *env, jclass type, jlong docl, jlong pagel, jobject bitmap,
-        jfloat zoom, jint pageW, jint pageH, jint patchX, jint patchY, jint patchW, jint patchH)
-{
-    ddjvu_document_t * doc = (ddjvu_document_t *) docl;
-    ddjvu_page_t * page = (ddjvu_page_t *) pagel;
+JNIEXPORT jboolean JNICALL
+JNI_FN(drawPage)(JNIEnv *env, jclass type, jlong docl, jlong pagel, jobject bitmap,
+                 jfloat zoom, jint pageW, jint pageH, jint patchX, jint patchY, jint patchW,
+                 jint patchH) {
+    ddjvu_document_t *doc = (ddjvu_document_t *) docl;
+    ddjvu_page_t *page = (ddjvu_page_t *) pagel;
 
-	LOGI("==================Start Rendering==============");
-	int ret;
-	void *pixels;
-	int num_pixels = pageW * pageH;
+    LOGI("==================Start Rendering==============");
+    int ret;
+    void *pixels;
+    int num_pixels = pageW * pageH;
 
 
-    #ifdef ORION_FOR_ANDROID 
+#ifdef ORION_FOR_ANDROID
     AndroidBitmapInfo info;
     LOGI("Rendering page=%dx%d patch=[%d,%d,%d,%d]",
-            pageW, pageH, patchX, patchY, patchW, patchH);
+         pageW, pageH, patchX, patchY, patchW, patchH);
     LOGI("page: %p", page);
 
     LOGI("In native method\n");
@@ -169,54 +170,54 @@ JNIEXPORT jboolean JNICALL JNI_FN(drawPage)(JNIEnv *env, jclass type, jlong docl
         LOGE("AndroidBitmap_lockPixels() failed ! error=%d", ret);
         return 0;
     }
-    #endif
+#endif
 
 
-			
+
     //float zoom = 0.0001f * zoom10000;
-	
-	int pageWidth =  ddjvu_page_get_width(page);
-	int pageHeight = ddjvu_page_get_height(page);
-	
+
+    int pageWidth = ddjvu_page_get_width(page);
+    int pageHeight = ddjvu_page_get_height(page);
+
     ddjvu_rect_t pageRect;
     pageRect.x = 0;
     pageRect.y = 0;
     pageRect.w = round(zoom * pageWidth);
     pageRect.h = round(zoom * pageHeight);
-	LOGI("Original page=%dx%d patch=[%d,%d,%d,%d]",
-			pageWidth, pageHeight, pageRect.x, pageRect.y, pageRect.w, pageRect.h);
+    LOGI("Original page=%dx%d patch=[%d,%d,%d,%d]",
+         pageWidth, pageHeight, pageRect.x, pageRect.y, pageRect.w, pageRect.h);
     ddjvu_rect_t targetRect;
     targetRect.x = patchX;
     targetRect.y = patchY;
     targetRect.w = patchW;
     targetRect.h = patchH;
-	
-	int shift = 0;
-	if (targetRect.x < 0) {
-	   shift = -targetRect.x;
-	   targetRect.w += targetRect.x;
-	   targetRect.x = 0;
-	}
-	if (targetRect.y < 0) {
-	    shift +=  -targetRect.y * pageW;
-		targetRect.h += targetRect.y;
-		targetRect.y = 0;
-	}
-	
-	
-	if (pageRect.w <  targetRect.x + targetRect.w) {
-	  targetRect.w = targetRect.w - (targetRect.x + targetRect.w - pageRect.w);
-	}
-	if (pageRect.h <  targetRect.y + targetRect.h) {
-	    targetRect.h = targetRect.h - (targetRect.y + targetRect.h - pageRect.h);
-	}
-	memset(pixels, 255, num_pixels * 4);
-	 
-	LOGI("Rendering page=%dx%d patch=[%d,%d,%d,%d]",
-			patchW, patchH, targetRect.x, targetRect.y, targetRect.w, targetRect.h);
-	 
-    unsigned int masks[4] = { 0xff, 0xff00, 0xff0000, 0xff000000 };
-    ddjvu_format_t* pixelFormat = ddjvu_format_create(DDJVU_FORMAT_RGBMASK32, 4, masks);
+
+    int shift = 0;
+    if (targetRect.x < 0) {
+        shift = -targetRect.x;
+        targetRect.w += targetRect.x;
+        targetRect.x = 0;
+    }
+    if (targetRect.y < 0) {
+        shift += -targetRect.y * pageW;
+        targetRect.h += targetRect.y;
+        targetRect.y = 0;
+    }
+
+
+    if (pageRect.w < targetRect.x + targetRect.w) {
+        targetRect.w = targetRect.w - (targetRect.x + targetRect.w - pageRect.w);
+    }
+    if (pageRect.h < targetRect.y + targetRect.h) {
+        targetRect.h = targetRect.h - (targetRect.y + targetRect.h - pageRect.h);
+    }
+    memset(pixels, 255, num_pixels * 4);
+
+    LOGI("Rendering page=%dx%d patch=[%d,%d,%d,%d]",
+         patchW, patchH, targetRect.x, targetRect.y, targetRect.w, targetRect.h);
+
+    unsigned int masks[4] = {0xff, 0xff00, 0xff0000, 0xff000000};
+    ddjvu_format_t *pixelFormat = ddjvu_format_create(DDJVU_FORMAT_RGBMASK32, 4, masks);
 
     LOGI("zoom=%f ", zoom);
 
@@ -224,81 +225,77 @@ JNIEXPORT jboolean JNICALL JNI_FN(drawPage)(JNIEnv *env, jclass type, jlong docl
 
     ddjvu_format_set_y_direction(pixelFormat, TRUE);
 
-    char * buffer = &(((char *)pixels)[shift*4]);
-    jboolean result = ddjvu_page_render(page, DDJVU_RENDER_COLOR, &pageRect, &targetRect, pixelFormat, pageW * 4, buffer);
+    char *buffer = &(((char *) pixels)[shift * 4]);
+    jboolean result = ddjvu_page_render(page, DDJVU_RENDER_COLOR, &pageRect, &targetRect,
+                                        pixelFormat, pageW * 4, buffer);
 
-	ddjvu_format_release(pixelFormat);
+    ddjvu_format_release(pixelFormat);
 
-	orion_updateContrast((unsigned char *) pixels, num_pixels*4);
+    orion_updateContrast((unsigned char *) pixels, num_pixels * 4);
 
 
-	#ifdef ORION_FOR_ANDROID
+#ifdef ORION_FOR_ANDROID
     AndroidBitmap_unlockPixels(env, bitmap);
-    #endif
+#endif
 
 
-	LOGI("...Rendered");
-	
+    LOGI("...Rendered");
+
     return 1;
 }
 
 
-JNIEXPORT void JNICALL JNI_FN(destroying)(JNIEnv * env, jclass type, jlong doc, jlong context)
-{
-	LOGI("Closing doc...");	
+JNIEXPORT void JNICALL JNI_FN(destroying)(JNIEnv *env, jclass type, jlong doc, jlong context) {
+    LOGI("Closing doc...");
 
-	if (doc != 0) {
-		ddjvu_document_release((ddjvu_document_t *) doc);
-	}
+    if (doc != 0) {
+        ddjvu_document_release((ddjvu_document_t *) doc);
+    }
 
     LOGI("Closing context...");
-	if (context != 0) {
-		ddjvu_context_release((ddjvu_context_t *) context);
-	}
+    if (context != 0) {
+        ddjvu_context_release((ddjvu_context_t *) context);
+    }
 }
 
-JNIEXPORT void JNICALL JNI_FN(releasePage)(JNIEnv * env, jobject thiz, jlong page)
-{
+JNIEXPORT void JNICALL JNI_FN(releasePage)(JNIEnv *env, jobject thiz, jlong page) {
     if (page != 0) {
-        ddjvu_page_release((ddjvu_page_t *)page);
+        ddjvu_page_release((ddjvu_page_t *) page);
     }
 }
 
 
-struct list_el {  
-  jobject item;
-  struct list_el * next;
+struct list_el {
+    jobject item;
+    struct list_el *next;
 };
 
 typedef struct list_el list_item;
 
-struct list_st {  
-  list_item * head;
-  list_item * tail;
+struct list_st {
+    list_item *head;
+    list_item *tail;
 };
 
 typedef struct list_st list;
 
-struct OutlineItem_s {  
-  const char * title;
-  int level;
-  int page;
+struct OutlineItem_s {
+    const char *title;
+    int level;
+    int page;
 };
 typedef struct OutlineItem_s OutlineItem;
 
 
-
-int buildTOC(ddjvu_document_t * doc, miniexp_t expr, list * myList, jint level, JNIEnv * env, jclass olClass, jmethodID ctor)
-{
-    while(miniexp_consp(expr))
-    {
+int buildTOC(ddjvu_document_t *doc, miniexp_t expr, list *myList, jint level, JNIEnv *env,
+             jclass olClass, jmethodID ctor) {
+    while (miniexp_consp(expr)) {
         miniexp_t s = miniexp_car(expr);
         expr = miniexp_cdr(expr);
         if (miniexp_consp(s) &&
             miniexp_consp(miniexp_cdr(s)) &&
             miniexp_stringp(miniexp_car(s)) &&
-            miniexp_stringp(miniexp_cadr(s)) )
-        {
+            miniexp_stringp(miniexp_cadr(s))) {
             // fill item
             const char *name = miniexp_to_str(miniexp_car(s));
             const char *page = miniexp_to_str(miniexp_cadr(s));
@@ -313,29 +310,28 @@ int buildTOC(ddjvu_document_t * doc, miniexp_t expr, list * myList, jint level, 
                 LOGI("Page %s", page);
             }
 
-            if (name == NULL) {return -1;}
+            if (name == NULL) { return -1; }
 
-            OutlineItem * element = (OutlineItem *) malloc(sizeof(OutlineItem));
+            OutlineItem *element = (OutlineItem *) malloc(sizeof(OutlineItem));
             element->title = name;
             element->page = pageno;
             element->level = level;
 
-            list_item * next = (list_item *) malloc(sizeof(list_item));
+            list_item *next = (list_item *) malloc(sizeof(list_item));
             next->item = element;
             next->next = NULL;
             myList->tail->next = next;
             myList->tail = next;
 
             // recursion
-            buildTOC(doc, miniexp_cddr(s), myList, level+1, env, olClass, ctor);
+            buildTOC(doc, miniexp_cddr(s), myList, level + 1, env, olClass, ctor);
         }
     }
     return 0;
 }
 
 
-JNIEXPORT jobjectArray JNICALL JNI_FN(getOutline)(JNIEnv * env, jobject thiz, jlong docl)
-{
+JNIEXPORT jobjectArray JNICALL JNI_FN(getOutline)(JNIEnv *env, jobject thiz, jlong docl) {
     ddjvu_document_t *doc = (ddjvu_document_t *) docl;
     miniexp_t outline = ddjvu_document_get_outline(doc);
 
@@ -357,12 +353,12 @@ JNIEXPORT jobjectArray JNICALL JNI_FN(getOutline)(JNIEnv * env, jobject thiz, jl
     jclass olClass;
     jmethodID ctor;
 
-    #ifdef ORION_FOR_ANDROID
+#ifdef ORION_FOR_ANDROID
     olClass = (*env)->FindClass(env, "universe/constellation/orion/viewer/outline/OutlineItem");
     if (olClass == NULL) return NULL;
     ctor = (*env)->GetMethodID(env, olClass, "<init>", "(ILjava/lang/String;I)V");
     if (ctor == NULL) return NULL;
-    #endif
+#endif
 
     buildTOC(doc, miniexp_cdr(outline), myList, 0, env, olClass, ctor);
 
@@ -385,14 +381,14 @@ JNIEXPORT jobjectArray JNICALL JNI_FN(getOutline)(JNIEnv * env, jobject thiz, jl
 
     while (next != NULL) {
         OutlineItem *item = next->item;
-        #ifdef ORION_FOR_ANDROID
+#ifdef ORION_FOR_ANDROID
         jstring title = (*env)->NewStringUTF(env, item->title);
         //shift pageno to zero based
         jobject element = (*env)->NewObject(env, olClass, ctor, item->level, title, item->page);
         (*env)->SetObjectArrayElement(env, arr, pos, element);
         (*env)->DeleteLocalRef(env, title);
         (*env)->DeleteLocalRef(env, element);
-        #endif
+#endif
         free(item);
         list_item *next2 = next->next;
         free(next);
@@ -407,9 +403,8 @@ JNIEXPORT jobjectArray JNICALL JNI_FN(getOutline)(JNIEnv * env, jobject thiz, jl
 }
 
 
-
 //sumatrapdf code
-int extractText(miniexp_t item, Arraylist list, fz_bbox * target) {
+int extractText(miniexp_t item, Arraylist list, fz_bbox *target) {
     miniexp_t type = miniexp_car(item);
 
     if (!miniexp_symbolp(type))
@@ -418,15 +413,19 @@ int extractText(miniexp_t item, Arraylist list, fz_bbox * target) {
     item = miniexp_cdr(item);
 
     if (!miniexp_numberp(miniexp_car(item))) return 0;
-    int x0 = miniexp_to_int(miniexp_car(item)); item = miniexp_cdr(item);
+    int x0 = miniexp_to_int(miniexp_car(item));
+    item = miniexp_cdr(item);
     if (!miniexp_numberp(miniexp_car(item))) return 0;
-    int y0 = miniexp_to_int(miniexp_car(item)); item = miniexp_cdr(item);
+    int y0 = miniexp_to_int(miniexp_car(item));
+    item = miniexp_cdr(item);
     if (!miniexp_numberp(miniexp_car(item))) return 0;
-    int x1 = miniexp_to_int(miniexp_car(item)); item = miniexp_cdr(item);
+    int x1 = miniexp_to_int(miniexp_car(item));
+    item = miniexp_cdr(item);
     if (!miniexp_numberp(miniexp_car(item))) return 0;
-    int y1 = miniexp_to_int(miniexp_car(item)); item = miniexp_cdr(item);
+    int y1 = miniexp_to_int(miniexp_car(item));
+    item = miniexp_cdr(item);
     //RectI rect = RectI::FromXY(x0, y0, x1, y1);
-    fz_bbox rect = {x0 , y0 , x1 , y1};
+    fz_bbox rect = {x0, y0, x1, y1};
 
     miniexp_t str = miniexp_car(item);
 
@@ -450,8 +449,7 @@ int extractText(miniexp_t item, Arraylist list, fz_bbox * target) {
             if (miniexp_symbol("word") == type) {
                 arraylist_add(list, ' ');
                 //coords.Append(RectI(rect.x + rect.dx, rect.y, 2, rect.dy));
-            }
-            else if (miniexp_symbol("char") != type) {
+            } else if (miniexp_symbol("char") != type) {
                 arraylist_add(list, '\n');
                 //            extracted.Append(lineSep);
                 //            for (size_t i = 0; i < str::Len(lineSep); i++)
@@ -472,14 +470,13 @@ int extractText(miniexp_t item, Arraylist list, fz_bbox * target) {
 
 
 JNIEXPORT jstring JNICALL JNI_FN(getText)(JNIEnv *env, jobject thiz, jlong docl, jint pageNumber,
-		int startX, jint startY, jint width, jint height)
-{
-    ddjvu_document_t * doc = (ddjvu_document_t *) docl;
+                                          int startX, jint startY, jint width, jint height) {
+    ddjvu_document_t *doc = (ddjvu_document_t *) docl;
     LOGI("==================Start Text Extraction==============");
 
     miniexp_t pagetext;
-    while ((pagetext=ddjvu_document_get_pagetext(doc,pageNumber,0))==miniexp_dummy) {
-      //handle_ddjvu_messages(ctx, TRUE);
+    while ((pagetext = ddjvu_document_get_pagetext(doc, pageNumber, 0)) == miniexp_dummy) {
+        //handle_ddjvu_messages(ctx, TRUE);
     }
 
     if (miniexp_nil == pagetext) {
@@ -492,18 +489,18 @@ JNIEXPORT jstring JNICALL JNI_FN(getText)(JNIEnv *env, jobject thiz, jlong docl,
         //nothing
     }
 
-	LOGI("Extraction rectangle=[%d,%d,%d,%d]", startX, startY, width, height);
+    LOGI("Extraction rectangle=[%d,%d,%d,%d]", startX, startY, width, height);
 
-	Arraylist values = arraylist_create();
+    Arraylist values = arraylist_create();
 
     int w = info.width;
     int h = info.height;
     fz_bbox target = {startX, h - startY - height, startX + width, h - startY};
     LOGI("Extraction irectangle=[%d,%d,%d,%d]", target.x0, target.y0, target.x1, target.y1);
 
-	extractText(pagetext, values, &target);
+    extractText(pagetext, values, &target);
 
-	arraylist_add(values, 0);
+    arraylist_add(values, 0);
 
     LOGI("Data: %s", arraylist_getData(values));
     jstring result = (*env)->NewStringUTF(env, arraylist_getData(values));
@@ -519,56 +516,54 @@ static int qMax(int a, int b) {
     return b;
 }
 
-static int miniexp_get_int(miniexp_t * r, int * x)
-{
-  if (! miniexp_numberp(miniexp_car(*r)))
-    return 0;
+static int miniexp_get_int(miniexp_t *r, int *x) {
+    if (!miniexp_numberp(miniexp_car(*r)))
+        return 0;
 
-  *x = miniexp_to_int(miniexp_car(*r));
-  *r = miniexp_cdr(*r);
+    *x = miniexp_to_int(miniexp_car(*r));
+    *r = miniexp_cdr(*r);
 
-  return 1;
+    return 1;
 }
 
 static int
-parse_text_type(miniexp_t exp)
-{
-  static const char *names[] = {
-    "char", "word", "line", "para", "region", "column", "page"
-  };
-  static int const nsymbs = 7;
-  static miniexp_t symbs[7];
-  if (!symbs[0]) {
-    int i;
-    for (i=0; i<nsymbs; i++)
-      symbs[i] = miniexp_symbol(names[i]);
-  }
+parse_text_type(miniexp_t exp) {
+    static const char *names[] = {
+            "char", "word", "line", "para", "region", "column", "page"
+    };
+    static int const nsymbs = 7;
+    static miniexp_t symbs[7];
+    if (!symbs[0]) {
+        int i;
+        for (i = 0; i < nsymbs; i++)
+            symbs[i] = miniexp_symbol(names[i]);
+    }
 
- int i;
-  for (i=0; i<nsymbs; i++)
-    if (exp == symbs[i])
-      return i;
-  return -1;
+    int i;
+    for (i = 0; i < nsymbs; i++)
+        if (exp == symbs[i])
+            return i;
+    return -1;
 }
 
 
 static jobject
-miniexp_get_rect(miniexp_t *r, JNIEnv * env, jclass rectFClass, jmethodID ctor, int pageHeight)
-{
-      int x1,y1,x2,y2;
-      if (! (miniexp_get_int(r, &x1) && miniexp_get_int(r, &y1) &&
-             miniexp_get_int(r, &x2) && miniexp_get_int(r, &y2) ))
-            return NULL;
+miniexp_get_rect(miniexp_t *r, JNIEnv *env, jclass rectFClass, jmethodID ctor, int pageHeight) {
+    int x1, y1, x2, y2;
+    if (!(miniexp_get_int(r, &x1) && miniexp_get_int(r, &y1) &&
+          miniexp_get_int(r, &x2) && miniexp_get_int(r, &y2)))
+        return NULL;
 
-    if (x2<x1 || y2<y1)
+    if (x2 < x1 || y2 < y1)
         return NULL;
 
     jobject rectF;
 
-    #ifdef ORION_FOR_ANDROID
+#ifdef ORION_FOR_ANDROID
     rectF = (*env)->NewObject(env, rectFClass, ctor,
-                    (float)x1, (float)(pageHeight - y2), (float)x2, (float)pageHeight - y1);
-    #endif
+                              (float) x1, (float) (pageHeight - y2), (float) x2,
+                              (float) pageHeight - y1);
+#endif
     if (rectF == NULL) return NULL;
 
     //(*env)->DeleteLocalRef(env, rectF);
@@ -577,76 +572,77 @@ miniexp_get_rect(miniexp_t *r, JNIEnv * env, jclass rectFClass, jmethodID ctor, 
 }
 
 #ifdef ORION_FOR_ANDROID
-static jboolean miniexp_get_text(JNIEnv * env, miniexp_t exp, jobject stringBuilder, jobject positions, int *state,
-                        jclass rectFClass, jmethodID ctor, jmethodID addToList, int pageHeight)
-{
 
-  miniexp_t type = miniexp_car(exp);
-  int typenum = parse_text_type(type);
-  miniexp_t r = exp = miniexp_cdr(exp);
-  if (! miniexp_symbolp(type))
-    return 0;
+static jboolean
+miniexp_get_text(JNIEnv *env, miniexp_t exp, jobject stringBuilder, jobject positions, int *state,
+                 jclass rectFClass, jmethodID ctor, jmethodID addToList, int pageHeight) {
 
-  jobject rect = miniexp_get_rect(&r, env, rectFClass, ctor, pageHeight);
-  if (rect == NULL)
-    return 0;
+    miniexp_t type = miniexp_car(exp);
+    int typenum = parse_text_type(type);
+    miniexp_t r = exp = miniexp_cdr(exp);
+    if (!miniexp_symbolp(type))
+        return 0;
 
-  miniexp_t s = miniexp_car(r);
-  *state = qMax(*state, typenum);
+    jobject rect = miniexp_get_rect(&r, env, rectFClass, ctor, pageHeight);
+    if (rect == NULL)
+        return 0;
+
+    miniexp_t s = miniexp_car(r);
+    *state = qMax(*state, typenum);
 
 
-  jstring space = (*env)->NewStringUTF(env, " ");
-  jstring newLine = (*env)->NewStringUTF(env, "\n");
+    jstring space = (*env)->NewStringUTF(env, " ");
+    jstring newLine = (*env)->NewStringUTF(env, "\n");
 
-  if (miniexp_stringp(s) && !miniexp_cdr(r))
-    {
-      //result += (state >= 2) ? "\n" : (state >= 1) ? " " : "";
-      if (*state >= 2) {
+    if (miniexp_stringp(s) && !miniexp_cdr(r)) {
+        //result += (state >= 2) ? "\n" : (state >= 1) ? " " : "";
+        if (*state >= 2) {
+            (*env)->CallBooleanMethod(env, positions, addToList, rect);
+            (*env)->CallBooleanMethod(env, stringBuilder, addToList, newLine);
+        } else if (*state >= 1) {
+            (*env)->CallBooleanMethod(env, positions, addToList, rect);
+            (*env)->CallBooleanMethod(env, stringBuilder, addToList, newLine);
+        } else {
+            //add empty?
+        }
+        *state = -1;
+
         (*env)->CallBooleanMethod(env, positions, addToList, rect);
-        (*env)->CallBooleanMethod(env, stringBuilder, addToList, newLine);
-      } else if (*state >= 1) {
-        (*env)->CallBooleanMethod(env, positions, addToList, rect);
-        (*env)->CallBooleanMethod(env, stringBuilder, addToList, newLine);
-      } else {
-        //add empty?
-      }
-      *state = -1;
 
-      (*env)->CallBooleanMethod(env, positions, addToList, rect);
+        jstring string = (*env)->NewStringUTF(env, miniexp_to_str(s));
+        (*env)->CallBooleanMethod(env, stringBuilder, addToList, string);
+        (*env)->DeleteLocalRef(env, string);
 
-      jstring string = (*env)->NewStringUTF(env, miniexp_to_str(s));
-      (*env)->CallBooleanMethod(env, stringBuilder, addToList, string);
-      (*env)->DeleteLocalRef(env, string);
-
-      r = miniexp_cdr(r);
+        r = miniexp_cdr(r);
     }
 
-  (*env)->DeleteLocalRef(env, space);
-  (*env)->DeleteLocalRef(env, newLine);
-  (*env)->DeleteLocalRef(env, rect);
+    (*env)->DeleteLocalRef(env, space);
+    (*env)->DeleteLocalRef(env, newLine);
+    (*env)->DeleteLocalRef(env, rect);
 
-  while(miniexp_consp(s))
-    {
-      miniexp_get_text(env, s, stringBuilder, positions, state, rectFClass, ctor, addToList, pageHeight);
-      r = miniexp_cdr(r);
-      s = miniexp_car(r);
+    while (miniexp_consp(s)) {
+        miniexp_get_text(env, s, stringBuilder, positions, state, rectFClass, ctor, addToList,
+                         pageHeight);
+        r = miniexp_cdr(r);
+        s = miniexp_car(r);
     }
 
-  if (r)
-    return 0;
+    if (r)
+        return 0;
 
-  *state = qMax(*state, typenum);
-  return 1;
+    *state = qMax(*state, typenum);
+    return 1;
 }
 
-JNIEXPORT jboolean JNICALL JNI_FN(getPageText)(JNIEnv *env, jclass type, jlong  docl, jint pageNumber, jobject stringBuilder, jobject positionList)
-{
+JNIEXPORT jboolean JNICALL
+JNI_FN(getPageText)(JNIEnv *env, jclass type, jlong docl, jint pageNumber, jobject stringBuilder,
+                    jobject positionList) {
     LOGI("Start Page Text Extraction %i", pageNumber);
-    ddjvu_document_t * doc = (ddjvu_document_t *) docl;
+    ddjvu_document_t *doc = (ddjvu_document_t *) docl;
 
     miniexp_t pagetext;
-    while ((pagetext=ddjvu_document_get_pagetext(doc, pageNumber, "word"))==miniexp_dummy) {
-      //handle_ddjvu_messages(ctx, TRUE);
+    while ((pagetext = ddjvu_document_get_pagetext(doc, pageNumber, "word")) == miniexp_dummy) {
+        //handle_ddjvu_messages(ctx, TRUE);
     }
 
     if (pagetext == NULL) {
@@ -676,10 +672,11 @@ JNIEXPORT jboolean JNICALL JNI_FN(getPageText)(JNIEnv *env, jclass type, jlong  
 
     ddjvu_pageinfo_t dinfo;
     ddjvu_status_t r;
-    while ((r=ddjvu_document_get_pageinfo(doc, pageNumber, &dinfo))<DDJVU_JOB_OK) {}
-         //handle_ddjvu_messages(ctx, TRUE);
+    while ((r = ddjvu_document_get_pageinfo(doc, pageNumber, &dinfo)) < DDJVU_JOB_OK) {}
+    //handle_ddjvu_messages(ctx, TRUE);
 
-    return miniexp_get_text(env, pagetext, stringBuilder, positionList, &state, rectFClass, ctor, addToList, dinfo.height);
+    return miniexp_get_text(env, pagetext, stringBuilder, positionList, &state, rectFClass, ctor,
+                            addToList, dinfo.height);
 }
 
 #endif
