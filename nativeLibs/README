@@ -1,0 +1,3 @@
+For building native libraries you need android ndk r16b ang git installed on your system
+
+All steps scripted in 'thirdparty_build.gradle' 'buildNativeLibs' task

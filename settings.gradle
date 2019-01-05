@@ -1,2 +1,2 @@
-include ':orion-viewer', ':tree-view-list-android', ':common', ':native', ':nativeLibs:djvuModule'
+include ':orion-viewer', ':tree-view-list-android', ':common', ':native', ':nativeLibs:djvuModule', ':nativeLibs:mupdfModule'
 enableFeaturePreview('GRADLE_METADATA')

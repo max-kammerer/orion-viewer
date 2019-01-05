@@ -14,7 +14,8 @@
 
 #include "mupdf/fitz.h"
 #include "mupdf/pdf.h"
-#include "list.c"
+#include "common/list.c"
+#include "common/orion_bitmap.c"
 
 #define JNI_FN(A) Java_com_artifex_mupdfdemo_ ## A
 #define PACKAGENAME "com/artifex/mupdfdemo"
