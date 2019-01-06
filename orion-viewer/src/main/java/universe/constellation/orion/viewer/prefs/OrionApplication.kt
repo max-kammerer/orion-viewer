@@ -224,7 +224,7 @@ class OrionApplication : Application() {
         val HARDWARE = getField("HARDWARE")
 
         @JvmField
-        val ONYX_DEVICE = "ONYX".equals(MANUFACTURER, ignoreCase = true) && OnyxUtil.isEinkDevice()
+        val ONYX_DEVICE = "ONYX".equals(MANUFACTURER, ignoreCase = true) && OnyxUtil.isEinkDevice
 
         @JvmField
         val TEXET_TB_138 = "texet".equals(DEVICE, ignoreCase = true) && "rk29sdk".equals(MODEL, ignoreCase = true)
