@@ -14,7 +14,7 @@ dependencies {
     implementation project(':tree-view-list-android')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.30.2-eap13'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.0'
     implementation project(":nativeLibs:djvuModule")
     implementation project(":nativeLibs:mupdfModule")
 

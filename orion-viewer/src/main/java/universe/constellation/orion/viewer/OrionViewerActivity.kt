@@ -35,7 +35,6 @@ import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.android.UI
 import universe.constellation.orion.viewer.android.FileUtils
 import universe.constellation.orion.viewer.device.Device
 import universe.constellation.orion.viewer.dialog.SearchDialog
@@ -270,13 +269,13 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         controller = stubController
         updateViewOnNewBook(stubDocument.title)
 
-        launch(UI) {
+        GlobalScope.launch(Dispatchers.Main) {
             log("Trying to open file: $filePath")
             val rootJob = Job()
             val newDocument = try {
-                async(CommonPool, parent = rootJob) {
+                withContext(Dispatchers.Default + rootJob) {
                     FileUtil.openFile(filePath)
-                }.await()
+                }
             } catch (e: Exception) {
                 log(e)
                 stubDocument.bodyText = e.message
@@ -287,9 +286,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
             try {
                 val lastPageInfo1 =
-                    async(CommonPool, parent = rootJob) {
+                    withContext(Dispatchers.Default + rootJob) {
                         LastPageInfo.loadBookParameters(this@OrionViewerActivity, filePath, initalizer(globalOptions))
-                    }.await()
+                    }
                 lastPageInfo = lastPageInfo1
                 orionContext.currentBookParameters = lastPageInfo1
                 OptionActions.DEBUG.doAction(this@OrionViewerActivity, false, globalOptions.getBooleanProperty("DEBUG", false))
@@ -1021,7 +1020,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         controller?.let {
             val currentPage = it.currentPage
             val pageCount = it.document.pageCount
-            launch(CommonPool) {
+            GlobalScope.launch(Dispatchers.Default) {
                 it.destroy()
                 device!!.onBookClose(currentPage, pageCount)
             }

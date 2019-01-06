@@ -8,10 +8,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import kotlinx.coroutines.CommonPool
-import kotlinx.coroutines.android.UI
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import universe.constellation.orion.viewer.OrionViewerActivity.Companion.SAVE_FILE_RESULT
 import universe.constellation.orion.viewer.filemanager.FileChooserAdapter
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
@@ -91,18 +88,18 @@ open class SaveNotification : DialogFragment() {
             uri: Uri,
             toFile: File
         ) {
-            launch(UI) {
+            GlobalScope.launch(Dispatchers.Main) {
                 val progressBar = ProgressDialog(myActivity)
                 progressBar.isIndeterminate = true
                 progressBar.show()
                 try {
-                    val newFile = async(CommonPool) {
+                    val newFile = withContext(Dispatchers.Default) {
                         saveFileInto(
-                            myActivity,
-                            uri,
-                            toFile.also { log("Saving file into $it") }
+                                myActivity,
+                                uri,
+                                toFile.also { log("Saving file into $it") }
                         )
-                    }.await()
+                    }
                     myActivity.openFileAndDestroyOldController(newFile.path)
                 } finally {
                     progressBar.dismiss()
