@@ -1,5 +1,6 @@
 package universe.constellation.orion.viewer.device.texet;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -64,6 +65,7 @@ public class TexetDevice extends EInkDevice {
                 getActivity().getApplicationContext().createPackageContext("com.android.systemui", Context.CONTEXT_IGNORE_SECURITY);
 
 
+        @SuppressLint({"WorldReadableFiles", "WorldWriteableFiles"})
         SharedPreferences settings =
                 bmkContext.getSharedPreferences("MyPrefsFile",
                         Context.MODE_WORLD_READABLE + Context.MODE_WORLD_WRITEABLE);
