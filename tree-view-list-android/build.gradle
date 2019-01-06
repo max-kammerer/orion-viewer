@@ -2,8 +2,8 @@ apply plugin: 'com.android.library'
 
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '28.0.3'
+    compileSdkVersion orionCompileSdk
+    buildToolsVersion orionBuildToolsVersion
 
     sourceSets {
         main {
@@ -17,6 +17,6 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion orionMinSdk
     }
 }

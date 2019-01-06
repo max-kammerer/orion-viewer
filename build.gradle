@@ -19,3 +19,10 @@ allprojects {
         google()
     }
 }
+
+project.ext {
+    orionMinSdk = 14
+    orionTargetSdk = 26
+    orionCompileSdk = 27
+    orionBuildToolsVersion = "28.0.3"
+}
