@@ -31,12 +31,14 @@ kotlin {
         commonMain {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
+                implementation 'com.github.msink:libui-metadata:0.1.0'
             }
         }
 
         linuxAppMain {
             dependencies {
                 implementation 'com.github.msink:libui:0.1.0'
+                implementation 'com.github.msink:libui-linux:0.1.0:cinterop-libui@klib'
             }
         }
 
