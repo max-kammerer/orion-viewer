@@ -4,9 +4,9 @@ import universe.constellation.orion.viewer.LastPageInfo
 
 fun initalizer(options: GlobalOptions): LastPageInfo.() -> Unit =
     {
-        zoom = options.getDefaultZoom()
-        contrast = options.getDefaultContrast()
-        walkOrder = options.getWalkOrder()
-        pageLayout = options.getPageLayout()
-        colorMode = options.getColorMode()
+        zoom = options.defaultZoom
+        contrast = options.defaultContrast
+        walkOrder = options.walkOrder
+        pageLayout = options.pageLayout
+        colorMode = options.colorMode
     }

@@ -67,7 +67,7 @@ class OrionApplication : Application() {
 
     private var langCode: String? = null
 
-    val isLightTheme: Boolean
+    private val isLightTheme: Boolean
         get() {
             val theme = options.applicationTheme
             val isDefault = !("DARK" == theme || "LIGHT" == theme)

@@ -1,5 +1,6 @@
 package universe.constellation.orion.viewer.view
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.ColorMatrixColorFilter
 import android.view.View
@@ -24,6 +25,7 @@ class OrionStatusBarHelper(val view: ViewGroup) : OrionBookListener, OrionImageL
         this.offset.text = "[?, ?]"
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onNewImage(bitmap: Bitmap?, info: LayoutPosition?, latch: CountDownLatch?) {
         info?.let {
             offset.text = "[${pad(info.x.offset)}:${pad(info.y.offset)}]"

@@ -67,8 +67,8 @@ open class SaveNotification : DialogFragment() {
             val input = context.contentResolver.openInputStream(uri)
 
             input.use {
-                toFile.outputStream().use {
-                    input.copyTo(it)
+                toFile.outputStream().use { outputStream ->
+                    input.copyTo(outputStream)
                 }
             }
             return toFile
