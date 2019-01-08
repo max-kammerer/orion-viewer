@@ -87,4 +87,6 @@
     <string name="msg_error">Ошибка</string>
     <string name="msg_warning">Предупреждение</string>
     <string name="msg_specify_keyword_for_search">Не задано слово для поиска</string>
+
+    <string name="saveFileNameTooltip">ИмяФайла.расширение</string>
 </resources>

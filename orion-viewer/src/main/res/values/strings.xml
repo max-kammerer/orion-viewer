@@ -84,4 +84,6 @@
     <string name="color_mode_yellow_on_dark">Yellow on black background</string>
     <string name="color_mode_white_on_blue">White on blue background</string>
     <string name="select_color_mode">Select color mode to switch</string>
+
+    <string name="saveFileNameTooltip">FileName.extension</string>
 </resources>

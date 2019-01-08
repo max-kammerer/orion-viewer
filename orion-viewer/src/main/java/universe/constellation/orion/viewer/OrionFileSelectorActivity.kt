@@ -23,6 +23,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
 import java.io.File
@@ -40,7 +41,15 @@ class OrionSaveFileActivity : OrionFileManagerActivity(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        findViewById<TextView>(R.id.fileName).visibility = View.VISIBLE
+        findViewById<TextView>(R.id.saveFileIdView).visibility = View.VISIBLE
+        findViewById<Button>(R.id.saveFile).setOnClickListener {
+            val result = Intent()
+            result.putExtra(OrionFileSelectorActivity.RESULT_FILE_NAME,
+                            findViewById<TextView>(R.id.saveFileIdView).text
+            )
+            setResult(Activity.RESULT_OK, result)
+            finish()
+        }
     }
 }
 

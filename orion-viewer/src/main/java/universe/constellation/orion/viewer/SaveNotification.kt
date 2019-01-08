@@ -23,7 +23,7 @@ open class SaveNotification : DialogFragment() {
         val mimeType = arguments!!.getString(TYPE)
         val builder = AlertDialog.Builder(activity)
         builder.setTitle("Please save file before opening...")
-                .setItems(R.array.save_options) { dialog, which ->
+                .setItems(R.array.save_options) { _, which ->
                     val myActivity = activity as OrionViewerActivity
                     when(which) {
                         0 -> {
