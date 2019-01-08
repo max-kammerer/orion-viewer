@@ -1,4 +1,3 @@
 # Modify 'sdk.dir' property  and resave this file as local.properties
 sdk.dir=/path/to/android/sdk/android-sdk-linux
 ndk.dir=/home/mike/devel/tools/android-ndk/android-ndk-r9d/
-thirdparty.dir=../thirdparty
