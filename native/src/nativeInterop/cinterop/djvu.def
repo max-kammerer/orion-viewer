@@ -1,0 +1,3 @@
+compilerOpts = -I../nativeLibs/djvuModule/jni/
+headers = djvu.h
+

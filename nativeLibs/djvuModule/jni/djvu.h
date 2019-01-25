@@ -23,7 +23,7 @@ typedef char*       jstring;
 typedef void*       JNIEnv;
 
 
-#define JNI_FN(A) ## A
+#define JNI_FN(A) native_ ## A
 #else
 #include <jni.h>
 

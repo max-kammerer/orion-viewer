@@ -24,6 +24,11 @@ kotlin {
         fromPreset(presets.linuxX64, 'linuxApp') {
             compilations.main.outputKinds 'executable'
             //entryPoint 'main'
+            compilations.main.cinterops {
+                djvu {
+                    //includeDirs.headerFilterOnly '../nativeLibs/djvuModule/jni/djvu.h'
+                }
+            }
         }
     }
 
@@ -31,14 +36,14 @@ kotlin {
         commonMain {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
-                implementation 'com.github.msink:libui-metadata:0.1.0'
+                implementation 'com.github.msink:libui-metadata:0.1.2'
             }
         }
 
         linuxAppMain {
             dependencies {
-                implementation 'com.github.msink:libui:0.1.0'
-                implementation 'com.github.msink:libui-linux:0.1.0:cinterop-libui@klib'
+                implementation 'com.github.msink:libui-linux:0.1.2'
+                implementation 'com.github.msink:libui-linux:0.1.2:cinterop-libui@klib'
             }
         }
 
