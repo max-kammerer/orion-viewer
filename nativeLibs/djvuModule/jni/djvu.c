@@ -2,20 +2,17 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 
 #include <miniexp.h>
 #include <ddjvuapi.h>
 #include "debug.h"
 
-#include "common/list.c"
-#include "common/orion_bitmap.c"
+#include "../../common/list.h"
+#include "../../common/orion_bitmap.h"
 #include "base_geometry.c"
 #include "djvu.h"
-
-#define LOG_TAG "djvulib"
-#define LOGI(...) __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 
 extern void orion_updateContrast(unsigned char *, int);
 
@@ -29,15 +26,20 @@ static inline jlong jlong_cast(void *p) {
 }
 
 
-JNIEXPORT jlong JNICALL JNI_FN(initContext)(JNIEnv *env, jclass type) {
+JNIEXPORT jlong JNICALL JNI_FN(DjvuDocument_initContext)(JNIEnv *env, jclass type) {
     LOGI("Creating context");
     return jlong_cast(ddjvu_context_create("orion"));
 }
 
 JNIEXPORT jlong JNICALL
-JNI_FN(openFile)(JNIEnv *env, jclass type, jstring jfileName, jobject docInfo, jlong contextl) {
+JNI_FN(DjvuDocument_openFile)(JNIEnv *env, jclass type, jstring jfileName, DocInfo docInfo, jlong contextl) {
     ddjvu_context_t *context = (ddjvu_context_t *) contextl;
+
+#ifdef ORION_FOR_ANDROID
     const char *fileName = (*env)->GetStringUTFChars(env, jfileName, 0);
+#else
+    const char *fileName = jfileName;
+#endif
 
     LOGI("Opening document: %s", fileName);
     ddjvu_document_t *doc = ddjvu_document_create_by_filename_utf8(context, fileName, 0);
@@ -62,6 +64,8 @@ JNI_FN(openFile)(JNIEnv *env, jclass type, jstring jfileName, jobject docInfo, j
         jclass cls = (*env)->GetObjectClass(env, docInfo);
         jfieldID pageCountF = (*env)->GetFieldID(env, cls, "pageCount", "I");
         (*env)->SetIntField(env, docInfo, pageCountF, pageNum);
+#else
+        *docInfo = pageNum;
 #endif
 
 
@@ -76,7 +80,7 @@ JNI_FN(openFile)(JNIEnv *env, jclass type, jstring jfileName, jobject docInfo, j
 
 
 JNIEXPORT jlong JNICALL
-JNI_FN(gotoPageInternal)(JNIEnv *env, jclass type, jlong docl, jint pageNum) {
+JNI_FN(DjvuDocument_gotoPageInternal)(JNIEnv *env, jclass type, jlong docl, jint pageNum) {
     ddjvu_document_t *doc = (ddjvu_document_t *) docl;
     LOGI("Opening page: %d", pageNum);
     ddjvu_page_t *page = ddjvu_page_create_by_pageno(doc, pageNum);
@@ -89,7 +93,7 @@ JNI_FN(gotoPageInternal)(JNIEnv *env, jclass type, jlong docl, jint pageNum) {
 }
 
 JNIEXPORT void JNICALL
-JNI_FN(getPageInfo)(JNIEnv *env, jclass type, jlong docl, jint pageNum, jobject info) {
+JNI_FN(DjvuDocument_getPageInfo)(JNIEnv *env, jclass type, jlong docl, jint pageNum, jobject info) {
 
     clock_t start, end;
     start = clock();
@@ -132,7 +136,7 @@ JNI_FN(getPageInfo)(JNIEnv *env, jclass type, jlong docl, jint pageNum, jobject 
 }
 
 JNIEXPORT jboolean JNICALL
-JNI_FN(drawPage)(JNIEnv *env, jclass type, jlong docl, jlong pagel, jobject bitmap,
+JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong docl, jlong pagel, jobject bitmap,
                  jfloat zoom, jint pageW, jint pageH, jint patchX, jint patchY, jint patchW,
                  jint patchH) {
     ddjvu_document_t *doc = (ddjvu_document_t *) docl;
@@ -242,7 +246,7 @@ JNI_FN(drawPage)(JNIEnv *env, jclass type, jlong docl, jlong pagel, jobject bitm
 }
 
 
-JNIEXPORT void JNICALL JNI_FN(destroying)(JNIEnv *env, jclass type, jlong doc, jlong context) {
+JNIEXPORT void JNICALL JNI_FN(DjvuDocument_destroying)(JNIEnv *env, jclass type, jlong doc, jlong context) {
     LOGI("Closing doc...");
 
     if (doc != 0) {
@@ -255,7 +259,7 @@ JNIEXPORT void JNICALL JNI_FN(destroying)(JNIEnv *env, jclass type, jlong doc, j
     }
 }
 
-JNIEXPORT void JNICALL JNI_FN(releasePage)(JNIEnv *env, jobject thiz, jlong page) {
+JNIEXPORT void JNICALL JNI_FN(DjvuDocument_releasePage)(JNIEnv *env, jobject thiz, jlong page) {
     if (page != 0) {
         ddjvu_page_release((ddjvu_page_t *) page);
     }
@@ -327,8 +331,8 @@ int buildTOC(ddjvu_document_t *doc, miniexp_t expr, list *myList, jint level, JN
     return 0;
 }
 
-
-JNIEXPORT jobjectArray JNICALL JNI_FN(getOutline)(JNIEnv *env, jobject thiz, jlong docl) {
+#ifdef ORION_FOR_ANDROID
+JNIEXPORT jobjectArray JNICALL JNI_FN(DjvuDocument_getOutline)(JNIEnv *env, jobject thiz, jlong docl) {
     ddjvu_document_t *doc = (ddjvu_document_t *) docl;
     miniexp_t outline = ddjvu_document_get_outline(doc);
 
@@ -398,7 +402,7 @@ JNIEXPORT jobjectArray JNICALL JNI_FN(getOutline)(JNIEnv *env, jobject thiz, jlo
 
     return arr;
 }
-
+#endif
 
 //sumatrapdf code
 int extractText(miniexp_t item, Arraylist list, fz_bbox *target) {
@@ -466,7 +470,7 @@ int extractText(miniexp_t item, Arraylist list, fz_bbox *target) {
 }
 
 
-JNIEXPORT jstring JNICALL JNI_FN(getText)(JNIEnv *env, jobject thiz, jlong docl, jint pageNumber,
+JNIEXPORT jstring JNICALL JNI_FN(DjvuDocument_getText)(JNIEnv *env, jobject thiz, jlong docl, jint pageNumber,
                                           int startX, jint startY, jint width, jint height) {
     ddjvu_document_t *doc = (ddjvu_document_t *) docl;
     LOGI("==================Start Text Extraction==============");
@@ -499,11 +503,16 @@ JNIEXPORT jstring JNICALL JNI_FN(getText)(JNIEnv *env, jobject thiz, jlong docl,
 
     arraylist_add(values, 0);
 
-    LOGI("Data: %s", arraylist_getData(values));
-    jstring result = (*env)->NewStringUTF(env, arraylist_getData(values));
+    char *data = arraylist_getData(values);
+    LOGI("Data: %s", data);
+#ifdef ORION_FOR_ANDROID
+    jstring result = (*env)->NewStringUTF(env, data);
     arraylist_free(values);
 
     return result;
+#else
+    return data;
+#endif
 }
 
 static int qMax(int a, int b) {
@@ -632,7 +641,7 @@ miniexp_get_text(JNIEnv *env, miniexp_t exp, jobject stringBuilder, jobject posi
 }
 
 JNIEXPORT jboolean JNICALL
-JNI_FN(getPageText)(JNIEnv *env, jclass type, jlong docl, jint pageNumber, jobject stringBuilder,
+JNI_FN(DjvuDocument_getPageText)(JNIEnv *env, jclass type, jlong docl, jint pageNumber, jobject stringBuilder,
                     jobject positionList) {
     LOGI("Start Page Text Extraction %i", pageNumber);
     ddjvu_document_t *doc = (ddjvu_document_t *) docl;

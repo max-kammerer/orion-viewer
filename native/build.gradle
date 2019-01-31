@@ -26,9 +26,10 @@ kotlin {
             //entryPoint 'main'
             compilations.main.cinterops {
                 djvu {
-                    //includeDirs.headerFilterOnly '../nativeLibs/djvuModule/jni/djvu.h'
                 }
             }
+            compilations.main.linkerOpts "../nativeLibs/djvuModule/cmake/libdjvucore.a",
+                    "../nativeLibs/djvuModule/cmake/liboriondjvu.a"
         }
     }
 

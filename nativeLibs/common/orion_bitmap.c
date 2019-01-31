@@ -1,15 +1,8 @@
 /* Globals */
 
 /* For compilation only */
+#include "common_header.h"
 #include <math.h>
-#include <jni.h>
-
-#include <android/log.h>
-
-#define LOG_TAG "orion_bitmap"
-#define LOGI(...) __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
-
 
 unsigned char orion_gamma[256];
 unsigned const int DEFAULT_CONTRAST = 100;
@@ -20,14 +13,14 @@ void orion_setContrast(JNIEnv *env, jobject thiz, jint contrast1);
 
 #ifdef ORION_PDF
 JNIEXPORT void
-JNICALL Java_com_artifex_mupdfdemo_MuPDFCore_setContrast(JNIEnv * env, jobject thiz, jint contrast1)
+JNICALL JNI_FN(MuPDFCore_setContrast)(JNIEnv * env, jobject thiz, jint contrast1)
 {
     orion_setContrast(env, thiz, contrast1);
 }
 
 /* Setting the watermark removal threshold */
 JNIEXPORT void
-JNICALL Java_com_artifex_mupdfdemo_MuPDFCore_setThreshold(JNIEnv * env, jobject thiz, jint threshold1)
+JNICALL JNI_FN(MuPDFCore_setThreshold)(JNIEnv * env, jobject thiz, jint threshold1)
 {
     threshold = threshold1;
 }
@@ -35,12 +28,12 @@ JNICALL Java_com_artifex_mupdfdemo_MuPDFCore_setThreshold(JNIEnv * env, jobject 
 #else
 
 JNIEXPORT void
-JNICALL Java_universe_constellation_orion_viewer_djvu_DjvuDocument_setContrast(JNIEnv *env, jobject thiz, jint contrast1) {
+JNICALL JNI_FN(DjvuDocument_setContrast)(JNIEnv *env, jobject thiz, jint contrast1) {
     orion_setContrast(env, thiz, contrast1);
 }
 
 JNIEXPORT void
-JNICALL Java_universe_constellation_orion_viewer_djvu_DjvuDocument_setThreshold(JNIEnv *env, jobject thiz, jint threshold1) {
+JNICALL JNI_FN(DjvuDocument_setThreshold)(JNIEnv *env, jobject thiz, jint threshold1) {
     threshold = (unsigned int) threshold1;
 }
 

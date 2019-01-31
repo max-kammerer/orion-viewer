@@ -1,3 +1,4 @@
 compilerOpts = -I../nativeLibs/djvuModule/jni/
 headers = djvu.h
-
+#staticLibraries = libdjvucore.a liboriondjvu.a
+#libraryPaths = ../nativeLibs/djvuModule/cmake/

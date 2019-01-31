@@ -15,7 +15,10 @@ LOCAL_C_INCLUDES := \
 	../djvu/libdjvu
 
 LOCAL_MODULE    := djvu
-LOCAL_SRC_FILES := djvu.c
+LOCAL_SRC_FILES := djvu.c \
+		   ../../common/orion_bitmap.c \
+		   ../../common/list.c
+
 
 LOCAL_STATIC_LIBRARIES := djvucore
 

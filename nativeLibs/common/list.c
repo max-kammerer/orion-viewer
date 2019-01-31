@@ -3,6 +3,7 @@ typedef struct Arraylist_Struct * Arraylist;
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "list.h"
 
 /*
   constants
@@ -10,17 +11,10 @@ typedef struct Arraylist_Struct * Arraylist;
 #define ARRAYLIST_INITIAL_CAPACITY 256
 #define ARRAYLIST_CAPACITY_DELTA 256
 
-#define Object char
-
 static const size_t object_size = sizeof(Object);
 /*
   structures
 */
-struct Arraylist_Struct {
-  int _current_capacity;
-  Object *_data;
-  int _size;
-};
 
 
 void arraylist_free(const Arraylist list)
