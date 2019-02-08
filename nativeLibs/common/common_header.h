@@ -35,6 +35,7 @@ typedef void*       JNIEnv;
 //}
 
 #define LOGI(...)
+#define LOGT(...)
 #define LOGE(...)
 
 
@@ -44,7 +45,7 @@ typedef void*       JNIEnv;
 #include <android/log.h>
 #include <android/bitmap.h>
 
-#ifndef ORION_PDF
+#ifdef ORION_PDF
 #define JNI_FN(A) Java_com_artifex_mupdfdemo_ ## A
 #define LOG_TAG "libmupdf"
 #else
@@ -54,6 +55,7 @@ typedef void*       JNIEnv;
 
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#define LOGT(...) __android_log_print(ANDROID_LOG_INFO,"alert",__VA_ARGS__)
 #endif
 
 #endif

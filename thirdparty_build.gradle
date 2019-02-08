@@ -81,20 +81,6 @@ task downloadAndMakeMupdf(dependsOn: downloadMupdf) << {
     }
 }
 
-task patchMupdf() << {
-    ant.copy(todir: mupdfAndroid + "/jni", overwrite: true, preservelastmodified: true) {
-        fileset(dir : 'orion-viewer/jni/mupdf')
-        fileset(dir : 'orion-viewer/jni/common')
-    }
-}
-
-task patchAndBuildMupdf(dependsOn: [patchMupdf]) << {
-    exec {
-        workingDir file(mupdfAndroid)
-        commandLine ndkDir + "/ndk-build"
-    }
-}
-
 task buildMupdf() << {
     exec {
         workingDir file(mupdfAndroid)
@@ -102,10 +88,8 @@ task buildMupdf() << {
     }
 }
 
-task mupdfChain(dependsOn: [downloadAndMakeMupdf, patchAndBuildMupdf])
+task mupdfChain(dependsOn: [downloadAndMakeMupdf, buildMupdf])
 
-patchMupdf.mustRunAfter downloadMupdf
-patchMupdf.mustRunAfter downloadAndMakeMupdf
 mupdfChain.mustRunAfter djvuChain
 
 

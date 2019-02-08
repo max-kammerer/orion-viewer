@@ -22,9 +22,11 @@ LOCAL_C_INCLUDES := \
     $(MUPDF_ROOT)/platform/java \
     ..
 
-LOCAL_CFLAGS := -DHAVE_ANDROID -DORION_PDF
+LOCAL_CFLAGS := -DHAVE_ANDROID -DORION_PDF -DORION_FOR_ANDROID
 LOCAL_MODULE    := mupdf
-LOCAL_SRC_FILES := mupdf.c
+LOCAL_SRC_FILES := mupdf.c  \
+                   ../../common/orion_bitmap.c \
+                   ../../common/list.c
 
 LOCAL_STATIC_LIBRARIES := mupdfcore mupdfthirdparty
 ifdef NDK_PROFILER

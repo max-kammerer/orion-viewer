@@ -1,8 +1,6 @@
-#include <jni.h>
+#include "../../common/common_header.h"
 #include <time.h>
 #include <pthread.h>
-#include <android/log.h>
-#include <android/bitmap.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,16 +12,9 @@
 
 #include "mupdf/fitz.h"
 #include "mupdf/pdf.h"
-#include "common/list.c"
-#include "common/orion_bitmap.c"
-
-#define JNI_FN(A) Java_com_artifex_mupdfdemo_ ## A
+#include "../../common/list.h"
+#include "../../common/orion_bitmap.h"
 #define PACKAGENAME "com/artifex/mupdfdemo"
-
-#define LOG_TAG "libmupdf"
-#define LOGI(...) __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-#define LOGT(...) __android_log_print(ANDROID_LOG_INFO,"alert",__VA_ARGS__)
-#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 
 /* Set to 1 to enable debug log traces. */
 #define DEBUG 0
