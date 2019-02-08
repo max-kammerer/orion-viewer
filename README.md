@@ -4,24 +4,22 @@ Orion Viewer is pdf, djvu, xps, cbz and tiff file viewer for Android
 devices based on
 [mupdf](http://mupdf.com/docs/how-to-build-mupdf-for-android) and
 [DjVuLibre](https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/)
-libraries 
+libraries
 
 To build Orion Viewer you will need:
 
- * android-sdk-r23+
- * gradle 3.3+
+ * android-sdk-r26+
+ * gradle 4.10.1+
+ * android-ndk-r16b
+ * make
+ * git
 
-To compile native libs you also need:
+ * downloaded Native Libs [mupdf, djvu]:
 
- * android-ndk-r15b
- * make, git 1.9+
+    ./gradlew -b  thirdparty_build.gradle downloadAndPatchDjvu downloadAndMakeMupdf
 
-Note: compiled native libs could be downloaded by 'thirdparty_download.gradle' script
+    They are defined in gradle scripts via 'externalNativeBuild' section
+    (for details see 'djvuModule/build.gradle' and 'mupdfModule/build.gradle').
+    Native libs are checkouted into 'nativeLibs/djvu' and 'nativeLibs/mupdf' folders.
 
-Thirdparty build scripted in [thirdparty_build.gradle](thirdparty_build.gradle) file
-(details in [orion-viewer/jni/README](orion-viewer/jni/README)).  It should be executed once to build native libs.
-
-Main project build logic scripted in build.gradle.
-
-Specify path to android-sdk, android-ndk and folder to checkout third-party libs in
-'local.properties' (use 'local.properties.sample' as example).
+ * specify path to android-sdk, android-ndk in 'local.properties' (use 'local.properties.sample' as example).
