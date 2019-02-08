@@ -43,3 +43,5 @@ fun memoryInMB(memoryInBytes: Long): String {
 }
 
 expect fun currentTimeMillis(): Long
+
+expect inline  fun <R> Any.mySynchronized(p: () -> R): R

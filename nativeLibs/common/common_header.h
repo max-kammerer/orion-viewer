@@ -34,10 +34,9 @@ typedef void*       JNIEnv;
 //    //TODO
 //}
 
-#define LOGI(...)
-#define LOGT(...)
-#define LOGE(...)
-
+#define LOGI(...) printf(__VA_ARGS__); printf("\n")
+#define LOGT(...) printf(__VA_ARGS__); printf("\n")
+#define LOGE(...) printf(__VA_ARGS__); printf("\n")
 
 #else
 #include <jni.h>

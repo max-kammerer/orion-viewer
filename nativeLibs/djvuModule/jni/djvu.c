@@ -92,12 +92,12 @@ JNI_FN(DjvuDocument_gotoPageInternal)(JNIEnv *env, jclass type, jlong docl, jint
     return jlong_cast(page);
 }
 
-JNIEXPORT void JNICALL
-JNI_FN(DjvuDocument_getPageInfo)(JNIEnv *env, jclass type, jlong docl, jint pageNum, jobject info) {
-
+JNIEXPORT jobject JNICALL
+JNI_FN(DjvuDocument_getPageInfo)(JNIEnv *env, jclass type, jlong docl, jint pageNum, PageInfo(info)) {
     clock_t start, end;
+    ddjvu_document_t *doc = (ddjvu_document_t *) docl;
+    LOGI("Obtaining page %i info in %p!", pageNum, doc);
     start = clock();
-
     /*
     ddjvu_page_t * mypage = ddjvu_page_create_by_pageno(doc, pageNum);
     int pageWidth =  ddjvu_page_get_width(mypage);
@@ -107,18 +107,21 @@ JNI_FN(DjvuDocument_getPageInfo)(JNIEnv *env, jclass type, jlong docl, jint page
     ddjvu_page_release(mypage);
     */
 
-    ddjvu_document_t *doc = (ddjvu_document_t *) docl;
     ddjvu_status_t r;
     ddjvu_pageinfo_t dinfo;
     while ((r = ddjvu_document_get_pageinfo(doc, pageNum, &dinfo)) < DDJVU_JOB_OK) {}
     //handle_ddjvu_messages(ctx, TRUE);
 
     if (r >= DDJVU_JOB_FAILED) {
-        LOGI("Page info get fail!");
+        LOGI("Page info get fail %i!", r);
         //signal_error();
-        return;
+        return NULL;
     }
 
+    end = clock();
+
+    LOGI("Page info get %lf s; page size = %ix%i", ((double) (end - start)) / CLOCKS_PER_SEC,
+         dinfo.width, dinfo.height);
 
 #ifdef ORION_FOR_ANDROID
     jclass cls = (*env)->GetObjectClass(env, info);
@@ -126,13 +129,10 @@ JNI_FN(DjvuDocument_getPageInfo)(JNIEnv *env, jclass type, jlong docl, jint page
     jfieldID height = (*env)->GetFieldID(env, cls, "height", "I");
     (*env)->SetIntField(env, info, width, dinfo.width);
     (*env)->SetIntField(env, info, height, dinfo.height);
+    return info;
+#else
+    return info(pageNum, dinfo.width, dinfo.height);
 #endif
-
-
-    end = clock();
-
-    LOGI("Page info get %lf s; page size = %ix%i", ((double) (end - start)) / CLOCKS_PER_SEC,
-         dinfo.width, dinfo.height);
 }
 
 JNIEXPORT jboolean JNICALL
@@ -679,10 +679,27 @@ JNI_FN(DjvuDocument_getPageText)(JNIEnv *env, jclass type, jlong docl, jint page
     ddjvu_pageinfo_t dinfo;
     ddjvu_status_t r;
     while ((r = ddjvu_document_get_pageinfo(doc, pageNumber, &dinfo)) < DDJVU_JOB_OK) {}
-    //handle_ddjvu_messages(ctx, TRUE);
+        //handle_ddjvu_messages(ctx, TRUE);
 
     return miniexp_get_text(env, pagetext, stringBuilder, positionList, &state, rectFClass, ctor,
                             addToList, dinfo.height);
 }
 
 #endif
+
+void handle_ddjvu_messages(ddjvu_context_t *ctx, int wait)
+{
+    const ddjvu_message_t *msg;
+    if (wait)
+        ddjvu_message_wait(ctx);
+    while ((msg = ddjvu_message_peek(ctx)))
+    {
+        switch(msg->m_any.tag)
+        {
+            case DDJVU_ERROR:      LOGE("info: %i", msg->m_any.tag) ; break;
+            case DDJVU_INFO:       LOGI("error: %i", msg->m_any.tag) ; break;
+            default: LOGI("default: %i", msg->m_any.tag); break;
+        }
+        ddjvu_message_pop(ctx);
+    }
+}

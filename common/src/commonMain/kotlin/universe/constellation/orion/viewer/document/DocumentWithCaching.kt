@@ -52,7 +52,7 @@ class DocumentWithCaching(val doc: Document) : Document by doc {
     }
 
     override fun getPageInfo(pageNum: Int, cropMode: Int): PageInfo {
-        return synchronized(doc) {
+        return doc.mySynchronized {
             var pageInfo = cache.get(pageNum)
             if (pageInfo == null) {
                 pageInfo = doc.getPageInfo(pageNum, cropMode)
