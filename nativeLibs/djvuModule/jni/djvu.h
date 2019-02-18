@@ -17,4 +17,4 @@ JNI_FN(DjvuDocument_openFile)(JNIEnv *env, jclass type, jstring jfileName, DocIn
 extern JNIEXPORT void JNICALL JNI_FN(DjvuDocument_destroying)(JNIEnv *env, jclass type, jlong doc, jlong context);
 
 extern JNIEXPORT jobject JNICALL
-JNI_FN(DjvuDocument_getPageInfo)(JNIEnv *env, jclass type, jlong docl, jint pageNum, PageInfo(info));
+JNI_FN(DjvuDocument_getPageInfo)(JNIEnv *env, jclass type, jlong contextPointer, jlong docl, jint pageNum, PageInfo(info));

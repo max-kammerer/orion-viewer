@@ -53,7 +53,7 @@ class DjvuDocument(fileName: String) : Document {
     override fun getPageInfo(pageNum: Int, cropMode: Int) =
             PageInfo(pageNum).also {
                 timing("Page $pageNum info calculation") {
-                    getPageInfo(docPointer, pageNum, it)
+                    getPageInfo(contextPointer, docPointer, pageNum, it)
                 }
             }
 
@@ -173,7 +173,7 @@ class DjvuDocument(fileName: String) : Document {
         external fun gotoPageInternal(doc: Long, pageNum: Int): Long
 
         @JvmStatic
-        external fun getPageInfo(doc: Long, pageNum: Int, info: PageInfo): Int
+        external fun getPageInfo(context: Long, doc: Long, pageNum: Int, info: PageInfo): Int
 
         @JvmStatic
         external fun drawPage(doc: Long, page: Long, bitmap: Bitmap, zoom: Float, pageW: Int, pageH: Int,

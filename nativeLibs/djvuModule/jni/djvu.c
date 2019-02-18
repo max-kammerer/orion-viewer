@@ -13,22 +13,39 @@
 #include "../../common/orion_bitmap.h"
 #include "base_geometry.c"
 #include "djvu.h"
-
 extern void orion_updateContrast(unsigned char *, int);
-
-/* Globals */
-//ddjvu_context_t *context = NULL;
-//ddjvu_document_t *doc = NULL;
-//ddjvu_page_t *page = NULL;
 
 static inline jlong jlong_cast(void *p) {
     return (jlong) (intptr_t) p;
 }
 
+void handle_ddjvu_messages(ddjvu_context_t *ctx, int wait)
+{
+    const ddjvu_message_t *msg;
+    if (wait)
+        ddjvu_message_wait(ctx);
+    while ((msg = ddjvu_message_peek(ctx)))
+    {
+        switch(msg->m_any.tag) {
+            case DDJVU_ERROR:
+                LOGE("error: %s", msg->m_info.message);
+                break;
+            case DDJVU_INFO:
+                LOGI("info: %s", msg->m_error.message);
+                break;
+            default:
+                LOGI("default: %i", msg->m_any.tag);
+                break;
+        }
+        ddjvu_message_pop(ctx);
+    }
+}
+
 
 JNIEXPORT jlong JNICALL JNI_FN(DjvuDocument_initContext)(JNIEnv *env, jclass type) {
-    LOGI("Creating context");
-    return jlong_cast(ddjvu_context_create("orion"));
+    ddjvu_context_t *p = ddjvu_context_create("orion");
+    LOGI("Creating context %p", p);
+    return jlong_cast(p);
 }
 
 JNIEXPORT jlong JNICALL
@@ -93,9 +110,10 @@ JNI_FN(DjvuDocument_gotoPageInternal)(JNIEnv *env, jclass type, jlong docl, jint
 }
 
 JNIEXPORT jobject JNICALL
-JNI_FN(DjvuDocument_getPageInfo)(JNIEnv *env, jclass type, jlong docl, jint pageNum, PageInfo(info)) {
+JNI_FN(DjvuDocument_getPageInfo)(JNIEnv *env, jclass type, jlong contextPointer, jlong docl, jint pageNum, PageInfo(info)) {
     clock_t start, end;
     ddjvu_document_t *doc = (ddjvu_document_t *) docl;
+    ddjvu_context_t *context = (ddjvu_context_t *) contextPointer;
     LOGI("Obtaining page %i info in %p!", pageNum, doc);
     start = clock();
     /*
@@ -110,10 +128,10 @@ JNI_FN(DjvuDocument_getPageInfo)(JNIEnv *env, jclass type, jlong docl, jint page
     ddjvu_status_t r;
     ddjvu_pageinfo_t dinfo;
     while ((r = ddjvu_document_get_pageinfo(doc, pageNum, &dinfo)) < DDJVU_JOB_OK) {}
-    //handle_ddjvu_messages(ctx, TRUE);
+        handle_ddjvu_messages(context, TRUE);
 
     if (r >= DDJVU_JOB_FAILED) {
-        LOGI("Page info get fail %i!", r);
+        LOGI("'getPageInfo' operation failed: %i!", r);
         //signal_error();
         return NULL;
     }
@@ -686,20 +704,3 @@ JNI_FN(DjvuDocument_getPageText)(JNIEnv *env, jclass type, jlong docl, jint page
 }
 
 #endif
-
-void handle_ddjvu_messages(ddjvu_context_t *ctx, int wait)
-{
-    const ddjvu_message_t *msg;
-    if (wait)
-        ddjvu_message_wait(ctx);
-    while ((msg = ddjvu_message_peek(ctx)))
-    {
-        switch(msg->m_any.tag)
-        {
-            case DDJVU_ERROR:      LOGE("info: %i", msg->m_any.tag) ; break;
-            case DDJVU_INFO:       LOGI("error: %i", msg->m_any.tag) ; break;
-            default: LOGI("default: %i", msg->m_any.tag); break;
-        }
-        ddjvu_message_pop(ctx);
-    }
-}

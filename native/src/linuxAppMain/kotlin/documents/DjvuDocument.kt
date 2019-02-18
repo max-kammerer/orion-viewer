@@ -47,7 +47,7 @@ class DjvuDocument(private val fileName: String) : Document {
     override fun getPageInfo(pageNum: Int, cropMode: Int): PageInfo {
 //        djvu_DjvuDocument_openFile()
 
-        val result = djvu_DjvuDocument_getPageInfo(null, null, bookRef, pageNum, staticCFunction { pN: Int, w: Int, h: Int ->
+        val result = djvu_DjvuDocument_getPageInfo(null, null, contextRef, bookRef, pageNum, staticCFunction { pN: Int, w: Int, h: Int ->
             val asCPointer: COpaquePointer? = StableRef.create(PageInfo(pN, w, h, null)).asCPointer()
             asCPointer
 
