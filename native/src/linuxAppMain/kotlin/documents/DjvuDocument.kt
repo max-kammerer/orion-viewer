@@ -1,21 +1,21 @@
 package documents
 
-import djvu.djvu_DjvuDocument_destroying
-import djvu.djvu_DjvuDocument_getPageInfo
-import djvu.djvu_DjvuDocument_initContext
-import djvu.djvu_DjvuDocument_openFile
+import djvu.*
 import kotlinx.cinterop.*
 import universe.constellation.orion.viewer.Bitmap
 import universe.constellation.orion.viewer.PageInfo
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.geometry.RectF
+import universe.constellation.orion.viewer.timing
 
 class DjvuDocument(private val fileName: String) : Document {
 
     override val pageCount: Int
-    private var bookRef: Long = 0
+    private var docPointer: Long = 0
     private var contextRef: Long = 0
+    private var lastPagePointer: Long = 0
+    private var lastPage = -1
 
     init {
         contextRef = djvu_DjvuDocument_initContext(null, null)
@@ -23,9 +23,9 @@ class DjvuDocument(private val fileName: String) : Document {
 
         pageCount = memScoped {
             val pageCount1 = this.alloc<LongVar>()
-            bookRef = djvu_DjvuDocument_openFile(null, null, fileName.cstr.getPointer(this), pageCount1.ptr, contextRef)
+            docPointer = djvu_DjvuDocument_openFile(null, null, fileName.cstr.getPointer(this), pageCount1.ptr, contextRef)
             println(
-                "Book: $bookRef size: ${pageCount1.value}"
+                "Book: $docPointer size: ${pageCount1.value}"
             )
             pageCount1.value.toInt()
         }
@@ -45,26 +45,66 @@ class DjvuDocument(private val fileName: String) : Document {
         get() = emptyArray()
 
     override fun getPageInfo(pageNum: Int, cropMode: Int): PageInfo {
-//        djvu_DjvuDocument_openFile()
-
-        val result = djvu_DjvuDocument_getPageInfo(null, null, contextRef, bookRef, pageNum, staticCFunction { pN: Int, w: Int, h: Int ->
+        val result = djvu_DjvuDocument_getPageInfo(null, null, contextRef, docPointer, pageNum, staticCFunction { pN: Int, w: Int, h: Int ->
             val asCPointer: COpaquePointer? = StableRef.create(PageInfo(pN, w, h, null)).asCPointer()
             asCPointer
 
-        } )
+        })
 
-        println(result)
         val asStableRef = result?.asStableRef<PageInfo>()
-        println("foo")
         val res = asStableRef?.get() ?: PageInfo(0, 0, 0, null)
-        println("dispose")
         asStableRef?.dispose()
 
         return res
     }
 
+
+    private fun gotoPage(page: Int): Long {
+        if (lastPage != page) {
+            timing("Changing page...") {
+                releasePage()
+                lastPagePointer = djvu_DjvuDocument_gotoPageInternal(
+                    null, null, docPointer,
+                    when {
+                        page > pageCount - 1 -> pageCount - 1
+                        page < 0 -> 0
+                        else -> page
+                    }
+                )
+                lastPage = page
+            }
+        }
+        return lastPagePointer
+    }
+
+    private fun releasePage() {
+        djvu_DjvuDocument_releasePage(null, null, lastPagePointer)
+        lastPagePointer = 0
+    }
+
+
     override fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val pagePointer = gotoPage(pageNumber)
+
+        timing("Page $pageNumber rendering") {
+            djvu_DjvuDocument_drawPage(
+                null,
+                null,
+                docPointer,
+                pagePointer,
+                bitmap.pixels.addressOf(0),
+                zoom.toFloat(),
+                right - left,
+                bottom - top,
+                left,
+                top,
+                right - left,
+                bottom - top
+            )
+
+        }
+
+        println("Total!:" + bitmap.pixels.get().sum());
     }
 
     override fun getText(pageNumber: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): String? {
@@ -72,7 +112,8 @@ class DjvuDocument(private val fileName: String) : Document {
     }
 
     override fun destroy() {
-        djvu_DjvuDocument_destroying(null, null, bookRef, contextRef)
+        releasePage()
+        djvu_DjvuDocument_destroying(null, null, docPointer, contextRef)
     }
 
     override fun searchPage(pageNumber: Int, text: String): Array<RectF>? {

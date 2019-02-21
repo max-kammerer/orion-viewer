@@ -28,13 +28,13 @@ void handle_ddjvu_messages(ddjvu_context_t *ctx, int wait)
     {
         switch(msg->m_any.tag) {
             case DDJVU_ERROR:
-                LOGE("error: %s", msg->m_info.message);
+                LOGE("handle_ddjvu_messages[error]: %s", msg->m_info.message);
                 break;
             case DDJVU_INFO:
-                LOGI("info: %s", msg->m_error.message);
+                LOGI("handle_ddjvu_messages[info]: %s", msg->m_error.message);
                 break;
             default:
-                LOGI("default: %i", msg->m_any.tag);
+                LOGI("handle_ddjvu_messages[default]: %i", msg->m_any.tag);
                 break;
         }
         ddjvu_message_pop(ctx);
@@ -97,8 +97,8 @@ JNI_FN(DjvuDocument_openFile)(JNIEnv *env, jclass type, jstring jfileName, DocIn
 
 
 JNIEXPORT jlong JNICALL
-JNI_FN(DjvuDocument_gotoPageInternal)(JNIEnv *env, jclass type, jlong docl, jint pageNum) {
-    ddjvu_document_t *doc = (ddjvu_document_t *) docl;
+JNI_FN(DjvuDocument_gotoPageInternal)(JNIEnv *env, jclass type, jlong docPointer, jint pageNum) {
+    ddjvu_document_t *doc = (ddjvu_document_t *) docPointer;
     LOGI("Opening page: %d", pageNum);
     ddjvu_page_t *page = ddjvu_page_create_by_pageno(doc, pageNum);
 
@@ -154,7 +154,7 @@ JNI_FN(DjvuDocument_getPageInfo)(JNIEnv *env, jclass type, jlong contextPointer,
 }
 
 JNIEXPORT jboolean JNICALL
-JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong docl, jlong pagel, jobject bitmap,
+JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong docl, jlong pagel, BITMAP bitmap,
                  jfloat zoom, jint pageW, jint pageH, jint patchX, jint patchY, jint patchW,
                  jint patchH) {
     ddjvu_document_t *doc = (ddjvu_document_t *) docl;
@@ -189,6 +189,8 @@ JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong docl, jlong pagel,
         LOGE("AndroidBitmap_lockPixels() failed ! error=%d", ret);
         return 0;
     }
+#else
+    pixels = bitmap;
 #endif
 
 

@@ -3,6 +3,7 @@
 
 #ifndef ORION_FOR_ANDROID
 #include <stdint.h>
+#include <stdio.h>
 
 #define JNIIMPORT
 #define JNIEXPORT  __attribute__ ((visibility ("default")))
@@ -34,9 +35,11 @@ typedef void*       JNIEnv;
 //    //TODO
 //}
 
-#define LOGI(...) printf(__VA_ARGS__); printf("\n")
-#define LOGT(...) printf(__VA_ARGS__); printf("\n")
-#define LOGE(...) printf(__VA_ARGS__); printf("\n")
+#define BITMAP int *
+
+#define LOGI(...) printf(__VA_ARGS__); printf("\n"); fflush(stdout)
+#define LOGT(...) printf(__VA_ARGS__); printf("\n"); fflush(stdout)
+#define LOGE(...) printf(__VA_ARGS__); printf("\n"); fflush(stdout)
 
 #else
 #include <jni.h>
@@ -52,6 +55,7 @@ typedef void*       JNIEnv;
 #define LOG_TAG "djvulib"
 #endif
 
+#define BITMAP jobject
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 #define LOGT(...) __android_log_print(ANDROID_LOG_INFO,"alert",__VA_ARGS__)
