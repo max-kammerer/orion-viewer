@@ -22,14 +22,17 @@ plugins {
 kotlin {
     targets {
         fromPreset(presets.linuxX64, 'linuxApp') {
-            compilations.main.outputKinds 'executable'
+            binaries {
+                executable {
+                    linkerOpts "../nativeLibs/djvuModule/cmake/libdjvucore.a",
+                            "../nativeLibs/djvuModule/cmake/liboriondjvu.a"
+                }
+            }
             //entryPoint 'main'
             compilations.main.cinterops {
                 djvu {
                 }
             }
-            compilations.main.linkerOpts "../nativeLibs/djvuModule/cmake/libdjvucore.a",
-                    "../nativeLibs/djvuModule/cmake/liboriondjvu.a"
         }
     }
 
