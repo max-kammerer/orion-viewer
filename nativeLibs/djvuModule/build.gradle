@@ -11,7 +11,7 @@ android {
 
         externalNativeBuild {
             ndkBuild {
-                abiFilters 'armeabi', 'armeabi-v7a', 'x86', 'mips'
+                abiFilters 'armeabi-v7a', 'x86'/*, 'armeabi', 'mips'*/
                 cppFlags "-fexceptions", "-frtti"
                 arguments "APP_STL:=c++_static"
             }
