@@ -27,6 +27,6 @@ To build Orion Viewer you will need:
  * By default sources for native libs are excluded from build because otherwise IDE becomes too slow,
  so you need to prebuild them once:
 
-   run ``~/Android/Sdk/ndk-bundle/build/ndk-build` command within `nativeLibs/djvuModule' and `nativeLibs/mupdfModule'
+   run `~/Android/Sdk/ndk-bundle/build/ndk-build` command within `nativeLibs/djvuModule' and `nativeLibs/mupdfModule'
 
    To include native sources specify `orion.include_native_libs_source=true` in `local.properties` file.
