@@ -33,7 +33,7 @@ interface TestUtil {
             throw RuntimeException("Couldn't create new file " + outFile.absolutePath, e)
         }
 
-        val input = getOrionTestContext().assets!!.open(getFileUnderTestData(fileName))
+        val input = this.javaClass.classLoader.getResourceAsStream(getFileUnderTestData(fileName))
         val bufferedOutputStream = FileOutputStream(outFile).buffered()
         input.buffered().copyTo(bufferedOutputStream)
         bufferedOutputStream.close()

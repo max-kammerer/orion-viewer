@@ -2,27 +2,32 @@ package universe.constellation.orion.viewer.test.framework
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import android.test.ActivityInstrumentationTestCase2
+import androidx.test.rule.GrantPermissionRule
+import org.junit.Rule
 import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.OrionViewerActivity
+import androidx.test.rule.ActivityTestRule
 
-/**
- * User: mike
- * Date: 21.10.13
- * Time: 19:50
- */
 
-open class InstrumentationTestCase : ActivityInstrumentationTestCase2<OrionViewerActivity>(OrionViewerActivity::class.java), TestUtil {
+abstract class InstrumentationTestCase : TestUtil {
 
-    override fun getOrionTestContext(): Context = instrumentation!!.context!!
+    @Rule
+    @JvmField
+    val mRuntimePermissionRule: GrantPermissionRule = GrantPermissionRule.grant(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE)
 
-    fun getController() : Controller = activity.controller!!
+    @Rule
+    @JvmField
+    var mActivityRule: ActivityTestRule<OrionViewerActivity> = ActivityTestRule(OrionViewerActivity::class.java, true, false)
 
-    fun startActivityWithBook(book: String) {
-        val file = extractFileFromTestData(book)
-        val intent = Intent()
-        intent.data = Uri.fromFile(file)
-        setActivityIntent(intent)
+    val activity: OrionViewerActivity
+        get() = mActivityRule.activity
+
+    override fun getOrionTestContext(): Context = mActivityRule.activity.orionContext
+
+    fun getController() : Controller = mActivityRule.activity.controller!!
+
+    fun startActivityWithBook(intent: Intent) {
+        mActivityRule.launchActivity(intent)
+        activity.orionContext.isTesting = true
     }
 }

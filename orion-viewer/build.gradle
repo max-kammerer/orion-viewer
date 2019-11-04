@@ -18,6 +18,11 @@ dependencies {
     implementation project(":nativeLibs:djvuModule")
     implementation project(":nativeLibs:mupdfModule")
 
+    androidTestImplementation 'androidx.test:core:1.2.0'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+
+
     //MPP test workaround
     implementation project(":common")
 }
@@ -36,7 +41,7 @@ android {
 
         applicationId "universe.constellation.orion.viewer"
         testApplicationId "universe.constellation.orion.viewer.test"
-        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         archivesBaseName = "orion-viewer-$versionName"
     }
 
@@ -52,6 +57,7 @@ android {
         //test
         androidTest {
             java.srcDirs += 'src/androidTest/kotlin'
+            resources.srcDirs += 'src/androidTest/assets'
         }
     }
 

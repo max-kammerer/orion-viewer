@@ -1,22 +1,23 @@
 package universe.constellation.orion.viewer.test
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Point
 import junit.framework.Assert
+import org.junit.Before
+import org.junit.Test
 import universe.constellation.orion.viewer.*
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.LayoutStrategy
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
 import universe.constellation.orion.viewer.prefs.initalizer
-import universe.constellation.orion.viewer.test.framework.ActivityBaseTest
+import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
 import universe.constellation.orion.viewer.test.framework.SingleThreadRenderer
 import universe.constellation.orion.viewer.test.framework.TestUtil
 import universe.constellation.orion.viewer.view.Scene
 import java.util.*
 import java.util.concurrent.CountDownLatch
 
-class RenderingAndNavigationTest : ActivityBaseTest() {
+class RenderingAndNavigationTest : InstrumentationTestCase() {
 
     class MyView(private val imageView: OrionImageListener) : Scene, OrionBookListener {
 
@@ -36,15 +37,18 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
 
     private lateinit var view: MyView
 
-    override fun setUp() {
-        super.setUp()
+    @Before
+    fun setUp() {
+        mActivityRule.launchActivity(null)
         view = MyView(activity.view)
     }
 
+    @Test
     fun testProperPagesSkip() {
         doTestProperPages(TestUtil.SICP)
     }
 
+    @Test
     fun testProperPagesAlice() {
         doTestProperPages(TestUtil.ALICE)
     }
@@ -103,10 +107,5 @@ class RenderingAndNavigationTest : ActivityBaseTest() {
         //getSubscriptionManager()?.sendDocOpenedNotification(controller)
         activity.view.setDimensionAware(controller)
         return controller
-    }
-
-
-    override fun getOrionTestContext(): Context {
-        return instrumentation!!.context!!
     }
 }

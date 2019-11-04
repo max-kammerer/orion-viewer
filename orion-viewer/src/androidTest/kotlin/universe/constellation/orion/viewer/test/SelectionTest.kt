@@ -1,12 +1,14 @@
 package universe.constellation.orion.viewer.test
 
 import junit.framework.Assert
+import org.junit.Test
 import universe.constellation.orion.viewer.selection.SelectionAutomata
 import universe.constellation.orion.viewer.test.framework.BaseTest
 import universe.constellation.orion.viewer.test.framework.TestUtil
 
 class SelectionTest : BaseTest() {
 
+    @Test
     fun testSicp() {
         val book = openTestBook(TestUtil.SICP)
         val text = book.getText(11/*zero based*/, 242, 172, 140, 8, false)
@@ -14,6 +16,7 @@ class SelectionTest : BaseTest() {
         Assert.assertEquals("These programs", text)
     }
 
+    @Test
     fun testSicpSingleWord() {
         val book = openTestBook(TestUtil.SICP)
         val selectionRect = SelectionAutomata.getSelectionRectangle(250, 176, 0, 0, true)
@@ -22,6 +25,7 @@ class SelectionTest : BaseTest() {
         Assert.assertEquals("These", text)
     }
 
+    @Test
     fun testAlice() {
         val book = openTestBook(TestUtil.ALICE)
         val text = book.getText(5/*zero based*/, 1288, 517, 115, 50, false)
@@ -29,6 +33,7 @@ class SelectionTest : BaseTest() {
         Assert.assertEquals("tunnel ", text)
     }
 
+    @Test
     fun testAliceSingleWord() {
         val book = openTestBook(TestUtil.ALICE)
         val selectionRect = SelectionAutomata.getSelectionRectangle(518, 556, 0, 0, true)
