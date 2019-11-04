@@ -11,9 +11,11 @@ local.properties
 
 nativeLibs/djvu/
 nativeLibs/djvuModule/.externalNativeBuild
+nativeLibs/djvuModule/.cxx
 nativeLibs/mupdf/
 nativeLibs/mupdf-android-viewer-old/
 nativeLibs/mupdfModule/.externalNativeBuild
+nativeLibs/mupdfModule/.cxx
 android_gradle_build.json
 # built native files
 *.o

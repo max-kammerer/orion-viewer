@@ -8,20 +8,22 @@ android {
     defaultConfig {
 
         minSdkVersion orionMinSdk
-
-        externalNativeBuild {
-            ndkBuild {
-                abiFilters 'armeabi-v7a', 'x86'/*, 'armeabi', 'mips'*/
-                cFlags "-DTOFU_NOTO", "-DTOFU_CJK", "-DTOFU_SIL"
+        if (includeNativeLibsSources) {
+            externalNativeBuild {
+                ndkBuild {
+                    abiFilters 'armeabi-v7a', 'x86'/*, 'armeabi', 'mips'*/
+                    cFlags "-DTOFU_NOTO", "-DTOFU_CJK", "-DTOFU_SIL"
+                }
             }
         }
     }
 
-    externalNativeBuild {
+    if (includeNativeLibsSources) {
+        externalNativeBuild {
 
-        ndkBuild {
-            path "jni/Android.mk"
+            ndkBuild {
+                path "jni/Android.mk"
+            }
         }
     }
-
 }

@@ -8,20 +8,22 @@ android {
     defaultConfig {
 
         minSdkVersion orionMinSdk
-
-        externalNativeBuild {
-            ndkBuild {
-                abiFilters 'armeabi-v7a', 'x86'/*, 'armeabi', 'mips'*/
-                cppFlags "-fexceptions", "-frtti"
-                arguments "APP_STL:=c++_static"
+        if (includeNativeLibsSources) {
+            externalNativeBuild {
+                ndkBuild {
+                    abiFilters 'armeabi-v7a', 'x86'/*, 'armeabi', 'mips'*/
+                    cppFlags "-fexceptions", "-frtti"
+                    arguments "APP_STL:=c++_static"
+                }
             }
         }
     }
 
-    externalNativeBuild {
-
-        ndkBuild {
-            path "jni/Android.mk"
+    if (includeNativeLibsSources) {
+        externalNativeBuild {
+            ndkBuild {
+                path "jni/Android.mk"
+            }
         }
     }
 
