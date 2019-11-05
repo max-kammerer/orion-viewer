@@ -7,30 +7,36 @@ buildscript {
 }
 
 /*DJVU CHAIN*/
-task downloadDjvu << {
-    exec {
-        commandLine = ['git', 'clone', 'git://git.code.sf.net/p/djvu/djvulibre-git', djvu]
-    }
+task downloadDjvu {
+    doLast {
+        exec {
+            commandLine = ['git', 'clone', 'git://git.code.sf.net/p/djvu/djvulibre-git', djvu]
+        }
 
-    exec {
-        workingDir file(djvu)
-        commandLine = ['git', 'checkout', 'release.3.5.27']
+        exec {
+            workingDir file(djvu)
+            commandLine = ['git', 'checkout', 'release.3.5.27']
+        }
     }
 }
 
-task patchDjvu << {
-    exec {
-        workingDir file(djvu)
-        commandLine = ['git', 'apply', '../../djvu.patch']
+task patchDjvu  {
+    doLast {
+        exec {
+            workingDir file(djvu)
+            commandLine = ['git', 'apply', '../../djvu.patch']
+        }
     }
 }
 
 task downloadAndPatchDjvu(dependsOn: [downloadDjvu, patchDjvu])
 
-task buildDjvu() << {
-    exec {
-        workingDir file("orion-viewer/jni/djvu/")
-        commandLine ndkDir + "/ndk-build"
+task buildDjvu() {
+    doLast {
+        exec {
+            workingDir file(djvuModule)
+            commandLine ndkDir + "/ndk-build"
+        }
     }
 }
 
@@ -41,50 +47,56 @@ buildDjvu.mustRunAfter patchDjvu
 
 
 /*MUPDF CHAIN*/
-task downloadMupdf << {
+task downloadMupdf {
     def version = "1.11"
 
-    exec {
-        commandLine = ['git', 'clone', 'git://git.ghostscript.com/mupdf.git', mupdf]
-    }
+    doLast {
+        exec {
+            commandLine = ['git', 'clone', 'git://git.ghostscript.com/mupdf.git', mupdf]
+        }
 
-    exec {
-        workingDir file(mupdf)
-        commandLine = ['git', 'checkout', version]
-    }
+        exec {
+            workingDir file(mupdf)
+            commandLine = ['git', 'checkout', version]
+        }
 
-    exec {
-        workingDir file(mupdf)
-        commandLine 'git', 'submodule', 'init'
-    }
-    exec {
-        workingDir file(mupdf)
-        commandLine 'git', 'submodule', 'update'
-    }
+        exec {
+            workingDir file(mupdf)
+            commandLine 'git', 'submodule', 'init'
+        }
+        exec {
+            workingDir file(mupdf)
+            commandLine 'git', 'submodule', 'update'
+        }
 
-    exec {
-        commandLine = ['git', 'clone', 'git://git.ghostscript.com/mupdf-android-viewer-old.git', mupdfAndroid]
-    }
+        exec {
+            commandLine = ['git', 'clone', 'git://git.ghostscript.com/mupdf-android-viewer-old.git', mupdfAndroid]
+        }
 
-    exec {
-        workingDir file(mupdfAndroid)
-        commandLine = ['git', 'checkout', version]
+        exec {
+            workingDir file(mupdfAndroid)
+            commandLine = ['git', 'checkout', version]
+        }
     }
 }
 
-task downloadAndMakeMupdf(dependsOn: downloadMupdf) << {
-    /*For more details see mupdf/platform/android/viewer/ReadMe.txt*/
-    exec {
-        workingDir file(mupdf)
-        commandLine 'make'
-        ignoreExitValue true
+task downloadAndMakeMupdf(dependsOn: downloadMupdf)  {
+    doLast {
+        /*For more details see mupdf/platform/android/viewer/ReadMe.txt*/
+        exec {
+            workingDir file(mupdf)
+            commandLine 'make'
+            ignoreExitValue true
+        }
     }
 }
 
-task buildMupdf() << {
-    exec {
-        workingDir file(mupdfAndroid)
-        commandLine ndkDir + "/ndk-build"
+task buildMupdf() {
+    doLast {
+        exec {
+            workingDir file(mupdfModule)
+            commandLine ndkDir + "/ndk-build"
+        }
     }
 }
 

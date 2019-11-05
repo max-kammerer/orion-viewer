@@ -5,8 +5,14 @@ ext {
     thirparty_folder = "nativeLibs"
 
     thirparty_build_root = rootDir.canonicalPath + "/" + thirparty_folder
-    mupdf_libs = thirparty_build_root + "/mupdfModule/libs"
-    djvu_libs = thirparty_build_root + "/djvuModule/libs"
+    mupdf = thirparty_build_root + "/mupdf/"
+    mupdfModule = thirparty_build_root + "/mupdfModule/"
+    mupdf_libs = mupdfModule + "/libs"
+    mupdfAndroid = thirparty_build_root + "/mupdf-android-viewer-old/"
+
+    djvu = thirparty_build_root + "/djvu/"
+    djvuModule = thirparty_build_root + "/djvuModule/"
+    djvu_libs = djvuModule +  "/libs"
 
     includeNativeLibsSources = (project.findProperty('orion.include_native_libs_source')
             ?: properties.getProperty('orion.include_native_libs_source'))
