@@ -14,7 +14,7 @@ ext {
     djvuModule = thirparty_build_root + "/djvuModule/"
     djvu_libs = djvuModule +  "/libs"
 
-    includeNativeLibsSources = (project.findProperty('orion.include_native_libs_source')
-            ?: properties.getProperty('orion.include_native_libs_source'))
+    excludeNativeLibsSources = (project.findProperty('orion.exclude_native_libs_source')
+            ?: properties.getProperty('orion.exclude_native_libs_source'))
             ?.toBoolean() ?: false
 }
