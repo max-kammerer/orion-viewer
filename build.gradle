@@ -1,14 +1,14 @@
 apply from: 'project.gradle'
 
 buildscript {
-    ext.kotlin_version = '1.3.50'
+    ext.kotlin_version = '1.3.71'
     repositories {
         mavenCentral()
         jcenter()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.1'
+        classpath 'com.android.tools.build:gradle:3.6.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -23,8 +23,9 @@ allprojects {
 }
 
 project.ext {
-    orionMinSdk = 14
-    orionTargetSdk = 26
-    orionCompileSdk = 27
+    orionMinSdk = 16
+    orionTargetSdk = 28
+    orionCompileSdk = 28
     orionBuildToolsVersion = "28.0.3"
+    orionNdkVersion = "20.1.5948944"
 }
