@@ -17,6 +17,7 @@ LOCAL_ARM_MODE := arm
 LOCAL_C_INCLUDES := \
 	jni/andprof \
 	$(MUPDF_ROOT)/include \
+	$(MUPDF_ROOT)/source \
 	$(MUPDF_ROOT)/source/fitz \
 	$(MUPDF_ROOT)/source/pdf \
     $(MUPDF_ROOT)/platform/java \
