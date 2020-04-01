@@ -264,12 +264,13 @@ add_library( mupdf_java
             SHARED
 ../../common/orion_bitmap.c
 ../../common/list.c
-${MUPDF_PATH}/platform/java/mupdf_native.c
+mupdf_native.c
 )
 
 
 include_directories(
 ${MUPDF_PATH}/include
+${MUPDF_PATH}/platform/java/
 )
 
 target_compile_definitions(mupdf_java PRIVATE -DHAVE_ANDROID -DORION_PDF -DORION_FOR_ANDROID)

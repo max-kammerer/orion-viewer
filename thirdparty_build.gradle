@@ -48,7 +48,7 @@ buildDjvu.mustRunAfter patchDjvu
 
 /*MUPDF CHAIN*/
 task downloadMupdf {
-    def version = "1.11"
+    def version = "1.16.1"
 
     doLast {
         exec {
@@ -67,15 +67,6 @@ task downloadMupdf {
         exec {
             workingDir file(mupdf)
             commandLine 'git', 'submodule', 'update'
-        }
-
-        exec {
-            commandLine = ['git', 'clone', 'git://git.ghostscript.com/mupdf-android-viewer-old.git', mupdfAndroid]
-        }
-
-        exec {
-            workingDir file(mupdfAndroid)
-            commandLine = ['git', 'checkout', version]
         }
     }
 }

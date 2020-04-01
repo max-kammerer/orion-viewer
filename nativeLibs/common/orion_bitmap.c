@@ -10,20 +10,39 @@ unsigned int contrast = 100;
 unsigned int threshold = 255;
 
 void orion_setContrast(JNIEnv *env, jobject thiz, jint contrast1);
+void orion_updateContrast(unsigned char *data, int size);
 
 #ifdef ORION_PDF
 JNIEXPORT void
-JNICALL JNI_FN(MuPDFCore_setContrast)(JNIEnv * env, jobject thiz, jint contrast1)
+JNICALL JNI_FN(PdfDocument_setContrast)(JNIEnv * env, jobject thiz, jint contrast1)
 {
     orion_setContrast(env, thiz, contrast1);
 }
 
 /* Setting the watermark removal threshold */
 JNIEXPORT void
-JNICALL JNI_FN(MuPDFCore_setThreshold)(JNIEnv * env, jobject thiz, jint threshold1)
+JNICALL JNI_FN(PdfDocument_setThreshold)(JNIEnv * env, jobject thiz, jint threshold1)
 {
     threshold = threshold1;
 }
+
+JNIEXPORT void
+JNICALL JNI_FN(PdfDocument_updateContrast)(JNIEnv *env, jobject thiz, jobject jbitmap, jint size) {
+    void *pixels;
+    int ret;
+
+    ret = AndroidBitmap_lockPixels(env, jbitmap, (void **)&pixels);
+    if (ret != ANDROID_BITMAP_RESULT_SUCCESS) {
+        //TODO: log
+        return;
+    }
+    orion_updateContrast((unsigned char *) pixels, (unsigned int)size);
+
+    if (AndroidBitmap_unlockPixels(env, jbitmap) != ANDROID_BITMAP_RESULT_SUCCESS) {
+        //log
+    }
+}
+
 
 #else
 

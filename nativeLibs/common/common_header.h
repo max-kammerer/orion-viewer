@@ -45,7 +45,7 @@ typedef void*       JNIEnv;
 #include <android/bitmap.h>
 
 #ifdef ORION_PDF
-#define JNI_FN(A) Java_com_artifex_mupdfdemo_ ## A
+#define JNI_FN(A) Java_universe_constellation_orion_viewer_pdf_ ## A
 #define LOG_TAG "libmupdf"
 #else
 #define JNI_FN(A) Java_universe_constellation_orion_viewer_djvu_ ## A
