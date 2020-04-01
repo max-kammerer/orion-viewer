@@ -49,7 +49,7 @@ android {
         main {
             assets.srcDirs = ['assets']
             //java.srcDirs += '../common/src/main/kotlin'
-            if (!includeNativeLibsSources) {
+            if (excludeNativeLibsSources) {
                 jniLibs.srcDirs = [mupdf_libs, djvu_libs]
             }
             java.srcDirs += "../nativeLibs/mupdf/platform/java/src"

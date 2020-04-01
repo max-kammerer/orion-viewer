@@ -8,7 +8,7 @@ android {
     defaultConfig {
 
         minSdkVersion orionMinSdk
-        if (includeNativeLibsSources) {
+        if (!excludeNativeLibsSources) {
             externalNativeBuild {
                 ndkBuild {
                     abiFilters 'armeabi-v7a', 'x86'/*, 'armeabi', 'mips'*/
@@ -19,7 +19,7 @@ android {
         }
     }
 
-    if (includeNativeLibsSources) {
+    if (!excludeNativeLibsSources) {
         externalNativeBuild {
             ndkBuild {
                 path "jni/Android.mk"

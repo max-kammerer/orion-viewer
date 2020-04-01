@@ -2,5 +2,5 @@
 sdk.dir=/path/to/android/sdk/android-sdk-linux
 ndk.dir=/home/mike/devel/tools/android-ndk/android-ndk-r9d/
 
-#To include native source to IDE project
-#orion.include_native_libs_source=true
+#To exclude native source from IDE project
+#orion.exclude_native_libs_source=true
