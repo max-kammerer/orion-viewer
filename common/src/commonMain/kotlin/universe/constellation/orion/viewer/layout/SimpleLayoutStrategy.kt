@@ -20,8 +20,8 @@
 package universe.constellation.orion.viewer.layout
 
 import universe.constellation.orion.viewer.*
-import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.DocumentWithCaching
+import universe.constellation.orion.viewer.document.DocumentWithCachingImpl
 import universe.constellation.orion.viewer.document.PageInfoProvider
 import universe.constellation.orion.viewer.geometry.Point
 
@@ -265,9 +265,9 @@ class SimpleLayoutStrategy private constructor(
 
     companion object {
 
-        fun create(doc: Document): SimpleLayoutStrategy {
+        fun create(doc: DocumentWithCaching): SimpleLayoutStrategy {
             val simpleLayoutStrategy = SimpleLayoutStrategy(doc, doc.pageCount)
-            if (doc is DocumentWithCaching) {
+            if (doc is DocumentWithCachingImpl) {
                 //TODO: ugly hack
                 doc.strategy = simpleLayoutStrategy
             }

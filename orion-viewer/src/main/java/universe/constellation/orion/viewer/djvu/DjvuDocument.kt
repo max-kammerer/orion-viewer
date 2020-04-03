@@ -50,7 +50,7 @@ class DjvuDocument(fileName: String) : Document {
     override val pageCount: Int
         get() = docInfo.pageCount
 
-    override fun getPageInfo(pageNum: Int, cropMode: Int) =
+    override fun getPageInfo(pageNum: Int) =
             PageInfo(pageNum).also {
                 timing("Page $pageNum info calculation") {
                     getPageInfo(docPointer, pageNum, it)

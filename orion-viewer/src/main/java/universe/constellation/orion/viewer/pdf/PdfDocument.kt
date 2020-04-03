@@ -37,7 +37,7 @@ class PdfDocument @Throws(Exception::class) constructor(fileName: String) : Docu
     override val pageCount: Int
         get() = core.countPages()
 
-    override fun getPageInfo(pageNum: Int, cropMode: Int): PageInfo = core.loadPage(pageNum).bounds.run {
+    override fun getPageInfo(pageNum: Int): PageInfo = core.loadPage(pageNum).bounds.run {
         PageInfo(pageNum, (x1 - x0).toInt(), (y1 - y0).toInt())
     }
 

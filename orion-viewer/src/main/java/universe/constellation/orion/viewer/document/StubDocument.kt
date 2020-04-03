@@ -4,7 +4,7 @@ import universe.constellation.orion.viewer.Bitmap
 import universe.constellation.orion.viewer.PageInfo
 import universe.constellation.orion.viewer.geometry.RectF
 
-class StubDocument(override var title: String?, var bodyText: String? = title) : Document {
+class StubDocument(override var title: String?, var bodyText: String? = title) : DocumentWithCaching {
 
     override fun setThreshold(threshold: Int) {}
 
@@ -15,8 +15,12 @@ class StubDocument(override var title: String?, var bodyText: String? = title) :
 
     override val outline: Array<OutlineItem> = emptyArray()
 
-    override fun getPageInfo(pageNum: Int, cropMode: Int) =
+    override fun getPageInfo(pageNum: Int) =
         PageInfo(0, 100, 100)
+
+    override fun getPageInfo(pageNum: Int, cropMode: Int): PageInfo {
+        return getPageInfo(pageNum)
+    }
 
     override fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int) {
         //TODO: render body text

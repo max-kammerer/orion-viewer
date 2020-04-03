@@ -23,7 +23,7 @@ import android.graphics.Point
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import universe.constellation.orion.viewer.document.Document
-import universe.constellation.orion.viewer.document.DocumentWithCaching
+import universe.constellation.orion.viewer.document.DocumentWithCachingImpl
 import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.layout.CropMargins
 import universe.constellation.orion.viewer.layout.LayoutPosition
@@ -165,7 +165,7 @@ class Controller(
     fun changeCropMargins(cropMargins: CropMargins) {
         if (layoutStrategy.changeCropMargins(cropMargins)) {
             layoutStrategy.reset(layoutInfo, layoutInfo.pageNumber)
-            if (document is DocumentWithCaching) {
+            if (document is DocumentWithCachingImpl) {
                 document.resetCache()
             }
             sendViewChangeNotification()
