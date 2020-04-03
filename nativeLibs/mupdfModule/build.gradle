@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
 android {
-
+    ndkVersion orionNdkVersion
     compileSdkVersion orionCompileSdk
     buildToolsVersion orionBuildToolsVersion
 
@@ -11,7 +11,6 @@ android {
         if (!excludeNativeLibsSources) {
             externalNativeBuild {
                 cmake {
-                    abiFilters 'armeabi-v7a', 'x86'/*, 'armeabi', 'mips'*/
                     arguments "-DANDROID_STL=c++_static"
                 }
             }
