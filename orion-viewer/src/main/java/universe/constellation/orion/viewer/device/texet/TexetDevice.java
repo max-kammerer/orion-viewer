@@ -20,7 +20,6 @@ import universe.constellation.orion.viewer.PageInfo;
 import universe.constellation.orion.viewer.ShortFileInfo;
 import universe.constellation.orion.viewer.device.EInkDevice;
 import universe.constellation.orion.viewer.document.Document;
-import universe.constellation.orion.viewer.document.DocumentWithCaching;
 
 import static universe.constellation.orion.viewer.LoggerKt.log;
 
@@ -219,12 +218,7 @@ public class TexetDevice extends EInkDevice {
                 @Override
                 public void run() {
                     try {
-                        Document originalDoc = doc;
-                        if (doc instanceof DocumentWithCaching) {
-                            originalDoc = ((DocumentWithCaching) doc).getDoc();
-                        }
-
-                        if (originalDoc.getPageCount() <= 0) {
+                        if (doc.getPageCount() <= 0) {
                             log("No pages in document");
                             return;
                         }
@@ -232,7 +226,7 @@ public class TexetDevice extends EInkDevice {
 
                         log("Extracting cover info ...");
 
-                        PageInfo pageInfo = originalDoc.getPageInfo(0, 0);
+                        PageInfo pageInfo = doc.getPageInfo(0);
                         if (pageInfo.width <= 0 || pageInfo.height <= 0) {
                             log("Wrong page defaultHeight: " + pageInfo.width + "x" + pageInfo.height);
                         }
@@ -244,7 +238,7 @@ public class TexetDevice extends EInkDevice {
                         int xDelta = -(sizeX - (int)(zoom * pageInfo.width))/2;
                         int yDelta = -(sizeY - (int)(zoom * pageInfo.height))/2;
                         log("Cover info " + zoom + " xD: " + xDelta + " yD: " + yDelta + " bm: " + sizeX + "x" + sizeY);
-                        originalDoc.renderPage(0, bm, zoom, xDelta, yDelta, sizeX + xDelta, sizeY + yDelta);
+                        doc.renderPage(0, bm, zoom, xDelta, yDelta, sizeX + xDelta, sizeY + yDelta);
                         writeCover(bm, coverFileName);
                     } catch (FileNotFoundException e) {
                         log(e);

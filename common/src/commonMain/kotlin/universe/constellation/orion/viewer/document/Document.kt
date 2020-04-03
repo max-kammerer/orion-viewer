@@ -46,7 +46,9 @@ interface ImagePostProcessor {
     fun setContrast(contrast: Int)
 }
 
-interface Document : PageInfoProvider, ImagePostProcessor {
+interface DocumentWithCaching: PageInfoProvider, Document
+
+interface Document : ImagePostProcessor {
 
     val pageCount: Int
 
@@ -54,7 +56,7 @@ interface Document : PageInfoProvider, ImagePostProcessor {
 
     val outline: Array<OutlineItem>?
 
-    override fun getPageInfo(pageNum: Int, cropMode: Int): PageInfo
+    fun getPageInfo(pageNum: Int): PageInfo
 
     fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int)
 

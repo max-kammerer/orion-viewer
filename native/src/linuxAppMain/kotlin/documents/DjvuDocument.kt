@@ -44,7 +44,7 @@ class DjvuDocument(private val fileName: String) : Document {
     override val outline: Array<OutlineItem>
         get() = emptyArray()
 
-    override fun getPageInfo(pageNum: Int, cropMode: Int): PageInfo {
+    override fun getPageInfo(pageNum: Int): PageInfo {
 //        djvu_DjvuDocument_openFile()
 
         val result = djvu_DjvuDocument_getPageInfo(null, null, bookRef, pageNum, staticCFunction { pN: Int, w: Int, h: Int ->

@@ -32,7 +32,9 @@ private const val HEIGHT = 800
 private const val THRESHOLD = 255 - 10
 private const val VOTE_THRESHOLD = 3
 
-class DocumentWithCaching(val doc: Document) : Document by doc {
+
+
+class DocumentWithCachingImpl(val doc: Document) : DocumentWithCaching, Document by doc {
 
     private val cache = createCache<Int, PageInfo?>(100)
 
@@ -55,7 +57,7 @@ class DocumentWithCaching(val doc: Document) : Document by doc {
         return doc.mySynchronized {
             var pageInfo = cache.get(pageNum)
             if (pageInfo == null) {
-                pageInfo = doc.getPageInfo(pageNum, cropMode)
+                pageInfo = doc.getPageInfo(pageNum)
                 cache.put(pageNum, pageInfo)
             }
 
