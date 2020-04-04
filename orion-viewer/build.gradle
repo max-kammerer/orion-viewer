@@ -52,7 +52,14 @@ android {
             if (excludeNativeLibsSources) {
                 jniLibs.srcDirs = [mupdf_libs, djvu_libs]
             }
-            java.srcDirs += "../nativeLibs/mupdf/platform/java/src"
+            java {
+                srcDirs += "../nativeLibs/mupdf/platform/java/src"
+
+                if (onyxSdkPath != null) {
+                    srcDirs += onyxSdkPath + "/src/main/java/"
+                }
+            }
+
         }
 
         //test
@@ -89,9 +96,17 @@ android {
 //            dimension "arch"
 //        }
         arm7 {
-            versionCode = 2
+            versionCode = 1
             ndk {
                 abiFilter "armeabi-v7a"
+            }
+            dimension "arch"
+        }
+
+        arm64 {
+            versionCode = 2
+            ndk {
+                abiFilter "arm64-v8a"
             }
             dimension "arch"
         }
@@ -99,6 +114,13 @@ android {
             versionCode = 3
             ndk {
                 abiFilter "x86"
+            }
+            dimension "arch"
+        }
+        x86_64 {
+            versionCode = 4
+            ndk {
+                abiFilter "x86_64"
             }
             dimension "arch"
         }
