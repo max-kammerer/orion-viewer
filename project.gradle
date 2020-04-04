@@ -17,4 +17,7 @@ ext {
     excludeNativeLibsSources = (project.findProperty('orion.exclude_native_libs_source')
             ?: properties.getProperty('orion.exclude_native_libs_source'))
             ?.toBoolean() ?: false
+
+    onyxSdkPath =  (project.findProperty('orion.onyxSdkPath')
+            ?: properties.getProperty('orion.onyxSdkPath'))
 }

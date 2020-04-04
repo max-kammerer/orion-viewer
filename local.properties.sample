@@ -4,3 +4,6 @@ ndk.dir=/home/mike/devel/tools/android-ndk/android-ndk-r9d/
 
 #To exclude native source from IDE project
 #orion.exclude_native_libs_source=true
+
+#To e-ink support on Onyx devices
+#orion.onyxSdkPath=../OnyxAndroidSDK
