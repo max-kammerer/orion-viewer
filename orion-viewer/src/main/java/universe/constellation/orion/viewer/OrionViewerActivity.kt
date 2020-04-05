@@ -312,7 +312,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
                 controller1.drawPage()
 
-                val title = newDocument.title?.takeIf { it.isNotBlank() } ?: filePath.substringAfter('/').substringBefore(".")
+                val title = newDocument.title?.takeIf { it.isNotBlank() } ?: filePath.substringAfterLast('/').substringBefore(".")
 
                 updateViewOnNewBook(title)
                 globalOptions.addRecentEntry(GlobalOptions.RecentEntry(File(filePath).absolutePath))
