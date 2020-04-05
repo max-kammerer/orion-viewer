@@ -7,7 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import kotlinx.coroutines.*
 import universe.constellation.orion.viewer.OrionViewerActivity.Companion.SAVE_FILE_RESULT
 import universe.constellation.orion.viewer.filemanager.FileChooserAdapter

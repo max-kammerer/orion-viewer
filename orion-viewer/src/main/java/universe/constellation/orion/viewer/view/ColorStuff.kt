@@ -5,7 +5,7 @@ import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
-import android.support.v4.graphics.drawable.DrawableCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import android.view.View
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.util.ColorUtil

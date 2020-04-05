@@ -2,7 +2,7 @@ package universe.constellation.orion.viewer.selection
 
 import android.graphics.Point
 import android.os.Build
-import android.support.annotation.RequiresApi
+import androidx.annotation.RequiresApi
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import universe.constellation.orion.viewer.OrionScene

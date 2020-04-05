@@ -21,18 +21,12 @@ package universe.constellation.orion.viewer
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
-import android.support.v4.view.ViewPager
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentStatePagerAdapter
+import com.google.android.material.tabs.TabLayout
 
 class OrionHelpActivity : OrionBaseActivity(false) {
 
@@ -72,7 +66,7 @@ class OrionHelpActivity : OrionBaseActivity(false) {
 
     private fun initHelpScreen() {
         val pagerAdapter = HelpSimplePagerAdapter(supportFragmentManager, 2)
-        val viewPager = findViewById<View>(R.id.viewpager) as ViewPager
+        val viewPager = findViewById<View>(R.id.viewpager) as androidx.viewpager.widget.ViewPager
         viewPager.adapter = pagerAdapter
         val tabLayout = findViewById<View>(R.id.sliding_tabs) as TabLayout
         tabLayout.setupWithViewPager(viewPager)
@@ -102,7 +96,7 @@ class OrionHelpActivity : OrionBaseActivity(false) {
 }
 
 
-internal class HelpSimplePagerAdapter(fm: FragmentManager, private val pageCount: Int) : FragmentStatePagerAdapter(fm) {
+internal class HelpSimplePagerAdapter(fm: androidx.fragment.app.FragmentManager, private val pageCount: Int) : FragmentStatePagerAdapter(fm) {
 
     override fun getItem(i: Int): Fragment {
         return if (i == 0)

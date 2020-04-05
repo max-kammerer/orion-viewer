@@ -8,8 +8,8 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,7 +83,7 @@ public class SearchDialog extends DialogFragment {
         window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.TOP;
-        android.support.v7.widget.Toolbar toolbar = ((OrionBaseActivity) getActivity()).getToolbar();
+        androidx.appcompat.widget.Toolbar toolbar = ((OrionBaseActivity) getActivity()).getToolbar();
         wlp.y = toolbar.getHeight() + 5;
 
         window.setAttributes(wlp);

@@ -1,8 +1,8 @@
 package universe.constellation.orion.viewer.dialog
 
 import android.os.Bundle
-import android.support.design.widget.TabLayout
-import android.support.v7.app.AppCompatDialog
+import com.google.android.material.tabs.TabLayout
+import androidx.appcompat.app.AppCompatDialog
 import android.view.View
 import android.view.Window
 import android.widget.*

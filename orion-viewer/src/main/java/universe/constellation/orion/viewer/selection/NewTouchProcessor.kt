@@ -1,7 +1,7 @@
 package universe.constellation.orion.viewer.selection
 
 import android.graphics.Point
-import android.support.v4.view.GestureDetectorCompat
+import androidx.core.view.GestureDetectorCompat
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.widget.Toast

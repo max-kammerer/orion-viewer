@@ -2,7 +2,7 @@ package universe.constellation.orion.viewer.util
 
 import android.graphics.Color
 import android.graphics.ColorMatrix
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 
 object ColorUtil {
 

@@ -100,6 +100,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             int code = data.getIntExtra("code", 0);
             int keyCode = data.getIntExtra("keyCode", 0);

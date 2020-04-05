@@ -27,7 +27,7 @@ import universe.constellation.orion.viewer.Action;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.R;
 
-public class ImageButton extends android.support.v7.widget.AppCompatImageButton {
+public class ImageButton extends androidx.appcompat.widget.AppCompatImageButton {
 
     private Action action;
 

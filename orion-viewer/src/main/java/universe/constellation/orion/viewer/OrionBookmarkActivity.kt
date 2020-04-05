@@ -211,6 +211,7 @@ class OrionBookmarkActivity : OrionBaseActivity(false) {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             val fileName = data!!.getStringExtra(OrionFileSelectorActivity.RESULT_FILE_NAME)
             if (fileName == null || "" == fileName) {

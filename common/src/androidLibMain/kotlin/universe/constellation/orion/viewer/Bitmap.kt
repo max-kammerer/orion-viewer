@@ -24,6 +24,6 @@ actual typealias Bitmap = android.graphics.Bitmap
 actual fun createBitmap(width: Int, height: Int): Bitmap =
         android.graphics.Bitmap.createBitmap(width, height, android.graphics.Bitmap.Config.ARGB_8888)
 
-actual typealias LruCache<K, V> = android.support.v4.util.LruCache<K, V>
+actual typealias LruCache<K, V> = androidx.collection.LruCache<K, V>
 
-actual fun <K, V> createCache(size: Int): LruCache<K, V> = android.support.v4.util.LruCache(size)
+actual fun <K, V> createCache(size: Int): LruCache<K, V> = androidx.collection.LruCache(size)

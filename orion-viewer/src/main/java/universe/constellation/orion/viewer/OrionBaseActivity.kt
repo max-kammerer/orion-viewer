@@ -20,19 +20,18 @@
 package universe.constellation.orion.viewer
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.KeyEvent
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import universe.constellation.orion.viewer.device.AndroidDevice
 import universe.constellation.orion.viewer.device.Device
-import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
+import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivityBase
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import universe.constellation.orion.viewer.prefs.OrionApplication
 
@@ -63,7 +62,7 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
         orionContext.applyTheme(this)
         orionContext.updateLanguage(resources)
 
-        if (this is OrionViewerActivity || this is OrionFileManagerActivity) {
+        if (this is OrionViewerActivity || this is OrionFileManagerActivityBase) {
             val screenOrientation = getScreenOrientation(applicationDefaultOrientation)
             changeOrientation(screenOrientation)
         }

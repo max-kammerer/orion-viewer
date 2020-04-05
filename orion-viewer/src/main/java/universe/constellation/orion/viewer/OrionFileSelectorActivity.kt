@@ -25,19 +25,15 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
+import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivityBase
 import java.io.File
 import java.io.FilenameFilter
 
-class OrionSaveFileActivity : OrionFileManagerActivity(
+class OrionSaveFileActivity : OrionFileManagerActivityBase(
     false,  false,
     FilenameFilter { dir, filename ->
         File(dir, filename).isDirectory
     }) {
-
-    override fun onNewIntent(intent: Intent) {
-
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,16 +49,12 @@ class OrionSaveFileActivity : OrionFileManagerActivity(
     }
 }
 
-class OrionFileSelectorActivity : OrionFileManagerActivity(
+class OrionFileSelectorActivity : OrionFileManagerActivityBase(
     false, false,
     FilenameFilter { dir, filename ->
         File(dir, filename).isDirectory || filename.toLowerCase().endsWith(".xml")
     }
 ) {
-
-    override fun onNewIntent(intent: Intent) {
-
-    }
 
     override fun openFile(file: File) {
         val result = Intent()

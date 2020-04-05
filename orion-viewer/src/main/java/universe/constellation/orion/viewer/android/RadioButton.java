@@ -24,7 +24,7 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import universe.constellation.orion.viewer.R;
 
-public class RadioButton extends android.support.v7.widget.AppCompatRadioButton {
+public class RadioButton extends androidx.appcompat.widget.AppCompatRadioButton {
 
     private String walkOrder;
 

@@ -26,30 +26,53 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.preference.PreferenceManager
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
-import android.support.v4.app.ListFragment
-import android.support.v4.view.ViewPager
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.fragment.app.ListFragment
+import com.google.android.material.tabs.TabLayout
 import universe.constellation.orion.viewer.*
+import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity.Companion.LAST_OPENED_DIRECTORY
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import java.io.File
 import java.io.FilenameFilter
 
-/**
- * User: mike
- * Date: 24.12.11
- * Time: 16:41
- */
+open class OrionFileManagerActivity : OrionFileManagerActivityBase(true, true, FileChooserAdapter.DEFAULT_FILTER) {
+    companion object {
+        const val OPEN_RECENTS_TAB = "OPEN_RECENTS_FILE"
+        const val LAST_OPENED_DIRECTORY = "LAST_OPENED_DIR"
+    }
 
-open class OrionFileManagerActivity @JvmOverloads constructor(
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        log("OrionFileManager: On new intent $intent")
+
+        if (intent.getBooleanExtra(OPEN_RECENTS_TAB, false)) {
+            findViewById<androidx.viewpager.widget.ViewPager>(R.id.viewpager).setCurrentItem(1, false)
+            return
+        }
+
+
+        val dontStartRecent = intent.getBooleanExtra(DONT_OPEN_RECENT_FILE, false)
+        if (!dontStartRecent && globalOptions!!.isOpenRecentBook) {
+            if (!globalOptions!!.recentFiles.isEmpty()) {
+                val entry = globalOptions!!.recentFiles[0]
+                val book = File(entry.path)
+                if (book.exists()) {
+                    log("Opening recent book $book")
+                    openFile(book)
+                }
+            }
+        }
+    }
+}
+
+abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
     private val showRecentsAndSavePath: Boolean = true,
     private val addToolbar: Boolean = true,
     private val fileNameFilter: FilenameFilter = FileChooserAdapter.DEFAULT_FILTER
@@ -57,7 +80,7 @@ open class OrionFileManagerActivity @JvmOverloads constructor(
 
     private var prefs: SharedPreferences? = null
 
-    private var globalOptions: GlobalOptions? = null
+    protected var globalOptions: GlobalOptions? = null
 
     private var justCreated: Boolean = false
 
@@ -90,7 +113,7 @@ open class OrionFileManagerActivity @JvmOverloads constructor(
 
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
-            (activity as OrionFileManagerActivity).createFileView(
+            (activity as OrionFileManagerActivityBase).createFileView(
                 activity!!.findViewById<View>(R.id.listView) as ListView,
                 activity!!.findViewById<View>(R.id.path) as TextView
             )
@@ -100,7 +123,7 @@ open class OrionFileManagerActivity @JvmOverloads constructor(
     class RecentListFragment : ListFragment() {
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
-            (activity as OrionFileManagerActivity).createRecentView(this)
+            (activity as OrionFileManagerActivityBase).createRecentView(this)
         }
     }
 
@@ -129,29 +152,6 @@ open class OrionFileManagerActivity @JvmOverloads constructor(
                 val currentFolder = adapter.currentFolder
                 println("Refreshing view")
                 adapter.changeFolder(File(currentFolder.absolutePath))
-            }
-        }
-    }
-
-
-    override fun onNewIntent(intent: Intent) {
-        log("OrionFileManager: On new intent $intent")
-
-        if (intent.getBooleanExtra(OPEN_RECENTS_TAB, false)) {
-            findViewById<ViewPager>(R.id.viewpager).setCurrentItem(1, false)
-            return
-        }
-
-
-        val dontStartRecent = intent.getBooleanExtra(DONT_OPEN_RECENT_FILE, false)
-        if (!dontStartRecent && globalOptions!!.isOpenRecentBook) {
-            if (!globalOptions!!.recentFiles.isEmpty()) {
-                val entry = globalOptions!!.recentFiles[0]
-                val book = File(entry.path)
-                if (book.exists()) {
-                    log("Opening recent book $book")
-                    openFile(book)
-                }
             }
         }
     }
@@ -219,7 +219,7 @@ open class OrionFileManagerActivity @JvmOverloads constructor(
 
     private fun initFileManager() {
         val pagerAdapter = SimplePagerAdapter(supportFragmentManager, if (showRecentsAndSavePath) 2 else 1)
-        val viewPager = findViewById<ViewPager>(R.id.viewpager)
+        val viewPager = findViewById<androidx.viewpager.widget.ViewPager>(R.id.viewpager)
         viewPager.adapter = pagerAdapter
         val tabLayout = findViewById<TabLayout>(R.id.sliding_tabs)
         tabLayout.setupWithViewPager(viewPager)
@@ -251,27 +251,18 @@ open class OrionFileManagerActivity @JvmOverloads constructor(
     }
 
     companion object {
-
-        const val OPEN_RECENTS_TAB = "OPEN_RECENTS_FILE"
-
         const val DONT_OPEN_RECENT_FILE = "DONT_OPEN_RECENT_FILE"
-
-        const val LAST_OPENED_DIRECTORY = "LAST_OPENED_DIR"
-
-        private const val LAST_FOLDER = "LAST_FOLDER"
-
-        private const val FILE_FILTER_EXTENSION = "FILE_FILTER_EXTENSION"
     }
 }
 
 
-internal class SimplePagerAdapter(fm: FragmentManager, private val pageCount: Int) : FragmentStatePagerAdapter(fm) {
+internal class SimplePagerAdapter(fm: androidx.fragment.app.FragmentManager, private val pageCount: Int) : FragmentStatePagerAdapter(fm) {
 
     override fun getItem(i: Int): Fragment {
         return if (i == 0)
-            OrionFileManagerActivity.FoldersFragment()
+            OrionFileManagerActivityBase.FoldersFragment()
         else
-            OrionFileManagerActivity.RecentListFragment()
+            OrionFileManagerActivityBase.RecentListFragment()
     }
 
     override fun getCount(): Int {

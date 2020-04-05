@@ -38,7 +38,7 @@ expect fun createBitmap(width: Int, height: Int): Bitmap
 expect class LruCache<K, V> {
     fun evictAll()
     operator fun get(k: K): V?
-    fun put(k: K, v: V): V
+    fun put(k: K, v: V): V?
 }
 
 expect fun <K, V> createCache(size: Int): LruCache<K, V>

@@ -21,8 +21,8 @@ package universe.constellation.orion.viewer;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.support.v7.app.AppCompatDialog;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatDialog;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.view.Window;
 import android.widget.Toast;

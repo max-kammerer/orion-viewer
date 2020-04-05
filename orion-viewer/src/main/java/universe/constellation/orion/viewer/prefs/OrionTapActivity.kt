@@ -88,6 +88,7 @@ class OrionTapActivity : OrionBaseActivity(false) {
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             if (activeView != null) {
                 val view = activeView!!.findViewById<View>(if (isLong) R.id.longClick else R.id.shortClick) as TextView

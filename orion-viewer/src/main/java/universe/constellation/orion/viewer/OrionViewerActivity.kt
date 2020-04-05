@@ -28,8 +28,8 @@ import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
 import android.os.Debug
-import android.support.v4.internal.view.SupportMenuItem
-import android.support.v7.app.AppCompatDialog
+import androidx.core.internal.view.SupportMenuItem
+import androidx.appcompat.app.AppCompatDialog
 import android.text.method.PasswordTransformationMethod
 import android.view.*
 import android.view.inputmethod.EditorInfo
@@ -191,6 +191,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
         log("Runtime.getRuntime().totalMemory(): ${Runtime.getRuntime().totalMemory()}")
         log("Debug.getNativeHeapSize(): ${Debug.getNativeHeapSize()}")
         log("Trying to open new intent: $intent...")
@@ -202,7 +203,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
         val uri = intent.data
         if (uri != null) {
-            log("Try to open file by " + uri.toString())
+            log("Try to open file by $uri")
             try {
                 val intentPath: String =
                         if ("content".equals(uri.scheme, ignoreCase = true)) {
@@ -920,6 +921,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == OPEN_BOOKMARK_ACTIVITY_RESULT && resultCode == Activity.RESULT_OK) {
             if (controller != null) {
                 val page = data!!.getIntExtra(OrionBookmarkActivity.OPEN_PAGE, -1)

@@ -19,8 +19,8 @@
 
 package universe.constellation.orion.viewer;
 
-import android.support.v4.internal.view.SupportMenuItem;
-import android.support.v7.widget.Toolbar;
+import androidx.core.internal.view.SupportMenuItem;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
