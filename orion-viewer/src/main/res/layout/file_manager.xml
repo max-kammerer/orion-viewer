@@ -39,18 +39,27 @@
     </androidx.appcompat.widget.Toolbar>
 
 
-    <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:id="@+id/saveFileIdView" android:visibility="gone">
+    <LinearLayout
+        android:id="@+id/saveFileIdView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
         <EditText
-            android:layout_width="match_parent"
+            android:id="@+id/fileName"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/saveFileNameTooltip"
-            android:id="@+id/fileName"
-        />
+            android:layout_weight="1"
+            />
 
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/saveFile"/>
+        <Button
+            android:id="@+id/saveFile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"/>
     </LinearLayout>
-
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewpager"

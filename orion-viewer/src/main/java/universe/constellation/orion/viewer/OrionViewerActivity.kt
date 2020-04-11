@@ -215,7 +215,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                             } ?: run {
                                 SaveNotification().apply {
                                     Bundle().apply {
-                                        putString(SaveNotification.URI, uri.toString())
+                                        putParcelable(SaveNotification.URI, uri)
                                         putString(SaveNotification.TYPE, intent.type)
                                         arguments = this
                                     }

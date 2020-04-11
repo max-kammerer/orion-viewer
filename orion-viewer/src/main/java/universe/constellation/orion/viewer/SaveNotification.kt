@@ -1,5 +1,6 @@
 package universe.constellation.orion.viewer
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.app.ProgressDialog
@@ -9,7 +10,6 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import kotlinx.coroutines.*
-import universe.constellation.orion.viewer.OrionViewerActivity.Companion.SAVE_FILE_RESULT
 import universe.constellation.orion.viewer.filemanager.FileChooserAdapter
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
 import java.io.File
@@ -19,7 +19,7 @@ open class SaveNotification : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
-        val uri = Uri.parse(arguments!!.getString(URI)!!)
+        val uri = arguments!!.getParcelable<Uri>(URI)!!
         val mimeType = arguments!!.getString(TYPE)
         val builder = AlertDialog.Builder(activity)
         builder.setTitle("Please save file before opening...")
@@ -27,10 +27,10 @@ open class SaveNotification : DialogFragment() {
                     val myActivity = activity as OrionViewerActivity
                     when(which) {
                         0 -> {
-                            myActivity.startActivityForResult(
+                            myActivity.startActivity(
                                 Intent(myActivity, OrionSaveFileActivity::class.java).apply {
-                                },
-                                SAVE_FILE_RESULT
+                                    putExtra(URI, uri)
+                                }
                             )
                         }
                         1 -> {
@@ -39,7 +39,9 @@ open class SaveNotification : DialogFragment() {
                                 getExtension(uri, mimeType)
                             )
 
-                            saveFileAndOpen(myActivity, uri, toFile)
+                            saveFileAndOpen(myActivity, uri, toFile) {
+                                myActivity.openFileAndDestroyOldController(it.path)
+                            }
                         }
                         2 -> myActivity.startActivity(
                             Intent(myActivity, OrionFileManagerActivity::class.java).apply {
@@ -61,7 +63,7 @@ open class SaveNotification : DialogFragment() {
         const val TYPE = "TYPE"
 
         private fun saveFileInto(context: Context, uri: Uri, toFile: File): File {
-            toFile.mkdirs()
+            toFile.parentFile.mkdirs()
             toFile.createNewFile()
 
             val input = context.contentResolver.openInputStream(uri)
@@ -84,23 +86,24 @@ open class SaveNotification : DialogFragment() {
         }
 
         fun saveFileAndOpen(
-            myActivity: OrionViewerActivity,
-            uri: Uri,
-            toFile: File
+                myActivity: Activity,
+                uri: Uri,
+                toFile: File,
+                action: (File) -> Unit
         ) {
             GlobalScope.launch(Dispatchers.Main) {
                 val progressBar = ProgressDialog(myActivity)
                 progressBar.isIndeterminate = true
                 progressBar.show()
                 try {
-                    val newFile = withContext(Dispatchers.Default) {
+                    withContext(Dispatchers.Default) {
                         saveFileInto(
                                 myActivity,
                                 uri,
-                                toFile.also { log("Saving file into $it") }
+                                toFile.also { log("Trying to save file into $it") }
                         )
                     }
-                    myActivity.openFileAndDestroyOldController(newFile.path)
+                    action(toFile)
                 } finally {
                     progressBar.dismiss()
                 }

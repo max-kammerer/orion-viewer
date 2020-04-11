@@ -21,13 +21,17 @@ package universe.constellation.orion.viewer
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ListView
 import android.widget.TextView
+import kotlinx.coroutines.*
+import universe.constellation.orion.viewer.filemanager.FileChooserAdapter
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivityBase
-import java.io.File
-import java.io.FilenameFilter
+import java.io.*
+import java.lang.Exception
 
 class OrionSaveFileActivity : OrionFileManagerActivityBase(
     false,  false,
@@ -37,14 +41,19 @@ class OrionSaveFileActivity : OrionFileManagerActivityBase(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        findViewById<TextView>(R.id.saveFileIdView).visibility = View.VISIBLE
+
+        findViewById<View>(R.id.saveFileIdView).visibility = View.VISIBLE
         findViewById<Button>(R.id.saveFile).setOnClickListener {
-            val result = Intent()
-            result.putExtra(OrionFileSelectorActivity.RESULT_FILE_NAME,
-                            findViewById<TextView>(R.id.saveFileIdView).text
-            )
-            setResult(Activity.RESULT_OK, result)
-            finish()
+            val fileName = findViewById<TextView>(R.id.fileName).text.toString()
+            val currentFolder = (findViewById<ListView>(R.id.listView).adapter as FileChooserAdapter).currentFolder
+            val fileUri = intent.extras.get(SaveNotification.URI) as Uri
+            saveFile(File(currentFolder, fileName), fileUri)
+        }
+    }
+
+    private fun saveFile(target: File, fileUri: Uri) {
+        SaveNotification.saveFileAndOpen(this, fileUri, target) {
+            openFile(target)
         }
     }
 }
