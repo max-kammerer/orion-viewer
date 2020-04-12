@@ -26,43 +26,39 @@ import com.artifex.mupdf.fitz.Outline
 import com.artifex.mupdf.fitz.Point
 import com.artifex.mupdf.fitz.StructuredText
 import com.artifex.mupdf.fitz.android.AndroidDrawDevice
+import com.artifex.mupdf.viewer.MuPDFCore
 import universe.constellation.orion.viewer.PageInfo
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.OutlineItem
 
 class PdfDocument @Throws(Exception::class) constructor(fileName: String) : Document {
 
-    private val core: com.artifex.mupdf.fitz.Document = com.artifex.mupdf.fitz.Document.openDocument(fileName)
+    private val core = MuPDFCore(fileName)
 
     override val pageCount: Int
         get() = core.countPages()
 
-    override fun getPageInfo(pageNum: Int): PageInfo = core.loadPage(pageNum).bounds.run {
-        PageInfo(pageNum, (x1 - x0).toInt(), (y1 - y0).toInt())
+    override fun getPageInfo(pageNum: Int): PageInfo = core.getPageSize(pageNum).run {
+        PageInfo(pageNum, x.toInt(), y.toInt())
     }
 
     override fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int) {
-        val device = AndroidDrawDevice(bitmap, left, top, 0, 0, right - left, bottom - top)
-        try {
-            core.loadPage(pageNumber).run(device, Matrix(zoom.toFloat(), zoom.toFloat()))
-        } finally {
-            device.destroy()
-        }
-        updateContrast(bitmap, bitmap.width * bitmap.height * 4)
+        core.drawPage(bitmap, pageNumber, left, top,  right, bottom, zoom.toFloat())
+        //updateContrast(bitmap, bitmap.width * bitmap.height * 4)
     }
 
-    override fun destroy() = core.destroy()
+    override fun destroy() = core.onDestroy()
 
     override val title: String?
-        get() = core.getMetaData(com.artifex.mupdf.fitz.Document.META_INFO_TITLE)
+        get() = core.title
 
-    override external fun setContrast(contrast: Int)
+    external override fun setContrast(contrast: Int)
     external fun updateContrast(bitmap: Bitmap, size: Int)
 
     external override fun setThreshold(threshold: Int)
 
     override fun getText(pageNumber: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): String? {
-        val text: StructuredText = core.loadPage(pageNumber).toStructuredText()
+        val text: StructuredText = core.getText(pageNumber)
         //TODO support single word
         return text.copy(Point(absoluteX.toFloat(), absoluteY.toFloat()), Point( (absoluteX + width).toFloat(), (absoluteY + height).toFloat()))
     }
@@ -77,7 +73,7 @@ class PdfDocument @Throws(Exception::class) constructor(fileName: String) : Docu
                     }
                 }
             }
-            return core.loadOutline()?.takeIf { it.isNotEmpty() }?.let { items ->
+            return core.outline?.takeIf { it.isNotEmpty() }?.let { items ->
                 ArrayList<OutlineItem>(items.size).apply { collectItems(this, items, 0) }.toTypedArray()
             }
 
@@ -87,5 +83,5 @@ class PdfDocument @Throws(Exception::class) constructor(fileName: String) : Docu
 
     override fun authenticate(password: String) = core.authenticatePassword(password)
 
-    override fun searchPage(pageNumber: Int, text: String): Array<RectF>? = core.loadPage(pageNumber).search(text)?.map { it.toRect().run { RectF(x0, y0, x1, y1) } }?.toTypedArray()
+    override fun searchPage(pageNumber: Int, text: String): Array<RectF>? = core.searchPage(pageNumber, text)?.map { it.toRect().run { RectF(x0, y0, x1, y1) } }?.toTypedArray()
 }

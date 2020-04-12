@@ -1,9 +1,9 @@
-package com.artifex.mupdfdemo;
+package com.artifex.mupdf.viewer;
 
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 
-import com.artifex.mupdf.fitz.Cookie;
+import com.artifex.mupdf.fitz.Device;
 import com.artifex.mupdf.fitz.DisplayList;
 import com.artifex.mupdf.fitz.Document;
 import com.artifex.mupdf.fitz.Link;
@@ -12,15 +12,11 @@ import com.artifex.mupdf.fitz.Outline;
 import com.artifex.mupdf.fitz.Page;
 import com.artifex.mupdf.fitz.Quad;
 import com.artifex.mupdf.fitz.Rect;
-import com.artifex.mupdf.fitz.RectI;
+import com.artifex.mupdf.fitz.StructuredText;
 import com.artifex.mupdf.fitz.android.AndroidDrawDevice;
-import com.artifex.mupdf.viewer.OutlineActivity;
-
-import java.util.ArrayList;
 
 public class MuPDFCore
 {
-	private int resolution;
 	private Document doc;
 	private Outline[] outline;
 	private int pageCount = -1;
@@ -39,7 +35,6 @@ public class MuPDFCore
 		doc = Document.openDocument(filename);
 		doc.layout(layoutW, layoutH, layoutEM);
 		pageCount = doc.countPages();
-		resolution = 160;
 		currentPage = -1;
 	}
 
@@ -47,7 +42,6 @@ public class MuPDFCore
 		doc = Document.openDocument(buffer, magic);
 		doc.layout(layoutW, layoutH, layoutEM);
 		pageCount = doc.countPages();
-		resolution = 160;
 		currentPage = -1;
 	}
 
@@ -122,35 +116,22 @@ public class MuPDFCore
 		doc = null;
 	}
 
-	public synchronized void drawPage(Bitmap bm, int pageNum,
-			int pageW, int pageH,
-			int patchX, int patchY,
-			int patchW, int patchH,
-			Cookie cookie) {
+	public synchronized void drawPage(Bitmap bitmap, int pageNum,
+			int left, int top,
+			int right, int bottom,
+			float zoom) {
 		gotoPage(pageNum);
 
 		if (displayList == null)
 			displayList = page.toDisplayList();
 
-		float zoom = resolution / 72;
-		Matrix ctm = new Matrix(zoom, zoom);
-		RectI bbox = new RectI(page.getBounds().transform(ctm));
-		float xscale = (float)pageW / (float)(bbox.x1-bbox.x0);
-		float yscale = (float)pageH / (float)(bbox.y1-bbox.y0);
-		ctm.scale(xscale, yscale);
-
-		AndroidDrawDevice dev = new AndroidDrawDevice(bm, patchX, patchY);
-		displayList.run(dev, ctm, cookie);
-		dev.close();
-		dev.destroy();
-	}
-
-	public synchronized void updatePage(Bitmap bm, int pageNum,
-			int pageW, int pageH,
-			int patchX, int patchY,
-			int patchW, int patchH,
-			Cookie cookie) {
-		drawPage(bm, pageNum, pageW, pageH, patchX, patchY, patchW, patchH, cookie);
+		Device dev = new AndroidDrawDevice(bitmap, left, top, 0, 0, right - left, bottom - top);
+		try {
+			displayList.run(dev, new Matrix(zoom, zoom), null);
+		} finally {
+			dev.close();
+			dev.destroy();
+		}
 	}
 
 	public synchronized Link[] getPageLinks(int pageNum) {
@@ -161,6 +142,11 @@ public class MuPDFCore
 	public synchronized Quad[] searchPage(int pageNum, String text) {
 		gotoPage(pageNum);
 		return page.search(text);
+	}
+
+	public synchronized StructuredText getText(int pageNum) {
+		gotoPage(pageNum);
+		return page.toStructuredText();
 	}
 
 	public synchronized boolean hasOutline() {
@@ -174,19 +160,9 @@ public class MuPDFCore
 		return outline != null;
 	}
 
-	private void flattenOutlineNodes(ArrayList<OutlineActivity.Item> result, Outline list[], String indent) {
-		for (Outline node : list) {
-			if (node.title != null)
-				result.add(new OutlineActivity.Item(indent + node.title, node.page));
-			if (node.down != null)
-				flattenOutlineNodes(result, node.down, indent + "    ");
-		}
-	}
-
-	public synchronized ArrayList<OutlineActivity.Item> getOutline() {
-		ArrayList<OutlineActivity.Item> result = new ArrayList<OutlineActivity.Item>();
-		flattenOutlineNodes(result, outline, "");
-		return result;
+	public synchronized Outline[] getOutline() {
+		hasOutline();
+		return outline;
 	}
 
 	public synchronized boolean needsPassword() {
