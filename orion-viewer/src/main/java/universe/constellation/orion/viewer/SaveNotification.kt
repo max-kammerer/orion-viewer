@@ -22,7 +22,7 @@ open class SaveNotification : DialogFragment() {
         val uri = arguments!!.getParcelable<Uri>(URI)!!
         val mimeType = arguments!!.getString(TYPE)
         val builder = AlertDialog.Builder(activity)
-        builder.setTitle("Please save file before opening...")
+        builder.setTitle(getString(R.string.please_save_file))
                 .setItems(R.array.save_options) { _, which ->
                     val myActivity = activity as OrionViewerActivity
                     when(which) {
@@ -39,7 +39,7 @@ open class SaveNotification : DialogFragment() {
                                 getExtension(uri, mimeType)
                             )
 
-                            saveFileAndOpen(myActivity, uri, toFile) {
+                            saveFileAndDoAction(myActivity, uri, toFile) {
                                 myActivity.openFileAndDestroyOldController(it.path)
                             }
                         }
@@ -85,7 +85,7 @@ open class SaveNotification : DialogFragment() {
             } ?: mimeType?.let { if (it.endsWith("djvu")) "djvu" else "pdf" } ?: error("Unknown extension $uri")
         }
 
-        fun saveFileAndOpen(
+        fun saveFileAndDoAction(
                 myActivity: Activity,
                 uri: Uri,
                 toFile: File,

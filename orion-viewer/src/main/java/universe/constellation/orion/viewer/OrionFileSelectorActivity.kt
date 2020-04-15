@@ -27,11 +27,11 @@ import android.view.View
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
-import kotlinx.coroutines.*
+import androidx.appcompat.app.AlertDialog
 import universe.constellation.orion.viewer.filemanager.FileChooserAdapter
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivityBase
-import java.io.*
-import java.lang.Exception
+import java.io.File
+import java.io.FilenameFilter
 
 class OrionSaveFileActivity : OrionFileManagerActivityBase(
     false,  false,
@@ -46,13 +46,26 @@ class OrionSaveFileActivity : OrionFileManagerActivityBase(
         findViewById<Button>(R.id.saveFile).setOnClickListener {
             val fileName = findViewById<TextView>(R.id.fileName).text.toString()
             val currentFolder = (findViewById<ListView>(R.id.listView).adapter as FileChooserAdapter).currentFolder
-            val fileUri = intent.extras.get(SaveNotification.URI) as Uri
-            saveFile(File(currentFolder, fileName), fileUri)
+            val targetFile = File(currentFolder, fileName)
+            if (targetFile.exists()) {
+
+                AlertDialog.Builder(this).setMessage("File '${targetFile.name}' already exists.\nDo you want to overwrite it?").
+                setPositiveButton("Yes") { _, _ -> saveFile(targetFile) }.
+                setNegativeButton("No", {_, _ ->}).
+                show()
+            } else {
+                saveFile(targetFile)
+            }
         }
     }
 
+    private fun saveFile(targetFile: File) {
+        val fileUri = intent.extras.get(SaveNotification.URI) as Uri
+        saveFile(targetFile, fileUri)
+    }
+
     private fun saveFile(target: File, fileUri: Uri) {
-        SaveNotification.saveFileAndOpen(this, fileUri, target) {
+        SaveNotification.saveFileAndDoAction(this, fileUri, target) {
             openFile(target)
         }
     }

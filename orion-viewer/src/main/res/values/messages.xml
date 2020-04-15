@@ -17,4 +17,5 @@
     <string name="open_rececent_files">Open Recent files…</string>
     <string name="recent_book_not_found">Can\'t find book!</string>
 
+    <string name="please_save_file">Please save document into file to open (can\'t extract file path from intent)</string>
 </resources>

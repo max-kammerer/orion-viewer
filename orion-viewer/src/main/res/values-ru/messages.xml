@@ -9,4 +9,5 @@
     <string name="msg_select_text">Выделите текст!</string>
     <string name="msg_select_word">Кликните по слову!</string>
 
+    <string name="please_save_file">Пожалуйста сохраните документ в файл чтобы открыть (не найти путь в файл-intent\'e)</string>
 </resources>
