@@ -12,10 +12,11 @@
     <string name="msg_error">Error</string>
     <string name="msg_warning">Warning</string>
     <string name="msg_specify_keyword_for_search">Specify keyword for search</string>
-    <string name="save_to_file">Save to File…</string>
-    <string name="open_in_temporary_file">Open as temporary file</string>
-    <string name="open_rececent_files">Open Recent files…</string>
-    <string name="recent_book_not_found">Can\'t find book!</string>
 
     <string name="please_save_file">Please save document into file to open (can\'t extract file path from intent)</string>
+    <string name="save_to_file">Save to File…</string>
+    <string name="open_in_temporary_file">Open as temporary file</string>
+    <string name="open_rececent_files">Go to recent books…</string>
+
+    <string name="recent_book_not_found">Can\'t find book file!</string>
 </resources>

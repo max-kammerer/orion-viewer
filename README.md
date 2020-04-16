@@ -26,5 +26,5 @@ To build Orion Viewer you will need:
  * specify path to android-sdk, android-ndk in 'local.properties' (use 'local.properties.sample' as example).
 
  * By default sources for native libs are included to build.
-  If you have any freezes with IDE you can exlude them via 'orion.excludeNativeLibsSources'
+  If you have any freezes with IDE you can exclude them via 'orion.excludeNativeLibsSources'
   flag in local.properties.

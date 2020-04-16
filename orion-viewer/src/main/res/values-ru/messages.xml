@@ -9,5 +9,15 @@
     <string name="msg_select_text">Выделите текст!</string>
     <string name="msg_select_word">Кликните по слову!</string>
 
+    <string name="msg_error">Ошибка</string>
+    <string name="msg_warning">Предупреждение</string>
+    <string name="msg_specify_keyword_for_search">Не задано слово для поиска</string>
+
     <string name="please_save_file">Пожалуйста сохраните документ в файл чтобы открыть (не найти путь в файл-intent\'e)</string>
+    <string name="save_to_file">Сохранить в файл…</string>
+    <string name="open_in_temporary_file">Открыть через временный файл</string>
+    <string name="open_rececent_files">Перейти к недавно открытым книгам…</string>
+
+    <string name="recent_book_not_found">Не могу найти файл книги!</string>
+
 </resources>
