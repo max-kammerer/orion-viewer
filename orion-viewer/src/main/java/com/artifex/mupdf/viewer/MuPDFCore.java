@@ -33,14 +33,14 @@ public class MuPDFCore
 
 	public MuPDFCore(String filename) {
 		doc = Document.openDocument(filename);
-		doc.layout(layoutW, layoutH, layoutEM);
+		//doc.layout(layoutW, layoutH, layoutEM);
 		pageCount = doc.countPages();
 		currentPage = -1;
 	}
 
 	public MuPDFCore(byte buffer[], String magic) {
 		doc = Document.openDocument(buffer, magic);
-		doc.layout(layoutW, layoutH, layoutEM);
+		//doc.layout(layoutW, layoutH, layoutEM);
 		pageCount = doc.countPages();
 		currentPage = -1;
 	}
