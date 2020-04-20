@@ -1,6 +1,7 @@
-===== 0.80.1 (Apr 12, 20200) =====
+===== 0.80.2 (Apr 18, 20200) =====
 * Mupdf updated to 1.16.1
 * Added save file dialog (for document with content URIs)
+* Minor russian localization
 
 ===== 0.74.2 (Jul 08, 2017) =====
 * Fixed compatibility with android 2.1
