@@ -303,18 +303,18 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 stubController.destroy()
                 controller1.changeOrinatation(lastPageInfo1!!.screenOrientation)
 
+                (newDocument.title?.takeIf { it.isNotBlank() } ?: filePath.substringAfterLast('/').substringBefore(".")).let {
+                    updateViewOnNewBook(it)
+                }
+
                 val drawView = fullScene.drawView
                 controller1.init(lastPageInfo1, Point(drawView.sceneWidth, drawView.sceneHeight))
 
                 subscriptionManager.sendDocOpenedNotification(controller1)
 
                 view.setDimensionAware(controller1)
-
                 controller1.drawPage()
 
-                val title = newDocument.title?.takeIf { it.isNotBlank() } ?: filePath.substringAfterLast('/').substringBefore(".")
-
-                updateViewOnNewBook(title)
                 globalOptions.addRecentEntry(GlobalOptions.RecentEntry(File(filePath).absolutePath))
 
                 lastPageInfo1.totalPages = newDocument.pageCount

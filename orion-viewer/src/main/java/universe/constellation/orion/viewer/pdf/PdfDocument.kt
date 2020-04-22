@@ -49,8 +49,9 @@ class PdfDocument @Throws(Exception::class) constructor(fileName: String) : Docu
 
     override fun destroy() = core.onDestroy()
 
-    override val title: String?
-        get() = core.title
+    override val title: String? by lazy {
+        core.title
+    }
 
     external override fun setContrast(contrast: Int)
     external fun updateContrast(bitmap: Bitmap, size: Int)

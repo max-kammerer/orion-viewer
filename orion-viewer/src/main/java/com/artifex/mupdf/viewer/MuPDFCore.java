@@ -45,7 +45,7 @@ public class MuPDFCore
 		currentPage = -1;
 	}
 
-	public String getTitle() {
+	public synchronized String getTitle() {
 		return doc.getMetaData(Document.META_INFO_TITLE);
 	}
 
