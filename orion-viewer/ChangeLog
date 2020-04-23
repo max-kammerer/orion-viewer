@@ -1,3 +1,6 @@
+===== 0.80.3 (Apr 23, 20200) =====
+* Try to avoid crash in `pdf_lex_no_string`
+
 ===== 0.80.2 (Apr 18, 20200) =====
 * Mupdf updated to 1.16.1
 * Added save file dialog (for document with content URIs)
