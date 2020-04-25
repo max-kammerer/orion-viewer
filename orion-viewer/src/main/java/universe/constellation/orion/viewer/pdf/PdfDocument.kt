@@ -44,7 +44,7 @@ class PdfDocument @Throws(Exception::class) constructor(fileName: String) : Docu
 
     override fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int) {
         core.drawPage(bitmap, pageNumber, left, top,  right, bottom, zoom.toFloat())
-        //updateContrast(bitmap, bitmap.width * bitmap.height * 4)
+        updateContrast(bitmap, bitmap.width * bitmap.height * 4)
     }
 
     override fun destroy() = core.onDestroy()
