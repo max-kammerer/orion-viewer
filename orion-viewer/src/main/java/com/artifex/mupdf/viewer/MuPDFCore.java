@@ -100,6 +100,8 @@ public class MuPDFCore
 	}
 
 	public synchronized PointF getPageSize(int pageNum) {
+		//destroyed, can be called in non-ui thread
+		if (doc == null) return new PointF(300, 400);
 		gotoPage(pageNum);
 		return new PointF(pageWidth, pageHeight);
 	}
@@ -120,6 +122,8 @@ public class MuPDFCore
 			int left, int top,
 			int right, int bottom,
 			float zoom) {
+		//destroyed, can be called in non-ui thread
+		if (doc == null) return;
 		gotoPage(pageNum);
 
 		if (displayList == null)
