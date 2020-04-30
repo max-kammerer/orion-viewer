@@ -59,12 +59,10 @@ open class SaveNotification : DialogFragment() {
     companion object {
 
         const val URI = "URI"
-        const val EXTENSION = "EXTENSION"
         const val TYPE = "TYPE"
 
         private fun saveFileInto(context: Context, uri: Uri, toFile: File): File {
             toFile.parentFile.mkdirs()
-            toFile.createNewFile()
 
             val input = context.contentResolver.openInputStream(uri)
 

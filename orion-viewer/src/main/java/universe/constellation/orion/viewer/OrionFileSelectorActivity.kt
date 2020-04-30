@@ -28,6 +28,7 @@ import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import universe.constellation.orion.viewer.Permissions.checkWritePermission
 import universe.constellation.orion.viewer.filemanager.FileChooserAdapter
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivityBase
 import java.io.File
@@ -44,19 +45,23 @@ class OrionSaveFileActivity : OrionFileManagerActivityBase(
 
         findViewById<View>(R.id.saveFileIdView).visibility = View.VISIBLE
         findViewById<Button>(R.id.saveFile).setOnClickListener {
-            val fileName = findViewById<TextView>(R.id.fileName).text.toString()
-            val currentFolder = (findViewById<ListView>(R.id.listView).adapter as FileChooserAdapter).currentFolder
-            val targetFile = File(currentFolder, fileName)
-            if (targetFile.exists()) {
-
-                AlertDialog.Builder(this).setMessage("File '${targetFile.name}' already exists.\nDo you want to overwrite it?").
-                setPositiveButton("Yes") { _, _ -> saveFile(targetFile) }.
-                setNegativeButton("No", {_, _ ->}).
-                show()
-            } else {
-                saveFile(targetFile)
+            //should be granted automatically
+            if (checkWritePermission(this)) {
+                val fileName = findViewById<TextView>(R.id.fileName).text.toString()
+                val currentFolder = (findViewById<ListView>(R.id.listView).adapter as FileChooserAdapter).currentFolder
+                val targetFile = File(currentFolder, fileName)
+                if (targetFile.exists()) {
+                    AlertDialog.Builder(this).
+                    setMessage("File '${targetFile.name}' already exists.\nDo you want to overwrite it?").
+                    setPositiveButton("Yes") { _, _ -> saveFile(targetFile) }.
+                    setNegativeButton("No", { _, _ -> }).show()
+                } else {
+                    saveFile(targetFile)
+                }
             }
         }
+        //should be granted automatically
+        checkWritePermission(this)
     }
 
     private fun saveFile(targetFile: File) {

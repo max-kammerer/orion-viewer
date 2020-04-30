@@ -32,6 +32,7 @@ import android.widget.*
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import org.xmlpull.v1.XmlPullParserFactory
+import universe.constellation.orion.viewer.Permissions.checkWritePermission
 import universe.constellation.orion.viewer.bookmarks.BookNameAndSize
 import universe.constellation.orion.viewer.bookmarks.Bookmark
 import universe.constellation.orion.viewer.bookmarks.BookmarkExporter
@@ -137,6 +138,8 @@ class OrionBookmarkActivity : OrionBaseActivity(false) {
             }
 
             R.id.export_bookmarks_menu_item -> {
+                //should be granted automatically
+                checkWritePermission(this)
                 if (bookId == -1L) {
                     showEmptyResult = true
                 }
@@ -169,6 +172,8 @@ class OrionBookmarkActivity : OrionBaseActivity(false) {
             }
 
             R.id.export_all_bookmarks_menu_item -> {
+                //should be granted automatically
+                checkWritePermission(this)
                 var file: String? = orionContext.tempOptions!!.openedFile
                 if (file == null) {
                     showEmptyResult = true
