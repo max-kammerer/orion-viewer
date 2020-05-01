@@ -19,6 +19,7 @@
 
 package universe.constellation.orion.viewer
 
+import android.app.Activity
 import android.graphics.Point
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
@@ -229,12 +230,13 @@ class Controller(
         }
     }
 
-    fun serialize(info: LastPageInfo) {
+    fun serializeAndSave(info: LastPageInfo, activity: Activity) {
         layoutStrategy.serialize(info)
         info.newOffsetX = layoutInfo.x.offset
         info.newOffsetY = layoutInfo.y.offset
         info.pageNumber = layoutInfo.pageNumber
         info.screenOrientation = screenOrientation
+        info.save(activity)
     }
 
     private fun sendViewChangeNotification() {

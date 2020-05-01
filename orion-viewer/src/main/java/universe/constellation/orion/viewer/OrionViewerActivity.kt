@@ -213,6 +213,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                                 log(e)
                                 null
                             } ?: run {
+                                if (controller == null) {
+                                    initStubController("Can't extract file path from URI", "Can't extract file path from URI")
+                                }
                                 SaveNotification().apply {
                                     Bundle().apply {
                                         putParcelable(SaveNotification.URI, uri)
@@ -257,18 +260,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     @Throws(Exception::class)
     private fun openFile(filePath: String) {
-        val stubDocument = StubDocument(filePath, "Loading...")
-        val stubRenderer = Renderer.EMPTY
-        val stubController = Controller(this, stubDocument, SimpleLayoutStrategy.create(stubDocument), stubRenderer)
-        val drawView = fullScene.drawView
-        val stubInfo = LastPageInfo.createDefaultLastPageInfo(initalizer(globalOptions))
-        stubController.changeOrinatation(stubInfo.screenOrientation)
-        stubController.init(stubInfo, Point(drawView.sceneWidth, drawView.sceneHeight))
-
-        view.setDimensionAware(stubController)
-        stubController.drawPage()
-        controller = stubController
-        updateViewOnNewBook(stubDocument.title)
+        val stubController = initStubController(filePath, "Loading...")
+        val stubDocument = stubController.document as StubDocument
 
         GlobalScope.launch(Dispatchers.Main) {
             log("Trying to open file: $filePath")
@@ -330,6 +323,22 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
     }
 
+    private fun initStubController(title: String, bodyText: String): Controller {
+        val stubDocument = StubDocument(title, bodyText)
+        val stubRenderer = Renderer.EMPTY
+        val stubController = Controller(this, stubDocument, SimpleLayoutStrategy.create(stubDocument), stubRenderer)
+        val drawView = fullScene.drawView
+        val stubInfo = LastPageInfo.createDefaultLastPageInfo(initalizer(globalOptions))
+        stubController.changeOrinatation(stubInfo.screenOrientation)
+        stubController.init(stubInfo, Point(drawView.sceneWidth, drawView.sceneHeight))
+
+        view.setDimensionAware(stubController)
+        stubController.drawPage()
+        controller = stubController
+        updateViewOnNewBook(stubDocument.title)
+        return stubController
+    }
+
     private fun updateViewOnNewBook(title: String?) {
         fullScene.onNewBook(title, controller!!.pageCount)
         supportActionBar?.title = title
@@ -352,9 +361,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     public override fun onPause() {
         _isResumed = false
         super.onPause()
-        if (controller != null) {
-            controller!!.onPause()
-            saveData()
+        controller?.let {
+            it.onPause()
+            saveBookPositionAndRecentFiles()
         }
     }
 
@@ -640,15 +649,13 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         orionContext.destroyDb()
     }
 
-    private fun saveData() {
-        if (controller != null) {
-            try {
-                controller!!.serialize(lastPageInfo!!)
-                lastPageInfo!!.save(this)
-            } catch (ex: Exception) {
-                log(ex)
+    private fun saveBookPositionAndRecentFiles() {
+        try {
+            lastPageInfo?.let {
+                controller?.serializeAndSave(it, this)
             }
-
+        } catch (ex: Exception) {
+            log(ex)
         }
         saveGlobalOptions()
     }
