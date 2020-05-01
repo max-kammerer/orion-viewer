@@ -50,15 +50,23 @@ class DjvuDocument(fileName: String) : Document {
     override val pageCount: Int
         get() = docInfo.pageCount
 
-    override fun getPageInfo(pageNum: Int) =
-            PageInfo(pageNum).also {
-                timing("Page $pageNum info calculation") {
-                    getPageInfo(docPointer, pageNum, it)
-                }
+    @Synchronized
+    override fun getPageInfo(pageNum: Int): PageInfo {
+        //destroyed, can be called in non-ui thread
+        if (docPointer == 0L) return PageInfo(pageNum, 300, 400)
+
+        return PageInfo(pageNum).also {
+            timing("Page $pageNum info calculation") {
+                getPageInfo(docPointer, pageNum, it)
             }
+        }
+    }
 
     @Synchronized
     override fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int) {
+        //destroyed, can be called in non-ui thread
+        if (docPointer == 0L) return
+
         val pagePointer = gotoPage(pageNumber)
         timing("Page $pageNumber rendering") {
             drawPage(docPointer, pagePointer, bitmap, zoom.toFloat(), right - left, bottom - top, left, top, right - left, bottom - top)
