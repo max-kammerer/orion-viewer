@@ -40,6 +40,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
 
     private var lastEvent: LayoutPosition? = null
 
+    @Volatile
     private var stopped: Boolean = false
 
     internal constructor(activity: OrionViewerActivity, layout: LayoutStrategy, doc: Document, fullScene: Scene) : this(activity, layout, doc, true, fullScene)
@@ -72,8 +73,8 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
     }
 
     override fun stopRenderer() {
+        stopped = true
         synchronized(this) {
-            stopped = true
             cleanCache()
             (this as java.lang.Object).notify()
         }
@@ -128,6 +129,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
                 }
             }
              if (doContinue) continue
+             if (stopped) break
 
             renderInCurrentThread(futureIndex == 0, curPos)
             futureIndex++
@@ -139,15 +141,17 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
         log("Orion: rendering position: $curPos")
         if (curPos != null) {
             //try to find result in cache
-            val iterator = cachedBitmaps.iterator()
-            while (iterator.hasNext()) {
-                val cacheInfo = iterator.next()
-                if (cacheInfo.isValid && cacheInfo.info == curPos) {
-                    resultEntry = cacheInfo
-                    //relocate info to end of cache
-                    iterator.remove()
-                    cachedBitmaps.add(cacheInfo)
-                    break
+            synchronized(this) {
+                val iterator = cachedBitmaps.iterator()
+                while (iterator.hasNext()) {
+                    val cacheInfo = iterator.next()
+                    if (cacheInfo.isValid && cacheInfo.info == curPos) {
+                        resultEntry = cacheInfo
+                        //relocate info to end of cache
+                        iterator.remove()
+                        cachedBitmaps.add(cacheInfo)
+                        break
+                    }
                 }
             }
 
@@ -157,13 +161,13 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
                 resultEntry = renderInner(curPos)
 
                 synchronized(this) {
-                    cachedBitmaps.add(resultEntry)
+                    cachedBitmaps.add(resultEntry!!)
                 }
             }
 
 
             if (flushBitmap) {
-                val bitmap = resultEntry.bitmap
+                val bitmap = resultEntry!!.bitmap
                 log("Sending Bitmap")
                 val mutex = CountDownLatch(1)
 
