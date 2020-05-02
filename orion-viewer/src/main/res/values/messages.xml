@@ -19,4 +19,5 @@
     <string name="open_rececent_files">Go to recent books…</string>
 
     <string name="recent_book_not_found">Can\'t find book file!</string>
+    <string name="tap_zones_header">Default Tap Zones</string>
 </resources>

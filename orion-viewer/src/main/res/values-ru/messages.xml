@@ -20,4 +20,5 @@
 
     <string name="recent_book_not_found">Не могу найти файл книги!</string>
 
+    <string name="tap_zones_header">Тап Зоны по-умолчанию</string>
 </resources>

@@ -18,7 +18,8 @@ import universe.constellation.orion.viewer.prefs.OrionTapActivity;
 public class TapHelpDialog extends DialogOverView {
 
     public TapHelpDialog(OrionViewerActivity activity) {
-        super(activity, R.layout.tap, android.R.style.Theme_Translucent_NoTitleBar);
+        super(activity, R.layout.tap, android.R.style.Theme_Translucent);
+        dialog.setTitle(R.string.tap_zones_header);
 
         TableLayout table = dialog.findViewById(R.id.tap_table);
         table.setBackgroundColor(0);
