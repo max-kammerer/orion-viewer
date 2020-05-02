@@ -118,7 +118,7 @@ class Controller(
             renderer.onResume()
 
             //HACK
-            activity.myprocessOnActivityVisible()
+            activity.showTapDialogIfNeeded()
         }
     }
 

@@ -112,9 +112,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             return bookId
         }
 
+    private var tapHelpCounter = 0
+
     @SuppressLint("MissingSuperCall")
     public override fun onCreate(savedInstanceState: Bundle?) {
-        log("Creating file manager")
+        log("Creating OrionViewerActivity...")
 
         orionContext.viewActivity = this
         OptionActions.FULL_SCREEN.doAction(this, !globalOptions.isFullScreen, globalOptions.isFullScreen)
@@ -316,6 +318,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 askPassword(controller1)
                 orionContext.onNewBook(filePath)
 
+                showTapDialogIfNeeded()
             } catch (e: Exception) {
                 log(e)
                 throw e
@@ -1013,8 +1016,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
     }
 
-    //big hack
-    fun myprocessOnActivityVisible() {
+    fun showTapDialogIfNeeded() {
+        if (++tapHelpCounter < 2) return
         if (globalOptions.isShowTapHelp && !orionContext.isTesting) {
             globalOptions.saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false)
             TapHelpDialog(this).showDialog()
