@@ -51,10 +51,17 @@ class OrionSaveFileActivity : OrionFileManagerActivityBase(
                 val currentFolder = (findViewById<ListView>(R.id.listView).adapter as FileChooserAdapter).currentFolder
                 val targetFile = File(currentFolder, fileName)
                 if (targetFile.exists()) {
-                    AlertDialog.Builder(this).
-                    setMessage("File '${targetFile.name}' already exists.\nDo you want to overwrite it?").
-                    setPositiveButton("Yes") { _, _ -> saveFile(targetFile) }.
-                    setNegativeButton("No", { _, _ -> }).show()
+                    if (targetFile.isDirectory) {
+                        AlertDialog.Builder(this).
+                        setMessage("Can't save file into '${targetFile.name}' because there is a directory with same name").
+                        setPositiveButton("OK") { _, _ -> }.show()
+                    }
+                    else {
+                        AlertDialog.Builder(this).
+                        setMessage("File '${targetFile.name}' already exists.\nDo you want to overwrite it?").
+                        setPositiveButton("Yes") { _, _ -> saveFile(targetFile) }.
+                        setNegativeButton("No") { _, _ -> }.show()
+                    }
                 } else {
                     saveFile(targetFile)
                 }
