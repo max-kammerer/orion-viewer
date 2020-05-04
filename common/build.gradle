@@ -35,7 +35,7 @@ kotlin {
         androidLibMain {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-                implementation 'com.android.support:appcompat-v7:27.1.1'
+                implementation 'androidx.collection:collection:1.1.0'
             }
         }
     }
