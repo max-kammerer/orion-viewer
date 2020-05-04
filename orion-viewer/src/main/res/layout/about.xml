@@ -116,11 +116,11 @@
             android:gravity="center"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_1" android:layout_marginTop="20dp"
-                  android:text="Project site: https://sourceforge.net/projects/orion-viewer/" android:textSize="18sp"
+                  android:text="Project site: https://github.com/max-kammerer/orion-viewer" android:textSize="18sp"
                   android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_2" android:textSize="18sp"
-                  android:text="Bug reporting: https://sourceforge.net/p/orion-viewer/tickets/"
+                  android:text="Bug reporting: https://github.com/max-kammerer/orion-viewer/issues"
                   android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
 
         <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_3" android:textSize="18sp"
