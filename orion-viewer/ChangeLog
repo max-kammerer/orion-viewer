@@ -1,13 +1,17 @@
-===== 0.80.5 (Apr 30, 20200) =====
+===== 0.80.6 (May 04, 2020) =====
+* Small UX fixes
+* Small multithreading fixes
+
+===== 0.80.5 (Apr 30, 2020) =====
 * Fixed WRITE permission acquisition
 
-===== 0.80.4 (Apr 23, 20200) =====
+===== 0.80.4 (Apr 23, 2020) =====
 * Fix several NPE's during pdf rendering
 
-===== 0.80.3 (Apr 23, 20200) =====
+===== 0.80.3 (Apr 23, 2020) =====
 * Try to avoid crash in `pdf_lex_no_string`
 
-===== 0.80.2 (Apr 18, 20200) =====
+===== 0.80.2 (Apr 18, 2020) =====
 * Mupdf updated to 1.16.1
 * Added save file dialog (for document with content URIs)
 * Minor russian localization
