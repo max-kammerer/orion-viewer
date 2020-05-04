@@ -6,7 +6,7 @@ actual class LruCache<K, V> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    actual fun put(k: K, v: V): V {
+    actual fun put(k: K, v: V): V? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

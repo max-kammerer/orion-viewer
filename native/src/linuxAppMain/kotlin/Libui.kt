@@ -17,7 +17,7 @@ fun main(args: Array<String>) = appWindow(
 
                 val djvuDocument = DjvuDocument(openedFile!!)
                 println(djvuDocument.pageCount)
-                val pageInfo = djvuDocument.getPageInfo(0, 0)
+                val pageInfo = djvuDocument.getPageInfo(0)
                 println(pageInfo)
                 djvuDocument.destroy()
             }
