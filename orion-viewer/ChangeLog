@@ -4,11 +4,7 @@
 
 ===== 0.80.5 (Apr 30, 2020) =====
 * Fixed WRITE permission acquisition
-
-===== 0.80.4 (Apr 23, 2020) =====
 * Fix several NPE's during pdf rendering
-
-===== 0.80.3 (Apr 23, 2020) =====
 * Try to avoid crash in `pdf_lex_no_string`
 
 ===== 0.80.2 (Apr 18, 2020) =====
