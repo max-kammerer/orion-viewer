@@ -116,8 +116,8 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
             (activity as OrionFileManagerActivityBase).createFileView(
-                activity!!.findViewById<View>(R.id.listView) as ListView,
-                activity!!.findViewById<View>(R.id.path) as TextView
+                activity!!.findViewById(R.id.listView),
+                activity!!.findViewById(R.id.path)
             )
         }
     }
@@ -149,7 +149,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         if (Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER == requestCode) {
             log("Permission callback...")
             if (checkPermissionGranted(grantResults, permissions, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                val list = findViewById<View>(R.id.listView) as ListView
+                val list = findViewById<ListView>(R.id.listView)
                 val adapter = list.adapter
                 if (adapter is FileChooserAdapter) {
                     val currentFolder = adapter.currentFolder
