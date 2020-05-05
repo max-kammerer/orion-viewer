@@ -19,11 +19,11 @@
 
 package universe.constellation.orion.viewer
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
@@ -34,6 +34,7 @@ import android.text.method.PasswordTransformationMethod
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import kotlinx.coroutines.*
 import universe.constellation.orion.viewer.android.FileUtils
 import universe.constellation.orion.viewer.device.Device
@@ -87,8 +88,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     lateinit var fullScene: FullScene
         private set
 
-    private var hasReadPermissions = false
-
     private var lastIntent: Intent? = null
 
     private var zoomInternal = 0
@@ -139,27 +138,26 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             NewTouchProcessorWithScale(view, this)
         else
             NewTouchProcessor(view, this)
-
-        hasReadPermissions = Permissions.checkReadPermission(this)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (Permissions.ORION_ASK_PERMISSION_CODE == requestCode && !hasReadPermissions) {
+        if (Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN == requestCode) {
             println("Permission callback...")
-            var i = 0
-            while (i < permissions.size) {
-                if (android.Manifest.permission.READ_EXTERNAL_STORAGE == permissions[i] && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                    hasReadPermissions = true
-                    onNewIntent(lastIntent ?: return)
-                    lastIntent = null
-                    return
-                }
-                i++
+
+            if (checkPermissionGranted(grantResults, permissions, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                val intent = lastIntent
+                lastIntent = null
+                openFileWithGrantedPermissions(intent ?: return)
+            } else {
+                AlertDialog.Builder(this).
+                setMessage(R.string.permission_read_warning).
+                setPositiveButton(R.string.permission_grant) { _, _ -> askReadPermissions() }.
+                setNegativeButton(R.string.permission_exit) { _, _ -> this.finish() }.
+                show()
             }
         }
     }
-
 
     private fun initDialogs() {
         initOptionDialog()
@@ -194,14 +192,22 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        log("Runtime.getRuntime().totalMemory(): ${Runtime.getRuntime().totalMemory()}")
-        log("Debug.getNativeHeapSize(): ${Debug.getNativeHeapSize()}")
-        log("Trying to open new intent: $intent...")
-        if (!hasReadPermissions) {
-            log("Waiting for read permissions")
+        if (!askReadPermissions()) {
+            log("Waiting for read permissions for $intent")
             lastIntent = intent
             return
         }
+
+        openFileWithGrantedPermissions(intent)
+    }
+
+    private fun askReadPermissions() =
+            Permissions.checkReadPermission(this, Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN)
+
+    private fun openFileWithGrantedPermissions(intent: Intent) {
+        log("Runtime.getRuntime().totalMemory(): ${Runtime.getRuntime().totalMemory()}")
+        log("Debug.getNativeHeapSize(): ${Debug.getNativeHeapSize()}")
+        log("Trying to open new intent: $intent...")
 
         val uri = intent.data
         if (uri != null) {

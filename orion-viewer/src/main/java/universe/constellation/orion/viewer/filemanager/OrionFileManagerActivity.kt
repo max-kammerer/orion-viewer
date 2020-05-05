@@ -19,6 +19,7 @@
 
 package universe.constellation.orion.viewer.filemanager
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
@@ -32,6 +33,7 @@ import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.ListFragment
@@ -139,19 +141,27 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
 
         justCreated = true
 
-        Permissions.checkReadPermission(this)
+        Permissions.checkReadPermission(this, Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (Permissions.ORION_ASK_PERMISSION_CODE == requestCode) {
-            println("Permission callback...")
-            val list = findViewById<View>(R.id.listView) as ListView
-            val adapter = list.adapter
-            if (adapter is FileChooserAdapter) {
-                val currentFolder = adapter.currentFolder
-                println("Refreshing view")
-                adapter.changeFolder(File(currentFolder.absolutePath))
+        if (Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER == requestCode) {
+            log("Permission callback...")
+            if (checkPermissionGranted(grantResults, permissions, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                val list = findViewById<View>(R.id.listView) as ListView
+                val adapter = list.adapter
+                if (adapter is FileChooserAdapter) {
+                    val currentFolder = adapter.currentFolder
+                    log("Refreshing view")
+                    adapter.changeFolder(File(currentFolder.absolutePath))
+                }
+            } else {
+                AlertDialog.Builder(this).
+                setMessage(R.string.permission_directory_warning).
+                setPositiveButton(R.string.permission_grant) { _, _ -> Permissions.checkReadPermission(this, Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER) }.
+                setNegativeButton(R.string.permission_exit) { _, _ -> this.finish() }.
+                show()
             }
         }
     }

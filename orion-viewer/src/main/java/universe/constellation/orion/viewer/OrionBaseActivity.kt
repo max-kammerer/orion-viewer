@@ -22,6 +22,7 @@ package universe.constellation.orion.viewer
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
@@ -186,6 +187,12 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
 
     protected fun doTrack(keyCode: Int): Boolean {
         return keyCode != KeyEvent.KEYCODE_MENU && keyCode != KeyEvent.KEYCODE_BACK
+    }
+
+    protected fun checkPermissionGranted(grantResults: IntArray, permissions: Array<String>, checkPermission: String): Boolean {
+        return grantResults.zip(permissions).any { (grantResult, permission) ->
+            checkPermission == permission && grantResult == PackageManager.PERMISSION_GRANTED
+        }
     }
 
 }

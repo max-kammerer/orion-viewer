@@ -21,4 +21,9 @@
     <string name="recent_book_not_found">Не могу найти файл книги!</string>
 
     <string name="tap_zones_header">Тап Зоны по-умолчанию</string>
+
+    <string name="permission_read_warning">Не возможно открыть файл без прав на чтение. Пожалуйста, предоставьте права на чтение!</string>
+    <string name="permission_directory_warning">Не возможно прочитать содержимое директорий без прав на чтение. Пожалуйста, предоставьте права на чтение!</string>
+    <string name="permission_grant">Предоставить…</string>
+    <string name="permission_exit">Выйти</string>
 </resources>

@@ -25,27 +25,29 @@ import android.content.pm.PackageManager
 import android.os.Build
 
 object Permissions {
-    const val ORION_ASK_PERMISSION_CODE = 111
+    private const val ASK_PERMISSION_COMMON = 111
+    const val ASK_READ_PERMISSION_FOR_BOOK_OPEN = 112
+    const val ASK_READ_PERMISSION_FOR_FILE_MANAGER = 113
 
     @JvmStatic
-    fun checkReadPermission(activity: Activity) =
+    fun checkReadPermission(activity: Activity, code: Int = ASK_PERMISSION_COMMON) =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                checkPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)
+                checkPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE, code)
             else true
 
     @JvmStatic
-    fun checkWritePermission(activity: Activity) =
+    fun checkWritePermission(activity: Activity, code: Int = ASK_PERMISSION_COMMON) =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                checkPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                checkPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, code)
             else true
 
     @JvmStatic
-    private fun checkPermission(activity: Activity, permission: String): Boolean {
+    private fun checkPermission(activity: Activity, permission: String, code: Int = ASK_PERMISSION_COMMON): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val hasPermission = activity.checkSelfPermission(permission)
             if (hasPermission != PackageManager.PERMISSION_GRANTED) {
-                log("Request permission $permission")
-                activity.requestPermissions(arrayOf(permission), ORION_ASK_PERMISSION_CODE)
+                log("Request ($code) permission $permission")
+                activity.requestPermissions(arrayOf(permission), code)
                 return false
             }
         }

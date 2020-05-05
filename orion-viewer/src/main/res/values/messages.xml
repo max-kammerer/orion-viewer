@@ -20,4 +20,10 @@
 
     <string name="recent_book_not_found">Can\'t find book file!</string>
     <string name="tap_zones_header">Default Tap Zones</string>
+
+    <string name="permission_read_warning">Can\'t open file without read permissions. Please grant read permissions!</string>
+    <string name="permission_directory_warning">Can\'t read directories content without read permissions. Please grant read permissions!</string>
+    <string name="permission_grant">Grant…</string>
+    <string name="permission_exit">Exit</string>
+
 </resources>
