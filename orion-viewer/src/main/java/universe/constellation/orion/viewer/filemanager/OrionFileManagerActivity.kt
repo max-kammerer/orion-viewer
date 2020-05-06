@@ -61,9 +61,9 @@ open class OrionFileManagerActivity : OrionFileManagerActivityBase(true, true, F
 
 
         val dontStartRecent = intent.getBooleanExtra(DONT_OPEN_RECENT_FILE, false)
-        if (!dontStartRecent && globalOptions!!.isOpenRecentBook) {
-            if (!globalOptions!!.recentFiles.isEmpty()) {
-                val entry = globalOptions!!.recentFiles[0]
+        if (!dontStartRecent && globalOptions.isOpenRecentBook) {
+            if (!globalOptions.recentFiles.isEmpty()) {
+                val entry = globalOptions.recentFiles[0]
                 val book = File(entry.path)
                 if (book.exists()) {
                     log("Opening recent book $book")
@@ -82,13 +82,13 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
 
     private var prefs: SharedPreferences? = null
 
-    protected var globalOptions: GlobalOptions? = null
+    protected lateinit var globalOptions: GlobalOptions
 
     private var justCreated: Boolean = false
 
     private val startFolder: String
         get() {
-            val lastOpenedDir = globalOptions!!.lastOpenedDirectory
+            val lastOpenedDir = globalOptions.lastOpenedDirectory
 
             if (lastOpenedDir != null && File(lastOpenedDir).exists()) {
                 return lastOpenedDir
@@ -125,8 +125,27 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
     class RecentListFragment : ListFragment() {
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
-            (activity as OrionFileManagerActivityBase).createRecentView(this)
+
+            listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+                val entry = parent.getItemAtPosition(position) as GlobalOptions.RecentEntry
+                val file = File(entry.path)
+                if (file.exists()) {
+                    (requireActivity() as OrionFileManagerActivityBase).openFile(file)
+                } else {
+                    Toast.makeText(parent.context, getString(R.string.recent_book_not_found), LENGTH_SHORT).show()
+                }
+            }
         }
+
+        override fun onResume() {
+            super.onResume()
+            updateRecentListAdapter()
+        }
+
+        private fun updateRecentListAdapter() {
+            listAdapter = RecentListAdapter(requireActivity(), (requireActivity() as OrionFileManagerActivityBase).globalOptions.recentFiles)
+        }
+
     }
 
     @SuppressLint("MissingSuperCall")
@@ -177,21 +196,6 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
             justCreated = false
             onNewIntent(intent)
         }
-    }
-
-    private fun createRecentView(list: ListFragment) {
-        val recent = list.listView
-        recent.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            val entry = parent.getItemAtPosition(position) as GlobalOptions.RecentEntry
-            val file = File(entry.path)
-            if (file.exists()) {
-                openFile(file)
-            } else {
-                Toast.makeText(parent.context, getString(R.string.recent_book_not_found), LENGTH_SHORT).show()
-            }
-        }
-
-        list.listAdapter = RecentListAdapter(this, globalOptions!!.recentFiles)
     }
 
     private fun createFileView(list: ListView, path: TextView) {
