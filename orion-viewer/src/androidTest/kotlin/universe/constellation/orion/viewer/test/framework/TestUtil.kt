@@ -34,7 +34,7 @@ interface TestUtil {
             throw RuntimeException("Couldn't create new file " + outFile.absolutePath, e)
         }
 
-        val input = this.javaClass.classLoader.getResourceAsStream(getFileUnderTestData(fileName))
+        val input = this.javaClass.classLoader!!.getResourceAsStream(getFileUnderTestData(fileName))
         val bufferedOutputStream = FileOutputStream(outFile).buffered()
         input.buffered().copyTo(bufferedOutputStream)
         bufferedOutputStream.close()
@@ -51,6 +51,8 @@ interface TestUtil {
         const val SICP: String = "sicp.pdf"
 
         const val ALICE: String = "aliceinw.djvu"
+
+        const val DJVU_SPEC: String = "DjVu3Spec.djvu"
 
         const val ORION_PKG: String = "universe.constellation.orion.viewer"
     }

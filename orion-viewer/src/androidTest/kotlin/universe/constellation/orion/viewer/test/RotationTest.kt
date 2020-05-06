@@ -3,7 +3,7 @@ package universe.constellation.orion.viewer.test
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.net.Uri
-import junit.framework.Assert
+import org.junit.Assert
 import org.junit.Test
 import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
 import universe.constellation.orion.viewer.test.framework.TestUtil
@@ -25,9 +25,9 @@ class RotationTest : InstrumentationTestCase() {
         Assert.assertTrue(width != 0)
         Assert.assertTrue(height != 0)
         //OptionActions.FULL_SCREEN.doAction(getActivity(), true, false)
-        val orientation = activity.resources!!.configuration.orientation;
+        val orientation = activity.resources!!.configuration.orientation
 
-        val latch = CountDownLatch(1);
+        val latch = CountDownLatch(1)
         mActivityRule.runOnUiThread {
             getController().changeOrinatation(if (orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) "PORTRAIT" else "LANDSCAPE")
             latch.countDown()

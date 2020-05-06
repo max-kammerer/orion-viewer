@@ -28,4 +28,5 @@ project.ext {
     orionCompileSdk = 28
     orionBuildToolsVersion = "28.0.3"
     orionNdkVersion = "20.1.5948944"
+    testFiles = ['http://www.djvu.org/docs/DjVu3Spec.djvu']
 }

@@ -189,3 +189,26 @@ kotlin {
 //        }
     }
 }
+
+task downloadTestFiles() {
+    doFirst {
+        testFiles.forEach {
+            def name = it.tokenize('/').last()
+            def fileName = project.rootDir.path + "/orion-viewer/src/androidTest/assets/testData/" + name
+            def file = new File(fileName)
+            if (!file.exists()) {
+                println "Downloading " + it + " into " + file.absolutePath
+                new URL(it).withInputStream { i -> file.withOutputStream { it << i } }
+            }
+        }
+    }
+}
+
+
+//afterEvaluate {
+//    tasks.each {
+//        if (it.name.contains("pre") && it.name.endsWith("AndroidTestBuild")) {
+//            it.dependsOn 'downloadTestFiles'
+//        }
+//    }
+//}

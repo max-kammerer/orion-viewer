@@ -2,22 +2,33 @@ package universe.constellation.orion.viewer.test
 
 import android.graphics.Bitmap
 import android.graphics.Point
-import junit.framework.Assert
+import org.junit.After
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.*
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.LayoutStrategy
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
 import universe.constellation.orion.viewer.prefs.initalizer
+import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
 import universe.constellation.orion.viewer.test.framework.SingleThreadRenderer
-import universe.constellation.orion.viewer.test.framework.TestUtil
 import universe.constellation.orion.viewer.view.Scene
-import java.util.*
 import java.util.concurrent.CountDownLatch
 
-class RenderingAndNavigationTest : InstrumentationTestCase() {
+@RunWith(Parameterized::class)
+class RenderingAndNavigationTest(path: String) : InstrumentationTestCase() {
+
+    companion object {
+        @JvmStatic
+        @Parameterized.Parameters(name = "Test simple navigation in {0}")
+        fun testData(): Iterable<Array<Any>> {
+            return BookDescription.values().map { arrayOf<Any>(it.path) }
+        }
+    }
 
     class MyView(private val imageView: OrionImageListener) : Scene, OrionBookListener {
 
@@ -33,6 +44,8 @@ class RenderingAndNavigationTest : InstrumentationTestCase() {
         }
     }
 
+    private val document = openTestBook(path)
+
     private val deviceSize = Point(300, 350) //to split page on two screen - page size is 663x886
 
     private lateinit var view: MyView
@@ -43,42 +56,46 @@ class RenderingAndNavigationTest : InstrumentationTestCase() {
         view = MyView(activity.view)
     }
 
-    @Test
-    fun testProperPagesSkip() {
-        doTestProperPages(TestUtil.SICP)
+    @After
+    fun destroy() {
+        document.destroy()
     }
 
     @Test
-    fun testProperPagesAlice() {
-        doTestProperPages(TestUtil.ALICE)
+    fun testProperPages() {
+        doTestProperPages()
     }
 
-    private fun doTestProperPages(book: String) {
-        val controller = prepareEngine(book)
+    private fun doTestProperPages() {
+        val controller = prepareEngine()
         val screens = 21
 
         val nexts = arrayListOf<IntArray>()
-        (1..screens).forEach {
+        repeat(screens) {
             processBitmap(nexts) { controller.drawNext() }
         }
 
         controller.drawNext()
 
         val prevs = arrayListOf<IntArray>()
-        (1..screens).forEach {
+        repeat(screens) {
             processBitmap(prevs) { controller.drawPrev() }
         }
 
-        (1..screens - 2).forEach { i ->
-            Assert.assertFalse("fail on $i", Arrays.equals(nexts[i], nexts[i + 1]))
-            Assert.assertFalse("fail on $i", Arrays.equals(prevs[i], prevs[i + 1]))
+        Assert.assertEquals(prevs.size, screens)
+        Assert.assertEquals(nexts.size, screens)
+
+        nexts.zipWithNext().forEachIndexed { index, (left, right) ->
+            Assert.assertFalse("fail on $index", left.contentEquals(right))
         }
 
-        (screens - 1 downTo 1).forEach { i ->
-            println("$i")
-            Assert.assertTrue("fail on $i", Arrays.equals(nexts[i], prevs[prevs.lastIndex - i]))
+        prevs.zipWithNext().forEachIndexed { index, (left, right) ->
+            Assert.assertFalse("fail on $index", left.contentEquals(right))
         }
 
+        nexts.zip(prevs.reversed()).forEachIndexed() { index, (next, prev) ->
+            Assert.assertTrue("fail on $index", next.contentEquals(prev))
+        }
     }
 
     private fun processBitmap(list: MutableList<IntArray>, drawer: () -> Unit) {
@@ -92,12 +109,11 @@ class RenderingAndNavigationTest : InstrumentationTestCase() {
         list.add(pixels)
     }
 
-    private fun prepareEngine(book: String): Controller {
-        val doc = openTestBook(book)
+    private fun prepareEngine(): Controller {
 
-        val layoutStrategy: LayoutStrategy = SimpleLayoutStrategy.create(doc)
-        val renderer = SingleThreadRenderer(activity, view, layoutStrategy, doc)
-        val controller = Controller(activity, doc, layoutStrategy, renderer)
+        val layoutStrategy: LayoutStrategy = SimpleLayoutStrategy.create(document)
+        val renderer = SingleThreadRenderer(activity, view, layoutStrategy, document)
+        val controller = Controller(activity, document, layoutStrategy, renderer)
 
 
         val lastPageInfo = LastPageInfo.loadBookParameters(activity, "123", initalizer(activity.globalOptions))

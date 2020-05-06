@@ -1,45 +1,33 @@
 package universe.constellation.orion.viewer.test
 
-import junit.framework.Assert
+import android.graphics.Rect
+import org.junit.Assert.assertEquals
 import org.junit.Test
+import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.selection.SelectionAutomata
-import universe.constellation.orion.viewer.test.framework.BaseTest
+import universe.constellation.orion.viewer.test.framework.BookTest
 import universe.constellation.orion.viewer.test.framework.TestUtil
 
-class SelectionTest : BaseTest() {
+class SelectionTest(path: String, val page1Based: Int, val absoluteRect: Rect, val isSingleWord: Boolean, val expectedText: String) : BookTest(path) {
 
-    @Test
-    fun testSicp() {
-        val book = openTestBook(TestUtil.SICP)
-        val text = book.getText(11/*zero based*/, 242, 172, 140, 8, false)
-
-        Assert.assertEquals("These programs", text)
+    companion object {
+        @JvmStatic
+        @Parameterized.Parameters(name = "Test text selection in {0} with singleWord={3} expected text {4}")
+        fun testData(): Iterable<Array<Any>> {
+            return listOf(
+                    arrayOf(TestUtil.SICP, 12, Rect(242, 172, 242 + 140, 172 + 8), false, "These programs"),
+                    arrayOf(TestUtil.SICP, 12, Rect(250, 176, 250 + 0, 176 + 0), true, "These"),
+                    arrayOf(TestUtil.ALICE, 6, Rect(1288, 517, 1288 + 115, 517 + 50), false, "tunnel "),
+                    arrayOf(TestUtil.ALICE, 6, Rect(518, 556, 518 + 0, 556 + 0), true, "The ")
+            )
+        }
     }
 
-    @Test
-    fun testSicpSingleWord() {
-        val book = openTestBook(TestUtil.SICP)
-        val selectionRect = SelectionAutomata.getSelectionRectangle(250, 176, 0, 0, true)
-        val text = book.getText(11/*zero based*/, selectionRect.left, selectionRect.top, selectionRect.width(), selectionRect.height(), true)
-
-        Assert.assertEquals("These", text)
-    }
 
     @Test
-    fun testAlice() {
-        val book = openTestBook(TestUtil.ALICE)
-        val text = book.getText(5/*zero based*/, 1288, 517, 115, 50, false)
-
-        Assert.assertEquals("tunnel ", text)
+    fun testSelection() {
+        val selectionRect = SelectionAutomata.getSelectionRectangle(absoluteRect.left, absoluteRect.top, absoluteRect.width(), absoluteRect.height(), isSingleWord)
+        val text = document.getText(page1Based - 1/*zero based*/, selectionRect.left, selectionRect.top, selectionRect.width(), selectionRect.height(), isSingleWord)
+        assertEquals(expectedText, text)
     }
-
-    @Test
-    fun testAliceSingleWord() {
-        val book = openTestBook(TestUtil.ALICE)
-        val selectionRect = SelectionAutomata.getSelectionRectangle(518, 556, 0, 0, true)
-        val text = book.getText(5/*zero based*/, selectionRect.left, selectionRect.top, selectionRect.width(), selectionRect.height(), true)
-
-        Assert.assertEquals("The ", text)
-    }
-
 }
