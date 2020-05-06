@@ -288,8 +288,7 @@ struct OutlineItem_s {
 typedef struct OutlineItem_s OutlineItem;
 
 
-int buildTOC(ddjvu_document_t *doc, miniexp_t expr, list *myList, jint level, JNIEnv *env,
-             jclass olClass, jmethodID ctor) {
+int buildTOC(ddjvu_document_t *doc, miniexp_t expr, list *myList, jint level, JNIEnv *env, jclass olClass) {
     while (miniexp_consp(expr)) {
         miniexp_t s = miniexp_car(expr);
         expr = miniexp_cdr(expr);
@@ -325,7 +324,7 @@ int buildTOC(ddjvu_document_t *doc, miniexp_t expr, list *myList, jint level, JN
             myList->tail = next;
 
             // recursion
-            buildTOC(doc, miniexp_cddr(s), myList, level + 1, env, olClass, ctor);
+            buildTOC(doc, miniexp_cddr(s), myList, level + 1, env, olClass);
         }
     }
     return 0;
@@ -355,13 +354,13 @@ JNIEXPORT jobjectArray JNICALL JNI_FN(DjvuDocument_getOutline)(JNIEnv *env, jobj
     jmethodID ctor;
 
 #ifdef ORION_FOR_ANDROID
-    olClass = (*env)->FindClass(env, "universe/constellation/orion/viewer/outline/OutlineItem");
+    olClass = (*env)->FindClass(env, "universe/constellation/orion/viewer/document/OutlineItem");
     if (olClass == NULL) return NULL;
     ctor = (*env)->GetMethodID(env, olClass, "<init>", "(ILjava/lang/String;I)V");
     if (ctor == NULL) return NULL;
 #endif
 
-    buildTOC(doc, miniexp_cdr(outline), myList, 0, env, olClass, ctor);
+    buildTOC(doc, miniexp_cdr(outline), myList, 0, env, olClass);
 
     list_item *next = myList->head;
     int size = 0;
