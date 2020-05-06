@@ -21,12 +21,10 @@ package universe.constellation.orion.viewer.pdf
 
 import android.graphics.Bitmap
 import android.graphics.RectF
-import com.artifex.mupdf.fitz.Matrix
 import com.artifex.mupdf.fitz.Outline
-import com.artifex.mupdf.fitz.Point
 import com.artifex.mupdf.fitz.StructuredText
-import com.artifex.mupdf.fitz.android.AndroidDrawDevice
 import com.artifex.mupdf.viewer.MuPDFCore
+import com.artifex.mupdfdemo.TextWord
 import universe.constellation.orion.viewer.PageInfo
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.OutlineItem
@@ -60,8 +58,52 @@ class PdfDocument @Throws(Exception::class) constructor(fileName: String) : Docu
 
     override fun getText(pageNumber: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): String? {
         val text: StructuredText = core.getText(pageNumber)
-        //TODO support single word
-        return text.copy(Point(absoluteX.toFloat(), absoluteY.toFloat()), Point( (absoluteX + width).toFloat(), (absoluteY + height).toFloat()))
+
+        // The text of the page held in a hierarchy (blocks, lines, spans).
+        // Currently we don't need to distinguish the blocks level or
+        // the spans, and we need to collect the text into words.
+        val lns: java.util.ArrayList<List<TextWord>> = arrayListOf()
+        val region = RectF(absoluteX.toFloat(), absoluteY.toFloat(), (absoluteX + width).toFloat(), (absoluteY + height).toFloat())
+
+        for (block in text.blocks) {
+            if (block != null) {
+                for (ln in block.lines) {
+                    if (ln != null) {
+                        val wordsInLine = arrayListOf<TextWord>()
+                        var word = TextWord()
+                        for (textChar in ln.chars) {
+                            if (textChar.c != ' '.toInt()) {
+                                word.add(textChar)
+                            } else if (word.isNotEmpty()) {
+                                processWord(word, wordsInLine, region, singleWord)
+                                word = TextWord()
+                            }
+                        }
+                        if (word.isNotEmpty()) {
+                            processWord(word, wordsInLine, region, singleWord)
+                        }
+                        if (wordsInLine.size > 0) {
+                            lns.add(wordsInLine)
+                        }
+                    }
+                }
+            }
+        }
+
+        return lns.joinToString(" ") {
+            it.joinToString (" ")
+        }.also {
+            text.destroy()
+        }
+    }
+
+    private fun processWord(word: TextWord, words: java.util.ArrayList<TextWord>, region: RectF, isSingleWord: Boolean) {
+        val wordSquare5: Float = word.width() * word.height() / 5
+        if (word.rect.setIntersect(word.rect, region)) {
+            if (isSingleWord || word.width() * word.height() > wordSquare5) {
+                words.add(word)
+            }
+        }
     }
 
     override val outline: Array<OutlineItem>?
