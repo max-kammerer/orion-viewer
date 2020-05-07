@@ -77,7 +77,6 @@ task downloadAndMakeMupdf(dependsOn: downloadMupdf)  {
         exec {
             workingDir file(mupdf)
             commandLine 'make generate'
-            ignoreExitValue true
         }
     }
 }
