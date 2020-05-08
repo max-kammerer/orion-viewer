@@ -29,7 +29,7 @@ project.ext {
     orionCompileSdk = 28
     orionBuildToolsVersion = "28.0.3"
     if (isCIBuild) {
-        orionNdkVersion = "21.0.6113669"
+        orionNdkVersion = "21.1.6352462"
     }
     else {
         orionNdkVersion = "20.1.5948944"

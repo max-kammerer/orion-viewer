@@ -76,7 +76,7 @@ task downloadAndMakeMupdf(dependsOn: downloadMupdf)  {
         /*For more details see mupdf/platform/android/viewer/ReadMe.txt*/
         exec {
             workingDir file(mupdf)
-            commandLine 'make generate'
+            commandLine 'make', 'generate'
         }
     }
 }
