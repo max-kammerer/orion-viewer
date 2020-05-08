@@ -13,11 +13,6 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - name: Create empty local.properties
-        uses: finnp/create-file-action@1.0.0
-        env:
-          FILE_NAME: "local.properties"
-          FILE_DATA: ""
       - name: Prepare thirdparty
         run: bash ./gradlew -b thirdparty_build.gradle downloadAndPatchDjvu downloadAndMakeMupdf
       - name: Build debug APK
