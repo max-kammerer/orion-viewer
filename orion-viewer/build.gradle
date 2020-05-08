@@ -93,7 +93,8 @@ android {
             def formatter= new SimpleDateFormat("yyMMddHHmm")
             def date = new Date(System.currentTimeMillis())
 
-            archivesBaseName = "orion-viewer-${defaultConfig.versionName}-${formatter.format(date)}"
+            //TODO specify custom name for ci artifacts
+            //archivesBaseName = "orion-viewer-${defaultConfig.versionName}-${formatter.format(date)}"
         }
     }
 
