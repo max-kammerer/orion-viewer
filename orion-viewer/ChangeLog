@@ -1,3 +1,7 @@
+===== 0.80.7 (May 08, 2020) =====
+* Fixed text selection logic
+* Fixed djvu outline extraction
+
 ===== 0.80.6 (May 04, 2020) =====
 * Small UX fixes
 * Small multithreading fixes
