@@ -1,7 +1,9 @@
 ext {
     Properties properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    ndkDir = properties.getProperty('ndk.dir')
+    def propertiesFile = project.rootProject.file('local.properties')
+    if (propertiesFile.exists()) {
+        properties.load(propertiesFile.newDataInputStream())
+    }
     thirparty_folder = "nativeLibs"
 
     thirparty_build_root = rootDir.canonicalPath + "/" + thirparty_folder
