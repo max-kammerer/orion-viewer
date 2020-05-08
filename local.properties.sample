@@ -1,6 +1,5 @@
 # Modify 'sdk.dir' property  and resave this file as local.properties
-sdk.dir=/path/to/android/sdk/android-sdk-linux
-ndk.dir=/home/mike/devel/tools/android-ndk/android-ndk-r9d/
+sdk.dir=/path/to/android/sdk
 
 #To exclude native source from IDE project
 #orion.exclude_native_libs_source=true

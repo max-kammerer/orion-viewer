@@ -1,7 +1,9 @@
 apply plugin: 'com.android.library'
 
 android {
-    ndkVersion orionNdkVersion
+    if (orionNdkVersion != null) {
+        ndkVersion orionNdkVersion
+    }
     compileSdkVersion orionCompileSdk
     buildToolsVersion orionBuildToolsVersion
 

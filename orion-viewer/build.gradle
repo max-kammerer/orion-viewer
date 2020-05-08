@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-multiplatform'
 apply from: 'version.gradle'
@@ -30,6 +32,9 @@ dependencies {
 }
 
 android {
+    if (orionNdkVersion != null) {
+        ndkVersion orionNdkVersion
+    }
     compileSdkVersion orionCompileSdk
     buildToolsVersion orionBuildToolsVersion
 
@@ -73,17 +78,22 @@ android {
 
     buildTypes {
         release {
-            applicationVariants.all { variant ->
-                variant.outputs.each { output ->
-                    if (variant.name == "release") {
-                        outputFileName = "orion-viewer--${variant.version}-${variant.name}.apk"
-                    }
-                }
-            }
-
             if (doSigning) {
                 signingConfig signingConfigs.release
             }
+        }
+
+        ci {
+            matchingFallbacks = ['debug']
+            debuggable = true
+
+            applicationIdSuffix ".ci"
+
+            signingConfig signingConfigs.debug
+            def formatter= new SimpleDateFormat("yyMMddHHmm")
+            def date = new Date(System.currentTimeMillis())
+
+            archivesBaseName = "orion-viewer-${defaultConfig.versionName}-${formatter.format(date)}"
         }
     }
 
@@ -135,17 +145,25 @@ android {
 //        }
     }
 
+
+    def cal = new GregorianCalendar()
+    cal.set(Calendar.YEAR, 2020)
+    cal.set(Calendar.DAY_OF_YEAR, 1)
+    def timeFrom2020 = cal.getTimeInMillis()
+    //per hour version
+    def ciVersion = (System.currentTimeMillis() - timeFrom2020) / (1000 * 60 * 60)
+
     // make per-variant version code
     applicationVariants.all { variant ->
         // get the version code of each flavor
-        def abiVersion = variant.productFlavors.get(0).versionCode
+        def abiVersion = (variant.buildType.name == "ci" ? ciVersion : 0) + variant.productFlavors.get(0).versionCode
 
         // set the composite code
         variant.outputs.each { output ->
             output.versionCodeOverride = abiVersion + defaultConfig.versionCode - 1
+            println "New version code for " + variant.buildType.name + "/" + variant.productFlavors.name + " is " + output.versionCodeOverride
         }
 
-        println "New version code for " + variant.productFlavors.name + " is " + variant.mergedFlavor.versionCode
     }
 
     lintOptions { abortOnError false }

@@ -2,6 +2,7 @@ apply from: 'project.gradle'
 
 buildscript {
     ext.kotlin_version = '1.3.71'
+    ext.isCIBuild = findProperty("orion.CIBuild")?.toBoolean() ?: false
     repositories {
         mavenCentral()
         jcenter()
@@ -27,6 +28,12 @@ project.ext {
     orionTargetSdk = 28
     orionCompileSdk = 28
     orionBuildToolsVersion = "28.0.3"
-    orionNdkVersion = "20.1.5948944"
+    if (isCIBuild) {
+        //use latest avaliable
+        orionNdkVersion = null
+    }
+    else {
+        orionNdkVersion = "20.1.5948944"
+    }
     testFiles = ['http://www.djvu.org/docs/DjVu3Spec.djvu']
 }
