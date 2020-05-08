@@ -336,7 +336,12 @@ class Controller(
                 (widht / layoutInfo.docZoom).toInt(),
                 (height / layoutInfo.docZoom).toInt(),
                 isSingleWord
-        )?.trim()
+        )?.trimText(isSingleWord)
+    }
+
+    private fun String.trimText(isSingleWord: Boolean): String {
+        return if (!isSingleWord) trim()
+        else this.dropWhile { it.isWhitespace() || it in PUNCTUATION_CHARS }.dropLastWhile { it.isWhitespace() || it in PUNCTUATION_CHARS }
     }
 
     fun needPassword(): Boolean {
@@ -351,4 +356,8 @@ class Controller(
         }
     }
 
+    companion object {
+        //https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
+        val PUNCTUATION_CHARS = "!\"#\$%&'()*+,-./:;<=>?@[\\]^_`{|}~".toSet()
+    }
 }
