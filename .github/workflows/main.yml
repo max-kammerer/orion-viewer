@@ -20,5 +20,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v2
         with:
-          name: OrionViewer
+          name: OrionViewer-${{github.run_number}}
           path: orion-viewer/build/outputs/apk/**/*.apk
