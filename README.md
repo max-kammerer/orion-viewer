@@ -1,4 +1,8 @@
-Orion Viewer is pdf, djvu, xps, cbz and tiff file viewer for Android
+![GitHub code size](https://img.shields.io/github/languages/code-size/max-kammerer/orion-viewer.svg)
+![GitHub Releases Downloads](https://img.shields.io/github/downloads/max-kammerer/orion-viewer/total.svg?label=GitHub%20Releases%20Downloads)
+![GitHub release](https://img.shields.io/github/release/max-kammerer/orion-viewer.svg)
+
+`Orion Viewer` is `pdf`, `djvu`, `xps`, `cbz` and `tiff` file viewer for Android
 devices based on
 [mupdf](https://mupdf.com) and
 [DjVuLibre](https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/)
@@ -17,7 +21,9 @@ libraries
 * External Dictionaries support
 * Built-in file manager with recently opened file view
 
-<a href='https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer&hl=en&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
+<a href='https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer&hl=en&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
+<img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' height=75px/>
+</a>
 
 ## How to build project?
 
