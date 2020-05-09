@@ -1,5 +1,3 @@
-import java.text.SimpleDateFormat
-
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-multiplatform'
 apply from: 'version.gradle'
@@ -52,8 +50,6 @@ android {
         testApplicationId "universe.constellation.orion.viewer.test"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         if (isCIBuild) {
-            def formatter = new SimpleDateFormat("yyMMddHHmm")
-            def date = new Date(System.currentTimeMillis())
             archivesBaseName = "orion-viewer-$versionName-$githubBuildNumber"
         } else {
             archivesBaseName = "orion-viewer-$versionName"
@@ -150,11 +146,11 @@ android {
     // make per-variant version code
     applicationVariants.all { variant ->
         // get the version code of each flavor
-        def abiVersion = (variant.buildType.name == "ci" ? githubBuildNumber : 0) + variant.productFlavors.get(0).versionCode
+        def abiVersion = variant.productFlavors.get(0).versionCode
 
         // set the composite code
         variant.outputs.each { output ->
-            output.versionCodeOverride = abiVersion + defaultConfig.versionCode - 1
+            output.versionCodeOverride = (variant.buildType.name == "ci" ? githubBuildNumber : defaultConfig.versionCode) + abiVersion - 1
             println "New version code for " + variant.buildType.name + "/" + variant.productFlavors.name + " is " + output.versionCodeOverride
         }
 
