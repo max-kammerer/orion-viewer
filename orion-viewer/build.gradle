@@ -38,6 +38,8 @@ android {
     compileSdkVersion orionCompileSdk
     buildToolsVersion orionBuildToolsVersion
 
+    def githubBuildNumber = (System.getenv("GITHUB_RUN_NUMBER") ?: "1").toInteger()
+
     defaultConfig {
         versionCode = orionVersionCode
         versionName = orionVersionName
@@ -52,7 +54,7 @@ android {
         if (isCIBuild) {
             def formatter = new SimpleDateFormat("yyMMddHHmm")
             def date = new Date(System.currentTimeMillis())
-            archivesBaseName = "orion-viewer-$versionName-${formatter.format(date)}"
+            archivesBaseName = "orion-viewer-$versionName-$githubBuildNumber"
         } else {
             archivesBaseName = "orion-viewer-$versionName"
         }
@@ -145,18 +147,10 @@ android {
 //        }
     }
 
-
-    def cal = new GregorianCalendar()
-    cal.set(Calendar.YEAR, 2020)
-    cal.set(Calendar.DAY_OF_YEAR, 1)
-    def timeFrom2020 = cal.getTimeInMillis()
-    //per hour version
-    def ciVersion = (System.currentTimeMillis() - timeFrom2020) / (1000 * 60 * 60)
-
     // make per-variant version code
     applicationVariants.all { variant ->
         // get the version code of each flavor
-        def abiVersion = (variant.buildType.name == "ci" ? ciVersion : 0) + variant.productFlavors.get(0).versionCode
+        def abiVersion = (variant.buildType.name == "ci" ? githubBuildNumber : 0) + variant.productFlavors.get(0).versionCode
 
         // set the composite code
         variant.outputs.each { output ->
