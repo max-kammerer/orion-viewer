@@ -24,7 +24,8 @@ allprojects {
 }
 
 project.ext {
-    orionMinSdk = 16
+    isAndroid40Build = project.findProperty("orion.build.android40")?.toBoolean() ?: false
+    orionMinSdk = !isAndroid40Build ? 16 : 14
     orionTargetSdk = 28
     orionCompileSdk = 28
     orionBuildToolsVersion = "28.0.3"
@@ -32,7 +33,7 @@ project.ext {
         orionNdkVersion = "21.1.6352462"
     }
     else {
-        orionNdkVersion = "20.1.5948944"
+        orionNdkVersion = !isAndroid40Build ? "20.1.5948944" : "17.2.4988734"
     }
     testFiles = ['http://www.djvu.org/docs/DjVu3Spec.djvu']
 }

@@ -43,6 +43,9 @@ android {
         versionName = orionVersionName
 
         minSdkVersion orionMinSdk
+        if (isAndroid40Build) {
+            maxSdkVersion = 15
+        }
         targetSdkVersion orionTargetSdk
 
 
@@ -52,7 +55,7 @@ android {
         if (isCIBuild) {
             archivesBaseName = "orion-viewer-$versionName-$githubBuildNumber"
         } else {
-            archivesBaseName = "orion-viewer-$versionName"
+            archivesBaseName = "orion-viewer-$versionName" + (isAndroid40Build ? "-android40" : "")
         }
     }
 
