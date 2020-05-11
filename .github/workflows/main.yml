@@ -25,8 +25,23 @@ jobs:
         run: bash ./gradlew -b thirdparty_build.gradle downloadAndPatchDjvu downloadAndMakeMupdf
       - name: Build debug APK
         run: bash ./gradlew assembleCi --stacktrace -Porion.CIBuild=true
-      - name: Upload APK
+      - name: Upload arm7 APK
         uses: actions/upload-artifact@v2
         with:
-          name: OrionViewer-dev-${{github.run_number}}
-          path: orion-viewer/build/outputs/apk/**/*.apk
+          name: OrionViewer-arm7-dev-${{github.run_number}}.zip
+          path: orion-viewer/build/outputs/apk/arm7/ci/*.apk
+      - name: Upload arm64 APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: OrionViewer-arm64-dev-${{github.run_number}}.zip
+          path: orion-viewer/build/outputs/apk/arm64/ci/*.apk
+      - name: Upload x86 APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: OrionViewer-x86-dev-${{github.run_number}}.zip
+          path: orion-viewer/build/outputs/apk/x86/ci/*.apk
+      - name: Upload x86_64 APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: OrionViewer-x86_64-dev-${{github.run_number}}.zip
+          path: orion-viewer/build/outputs/apk/x86_64/ci/*.apk                   
