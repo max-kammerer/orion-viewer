@@ -1,0 +1,16 @@
+<p>Orion Viewer is pdf, djvu, xps, cbz and tiff file viewer for Android devices based on mupdf and DjVuLibre libraries.</p>
+
+<p>Application features:</p>
+<ul>
+    <li>Outline navigation</li>
+    <li>Bookmarks support</li>
+    <li>Page navigation by screen taps + Tap Zones + Key binding</li>
+    <li>Text selection</li>
+    <li>Single word selection by double tap with translation in external dictionary</li>
+    <li>Custom zoom</li>
+    <li>Custom manual and auto border crop</li>
+    <li>Portrait/landscape orientation</li>
+    <li>Support different navigation patterns inside page (left to right, right to left)</li>
+    <li>External Dictionaries support</li>
+    <li>Built-in file manager with recently opened file view</li>
+</ul>

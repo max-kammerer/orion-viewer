@@ -1,0 +1,4 @@
+* Added save file dialog (for document with content URIs)
+* Mupdf updated to 1.16.1
+* Small multithreading fixes
+* Fixed WRITE permission acquisition
