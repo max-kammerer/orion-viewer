@@ -183,15 +183,15 @@ JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong docl, jlong pagel,
     ddjvu_rect_t pageRect;
     pageRect.x = 0;
     pageRect.y = 0;
-    pageRect.w = round(zoom * pageWidth);
-    pageRect.h = round(zoom * pageHeight);
+    pageRect.w = (unsigned int) round(zoom * (unsigned int) pageWidth);
+    pageRect.h = (unsigned int) round(zoom * (unsigned int) pageHeight);
     LOGI("Original page=%dx%d patch=[%d,%d,%d,%d]",
          pageWidth, pageHeight, pageRect.x, pageRect.y, pageRect.w, pageRect.h);
     ddjvu_rect_t targetRect;
     targetRect.x = patchX;
     targetRect.y = patchY;
-    targetRect.w = patchW;
-    targetRect.h = patchH;
+    targetRect.w = (unsigned int)patchW;
+    targetRect.h = (unsigned int)patchH;
 
     int shift = 0;
     if (targetRect.x < 0) {
@@ -227,8 +227,8 @@ JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong docl, jlong pagel,
     ddjvu_format_set_y_direction(pixelFormat, TRUE);
 
     char *buffer = &(((char *) pixels)[shift * 4]);
-    jboolean result = ddjvu_page_render(page, DDJVU_RENDER_COLOR, &pageRect, &targetRect,
-                                        pixelFormat, pageW * 4, buffer);
+    /*jboolean result = */ddjvu_page_render(page, DDJVU_RENDER_COLOR, &pageRect, &targetRect,
+                                        pixelFormat, ((unsigned int)pageW) * 4, buffer);
 
     ddjvu_format_release(pixelFormat);
 

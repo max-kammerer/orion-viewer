@@ -15,17 +15,18 @@ task downloadDjvu {
 
         exec {
             workingDir file(djvu)
-            commandLine = ['git', 'checkout', 'release.3.5.27']
+            commandLine = ['git', 'checkout', '32ff0948c5bc27c0b7507dba90e726fc941fcc42'/*current master*/]
         }
     }
 }
 
 task patchDjvu  {
     doLast {
-        exec {
-            workingDir file(djvu)
-            commandLine = ['git', 'apply', '../../djvu.patch']
-        }
+//        exec {
+//            workingDir file(djvu)
+//            commandLine = ['git', 'apply', '../../djvu.patch']
+//        }
+        println "Task is obsolete"
     }
 }
 
