@@ -323,7 +323,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
                 askPassword(controller1)
                 orionContext.onNewBook(filePath)
-
+                invalidateOptionsMenu()
                 showTapDialogIfNeeded()
             } catch (e: Exception) {
                 log(e)
@@ -345,6 +345,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         stubController.drawPage()
         controller = stubController
         updateViewOnNewBook(stubDocument.title)
+        invalidateOptionsMenu()
         return stubController
     }
 
@@ -751,6 +752,19 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         return true
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        val onPrepareOptionsMenu = super.onPrepareOptionsMenu(menu)
+        val disable = controller?.document is StubDocument
+        if (menu != null) {
+            (0 until menu.size()).forEach {
+                val item = menu.getItem(it)
+                item.isEnabled = !disable || item.itemId !in BOOK_MENU_ITEMS
+            }
+        }
+
+        return onPrepareOptionsMenu
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var action = Action.NONE //will open help
 
@@ -1046,6 +1060,18 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     companion object {
+
+        val BOOK_MENU_ITEMS = setOf(R.id.search_menu_item,
+                R.id.crop_menu_item,
+                R.id.zoom_menu_item,
+                R.id.add_bookmark_menu_item,
+                R.id.goto_menu_item,
+                R.id.select_text_menu_item,
+                R.id.book_options_menu_item,
+                R.id.outline_menu_item,
+                R.id.bookmarks_menu_item,
+                R.id.open_dictionary_menu_item
+        )
 
         const val OPEN_BOOKMARK_ACTIVITY_RESULT = 1
 
