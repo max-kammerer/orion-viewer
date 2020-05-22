@@ -26,4 +26,10 @@
     <string name="permission_grant">Grant…</string>
     <string name="permission_exit">Exit</string>
 
+    <string name="crash_on_book_opening_title">Error on file opening</string>
+    <string name="crash_on_book_opening_message_header">Error occurred during file \`%1$s\` opening. Please report an issue (with attached file if possible):</string>
+
+    <string name="string_cancel">Cancel</string>
+    <string name="string_send">Send…</string>
+    <string name="send_report_header">[Please provide additional details and/or attach file]</string>
 </resources>
