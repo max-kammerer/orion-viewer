@@ -25,12 +25,22 @@
     <item android:id="@+id/search_menu_item"
           android:title="@string/menu_search_item"
           android:icon="@drawable/search"
-          orion:showAsAction="ifRoom"/>
+          orion:showAsAction="always"/>
 
     <item android:id="@+id/add_bookmark_menu_item"
           android:title="@string/menu_add_bookmark_item"
           android:icon="@drawable/add_bookmark"
-          orion:showAsAction="ifRoom"/>
+          orion:showAsAction="always"/>
+
+    <item android:id="@+id/select_text_menu_item"
+        android:title="@string/menu_select_text"
+        android:icon="@drawable/edit"
+        orion:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/goto_menu_item"
+        android:title="@string/menu_goto_text"
+        android:icon="@drawable/next"
+        orion:showAsAction="ifRoom"/>
 
     <item android:id="@+id/bookmarks_menu_item"
           android:title="@string/menu_bookmarks_text"
@@ -42,42 +52,19 @@
           android:icon="@drawable/zoom"
           orion:showAsAction="ifRoom"/>
 
-
     <item android:id="@+id/crop_menu_item"
           android:title="@string/menu_crop_text"
           android:icon="@drawable/crop"
           orion:showAsAction="ifRoom"/>
 
-    <item android:id="@+id/select_text_menu_item"
-          android:title="@string/menu_select_text"
-          android:icon="@drawable/edit"
-          orion:showAsAction="ifRoom"/>
-
-    <!--<item android:id="@+id/rotation_menu_item"-->
-    <!--android:title="@string/menu_rotation_text"-->
-    <!--android:icon="@drawable/rotate"/>-->
-
     <item android:id="@+id/book_options_menu_item"
-          android:title="@string/menu_book_preferences"
-          android:icon="@drawable/book_preferences"/>
-
-    <!--<item android:id="@+id/navigation_menu_item"-->
-    <!--android:title="@string/menu_navigation_text"-->
-    <!--android:icon="@drawable/navigation"/>-->
-
-    <item android:id="@+id/goto_menu_item"
-          android:title="@string/menu_goto_text"
-          android:icon="@drawable/next"/>
-
-
-    <!--<item android:id="@+id/keybinder_menu_item"-->
-    <!--android:title="@string/menu_key_binder_text"-->
-    <!--android:icon="@drawable/help"/>-->
+        android:title="@string/menu_book_preferences"
+        android:icon="@drawable/book_preferences"
+        orion:showAsAction="ifRoom"/>
 
     <item android:id="@+id/outline_menu_item"
           android:title="@string/menu_outline_text"
           android:icon="@drawable/help"/>
-
 
     <item android:id="@+id/open_dictionary_menu_item"
           android:title="@string/menu_open_dictionary_text"
@@ -89,11 +76,6 @@
 
     <item android:id="@+id/open_menu_item"
           android:title="@string/menu_open_text"/>
-
-    <!--<item android:id="@+id/open_menu_item" TODO add taps-->
-              <!--android:title="@string/menu_open_text"-->
-              <!--android:icon="@drawable/help"/>-->
-
 
     <item android:id="@+id/help_menu_item"
           android:title="@string/menu_help_text"
