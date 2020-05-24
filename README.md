@@ -27,7 +27,7 @@ libraries
 
 ## Contibution
 
-Whatever you want! Project is opened to any ideas and discussions
+Whatever you want! Project is open to any ideas and discussions
 
 ### Translations
 
@@ -56,10 +56,6 @@ To build `Orion Viewer` you will need:
     Native libs are checked out into `nativeLibs/djvu` and `nativeLibs/mupdf` folders.
 
  * specify path to android-sdk in `local.properties` (use `local.properties.sample` as example).
-
- * By default sources for native libs are included to build.
-  If you have any freezes with IDE you can exclude them via `orion.excludeNativeLibsSources`
-  flag in local.properties.
 
  To build Android apk files run:
 
