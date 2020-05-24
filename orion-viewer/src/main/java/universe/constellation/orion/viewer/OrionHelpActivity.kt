@@ -20,12 +20,14 @@
 package universe.constellation.orion.viewer
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 
 class OrionHelpActivity : OrionBaseActivity(false) {
@@ -62,11 +64,12 @@ class OrionHelpActivity : OrionBaseActivity(false) {
     override fun onCreate(savedInstanceState: Bundle?) {
         onOrionCreate(savedInstanceState, R.layout.file_manager)
         initHelpScreen()
+        chooseTab(intent)
     }
 
     private fun initHelpScreen() {
         val pagerAdapter = HelpSimplePagerAdapter(supportFragmentManager, 2)
-        val viewPager = findViewById<View>(R.id.viewpager) as androidx.viewpager.widget.ViewPager
+        val viewPager = findViewById<ViewPager>(R.id.viewpager)
         viewPager.adapter = pagerAdapter
         val tabLayout = findViewById<View>(R.id.sliding_tabs) as TabLayout
         tabLayout.setupWithViewPager(viewPager)
@@ -77,6 +80,15 @@ class OrionHelpActivity : OrionBaseActivity(false) {
         about?.setIcon(R.drawable.info)
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        chooseTab(intent)
+    }
+
+    private fun chooseTab(intent: Intent?) {
+        val index = intent?.getBooleanExtra(OPEN_ABOUT_TAB, false)?.run { 1 } ?: 0
+        findViewById<ViewPager>(R.id.viewpager).setCurrentItem(index, false)
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.file_manager_menu, menu)
@@ -91,6 +103,10 @@ class OrionHelpActivity : OrionBaseActivity(false) {
             }
         }
         return false
+    }
+
+    companion object {
+        const val OPEN_ABOUT_TAB = "OPEN_ABOUT";
     }
 
 }

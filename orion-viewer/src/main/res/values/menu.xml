@@ -28,6 +28,7 @@
     <string name="menu_rotation_text">Screen rotation</string>
     <string name="menu_navigation_text">Page layout</string>
     <string name="menu_help_text">Help</string>
+    <string name="menu_about_text">About…</string>
     <string name="menu_open_text">Open Book</string>
     <string name="menu_outline_text">Outline</string>
     <string name="menu_open_dictionary_text">Open Dictionary</string>
@@ -37,6 +38,7 @@
     <string name="menu_options_text">Settings</string>
     <string name="menu_tap_text">Tap zones</string>
     <string name="menu_search_item">Search</string>
+    <string name="menu_other">Other…</string>
 
     <string name="menu_book_preferences">Book Options</string>
 

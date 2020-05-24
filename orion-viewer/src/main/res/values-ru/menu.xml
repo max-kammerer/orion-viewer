@@ -27,6 +27,7 @@
     <string name="menu_rotation_text">Ориентация экрана</string>
     <string name="menu_navigation_text">Раскладка страницы</string>
     <string name="menu_help_text">Помощь</string>
+    <string name="menu_about_text">О программе…</string>
     <string name="menu_open_text">Открыть книгу</string>
     <string name="menu_open_dictionary_text">Открыть словарь</string>
     <string name="menu_day_night_text">Дневной/Ночной режим</string>
@@ -35,6 +36,7 @@
     <string name="menu_options_text">Настройки</string>
     <string name="menu_tap_text">Тап зоны</string>
     <string name="menu_search_item">Поиск</string>
+    <string name="menu_other">Прочее…</string>
 
     <string name="menu_book_preferences">Настройки книги</string>
     <string name="menu_outline_text">Содержание</string>

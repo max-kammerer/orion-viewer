@@ -20,71 +20,95 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:orion="http://schemas.android.com/apk/res-auto">
+    xmlns:orion="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/search_menu_item"
-          android:title="@string/menu_search_item"
-          android:icon="@drawable/search"
-          orion:showAsAction="always"/>
+    <item
+        android:id="@+id/search_menu_item"
+        android:icon="@drawable/search"
+        android:title="@string/menu_search_item"
+        orion:showAsAction="always" />
 
-    <item android:id="@+id/add_bookmark_menu_item"
-          android:title="@string/menu_add_bookmark_item"
-          android:icon="@drawable/add_bookmark"
-          orion:showAsAction="always"/>
+    <item
+        android:id="@+id/add_bookmark_menu_item"
+        android:icon="@drawable/add_bookmark"
+        android:title="@string/menu_add_bookmark_item"
+        orion:showAsAction="always" />
 
-    <item android:id="@+id/select_text_menu_item"
-        android:title="@string/menu_select_text"
+    <item
+        android:id="@+id/select_text_menu_item"
         android:icon="@drawable/edit"
-        orion:showAsAction="ifRoom"/>
+        android:title="@string/menu_select_text"
+        orion:showAsAction="ifRoom" />
 
-    <item android:id="@+id/goto_menu_item"
-        android:title="@string/menu_goto_text"
+    <item
+        android:id="@+id/goto_menu_item"
         android:icon="@drawable/next"
-        orion:showAsAction="ifRoom"/>
+        android:title="@string/menu_goto_text"
+        orion:showAsAction="ifRoom" />
 
-    <item android:id="@+id/bookmarks_menu_item"
-          android:title="@string/menu_bookmarks_text"
-          android:icon="@drawable/bookmarks"
-          orion:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/bookmarks_menu_item"
+        android:icon="@drawable/bookmarks"
+        android:title="@string/menu_bookmarks_text"
+        orion:showAsAction="ifRoom" />
 
-    <item android:id="@+id/zoom_menu_item"
-          android:title="@string/menu_zoom_text"
-          android:icon="@drawable/zoom"
-          orion:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/zoom_menu_item"
+        android:icon="@drawable/zoom"
+        android:title="@string/menu_zoom_text"
+        orion:showAsAction="ifRoom" />
 
-    <item android:id="@+id/crop_menu_item"
-          android:title="@string/menu_crop_text"
-          android:icon="@drawable/crop"
-          orion:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/crop_menu_item"
+        android:icon="@drawable/crop"
+        android:title="@string/menu_crop_text"
+        orion:showAsAction="ifRoom" />
 
-    <item android:id="@+id/book_options_menu_item"
-        android:title="@string/menu_book_preferences"
+    <item
+        android:id="@+id/book_options_menu_item"
         android:icon="@drawable/book_preferences"
-        orion:showAsAction="ifRoom"/>
+        android:title="@string/menu_book_preferences"
+        orion:showAsAction="ifRoom" />
 
-    <item android:id="@+id/outline_menu_item"
-          android:title="@string/menu_outline_text"
-          android:icon="@drawable/help"/>
+    <item
+        android:id="@+id/outline_menu_item"
+        android:icon="@drawable/help"
+        android:title="@string/menu_outline_text" />
 
-    <item android:id="@+id/open_dictionary_menu_item"
-          android:title="@string/menu_open_dictionary_text"
-          android:icon="@drawable/dictionary"/>
+    <item
+        android:id="@+id/open_dictionary_menu_item"
+        android:icon="@drawable/dictionary"
+        android:title="@string/menu_open_dictionary_text" />
 
-    <item android:id="@+id/options_menu_item"
-          android:title="@string/menu_options_text"
-          android:icon="@drawable/options"/>
+    <item
+        android:id="@+id/options_menu_item"
+        android:icon="@drawable/options"
+        android:title="@string/menu_options_text" />
 
-    <item android:id="@+id/open_menu_item"
-          android:title="@string/menu_open_text"/>
+    <item
+        android:id="@+id/options_other"
+        android:title="@string/menu_other">
+        <menu>
+            <item
+                android:id="@+id/open_menu_item"
+                android:title="@string/menu_open_text" />
 
-    <item android:id="@+id/help_menu_item"
-          android:title="@string/menu_help_text"
-          android:icon="@drawable/help"/>
+            <item
+                android:id="@+id/help_menu_item"
+                android:icon="@drawable/help"
+                android:title="@string/menu_help_text" />
 
-    <item android:id="@+id/exit_menu_item"
-          android:title="@string/menu_exit_text"
-          android:icon="@drawable/close"/>
+            <item
+                android:id="@+id/about_menu_item"
+                android:icon="@drawable/info"
+                android:title="@string/menu_about_text" />
 
+            <item
+                android:id="@+id/exit_menu_item"
+                android:icon="@drawable/close"
+                android:title="@string/menu_exit_text" />
+        </menu>
+    </item>
 
 
 </menu>

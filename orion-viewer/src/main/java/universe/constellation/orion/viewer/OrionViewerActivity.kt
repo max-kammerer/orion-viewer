@@ -869,9 +869,10 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             R.id.open_dictionary_menu_item -> action = Action.DICTIONARY
 
             R.id.bookmarks_menu_item -> action = Action.OPEN_BOOKMARKS
-            R.id.help_menu_item -> {
+            R.id.help_menu_item, R.id.about_menu_item -> {
                 val intent = Intent()
                 intent.setClass(this, OrionHelpActivity::class.java)
+                intent.putExtra(OrionHelpActivity.OPEN_ABOUT_TAB, item.itemId == R.id.about_menu_item)
                 startActivity(intent)
             }
         }

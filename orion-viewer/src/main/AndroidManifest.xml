@@ -130,7 +130,7 @@
         <activity android:name=".OrionHelpActivity" android:screenOrientation="behind"
                   android:theme="@style/Theme.AppCompat.NoActionBar"
                   android:label="@string/app_name"
-                  android:launchMode="singleInstance"
+                  android:launchMode="standard"
                   android:icon="@drawable/orion"/>
 
         <activity android:name=".prefs.OrionPreferenceActivity" android:screenOrientation="behind"
