@@ -1,3 +1,7 @@
+===== 0.81.0 (May 24, 2020) =====
+* Djvu library update to current master
+* Added report dialog if file open is failed
+
 ===== 0.80.7 (May 08, 2020) =====
 * Fixed text selection logic
 * Fixed djvu outline extraction
