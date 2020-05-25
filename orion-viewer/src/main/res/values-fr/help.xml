@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!--Author: Claude Dellacherie-->
+<!--Translated by Claude Dellacherie-->
 <resources>
     <string name="zoom">Ouvre la fenêtre zoom. Une valeur égale à zéro adapte le zoom à la largeur de la page.</string>
     <string name="rotation">Tourne le document de 90° dans le sens horaire. Une longue tape tourne le document dans le sens antihoraire.</string>

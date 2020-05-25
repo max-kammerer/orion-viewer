@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!--Author: Marc Armengol-->
+<!--Translated by Marc Armengol-->
 <resources>
     <string name="zoom">Abre la ventana Zoom. Un valor igual a cero adapta el zoom a la anchura de la página.</string>
     <string name="rotation">Rota el documento 90 grados en el sentido horario. Un click largo rota el documento en el sentido antihorario.</string>

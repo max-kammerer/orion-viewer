@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!--Author: Alberto Pettarin-->
+<!--Translated by Alberto Pettarin-->
 <resources>
     <string name="zoom">Apre la finestra Zoom. Il valore zero adatta lo zoom alla larghezza di pagina.</string>
     <string name="rotation">Ruota il documento di 90 gradi in senso orario. Un tap lungo ruota in senso antiorario.</string>
