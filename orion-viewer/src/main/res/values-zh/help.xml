@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!--Author: Bruce Li-->
+
 <resources>
     <string name="zoom">打开缩放对话框. 放大值为0表示以宽度放大.</string>
     <string name="rotation">顺时针90度旋转页面.长按逆时针旋转.</string>
