@@ -196,6 +196,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        log("onNewIntent: $intent")
         if (!askReadPermissions()) {
             log("Waiting for read permissions for $intent")
             lastIntent = intent
