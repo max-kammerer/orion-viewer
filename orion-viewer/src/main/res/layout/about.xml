@@ -211,6 +211,25 @@
                           android:gravity="left|center_vertical" android:linksClickable="true" android:autoLink="all"/>
 
             </TableRow>
+            <TableRow>
+
+                <LinearLayout android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center">
+                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:src="@drawable/info"/>
+                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:src="@drawable/help"/>
+
+                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:src="@drawable/fileopen"/>
+                </LinearLayout>
+
+                <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
+                    android:textSize="18sp"
+                    android:text="Ubuntu Humanity Icons"
+                    android:gravity="left|center_vertical" android:linksClickable="true" android:autoLink="all"/>
+
+            </TableRow>
 
             <TableRow>
 
