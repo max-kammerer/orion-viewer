@@ -17,7 +17,7 @@
 
     <item
         android:id="@+id/select_text_menu_item"
-        android:icon="@drawable/edit"
+        android:icon="@drawable/select_text"
         android:title="@string/menu_select_text"
         orion:showAsAction="ifRoom" />
 
