@@ -182,8 +182,6 @@
                     <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
                        android:src="@drawable/folder"/>
                     <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                       android:src="@drawable/book"/>
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
                        android:src="@drawable/cbz"/>
                 </LinearLayout>
 
@@ -203,11 +201,17 @@
 
                     <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
                                                            android:src="@drawable/xml"/>
+
+                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:src="@drawable/book_preferences"/>
+
+                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:src="@drawable/copy"/>
                 </LinearLayout>
 
                 <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
                           android:textSize="18sp"
-                          android:text="Oxygen Team - http://www.oxygen-icons.org"
+                          android:text="Oxygen Icons - https://github.com/KDE/oxygen-icons"
                           android:gravity="left|center_vertical" android:linksClickable="true" android:autoLink="all"/>
 
             </TableRow>
@@ -222,6 +226,8 @@
 
                     <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
                         android:src="@drawable/fileopen"/>
+                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:src="@drawable/recent"/>
                 </LinearLayout>
 
                 <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"

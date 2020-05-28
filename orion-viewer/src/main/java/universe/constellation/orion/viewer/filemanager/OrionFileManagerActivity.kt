@@ -242,7 +242,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         folderTab?.setIcon(R.drawable.folder)
         if (showRecentsAndSavePath) {
             val recentTab = tabLayout.getTabAt(1)
-            recentTab?.setIcon(R.drawable.book)
+            recentTab?.setIcon(R.drawable.recent)
         }
     }
 
