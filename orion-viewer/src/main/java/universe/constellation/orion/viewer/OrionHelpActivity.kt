@@ -86,7 +86,7 @@ class OrionHelpActivity : OrionBaseActivity(false) {
     }
 
     private fun chooseTab(intent: Intent?) {
-        val index = intent?.getBooleanExtra(OPEN_ABOUT_TAB, false)?.run { 1 } ?: 0
+        val index = if (intent?.getBooleanExtra(OPEN_ABOUT_TAB, false) == true) 1 else 0
         findViewById<ViewPager>(R.id.viewpager).setCurrentItem(index, false)
     }
 
