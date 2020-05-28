@@ -72,6 +72,7 @@
         <menu>
             <item
                 android:id="@+id/open_menu_item"
+                android:icon="@drawable/fileopen"
                 android:title="@string/menu_open_text" />
 
             <item
