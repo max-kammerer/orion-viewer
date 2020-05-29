@@ -32,23 +32,29 @@ jobs:
         run: bash ./gradlew -b thirdparty_build.gradle downloadAndPatchDjvu downloadAndMakeMupdf
       - name: Build debug APK
         run: bash ./gradlew assembleCi --stacktrace -Porion.CIBuild=true
+      - name: Read value from Properties-file
+        id: read_version_property
+        uses: christian-draeger/read-properties@1.0.1
+        with:
+          path: './orion-viewer/version.properties'
+          property: 'orion.version.name'
       - name: Upload arm7 APK
         uses: actions/upload-artifact@v2
         with:
-          name: OrionViewer-arm7-dev-${{github.run_number}}.zip
+          name: orion-viewer-dev-${{steps.read_version_property.outputs.value}}-${{github.ref}}-${{github.run_number}}-arm7.zip
           path: orion-viewer/build/outputs/apk/arm7/ci/*.apk
       - name: Upload arm64 APK
         uses: actions/upload-artifact@v2
         with:
-          name: OrionViewer-arm64-dev-${{github.run_number}}.zip
+          name: orion-viewer-dev-${{steps.read_version_property.outputs.value}}-${{github.ref}}-${{github.run_number}}-arm64.zip
           path: orion-viewer/build/outputs/apk/arm64/ci/*.apk
       - name: Upload x86 APK
         uses: actions/upload-artifact@v2
         with:
-          name: OrionViewer-x86-dev-${{github.run_number}}.zip
+          name: orion-viewer-dev-${{steps.read_version_property.outputs.value}}-${{github.ref}}-${{github.run_number}}-x86.zip
           path: orion-viewer/build/outputs/apk/x86/ci/*.apk
       - name: Upload x86_64 APK
         uses: actions/upload-artifact@v2
         with:
-          name: OrionViewer-x86_64-dev-${{github.run_number}}.zip
+          name: orion-viewer-dev-${{steps.read_version_property.outputs.value}}-${{github.ref}}-${{github.run_number}}-x86_64.zip
           path: orion-viewer/build/outputs/apk/x86_64/ci/*.apk                   
