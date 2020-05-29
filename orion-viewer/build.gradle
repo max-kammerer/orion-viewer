@@ -1,11 +1,19 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-multiplatform'
-apply from: 'version.gradle'
 apply from: '../project.gradle'
 
-println "do singing: " + doSigning
-if (doSigning) {
-    apply from: 'signing.gradle'
+project.ext {
+    Properties properties = new Properties()
+    def propertiesFile = file('version.properties')
+    properties.load(propertiesFile.newDataInputStream())
+    orionVersionCode = properties.getProperty("orion.version.code").toInteger()
+    orionVersionName = properties.getProperty("orion.version.name")
+
+    doSigning = new File("orion-viewer/signing.gradle").exists()
+    println "do signing: " + doSigning
+    if (doSigning) {
+        apply from: 'signing.gradle'
+    }
 }
 
 dependencies {
