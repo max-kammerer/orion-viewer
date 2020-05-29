@@ -2,21 +2,21 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/app_info"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:isScrollContainer="true"
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbarStyle="outsideInset"
             android:scrollbars="vertical"
             android:orientation="vertical">
 
-    <LinearLayout android:layout_width="fill_parent"
+    <LinearLayout android:layout_width="match_parent"
                   android:layout_height="wrap_content" android:orientation="vertical">
 
-            <!--<WebView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/webview_about"/>-->
+            <!--<WebView android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/webview_about"/>-->
 
 
-        <LinearLayout android:layout_width="fill_parent"
+        <LinearLayout android:layout_width="match_parent"
                       android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center"
                       android:paddingBottom="10dp" android:paddingTop="10dp">
 
@@ -50,264 +50,405 @@
         </LinearLayout>
 
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:text="e-mail: mikhael.bogdanov@gmail.com" android:textSize="20sp"
-                  android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_1" android:layout_marginTop="20dp"
+            android:text="Project site: https://github.com/max-kammerer/orion-viewer" android:textSize="18sp"
+            android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
+
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="E-mail: mikhael.bogdanov+orion@gmail.com" android:textSize="18sp"
+            android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
+
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_2" android:textSize="18sp"
+            android:text="Bug reporting: https://github.com/max-kammerer/orion-viewer/issues"
+            android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
+
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_3" android:textSize="18sp"
+            android:text="Discussion group: https://groups.google.com/group/orionviewer"
+            android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
+
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_4" android:textSize="18sp"
+            android:text="Donation: https://sourceforge.net/p/orion-viewer/wiki/Donation/"
+            android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
 
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+
+
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:textSize="20sp"
                   android:text="Contributors:"
                   android:gravity="center" android:layout_marginTop="20dp"/>
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:textSize="20sp"
                   android:text="Alberto Pettarin - Italian translation"
                   android:gravity="center"/>
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                           android:textSize="20sp"
                           android:text="Alexander Goldberg - Hebrew translation"
                           android:gravity="center"/>
 
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                           android:textSize="20sp"
                           android:text="Bruce Li - Chinese translation &amp; code"
                           android:gravity="center"/>
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                           android:textSize="20sp"
                           android:text="Marc Armengol - Spanish translation"
                           android:gravity="center"/>
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:textSize="20sp"
                   android:text="Yuriy Chorniy - Ukrainian translation"
                   android:gravity="center"/>
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:textSize="20sp"
                   android:text="Johannes Römer - German translation"
                   android:gravity="center"/>
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
             android:textSize="20sp"
             android:text="Claude Dellacherie - French translation"
             android:gravity="center"/>
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_1" android:layout_marginTop="20dp"
-                  android:text="Project site: https://github.com/max-kammerer/orion-viewer" android:textSize="18sp"
-                  android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
-
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_2" android:textSize="18sp"
-                  android:text="Bug reporting: https://github.com/max-kammerer/orion-viewer/issues"
-                  android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
-
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_3" android:textSize="18sp"
-                  android:text="Discussion group: https://groups.google.com/group/orionviewer"
-                  android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
-
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_4" android:textSize="18sp"
-                  android:text="Donation: https://sourceforge.net/p/orion-viewer/wiki/Donation/"
-                  android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
-
-
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:textSize="20sp"
                   android:text="Third party libraries:"
                   android:gravity="center" android:layout_marginTop="20dp"/>
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:textSize="18sp"
                   android:text="mupdf"
                   android:gravity="center"/>
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:textSize="18sp"
                   android:text="DjVuLibre"
                   android:gravity="center"/>
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:textSize="18sp"
                   android:text="apdfViewer for nook"
                   android:gravity="center"/>
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="tree-view-list-android"
                     android:textSize="18sp"/>
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:textSize="18sp"
-                  android:text="DairyKnight"
-                  android:gravity="center"/>
-
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:textSize="18sp"
                   android:text="freetype"
                   android:gravity="center"/>
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:textSize="18sp"
                   android:text="jbig2dec"
                   android:gravity="center"/>
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:textSize="18sp"
                   android:text="jpeg"
                   android:gravity="center"/>
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:textSize="18sp"
                   android:text="openjpeg"
                   android:gravity="center"/>
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:textSize="18sp"
                   android:text="zlib"
                   android:gravity="center"/>
 
-        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:textSize="20sp"
                   android:text="Third party icons:"
                   android:gravity="center" android:layout_marginTop="20dp"/>
 
-        <TableLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
-                     android:shrinkColumns="1" android:gravity="center">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <TableRow>
-                <LinearLayout android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center">
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:src="@drawable/cbz"/>
-                </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:gravity="center"
+                android:linksClickable="true"
+                android:text="ESO/Igor Chekalin image at http://www.eso.org/public/images/eso1103a/"
+                android:textSize="18sp" />
 
-                <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
-                    android:textSize="18sp"
-                    android:text="Anna Shlyapnikova (shlyapnikova.deviantart.com)"
-                    android:gravity="left|center_vertical" android:linksClickable="true" android:autoLink="all"/>
-            </TableRow>
-            <TableRow>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-                <LinearLayout android:layout_width="wrap_content"
-                               android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center">
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                       android:src="@drawable/pdf"/>
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                       android:src="@drawable/xps"/>
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:src="@drawable/orion" />
+            </LinearLayout>
 
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                                           android:src="@drawable/xml"/>
+        </LinearLayout>
 
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:src="@drawable/book_preferences"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp">
 
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:src="@drawable/copy"/>
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:src="@drawable/bookmarks"/>
-                </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:gravity="center"
+                android:linksClickable="true"
+                android:text="Anna Shlyapnikova - shlyapnikova.deviantart.com"
+                android:textSize="18sp" />
 
-                <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
-                          android:textSize="18sp"
-                          android:text="Oxygen Icons - https://github.com/KDE/oxygen-icons"
-                          android:gravity="left|center_vertical" android:linksClickable="true" android:autoLink="all"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
 
-            </TableRow>
-            <TableRow>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cbz" />
+            </LinearLayout>
+        </LinearLayout>
 
-                <LinearLayout android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center">
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:src="@drawable/info"/>
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:src="@drawable/help"/>
 
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:src="@drawable/fileopen"/>
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:src="@drawable/recent"/>
-                </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp">
 
-                <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
-                    android:textSize="18sp"
-                    android:text="Ubuntu Humanity Icons"
-                    android:gravity="left|center_vertical" android:linksClickable="true" android:autoLink="all"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:gravity="center"
+                android:linksClickable="true"
+                android:text="DjVuLibre - http://djvu.sourceforge.net/"
+                android:textSize="18sp" />
 
-            </TableRow>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-            <TableRow>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/djvu" />
 
-                <LinearLayout android:layout_width="wrap_content"
-                               android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center">
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                       android:src="@drawable/plus"/>
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                       android:src="@drawable/minus"/>
+            </LinearLayout>
+        </LinearLayout>
 
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                                           android:src="@drawable/next"/>
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                                                               android:src="@drawable/prev"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp">
 
-                    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                                                                           android:src="@drawable/view"/>
-                </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autoLink="all"
+                android:gravity="center"
+                android:linksClickable="true"
+                android:text="Blue Bits icons by Stan Khodjaev"
+                android:textSize="18sp" />
 
-                <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
-                          android:textSize="18sp"
-                          android:text="Blue Bits icons, by Stan Khodjaev"
-                          android:gravity="left|center_vertical" android:linksClickable="true" android:autoLink="all"/>
-            </TableRow>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-            <!--<TableRow>-->
-                <!--<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"-->
-                   <!--android:src="@drawable/view"/>-->
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/plus" />
 
-                <!--<TextView android:layout_width="fill_parent" android:layout_height="fill_parent"-->
-                          <!--android:textSize="18sp"-->
-                          <!--android:text="Derived on Oxygen Team icon"-->
-                          <!--android:gravity="left|center_vertical"/>-->
-            <!--</TableRow>-->
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/minus" />
 
-            <TableRow>
-                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                   android:src="@drawable/djvu"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/next" />
 
-                <TextView android:layout_width="fill_parent" android:layout_height="fill_parent"
-                          android:textSize="18sp"
-                          android:text="DjVuLibre - http://djvu.sourceforge.net/"
-                          android:gravity="left|center_vertical" android:linksClickable="true" android:autoLink="all"/>
-            </TableRow>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/prev" />
 
-            <TableRow>
-                <ImageView android:layout_width="fill_parent" android:layout_height="fill_parent"
-                   android:src="@drawable/orion" android:gravity="center"/>
-                <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                          android:textSize="18sp"
-                          android:text="ESO/Igor Chekalin image at http://www.eso.org/public/images/eso1103a/"
-                          android:gravity="left|center_vertical" android:linksClickable="true" android:autoLink="all"/>
-            </TableRow>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/view" />
+            </LinearLayout>
+        </LinearLayout>
 
-            <TableRow>
-                <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                          android:textSize="18sp"
-                          android:text="..." android:gravity="center"/>
-                <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                          android:textSize="18sp"
-                          android:text="Android Icons"
-                          android:gravity="left|center_vertical"/>
-            </TableRow>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp">
 
-<TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-                  android:textSize="18sp" android:layout_marginTop="20dp"
-                  android:text="Orion Viewer is free software: you can redistribute it and/or modify
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autoLink="all"
+                android:gravity="center"
+                android:linksClickable="true"
+                android:text="Ubuntu Humanity Icons"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/info" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/help" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/fileopen" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/recent" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/close" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:gravity="center"
+                android:linksClickable="true"
+                android:text="Oxygen Icons - https://github.com/KDE/oxygen-icons"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/pdf" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/xps" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/xml" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/book_preferences" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/copy" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/bookmarks" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/folder" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Other"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Android Icons"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="Orion Viewer is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version."
-                  android:gravity="center"/>
-        </TableLayout>
+            android:textSize="18sp" />
 
 
         <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
