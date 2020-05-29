@@ -11,19 +11,13 @@ on:
       - dev**
 
 jobs:
-  validation:
-    name: "Gradle wrapper validation"
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v2
-      - uses: gradle/wrapper-validation-action@v1
-
   apk:
     name: Generate APK
     runs-on: ubuntu-18.04
 
     steps:
       - uses: actions/checkout@v1
+      - uses: gradle/wrapper-validation-action@v1
       - name: set up JDK 1.8
         uses: actions/setup-java@v1
         with:
@@ -41,20 +35,20 @@ jobs:
       - name: Upload arm7 APK
         uses: actions/upload-artifact@v2
         with:
-          name: orion-viewer-dev-${{steps.read_version_property.outputs.value}}-${{github.ref}}-${{github.run_number}}-arm7.zip
+          name: orion-viewer-dev-${{steps.read_version_property.outputs.value}}-${{github.run_number}}-arm7.zip
           path: orion-viewer/build/outputs/apk/arm7/ci/*.apk
       - name: Upload arm64 APK
         uses: actions/upload-artifact@v2
         with:
-          name: orion-viewer-dev-${{steps.read_version_property.outputs.value}}-${{github.ref}}-${{github.run_number}}-arm64.zip
+          name: orion-viewer-dev-${{steps.read_version_property.outputs.value}}-${{github.run_number}}-arm64.zip
           path: orion-viewer/build/outputs/apk/arm64/ci/*.apk
       - name: Upload x86 APK
         uses: actions/upload-artifact@v2
         with:
-          name: orion-viewer-dev-${{steps.read_version_property.outputs.value}}-${{github.ref}}-${{github.run_number}}-x86.zip
+          name: orion-viewer-dev-${{steps.read_version_property.outputs.value}}-${{github.run_number}}-x86.zip
           path: orion-viewer/build/outputs/apk/x86/ci/*.apk
       - name: Upload x86_64 APK
         uses: actions/upload-artifact@v2
         with:
-          name: orion-viewer-dev-${{steps.read_version_property.outputs.value}}-${{github.ref}}-${{github.run_number}}-x86_64.zip
+          name: orion-viewer-dev-${{steps.read_version_property.outputs.value}}-${{github.run_number}}-x86_64.zip
           path: orion-viewer/build/outputs/apk/x86_64/ci/*.apk                   
