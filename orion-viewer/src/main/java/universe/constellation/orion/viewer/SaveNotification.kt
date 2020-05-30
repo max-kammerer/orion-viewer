@@ -7,59 +7,75 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
-import androidx.fragment.app.DialogFragment
+import android.widget.ListView
 import kotlinx.coroutines.*
 import universe.constellation.orion.viewer.filemanager.FileChooserAdapter
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
 import java.io.File
 
 
-open class SaveNotification : DialogFragment() {
+open class SaveNotification {
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        super.onCreateDialog(savedInstanceState)
-        val uri = arguments!!.getParcelable<Uri>(URI)!!
-        val mimeType = arguments!!.getString(TYPE)
-        val builder = AlertDialog.Builder(activity)
-        builder.setTitle(getString(R.string.please_save_file))
-                .setItems(R.array.save_options) { _, which ->
-                    val myActivity = activity as OrionViewerActivity
-                    when(which) {
-                        0 -> {
-                            myActivity.startActivity(
-                                Intent(myActivity, OrionSaveFileActivity::class.java).apply {
-                                    putExtra(URI, uri)
-                                }
-                            )
-                        }
-                        1 -> {
-                            val toFile = createTmpFile(
-                                activity!!,
-                                getExtension(uri, mimeType)
-                            )
+     fun showIntentFallbackDialog(activity: Activity, intent: Intent): Dialog {
+         val uri = intent.data!!
+         val mimeType = intent.type
+         val builder = AlertDialog.Builder(activity)
+         val view = activity.layoutInflater.inflate(R.layout.intent_problem_dialog, null)
+         builder.setTitle(activity.applicationContext.getString(R.string.please_save_file)).setView(view)
+                 .setNegativeButton(android.R.string.cancel) { dialog, _ ->
+                     dialog.cancel()
+                 }
+         val alertDialog = builder.create()
+         val fallbacks = view.findViewById<ListView>(R.id.intent_fallback_list)
+         fallbacks.setOnItemClickListener { _, _, position, _ ->
+             val myActivity = activity as OrionViewerActivity
+             when (position) {
+                 0 -> {
+                     myActivity.startActivity(
+                             Intent(myActivity, OrionSaveFileActivity::class.java).apply {
+                                 putExtra(URI, uri)
+                             }
+                     )
+                     alertDialog.dismiss()
+                 }
+                 1 -> {
+                     val toFile = createTmpFile(
+                             activity,
+                             getExtension(uri, mimeType)
+                     )
 
-                            saveFileAndDoAction(myActivity, uri, toFile) {
-                                myActivity.openFileAndDestroyOldController(it.path)
-                            }
-                        }
-                        2 -> myActivity.startActivity(
-                            Intent(myActivity, OrionFileManagerActivity::class.java).apply {
-                                putExtra(OrionFileManagerActivity.OPEN_RECENTS_TAB, true)
-                            }
-                        )
-                        else -> error("Unknown save option: $which")
-                    }
-                }.setNegativeButton(android.R.string.cancel) { dialog, _ ->
-                    dialog.cancel()
-                }
-        return builder.create()
+                     saveFileAndDoAction(myActivity, uri, toFile) {
+                         alertDialog.dismiss()
+                         myActivity.openFileAndDestroyOldController(it.path)
+                     }
+
+                 }
+                 2 -> {
+                     alertDialog.dismiss()
+                     myActivity.startActivity(
+                             Intent(myActivity, OrionFileManagerActivity::class.java).apply {
+                                 putExtra(OrionFileManagerActivity.OPEN_RECENTS_TAB, true)
+
+                             })
+                 }
+                 3 -> {
+                     val title = myActivity.applicationContext.getString(R.string.crash_on_intent_opening_title)
+                     myActivity.reportErrorVia(false, title, intent.toString())
+
+                 }
+                 4 -> {
+                     val title = myActivity.applicationContext.getString(R.string.crash_on_intent_opening_title)
+                     myActivity.reportErrorVia(true, title, intent.toString())
+                 }
+                 else -> error("Unknown save option: $position")
+             }
+         }
+         return alertDialog
     }
 
     companion object {
 
         const val URI = "URI"
-        const val TYPE = "TYPE"
 
         private fun saveFileInto(context: Context, uri: Uri, toFile: File): File {
             toFile.parentFile.mkdirs()

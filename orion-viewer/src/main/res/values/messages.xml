@@ -13,10 +13,13 @@
     <string name="msg_warning">Warning</string>
     <string name="msg_specify_keyword_for_search">Specify keyword for search</string>
 
-    <string name="please_save_file">Please save document into file to open (can\'t extract file path from intent)</string>
+    <string name="please_save_file">Error during intent processing</string>
+    <string name="intent_fail_fallbacks">Can\'t extract file path from intent. Please save intent data into file to open it or…</string>
     <string name="save_to_file">Save to File…</string>
     <string name="open_in_temporary_file">Open as temporary file</string>
-    <string name="open_rececent_files">Go to recent books…</string>
+    <string name="open_recent_files">Go to recent books…</string>
+    <string name="report_error_by_github_and_return">Report issue on github and return to dialog…</string>
+    <string name="report_error_by_email_and_return">Report error by email and return to dialog…</string>
 
     <string name="recent_book_not_found">Can\'t find book file!</string>
     <string name="tap_zones_header">Default Tap Zones</string>
@@ -27,6 +30,7 @@
     <string name="permission_exit">Exit</string>
 
     <string name="crash_on_book_opening_title">Error on file opening</string>
+    <string name="crash_on_intent_opening_title">Error on intent processing</string>
     <string name="crash_on_book_opening_message_header">Error occurred during file \`%1$s\` opening. Please report an issue (with attached file if possible):</string>
 
     <string name="string_cancel">Cancel</string>

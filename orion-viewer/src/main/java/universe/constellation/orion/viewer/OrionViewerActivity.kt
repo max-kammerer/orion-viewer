@@ -22,11 +22,9 @@ package universe.constellation.orion.viewer
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.graphics.Point
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Debug
@@ -229,16 +227,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                                 if (controller == null) {
                                     initStubController("Can't extract file path from URI", "Can't extract file path from URI")
                                 }
-                                SaveNotification().apply {
-                                    Bundle().apply {
-                                        putParcelable(SaveNotification.URI, uri)
-                                        putString(SaveNotification.TYPE, intent.type)
-                                        arguments = this
-                                    }
-
-
-                                    show(supportFragmentManager, "save_notification")
-                                }
+                                SaveNotification().showIntentFallbackDialog(this, intent).show()
                                 return
                             }
                         } else uri.path
@@ -271,71 +260,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         openFile(filePath)
     }
 
-    private fun showErrorDialog(file: String, e: Throwable) {
-        val inflater = layoutInflater
-
-        val view = inflater.inflate(R.layout.crash_dialog, null)
-        val textView = view.findViewById<TextView>(R.id.crashTextView)
-
-        val exceptionWriter = StringWriter()
-        val printWriter = PrintWriter(exceptionWriter)
-        e.printStackTrace(printWriter)
-        printWriter.flush()
-        val rawException = exceptionWriter.toString()
-        val bodyWithException = applicationContext.getString(R.string.send_report_header) + "\n\n```\n$rawException\n```"
-        textView.text = rawException
-
-        val header = view.findViewById<TextView>(R.id.crash_message_header)
-        header.text = applicationContext.resources.getString(R.string.crash_on_book_opening_message_header, File(file).name)
-
-        val dialog = AlertDialog.Builder(this).setView(view).setTitle(R.string.crash_on_book_opening_title).setPositiveButton(R.string.string_send) { dialog, _ ->
-            val viaEmail = view.findViewById<RadioButton>(R.id.crash_send_email).isChecked
-            try {
-                val title = applicationContext.getString(R.string.crash_on_book_opening_title)
-                if (viaEmail) {
-                    val intent = Intent(Intent.ACTION_SENDTO)
-                    val email = "mikhael" + "." + "bogdanov" + "+" + "orion" + "@" + "gmail" + "." + "com"
-                    val emailTitle = "Orion Viewer: $title"
-                    intent.data = Uri.Builder().scheme("mailto").opaquePart(email).
-                    appendQueryParameter("subject", emailTitle).appendQueryParameter("body", bodyWithException).build()
-
-                    intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
-                    intent.putExtra(Intent.EXTRA_SUBJECT, emailTitle)
-                    intent.putExtra(Intent.EXTRA_TEXT, bodyWithException)
-
-                    startActivity(Intent.createChooser(intent, "Send Email..."))
-                } else {
-
-                    val myIntent = Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse("https://github.com/max-kammerer/orion-viewer/issues/new").buildUpon().
-                            appendQueryParameter("title", title).
-                            appendQueryParameter("body", bodyWithException).build()
-                    )
-                    startActivity(myIntent)
-                }
-            } catch (e: ActivityNotFoundException) {
-                showLongMessage("No application can handle this request. Please install ${if (viaEmail) "a web browser" else "an e-mail client"}")
-            }
-
-            dialog.dismiss()
-
-        }.setNegativeButton(R.string.string_cancel) { dialog, _ ->
-            dialog.dismiss()
-
-        }.create()
-        dialog.show()
-
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
-
-        view.findViewById<RadioButton>(R.id.crash_send_email).setOnClickListener {
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
-        }
-        view.findViewById<RadioButton>(R.id.crash_send_github).setOnClickListener {
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
-        }
-    }
-
     @Throws(Exception::class)
     private fun openFile(filePath: String) {
         val stubController = initStubController(filePath, "Loading...")
@@ -353,7 +277,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 stubDocument.bodyText = e.message
                 stubDocument.title = e.message
                 updateViewOnNewBook(stubDocument.title)
-                showErrorDialog(filePath, e)
+                showErrorReportDialog(filePath, e)
                 return@launch
             }
 
@@ -1166,3 +1090,16 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         const val CROP_RESTRICTION_MAX = 40
     }
 }
+
+internal fun OrionBaseActivity.showErrorReportDialog(file: String, e: Throwable) {
+    val exceptionWriter = StringWriter()
+    val printWriter = PrintWriter(exceptionWriter)
+    e.printStackTrace(printWriter)
+    printWriter.flush()
+    val rawException = exceptionWriter.toString()
+    showErrorReportDialog(
+            applicationContext.resources.getString(R.string.crash_on_book_opening_message_header, File(file).name),
+            applicationContext.getString(R.string.crash_on_book_opening_title), rawException
+    )
+}
+
