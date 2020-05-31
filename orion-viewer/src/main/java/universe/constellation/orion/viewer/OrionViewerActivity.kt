@@ -1091,7 +1091,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 }
 
-internal fun OrionBaseActivity.showErrorReportDialog(file: String, e: Throwable) {
+private fun OrionBaseActivity.showErrorReportDialog(file: String, e: Throwable, intent: Intent) {
     val exceptionWriter = StringWriter()
     val printWriter = PrintWriter(exceptionWriter)
     e.printStackTrace(printWriter)
@@ -1099,7 +1099,7 @@ internal fun OrionBaseActivity.showErrorReportDialog(file: String, e: Throwable)
     val rawException = exceptionWriter.toString()
     showErrorReportDialog(
             applicationContext.resources.getString(R.string.crash_on_book_opening_message_header, File(file).name),
-            applicationContext.getString(R.string.crash_on_book_opening_title), rawException
+            applicationContext.getString(R.string.crash_on_book_opening_title), intent.toString() + "\n\n" + rawException
     )
 }
 
