@@ -96,7 +96,7 @@
                   android:label="@string/app_name"
                   android:theme="@style/Theme.AppCompat.NoActionBar"
                   android:launchMode="singleTask"
-                  android:icon="@drawable/orion"
+                  android:icon="@mipmap/ic_launcher"
                   android:configChanges="orientation|locale|screenSize">
 
             <intent-filter>

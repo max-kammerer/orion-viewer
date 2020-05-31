@@ -182,7 +182,43 @@
                 android:autoLink="all"
                 android:gravity="center"
                 android:linksClickable="true"
-                android:text="ESO/Igor Chekalin image at http://www.eso.org/public/images/eso1103a/"
+                android:text="David Tolliday photo from https://www.davidtolliday.co.uk/p374533124/hb8f85e70#hb8f85e70"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:src="@mipmap/ic_launcher_background"
+                    android:maxWidth="53dp"
+                    android:maxHeight="53dp"
+                    android:adjustViewBounds ="true"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:gravity="center"
+                android:linksClickable="true"
+                android:text="ESO/Igor Chekalin photo from http://www.eso.org/public/images/eso1103a"
                 android:textSize="18sp" />
 
             <LinearLayout
