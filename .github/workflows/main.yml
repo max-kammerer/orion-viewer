@@ -36,19 +36,19 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: orion-viewer-dev-${{steps.read_version_property.outputs.value}}-${{github.run_number}}-arm7.zip
-          path: orion-viewer/build/outputs/apk/arm7/ci/*.apk
+          path: orion-viewer/build/outputs/apk/arm7/dev/*.apk
       - name: Upload arm64 APK
         uses: actions/upload-artifact@v2
         with:
           name: orion-viewer-dev-${{steps.read_version_property.outputs.value}}-${{github.run_number}}-arm64.zip
-          path: orion-viewer/build/outputs/apk/arm64/ci/*.apk
+          path: orion-viewer/build/outputs/apk/arm64/dev/*.apk
       - name: Upload x86 APK
         uses: actions/upload-artifact@v2
         with:
           name: orion-viewer-dev-${{steps.read_version_property.outputs.value}}-${{github.run_number}}-x86.zip
-          path: orion-viewer/build/outputs/apk/x86/ci/*.apk
+          path: orion-viewer/build/outputs/apk/x86/dev/*.apk
       - name: Upload x86_64 APK
         uses: actions/upload-artifact@v2
         with:
           name: orion-viewer-dev-${{steps.read_version_property.outputs.value}}-${{github.run_number}}-x86_64.zip
-          path: orion-viewer/build/outputs/apk/x86_64/ci/*.apk                   
+          path: orion-viewer/build/outputs/apk/x86_64/dev/*.apk                   

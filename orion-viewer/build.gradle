@@ -98,10 +98,11 @@ android {
             }
         }
 
-        ci {
+        // CI configuration
+        dev {
             matchingFallbacks = ['debug']
             debuggable = true
-            applicationIdSuffix ".ci"
+            applicationIdSuffix ".dev"
             signingConfig signingConfigs.debug
         }
     }
