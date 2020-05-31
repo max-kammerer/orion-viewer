@@ -72,12 +72,12 @@ class OrionSaveFileActivity : OrionFileManagerActivityBase(
     }
 
     private fun saveFile(targetFile: File) {
-        val fileUri = intent.extras.get(SaveNotification.URI) as Uri
+        val fileUri = intent.extras.get(IntentFallbackDialog.URI) as Uri
         saveFile(targetFile, fileUri)
     }
 
     private fun saveFile(target: File, fileUri: Uri) {
-        SaveNotification.saveFileAndDoAction(this, fileUri, target) {
+        IntentFallbackDialog.saveFileAndDoAction(this, fileUri, target) {
             openFile(target)
         }
     }

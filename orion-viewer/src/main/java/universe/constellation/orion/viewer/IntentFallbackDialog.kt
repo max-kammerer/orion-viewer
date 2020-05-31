@@ -14,7 +14,7 @@ import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
 import java.io.File
 
 
-open class SaveNotification {
+open class IntentFallbackDialog {
 
      fun showIntentFallbackDialog(activity: Activity, intent: Intent): Dialog {
          val uri = intent.data!!
