@@ -56,6 +56,8 @@ open class IntentFallbackDialog {
                          return@setOnItemClickListener
                      }
 
+                     //should be granted automatically
+                     Permissions.checkWritePermission(myActivity)
                      val toFile = createTmpFile(
                              activity,
                              extension
