@@ -4,11 +4,16 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.app.ProgressDialog
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.webkit.MimeTypeMap
 import android.widget.ListView
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import universe.constellation.orion.viewer.filemanager.FileChooserAdapter
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
 import java.io.File
@@ -16,6 +21,7 @@ import java.io.File
 
 open class IntentFallbackDialog {
 
+     //content intent
      fun showIntentFallbackDialog(activity: Activity, intent: Intent): Dialog {
          val uri = intent.data!!
          val mimeType = intent.type
@@ -39,14 +45,32 @@ open class IntentFallbackDialog {
                      alertDialog.dismiss()
                  }
                  1 -> {
+                     val extension = getExtension(uri, mimeType, myActivity.contentResolver)
+                     if (extension == null) {
+                         alertDialog.dismiss()
+                         myActivity.showErrorReportDialog(
+                                 myActivity.applicationContext.getString(R.string.crash_on_intent_opening_title),
+                                 myActivity.applicationContext.getString(R.string.crash_on_intent_opening_title),
+                                 intent.toString()
+                         )
+                         return@setOnItemClickListener
+                     }
+
                      val toFile = createTmpFile(
                              activity,
-                             getExtension(uri, mimeType)
+                             extension
                      )
 
                      saveFileAndDoAction(myActivity, uri, toFile) {
                          alertDialog.dismiss()
-                         myActivity.openFileAndDestroyOldController(it.path)
+                         myActivity.startActivity(
+                                 Intent(Intent.ACTION_VIEW).apply {
+                                     setClass(myActivity.applicationContext, OrionViewerActivity::class.java)
+                                     data = Uri.fromFile(toFile)
+                                     addCategory(Intent.CATEGORY_DEFAULT)
+                                     putExtra("from_intent_fallback", true)
+                                 }
+                         )
                      }
 
                  }
@@ -91,12 +115,27 @@ open class IntentFallbackDialog {
         }
 
         private fun createTmpFile(context: Context, extension: String) =
-            File.createTempFile("book", ".$extension", context.cacheDir)!!
+            File.createTempFile("temp_book", ".$extension", context.cacheDir)!!
 
-        fun getExtension(uri: Uri, mimeType: String?): String {
-            return uri.path.substringAfterLast('.').takeIf {
+        fun getExtension(uri: Uri, mimeType: String?, contentResolver: ContentResolver): String? {
+            return uri.path?.substringAfterLast("/")?.substringAfterLast('.').takeIf {
                 FileChooserAdapter.supportedExtensions.contains(it)
-            } ?: mimeType?.let { if (it.endsWith("djvu")) "djvu" else "pdf" } ?: error("Unknown extension $uri")
+            } ?: mimeType?.findExtensionForMimeType() ?: uri.extractMimeTypeFromUri(contentResolver)?.run {
+                findExtensionForMimeType() ?:
+                MimeTypeMap.getSingleton().getExtensionFromMimeType(this).takeIf {  FileChooserAdapter.supportedExtensions.contains(it) }
+            }
+        }
+
+        private fun Uri.extractMimeTypeFromUri(contentResolver: ContentResolver): String? {
+            return contentResolver.getType(this)
+
+        }
+
+        private fun String?.findExtensionForMimeType(): String? {
+            if (this  == null) return null;
+            return FileChooserAdapter.supportedExtensions.firstOrNull {
+                it.contains(this)
+            }
         }
 
         fun saveFileAndDoAction(

@@ -277,7 +277,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 stubDocument.bodyText = e.message
                 stubDocument.title = e.message
                 updateViewOnNewBook(stubDocument.title)
-                showErrorReportDialog(filePath, e)
+                showErrorReportDialog(filePath, e, intent)
                 return@launch
             }
 
