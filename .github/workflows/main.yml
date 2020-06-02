@@ -25,7 +25,7 @@ jobs:
       - name: Prepare thirdparty
         run: bash ./gradlew -b thirdparty_build.gradle downloadAndPatchDjvu downloadAndMakeMupdf
       - name: Build debug APK
-        run: bash ./gradlew assembleCi --stacktrace -Porion.CIBuild=true
+        run: bash ./gradlew assembleDev --stacktrace -Porion.CIBuild=true
       - name: Read value from Properties-file
         id: read_version_property
         uses: christian-draeger/read-properties@1.0.1
