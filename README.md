@@ -65,4 +65,7 @@ To build `Orion Viewer` you will need:
 
  For Android 4.0.x devices use next command (it also requires android-ndk 17):
 
- `./gradlew :orion-viewer assembleArm7Debug -Porion.build.android40=true`
+ ```
+ ./gradlew :nativeLibs:djvuModule:clean :nativeLibs:mupdfModule:clean
+ ./gradlew :orion-viewer:assembleArm7Debug -Porion.build.android40=true
+ ```
