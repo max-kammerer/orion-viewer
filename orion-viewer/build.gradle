@@ -8,8 +8,7 @@ project.ext {
     properties.load(propertiesFile.newDataInputStream())
     orionVersionCode = properties.getProperty("orion.version.code").toInteger()
     orionVersionName = properties.getProperty("orion.version.name")
-
-    doSigning = new File("orion-viewer/signing.gradle").exists()
+    doSigning = file("signing.gradle").exists()
     println "do signing: " + doSigning
     if (doSigning) {
         apply from: 'signing.gradle'
