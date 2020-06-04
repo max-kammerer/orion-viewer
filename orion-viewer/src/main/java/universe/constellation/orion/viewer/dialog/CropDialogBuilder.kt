@@ -1,5 +1,6 @@
 package universe.constellation.orion.viewer.dialog
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import com.google.android.material.tabs.TabLayout
 import androidx.appcompat.app.AppCompatDialog
@@ -120,6 +121,7 @@ class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : A
         linkCropButtonsAndText(minus, plus, valueView, i)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun linkCropButtonsAndText(minus: ImageButton, plus: ImageButton, text: TextView, cropIndex: Int) {
         minus.setOnClickListener {
             if (cropMargins[cropIndex] != CROP_RESTRICTION_MIN) {

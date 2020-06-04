@@ -65,7 +65,7 @@ public class BookmarkExporter {
             String nameSpace = "";
             serializer.startTag(nameSpace, "bookmarks");
             serializer.attribute(nameSpace, "version", "1");
-            serializer.attribute(nameSpace, "date", new SimpleDateFormat().format(new Date()));
+            serializer.attribute(nameSpace, "date", SimpleDateFormat.getDateTimeInstance().format(new Date()));
 
             int bookIdColumn = c.getColumnIndex(BookmarkAccessor.BOOK_ID);
             //hack

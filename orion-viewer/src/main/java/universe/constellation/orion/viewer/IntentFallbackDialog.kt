@@ -134,7 +134,7 @@ open class IntentFallbackDialog {
         }
 
         private fun String?.findExtensionForMimeType(): String? {
-            if (this  == null) return null;
+            if (this  == null) return null
             return FileChooserAdapter.supportedExtensions.firstOrNull {
                 it.contains(this)
             }

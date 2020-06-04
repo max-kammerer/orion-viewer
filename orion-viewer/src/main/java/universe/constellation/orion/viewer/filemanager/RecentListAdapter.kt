@@ -36,7 +36,7 @@ class RecentListAdapter(context: Context, entries: List<GlobalOptions.RecentEntr
             val name = it.lastPathElement
 
             val icon = getIconByNameExtension(name)
-            val iconView = newConvertView!!.findViewById<ImageView>(R.id.fileImage)!!
+            val iconView = newConvertView.findViewById<ImageView>(R.id.fileImage)!!
             iconView.setImageResource(icon)
 
             val fileName = newConvertView.findViewById<TextView>(R.id.fileName)!!

@@ -70,10 +70,10 @@ public class BookmarkImporter {
                     String name = xpp.getName();
 
                     if ("bookmarks".equals(name)) {
-                        fileVersion = Integer.valueOf(xpp.getAttributeValue("", "version"));
+                        fileVersion = Integer.parseInt(xpp.getAttributeValue("", "version"));
                     } else {
                         if ("book".equals(name)) {
-                            long size = Long.valueOf(xpp.getAttributeValue("", "fileSize"));
+                            long size = Long.parseLong(xpp.getAttributeValue("", "fileSize"));
                             String fileName = xpp.getAttributeValue("", "fileName");
                             BookNameAndSize book = new BookNameAndSize(fileName, size);
                             if (books.contains(book)) {
@@ -133,7 +133,7 @@ public class BookmarkImporter {
 
                     if ("bookmark".equals(name)) {
                         try {
-                            pageNumber = Integer.valueOf(xpp.getAttributeValue("", "page")) - 1;
+                            pageNumber = Integer.parseInt(xpp.getAttributeValue("", "page")) - 1;
                         } catch (NumberFormatException e){
                             throw new OrionException("Wrong page number for book", book.toString() +": " + xpp.getAttributeValue("", "page"));
                         }

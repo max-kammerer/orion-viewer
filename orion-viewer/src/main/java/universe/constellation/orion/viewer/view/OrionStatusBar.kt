@@ -18,6 +18,7 @@ class OrionStatusBarHelper(val view: ViewGroup) : OrionBookListener, OrionImageL
     val totalPages = view.findViewById<View>(R.id.totalPages) as TextView
     var info: LayoutPosition? = null
 
+    @SuppressLint("SetTextI18n")
     override fun onNewBook(title: String?, pageCount: Int) {
         this.title.text = title
         this.totalPages.text = "/$pageCount"

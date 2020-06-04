@@ -19,6 +19,7 @@
 
 package universe.constellation.orion.viewer.prefs;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -43,6 +44,7 @@ public class ActionListActivity extends Activity {
 
     //private boolean populating;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getOrionContext().applyTheme(this);

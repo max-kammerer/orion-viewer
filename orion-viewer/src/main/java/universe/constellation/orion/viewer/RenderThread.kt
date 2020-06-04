@@ -32,7 +32,7 @@ import universe.constellation.orion.viewer.layout.calcPageLayout
 import universe.constellation.orion.viewer.view.Renderer
 import universe.constellation.orion.viewer.view.Scene
 
-open class RenderThread(private val activity: OrionViewerActivity, protected var layout: LayoutStrategy, protected var doc: Document, private val executeInSeparateThread: Boolean, private val fullScene: Scene) : Thread(), Renderer {
+open class RenderThread(private val activity: OrionViewerActivity, protected var layout: LayoutStrategy, private var doc: Document, private val executeInSeparateThread: Boolean, private val fullScene: Scene) : Thread(), Renderer {
 
     private val cachedBitmaps = LinkedList<CacheInfo>()
 
@@ -76,7 +76,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
         stopped = true
         synchronized(this) {
             cleanCache()
-            (this as java.lang.Object).notify()
+            (this as Object).notify()
         }
     }
 
@@ -88,7 +88,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
 
     override fun onResume() {
         synchronized(this) {
-            (this as java.lang.Object).notify()
+            (this as Object).notify()
         }
     }
 
@@ -111,7 +111,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
                 if (currentPosition == null || futureIndex > FUTURE_COUNT || currentPosition!!.screenWidth == 0 || currentPosition!!.screenHeight == 0) {
                     try {
                         log("WAITING...")
-                        (this as java.lang.Object).wait()
+                        (this as Object).wait()
                     } catch (e: InterruptedException) {
                         log(e)
                     }
@@ -232,7 +232,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
         val lastInfo = lastInfo.deepCopy()
         synchronized(this) {
             lastEvent = lastInfo
-            (this as java.lang.Object).notify()
+            (this as Object).notify()
         }
     }
 

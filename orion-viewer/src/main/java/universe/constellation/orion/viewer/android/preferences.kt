@@ -21,6 +21,7 @@ package universe.constellation.orion.viewer.android
 
 import android.content.Context
 import android.preference.*
+import universe.constellation.orion.viewer.BuildConfig
 
 abstract class DSLPreferenceActivity : PreferenceActivity() {
 
@@ -29,7 +30,9 @@ abstract class DSLPreferenceActivity : PreferenceActivity() {
     internal var builderState: MutableList<Pair<PreferenceGroup, Preference>>? = null
 
     inline fun rootScreen(init: PreferenceScreen.() -> Unit): PreferenceScreen {
-        assert(builderState == null) { "rootScreen couldn't be nested" }
+        if (BuildConfig.DEBUG && builderState != null) {
+            error("rootScreen couldn't be nested")
+        }
         return preferenceManager.createPreferenceScreen(this).also {
             it.nested(init)
             preferenceScreen = it

@@ -299,9 +299,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 stubController.destroy()
                 controller1.changeOrinatation(lastPageInfo1!!.screenOrientation)
 
-                (newDocument.title?.takeIf { it.isNotBlank() } ?: filePath.substringAfterLast('/').substringBefore(".")).let {
-                    updateViewOnNewBook(it)
-                }
+                updateViewOnNewBook((newDocument.title?.takeIf { it.isNotBlank() } ?: filePath.substringAfterLast('/').substringBefore(".")))
 
                 val drawView = fullScene.drawView
                 controller1.init(lastPageInfo1, Point(drawView.sceneWidth, drawView.sceneHeight))
@@ -389,11 +387,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
         val pageNumberText = findMyViewById(R.id.page_picker_message) as TextView
         //initial state
-        pageNumberText.text = Integer.toString(1)
+        pageNumberText.text = 1.toString()
 
         pageSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                pageNumberText.text = "${progress + 1}"
+                pageNumberText.text = (progress + 1).toString()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
@@ -440,7 +438,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         val pageSeek = findMyViewById(R.id.page_picker_seeker) as SeekBar
         pageSeek.progress = controller!!.currentPage
         val view = findMyViewById(R.id.page_picker_message) as TextView
-        view.text = "${controller!!.currentPage + 1}"
+        view.text = (controller!!.currentPage + 1).toString()
         view.clearFocus()
         view.requestFocus()
 

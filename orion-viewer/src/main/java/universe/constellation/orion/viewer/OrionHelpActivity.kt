@@ -106,7 +106,7 @@ class OrionHelpActivity : OrionBaseActivity(false) {
     }
 
     companion object {
-        const val OPEN_ABOUT_TAB = "OPEN_ABOUT";
+        const val OPEN_ABOUT_TAB = "OPEN_ABOUT"
     }
 
 }

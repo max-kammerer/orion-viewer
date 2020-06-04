@@ -3,7 +3,6 @@ package universe.constellation.orion.viewer.device
 import android.view.View
 
 import universe.constellation.orion.viewer.OrionViewerActivity
-import universe.constellation.orion.viewer.prefs.GlobalOptions
 
 abstract class EInkDevice : EInkDeviceWithoutFastRefresh() {
 

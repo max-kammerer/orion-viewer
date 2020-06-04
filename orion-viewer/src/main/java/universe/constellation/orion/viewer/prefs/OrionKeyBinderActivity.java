@@ -19,6 +19,7 @@
 
 package universe.constellation.orion.viewer.prefs;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -243,6 +244,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
         }
 
 
+        @SuppressLint("SetTextI18n")
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = mInflater.inflate(android.R.layout.two_line_list_item, parent, false);
