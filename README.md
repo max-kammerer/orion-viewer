@@ -4,7 +4,7 @@
 
 Orion Viewer is *pdf*, *djvu*, *xps*, *cbz* and *tiff* file viewer for Android
 devices based on
-[mupdf](https://mupdf.com) and
+[MuPDF](https://mupdf.com) and
 [DjVuLibre](https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/)
 libraries
 
@@ -59,7 +59,7 @@ To build `Orion Viewer` you will need:
 
  To build Android apk files run:
 
- `./gradlew :orion-viewer assembleDebug` (or `assembleRelease`)
+ `./gradlew :orion-viewer:assembleDebug` (or `assembleRelease`)
 
  It will generate `apk` artifacts suitable for Android 4.1+ devices.
 
@@ -69,3 +69,5 @@ To build `Orion Viewer` you will need:
  ./gradlew :nativeLibs:djvuModule:clean :nativeLibs:mupdfModule:clean
  ./gradlew :orion-viewer:assembleArm7Debug -Porion.build.android40=true
  ```
+
+Pre 0.80 versions are compatible with Android 2.1+ devices

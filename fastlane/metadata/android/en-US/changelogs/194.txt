@@ -1,0 +1,2 @@
+* Djvu library update to current master
+* Added report dialog if file open is failed
