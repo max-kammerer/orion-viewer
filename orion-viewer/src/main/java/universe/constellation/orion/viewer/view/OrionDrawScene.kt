@@ -70,7 +70,7 @@ class OrionDrawScene : View, OrionScene {
 
     override fun init(colorStuff: ColorStuff) {
         this.stuff = colorStuff
-        defaultPaint = colorStuff.bd.paint
+        defaultPaint = colorStuff.backgroundPaint
         borderPaint = colorStuff.borderPaint
         inited = true
     }

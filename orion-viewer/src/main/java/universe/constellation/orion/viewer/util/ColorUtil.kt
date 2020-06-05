@@ -58,14 +58,13 @@ object ColorUtil {
 
     @ColorInt
     @JvmStatic
-    fun transformColor(color: Int, matrix: ColorMatrix): Int {
+    fun transformColor(color: Int, transformation: FloatArray): Int {
         val r = Color.red(color)
         val g = Color.green(color)
         val b = Color.blue(color)
         val a = Color.alpha(color)
 
         val array = IntArray(4)
-        val transformation = matrix.array
         for (i in array.indices) {
             val shift = i * 5
             array[i] = (

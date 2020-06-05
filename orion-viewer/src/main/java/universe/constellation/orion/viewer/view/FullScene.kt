@@ -18,11 +18,11 @@ interface Scene : OrionImageListener {
     }
 }
 
-class FullScene(val scene: ViewGroup, val drawView: OrionScene, statusBar: ViewGroup, val context: Context) : Scene, OrionBookListener {
+class FullScene(private val scene: ViewGroup, val drawView: OrionScene, statusBar: ViewGroup, val context: Context) : Scene, OrionBookListener {
 
     val statusBarHelper = OrionStatusBarHelper(statusBar)
 
-    val colorStuff = ColorStuff(context)
+    private val colorStuff = ColorStuff()
 
     init {
         drawView.init(colorStuff)
