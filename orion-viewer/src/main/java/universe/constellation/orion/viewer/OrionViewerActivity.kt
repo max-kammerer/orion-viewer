@@ -28,6 +28,8 @@ import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
 import android.os.Debug
+import android.os.ParcelFileDescriptor
+import android.system.Os
 import android.text.method.PasswordTransformationMethod
 import android.view.*
 import android.view.inputmethod.EditorInfo
@@ -52,6 +54,7 @@ import universe.constellation.orion.viewer.view.FullScene
 import universe.constellation.orion.viewer.view.OrionStatusBarHelper
 import universe.constellation.orion.viewer.view.Renderer
 import java.io.File
+import java.io.IOException
 import java.io.PrintWriter
 import java.io.StringWriter
 
@@ -219,16 +222,23 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 val intentPath: String =
                         if ("content".equals(uri.scheme, ignoreCase = true)) {
                             try {
-                                FileUtils.getPath(this, uri)
+                                FileUtils.getPath(this, uri).takeIf { File(it).exists() }
                             } catch (e: Exception) {
                                 log(e)
                                 null
                             } ?: run {
-                                if (controller == null) {
-                                    initStubController("Can't extract file path from URI", "Can't extract file path from URI")
+                                try {
+                                    contentResolver.openFileDescriptor(uri, "r")?.run { getFileDescriptorPath(this) }
+                                        ?.takeIf { File(it).exists() }
+                                } catch (e: Throwable) {
+                                    null
+                                } ?: run {
+                                    if (controller == null) {
+                                        initStubController("Can't extract file path from URI", "Can't extract file path from URI")
+                                    }
+                                    IntentFallbackDialog().showIntentFallbackDialog(this, intent).show()
+                                    return
                                 }
-                                IntentFallbackDialog().showIntentFallbackDialog(this, intent).show()
-                                return
                             }
                         } else uri.path
 
@@ -258,6 +268,32 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         destroyController(controller).also { controller = null }
         AndroidLogger.stopLogger()
         openFile(filePath)
+    }
+
+    /**
+     * Copied from koreader
+     * tries to get the absolute path of a file from a content provider. It works with most
+     * applications that use a fileProvider to deliver files to other applications.
+     * If the data in the uri is not a file this will fail
+     *
+     * @param pfd - parcelable file descriptor from contentResolver.openFileDescriptor
+     * @return absolute path to file or null
+     */
+    private fun getFileDescriptorPath(pfd: ParcelFileDescriptor?): String? {
+        return pfd?.use {  parcel ->
+            try {
+                val file = File("/proc/self/fd/" + parcel.fd)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    Os.readlink(file.absolutePath)
+                } else {
+                    file.canonicalPath
+                }
+            } catch (e: IOException) {
+                null
+            } catch (e: Exception) {
+                null
+            }
+        }
     }
 
     @Throws(Exception::class)
