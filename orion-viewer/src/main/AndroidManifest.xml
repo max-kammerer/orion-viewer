@@ -44,7 +44,7 @@
                   android:label="@string/app_name"
                   android:theme="@style/Theme.AppCompat"
                   android:launchMode="singleTask"
-                  android:icon="@drawable/orion" android:configChanges="orientation|locale|screenSize"
+                  android:icon="@drawable/orion" android:configChanges="orientation|locale|screenSize|keyboardHidden"
                   android:screenOrientation="behind" android:windowSoftInputMode="adjustPan">
 
             <intent-filter>
@@ -55,12 +55,14 @@
                 <data android:scheme="content"/>
                 <data android:mimeType="image/vnd.djvu"/>
                 <data android:mimeType="image/x-djvu"/>
+                <data android:mimeType="image/djvu"/>
                 <data android:mimeType="application/djvu"/>
                 <data android:mimeType="application/vnd.djvu"/>
                 <data android:mimeType="application/pdf"/>
                 <data android:mimeType="application/vnd.ms-xpsdocument"/>
                 <data android:mimeType="application/oxps"/>
                 <data android:mimeType="application/xps"/>
+                <data android:mimeType="application/vnd.comicbook+zip" />
                 <data android:mimeType="application/x-cbz"/>
 
                 <!--images-->
