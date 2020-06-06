@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.2.2)
+project("orion-djvu-library")
 set(MY_ROOT "${PROJECT_SOURCE_DIR}/../../djvu/")
 set(ANDROID_ROOT "${PROJECT_SOURCE_DIR}/../jni")
 
@@ -7,7 +8,7 @@ add_definitions(-DHAVE_PTHREAD -DNO_LIBGCC_HOOKS -DHAVE_STDINT_H )
 #-DHAVE_NAMESPACES
 
 #mbstate and wchar
-add_definitions(-DHAS_WCHAR -DHAVE_WCHAR_H -DHAVE_MBSTATE_T -DHAS_MBSTATE)
+add_definitions(-DHAS_WCHAR -DHAVE_WCHAR_H -DHAVE_MBSTATE_T -DHAS_MBSTATE -DHAVE_STDINCLUDES)
 
 add_definitions(-DUNIX)
 
