@@ -1,3 +1,6 @@
+===== 0.81.2 (Jun 14, 2020) =====
+* More wise content URI processing
+
 ===== 0.81.1 (Jun 02, 2020) =====
 * Djvu library update to current master
 * Added report dialog if file open is failed
