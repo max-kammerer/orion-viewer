@@ -40,15 +40,15 @@ kotlin {
         commonMain {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
-                implementation 'com.github.msink:libui-metadata:0.1.7'
+                implementation 'com.github.msink:libui-metadata:0.1.8'
                 implementation project(":common")
             }
         }
 
         linuxAppMain {
             dependencies {
-                implementation 'com.github.msink:libui-linux:0.1.7'
-                implementation 'com.github.msink:libui-linux:0.1.7:cinterop-libui@klib'
+                implementation 'com.github.msink:libui-linux:0.1.8'
+                implementation 'com.github.msink:libui-linux:0.1.8:cinterop-libui@klib'
             }
         }
 
