@@ -9,6 +9,7 @@ import android.widget.TextView
 import universe.constellation.orion.viewer.*
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import java.util.concurrent.CountDownLatch
+import kotlin.math.abs
 
 class OrionStatusBarHelper(val view: ViewGroup) : OrionBookListener, OrionImageListener {
     val panel = view.findViewById<View>(R.id.orion_status_bar) as ViewGroup
@@ -35,7 +36,7 @@ class OrionStatusBarHelper(val view: ViewGroup) : OrionBookListener, OrionImageL
     }
 
     private fun pad(value: Int): String {
-        val pValue = Math.abs(value)
+        val pValue = abs(value)
         return when {
             pValue < 10 -> "  $value"
             pValue < 100 -> " $value"
@@ -55,9 +56,7 @@ class OrionStatusBarHelper(val view: ViewGroup) : OrionBookListener, OrionImageL
         val colorFilter = if (colorMatrix == null) null else ColorMatrixColorFilter(colorMatrix)
         (0 until panel.childCount).forEach {
             val child = panel.getChildAt(it)
-            when(child) {
-                is TextView -> child.paint.colorFilter = colorFilter
-            }
+            if (child is TextView) child.paint.colorFilter = colorFilter
         }
     }
 

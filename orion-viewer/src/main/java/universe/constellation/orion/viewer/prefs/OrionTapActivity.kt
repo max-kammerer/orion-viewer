@@ -99,7 +99,7 @@ class OrionTapActivity : OrionBaseActivity(false) {
 
                 val i = index / 3
                 val j = index % 3
-                log(index.toString() + " " + i + " " + j)
+                log("$index $i $j")
                 val pref = PreferenceManager.getDefaultSharedPreferences(this)
                 val ed = pref.edit()
                 ed.putInt(getKey(i, j, isLong), action.code)

@@ -859,7 +859,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         dialog!!.setContentView(R.layout.options_dialog)
         animator = dialog!!.findViewById<View>(R.id.viewanim) as ViewAnimator?
 
-        view.setOnTouchListener(View.OnTouchListener { v, event -> newTouchProcessor!!.onTouch(event) })
+        view.setOnTouchListener { _, event -> newTouchProcessor!!.onTouch(event) }
 
         dialog!!.setCanceledOnTouchOutside(true)
     }

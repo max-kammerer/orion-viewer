@@ -59,7 +59,6 @@
         <attr name="isBook"/>
         <attr name="minValue"/>
         <attr name="maxValue"/>
-        <attr name="defaultValue" format="integer"/>
     </declare-styleable>
 
 </resources>
