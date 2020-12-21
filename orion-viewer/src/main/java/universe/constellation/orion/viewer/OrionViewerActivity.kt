@@ -240,7 +240,13 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                                     return
                                 }
                             }
-                        } else uri.path
+                        } else uri.path ?: run {
+                            if (controller == null) {
+                                initStubController("Can't extract file path from URI", "Can't extract file path from URI")
+                            }
+                            IntentFallbackDialog().showIntentFallbackDialog(this, intent).show()
+                            return
+                        }
 
 
                 if (controller != null && lastPageInfo != null) {

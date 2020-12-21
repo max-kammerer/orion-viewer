@@ -106,7 +106,7 @@ open class IntentFallbackDialog {
         private fun saveFileInto(context: Context, uri: Uri, toFile: File): File {
             toFile.parentFile.mkdirs()
 
-            val input = context.contentResolver.openInputStream(uri)
+            val input = context.contentResolver.openInputStream(uri) ?: error("Can't write to file: $uri")
 
             input.use {
                 toFile.outputStream().use { outputStream ->

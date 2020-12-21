@@ -72,7 +72,7 @@ class OrionBookmarkActivity : OrionBaseActivity(false) {
         val bookmarks = accessor.selectBookmarks(bookId)
         val view = findMyViewById(R.id.bookmarks) as ListView
         view.adapter = object : ArrayAdapter<Bookmark>(this, R.layout.bookmark_entry, R.id.bookmark_entry, bookmarks) {
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 var convertView = convertView
                 convertView = super.getView(position, convertView, parent)
 
@@ -84,7 +84,7 @@ class OrionBookmarkActivity : OrionBaseActivity(false) {
                 //if (edit != null)
                 edit.setOnClickListener {
                     if (position != 0) {
-                        val item = getItem(position)
+                        val item = getItem(position)!!
 
                         val builder = createThemedAlertBuilder().setIcon(R.drawable.edit_item)
 
