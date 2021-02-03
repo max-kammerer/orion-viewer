@@ -30,7 +30,7 @@ project.ext {
     orionCompileSdk = 28
     orionBuildToolsVersion = "28.0.3"
     if (isCIBuild) {
-        orionNdkVersion = "21.2.6472646"
+        orionNdkVersion = "21.3.6528147"
     }
     else {
         orionNdkVersion = !isAndroid40Build ? "20.1.5948944" : "17.2.4988734"
