@@ -21,9 +21,12 @@ libraries
 * External Dictionaries support
 * Built-in file manager with recently opened file view
 
-<a href='https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer&hl=en&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
-<img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' height=75px/>
-</a>
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/universe.constellation.orion.viewer/)
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
+     alt="Get it on Google Play"
+     height="80">](https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer)
 
 ## Contibution
 
