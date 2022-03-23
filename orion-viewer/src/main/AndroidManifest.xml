@@ -46,7 +46,8 @@
                   android:theme="@style/Theme.AppCompat"
                   android:launchMode="singleTask"
                   android:icon="@drawable/orion" android:configChanges="orientation|locale|screenSize|keyboardHidden"
-                  android:screenOrientation="behind" android:windowSoftInputMode="adjustPan">
+                  android:screenOrientation="behind" android:windowSoftInputMode="adjustPan"
+            android:exported="true">
 
             <intent-filter>
                 <action android:name="com.bravo.intent.action.VIEW"/>
@@ -100,7 +101,8 @@
                   android:theme="@style/Theme.AppCompat.NoActionBar"
                   android:launchMode="singleTask"
                   android:icon="@mipmap/ic_launcher"
-                  android:configChanges="orientation|locale|screenSize">
+                  android:configChanges="orientation|locale|screenSize"
+            android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -123,7 +125,8 @@
                   android:label="@string/app_name"
                   android:theme="@style/Theme.AppCompat"
                   android:launchMode="singleTask"
-                  android:icon="@drawable/orion">
+                  android:icon="@drawable/orion"
+            android:exported="false">
             <intent-filter>
                 <action android:name="universe.constellation.orion.viewer.KEY_MANAGER"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -146,7 +149,8 @@
 
         <activity android:name=".prefs.OrionTapActivity" android:screenOrientation="behind"
                   android:theme="@style/Theme.AppCompat"
-                  android:label="Tap Zones">
+                  android:label="Tap Zones"
+            android:exported="false">
             <intent-filter>
                 <action android:name="universe.constellation.orion.viewer.TAP_ZONES"/>
                 <category android:name="android.intent.category.DEFAULT"/>

@@ -1,15 +1,14 @@
 apply from: 'project.gradle'
 
 buildscript {
-    ext.kotlin_version = '1.4.21'
+    ext.kotlin_version = '1.6.10'
     ext.isCIBuild = findProperty("orion.CIBuild")?.toBoolean() ?: false
     repositories {
         mavenCentral()
-        jcenter()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.2'
+        classpath 'com.android.tools.build:gradle:7.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -18,7 +17,6 @@ allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
-        jcenter()
         google()
     }
 }
@@ -26,14 +24,14 @@ allprojects {
 project.ext {
     isAndroid40Build = project.findProperty("orion.build.android40")?.toBoolean() ?: false
     orionMinSdk = !isAndroid40Build ? 16 : 14
-    orionTargetSdk = 29
-    orionCompileSdk = 29
-    orionBuildToolsVersion = "28.0.3"
+    orionTargetSdk = 31
+    orionCompileSdk = 31
+    orionBuildToolsVersion = "30.0.3"
     if (isCIBuild) {
-        orionNdkVersion = "21.3.6528147"
+        orionNdkVersion = "23.1.7779620"
     }
     else {
-        orionNdkVersion = !isAndroid40Build ? "20.1.5948944" : "17.2.4988734"
+        orionNdkVersion = !isAndroid40Build ? "23.1.7779620" : "17.2.4988734"
     }
     testFiles = ['http://www.djvu.org/docs/DjVu3Spec.djvu']
 }
