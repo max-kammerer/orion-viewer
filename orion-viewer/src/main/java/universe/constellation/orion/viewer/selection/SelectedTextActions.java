@@ -109,12 +109,7 @@ public class SelectedTextActions {
             }
         });
 
-        popup.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                originalDialog.dismiss();
-            }
-        });
+        popup.setOnDismissListener(originalDialog::dismiss);
     }
 
     public void show(String text) {

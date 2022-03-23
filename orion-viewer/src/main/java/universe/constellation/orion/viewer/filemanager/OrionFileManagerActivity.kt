@@ -116,8 +116,8 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         override fun onActivityCreated(savedInstanceState: Bundle?) {
             super.onActivityCreated(savedInstanceState)
             (activity as OrionFileManagerActivityBase).createFileView(
-                activity!!.findViewById(R.id.listView),
-                activity!!.findViewById(R.id.path)
+                requireActivity().findViewById(R.id.listView),
+                requireActivity().findViewById(R.id.path)
             )
         }
     }

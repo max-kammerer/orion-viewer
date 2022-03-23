@@ -23,6 +23,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
+
 import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
@@ -150,7 +152,7 @@ public enum Action {
                 manager.setVisibleByDefault(false);
                 int navigateTo = OutlineAdapter.initializeTreeManager(manager, outline, controller.getCurrentPage());
                 TreeViewList tocTree = dialog.findViewById(R.id.mainTreeView);
-                tocTree.setDivider(activity.getResources().getDrawable(android.R.drawable.divider_horizontal_bright));
+                tocTree.setDivider(ResourcesCompat.getDrawable(activity.getResources(), android.R.drawable.divider_horizontal_bright, null));
 
                 tocTree.setAdapter(new OutlineAdapter(controller, activity, dialog, manager, outline));
                 tocTree.setSelection(navigateTo);
