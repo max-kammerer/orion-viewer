@@ -418,9 +418,7 @@ public class FileUtils {
         Bitmap bm = null;
         if (uri != null) {
             final ContentResolver resolver = context.getContentResolver();
-            Cursor cursor = null;
-            try {
-                cursor = resolver.query(uri, null, null, null, null);
+            try (Cursor cursor = resolver.query(uri, null, null, null, null)) {
                 if (cursor.moveToFirst()) {
                     final int id = cursor.getInt(0);
                     if (DEBUG)
@@ -443,9 +441,6 @@ public class FileUtils {
             } catch (Exception e) {
                 if (DEBUG)
                     Log.e(TAG, "getThumbnail", e);
-            } finally {
-                if (cursor != null)
-                    cursor.close();
             }
         }
         return bm;

@@ -41,7 +41,7 @@ public class BookNameAndSize implements Comparable<BookNameAndSize> {
     public int compareTo(BookNameAndSize another) {
         int res = name.compareTo(another.name);
         if (res == 0) {
-            res = size < another.size ? -1 : (size == another.size ? 0 : 1);
+            res = Long.compare(size, another.size);
         }
         return res;
     }

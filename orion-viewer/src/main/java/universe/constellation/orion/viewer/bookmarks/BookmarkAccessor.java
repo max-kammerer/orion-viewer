@@ -158,20 +158,14 @@ public class BookmarkAccessor extends SQLiteOpenHelper {
 
     public long selectBookId(String name, long size) {
         SQLiteDatabase dataBase = getReadableDatabase();
-        Cursor c = null;
         long id = -1;
-        try {
-            c = dataBase.rawQuery("select " + BOOK_ID + " from " + BOOKS_TABLE_NAME + " where " + BOOK_NAME + " = \"" + name + "\" and " + BOOK_FILE_SIZE + " = " + size, null);
+        try (Cursor c = dataBase.rawQuery("select " + BOOK_ID + " from " + BOOKS_TABLE_NAME + " where " + BOOK_NAME + " = \"" + name + "\" and " + BOOK_FILE_SIZE + " = " + size, null)) {
             if (c != null && c.moveToFirst()) {
                 id = c.getLong(c.getColumnIndex(BOOK_ID));
             }
 
             System.out.println("selectBookId " + id);
             return id;
-        } finally {
-            if (c != null) {
-                c.close();
-            }
         }
     }
 
