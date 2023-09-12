@@ -9,8 +9,22 @@ buildscript {
 /*DJVU CHAIN*/
 task downloadDjvu {
     doLast {
-        exec {
-            commandLine = ['git', 'clone', 'git://git.code.sf.net/p/djvu/djvulibre-git', djvu]
+        def djvuFolder = new File(djvu)
+        if (djvuFolder.exists()) {
+            // Switch to master so we can properly pull if it was
+            // detached.
+            exec {
+                commandLine = ['git', '-C', djvu, 'checkout', '-f', 'master']
+            }
+            // Fetch
+            exec {
+                commandLine = ['git', '-C', djvu, 'fetch', 'origin']
+            }
+        }
+        else {
+            exec {
+                commandLine = ['git', 'clone', 'git://git.code.sf.net/p/djvu/djvulibre-git', djvu]
+            }
         }
 
         exec {
@@ -52,8 +66,22 @@ task downloadMupdf {
     def version = "1.23.3"
 
     doLast {
-        exec {
-            commandLine = ['git', 'clone', 'git://git.ghostscript.com/mupdf.git', mupdf]
+        def mupdfFolder = new File(mupdf)
+        if (mupdfFolder.exists()) {
+            // Switch to master so we can properly pull if it was
+            // detached.
+            exec {
+                commandLine = ['git', '-C', mupdf, 'checkout', '-f', 'master']
+            }
+            // Fetch
+            exec {
+                commandLine = ['git', '-C', mupdf, 'fetch', 'origin']
+            }
+        }
+        else {
+            exec {
+                commandLine = ['git', 'clone', 'git://git.ghostscript.com/mupdf.git', mupdf]
+            }
         }
 
         exec {
