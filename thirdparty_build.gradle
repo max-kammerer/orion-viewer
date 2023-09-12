@@ -49,7 +49,7 @@ buildDjvu.mustRunAfter patchDjvu
 
 /*MUPDF CHAIN*/
 task downloadMupdf {
-    def version = "1.16.1"
+    def version = "1.22.0"
 
     doLast {
         exec {

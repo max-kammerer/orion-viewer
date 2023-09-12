@@ -21,6 +21,7 @@ package universe.constellation.orion.viewer.pdf
 
 import android.graphics.Bitmap
 import android.graphics.RectF
+import com.artifex.mupdf.fitz.Location
 import com.artifex.mupdf.fitz.Outline
 import com.artifex.mupdf.fitz.StructuredText
 import com.artifex.mupdf.viewer.MuPDFCore
@@ -110,7 +111,7 @@ class PdfDocument @Throws(Exception::class) constructor(fileName: String) : Docu
         get() {
             fun collectItems(list: MutableList<OutlineItem>, items: Array<Outline>, level: Int) {
                 items.forEach {
-                    list.add(OutlineItem(level, it.title, it.page))
+                    list.add(OutlineItem(level, it.title, core.pageNumberFromOutline(it)))
                     if (it.down != null) {
                         collectItems(list, it.down, level + 1)
                     }

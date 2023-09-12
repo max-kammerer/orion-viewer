@@ -7,6 +7,7 @@ import com.artifex.mupdf.fitz.Device;
 import com.artifex.mupdf.fitz.DisplayList;
 import com.artifex.mupdf.fitz.Document;
 import com.artifex.mupdf.fitz.Link;
+import com.artifex.mupdf.fitz.Location;
 import com.artifex.mupdf.fitz.Matrix;
 import com.artifex.mupdf.fitz.Outline;
 import com.artifex.mupdf.fitz.Page;
@@ -57,7 +58,7 @@ public class MuPDFCore
 		return doc.isReflowable();
 	}
 
-	public synchronized int layout(int oldPage, int w, int h, int em) {
+	public synchronized Location layout(Location oldPage, int w, int h, int em) {
 		if (w != layoutW || h != layoutH || em != layoutEM) {
 			System.out.println("LAYOUT: " + w + "," + h);
 			layoutW = w;
@@ -85,17 +86,25 @@ public class MuPDFCore
 		else if (pageNum < 0)
 			pageNum = 0;
 		if (pageNum != currentPage) {
-			currentPage = pageNum;
 			if (page != null)
 				page.destroy();
 			page = null;
 			if (displayList != null)
 				displayList.destroy();
 			displayList = null;
-			page = doc.loadPage(pageNum);
-			Rect b = page.getBounds();
-			pageWidth = b.x1 - b.x0;
-			pageHeight = b.y1 - b.y0;
+			page = null;
+			pageWidth = 0;
+			pageHeight = 0;
+			currentPage = -1;
+
+			if (doc != null) {
+				page = doc.loadPage(pageNum);
+				Rect b = page.getBounds();
+				pageWidth = b.x1 - b.x0;
+				pageHeight = b.y1 - b.y0;
+			}
+
+			currentPage = pageNum;
 		}
 	}
 
@@ -126,26 +135,42 @@ public class MuPDFCore
 		if (doc == null) return;
 		gotoPage(pageNum);
 
-		if (displayList == null)
-			displayList = page.toDisplayList();
+		if (displayList == null && page != null)
+			try {
+				displayList = page.toDisplayList();
+			} catch (Exception ex) {
+				displayList = null;
+			}
+
+		if (displayList == null || page == null)
+			return;
 
 		Device dev = new AndroidDrawDevice(bitmap, left, top, 0, 0, right - left, bottom - top);
 		try {
 			displayList.run(dev, new Matrix(zoom, zoom), null);
-		} finally {
 			dev.close();
+		} finally {
 			dev.destroy();
 		}
 	}
 
 	public synchronized Link[] getPageLinks(int pageNum) {
 		gotoPage(pageNum);
-		return page.getLinks();
+		return page != null ? page.getLinks() : null;
 	}
 
 	public synchronized Quad[] searchPage(int pageNum, String text) {
 		gotoPage(pageNum);
-		return page.search(text);
+		Quad[][] quads = page.search(text);
+		if (quads == null)
+			return null;
+		Quad[] flattenQuads = new Quad[quads.length * quads[0].length];
+		int dest=0;
+		for(Quad[] qd: quads){
+			System.arraycopy(qd, 0, flattenQuads, dest, qd.length);
+			dest += qd.length;
+		}
+		return flattenQuads;
 	}
 
 	public synchronized StructuredText getText(int pageNum) {
@@ -175,5 +200,15 @@ public class MuPDFCore
 
 	public synchronized boolean authenticatePassword(String password) {
 		return doc.authenticatePassword(password);
+	}
+
+	/**
+	 +	 * The convenience method to get page number from raw outline.
+	 +	 * @param ol the outline to get the page for.
+	 +	 * @return the page number.
+	 +	 */
+ 	public int pageNumberFromOutline(Outline ol){
+		Location loc = doc.resolveLink(ol);
+		return doc.pageNumberFromLocation(loc);
 	}
 }
