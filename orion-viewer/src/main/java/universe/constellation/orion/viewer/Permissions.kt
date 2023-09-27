@@ -23,6 +23,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.Environment
 
 object Permissions {
     private const val ASK_PERMISSION_COMMON = 111
@@ -33,6 +34,12 @@ object Permissions {
     fun checkReadPermission(activity: Activity, code: Int = ASK_PERMISSION_COMMON) =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 checkPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE, code)
+            else true
+
+    @JvmStatic
+    fun checkStorageAccessPermissionForAndroidR() =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+                Environment.isExternalStorageManager();
             else true
 
     @JvmStatic
