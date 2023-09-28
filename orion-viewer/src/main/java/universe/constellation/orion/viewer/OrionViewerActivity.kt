@@ -139,11 +139,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         initDialogs()
 
         myIntent = intent
-        newTouchProcessor = if (orionContext.sdkVersion >= Build.VERSION_CODES.FROYO)
-            NewTouchProcessorWithScale(view, this)
-        else
-            NewTouchProcessor(view, this)
-    }
+        newTouchProcessor = NewTouchProcessorWithScale(view, this)
+     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -208,7 +205,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     private fun askReadPermissions() =
-            Permissions.checkReadPermission(this, Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN)
+            Permissions.checkReadPermission(this, Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN).also {
+                Permissions.checkStorageAccessPermissionForAndroidR()
+            }
 
     private fun openFileWithGrantedPermissions(intent: Intent) {
         log("Runtime.getRuntime().totalMemory(): ${Runtime.getRuntime().totalMemory()}")
@@ -228,7 +227,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                                 null
                             } ?: run {
                                 try {
-                                    contentResolver.openFileDescriptor(uri, "r")?.run { getFileDescriptorPath(this) }
+                                    contentResolver.openFileDescriptor(uri, "r")?.use { getFileDescriptorPath(it) }
                                         ?.takeIf { File(it).exists() }
                                 } catch (e: Throwable) {
                                     null
@@ -391,7 +390,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private fun showAlertWithExceptionThrow(intent: Intent, e: Exception) {
         val themedAlertBuilder = createThemedAlertBuilder().setMessage("Error while opening " + intent + ": " + e.message + " cause of " + e.cause)
-        themedAlertBuilder.setPositiveButton("OK") { dialog, which ->
+        themedAlertBuilder.setPositiveButton("OK") { _, _ ->
             finish()
             throw RuntimeException("Exception on processing $intent", e)
         }
@@ -432,6 +431,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         pageNumberText.text = 1.toString()
 
         pageSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            @SuppressLint("SetTextI18n")
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 pageNumberText.text = (progress + 1).toString()
             }
@@ -730,8 +730,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
         val actionCode = orionContext.keyBinding.getInt(getPrefKey(keyCode, isLong), -1)
         if (actionCode != -1) {
-            val action = Action.getAction(actionCode)
-            when (action) {
+            when (val action = Action.getAction(actionCode)) {
                 Action.PREV, Action.NEXT -> {
                     changePage(if (action === Action.PREV) Device.PREV else Device.NEXT)
                     return true
@@ -912,14 +911,14 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         list.choiceMode = ListView.CHOICE_MODE_SINGLE
         list.setItemChecked(0, true)
 
-        list.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+        list.onItemClickListener = AdapterView.OnItemClickListener { _, view, _, _ ->
             val check = view as CheckedTextView
             check.isChecked = !check.isChecked
         }
 
         val orientationArray = resources.getTextArray(R.array.screen_orientation_full)
 
-        list.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+        list.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             onApplyAction(true)
             val orientation = orientationArray[position].toString()
             controller!!.changeOrinatation(orientation)
@@ -1058,7 +1057,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             input.transformationMethod = PasswordTransformationMethod()
             builder.setView(input)
 
-            builder.setPositiveButton("OK") { dialog, which ->
+            builder.setPositiveButton("OK") { dialog, _ ->
                 if (controller.authenticate(input.text.toString())) {
                     dialog.dismiss()
                 } else {
