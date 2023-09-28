@@ -80,10 +80,10 @@ open class NewTouchProcessor(val view: OrionScene, val activity: OrionViewerActi
         nextState = State.UNDEFINED
     }
 
-    /*override fun onDown(e: MotionEvent?): Boolean {
+    override fun onDown(e: MotionEvent): Boolean {
         log("onDown")
         return true
-    }*/
+    }
 
     override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
         log("onSingleTapConfirmed")
