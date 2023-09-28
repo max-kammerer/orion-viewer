@@ -11,17 +11,25 @@ on:
       - dev**
 
 jobs:
-  apk:
+  build_and_upload_artifacts:
     name: Generate APK
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '2.7'
+
       - uses: gradle/wrapper-validation-action@v1
+
       - name: set up JDK 11
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
           java-version: 11
+          distribution: corretto
+
       - name: Prepare thirdparty
         run: bash ./gradlew -b thirdparty_build.gradle downloadAndPatchDjvu downloadAndMakeMupdf
       - name: Build debug APK
@@ -32,6 +40,7 @@ jobs:
         with:
           path: './orion-viewer/version.properties'
           property: 'orion.version.name'
+
       - name: Upload arm7 APK
         uses: actions/upload-artifact@v2
         with:
