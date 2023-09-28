@@ -329,7 +329,7 @@ add_library( mupdf_java
             SHARED
 ../../common/orion_bitmap.c
 ../../common/list.c
-mupdf_native.c
+${MUPDF_PATH}/platform/java/mupdf_native.c
 )
 
 
