@@ -40,8 +40,8 @@ android {
     if (orionNdkVersion != null) {
         ndkVersion orionNdkVersion
     }
-    compileSdkVersion orionCompileSdk
-    buildToolsVersion orionBuildToolsVersion
+    compileSdkVersion = orionCompileSdk
+    buildToolsVersion = orionBuildToolsVersion
 
     def githubBuildNumber = (System.getenv("GITHUB_RUN_NUMBER") ?: "1").toInteger()
 
@@ -101,13 +101,6 @@ android {
     flavorDimensions "arch"
 
     productFlavors {
-//        arm5 {
-//            versionCode = 1
-//            ndk {
-//                abiFilter "armeabi"
-//            }
-//            dimension "arch"
-//        }
         arm7 {
             versionCode = 1
             ndk {
@@ -137,13 +130,6 @@ android {
             }
             dimension "arch"
         }
-//        mips {
-//            versionCode = 4
-//            ndk {
-//                abiFilter "mips"
-//            }
-//            dimension "arch"
-//        }
     }
 
     // make per-variant version code

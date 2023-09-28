@@ -4,11 +4,10 @@ android {
     if (orionNdkVersion != null) {
         ndkVersion orionNdkVersion
     }
-    compileSdkVersion orionCompileSdk
-    buildToolsVersion orionBuildToolsVersion
+    compileSdkVersion = orionCompileSdk
+    buildToolsVersion = orionBuildToolsVersion
 
     defaultConfig {
-
         minSdkVersion orionMinSdk
         if (!excludeNativeLibsSources) {
             externalNativeBuild {
@@ -21,7 +20,6 @@ android {
 
     if (!excludeNativeLibsSources) {
         externalNativeBuild {
-
             cmake {
                 path "jni/CMakeLists.txt"
             }
