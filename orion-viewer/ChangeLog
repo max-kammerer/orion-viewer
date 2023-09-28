@@ -1,3 +1,7 @@
+===== 0.82.0 (Sep 28, 2023) =====
+* Mupdf updated to 1.22.0 (kudos to @nickolay168)
+* Support of Android 11 file permissions
+
 ===== 0.81.2 (Jun 14, 2020) =====
 * More wise content URI processing
 
