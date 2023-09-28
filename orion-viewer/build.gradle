@@ -96,14 +96,6 @@ android {
                 signingConfig signingConfigs.release
             }
         }
-
-        // CI configuration
-        dev {
-            matchingFallbacks = ['debug']
-            debuggable = true
-            applicationIdSuffix ".dev"
-            signingConfig signingConfigs.debug
-        }
     }
 
     flavorDimensions "arch"
