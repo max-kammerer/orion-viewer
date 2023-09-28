@@ -1,14 +1,14 @@
 apply from: 'project.gradle'
 
 buildscript {
-    ext.kotlin_version = '1.6.10'
+    ext.kotlin_version = '1.7.20'
     ext.isCIBuild = findProperty("orion.CIBuild")?.toBoolean() ?: false
     repositories {
         mavenCentral()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.2'
+        classpath 'com.android.tools.build:gradle:7.1.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -24,8 +24,8 @@ allprojects {
 project.ext {
     isAndroid40Build = project.findProperty("orion.build.android40")?.toBoolean() ?: false
     orionMinSdk = !isAndroid40Build ? 16 : 14
-    orionTargetSdk = 31
-    orionCompileSdk = 31
+    orionTargetSdk = 33
+    orionCompileSdk = 33
     orionBuildToolsVersion = "30.0.3"
     if (isCIBuild) {
         orionNdkVersion = "23.1.7779620"
