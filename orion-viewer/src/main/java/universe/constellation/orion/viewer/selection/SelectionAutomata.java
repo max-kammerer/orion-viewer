@@ -1,22 +1,3 @@
-/*
- * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
- *
- * Copyright (C) 2011-2013  Michael Bogdanov & Co
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package universe.constellation.orion.viewer.selection;
 
 import android.app.Dialog;
@@ -28,11 +9,6 @@ import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.R;
 import universe.constellation.orion.viewer.dialog.DialogOverView;
 
-/**
- * User: mike
- * Date: 11.08.12
- * Time: 14:37
- */
 public class SelectionAutomata extends DialogOverView {
 
     private enum STATE {START, MOVING, END, CANCELED}
@@ -43,7 +19,7 @@ public class SelectionAutomata extends DialogOverView {
 
     private int startX, startY, width, height;
 
-    private SelectionView selectionView;
+    private final SelectionView selectionView;
 
     private boolean isSingleWord = false;
 

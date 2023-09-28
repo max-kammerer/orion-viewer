@@ -1,8 +1,6 @@
 package universe.constellation.orion.viewer.selection
 
 import android.graphics.Point
-import android.os.Build
-import androidx.annotation.RequiresApi
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import universe.constellation.orion.viewer.OrionScene
@@ -10,7 +8,6 @@ import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.prefs.OrionApplication
 import universe.constellation.orion.viewer.util.MoveUtil
 
-@RequiresApi(api = Build.VERSION_CODES.FROYO)
 class NewTouchProcessorWithScale(view: OrionScene, activity: OrionViewerActivity) :
         NewTouchProcessor(view, activity),
         ScaleGestureDetector.OnScaleGestureListener {
