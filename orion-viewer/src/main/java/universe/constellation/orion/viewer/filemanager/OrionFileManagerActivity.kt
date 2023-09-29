@@ -40,6 +40,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.ListFragment
 import com.google.android.material.tabs.TabLayout
 import universe.constellation.orion.viewer.*
+import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAccessPermissionForAndroidR
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity.Companion.LAST_OPENED_DIRECTORY
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import java.io.File
@@ -162,12 +163,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         justCreated = true
 
         Permissions.checkReadPermission(this, Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER)
-        if (!Permissions.checkStorageAccessPermissionForAndroidR()) {
-            val intent = Intent(ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-            val uri = Uri.fromParts("package", packageName, null)
-            intent.data = uri
-            startActivity(intent)
-        }
+        checkAndRequestStorageAccessPermissionForAndroidR()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

@@ -21,9 +21,12 @@ package universe.constellation.orion.viewer
 
 import android.Manifest
 import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.provider.Settings
 
 object Permissions {
     private const val ASK_PERMISSION_COMMON = 111
@@ -37,10 +40,16 @@ object Permissions {
             else true
 
     @JvmStatic
-    fun checkStorageAccessPermissionForAndroidR() =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
-                Environment.isExternalStorageManager();
-            else true
+    fun Activity.checkAndRequestStorageAccessPermissionForAndroidR() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                val uri = Uri.fromParts("package", packageName, null)
+                intent.data = uri
+                startActivity(intent)
+            }
+        }
+    }
 
     @JvmStatic
     fun checkWritePermission(activity: Activity, code: Int = ASK_PERMISSION_COMMON) =
