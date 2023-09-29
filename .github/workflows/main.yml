@@ -59,10 +59,10 @@ jobs:
           path: orion-viewer/build/outputs/apk/x86_64/debug/*.apk
 
   test:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        api-level: [29]
+        api-level: [25]
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -75,6 +75,7 @@ jobs:
 
       - name: Gradle cache
         uses: gradle/gradle-build-action@v2
+
 
       - name: AVD cache
         uses: actions/cache@v3
