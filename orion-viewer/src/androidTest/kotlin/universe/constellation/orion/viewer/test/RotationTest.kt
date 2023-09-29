@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Test
 import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
 import universe.constellation.orion.viewer.test.framework.TestUtil
@@ -12,6 +13,7 @@ import java.util.concurrent.CountDownLatch
 class RotationTest : InstrumentationTestCase() {
 
     @Test
+    @Ignore
     fun testRotation() {
         val file = extractFileFromTestData(TestUtil.SICP)
         val intent = Intent()

@@ -171,7 +171,7 @@ open class RenderThread(private val activity: OrionViewerActivity, protected var
                 log("Sending Bitmap")
                 val mutex = CountDownLatch(1)
 
-                if (!executeInSeparateThread) {
+                if (false && !executeInSeparateThread) {
                     fullScene.onNewImage(bitmap, curPos, mutex)
                     activity.device!!.flushBitmap()
                     mutex.countDown()
