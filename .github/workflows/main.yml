@@ -111,3 +111,9 @@ jobs:
           disable-animations: true
           sdcard-path-or-size: 900M
           script: ./gradlew connected${{ matrix.arch[2] }}DebugAndroidTest -Porion.CIBuild=true
+
+      - name: Test Summary
+        uses: test-summary/action@v2
+        with:
+          paths: orion-viewer/build/outputs/androidTest-results/connected/flavors/${{ matrix.arch[1] }}/TEST-*.xml
+        if: always()
