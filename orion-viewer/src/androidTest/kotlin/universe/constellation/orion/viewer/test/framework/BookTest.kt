@@ -8,7 +8,7 @@ import org.junit.runners.Parameterized
 @RunWith(Parameterized::class)
 abstract class BookTest(path: String) : BaseTest() {
 
-    protected val document = openTestBook(path)
+    protected val document by lazy {  openTestBook(path) }
 
     @After
     fun close() {

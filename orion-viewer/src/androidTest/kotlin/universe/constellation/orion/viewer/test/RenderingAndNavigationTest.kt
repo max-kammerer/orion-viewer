@@ -22,7 +22,7 @@ import java.util.concurrent.CountDownLatch
 @RunWith(Parameterized::class)
 class RenderingAndNavigationTest(path: String) : InstrumentationTestCase() {
 
-    companion object {
+   companion object {
         @JvmStatic
         @Parameterized.Parameters(name = "Test simple navigation in {0}")
         fun testData(): Iterable<Array<Any>> {
@@ -44,7 +44,9 @@ class RenderingAndNavigationTest(path: String) : InstrumentationTestCase() {
         }
     }
 
-    private val document = openTestBook(path)
+    private val document by lazy {
+        openTestBook(path)
+    }
 
     private val deviceSize = Point(300, 350) //to split page on two screen - page size is 663x886
 
