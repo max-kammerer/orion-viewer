@@ -60,7 +60,7 @@ public class SearchDialog extends DialogFragment {
 
     private EditText searchField;
 
-    private SearchDrawler lastSearchDrawler = new SearchDrawler();
+    private final SearchDrawler lastSearchDrawler = new SearchDrawler();
 
     private static final int ALPHA = 150;
 

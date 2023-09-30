@@ -31,6 +31,8 @@ import android.widget.CheckedTextView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import universe.constellation.orion.viewer.Action;
 import universe.constellation.orion.viewer.R;
 
@@ -67,7 +69,7 @@ public class ActionListActivity extends Activity {
         final Action [] actions = Action.values();
         view.setAdapter(new ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, Action.values()) {
             @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                 CheckedTextView view = (CheckedTextView)super.getView(position, convertView, parent);
                 view.setText(actions[position].getName());
                 return view;

@@ -118,7 +118,7 @@ class DjvuDocument(fileName: String) : Document {
     override fun authenticate(password: String) = true
 
     override fun searchPage(pageNumber: Int, text: String): Array<RectF>? {
-        val textToSearch = text.toLowerCase()
+        val textToSearch = text.lowercase(Locale.getDefault())
 
         val strings = ArrayList<String>(500)
         val positions = ArrayList<RectF>(500)
@@ -129,7 +129,7 @@ class DjvuDocument(fileName: String) : Document {
         val builder = StringBuilder()
         for (i in positions.indices) {
             val string = strings[i]
-            builder.append(string.toLowerCase())
+            builder.append(string.lowercase(Locale.getDefault()))
             val length = builder.length
             for (j in prevIndex until length) {
                 indexes.add(i)

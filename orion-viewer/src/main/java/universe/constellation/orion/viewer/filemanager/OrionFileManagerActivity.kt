@@ -89,6 +89,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
     private var justCreated: Boolean = false
 
     private val startFolder: String
+        @SuppressLint("SdCardPath")
         get() {
             val lastOpenedDir = globalOptions.lastOpenedDirectory
 

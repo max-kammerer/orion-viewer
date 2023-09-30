@@ -63,7 +63,7 @@ public class BookmarkAccessor extends SQLiteOpenHelper {
 
     public static final String OFFSET_Y = "OFFSET_Y";
 
-    private Bookmark GOTO;
+    private final Bookmark GOTO;
 
     private static final String BOOKMARKS_TABLE_CREATE =
                 "CREATE TABLE " + BOOKMARKS_TABLE_NAME + " (" +

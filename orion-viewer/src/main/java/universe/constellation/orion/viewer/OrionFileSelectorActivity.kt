@@ -33,6 +33,7 @@ import universe.constellation.orion.viewer.filemanager.FileChooserAdapter
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivityBase
 import java.io.File
 import java.io.FilenameFilter
+import java.util.Locale
 
 class OrionSaveFileActivity : OrionFileManagerActivityBase(
     false,  false,
@@ -86,7 +87,7 @@ class OrionSaveFileActivity : OrionFileManagerActivityBase(
 class OrionFileSelectorActivity : OrionFileManagerActivityBase(
     false, false,
     FilenameFilter { dir, filename ->
-        File(dir, filename).isDirectory || filename.toLowerCase().endsWith(".xml")
+        File(dir, filename).isDirectory || filename.lowercase(Locale.getDefault()).endsWith(".xml")
     }
 ) {
 

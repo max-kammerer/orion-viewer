@@ -38,13 +38,13 @@ import static universe.constellation.orion.viewer.LoggerKt.log;
  */
 public class BookmarkImporter {
 
-    private BookmarkAccessor dataBase;
+    private final BookmarkAccessor dataBase;
 
-    private String inputName;
+    private final String inputName;
 
-    private Set<BookNameAndSize> books;
+    private final Set<BookNameAndSize> books;
 
-    private BookNameAndSize toBook;
+    private final BookNameAndSize toBook;
 
 
     public BookmarkImporter(BookmarkAccessor dataBase, String inputName, Set<BookNameAndSize> books, BookNameAndSize toBook) {
@@ -53,7 +53,6 @@ public class BookmarkImporter {
         this.books = books;
         this.toBook = toBook;
     }
-
 
     public boolean doImport() throws OrionException {
         InputStreamReader reader = null;
@@ -106,8 +105,6 @@ public class BookmarkImporter {
         }
     }
 
-
-
     //now we stay on book start tag
     private int doBookImport(XmlPullParser xpp, BookNameAndSize book) throws OrionException {
         log("Importing bookmarks for " + book);
@@ -157,5 +154,4 @@ public class BookmarkImporter {
             throw new OrionException("Couldn't parse book parameters " + book, e);
         }
     }
-
 }

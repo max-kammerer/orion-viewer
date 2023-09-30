@@ -27,6 +27,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.prefs.GlobalOptions
+import java.util.Locale
 
 class RecentListAdapter(context: Context, entries: List<GlobalOptions.RecentEntry>) : ArrayAdapter<GlobalOptions.RecentEntry>(context, R.layout.file_entry, R.id.fileName, entries) {
 
@@ -48,8 +49,7 @@ class RecentListAdapter(context: Context, entries: List<GlobalOptions.RecentEntr
 }
 
 fun getIconByNameExtension(name: String): Int {
-    val extName = name.fileExtension.toLowerCase()
-    return when (extName) {
+    return when (name.fileExtension.lowercase(Locale.getDefault())) {
         "pdf" -> R.drawable.pdf
         "djvu", "djv" -> R.drawable.djvu
         "cbz", "tif", "tiff" -> R.drawable.cbz

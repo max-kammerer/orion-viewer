@@ -115,7 +115,7 @@ class FileChooserAdapter constructor(
                 return@FilenameFilter false
             }
 
-            supportedExtensions.contains(filename.fileExtension.toLowerCase())
+            supportedExtensions.contains(filename.fileExtension.lowercase(Locale.getDefault()))
         }
     }
 }

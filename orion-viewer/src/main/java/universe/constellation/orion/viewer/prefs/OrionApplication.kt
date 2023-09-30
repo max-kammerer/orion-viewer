@@ -236,7 +236,7 @@ class OrionApplication : Application() {
         val TEXET_TB576HD = "texet".equals(MANUFACTURER, ignoreCase = true) && "TB-576HD".equals(DEVICE, ignoreCase = true) && "TB-576HD".equals(MODEL, ignoreCase = true)
 
         @JvmField
-        val RK30SDK = "rk30sdk".equals(MODEL, ignoreCase = true) && ("T62D".equals(DEVICE, ignoreCase = true) || DEVICE.toLowerCase().contains("onyx"))
+        val RK30SDK = "rk30sdk".equals(MODEL, ignoreCase = true) && ("T62D".equals(DEVICE, ignoreCase = true) || DEVICE.lowercase(Locale.getDefault()).contains("onyx"))
 
         private fun getField(name: String): String =
                 try {

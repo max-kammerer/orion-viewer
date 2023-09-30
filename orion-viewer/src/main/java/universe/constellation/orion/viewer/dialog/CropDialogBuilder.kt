@@ -31,6 +31,7 @@ class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : A
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.crop_dialog)
 
         val viewAnimator = findViewById<View>(R.id.viewanim) as ViewAnimator
@@ -157,6 +158,7 @@ class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : A
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateView() {
         val cropTable = findViewById<View>(R.id.crop_borders) as TableLayout
         for (i in 0 until cropTable.childCount) {

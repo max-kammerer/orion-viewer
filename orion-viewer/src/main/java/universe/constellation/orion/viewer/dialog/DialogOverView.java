@@ -3,6 +3,7 @@ package universe.constellation.orion.viewer.dialog;
 import android.app.Dialog;
 import android.graphics.Rect;
 import android.view.Gravity;
+import android.view.Window;
 import android.view.WindowManager;
 
 import universe.constellation.orion.viewer.OrionScene;
@@ -35,10 +36,12 @@ public class DialogOverView {
         int width = rect.width();
         int height = rect.height();
         log("Dialog dim: " + width + "x" + height);
-        WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+        Window window = dialog.getWindow();
+        if (window == null) return;
+        WindowManager.LayoutParams params = window.getAttributes();
         params.gravity = Gravity.BOTTOM;
         params.width = width;
         params.height = height;
-        dialog.getWindow().setAttributes(params);
+        window.setAttributes(params);
     }
 }

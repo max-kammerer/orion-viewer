@@ -5,12 +5,8 @@ import universe.constellation.orion.viewer.document.DocumentWithCaching
 import universe.constellation.orion.viewer.document.DocumentWithCachingImpl
 import universe.constellation.orion.viewer.pdf.PdfDocument
 import java.io.File
+import java.util.Locale
 
-/**
- * User: mike
- * Date: 19.10.13
- * Time: 10:08
- */
 object FileUtil {
 
     private fun isDjvuFile(filePathLowCase: String): Boolean {
@@ -21,7 +17,7 @@ object FileUtil {
     @Throws(Exception::class)
     fun openFile(fileName: String): DocumentWithCaching {
         return DocumentWithCachingImpl(
-                if (isDjvuFile(fileName.toLowerCase())) {
+                if (isDjvuFile(fileName.lowercase(Locale.getDefault()))) {
                     DjvuDocument(fileName)
                 } else {
                     PdfDocument(fileName)
