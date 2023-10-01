@@ -1,0 +1,2 @@
+* Support of Android 11+ devices
+* Mupdf updated to 1.23.3
