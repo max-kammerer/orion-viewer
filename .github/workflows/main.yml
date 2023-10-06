@@ -39,31 +39,29 @@ jobs:
       - name: Upload arm7 APK
         uses: actions/upload-artifact@v3
         with:
-          name: orion-viewer-${{steps.read_version_property.outputs.value}}-${{github.run_number}}-arm7-debug.apk
-#          path: orion-viewer/build/outputs/apk/arm7/debug/orion-viewer-${{steps.read_version_property.outputs.value}}-arm7-debug.apk
-          path: orion-viewer/build/outputs/apk/arm7/debug/*.apk
+          name: orion-viewer-${{steps.read_version_property.outputs.value}}-${{github.run_number}}-armeabi-v7a-debug.apk
+          path: orion-viewer/build/outputs/apk/debug/orion-viewer-*-v7a-debug.apk
       - name: Upload arm64 APK
         uses: actions/upload-artifact@v3
         with:
-          name: orion-viewer-${{steps.read_version_property.outputs.value}}-${{github.run_number}}-arm64-debug.apk
-          path: orion-viewer/build/outputs/apk/arm64/debug/*.apk
+          name: orion-viewer-${{steps.read_version_property.outputs.value}}-${{github.run_number}}-arm64-v8a-debug.apk
+          path: orion-viewer/build/outputs/apk/debug/orion-viewer-*-v8a-debug.apk
       - name: Upload x86 APK
         uses: actions/upload-artifact@v3
         with:
           name: orion-viewer-${{steps.read_version_property.outputs.value}}-${{github.run_number}}-x86-debug.apk
-          path: orion-viewer/build/outputs/apk/x86/debug/*.apk
+          path: orion-viewer/build/outputs/apk/debug/orion-viewer-*-x86-debug.apk
       - name: Upload x86_64 APK
         uses: actions/upload-artifact@v3
         with:
           name: orion-viewer-${{steps.read_version_property.outputs.value}}-${{github.run_number}}-x86_64-debug.apk
-          path: orion-viewer/build/outputs/apk/x86_64/debug/*.apk
+          path: orion-viewer/build/outputs/apk/debug/orion-viewer-*-x86_64-debug.apk
 
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        arch: [[16, x86, X86], [21, x86, X86], [28, x86_64, X86_64]]
-#        , [arm64-v8a, Arm64]
+        arch: [[16, x86], [21, x86], [28, x86_64]]
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -74,32 +72,8 @@ jobs:
           java-version: 11
           distribution: corretto
 
-      - name: Gradle cache
-        uses: gradle/gradle-build-action@v2
-
-#      - name: AVD cache
-#        uses: actions/cache@v3
-#        id: avd-cache
-#        with:
-#          path: |
-#            ~/.android/avd/*
-#            ~/.android/adb*
-#          key: avd-${{ matrix.arch[0] }}-${{ matrix.arch[1] }}
-
       - name: Prepare thirdparty
         run: bash ./gradlew -b thirdparty_build.gradle downloadAndPatchDjvu downloadAndMakeMupdf
-
-#      - name: create AVD and generate snapshot for caching
-#        if: steps.avd-cache.outputs.cache-hit != 'true'
-#        uses: reactivecircus/android-emulator-runner@v2
-#        with:
-#          api-level: ${{ matrix.arch[0] }}
-#          arch: ${{ matrix.arch[1] }}
-#          force-avd-creation: false
-#          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-#          disable-animations: false
-#          sdcard-path-or-size: 900M
-#          script: echo "Generated AVD snapshot for caching."
 
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -110,10 +84,10 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           sdcard-path-or-size: 900M
-          script: ./gradlew connected${{ matrix.arch[2] }}DebugAndroidTest -Porion.CIBuild=true
+          script: ./gradlew connectedDebugAndroidTest -Porion.CIBuild=true
 
       - name: Test Summary
         uses: test-summary/action@v2
         with:
-          paths: orion-viewer/build/outputs/androidTest-results/connected/flavors/${{ matrix.arch[1] }}/TEST-*.xml
+          paths: orion-viewer/build/outputs/androidTest-results/connected/TEST-*.xml
         if: always()

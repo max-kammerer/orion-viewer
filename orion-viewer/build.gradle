@@ -13,6 +13,7 @@ project.ext {
     if (doSigning) {
         apply from: 'signing.gradle'
     }
+    ext.abiCodes = ['armeabi-v7a':1, x86:2, x86_64:3, 'arm64-v8a':4]
 }
 
 dependencies {
@@ -98,51 +99,20 @@ android {
         }
     }
 
-    flavorDimensions "arch"
-
-    productFlavors {
-        arm7 {
-            versionCode = 1
-            ndk {
-                abiFilter "armeabi-v7a"
-            }
-            dimension "arch"
-        }
-
-        arm64 {
-            versionCode = 2
-            ndk {
-                abiFilter "arm64-v8a"
-            }
-            dimension "arch"
-        }
-        x86 {
-            versionCode = 3
-            ndk {
-                abiFilter "x86"
-            }
-            dimension "arch"
-        }
-        x86_64 {
-            versionCode = 4
-            ndk {
-                abiFilter "x86_64"
-            }
-            dimension "arch"
+    splits {
+        abi {
+            enable true
+            universalApk false
         }
     }
 
     // make per-variant version code
-    applicationVariants.configureEach { variant ->
-        // get the version code of each flavor
-        def abiVersion = variant.productFlavors.get(0).versionCode
-
-        // set the composite code
+    android.applicationVariants.configureEach { variant ->
         variant.outputs.each { output ->
-            output.versionCodeOverride = (variant.buildType.name == "ci" ? githubBuildNumber : defaultConfig.versionCode) + abiVersion - 1
-            println "New version code for " + variant.buildType.name + "/" + variant.productFlavors.name + " is " + output.versionCodeOverride
+            def filter = output.getFilter(com.android.build.OutputFile.ABI)
+            output.versionCodeOverride = project.ext.abiCodes.get(filter) + variant.versionCode
+            println "New version code for " + variant.buildType.name + "/" + filter + " is " + output.versionCodeOverride
         }
-
     }
 
     lintOptions { abortOnError false }
