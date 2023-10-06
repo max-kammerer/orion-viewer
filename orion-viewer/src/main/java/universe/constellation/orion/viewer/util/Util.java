@@ -18,7 +18,7 @@ public class Util {
         rect.bottom *= scale;
     }
 
-    public static boolean inRange(List list, int index) {
+    public static boolean inRange(List<?> list, int index) {
         return index >= 0 && index < list.size();
     }
 }

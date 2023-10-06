@@ -69,11 +69,7 @@ public abstract class SearchTask {
         final ProgressDialogX progressDialog = new ProgressDialogX(mContext);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setTitle(mContext.getString(R.string.msg_searching));
-        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            public void onCancel(DialogInterface dialog) {
-                stop();
-            }
-        });
+        progressDialog.setOnCancelListener(dialog -> stop());
         progressDialog.setMax(document.getPageCount());
 
         mSearchTask = new AsyncTask<Void, Integer, SearchTaskResult>() {

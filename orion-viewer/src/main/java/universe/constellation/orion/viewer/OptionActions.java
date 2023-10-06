@@ -133,7 +133,7 @@ public enum OptionActions {
         return result != null ? result : NONE;
     }
 
-    private String key;
+    private final String key;
 
     OptionActions(String key) {
         this.key = key;

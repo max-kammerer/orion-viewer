@@ -60,7 +60,7 @@ public class SearchDialog extends DialogFragment {
 
     private EditText searchField;
 
-    private final SearchDrawler lastSearchDrawler = new SearchDrawler();
+    private final SearchDrawer lastSearchDrawer = new SearchDrawer();
 
     private static final int ALPHA = 150;
 
@@ -99,26 +99,14 @@ public class SearchDialog extends DialogFragment {
 
         android.widget.ImageButton button = dialog.findViewById(R.id.searchNext);
         button.getBackground().setAlpha(ALPHA);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //getDialog().hide();
-                doSearch(controller.getCurrentPage(), +1, controller);
-            }
-        });
+        button.setOnClickListener(v -> doSearch(controller.getCurrentPage(), +1, controller));
 
         button = dialog.findViewById(R.id.searchPrev);
         button.getBackground().setAlpha(ALPHA);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //getDialog().hide();
-                doSearch(controller.getCurrentPage(), -1, controller);
-            }
-        });
+        button.setOnClickListener(v -> doSearch(controller.getCurrentPage(), -1, controller));
 
         OrionScene view = controller.getActivity().getView();
-        view.addTask(lastSearchDrawler);
+        view.addTask(lastSearchDrawer);
 
         myTask = new SearchTask(getActivity(), controller.getDocument()) {
             @Override
@@ -197,7 +185,7 @@ public class SearchDialog extends DialogFragment {
         }
 
         OrionScene view = ((OrionViewerActivity)getActivity()).getView();
-        view.removeTask(lastSearchDrawler);
+        view.removeTask(lastSearchDrawer);
     }
 
     private void doSearch(int page, int direction, Controller controller) {
@@ -258,17 +246,17 @@ public class SearchDialog extends DialogFragment {
         System.out.println("page = " + subBatch.lp.getPageNumber());
         log("Rect " + toAbsoluteRect(subBatch.lp));
 
-        lastSearchDrawler.setBatch(subBatch);
+        lastSearchDrawer.setBatch(subBatch);
         controller.drawPage(subBatch.lp);
     }
 
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        lastSearchDrawler.setBatch(null);
+        lastSearchDrawer.setBatch(null);
     }
 
-    private class SubBatch {
+    private static class SubBatch {
         List<RectF> rects = new ArrayList<>();
 
         int active = -1;
@@ -276,14 +264,14 @@ public class SearchDialog extends DialogFragment {
         LayoutPosition lp;
     }
 
-    static class SearchDrawler implements DrawTask {
+    static class SearchDrawer implements DrawTask {
 
         private SubBatch batch;
 
-        private static int activeAlpha = 128;
-        private static int generalAlpha = 64;
+        private static final int activeAlpha = 128;
+        private static final int generalAlpha = 64;
 
-        public SearchDrawler() {
+        public SearchDrawer() {
 
         }
 

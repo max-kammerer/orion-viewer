@@ -40,7 +40,7 @@ public class OrionPreferenceUtil {
         if (info != null) {
             try {
                 Field f = info.getClass().getDeclaredField(key);
-                Class clazz = f.getType();
+                Class<?> clazz = f.getType();
                 Object resultValue = value;
                 if (int.class.equals(clazz)) {
                     resultValue = Integer.valueOf(value);

@@ -12,12 +12,6 @@ import static universe.constellation.orion.viewer.LoggerKt.log;
  */
 public class OnyxDevice extends EInkDevice {
 
-    private static Class epdControllerClass;
-
-    private  static Class epdControllerModeClass;
-
-    private static Object[] updateModeEnum;
-
     private static Object fastUpdateEntry;
     private static Object fullUpdateEntry;
 
@@ -28,16 +22,16 @@ public class OnyxDevice extends EInkDevice {
     static {
         boolean isSuccessful = false;
         try {
-            epdControllerClass = Class
+            Class<?> epdControllerClass = Class
                     .forName("com.onyx.android.sdk.device.EpdController");
 
-            epdControllerModeClass = Class
+            Class<?> epdControllerModeClass = Class
                     .forName("com.onyx.android.sdk.device.EpdController$UpdateMode");
 
             invalidate = epdControllerClass.getDeclaredMethod("invalidate", android.view.View.class, epdControllerModeClass);
 
             if (epdControllerModeClass.isEnum()) {
-                updateModeEnum = epdControllerModeClass.getEnumConstants();
+                Object[] updateModeEnum = epdControllerModeClass.getEnumConstants();
                 for (Object entry : updateModeEnum) {
                     if ("GU".equals(entry.toString())) {
                         fastUpdateEntry = entry;

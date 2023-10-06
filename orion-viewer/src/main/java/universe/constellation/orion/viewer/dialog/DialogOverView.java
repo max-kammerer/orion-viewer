@@ -18,7 +18,7 @@ import static universe.constellation.orion.viewer.LoggerKt.log;
  */
 public class DialogOverView {
 
-    protected OrionViewerActivity activity;
+    protected final OrionViewerActivity activity;
 
     public final Dialog dialog;
 

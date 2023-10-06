@@ -58,12 +58,7 @@ public class TapHelpDialog extends DialogOverView {
         ImageView view = dialog.findViewById(R.id.tap_help_close);
         view.setVisibility(View.VISIBLE);
         view.setClickable(true);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        view.setOnClickListener(v -> dialog.dismiss());
     }
 
     public void showDialog() {

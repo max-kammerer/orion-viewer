@@ -33,6 +33,8 @@ import java.util.*;
 
 import static universe.constellation.orion.viewer.LoggerKt.log;
 
+import androidx.annotation.NonNull;
+
 /**
  * User: mike
  * Date: 27.12.11
@@ -55,11 +57,9 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
         setContentView(R.layout.key_binder);
 
         Button button = findViewById(R.id.reset_bind);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+        button.setOnClickListener(view -> {
             getOrionContext().getKeyBinding().removeAll();
             adapter.clear();
-            }
         });
 
         statusText = (TextView) findMyViewById(R.id.key_binder_message);
@@ -174,18 +174,17 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.exit_menu_item:
-                finish();
-                return true;
+        if (item.getItemId() == R.id.exit_menu_item) {
+            finish();
+            return true;
         }
         return false;
     }
 
-    class KeyCodeAndAction implements Comparable<KeyCodeAndAction>{
-        private int keyCode;
-        private Action action;
-        private boolean isLong;
+    static class KeyCodeAndAction implements Comparable<KeyCodeAndAction>{
+        private final int keyCode;
+        private final Action action;
+        private final boolean isLong;
 
         KeyCodeAndAction(int keyCode, Action action, boolean isLong) {
             this.keyCode = keyCode;
@@ -193,6 +192,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
             this.isLong = isLong;
         }
 
+        @NonNull
         public String toString() {
             return KeyEventNamer.getKeyName(keyCode) + (isLong ? " [long press]" : "");
         }
@@ -204,7 +204,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
 
     private class KeyListAdapter extends BaseAdapter {
 
-        private LayoutInflater mInflater;
+        private final LayoutInflater mInflater;
 
         public ArrayList<KeyCodeAndAction> values = new ArrayList<>();
 
@@ -221,7 +221,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
                             if (isLong) {
                                 key = key.substring(0, key.length() - "long".length());
                             }
-                            values.add(new KeyCodeAndAction(Integer.valueOf(key), action, isLong));
+                            values.add(new KeyCodeAndAction(Integer.parseInt(key), action, isLong));
                         } catch (Exception e) {
                             log(e);
                         }

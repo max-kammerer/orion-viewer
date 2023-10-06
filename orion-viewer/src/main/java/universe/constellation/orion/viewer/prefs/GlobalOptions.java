@@ -121,9 +121,9 @@ public class GlobalOptions implements Serializable, PageOptions {
 
     protected final SharedPreferences prefs;
 
-    private SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener;
+    private final SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener;
 
-    private Map<String, Object> prefValues = new HashMap<>();
+    private final Map<String, Object> prefValues = new HashMap<>();
 
     GlobalOptions(final OrionApplication context, SharedPreferences preferences, boolean loadRecents) {
         prefs = preferences;
@@ -221,7 +221,7 @@ public class GlobalOptions implements Serializable, PageOptions {
 
     public static class RecentEntry implements Serializable{
 
-        private String path;
+        private final String path;
 
         public RecentEntry(String path) {
             this.path = path;
