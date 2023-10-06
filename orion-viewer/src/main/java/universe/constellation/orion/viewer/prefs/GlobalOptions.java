@@ -140,38 +140,36 @@ public class GlobalOptions implements Serializable, PageOptions {
             }
         }
 
-        onSharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-            public void onSharedPreferenceChanged(SharedPreferences preferences, String name) {
-                log("onSharedPreferenceChanged " + name);
-                Object oldValue = prefValues.remove(name);
+        onSharedPreferenceChangeListener = (preferences1, name) -> {
+            log("onSharedPreferenceChanged " + name);
+            Object oldValue = prefValues.remove(name);
 
-                OrionViewerActivity activity = context.getViewActivity();
-                if (activity != null) {
-                    if (FULL_SCREEN.equals(name)) {
-                        OptionActions.FULL_SCREEN.doAction(activity, false, isFullScreen());
-                    } else if (SHOW_ACTION_BAR.equals(name)) {
-                        OptionActions.SHOW_ACTION_BAR.doAction(activity, false, isActionBarVisible());
-                    } else if (SHOW_STATUS_BAR.equals(name)) {
-                        OptionActions.SHOW_STATUS_BAR.doAction(activity, false, isStatusBarVisible());
-                    } else if (SHOW_OFFSET_ON_STATUS_BAR.equals(name)) {
-                        OptionActions.SHOW_OFFSET_ON_STATUS_BAR.doAction(activity, false, isShowOffsetOnStatusBar());
-                    } else if (SCREEN_OVERLAPPING_HORIZONTAL.equals(name)) {
-                        OptionActions.SCREEN_OVERLAPPING_HORIZONTAL.doAction(activity, getHorizontalOverlapping(), getVerticalOverlapping());
-                    } else if (SCREEN_OVERLAPPING_VERTICAL.equals(name)) {
-                        OptionActions.SCREEN_OVERLAPPING_VERTICAL.doAction(activity, getHorizontalOverlapping(), getVerticalOverlapping());
-                    } else if (DEBUG.equals(name)) {
-                        OptionActions.DEBUG.doAction(activity, false, getBooleanProperty(DEBUG, false));
-                    } else if (APP_LANGUAGE.equals(name)) {
-                        context.setLangCode(getAppLanguage());
-                    } else if (DRAW_OFF_PAGE.equals(name)) {
-                        activity.getFullScene().setDrawOffPage(isDrawOffPage());
-                        //TODO ?
-                        activity.getView().invalidate();
-                    }
-
+            OrionViewerActivity activity = context.getViewActivity();
+            if (activity != null) {
+                if (FULL_SCREEN.equals(name)) {
+                    OptionActions.FULL_SCREEN.doAction(activity, false, isFullScreen());
+                } else if (SHOW_ACTION_BAR.equals(name)) {
+                    OptionActions.SHOW_ACTION_BAR.doAction(activity, false, isActionBarVisible());
+                } else if (SHOW_STATUS_BAR.equals(name)) {
+                    OptionActions.SHOW_STATUS_BAR.doAction(activity, false, isStatusBarVisible());
+                } else if (SHOW_OFFSET_ON_STATUS_BAR.equals(name)) {
+                    OptionActions.SHOW_OFFSET_ON_STATUS_BAR.doAction(activity, false, isShowOffsetOnStatusBar());
+                } else if (SCREEN_OVERLAPPING_HORIZONTAL.equals(name)) {
+                    OptionActions.SCREEN_OVERLAPPING_HORIZONTAL.doAction(activity, getHorizontalOverlapping(), getVerticalOverlapping());
+                } else if (SCREEN_OVERLAPPING_VERTICAL.equals(name)) {
+                    OptionActions.SCREEN_OVERLAPPING_VERTICAL.doAction(activity, getHorizontalOverlapping(), getVerticalOverlapping());
+                } else if (DEBUG.equals(name)) {
+                    OptionActions.DEBUG.doAction(activity, false, getBooleanProperty(DEBUG, false));
+                } else if (APP_LANGUAGE.equals(name)) {
+                    context.setLangCode(getAppLanguage());
+                } else if (DRAW_OFF_PAGE.equals(name)) {
+                    activity.getFullScene().setDrawOffPage(isDrawOffPage());
+                    //TODO ?
+                    activity.getView().invalidate();
                 }
 
             }
+
         };
 
         prefs.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);

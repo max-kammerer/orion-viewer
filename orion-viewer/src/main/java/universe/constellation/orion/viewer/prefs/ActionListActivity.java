@@ -25,7 +25,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
@@ -37,11 +36,6 @@ import universe.constellation.orion.viewer.Action;
 import universe.constellation.orion.viewer.R;
 
 
-/**
- * User: mike
- * Date: 07.01.12
- * Time: 12:48
- */
 public class ActionListActivity extends Activity {
 
     //private boolean populating;
@@ -67,7 +61,8 @@ public class ActionListActivity extends Activity {
 
         ListView view = findViewById(R.id.actionsGroup);
         final Action [] actions = Action.values();
-        view.setAdapter(new ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, Action.values()) {
+        view.setAdapter(new ArrayAdapter<Action>(this, android.R.layout.simple_list_item_single_choice, Action.values()) {
+            @NonNull
             @Override
             public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                 CheckedTextView view = (CheckedTextView)super.getView(position, convertView, parent);
@@ -88,63 +83,16 @@ public class ActionListActivity extends Activity {
                 break;
             }
         }
-        view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int code = actions[position].getCode();
-                Intent result = new Intent();
-                result.putExtra("code", code);
-                result.putExtra("keyCode", keyCode);
-                result.putExtra("isLong", isLong);
-                setResult(Activity.RESULT_OK, result);
-                finish();
-            }
+        view.setOnItemClickListener((parent, view1, position, id) -> {
+            int code1 = actions[position].getCode();
+            Intent result = new Intent();
+            result.putExtra("code", code1);
+            result.putExtra("keyCode", keyCode);
+            result.putExtra("isLong", isLong);
+            setResult(Activity.RESULT_OK, result);
+            finish();
         });
-//        RadioGroup group = (RadioGroup) findViewById(R.id.actionsGroup);
-//        Action[] actions = Action.values();
-//        for (int i = 0; i < actions.length; i++) {
-//            Action action = actions[i];
-//            RadioButton button = new RadioButton(this);
-//            button.setText(getResources().getString(action.getName()));
-//            button.setTag(R.attr.actionId, action.getCode());
-//            group.addView(button);
-//        }
-//
-//        group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//            public void onCheckedChanged(RadioGroup group, int checkedId) {
-//                if (!populating) {
-//                    RadioButton button = (RadioButton) group.findViewById(group.getCheckedRadioButtonId());
-//                    Integer code = (Integer) button.getTag(R.attr.actionId);
-//                    Intent result = new Intent();
-//                    result.putExtra("code", code);
-//                    setResult(Activity.RESULT_OK, result);
-//                    finish();
-//                }
-//            }
-//        });
     }
-
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        populating = true;
-//        int type = getIntent().getIntExtra("type", 0);
-//        TextView header = (TextView) findViewById(R.id.actions_header);
-//        header.setText(type == 0 ? R.string.short_click : type == 1 ? R.string.long_click : R.string.binding_click);
-//        int code = getIntent().getIntExtra("code", 0);
-//        RadioGroup group = (RadioGroup) findViewById(R.id.actionsGroup);
-//        int id = group.getChildAt(0).getId();
-//        for (int i = 0; i < group.getChildCount(); i++) {
-//            RadioButton button = (RadioButton) group.getChildAt(i);
-//            Integer buttone_code = (Integer) button.getTag(R.attr.actionId);
-//            if (buttone_code == code) {
-//                id = group.getChildAt(i).getId();
-//                break;
-//            }
-//        }
-//        group.check(id);
-//        populating = false;
-//    }
 
     public OrionApplication getOrionContext() {
         return (OrionApplication) getApplicationContext();

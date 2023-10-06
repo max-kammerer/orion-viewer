@@ -202,7 +202,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
         }
     }
 
-    private class KeyListAdapter extends BaseAdapter {
+    private static class KeyListAdapter extends BaseAdapter {
 
         private final LayoutInflater mInflater;
 

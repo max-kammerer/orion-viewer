@@ -118,12 +118,10 @@ public abstract class SearchTask {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                mHandler.postDelayed(new Runnable() {
-                    public void run() {
-                        if (!progressDialog.isCancelled()) {
-                            progressDialog.show();
-                            progressDialog.setProgress(startIndex);
-                        }
+                mHandler.postDelayed(() -> {
+                    if (!progressDialog.isCancelled()) {
+                        progressDialog.show();
+                        progressDialog.setProgress(startIndex);
                     }
                 }, SEARCH_PROGRESS_DELAY);
             }
