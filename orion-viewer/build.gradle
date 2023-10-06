@@ -23,7 +23,7 @@ dependencies {
     implementation project(':tree-view-list-android')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
     implementation project(":nativeLibs:djvuModule")
     implementation project(":nativeLibs:mupdfModule")
 
@@ -187,7 +187,7 @@ kotlin {
     }
 }
 
-task downloadTestFiles() {
+tasks.register('downloadTestFiles') {
     doFirst {
         testFiles.forEach {
             def name = it.tokenize('/').last()

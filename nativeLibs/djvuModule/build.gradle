@@ -5,8 +5,8 @@ android {
         ndkVersion orionNdkVersion
     }
 
-    compileSdkVersion orionCompileSdk
-    buildToolsVersion orionBuildToolsVersion
+    compileSdkVersion = orionCompileSdk
+    buildToolsVersion = orionBuildToolsVersion
 
     defaultConfig {
 
