@@ -67,4 +67,5 @@
     <string name="select_color_mode">Select color mode to switch</string>
 
     <string name="saveFileNameTooltip">FileName.extension</string>
+    <string name="save">Save</string>
 </resources>
