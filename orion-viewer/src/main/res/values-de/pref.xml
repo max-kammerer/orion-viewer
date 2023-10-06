@@ -42,7 +42,7 @@
     <string name="pref_screen_backlight_timeout_desc">Abschaltzeit der Hintergrundbeleuchtung</string>
     <string name="pref_custom_brightness">Helligkeit anpassen</string>
     <string name="pref_brightness">Helligkeit</string>
-    <string name="pref_brightness_desc">Helligkeitswert (1-100%)</string>
+    <string name="pref_brightness_desc">Helligkeitswert (1–100%)</string>
     <string name="pref_device_info">Geräte-Informationen</string>
     <string name="pref_e_ink_optimization">E-Ink</string>
     <string name="pref_e_ink_fast_refresh">Schneller Bildwechsel für E-Ink</string>
@@ -57,11 +57,11 @@
 
     <!--Other Prefs-->
     <string name="pref_long_crop_value">Großer Zuschnitt</string>
-    <string name="pref_long_crop_value_desc">Wert für großen Zuschnitt (0-40%)</string>
+    <string name="pref_long_crop_value_desc">Wert für großen Zuschnitt (0–40%)</string>
     <string name="pref_screen_overlapping_horizontal">Horizontales Überlappen</string>
-    <string name="pref_screen_overlapping_horizontal_desc">Horizontale Überlappung der Ansicht beim Blättern (0-90%)</string>
+    <string name="pref_screen_overlapping_horizontal_desc">Horizontale Überlappung der Ansicht beim Blättern (0–90%)</string>
     <string name="pref_screen_overlapping_vertical">Vertikales Überlappen</string>
-    <string name="pref_screen_overlapping_vertical_desc">Vertikale Überlappung der Ansicht beim Blättern (0-90%)</string>
+    <string name="pref_screen_overlapping_vertical_desc">Vertikale Überlappung der Ansicht beim Blättern (0–90%)</string>
 
     <!--System Prefs-->
     <string name="pref_debug">Debugging</string>

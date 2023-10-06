@@ -34,18 +34,18 @@
     <string name="pref_total_refresh_after">Полное обновление после…</string>
 
     <string name="pref_long_crop_value">Большая обрезка</string>
-    <string name="pref_long_crop_value_desc">Значение параметра большой обрезки (0-40%)</string>
+    <string name="pref_long_crop_value_desc">Значение параметра большой обрезки (0–40%)</string>
 
     <string name="pref_screen_overlapping_horizontal">Горизонтальный нахлест</string>
-    <string name="pref_screen_overlapping_horizontal_desc">Горизонтальный нахлест отображаемых частей страницы (0-90%)</string>
+    <string name="pref_screen_overlapping_horizontal_desc">Горизонтальный нахлест отображаемых частей страницы (0–90%)</string>
 
     <string name="pref_screen_overlapping_vertical">Вертикальный нахлест</string>
-    <string name="pref_screen_overlapping_vertical_desc">Вертикальный нахлест отображаемых частей страницы (0-90%)</string>
+    <string name="pref_screen_overlapping_vertical_desc">Вертикальный нахлест отображаемых частей страницы (0–90%)</string>
 
 
     <string name="pref_custom_brightness">Регулировка Яркости</string>
     <string name="pref_brightness">Яркость</string>
-    <string name="pref_brightness_desc">Яркость (1-100%)</string>
+    <string name="pref_brightness_desc">Яркость (1–100%)</string>
 
     <string name="pref_application_theme">Тема приложения</string>
     <string name="pref_application_theme_desc">Необходимо перезапустить приложение</string>

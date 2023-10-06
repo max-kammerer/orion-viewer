@@ -20,17 +20,17 @@
     <string name="pref_total_refresh_after">多少次后全刷…</string>
 
     <string name="pref_long_crop_value">最大切边值</string>
-    <string name="pref_long_crop_value_desc">最大切边的数值 (0-40%)</string>
+    <string name="pref_long_crop_value_desc">最大切边的数值 (0–40%)</string>
 
     <string name="pref_screen_overlapping_horizontal">水平屏幕重叠</string>
-    <string name="pref_screen_overlapping_horizontal_desc">翻页时水平重叠百分比 (0-90%)</string>
+    <string name="pref_screen_overlapping_horizontal_desc">翻页时水平重叠百分比 (0–90%)</string>
 
     <string name="pref_screen_overlapping_vertical">垂直重叠</string>
-    <string name="pref_screen_overlapping_vertical_desc">翻页时垂直重叠百分比 (0-90%)</string>
+    <string name="pref_screen_overlapping_vertical_desc">翻页时垂直重叠百分比 (0–90%)</string>
 
     <string name="pref_custom_brightness">调节亮度</string>
     <string name="pref_brightness">亮度</string>
-    <string name="pref_brightness_desc">亮度 (1-100%)</string>
+    <string name="pref_brightness_desc">亮度 (1–100%)</string>
 
     <string name="pref_application_theme">主题</string>
     <string name="pref_application_theme_desc">重启程序使设置生效</string>

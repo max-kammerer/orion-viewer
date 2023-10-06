@@ -27,17 +27,17 @@
     <string name="pref_total_refresh_after">Refresco después de…</string>
 
     <string name="pref_long_crop_value">Valor de recorte grande</string>
-    <string name="pref_long_crop_value_desc">Valor de recorte grande (0-40%)</string>
+    <string name="pref_long_crop_value_desc">Valor de recorte grande (0–40%)</string>
 
     <string name="pref_screen_overlapping_horizontal">Solapamiento horizontal de pantalla</string>
-    <string name="pref_screen_overlapping_horizontal_desc">Solapamiento horizontal de pantalla al cambiar la página (0-90%)</string>
+    <string name="pref_screen_overlapping_horizontal_desc">Solapamiento horizontal de pantalla al cambiar la página (0–90%)</string>
 
     <string name="pref_screen_overlapping_vertical">Solapamiento vertical de pantalla</string>
-    <string name="pref_screen_overlapping_vertical_desc">Solapamiento vertical de pantalla al cambiar la página (0-90%)</string>
+    <string name="pref_screen_overlapping_vertical_desc">Solapamiento vertical de pantalla al cambiar la página (0–90%)</string>
 
     <string name="pref_custom_brightness">Ajuste de brillo</string>
     <string name="pref_brightness">Brillo</string>
-    <string name="pref_brightness_desc">Brillo (1-100%)</string>
+    <string name="pref_brightness_desc">Brillo (1–100%)</string>
 
     <string name="pref_application_theme">Tema de la aplicación</string>
     <string name="pref_application_theme_desc">Reinicie para aplicar los cambios</string>

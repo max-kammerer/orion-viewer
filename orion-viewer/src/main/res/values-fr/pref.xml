@@ -34,17 +34,17 @@
     <string name="pref_total_refresh_after">Rafraichissement total après…</string>
 
     <string name="pref_long_crop_value">Valeur du grand rognage</string>
-    <string name="pref_long_crop_value_desc">Valeur du grand rognage (0-40%)</string>
+    <string name="pref_long_crop_value_desc">Valeur du grand rognage (0–40%)</string>
 
     <string name="pref_screen_overlapping_horizontal">Recouvrement horizontal</string>
-    <string name="pref_screen_overlapping_horizontal_desc">Recouvrement horizontal de l\'écran au changement de page (0-90%)</string>
+    <string name="pref_screen_overlapping_horizontal_desc">Recouvrement horizontal de l\'écran au changement de page (0–90%)</string>
 
     <string name="pref_screen_overlapping_vertical">Recouvrement vertical</string>
-    <string name="pref_screen_overlapping_vertical_desc">Recouvrement vertical de l\'écran au changement de page (0-90%)</string>
+    <string name="pref_screen_overlapping_vertical_desc">Recouvrement vertical de l\'écran au changement de page (0–90%)</string>
 
     <string name="pref_custom_brightness">Ajustement de la luminosité</string>
     <string name="pref_brightness">Luminosité</string>
-    <string name="pref_brightness_desc">Luminosité (1-100%)</string>
+    <string name="pref_brightness_desc">Luminosité (1–100%)</string>
 
     <string name="pref_application_theme">Thèmes</string>
     <string name="pref_application_theme_desc">Réinitialiser Orion pour appliquer les changements</string>
