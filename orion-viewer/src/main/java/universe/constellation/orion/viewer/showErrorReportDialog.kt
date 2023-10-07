@@ -43,7 +43,7 @@ internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: String, messag
 }
 
 internal fun OrionBaseActivity.reportErrorVia(viaEmail: Boolean, messageTitle: String, intentOrException: String) {
-    val bodyWithException = applicationContext.getString(R.string.send_report_header) + "\n\nAndroid Version: ${android.os.Build.VERSION.RELEASE}(${android.os.Build.VERSION.SDK_INT})\n```\n$intentOrException\n```"
+    val bodyWithException = applicationContext.getString(R.string.send_report_header) + "\n\nAndroid Version: ${android.os.Build.VERSION.RELEASE} (${android.os.Build.VERSION.SDK_INT})\n```\n$intentOrException\n```"
     if (viaEmail) {
         val intent = Intent(Intent.ACTION_SENDTO)
         val email = "mikhael" + "." + "bogdanov" + "+" + "orion" + "@" + "gmail" + "." + "com"
