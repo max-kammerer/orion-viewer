@@ -38,7 +38,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialog
 import androidx.core.internal.view.SupportMenuItem
 import kotlinx.coroutines.*
-import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAccessPermissionForAndroidR
+import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAccessPermissionOrReadOne
 import universe.constellation.orion.viewer.android.FileUtils
 import universe.constellation.orion.viewer.device.Device
 import universe.constellation.orion.viewer.dialog.SearchDialog
@@ -206,9 +206,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     private fun askReadPermissions() =
-            Permissions.checkReadPermission(this, Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN).also {
-                checkAndRequestStorageAccessPermissionForAndroidR()
-            }
+        checkAndRequestStorageAccessPermissionOrReadOne(Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN)
 
     private fun openFileWithGrantedPermissions(intent: Intent) {
         log("Runtime.getRuntime().totalMemory(): ${Runtime.getRuntime().totalMemory()}")

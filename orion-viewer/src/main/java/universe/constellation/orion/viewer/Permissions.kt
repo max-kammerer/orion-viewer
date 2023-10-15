@@ -40,15 +40,20 @@ object Permissions {
             else true
 
     @JvmStatic
-    fun Activity.checkAndRequestStorageAccessPermissionForAndroidR() {
+    fun Activity.checkAndRequestStorageAccessPermissionOrReadOne(code: Int): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (!Environment.isExternalStorageManager()) {
                 val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
                 val uri = Uri.fromParts("package", packageName, null)
                 intent.data = uri
                 startActivity(intent)
+            } else {
+                return true
             }
+        } else {
+            return checkReadPermission(this, code)
         }
+        return false
     }
 
     @JvmStatic
