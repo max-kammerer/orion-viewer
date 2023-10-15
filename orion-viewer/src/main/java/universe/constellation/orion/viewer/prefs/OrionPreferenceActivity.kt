@@ -22,16 +22,14 @@ package universe.constellation.orion.viewer.prefs
 import android.os.Bundle
 import android.preference.PreferenceCategory
 import android.preference.PreferenceScreen
+import androidx.appcompat.app.AppCompatActivity
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.android.DSLPreferenceActivity
+import universe.constellation.orion.viewer.android.DSLPreferenceFragment
 import universe.constellation.orion.viewer.device.EInkDevice
 import universe.constellation.orion.viewer.prefs.OrionBookPreferences.Companion.bookPreferences
+import universe.constellation.orion.viewer.prefs.OrionBookPreferencesFragment.Companion.bookPreferences
 
-/**
- * User: mike
- * Date: 02.01.12
- * Time: 17:35
- */
 class OrionPreferenceActivity : DSLPreferenceActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,4 +54,39 @@ class OrionPreferenceActivity : DSLPreferenceActivity() {
 
     private val orionContext: OrionApplication
         get() = applicationContext as OrionApplication
+}
+
+class OrionPreferenceActivityX : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (applicationContext as OrionApplication).applyTheme(this)
+        setContentView(R.layout.activity_with_fragment)
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.settings_container, OrionPreferenceFragmentX())
+            .commit()
+
+    }
+}
+
+class OrionPreferenceFragmentX : DSLPreferenceFragment() {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        setPreferencesFromResource(R.xml.userpreferences, rootKey)
+
+        val screen = preferenceScreen
+
+        if (orionContext.device !is EInkDevice) {
+            screen.findPreference<androidx.preference.PreferenceCategory>("NOOK2_EINK")?.let {
+                screen.removePreference(it)
+            }
+        }
+
+        val bookPreferences = screen.findPreference<androidx.preference.PreferenceScreen>("BOOK_DEFAULT")!!
+        bookPreferences.nested {
+            bookPreferences(this@nested, true)
+        }
+    }
+
+    private val orionContext: OrionApplication
+        get() = context as OrionApplication
 }

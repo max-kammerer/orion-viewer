@@ -52,6 +52,12 @@
         orion:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/book_options_menu_item2"
+        android:icon="@drawable/book_preferences"
+        android:title="@string/menu_book_preferences"
+        orion:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/outline_menu_item"
         android:icon="@drawable/help"
         android:title="@string/menu_outline_text" />

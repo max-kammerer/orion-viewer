@@ -823,6 +823,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             R.id.options_menu_item -> action = Action.OPTIONS
 
             R.id.book_options_menu_item -> action = Action.BOOK_OPTIONS
+            R.id.book_options_menu_item2 -> action = Action.BOOK_OPTIONS2
 
         //            case R.id.tap_menu_item:
         //                Intent tap = new Intent(this, OrionTapActivity.class);

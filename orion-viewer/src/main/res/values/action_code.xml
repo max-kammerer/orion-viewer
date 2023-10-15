@@ -33,6 +33,7 @@
     <integer name="action_switch_color_mode">17</integer>
 
     <integer name="action_book_options">18</integer>
+    <integer name="action_book_options2">53</integer>
 
     <integer name="action_full_screen">22</integer>
 

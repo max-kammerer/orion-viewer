@@ -2,16 +2,16 @@
 
 <resources>
     <!--Do not translate this section and do not include it in result localization: start-->
-        <string name="app_name">Orion Viewer</string>
+    <string name="app_name">Orion Viewer</string>
 
-        <string name="ABCD" translatable="false">ABCD</string>
-        <string name="ACBD" translatable="false">ACBD</string>
-        <string name="BADC" translatable="false">BADC</string>
-        <string name="BDAC" translatable="false">BDAC</string>
+    <string name="ABCD" translatable="false">ABCD</string>
+    <string name="ACBD" translatable="false">ACBD</string>
+    <string name="BADC" translatable="false">BADC</string>
+    <string name="BDAC" translatable="false">BDAC</string>
 
-        <integer name="layout_right_bottom_outside">0</integer>
-        <integer name="layout_only_bottom_outside">1</integer>
-        <integer name="layout_always_inside">2</integer>
+    <integer name="layout_right_bottom_outside">0</integer>
+    <integer name="layout_only_bottom_outside">1</integer>
+    <integer name="layout_always_inside">2</integer>
     <!--Do not translate this section and do not include it in result localization: end-->
 
 
@@ -68,4 +68,6 @@
 
     <string name="saveFileNameTooltip">FileName.extension</string>
     <string name="save">Save</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

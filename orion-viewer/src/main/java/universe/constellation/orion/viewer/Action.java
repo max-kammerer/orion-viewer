@@ -42,6 +42,7 @@ import universe.constellation.orion.viewer.outline.OutlineAdapter;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionApplication;
 import universe.constellation.orion.viewer.prefs.OrionBookPreferences;
+import universe.constellation.orion.viewer.prefs.OrionBookPreferencesActivityX;
 import universe.constellation.orion.viewer.prefs.OrionPreferenceActivity;
 import universe.constellation.orion.viewer.prefs.TemporaryOptions;
 import universe.constellation.orion.viewer.util.ColorUtil;
@@ -259,6 +260,15 @@ public enum Action {
             activity.startActivity(intent);
         }
     },
+
+    BOOK_OPTIONS2 (R.string.action_book_options, R.integer.action_book_options2) {
+        @Override
+        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+            Intent intent = new Intent(activity, OrionBookPreferencesActivityX.class);
+            activity.startActivity(intent);
+        }
+    },
+
 
     ZOOM (R.string.action_zoom_page, R.integer.action_zoom_page) {
             @Override
@@ -482,6 +492,7 @@ public enum Action {
             updateMargin(controller, false, 3);
         }
     };
+
 
     private static final HashMap<Integer, Action> actions = new HashMap<>();
 
