@@ -164,7 +164,13 @@ public class MuPDFCore
 		Quad[][] quads = page.search(text);
 		if (quads == null)
 			return null;
-		Quad[] flattenQuads = new Quad[quads.length * quads[0].length];
+
+		int length = 0;
+		for (Quad[] quad : quads) {
+			length += quad.length;
+		}
+
+		Quad[] flattenQuads = new Quad[length];
 		int dest=0;
 		for(Quad[] qd: quads){
 			System.arraycopy(qd, 0, flattenQuads, dest, qd.length);
