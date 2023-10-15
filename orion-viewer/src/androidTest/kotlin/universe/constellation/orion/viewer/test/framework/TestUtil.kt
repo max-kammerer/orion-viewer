@@ -26,7 +26,7 @@ fun extractFileFromTestData(fileName: String): File {
         throw RuntimeException("Couldn't create new file " + outFile.absolutePath, e)
     }
 
-    val input = ClassLoader.getSystemClassLoader().getResourceAsStream(getFileUnderTestData(fileName))
+    val input = TestUtil::class.java.classLoader.getResourceAsStream(getFileUnderTestData(fileName))
     val bufferedOutputStream = FileOutputStream(outFile).buffered()
     input.buffered().copyTo(bufferedOutputStream)
     bufferedOutputStream.close()

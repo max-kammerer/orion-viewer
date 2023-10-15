@@ -1074,7 +1074,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     fun showTapDialogIfNeeded() {
         println("tap")
         if (++tapHelpCounter < 2) return
-        if (globalOptions.isShowTapHelp && !orionContext.isTesting) {
+        if (globalOptions.isShowTapHelp) {
             TapHelpDialog(this).showDialog()
         }
     }
