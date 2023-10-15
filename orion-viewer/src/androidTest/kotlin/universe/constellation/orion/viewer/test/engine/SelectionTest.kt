@@ -1,4 +1,4 @@
-package universe.constellation.orion.viewer.test
+package universe.constellation.orion.viewer.test.engine
 
 import android.graphics.Rect
 import org.junit.Assert.assertEquals
@@ -8,7 +8,13 @@ import universe.constellation.orion.viewer.selection.SelectionAutomata
 import universe.constellation.orion.viewer.test.framework.BookTest
 import universe.constellation.orion.viewer.test.framework.TestUtil
 
-class SelectionTest(path: String, val page1Based: Int, val absoluteRect: Rect, val isSingleWord: Boolean, val expectedText: String) : BookTest(path) {
+class SelectionTest(
+    path: String,
+    private val page1Based: Int,
+    private val absoluteRect: Rect,
+    private val isSingleWord: Boolean,
+    private val expectedText: String
+) : BookTest(path) {
 
     companion object {
         @JvmStatic
