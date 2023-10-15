@@ -41,6 +41,8 @@ interface OrionScene : OrionImageListener {
 
     val sceneHeight: Int
 
+    val sceneYLocationOnScreen: Int
+
     val info: LayoutPosition?
 
     fun setDimensionAware(dimensionAware: ViewDimensionAware)
