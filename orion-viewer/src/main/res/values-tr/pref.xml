@@ -31,7 +31,10 @@
     <string name="pref_close_page_option_dialog_on_apply">Uygula düğmesine tıklandığında sayfa seçeneği iletişim kutusunu kapat</string>
     <string name="pref_swap_prev_next_keys">Önceki/sonraki tuşlarını değiştir</string>
     <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Yatay modda önceki/sonraki tuşlarını değiştirin</string>
+
     <string name="pref_dictionary">Sözlük</string>
+    <string name="pref_dictionary_desc">Sözlük - %s</string>
+
     <string name="pref_e_ink_optimization">E-mürekkep</string>
     <string name="pref_e_ink_fast_refresh">E-mürekkep hızlı yenileme</string>
     <string name="pref_total_refresh_after">Şundan sonra toplam yenileme…</string>
@@ -50,7 +53,7 @@
     <string name="pref_brightness_desc">Parlaklık (%1–100)</string>
 
     <string name="pref_application_theme">Uygulama teması</string>
-    <string name="pref_application_theme_desc">Uygulamak için uygulamayı yeniden başlatın</string>
+    <string name="pref_application_theme_desc">Tema - %s. (Uygulamak için uygulamayı yeniden başlatın)</string>
 
     <string name="pref_open_recent_book">Başlangıçta son kitabı aç</string>
 
@@ -76,10 +79,10 @@
     <string name="book_pref_title">Mevcut kitap seçenekleri</string>
 
     <string name="pref_screen_backlight_timeout">Ekran ışığı zaman aşımı</string>
-    <string name="pref_screen_backlight_timeout_desc">Ekran ışığı zaman aşımı</string>
+    <string name="pref_screen_backlight_timeout_desc">Ekran ışığı zaman aşımı - %s</string>
 
     <string name="pref_app_language">Uygulama dili</string>
-    <string name="pref_app_language_desc">Uygulama dili: uygulamak için uygulamayı yeniden başlatın!</string>
+    <string name="pref_app_language_desc">Uygulama dili - %s (uygulamak için uygulamayı yeniden başlatın!)</string>
 
     <string name="pref_tap_zones_desc">Eylemleri ekran bölgelerine bağlayın</string>
 

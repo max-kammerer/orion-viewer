@@ -34,6 +34,7 @@
     <string name="pref_swap_prev_next_keys">Swap prev/next keys</string>
     <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Swap prev/next keys in landscape mode</string>
     <string name="pref_dictionary">Dictionary</string>
+    <string name="pref_dictionary_desc">Dictionary - %s</string>
     <string name="pref_e_ink_optimization">E-ink</string>
     <string name="pref_e_ink_fast_refresh">E-ink fast refresh</string>
     <string name="pref_total_refresh_after">Total refresh after…</string>
@@ -52,7 +53,7 @@
     <string name="pref_brightness_desc">Brightness (1–100%)</string>
 
     <string name="pref_application_theme">Application Theme</string>
-    <string name="pref_application_theme_desc">Restart application to apply</string>
+    <string name="pref_application_theme_desc">Theme - %s. (Restart application on change)</string>
 
     <string name="pref_open_recent_book">Open recent book on start up</string>
 
@@ -78,10 +79,10 @@
     <string name="book_pref_title">Current Book Options</string>
 
     <string name="pref_screen_backlight_timeout">Screen backlight timeout</string>
-    <string name="pref_screen_backlight_timeout_desc">Screen backlight timeout</string>
+    <string name="pref_screen_backlight_timeout_desc">Screen backlight timeout - %s</string>
 
     <string name="pref_app_language">Application Language</string>
-    <string name="pref_app_language_desc">Application Language: restart application to apply!</string>
+    <string name="pref_app_language_desc">Language - %s. (Restart application on change)</string>
 
     <string name="pref_tap_zones_desc">Link actions to screen zones</string>
 

@@ -30,7 +30,10 @@
     <string name="pref_close_page_option_dialog_on_apply">Закрывать диалог параметров страницы при применении настроек</string>
     <string name="pref_swap_prev_next_keys">Обменять клавиши местами</string>
     <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Обменять действия клавиш вперед/назад в портретном режиме</string>
+
     <string name="pref_dictionary">Словарь</string>
+    <string name="pref_dictionary_desc">Словарь - %s</string>
+
     <string name="pref_e_ink_optimization">E-ink</string>
     <string name="pref_e_ink_fast_refresh">Быстрое обновление e-ink</string>
     <string name="pref_total_refresh_after">Полное обновление после…</string>
@@ -50,7 +53,7 @@
     <string name="pref_brightness_desc">Яркость (1–100%)</string>
 
     <string name="pref_application_theme">Тема приложения</string>
-    <string name="pref_application_theme_desc">Необходимо перезапустить приложение</string>
+    <string name="pref_application_theme_desc">Тема - %s. (При изменении необходимо перезапустить приложение)</string>
 
     <string name="pref_open_recent_book">Открывать последнюю книгу при старте</string>
 
@@ -74,10 +77,10 @@
     <string name="application_settings_title">Настройки приложения</string>
 
     <string name="pref_screen_backlight_timeout">Подсветка экрана</string>
-    <string name="pref_screen_backlight_timeout_desc">Длительность подсветки экрана</string>
+    <string name="pref_screen_backlight_timeout_desc">Длительность подсветки экрана - %s</string>
 
     <string name="pref_app_language">Язык приложения</string>
-    <string name="pref_app_language_desc">Язык приложения. Необходим перезапуск приложения!</string>
+    <string name="pref_app_language_desc">Язык приложения: %S. (Необходим перезапуск при изменении)</string>
 
     <string name="pref_tap_zones_desc">Привязка операции к зонам экрана</string>
     <string name="pref_key_binder_desc">Привязка операции к клавишам</string>

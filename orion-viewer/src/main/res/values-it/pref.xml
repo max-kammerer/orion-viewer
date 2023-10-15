@@ -21,7 +21,10 @@
     <string name="pref_close_page_option_dialog_on_apply">Chiudi le opzioni quando confermi</string>
     <string name="pref_swap_prev_next_keys">Inverti tasti precedente/successivo</string>
     <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Inverti tasti precedente/successivo in modalità orizzontale</string>
+
     <string name="pref_dictionary">Dizionario</string>
+    <string name="pref_dictionary_desc">Dizionario - %s</string>
+
     <string name="pref_e_ink_optimization">E-ink</string>
     <string name="pref_e_ink_fast_refresh">E-ink aggiornamento rapido</string>
     <string name="pref_total_refresh_after">Refresh completo dopo…</string>
@@ -40,7 +43,7 @@
     <string name="pref_brightness_desc">Luminosità (1–100%)</string>
 
     <string name="pref_application_theme">Tema applicazione</string>
-    <string name="pref_application_theme_desc">Riavvia per applicare le modifiche</string>
+    <string name="pref_application_theme_desc">Tema - %s. (Riavvia per applicare le modifiche)</string>
 
     <string name="pref_open_recent_book">All\'avvio apri l\'ultimo libro letto</string>
 
@@ -65,10 +68,10 @@
     <string name="book_pref_title">Impostazioni libro corrente</string>
 
     <string name="pref_screen_backlight_timeout">Intervallo retroilluminazione</string>
-    <string name="pref_screen_backlight_timeout_desc">Intervallo retroilluminazione</string>
+    <string name="pref_screen_backlight_timeout_desc">Intervallo retroilluminazione - %s</string>
 
     <string name="pref_app_language">Lingua</string>
-    <string name="pref_app_language_desc">Lingua: riavvia per applicare le modifiche</string>
+    <string name="pref_app_language_desc">Lingua: %s (riavvia per applicare le modifiche)</string>
 
     <string name="pref_tap_zones_desc">Zone tocco: associa comandi alle zone tocco</string>
 

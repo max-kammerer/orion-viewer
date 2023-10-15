@@ -21,7 +21,10 @@
     <string name="pref_close_page_option_dialog_on_apply">Закривати діалог параметрів сторінки при застосуванні налаштувань</string>
     <string name="pref_swap_prev_next_keys">Поміняти клавіші місцями</string>
     <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Обміняти дії клавіш вперед / назад в портретному режимі</string>
+
     <string name="pref_dictionary">Словник</string>
+    <string name="pref_dictionary_desc">Словник - %s</string>
+
     <string name="pref_e_ink_optimization">E-ink</string>
     <string name="pref_e_ink_fast_refresh">Швидке оновлення e-ink</string>
     <string name="pref_total_refresh_after">Повне оновлення після…</string>
@@ -61,10 +64,10 @@
     <string name="application_settings_title">Налаштування програми</string>
 
     <string name="pref_screen_backlight_timeout">Підсвітка екрану</string>
-    <string name="pref_screen_backlight_timeout_desc">Тривалість підсвічування екрану</string>
+    <string name="pref_screen_backlight_timeout_desc">Тривалість підсвічування екрану - %s</string>
 
     <string name="pref_app_language">Мова програми</string>
-    <string name="pref_app_language_desc">Мова програми. Необхідний перезапуск програми!</string>
+    <string name="pref_app_language_desc">Мова програми - %s. Необхідний перезапуск програми!</string>
 
     <string name="pref_tap_zones_desc">Тап зони: прив\'язка операції до зон екрану</string>
 

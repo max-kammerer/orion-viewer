@@ -28,7 +28,10 @@
     <string name="pref_close_page_option_dialog_on_apply">Fermer un dialogue après une tape au lieu de deux</string>
     <string name="pref_swap_prev_next_keys">Echanger les touches précédent/suivant</string>
     <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Echanger les touches précédent/suivant en mode paysage</string>
+
     <string name="pref_dictionary">Dictionnaire</string>
+    <string name="pref_dictionary_desc">Dictionnaire - %s</string>
+
     <string name="pref_e_ink_optimization">E-ink: optimisation</string>
     <string name="pref_e_ink_fast_refresh">E-ink: rapide rafraichissement</string>
     <string name="pref_total_refresh_after">Rafraichissement total après…</string>
@@ -47,7 +50,7 @@
     <string name="pref_brightness_desc">Luminosité (1–100%)</string>
 
     <string name="pref_application_theme">Thèmes</string>
-    <string name="pref_application_theme_desc">Réinitialiser Orion pour appliquer les changements</string>
+    <string name="pref_application_theme_desc">Thème - %s. (Réinitialiser Orion pour appliquer les changements)</string>
 
     <string name="pref_open_recent_book">Ouvrir un livre récent au départ</string>
 
@@ -72,10 +75,10 @@
     <string name="book_pref_title">Options pour livre</string>
 
     <string name="pref_screen_backlight_timeout">Laps de temps avant extinction de l\'écran</string>
-    <string name="pref_screen_backlight_timeout_desc">Laps de temps avant exticntion de l\'écran</string>
+    <string name="pref_screen_backlight_timeout_desc">Laps de temps avant exticntion de l\'écran - %s</string>
 
-    <string name="pref_app_language">Langues</string>
-    <string name="pref_app_language_desc">Langue de l\'application: réinitialiser Orion pour appliquer un changement</string>
+    <string name="pref_app_language">Langue de l\'application</string>
+    <string name="pref_app_language_desc">Langue - %s. (réinitialiser Orion pour appliquer un changement)</string>
 
     <string name="pref_tap_zones_desc">Zones de tapes: associer des actions aux zones de l\'écran</string>
     

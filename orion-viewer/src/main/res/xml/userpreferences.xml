@@ -195,7 +195,7 @@
         <ListPreference
                 android:key="DICTIONARY"
                 android:title="@string/pref_dictionary"
-                android:summary="@string/pref_dictionary"
+                android:summary="@string/pref_dictionary_desc"
                 android:entries="@array/dictionaries_desc"
                 android:entryValues="@array/dictionaries"
                 android:dialogTitle="@string/pref_dictionary"

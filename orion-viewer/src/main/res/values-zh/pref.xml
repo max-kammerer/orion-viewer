@@ -56,6 +56,6 @@
     <string name="book_pref_title">当前书籍设定</string>
 
     <string name="pref_screen_backlight_timeout">屏幕背光时间</string>
-    <string name="pref_screen_backlight_timeout_desc">多少秒后关闭屏幕背光</string>
+    <string name="pref_screen_backlight_timeout_desc">多少秒后关闭屏幕背光 - %s</string>
 
 </resources>
