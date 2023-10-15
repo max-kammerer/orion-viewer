@@ -192,4 +192,7 @@ class OrionDrawScene : View, OrionScene {
         get() = width
     override val sceneHeight: Int
         get() = height
+
+    override val sceneYLocationOnScreen: Int
+        get() = IntArray(2).run { getLocationOnScreen(this); this[1] }
 }
