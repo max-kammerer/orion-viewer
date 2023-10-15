@@ -202,6 +202,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             return
         }
 
+        processAdditionalOptionsInIntent(intent)
         openFileWithGrantedPermissions(intent)
     }
 
@@ -1071,9 +1072,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     fun showTapDialogIfNeeded() {
+        println("tap")
         if (++tapHelpCounter < 2) return
         if (globalOptions.isShowTapHelp && !orionContext.isTesting) {
-            globalOptions.saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false)
             TapHelpDialog(this).showDialog()
         }
     }
@@ -1090,6 +1091,13 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 it.destroy()
                 device!!.onBookClose(currentPage, pageCount)
             }
+        }
+    }
+
+    private fun processAdditionalOptionsInIntent(intent: Intent) {
+        if (intent.hasExtra(GlobalOptions.SHOW_TAP_HELP)) {
+            val showTapHelp = intent.getBooleanExtra(GlobalOptions.SHOW_TAP_HELP, false)
+            globalOptions.saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, showTapHelp)
         }
     }
 

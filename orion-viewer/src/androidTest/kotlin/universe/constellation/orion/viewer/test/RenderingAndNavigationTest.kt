@@ -16,6 +16,7 @@ import universe.constellation.orion.viewer.prefs.initalizer
 import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
 import universe.constellation.orion.viewer.test.framework.SingleThreadRenderer
+import universe.constellation.orion.viewer.test.framework.openTestBook
 import universe.constellation.orion.viewer.view.Scene
 import java.util.concurrent.CountDownLatch
 

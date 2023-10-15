@@ -8,6 +8,7 @@ import android.widget.*;
 import universe.constellation.orion.viewer.Action;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.R;
+import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionTapActivity;
 
 /**
@@ -58,7 +59,10 @@ public class TapHelpDialog extends DialogOverView {
         ImageView view = dialog.findViewById(R.id.tap_help_close);
         view.setVisibility(View.VISIBLE);
         view.setClickable(true);
-        view.setOnClickListener(v -> dialog.dismiss());
+        view.setOnClickListener(v -> {
+            dialog.dismiss();
+            activity.getGlobalOptions().saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false);
+        });
     }
 
     public void showDialog() {
