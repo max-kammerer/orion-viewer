@@ -63,8 +63,6 @@ class OrionApplication : Application() {
 
     val device = createDevice()
 
-    var isTesting = false
-
     private var langCode: String? = null
 
     private val isLightTheme: Boolean

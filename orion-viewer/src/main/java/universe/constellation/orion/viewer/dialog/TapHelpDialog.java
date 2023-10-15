@@ -61,7 +61,7 @@ public class TapHelpDialog extends DialogOverView {
         view.setClickable(true);
         view.setOnClickListener(v -> {
             dialog.dismiss();
-            activity.getGlobalOptions().saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false);
+            //TODO: activity.getGlobalOptions().saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false);
         });
     }
 

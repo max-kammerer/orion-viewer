@@ -74,8 +74,6 @@ android {
 
     sourceSets {
         main {
-            assets.srcDirs = ['assets']
-            //java.srcDirs += '../common/src/main/kotlin'
             if (excludeNativeLibsSources) {
                 jniLibs.srcDirs = [mupdf_libs, djvu_libs]
             }
@@ -89,7 +87,6 @@ android {
 
         }
 
-        //test
         androidTest {
             java.srcDirs += 'src/androidTest/kotlin'
             resources.srcDirs += 'src/androidTest/assets'

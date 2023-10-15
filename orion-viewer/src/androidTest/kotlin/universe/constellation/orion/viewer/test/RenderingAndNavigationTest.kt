@@ -2,13 +2,13 @@ package universe.constellation.orion.viewer.test
 
 import android.graphics.Bitmap
 import android.graphics.Point
-import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.*
+import universe.constellation.orion.viewer.document.DocumentWithCaching
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.LayoutStrategy
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
@@ -16,18 +16,18 @@ import universe.constellation.orion.viewer.prefs.initalizer
 import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
 import universe.constellation.orion.viewer.test.framework.SingleThreadRenderer
-import universe.constellation.orion.viewer.test.framework.openTestBook
 import universe.constellation.orion.viewer.view.Scene
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.atomic.AtomicReference
 
 @RunWith(Parameterized::class)
-class RenderingAndNavigationTest(path: String) : InstrumentationTestCase() {
+class RenderingAndNavigationTest(book: BookDescription) : InstrumentationTestCase(book.toOpenIntent()) {
 
    companion object {
         @JvmStatic
         @Parameterized.Parameters(name = "Test simple navigation in {0}")
-        fun testData(): Iterable<Array<Any>> {
-            return BookDescription.values().map { arrayOf<Any>(it.path) }
+        fun testData(): Iterable<Array<BookDescription>> {
+            return BookDescription.values().map { arrayOf(it) }
         }
     }
 
@@ -45,23 +45,17 @@ class RenderingAndNavigationTest(path: String) : InstrumentationTestCase() {
         }
     }
 
-    private val document by lazy {
-        openTestBook(path)
-    }
-
     private val deviceSize = Point(300, 350) //to split page on two screen - page size is 663x886
 
     private lateinit var view: MyView
 
     @Before
     fun setUp() {
-        mActivityRule.launchActivity(null)
-        view = MyView(activity.view)
-    }
-
-    @After
-    fun destroy() {
-        document.destroy()
+        val ref = AtomicReference<OrionImageListener>()
+        activityScenarioRule.scenario.onActivity {
+            ref.set(it.view)
+        }
+        view = MyView(ref.get())
     }
 
     @Test
@@ -113,18 +107,22 @@ class RenderingAndNavigationTest(path: String) : InstrumentationTestCase() {
     }
 
     private fun prepareEngine(): Controller {
+        lateinit var controller: Controller
+        activityScenarioRule.scenario.onActivity { activity ->
+            val document = activity.controller!!.document as DocumentWithCaching
+            val layoutStrategy: LayoutStrategy = SimpleLayoutStrategy.create(document)
+            val renderer = SingleThreadRenderer(activity, view, layoutStrategy, document)
+            controller = Controller(activity, document, layoutStrategy, renderer)
 
-        val layoutStrategy: LayoutStrategy = SimpleLayoutStrategy.create(document)
-        val renderer = SingleThreadRenderer(activity, view, layoutStrategy, document)
-        val controller = Controller(activity, document, layoutStrategy, renderer)
 
+            val lastPageInfo =
+                LastPageInfo.loadBookParameters(activity, "123", initalizer(activity.globalOptions))
+            controller.changeOrinatation(lastPageInfo.screenOrientation)
+            controller.init(lastPageInfo, deviceSize)
 
-        val lastPageInfo = LastPageInfo.loadBookParameters(activity, "123", initalizer(activity.globalOptions))
-        controller.changeOrinatation(lastPageInfo.screenOrientation)
-        controller.init(lastPageInfo, deviceSize)
-
-        //getSubscriptionManager()?.sendDocOpenedNotification(controller)
-        activity.view.setDimensionAware(controller)
+            //getSubscriptionManager()?.sendDocOpenedNotification(controller)
+            activity.view.setDimensionAware(controller)
+        }
         return controller
     }
 }
