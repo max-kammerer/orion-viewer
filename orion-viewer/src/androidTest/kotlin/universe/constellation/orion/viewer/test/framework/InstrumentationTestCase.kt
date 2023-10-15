@@ -20,8 +20,6 @@ abstract class InstrumentationTestCase : TestUtil {
     val activity: OrionViewerActivity
         get() = mActivityRule.activity
 
-    override fun getOrionTestContext(): Context = mActivityRule.activity.orionContext
-
     fun getController() : Controller = mActivityRule.activity.controller!!
 
     fun startActivityWithBook(intent: Intent) {

@@ -325,20 +325,6 @@ public class GlobalOptions implements Serializable, PageOptions {
         return getBooleanProperty(EINK_OPTIMIZATION, false);
     }
 
-//    public Integer getInteger(String key) {
-//        if (!prefValues.containsKey(key)) {
-//            String value = prefs.getString(key, null);
-//            Integer newIntValue = null;
-//            if (value == null || "".equals(value)) {
-//                return null;
-//            } else {
-//                newIntValue = Integer.valueOf(value);
-//            }
-//            prefValues.put(key, newIntValue);
-//        }
-//        return (Integer) prefValues.get(key);
-//    }
-
     public int getIntFromStringProperty(String key, int defaultValue) {
         if (!prefValues.containsKey(key)) {
             String value = prefs.getString(key, null);

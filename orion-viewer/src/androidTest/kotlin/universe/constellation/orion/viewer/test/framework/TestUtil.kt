@@ -9,42 +9,34 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-/**
- * User: mike
- * Date: 20.10.13
- * Time: 8:32
- */
+fun openTestBook(relativePath: String) : DocumentWithCaching {
+    val fileOnSdcard = extractFileFromTestData(relativePath)
+    return FileUtil.openFile(fileOnSdcard)
+}
 
-interface TestUtil {
-
-    fun openTestBook(relativePath: String) : DocumentWithCaching {
-        val fileOnSdcard = extractFileFromTestData(relativePath)
-        return FileUtil.openFile(fileOnSdcard)
-    }
-
-    fun extractFileFromTestData(fileName: String): File {
-        val outFile = File(testFolder, fileName)
-        if (outFile.exists()) {
-            return outFile
-        }
-        try {
-            outFile.parentFile!!.mkdirs()
-            outFile.createNewFile()
-        } catch (e: IOException) {
-            throw RuntimeException("Couldn't create new file " + outFile.absolutePath, e)
-        }
-
-        val input = this.javaClass.classLoader!!.getResourceAsStream(getFileUnderTestData(fileName))
-        val bufferedOutputStream = FileOutputStream(outFile).buffered()
-        input.buffered().copyTo(bufferedOutputStream)
-        bufferedOutputStream.close()
+fun extractFileFromTestData(fileName: String): File {
+    val outFile = File(TestUtil.testFolder, fileName)
+    if (outFile.exists()) {
         return outFile
     }
+    try {
+        outFile.parentFile!!.mkdirs()
+        outFile.createNewFile()
+    } catch (e: IOException) {
+        throw RuntimeException("Couldn't create new file " + outFile.absolutePath, e)
+    }
 
-    fun getFileUnderTestData(relativePath: String): String = "testData/$relativePath"
+    val input = ClassLoader.getSystemClassLoader().getResourceAsStream(getFileUnderTestData(fileName))
+    val bufferedOutputStream = FileOutputStream(outFile).buffered()
+    input.buffered().copyTo(bufferedOutputStream)
+    bufferedOutputStream.close()
+    return outFile
+}
 
-    fun getOrionTestContext(): Context
+fun getFileUnderTestData(relativePath: String): String = "testData/$relativePath"
 
+
+interface TestUtil {
     companion object {
         val testFolder: File = File(Environment.getExternalStorageDirectory(), "orion")
 
