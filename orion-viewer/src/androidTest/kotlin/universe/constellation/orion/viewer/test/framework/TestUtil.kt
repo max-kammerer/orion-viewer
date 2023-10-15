@@ -1,8 +1,8 @@
 package universe.constellation.orion.viewer.test.framework
 
-import android.content.Context
 import android.os.Environment
-import universe.constellation.orion.viewer.document.Document
+import androidx.test.platform.app.InstrumentationRegistry
+import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.FileUtil
 import universe.constellation.orion.viewer.document.DocumentWithCaching
 import java.io.File
@@ -25,8 +25,7 @@ fun extractFileFromTestData(fileName: String): File {
     } catch (e: IOException) {
         throw RuntimeException("Couldn't create new file " + outFile.absolutePath, e)
     }
-
-    val input = ClassLoader.getSystemClassLoader().getResourceAsStream(getFileUnderTestData(fileName))
+    val input = InstrumentationRegistry.getInstrumentation().context.assets.open(getFileUnderTestData(fileName))
     val bufferedOutputStream = FileOutputStream(outFile).buffered()
     input.buffered().copyTo(bufferedOutputStream)
     bufferedOutputStream.close()
@@ -38,7 +37,7 @@ fun getFileUnderTestData(relativePath: String): String = "testData/$relativePath
 
 interface TestUtil {
     companion object {
-        val testFolder: File = File(Environment.getExternalStorageDirectory(), "orion")
+        val testFolder: File = File(Environment.getExternalStorageDirectory(), "Download/orion")
 
         const val SICP: String = "sicp.pdf"
 
@@ -46,6 +45,6 @@ interface TestUtil {
 
         const val DJVU_SPEC: String = "DjVu3Spec.djvu"
 
-        const val ORION_PKG: String = "universe.constellation.orion.viewer"
+        const val ORION_PKG: String = BuildConfig.APPLICATION_ID
     }
 }
