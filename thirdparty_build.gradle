@@ -11,17 +11,14 @@ task downloadDjvu {
     doLast {
         def djvuFolder = new File(djvu)
         if (djvuFolder.exists()) {
-            // Clean previous checkout
+            // Switch to master so we can properly pull if it was
+            // detached.
             exec {
-                commandLine = ['git', '-C', djvu, 'checkout', '.']
-            }
-            // Switch to master
-            exec {
-                commandLine = ['git', '-C', djvu, 'checkout', 'master']
+                commandLine = ['git', '-C', djvu, 'checkout', '-f', 'master']
             }
             // Pull
             exec {
-                commandLine = ['git', '-C', djvu, 'pull']
+                commandLine = ['git', '-C', djvu, 'fetch', 'origin']
             }
         }
         else {
@@ -71,17 +68,14 @@ task downloadMupdf {
     doLast {
         def mupdfFolder = new File(mupdf)
         if (mupdfFolder.exists()) {
-            // Clean previous checkout
+            // Switch to master so we can properly pull if it was
+            // detached.
             exec {
-                commandLine = ['git', '-C', mupdf, 'checkout', '.']
-            }
-            // Switch to master
-            exec {
-                commandLine = ['git', '-C', mupdf, 'checkout', 'master']
+                commandLine = ['git', '-C', mupdf, 'checkout', '-f', 'master']
             }
             // Pull
             exec {
-                commandLine = ['git', '-C', mupdf, 'pull']
+                commandLine = ['git', '-C', mupdf, 'fetch', 'origin']
             }
         }
         else {
