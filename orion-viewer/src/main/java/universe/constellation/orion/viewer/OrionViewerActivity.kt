@@ -151,11 +151,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             if (checkPermissionGranted(grantResults, permissions, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 val intent = lastIntent
                 lastIntent = null
-                openFileWithGrantedPermissions(intent ?: return)
+                processIntentAndCheckPermission(intent ?: return)
             } else {
                 AlertDialog.Builder(this).
                 setMessage(R.string.permission_read_warning).
-                setPositiveButton(R.string.permission_grant) { _, _ -> askReadPermissions() }.
+                setPositiveButton(R.string.permission_grant) { _, _ -> askReadPermissions(null) }.
                 setNegativeButton(R.string.permission_exit) { _, _ -> this.finish() }.
                 show()
             }
@@ -195,30 +195,23 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        log("onNewIntent: $intent")
-        if (!askReadPermissions()) {
-            log("Waiting for read permissions for $intent")
-            lastIntent = intent
-            return
-        }
-
         processAdditionalOptionsInIntent(intent)
-        openFileWithGrantedPermissions(intent)
+        processIntentAndCheckPermission(intent)
     }
 
-    private fun askReadPermissions() =
-        checkAndRequestStorageAccessPermissionOrReadOne(Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN)
+    private fun askReadPermissions(file: File?): Boolean {
+        if (file?.canRead() == true) return true
+        return checkAndRequestStorageAccessPermissionOrReadOne(Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN)
+    }
 
-    private fun openFileWithGrantedPermissions(intent: Intent) {
-        log("Runtime.getRuntime().totalMemory(): ${Runtime.getRuntime().totalMemory()}")
-        log("Debug.getNativeHeapSize(): ${Debug.getNativeHeapSize()}")
-        log("Trying to open new intent: $intent...")
+    private fun processIntentAndCheckPermission(intent: Intent) {
+        log("Trying to open document by $intent...")
 
         val uri = intent.data
         if (uri != null) {
             log("Try to open file by $uri")
             try {
-                val intentPath: String =
+                val filePath: String =
                         if ("content".equals(uri.scheme, ignoreCase = true)) {
                             try {
                                 FileUtils.getPath(this, uri).takeIf { File(it).exists() }
@@ -249,13 +242,19 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
 
                 if (controller != null && lastPageInfo != null) {
-                    if (lastPageInfo!!.openingFileName == intentPath) {
+                    if (lastPageInfo!!.openingFileName == filePath) {
                         controller!!.drawPage()
                         return
                     }
                 }
 
-                openFileAndDestroyOldController(intentPath)
+                if (!askReadPermissions(File(filePath))) {
+                    log("Waiting for read permissions for $intent")
+                    lastIntent = intent
+                    return
+                }
+
+                openFileAndDestroyOldController(filePath)
 
             } catch (e: Exception) {
                 showAlertWithExceptionThrow(intent, e)
@@ -269,6 +268,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     @Throws(Exception::class)
     fun openFileAndDestroyOldController(filePath: String) {
+        log("Runtime.getRuntime().totalMemory(): ${Runtime.getRuntime().totalMemory()}")
+        log("Debug.getNativeHeapSize(): ${Debug.getNativeHeapSize()}")
         log("openFileAndDestroyOldController")
         destroyController(controller).also { controller = null }
         AndroidLogger.stopLogger()
@@ -1072,7 +1073,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     fun showTapDialogIfNeeded() {
-        println("tap")
         if (++tapHelpCounter < 2) return
         if (globalOptions.isShowTapHelp) {
             globalOptions.saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false);
