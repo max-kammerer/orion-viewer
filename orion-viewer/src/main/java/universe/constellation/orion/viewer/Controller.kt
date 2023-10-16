@@ -116,9 +116,6 @@ class Controller(
             }
             sendViewChangeNotification()
             renderer.onResume()
-
-            //HACK
-            activity.showTapDialogIfNeeded()
         }
     }
 

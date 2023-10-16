@@ -37,6 +37,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialog
 import androidx.core.internal.view.SupportMenuItem
+import androidx.core.view.doOnLayout
 import kotlinx.coroutines.*
 import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAccessPermissionOrReadOne
 import universe.constellation.orion.viewer.android.FileUtils
@@ -72,13 +73,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     var controller: Controller? = null
         private set
 
-    private val operation = OperationHolder()
-
     val globalOptions: GlobalOptions by lazy {
         orionContext.options
     }
 
-    private var myIntent: Intent? = null
+    private var intentProcessed: Boolean = false
 
     @JvmField
     var _isResumed: Boolean = false
@@ -93,8 +92,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     lateinit var fullScene: FullScene
         private set
-
-    private var lastIntent: Intent? = null
 
     private var zoomInternal = 0
 
@@ -117,8 +114,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             return bookId
         }
 
-    private var tapHelpCounter = 0
-
     @SuppressLint("MissingSuperCall")
     public override fun onCreate(savedInstanceState: Bundle?) {
         log("Creating OrionViewerActivity...")
@@ -139,7 +134,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
         initDialogs()
 
-        myIntent = intent
+        intentProcessed = false
         newTouchProcessor = NewTouchProcessorWithScale(view, this)
     }
 
@@ -147,10 +142,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN == requestCode) {
             println("Permission callback...")
-
             if (checkPermissionGranted(grantResults, permissions, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                val intent = lastIntent
-                lastIntent = null
                 processIntentAndCheckPermission(intent ?: return)
             } else {
                 AlertDialog.Builder(this).
@@ -195,8 +187,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        processAdditionalOptionsInIntent(intent)
-        processIntentAndCheckPermission(intent)
+        intentProcessed = false
+        setIntent(intent)
     }
 
     private fun askReadPermissions(file: File?): Boolean {
@@ -206,6 +198,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private fun processIntentAndCheckPermission(intent: Intent) {
         log("Trying to open document by $intent...")
+        processAdditionalOptionsInIntent(intent)
 
         val uri = intent.data
         if (uri != null) {
@@ -250,10 +243,10 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
                 if (!askReadPermissions(File(filePath))) {
                     log("Waiting for read permissions for $intent")
-                    lastIntent = intent
                     return
                 }
 
+                intentProcessed = true
                 openFileAndDestroyOldController(filePath)
 
             } catch (e: Exception) {
@@ -669,14 +662,12 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         updateBrightness()
 
         log("onResume")
-        if (myIntent != null) {
-            //starting creation intent
-            onNewIntent(myIntent!!)
-            myIntent = null
+        val intent = intent
+        if (intent != null && !intentProcessed) {
+            processIntentAndCheckPermission(intent)
         } else {
             if (controller != null) {
                 controller!!.processPendingEvents()
-                //controller.startRenderer();
                 controller!!.drawPage()
             }
         }
@@ -745,8 +736,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             }
         }
 
-        if (device!!.onKeyUp(keyCode, event.isLongPress, operation)) {
-            changePage(operation.value)
+        val resultHolder = OperationHolder()
+        if (device!!.onKeyUp(keyCode, event.isLongPress, resultHolder)) {
+            changePage(resultHolder.value)
             return true
         }
         return false
@@ -815,20 +807,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             R.id.add_bookmark_menu_item -> action = Action.ADD_BOOKMARK
             R.id.goto_menu_item -> action = Action.GOTO
             R.id.select_text_menu_item -> action = Action.SELECT_TEXT
-        //            case R.id.navigation_menu_item: showOrionDialog(PAGE_LAYOUT_SCREEN, null, null);
-        //                return true;
-
-        //            case R.id.rotation_menu_item: action = Action.ROTATION; break;
-
             R.id.options_menu_item -> action = Action.OPTIONS
-
             R.id.book_options_menu_item -> action = Action.BOOK_OPTIONS
-
-        //            case R.id.tap_menu_item:
-        //                Intent tap = new Intent(this, OrionTapActivity.class);
-        //                startActivity(tap);
-        //                return true;
-
             R.id.outline_menu_item -> action = Action.SHOW_OUTLINE
             R.id.open_menu_item -> action = Action.OPEN_BOOK
             R.id.open_dictionary_menu_item -> action = Action.DICTIONARY
@@ -845,9 +825,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         if (Action.NONE !== action) {
             doAction(action)
         } else {
-            //            Intent intent = new Intent();
-            //            intent.setClass(this, OrionHelpActivity.class);
-            //            startActivity(intent);
             return super.onOptionsItemSelected(item)
         }
         return true
@@ -1072,11 +1049,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
     }
 
-    fun showTapDialogIfNeeded() {
-        if (++tapHelpCounter < 2) return
+    private fun showTapDialogIfNeeded() {
         if (globalOptions.isShowTapHelp) {
-            globalOptions.saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false);
-            TapHelpDialog(this).showDialog()
+            (view as View).doOnLayout {
+                TapHelpDialog(this).showDialog()
+            }
         }
     }
 

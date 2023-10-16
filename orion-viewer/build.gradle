@@ -19,6 +19,7 @@ project.ext {
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.preference:preference-ktx:1.2.1'
     //tab layout
     implementation 'com.google.android.material:material:1.9.0'

@@ -37,36 +37,45 @@ class NoBookNoStartTapScreen: InstrumentationTestCase(BookDescription.SICP.toOpe
 class BookWithStartTapScreen: InstrumentationTestCase(BookDescription.SICP.toOpenIntent(), true) {
     @Test
     fun testStartScreen() {
-        //assertTrue(globalOptions.isShowTapHelp)
+        assertTrue(globalOptions.isShowTapHelp)
+        Thread.sleep(1000)
         onView(withId(R.id.tap_help_close)).check(matches(isDisplayed()))
         checkSizeAndPosition()
 
         onView(withId(R.id.tap_help_close)).perform(click())
-        //onView(withId(R.id.tap_help_close)).check(doesNotExist())//TODO
+        onView(withId(R.id.tap_help_close)).check(doesNotExist())
         assertFalse(globalOptions.isShowTapHelp)
     }
 
     private fun checkSizeAndPosition() {
-        val rect = AtomicReference<Rect>()
+        val viewRect = AtomicReference<Rect>()
+        val displayRect = AtomicReference<Rect>()
         val loc = AtomicReference<IntArray>()
         activityScenarioRule.scenario.onActivity { it ->
             val r = Rect()
             (it.view as View).getLocalVisibleRect(r)
-            rect.set(r)
+            viewRect.set(r)
             val l = IntArray(2)
             (it.view as View).getLocationOnScreen(l)
             loc.set(l)
+
+            displayRect.set(Rect(0, 0, it.display!!.width, it.display!!.height))
+            //windowRect.set(it.windowManager.currentWindowMetrics.bounds)
         }
 
         onView(withId(R.id.tap_help_close)).check { view, noViewFoundException ->
             val dialogRect = Rect()
             val rootView = view.rootView
             rootView.getLocalVisibleRect(dialogRect)
-            assertEquals(rect.get(), dialogRect)
+            val expectedRect = viewRect.get()
+            assertEquals(expectedRect, dialogRect)
 
             val l = IntArray(2)
             rootView.getLocationOnScreen(l)
             assertArrayEquals(loc.get(), l)
+
+            val screen = displayRect.get()
+            assert(expectedRect.width() * expectedRect.height() >= 0.8 * screen.width() * screen.height())
         }
     }
 }
