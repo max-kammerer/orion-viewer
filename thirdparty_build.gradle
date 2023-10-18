@@ -16,7 +16,7 @@ task downloadDjvu {
             exec {
                 commandLine = ['git', '-C', djvu, 'checkout', '-f', 'master']
             }
-            // Pull
+            // Fetch
             exec {
                 commandLine = ['git', '-C', djvu, 'fetch', 'origin']
             }
