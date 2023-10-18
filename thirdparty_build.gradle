@@ -73,9 +73,13 @@ task downloadMupdf {
             exec {
                 commandLine = ['git', '-C', mupdf, 'checkout', '-f', 'master']
             }
-            // Pull
+            // Fetch
             exec {
                 commandLine = ['git', '-C', mupdf, 'fetch', 'origin']
+            }
+            // Update submodules according to new HEAD
+            exec {
+                commandLine = ['git', '-C', mupdf, 'submodule', 'update']
             }
         }
         else {
