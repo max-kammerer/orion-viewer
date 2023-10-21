@@ -58,10 +58,13 @@ jobs:
           path: orion-viewer/build/outputs/apk/debug/orion-viewer-*-x86_64-debug.apk
 
   test:
-    runs-on: ubuntu-latest
+    env:
+      ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 170
     strategy:
       matrix:
-        arch: [[16, x86], [21, x86], [28, x86_64]]
+        arch: [[16, x86], [21, x86], [23, x86], [29, x86_64], [31, x86_64], [33, x86_64]]
+        os: [macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: checkout
         uses: actions/checkout@v3

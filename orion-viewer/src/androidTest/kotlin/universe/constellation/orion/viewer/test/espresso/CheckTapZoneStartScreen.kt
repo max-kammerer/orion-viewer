@@ -59,7 +59,8 @@ class BookWithStartTapScreen: InstrumentationTestCase(BookDescription.SICP.toOpe
             (it.view as View).getLocationOnScreen(l)
             loc.set(l)
 
-            displayRect.set(Rect(0, 0, it.display!!.width, it.display!!.height))
+            val displayMetrics = it.resources.displayMetrics
+            displayRect.set(Rect(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels))
             //windowRect.set(it.windowManager.currentWindowMetrics.bounds)
         }
 
