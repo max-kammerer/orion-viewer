@@ -77,14 +77,15 @@ task downloadMupdf {
             exec {
                 commandLine = ['git', '-C', mupdf, 'fetch', 'origin']
             }
-            // Update submodules according to new HEAD
-            exec {
-                commandLine = ['git', '-C', mupdf, 'submodule', 'update']
-            }
         }
         else {
             exec {
                 commandLine = ['git', 'clone', 'git://git.ghostscript.com/mupdf.git', mupdf]
+            }
+
+            exec {
+                workingDir file(mupdf)
+                commandLine 'git', 'submodule', 'init'
             }
         }
 
@@ -93,10 +94,6 @@ task downloadMupdf {
             commandLine = ['git', 'checkout', version]
         }
 
-        exec {
-            workingDir file(mupdf)
-            commandLine 'git', 'submodule', 'init'
-        }
         exec {
             workingDir file(mupdf)
             commandLine 'git', 'submodule', 'update'
