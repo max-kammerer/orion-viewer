@@ -25,10 +25,14 @@
 
     <string name="tap_zones_header">Тап Зоны по-умолчанию</string>
 
-    <string name="permission_read_warning">Не возможно открыть файл без прав на чтение. Пожалуйста, предоставьте права на чтение!</string>
-    <string name="permission_directory_warning">Не возможно прочитать содержимое директорий без прав на чтение. Пожалуйста, предоставьте права на чтение!</string>
+    <string name="permission_read_file_warning">Пожалуйста, предоставте права на чтение файла напрямую или откройте документ через временный файл</string>
+    <string name="permission_file_read_dialog_title">Пожалуйста, предоставте права на чтение</string>
+    <string name="permission_directory_warning">Пожалуйста, предоставте права на чтение данных диска</string>
     <string name="permission_grant">Предоставить…</string>
-    <string name="permission_exit">Выйти</string>
+    <string name="permission_cancel">Отмена</string>
+
+    <string name="permissions_grant_read">Предоставить права на чтение диска</string>
+    <string name="permissions_open_via_temp_file">Открыть документ через временный файл</string>
 
     <string name="crash_on_book_opening_title">Ошибка при открытии файла</string>
     <string name="crash_on_intent_opening_title">Ошибка при обработке интента</string>

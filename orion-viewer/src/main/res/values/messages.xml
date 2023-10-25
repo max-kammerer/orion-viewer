@@ -24,10 +24,14 @@
     <string name="recent_book_not_found">Can\'t find book file!</string>
     <string name="tap_zones_header">Default Tap Zones</string>
 
-    <string name="permission_read_warning">Can\'t open file without read permissions. Please grant read permissions!</string>
-    <string name="permission_directory_warning">Can\'t read directories content without read permissions. Please grant read permissions!</string>
+    <string name="permission_read_file_warning">Please grant read file permissions to access it directly or open document via temporary file</string>
+    <string name="permission_file_read_dialog_title">Please provide read permission</string>
+    <string name="permission_directory_warning">Please provide read permission to access storage data</string>
     <string name="permission_grant">Grant…</string>
-    <string name="permission_exit">Exit</string>
+    <string name="permission_cancel">Cancel</string>
+
+    <string name="permissions_grant_read">Grant storage read permission</string>
+    <string name="permissions_open_via_temp_file">Open document via temporary file</string>
 
     <string name="crash_on_book_opening_title">Error on file opening</string>
     <string name="crash_on_intent_opening_title">Error on intent processing</string>
@@ -36,4 +40,7 @@
     <string name="string_cancel">Cancel</string>
     <string name="string_send">Send…</string>
     <string name="send_report_header">[Please provide additional details and/or attach file]</string>
+
+
+
 </resources>

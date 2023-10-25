@@ -136,22 +136,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
         intentProcessed = false
         newTouchProcessor = NewTouchProcessorWithScale(view, this)
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN == requestCode) {
-            println("Permission callback...")
-            if (checkPermissionGranted(grantResults, permissions, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                processIntentAndCheckPermission(intent ?: return)
-            } else {
-                AlertDialog.Builder(this).
-                setMessage(R.string.permission_read_warning).
-                setPositiveButton(R.string.permission_grant) { _, _ -> askReadPermissions(null) }.
-                setNegativeButton(R.string.permission_exit) { _, _ -> this.finish() }.
-                show()
-            }
-        }
+        initStubController("Processing intent...", "Processing intent...")
     }
 
     private fun initDialogs() {
@@ -191,9 +176,14 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         setIntent(intent)
     }
 
-    private fun askReadPermissions(file: File?): Boolean {
-        if (file?.canRead() == true) return true
-        return checkAndRequestStorageAccessPermissionOrReadOne(Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN)
+    private fun askReadPermissions(file: File, intent: Intent): Boolean {
+        if (file.canRead()) return true
+
+        return checkAndRequestStorageAccessPermissionOrReadOne(Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN, doRequest = false).apply {
+            if (!this) {
+                FilePermissionsDialog().showReadPermissionDialog(this@OrionViewerActivity,  intent).show()
+            }
+        }
     }
 
     private fun processIntentAndCheckPermission(intent: Intent) {
@@ -241,7 +231,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     }
                 }
 
-                if (!askReadPermissions(File(filePath))) {
+                if (!askReadPermissions(File(filePath), intent)) {
                     log("Waiting for read permissions for $intent")
                     return
                 }
@@ -1126,4 +1116,5 @@ private fun OrionBaseActivity.showErrorReportDialog(file: String, e: Throwable, 
             applicationContext.getString(R.string.crash_on_book_opening_title), intent.toString() + "\n\n" + rawException
     )
 }
+
 

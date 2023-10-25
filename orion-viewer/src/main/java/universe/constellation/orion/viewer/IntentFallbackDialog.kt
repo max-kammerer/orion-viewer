@@ -117,7 +117,7 @@ open class IntentFallbackDialog {
             return toFile
         }
 
-        private fun createTmpFile(context: Context, extension: String) =
+        internal fun createTmpFile(context: Context, extension: String) =
             File.createTempFile("temp_book", ".$extension", context.cacheDir)!!
 
         fun getExtension(uri: Uri, mimeType: String?, contentResolver: ContentResolver): String? {

@@ -162,7 +162,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
 
         justCreated = true
 
-        checkAndRequestStorageAccessPermissionOrReadOne(Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER)
+        showPermissionRequestDialog()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -178,12 +178,17 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
                     adapter.changeFolder(File(currentFolder.absolutePath))
                 }
             } else {
-                AlertDialog.Builder(this).
-                setMessage(R.string.permission_directory_warning).
-                setPositiveButton(R.string.permission_grant) { _, _ -> Permissions.checkReadPermission(this, Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER) }.
-                setNegativeButton(R.string.permission_exit) { _, _ -> this.finish() }.
-                show()
+                showPermissionRequestDialog()
             }
+        }
+    }
+
+    private fun showPermissionRequestDialog() {
+        if (!checkAndRequestStorageAccessPermissionOrReadOne(Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER, doRequest = false)) {
+            AlertDialog.Builder(this).setMessage(R.string.permission_directory_warning)
+                .setPositiveButton(R.string.permission_grant) { _, _ ->
+                    checkAndRequestStorageAccessPermissionOrReadOne(Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER)
+                }.setNegativeButton(R.string.permission_cancel) { d, _ -> d.dismiss() }.show()
         }
     }
 
