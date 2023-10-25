@@ -33,6 +33,7 @@ class RenderingAndNavigationTest(book: BookDescription) : InstrumentationTestCas
 
     class MyView(private val imageView: OrionImageListener) : Scene, OrionBookListener {
 
+        @Volatile
         var data: Bitmap? = null
 
         override fun onNewImage(bitmap: Bitmap?, info: LayoutPosition?, latch: CountDownLatch?) {
@@ -91,7 +92,7 @@ class RenderingAndNavigationTest(book: BookDescription) : InstrumentationTestCas
         }
 
         nexts.zip(prevs.reversed()).forEachIndexed() { index, (next, prev) ->
-            Assert.assertTrue("fail on $index", next.contentEquals(prev))
+            Assert.assertArrayEquals("fail on $index", next, prev)
         }
     }
 
