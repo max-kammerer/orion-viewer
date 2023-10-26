@@ -84,11 +84,11 @@ class RenderingAndNavigationTest(book: BookDescription) : InstrumentationTestCas
         Assert.assertEquals(nexts.size, screens)
 
         nexts.zipWithNext().forEachIndexed { index, (left, right) ->
-            Assert.assertFalse("fail on $index", left.contentEquals(right))
+            Assert.assertFalse("Screens $index and ${index+1} are equals: ${left.joinToString()}", left.contentEquals(right))
         }
 
         prevs.zipWithNext().forEachIndexed { index, (left, right) ->
-            Assert.assertFalse("fail on $index", left.contentEquals(right))
+            Assert.assertFalse("Screens $index and ${index+1} are equals: ${left.joinToString()}", left.contentEquals(right))
         }
 
         nexts.zip(prevs.reversed()).forEachIndexed() { index, (next, prev) ->
