@@ -25,10 +25,28 @@ jobs:
           java-version: 11
           distribution: corretto
 
+      - name: Setup Gradle Cache
+        uses: gradle/gradle-build-action@v2
+
+      - name: Restore Native Libs
+        id: restore-nativeLibs
+        uses: actions/cache@v3
+        with:
+          path: |
+            nativeLibs/djvu
+            nativeLibs/mupdf
+            nativeLibs/mupdfModule/build
+            nativeLibs/mupdfModule/.cxx
+            nativeLibs/djvuModule/build
+          key: ${{ runner.os }}-native-libs-${{ hashFiles('thirdparty_build.gradle') }}
+
       - name: Prepare thirdparty
         run: bash ./gradlew -b thirdparty_build.gradle downloadAndPatchDjvu downloadAndMakeMupdf
+        if: steps.restore-nativeLibs.outputs.cache-hit != 'true'
+
       - name: Build debug APK
         run: bash ./gradlew assembleDebug --stacktrace -Porion.CIBuild=true
+
       - name: Read value from Properties-file
         id: read_version_property
         uses: christian-draeger/read-properties@1.0.1
@@ -75,8 +93,24 @@ jobs:
           java-version: 11
           distribution: corretto
 
+      - name: Setup Gradle Cache
+        uses: gradle/gradle-build-action@v2
+
+      - name: Restore Native Libs 2
+        id: restore-nativeLibs
+        uses: actions/cache@v3
+        with:
+          path: |
+            nativeLibs/djvu
+            nativeLibs/mupdf
+            nativeLibs/mupdfModule/build
+            nativeLibs/mupdfModule/.cxx
+            nativeLibs/djvuModule/build
+          key: ${{ runner.os }}-native-libs-${{ hashFiles('thirdparty_build.gradle') }}
+
       - name: Prepare thirdparty
         run: bash ./gradlew -b thirdparty_build.gradle downloadAndPatchDjvu downloadAndMakeMupdf
+        if: steps.restore-nativeLibs.outputs.cache-hit != 'true'
 
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
