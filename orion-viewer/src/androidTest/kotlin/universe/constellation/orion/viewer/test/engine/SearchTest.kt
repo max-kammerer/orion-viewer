@@ -4,7 +4,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.test.framework.BookTest
-import universe.constellation.orion.viewer.test.framework.TestUtil
 
 class SearchTest(
     path: String,
@@ -18,12 +17,12 @@ class SearchTest(
         @Parameterized.Parameters(name = "Test `{2}` text search on page {1} at {0}")
         fun testData(): Iterable<Array<Any>> {
             return listOf(
-                    arrayOf(TestUtil.SICP, 12, "These programs", 1),
-                    arrayOf(TestUtil.SICP, 12, "These", 2),
-                    arrayOf(TestUtil.SICP, 12, "12334", 0),
-                    arrayOf(TestUtil.ALICE, 6, "tunnel", 1),
-                    arrayOf(TestUtil.ALICE, 6, "Then", 3),
-                    arrayOf(TestUtil.ALICE, 6, "The123", 0)
+                    arrayOf(SICP, 12, "These programs", 1),
+                    arrayOf(SICP, 12, "These", 2),
+                    arrayOf(SICP, 12, "12334", 0),
+                    arrayOf(ALICE, 6, "tunnel", 1),
+                    arrayOf(ALICE, 6, "Then", 3),
+                    arrayOf(ALICE, 6, "The123", 0)
             )
         }
     }

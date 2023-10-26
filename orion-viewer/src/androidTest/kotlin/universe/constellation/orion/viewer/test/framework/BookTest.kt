@@ -3,7 +3,6 @@ package universe.constellation.orion.viewer.test.framework
 import android.content.Intent
 import android.graphics.Point
 import android.net.Uri
-import android.os.Bundle
 import org.junit.After
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -28,9 +27,9 @@ enum class BookDescription(
         val allOutlineItems: Int = topLevelOutlineItems,
         val pageSize: Point = Point(0, 0)
 ) {
-    SICP(TestUtil.SICP, 762, "", 15, 139, Point(662, 885)),
-    ALICE(TestUtil.ALICE, 77, null, 0,  pageSize = Point(2481, 3508)),
-    DJVU_SPEC(TestUtil.DJVU_SPEC, 71, null, 1, 100, Point(2539, 3295));
+    SICP(BaseTest.SICP, 762, "", 15, 139, Point(662, 885)),
+    ALICE(BaseTest.ALICE, 77, null, 0,  pageSize = Point(2481, 3508)),
+    DJVU_SPEC(BaseTest.DJVU_SPEC, 71, null, 1, 100, Point(2539, 3295));
 
     fun toOpenIntent(): Intent {
         val path = extractFileFromTestData(path)
