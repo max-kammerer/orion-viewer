@@ -3,6 +3,7 @@ package universe.constellation.orion.viewer.test
 import android.graphics.Bitmap
 import android.graphics.Point
 import org.junit.Assert
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -16,12 +17,13 @@ import universe.constellation.orion.viewer.prefs.initalizer
 import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
 import universe.constellation.orion.viewer.test.framework.SingleThreadRenderer
+import universe.constellation.orion.viewer.test.framework.openTestBook
 import universe.constellation.orion.viewer.view.Scene
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.atomic.AtomicReference
 
 @RunWith(Parameterized::class)
-class RenderingAndNavigationTest(book: BookDescription) : InstrumentationTestCase(book.toOpenIntent()) {
+class RenderingAndNavigationTest(private val book: BookDescription) : InstrumentationTestCase(book.toOpenIntent()) {
 
    companion object {
         @JvmStatic
@@ -68,6 +70,9 @@ class RenderingAndNavigationTest(book: BookDescription) : InstrumentationTestCas
         val controller = prepareEngine()
         val screens = 21
 
+        assertEquals(0, controller.currentPage)
+        assertEquals(book.pageCount, controller.pageCount)
+
         val nexts = arrayListOf<IntArray>()
         repeat(screens) {
             processBitmap(nexts) { controller.drawNext() }
@@ -80,26 +85,26 @@ class RenderingAndNavigationTest(book: BookDescription) : InstrumentationTestCas
             processBitmap(prevs) { controller.drawPrev() }
         }
 
-        Assert.assertEquals(prevs.size, screens)
-        Assert.assertEquals(nexts.size, screens)
+        assertEquals(prevs.size, screens)
+        assertEquals(nexts.size, screens)
 
         nexts.zipWithNext().forEachIndexed { index, (left, right) ->
-            Assert.assertFalse("Screens $index and ${index+1} are equals: ${left.joinToString()}", left.contentEquals(right))
+            assertFalse("Screens $index and ${index+1} are equals: ${left.joinToString()}", left.contentEquals(right))
         }
 
         prevs.zipWithNext().forEachIndexed { index, (left, right) ->
-            Assert.assertFalse("Screens $index and ${index+1} are equals: ${left.joinToString()}", left.contentEquals(right))
+            assertFalse("Screens $index and ${index+1} are equals: ${left.joinToString()}", left.contentEquals(right))
         }
 
         nexts.zip(prevs.reversed()).forEachIndexed() { index, (next, prev) ->
-            Assert.assertArrayEquals("fail on $index", next, prev)
+            assertArrayEquals("fail on $index", next, prev)
         }
     }
 
     private fun processBitmap(list: MutableList<IntArray>, drawer: () -> Unit) {
         drawer()
         val bitmap = view.data!!
-        Assert.assertNotNull(bitmap)
+        assertNotNull(bitmap)
 
         val pixels = IntArray(bitmap.width * bitmap.height)
         bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
@@ -108,12 +113,12 @@ class RenderingAndNavigationTest(book: BookDescription) : InstrumentationTestCas
     }
 
     private fun prepareEngine(): Controller {
-        lateinit var controller: Controller
+        val ref = AtomicReference<Controller>()
         activityScenarioRule.scenario.onActivity { activity ->
-            val document = activity.controller!!.document as DocumentWithCaching
+            val document = openTestBook(book)
             val layoutStrategy: LayoutStrategy = SimpleLayoutStrategy.create(document)
             val renderer = SingleThreadRenderer(activity, view, layoutStrategy, document)
-            controller = Controller(activity, document, layoutStrategy, renderer)
+            val controller = Controller(activity, document, layoutStrategy, renderer)
 
 
             val lastPageInfo =
@@ -123,7 +128,8 @@ class RenderingAndNavigationTest(book: BookDescription) : InstrumentationTestCas
 
             //getSubscriptionManager()?.sendDocOpenedNotification(controller)
             activity.view.setDimensionAware(controller)
+            ref.set(controller)
         }
-        return controller
+        return ref.get()
     }
 }

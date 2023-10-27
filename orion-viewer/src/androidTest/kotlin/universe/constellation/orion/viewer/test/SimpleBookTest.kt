@@ -8,7 +8,7 @@ import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.BookTest
 
-class SimpleBookTest(private val bookDescription: BookDescription) : BookTest(bookDescription.path) {
+class SimpleBookTest(private val bookDescription: BookDescription) : BookTest(bookDescription) {
 
     companion object {
         @JvmStatic

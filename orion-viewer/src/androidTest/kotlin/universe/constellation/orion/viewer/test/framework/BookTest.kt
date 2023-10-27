@@ -12,6 +12,8 @@ import universe.constellation.orion.viewer.OrionViewerActivity
 @RunWith(Parameterized::class)
 abstract class BookTest(path: String) : BaseTest() {
 
+    constructor(bookDescription: BookDescription): this(bookDescription.path)
+
     protected val document by lazy {  openTestBook(path) }
     @After
     fun close() {

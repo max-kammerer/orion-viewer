@@ -62,6 +62,10 @@ fun openTestBook(relativePath: String): DocumentWithCaching {
     return FileUtil.openFile(fileOnSdcard)
 }
 
+fun openTestBook(bookDescription: BookDescription): DocumentWithCaching {
+    return openTestBook(bookDescription.path)
+}
+
 fun extractFileFromTestData(fileName: String): File {
     val outFile = File(BaseTest.testFolder, fileName)
     if (outFile.exists()) {
