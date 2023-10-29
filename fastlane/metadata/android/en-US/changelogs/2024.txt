@@ -1,0 +1,2 @@
+* Reworked work with file permissions
+* Fixed app crash during text search in pdf files
