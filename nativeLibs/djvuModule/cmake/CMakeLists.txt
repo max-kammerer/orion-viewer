@@ -1,25 +1,11 @@
+#LOCAL_ARM_MODE := arm
 cmake_minimum_required(VERSION 3.2.2)
 project("orion-djvu-library")
 set(MY_ROOT "${PROJECT_SOURCE_DIR}/../../djvu/")
 set(ANDROID_ROOT "${PROJECT_SOURCE_DIR}/../jni")
 
-# -DDEBUGLVL=6 -DRUNTIME_DEBUG_ONLY
-add_definitions(-DHAVE_PTHREAD -DNO_LIBGCC_HOOKS -DHAVE_STDINT_H )
-#-DHAVE_NAMESPACES
-
-#mbstate and wchar
-add_definitions(-DHAS_WCHAR -DHAVE_WCHAR_H -DHAVE_MBSTATE_T -DHAS_MBSTATE -DHAVE_STDINCLUDES)
-
-add_definitions(-DUNIX)
-
-#for ernno
-#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} fexceptions")
-
-
-add_library(oriondjvu STATIC
+add_library(djvu SHARED
         ${ANDROID_ROOT}/djvu.c
-        ${ANDROID_ROOT}/base_geometry.c
-        ${ANDROID_ROOT}/../../
         ${ANDROID_ROOT}/../../common/list.c
         ${ANDROID_ROOT}/../../common/orion_bitmap.c
         )
@@ -84,14 +70,22 @@ add_library(djvucore STATIC
         ${MY_ROOT}/libdjvu/miniexp.cpp
         )
 
-target_include_directories(djvucore PUBLIC
-        ${MY_ROOT}/libdjvu/
-        )
+#djvucore lib
+target_include_directories(djvucore PUBLIC ${MY_ROOT}/libdjvu/)
 
-target_include_directories(oriondjvu PUBLIC
-        ${MY_ROOT}/libdjvu/
-        )
+# -DDEBUGLVL=6 -DRUNTIME_DEBUG_ONLY
+target_compile_definitions(djvucore PRIVATE -DHAVE_PTHREAD -DNO_LIBGCC_HOOKS -DHAVE_STDINT_H -DHAVE_NAMESPACES -DHAVE_STDINCLUDES)
+#mbstate and wchar
+target_compile_definitions(djvucore PRIVATE -DHAS_WCHAR -DHAVE_WCHAR_H -DHAVE_MBSTATE_T  -DHAS_MBSTATE)
+#for ernno
+target_compile_definitions(djvucore PRIVATE -DUNIX)
 
-target_compile_options(oriondjvu PRIVATE -fexceptions)
 
-target_link_libraries(oriondjvu djvucore)
+#DJVU Android
+target_include_directories(djvu PUBLIC ${MY_ROOT}/libdjvu/)
+
+target_compile_definitions(djvu PRIVATE -DORION_FOR_ANDROID)
+target_compile_options(djvu PRIVATE -fexceptions -frtti)
+
+
+target_link_libraries(djvu djvucore  -lm  -llog -ljnigraphics)

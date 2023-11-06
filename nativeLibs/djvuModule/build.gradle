@@ -9,24 +9,32 @@ android {
     buildToolsVersion = orionBuildToolsVersion
 
     defaultConfig {
-
         minSdkVersion orionMinSdk
-        if (!excludeNativeLibsSources) {
-            externalNativeBuild {
-                ndkBuild {
-                    cppFlags "-fexceptions", "-frtti"
-                    arguments "APP_STL:=c++_static"
-                }
-            }
-        }
-    }
 
-    if (!excludeNativeLibsSources) {
         externalNativeBuild {
-            ndkBuild {
-                path "jni/Android.mk"
+            cmake {
+                arguments "-DANDROID_STL=c++_static"
             }
         }
     }
 
+    externalNativeBuild {
+        cmake {
+            path "cmake/CMakeLists.txt"
+        }
+    }
+
+//    buildTypes {
+//        release {
+//            ndk {
+//                debugSymbolLevel 'full'
+//            }
+//        }
+//    }
+//
+//    packagingOptions {
+//        // specify the path to your object binaries, or generally:
+//        doNotStrip '**.so'
+//    }
 }
+

@@ -38,6 +38,7 @@ jobs:
             nativeLibs/mupdfModule/build
             nativeLibs/mupdfModule/.cxx
             nativeLibs/djvuModule/build
+            nativeLibs/djvuModule/.cxx
           key: ${{ runner.os }}-native-libs-${{ hashFiles('thirdparty_build.gradle') }}
 
       - name: Prepare thirdparty
