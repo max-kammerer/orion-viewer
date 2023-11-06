@@ -1055,6 +1055,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         controller?.let {
             val currentPage = it.currentPage
             val pageCount = it.document.pageCount
+            it.unsubscribe()
             GlobalScope.launch(Dispatchers.Default) {
                 it.destroy()
                 device!!.onBookClose(currentPage, pageCount)

@@ -175,10 +175,13 @@ class Controller(
 
     suspend fun destroy() {
         log("Destroying controller for ${document.title}...")
-        activity.subscriptionManager.unSubscribe(listener)
         rootJob.cancelAndJoin()
         renderer.stopRenderer()
         document.destroy()
+    }
+
+    fun unsubscribe() {
+        activity.subscriptionManager.unSubscribe(listener)
     }
 
     fun onPause() {
