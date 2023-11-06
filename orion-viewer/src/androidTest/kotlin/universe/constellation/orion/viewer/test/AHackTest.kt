@@ -22,11 +22,16 @@ class AHackTest : BaseTest() {
                     e.message,
                     e is RuntimeException && e.message?.contains("Permission denied") == true
                 )
+                return
             } else {
                 e.printStackTrace()
                 Assert.fail(e.message)
             }
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Assert.fail("Shouldn't be called")
+        }
+        Thread.sleep(1000)
     }
 
 }
