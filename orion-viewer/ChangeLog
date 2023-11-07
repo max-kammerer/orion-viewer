@@ -1,3 +1,6 @@
+===== 0.82.4 (Nov 07, 2023) =====
+Fixed ConcurrentModificationException
+
 ===== 0.82.3 (Oct 26, 2023) =====
 Reworked work with permissions
 
