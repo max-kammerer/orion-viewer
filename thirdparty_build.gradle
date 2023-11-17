@@ -23,7 +23,8 @@ task downloadDjvu {
         }
         else {
             exec {
-                commandLine = ['git', 'clone', 'git://git.code.sf.net/p/djvu/djvulibre-git', djvu]
+                //origin at git://git.code.sf.net/p/djvu/djvulibre-git
+                commandLine = ['git', 'clone', 'https://github.com/max-kammerer/djvulibre.git', djvu]
             }
         }
 
