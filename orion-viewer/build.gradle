@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-multiplatform'
+apply plugin: 'kotlin-android'
 apply from: '../project.gradle'
 
 project.ext {
@@ -76,9 +76,6 @@ android {
 
     sourceSets {
         main {
-            if (excludeNativeLibsSources) {
-                jniLibs.srcDirs = [mupdf_libs, djvu_libs]
-            }
             java {
                 srcDirs += "../nativeLibs/mupdf/platform/java/src"
 
@@ -145,20 +142,20 @@ kotlin {
 
     }
 
-    targets {
-        fromPreset(presets.android, 'androidApp') {
-
-        }
-//        fromPreset(presets.linuxX64, 'linuxApp') {
-//            compilations.main {
-//                cinterops {
-//                    interopName {
-//                         defFile "../native/src/main/c_interop/gtk3.def"
-//                    }
-//                }
-//            }
+//    targets {
+//        fromPreset(presets.android, 'androidApp') {
+//
 //        }
-    }
+////        fromPreset(presets.linuxX64, 'linuxApp') {
+////            compilations.main {
+////                cinterops {
+////                    interopName {
+////                         defFile "../native/src/main/c_interop/gtk3.def"
+////                    }
+////                }
+////            }
+////        }
+//    }
 }
 
 tasks.register('downloadTestFiles') {
