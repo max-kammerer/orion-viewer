@@ -131,7 +131,7 @@ public class SearchDialog extends DialogFragment {
                 RectF[] searchBoxes = result.searchBoxes;
 
                 for (RectF searchBox : searchBoxes) {
-                    System.out.println("Scaling rect " + searchBox);
+                    log("Scaling rect " + searchBox);
                     Util.scale(searchBox, position.getDocZoom());
                 }
 
@@ -140,11 +140,11 @@ public class SearchDialog extends DialogFragment {
                     SubBatch sb = new SubBatch();
                     sb.lp = position.deepCopy();
                     RectF screenArea = toAbsoluteRect(position);
-                    System.out.println("Area " + screenArea);
+                    log("Area " + screenArea);
                     for (RectF searchBox : searchBoxes) {
                         float square1 = searchBox.width() * searchBox.height();
                         if (temp.setIntersect(searchBox, screenArea)) {
-                            System.out.println("Rect " + searchBox);
+                            log("Rect " + searchBox);
                             float square2 = temp.width() * temp.height();
                             if (square2 >= square1 / 9) { /*33%*/
                                 sb.rects.add(searchBox);
@@ -240,10 +240,10 @@ public class SearchDialog extends DialogFragment {
     }
 
     private void drawBatch(SubBatch subBatch, Controller controller) {
-        System.out.println("lastDirectionOnSearch = " + lastDirectionOnSearch);
-        System.out.println("lastPosition = " + lastPosition);
-        System.out.println("lastIndex = " + subBatch.active);
-        System.out.println("page = " + subBatch.lp.getPageNumber());
+        log("lastDirectionOnSearch = " + lastDirectionOnSearch);
+        log("lastPosition = " + lastPosition);
+        log("lastIndex = " + subBatch.active);
+        log("page = " + subBatch.lp.getPageNumber());
         log("Rect " + toAbsoluteRect(subBatch.lp));
 
         lastSearchDrawer.setBatch(subBatch);

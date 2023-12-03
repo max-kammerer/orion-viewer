@@ -56,7 +56,7 @@ public class OnyxDevice extends EInkDevice {
     @Override
     public void doFullUpdate(View view) {
         if (successful) {
-            System.out.println("Do full update " + fullUpdateEntry);
+            log("Do full update " + fullUpdateEntry);
             doUpdate(view, fullUpdateEntry);
         } else {
             super.doFullUpdate(view);
@@ -66,7 +66,7 @@ public class OnyxDevice extends EInkDevice {
     @Override
     public void doPartialUpdate(View view) {
         if (successful) {
-            System.out.println("Do partial update " + fastUpdateEntry);
+            log("Do partial update " + fastUpdateEntry);
             doUpdate(view, fastUpdateEntry);
         } else {
             super.doPartialUpdate(view);
