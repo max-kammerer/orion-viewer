@@ -324,7 +324,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 stubController.destroy()
                 controller1.changeOrinatation(lastPageInfo1!!.screenOrientation)
 
-                updateViewOnNewBook((newDocument.title?.takeIf { it.isNotBlank() } ?: filePath.substringAfterLast('/').substringBefore(".")))
+                updateViewOnNewBook((newDocument.title?.takeIf { it.isNotBlank() } ?: filePath.substringAfterLast('/').substringBeforeLast(".")))
 
                 val drawView = fullScene.drawView
                 controller1.init(lastPageInfo1, Point(drawView.sceneWidth, drawView.sceneHeight))
