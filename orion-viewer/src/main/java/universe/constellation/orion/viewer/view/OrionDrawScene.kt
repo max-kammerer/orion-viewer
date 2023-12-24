@@ -20,7 +20,6 @@
 package universe.constellation.orion.viewer.view
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Point
@@ -36,8 +35,6 @@ import universe.constellation.orion.viewer.util.MoveUtil
 import java.util.concurrent.CountDownLatch
 
 class OrionDrawScene : View, OrionScene {
-
-    var bitmap: Bitmap? = null
 
     internal var pageView: PageView? = null
 
@@ -125,12 +122,6 @@ class OrionDrawScene : View, OrionScene {
         }
         canvas.restore()
 
-    }
-
-    override fun onNewImage(bitmap: Bitmap?, info: LayoutPosition?, latch: CountDownLatch?) {
-        this.bitmap = bitmap
-        this.latch = latch
-        this.info = info
     }
 
     override fun setDimensionAware(dimensionAware: ViewDimensionAware) {

@@ -92,24 +92,24 @@ class PageView(
     private fun draw(canvas: Canvas, bitmap: Bitmap, info: LayoutPosition, defaultPaint: Paint, scene: OrionDrawScene) {
         canvas.save()
         if (!bitmap.isRecycled) {
-            val start = System.currentTimeMillis()
-            log("OrionView: drawing bitmap on view...")
+            timing("Page $pageNum0 bitmap rendering") {
+                val start = System.currentTimeMillis()
 
-            stuffTempRect.set(
-                info.x.occupiedAreaStart,
-                info.y.occupiedAreaStart,
-                info.x.occupiedAreaEnd,
-                info.y.occupiedAreaEnd)
+                stuffTempRect.set(
+                    info.x.occupiedAreaStart,
+                    info.y.occupiedAreaStart,
+                    info.x.occupiedAreaEnd,
+                    info.y.occupiedAreaEnd
+                )
 
-            canvas.drawBitmap(bitmap, stuffTempRect, stuffTempRect, defaultPaint)
+                canvas.drawBitmap(bitmap, stuffTempRect, stuffTempRect, defaultPaint)
 
-            log("OrionView: bitmap rendering takes " + 0.001f * (System.currentTimeMillis() - start) + " s")
-
-            //TODO:
+                //TODO:
 //            for (drawTask in tasks) {
 //                drawTask.drawOnCanvas(canvas, stuff, null)
 //            }
-            drawBorder(canvas, scene, info)
+                drawBorder(canvas, scene, info)
+            }
         }
         canvas.restore()
 
@@ -147,11 +147,7 @@ class PageView(
 
 }
 
-interface OrionImageListener {
-    fun onNewImage(bitmap: Bitmap?, info: LayoutPosition?, latch: CountDownLatch?)
-}
-
-interface OrionScene: OrionImageListener {
+interface OrionScene {
 
     fun init(colorStuff: ColorStuff)
 
