@@ -34,16 +34,16 @@ import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.LayoutStrategy
 import universe.constellation.orion.viewer.layout.calcPageLayout
 import universe.constellation.orion.viewer.util.ColorUtil
-import universe.constellation.orion.viewer.view.Renderer
 import universe.constellation.orion.viewer.view.ViewDimensionAware
 
 class Controller(
     val activity: OrionViewerActivity,
     val document: Document,
     val layoutStrategy: LayoutStrategy,
-    private var renderer: Renderer,
-    private val rootJob: Job = Job()
+    private val rootJob: Job = Job(),
 ) : ViewDimensionAware {
+
+    internal var bitmapCache: BitmapCache = BitmapCache()
 
     private lateinit var layoutInfo: LayoutPosition
 
@@ -63,12 +63,10 @@ class Controller(
     init {
         log("Creating controller...")
 
-        renderer.startRenderer()
-
         listener = object : DocumentViewAdapter() {
             override fun viewParametersChanged() {
                 if (this@Controller.activity._isResumed) {
-                    this@Controller.renderer.invalidateCache()
+                    bitmapCache.invalidateCache()
                     drawPage(layoutInfo)
                     hasPendingEvents = false
                 } else {
@@ -88,9 +86,17 @@ class Controller(
 
     @JvmOverloads
     fun drawPage(info: LayoutPosition = layoutInfo) {
+        log("Draw page " + document.title + " "+ info.pageNumber)
         layoutInfo = info
         sendPageChangedNotification()
-        renderer.render(info)
+        //renderer.render(info)
+        val scene = activity.fullScene.drawView
+        scene.addPage(PageView(info.pageNumber, document, scene, /*def pos*/ layoutStrategy = layoutStrategy, controller = this).apply {
+            if (scene.sceneWidth > 0 && scene.sceneHeight > 0) {
+                log("Update layout " + info.pageNumber)
+                this.layoutInfo(info)
+            }
+        })
     }
 
     fun processPendingEvents() {
@@ -104,7 +110,7 @@ class Controller(
         if (newWidth > 0 && newHeight > 0) {
             log("New screen size ${newWidth}x$newHeight")
 
-            layoutStrategy.setDimension(newWidth, newHeight)
+            layoutStrategy.setViewSceneDimension(newWidth, newHeight)
             val options = activity.globalOptions
             layoutStrategy.changeOverlapping(options.horizontalOverlapping, options.verticalOverlapping)
             val offsetX = layoutInfo.x.offset
@@ -118,7 +124,6 @@ class Controller(
                 null
             }
             sendViewChangeNotification()
-            renderer.onResume()
         }
     }
 
@@ -136,7 +141,7 @@ class Controller(
         log("zoomscaling  $changeZoom $zoomScaling  $deltaX  $deltaY")
         val oldOffsetX = layoutInfo.x.offset
         val oldOffsetY = layoutInfo.y.offset
-        println("oldZoom  " + layoutInfo.docZoom + "  " + layoutInfo.x.offset + " x " + layoutInfo.y.offset)
+        log("oldZoom  " + layoutInfo.docZoom + "  " + layoutInfo.x.offset + " x " + layoutInfo.y.offset)
 
         if (changeZoom) {
             layoutStrategy.changeZoom((10000.0f * zoomScaling * layoutInfo.docZoom).toInt())
@@ -145,7 +150,7 @@ class Controller(
 
         layoutInfo.x.offset = (zoomScaling * oldOffsetX + deltaX).toInt()
         layoutInfo.y.offset = (zoomScaling * oldOffsetY + deltaY).toInt()
-        println("newZoom  " + layoutInfo.docZoom + "  " + layoutInfo.x.offset + " x " + layoutInfo.y.offset)
+        log("newZoom  " + layoutInfo.docZoom + "  " + layoutInfo.x.offset + " x " + layoutInfo.y.offset)
 
         sendViewChangeNotification()
     }
@@ -186,7 +191,6 @@ class Controller(
     }
 
     fun onPause() {
-        renderer.onPause()
     }
 
     fun changeOverlap(horizontal: Int, vertical: Int) {

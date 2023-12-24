@@ -317,9 +317,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
                 val layoutStrategy = SimpleLayoutStrategy.create(newDocument)
 
-                val renderer = RenderThread(this@OrionViewerActivity, layoutStrategy, newDocument, fullScene)
-
-                val controller1 = Controller(this@OrionViewerActivity, newDocument, layoutStrategy, renderer, rootJob)
+                val controller1 = Controller(this@OrionViewerActivity, newDocument, layoutStrategy, rootJob)
                 controller = controller1
                 stubController.destroy()
                 controller1.changeOrinatation(lastPageInfo1!!.screenOrientation)
@@ -352,8 +350,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private fun initStubController(title: String, bodyText: String): Controller {
         val stubDocument = StubDocument(title, bodyText)
-        val stubRenderer = Renderer.EMPTY
-        val stubController = Controller(this, stubDocument, SimpleLayoutStrategy.create(stubDocument), stubRenderer)
+        val stubController = Controller(this, stubDocument, SimpleLayoutStrategy.create(stubDocument))
         val drawView = fullScene.drawView
         val stubInfo = LastPageInfo.createDefaultLastPageInfo(initalizer(globalOptions))
         stubController.changeOrinatation(stubInfo.screenOrientation)

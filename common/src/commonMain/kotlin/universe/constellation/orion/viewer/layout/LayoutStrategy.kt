@@ -64,7 +64,11 @@ interface LayoutStrategy {
 
     fun changePageLayout(pageLayout: Int): Boolean
 
-    fun setDimension(width: Int, height: Int)
+    fun setViewSceneDimension(width: Int, height: Int)
+
+    val viewWidth: Int
+
+    val viewHeight: Int
 
 }
 

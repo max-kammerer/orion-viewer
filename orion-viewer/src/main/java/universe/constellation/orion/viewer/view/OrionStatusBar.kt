@@ -1,17 +1,15 @@
 package universe.constellation.orion.viewer.view
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.graphics.ColorMatrixColorFilter
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import universe.constellation.orion.viewer.*
+import universe.constellation.orion.viewer.document.abs
 import universe.constellation.orion.viewer.layout.LayoutPosition
-import java.util.concurrent.CountDownLatch
-import kotlin.math.abs
 
-class OrionStatusBarHelper(val view: ViewGroup) : OrionBookListener, OrionImageListener {
+class OrionStatusBarHelper(val view: ViewGroup) : OrionBookListener {
     val panel = view.findViewById<View>(R.id.orion_status_bar) as ViewGroup
     val title = view.findViewById<View>(R.id.title) as TextView
     val offset = view.findViewById<View>(R.id.offset) as TextView
@@ -28,7 +26,7 @@ class OrionStatusBarHelper(val view: ViewGroup) : OrionBookListener, OrionImageL
     }
 
     @SuppressLint("SetTextI18n")
-    override fun onNewImage(bitmap: Bitmap?, info: LayoutPosition?, latch: CountDownLatch?) {
+    fun onPageUpdate(info: LayoutPosition) {
         info?.let {
             offset.text = "[${pad(info.x.offset)}:${pad(info.y.offset)}]"
             page.text = "${info.pageNumber + 1}"
