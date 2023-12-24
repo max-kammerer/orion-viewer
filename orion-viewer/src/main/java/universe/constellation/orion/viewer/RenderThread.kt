@@ -20,230 +20,73 @@
 package universe.constellation.orion.viewer
 
 import android.graphics.Bitmap
-import android.os.Debug
 import java.util.LinkedList
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.LayoutStrategy
-import universe.constellation.orion.viewer.layout.calcPageLayout
-import universe.constellation.orion.viewer.view.Renderer
-import universe.constellation.orion.viewer.view.Scene
 
-open class RenderThread(private val activity: OrionViewerActivity, protected var layout: LayoutStrategy, private var doc: Document, private val executeInSeparateThread: Boolean, private val fullScene: Scene) : Thread(), Renderer {
+private const val CACHE_SIZE = 4
 
-    private val cachedBitmaps = LinkedList<CacheInfo>()
+open class BitmapCache : Thread() {
 
-    private var currentPosition: LayoutPosition? = null
+    protected val cachedBitmaps = LinkedList<CacheInfo>()
 
-    private var lastEvent: LayoutPosition? = null
-
-    @Volatile
-    private var stopped: Boolean = false
-
-    internal constructor(activity: OrionViewerActivity, layout: LayoutStrategy, doc: Document, fullScene: Scene) : this(activity, layout, doc, true, fullScene)
-
-    init {
-        log("RenderThread was created successfully")
+    protected class CacheInfo(/*val info: LayoutPosition,*/ val bitmap: Bitmap) {
+        var isValid = true
     }
 
-    override fun invalidateCache() {
-        synchronized(this) {
-            for (next in cachedBitmaps) {
-                next.isValid = false
-            }
-            log("Cache invalidated")
-        }
-    }
-
-    override fun startRenderer() {
-        log("Starting renderer")
-        start()
-    }
-
-    private fun cleanCache() {
-        synchronized(this) {
-            log("Allocated heap size: ${memoryInMB(Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize())}")
-            cachedBitmaps.clear()
-            log("Cache is cleared!")
-            currentPosition = null
-        }
-    }
-
-    override fun stopRenderer() {
-        stopped = true
-        synchronized(this) {
-            cleanCache()
-            (this as Object).notify()
-        }
-    }
-
-    override fun onPause() {
-        //        synchronized (this) {
-        //            paused = true;
-        //        }
-    }
-
-    override fun onResume() {
-        synchronized(this) {
-            (this as Object).notify()
-        }
-    }
-
-    override fun run() {
-        var futureIndex = 0
-        var curPos: LayoutPosition? = null
-
-         while (!stopped) {
-
-            log("Allocated heap size " + memoryInMB(Debug.getNativeHeapAllocatedSize() - Debug.getNativeHeapFreeSize()))
-
-            val doContinue = synchronized(this) {
-                if (lastEvent != null) {
-                    currentPosition = lastEvent
-                    lastEvent = null
-                    futureIndex = 0
-                    curPos = currentPosition
-                }
-
-                if (currentPosition == null || futureIndex > FUTURE_COUNT || currentPosition!!.screenWidth == 0 || currentPosition!!.screenHeight == 0) {
-                    try {
-                        log("WAITING...")
-                        (this as Object).wait()
-                    } catch (e: InterruptedException) {
-                        log(e)
-                    }
-
-                    log("AWAKENING!!!")
-                    true
-                } else {
-                    //will cache next page
-                    log("Future index is $futureIndex")
-                    if (futureIndex != 0) {
-                        curPos = curPos!!.deepCopy()
-                        layout.calcPageLayout( curPos!!, true, doc.pageCount)
-                    }
-                    false
-                }
-            }
-             if (doContinue) continue
-             if (stopped) break
-
-            renderInCurrentThread(futureIndex == 0, curPos)
-            futureIndex++
-        }
-    }
-
-    protected fun renderInCurrentThread(flushBitmap: Boolean, curPos: LayoutPosition?): Bitmap {
-        var resultEntry: CacheInfo? = null
-        log("Orion: rendering position: $curPos")
-        if (curPos != null) {
-            //try to find result in cache
-            synchronized(this) {
-                val iterator = cachedBitmaps.iterator()
-                while (iterator.hasNext()) {
-                    val cacheInfo = iterator.next()
-                    if (cacheInfo.isValid && cacheInfo.info == curPos) {
-                        resultEntry = cacheInfo
-                        //relocate info to end of cache
-                        iterator.remove()
-                        cachedBitmaps.add(cacheInfo)
-                        break
-                    }
-                }
-            }
-
-
-            if (resultEntry == null) {
-                //render page
-                resultEntry = renderInner(curPos)
-
-                synchronized(this) {
-                    cachedBitmaps.add(resultEntry!!)
-                }
-            }
-
-
-            if (flushBitmap) {
-                val bitmap = resultEntry!!.bitmap
-                log("Sending Bitmap")
-                val mutex = CountDownLatch(1)
-
-                if (!executeInSeparateThread) {
-                    //tests
-                    fullScene.onNewImage(bitmap, curPos, mutex)
-                    //activity.device!!.flushBitmap()
-                    mutex.countDown()
-                } else {
-                    activity.runOnUiThread {
-                        fullScene.onNewImage(bitmap, curPos, mutex)
-                        activity.device!!.flushBitmap()
-                    }
-                }
-
-                try {
-                    mutex.await(1, TimeUnit.SECONDS)
-                } catch (e: InterruptedException) {
-                    log(e)
-                }
-
-            }
-        }
-
-        return resultEntry!!.bitmap
-    }
-
-    private fun renderInner(curPos: LayoutPosition): CacheInfo {
-        val resultEntry: CacheInfo
-        val width = curPos.x.screenDimension
-        val height = curPos.y.screenDimension
-
-        val screenWidth = curPos.screenWidth
-        val screenHeight = curPos.screenHeight
-
+    fun createBitmap(width: Int, height: Int): Bitmap {
         var bitmap: Bitmap? = null
         if (cachedBitmaps.size >= CACHE_SIZE) {
+            //TODO: add checks
             val info = cachedBitmaps.removeFirst()
             info.isValid = false
 
-            if (screenWidth == info.bitmap.width && screenHeight == info.bitmap.height /*|| rotation != 0 && width == info.bitmap.getHeight() && height == info.bitmap.getWidth()*/) {
+            if (width == info.bitmap.width && height == info.bitmap.height) {
                 bitmap = info.bitmap
             } else {
                 info.bitmap.recycle() //todo recycle from ui
             }
         }
         if (bitmap == null) {
-            bitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888)
+            bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         } else {
             log("Using cached bitmap $bitmap")
         }
-
-        val leftTopCorner = layout.convertToPoint(curPos)
-
-
-        doc.renderPage(curPos.pageNumber, bitmap!!, curPos.docZoom, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + width, leftTopCorner.y + height)
-
-        resultEntry = CacheInfo(curPos, bitmap)
-        return resultEntry
+        addToCache(CacheInfo(bitmap!!))
+        return bitmap
     }
 
-    override fun render(lastInfo: LayoutPosition) {
-        val lastInfo = lastInfo.deepCopy()
-        synchronized(this) {
-            lastEvent = lastInfo
-            (this as Object).notify()
+    protected fun addToCache(info: CacheInfo) {
+        cachedBitmaps.add(info)
+    }
+
+    fun addToCache(info: Bitmap, pos: LayoutPosition) {
+        addToCache(CacheInfo(/*pos,*/ info))
+    }
+
+    fun free(info: Bitmap) {
+        for (next in cachedBitmaps) {
+            if (next.bitmap === info) {
+                next.isValid = false
+                break
+            }
         }
     }
 
-    private class CacheInfo(val info: LayoutPosition, val bitmap: Bitmap) {
-        var isValid = true
+    fun invalidateCache() {
+        for (next in cachedBitmaps) {
+            next.isValid = false
+        }
+        log("Cache invalidated")
     }
+}
 
-    companion object {
-        private const val CACHE_SIZE = 4
-
-        private const val FUTURE_COUNT = 1
-    }
+fun renderInner(curPos: LayoutPosition, doc: Document, bitmap: Bitmap, layout: LayoutStrategy): Bitmap {
+    val width = curPos.x.screenDimension
+    val height = curPos.y.screenDimension
+    val leftTopCorner = layout.convertToPoint(curPos)
+    doc.renderPage(curPos.pageNumber, bitmap, curPos.docZoom, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + width, leftTopCorner.y + height)
+    return bitmap
 }

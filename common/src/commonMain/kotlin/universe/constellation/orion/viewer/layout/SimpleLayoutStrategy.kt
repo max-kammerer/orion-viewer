@@ -30,9 +30,11 @@ class SimpleLayoutStrategy private constructor(
         private val pageCount: Int
 ) : LayoutStrategy {
 
-    private var viewWidth = 0
+    override var viewWidth = 0
+        private set
 
-    private var viewHeight = 0
+    override var viewHeight = 0
+        private set
 
     private var VERTICAL_OVERLAP = 3
 
@@ -258,7 +260,7 @@ class SimpleLayoutStrategy private constructor(
         return Point(pos.x.marginLess + pos.x.offset, pos.y.marginLess + pos.y.offset)
     }
 
-    override fun setDimension(width: Int, height: Int) {
+    override fun setViewSceneDimension(width: Int, height: Int) {
         viewWidth = width
         viewHeight = height
     }
