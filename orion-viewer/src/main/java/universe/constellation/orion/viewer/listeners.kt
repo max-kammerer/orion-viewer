@@ -54,7 +54,7 @@ class PageView(
             }
         }
         curPos = info.deepCopy()
-        GlobalScope.launch {
+        GlobalScope.launch(Dispatchers.Main) {
             update(scene as OrionDrawScene)
         }
     }
@@ -80,7 +80,9 @@ class PageView(
         coroutineScope {
             val newBitmap = controller.bitmapCache.createBitmap(layoutStrategy.viewWidth, layoutStrategy.viewHeight)
             withContext(Dispatchers.Default) {
-                renderInner(curPos, document, newBitmap, layoutStrategy)
+                timing("Rendering $pageNum0 via library") {
+                    renderInner(curPos, document, newBitmap, layoutStrategy)
+                }
             }
 
             bitmap = newBitmap
@@ -92,26 +94,25 @@ class PageView(
     private fun draw(canvas: Canvas, bitmap: Bitmap, info: LayoutPosition, defaultPaint: Paint, scene: OrionDrawScene) {
         canvas.save()
         if (!bitmap.isRecycled) {
-            timing("Page $pageNum0 bitmap rendering") {
-                val start = System.currentTimeMillis()
+            stuffTempRect.set(
+                info.x.occupiedAreaStart,
+                info.y.occupiedAreaStart,
+                info.x.occupiedAreaEnd,
+                info.y.occupiedAreaEnd
+            )
 
-                stuffTempRect.set(
-                    info.x.occupiedAreaStart,
-                    info.y.occupiedAreaStart,
-                    info.x.occupiedAreaEnd,
-                    info.y.occupiedAreaEnd
-                )
+            canvas.drawBitmap(bitmap, stuffTempRect, stuffTempRect, defaultPaint)
 
-                canvas.drawBitmap(bitmap, stuffTempRect, stuffTempRect, defaultPaint)
-
-                //TODO:
+            //TODO:
 //            for (drawTask in tasks) {
 //                drawTask.drawOnCanvas(canvas, stuff, null)
 //            }
-                drawBorder(canvas, scene, info)
-            }
+            drawBorder(canvas, scene, info)
         }
         canvas.restore()
+    }
+
+    fun endScaling(scene: OrionDrawScene) {
 
     }
 
