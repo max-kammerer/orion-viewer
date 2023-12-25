@@ -21,8 +21,11 @@ package universe.constellation.orion.viewer
 
 import android.app.Activity
 import android.graphics.Point
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.launch
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.DocumentWithCachingImpl
 import universe.constellation.orion.viewer.document.OutlineItem
@@ -178,14 +181,13 @@ class Controller(
     val margins: CropMargins
         get() = layoutStrategy.margins
 
-    suspend fun destroy() {
-        log("Destroying controller for ${document.title}...")
-        rootJob.cancelAndJoin()
-        document.destroy()
-    }
-
-    fun unsubscribe() {
+    fun destroy() {
         activity.subscriptionManager.unSubscribe(listener)
+        GlobalScope.launch(Dispatchers.Default) {
+            log("Destroying controller for ${document.title}...")
+            rootJob.cancelAndJoin()
+            document.destroy()
+        }
     }
 
     fun onPause() {
