@@ -60,8 +60,6 @@ class Controller(
     init {
         log("Creating controller...")
 
-        //renderer.startRenderer()
-
         listener = object : DocumentViewAdapter() {
             override fun viewParametersChanged() {
                 if (this@Controller.activity._isResumed) {
@@ -85,14 +83,14 @@ class Controller(
 
     @JvmOverloads
     fun drawPage(info: LayoutPosition = layoutInfo) {
-        println("Draw page " + document.title + " "+ info.pageNumber)
+        log("Draw page " + document.title + " "+ info.pageNumber)
         layoutInfo = info
         sendPageChangedNotification()
         //renderer.render(info)
         val scene = activity.fullScene.drawView
         scene.addPage(PageView(info.pageNumber, document, scene, /*def pos*/ layoutStrategy = layoutStrategy, controller = this).apply {
             if (scene.sceneWidth > 0 && scene.sceneHeight > 0) {
-                println("Update layout " + info.pageNumber)
+                log("Update layout " + info.pageNumber)
                 this.layoutInfo(info)
             }
         })
@@ -140,7 +138,7 @@ class Controller(
         log("zoomscaling  $changeZoom $zoomScaling  $deltaX  $deltaY")
         val oldOffsetX = layoutInfo.x.offset
         val oldOffsetY = layoutInfo.y.offset
-        println("oldZoom  " + layoutInfo.docZoom + "  " + layoutInfo.x.offset + " x " + layoutInfo.y.offset)
+        log("oldZoom  " + layoutInfo.docZoom + "  " + layoutInfo.x.offset + " x " + layoutInfo.y.offset)
 
         if (changeZoom) {
             layoutStrategy.changeZoom((10000.0f * zoomScaling * layoutInfo.docZoom).toInt())
@@ -149,7 +147,7 @@ class Controller(
 
         layoutInfo.x.offset = (zoomScaling * oldOffsetX + deltaX).toInt()
         layoutInfo.y.offset = (zoomScaling * oldOffsetY + deltaY).toInt()
-        println("newZoom  " + layoutInfo.docZoom + "  " + layoutInfo.x.offset + " x " + layoutInfo.y.offset)
+        log("newZoom  " + layoutInfo.docZoom + "  " + layoutInfo.x.offset + " x " + layoutInfo.y.offset)
 
         sendViewChangeNotification()
     }
