@@ -60,7 +60,7 @@ public class SearchDialog extends DialogFragment {
 
     private EditText searchField;
 
-    private final SearchDrawer lastSearchDrawer = new SearchDrawer();
+    private final SearchResultRenderer lastSearchResultRenderer = new SearchResultRenderer();
 
     private static final int ALPHA = 150;
 
@@ -106,7 +106,7 @@ public class SearchDialog extends DialogFragment {
         button.setOnClickListener(v -> doSearch(controller.getCurrentPage(), -1, controller));
 
         OrionScene view = controller.getActivity().getView();
-        view.addTask(lastSearchDrawer);
+        view.addTask(lastSearchResultRenderer);
 
         myTask = new SearchTask(getActivity(), controller.getDocument()) {
             @Override
@@ -185,7 +185,7 @@ public class SearchDialog extends DialogFragment {
         }
 
         OrionScene view = ((OrionViewerActivity)getActivity()).getView();
-        view.removeTask(lastSearchDrawer);
+        view.removeTask(lastSearchResultRenderer);
     }
 
     private void doSearch(int page, int direction, Controller controller) {
@@ -246,14 +246,14 @@ public class SearchDialog extends DialogFragment {
         log("page = " + subBatch.lp.getPageNumber());
         log("Rect " + toAbsoluteRect(subBatch.lp));
 
-        lastSearchDrawer.setBatch(subBatch);
+        lastSearchResultRenderer.setBatch(subBatch);
         controller.drawPage(subBatch.lp);
     }
 
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        lastSearchDrawer.setBatch(null);
+        lastSearchResultRenderer.setBatch(null);
     }
 
     private static class SubBatch {
@@ -264,14 +264,14 @@ public class SearchDialog extends DialogFragment {
         LayoutPosition lp;
     }
 
-    static class SearchDrawer implements DrawTask {
+    static class SearchResultRenderer implements DrawTask {
 
         private SubBatch batch;
 
         private static final int activeAlpha = 128;
         private static final int generalAlpha = 64;
 
-        public SearchDrawer() {
+        public SearchResultRenderer() {
 
         }
 
