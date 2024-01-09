@@ -27,7 +27,8 @@ import universe.constellation.orion.viewer.geometry.Point
 
 class SimpleLayoutStrategy private constructor(
         private val pageInfoProvider: PageInfoProvider,
-        private val pageCount: Int
+        private val pageCount: Int,
+        private val center: Boolean = false
 ) : LayoutStrategy {
 
     override var viewWidth = 0
@@ -103,7 +104,7 @@ class SimpleLayoutStrategy private constructor(
         }
 
         //original width and height without cropped margins
-        reset(pos, forward, pageInfoProvider.getPageInfo(pageNum, margins.cropMode), margins.cropMode, zoom, true)
+        reset(pos, forward, pageInfoProvider.getPageInfo(pageNum, margins.cropMode), margins.cropMode, zoom, center)
     }
 
     override fun reset(info: LayoutPosition, forward: Boolean, pageInfo: PageInfo, cropMode: Int, zoom: Int, doCentering: Boolean) {
@@ -153,7 +154,6 @@ class SimpleLayoutStrategy private constructor(
         //System.out.println("overlap " + hOverlap + " " + vOverlap);
 
         walker.reset(info, forward, doCentering, layout)
-        log("new position after reset: $info")
     }
 
     private fun appendManualMargins(info: LayoutPosition, leftMargin: Int, rightMargin: Int) {

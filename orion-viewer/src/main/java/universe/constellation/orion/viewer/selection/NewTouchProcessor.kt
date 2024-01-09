@@ -8,6 +8,7 @@ import android.widget.Toast
 import universe.constellation.orion.viewer.*
 import universe.constellation.orion.viewer.device.EInkDevice
 import universe.constellation.orion.viewer.layout.LayoutPosition
+import universe.constellation.orion.viewer.view.OrionDrawScene
 
 enum class State {
     UNDEFINED,
@@ -16,7 +17,7 @@ enum class State {
     SCALE;
 }
 
-open class NewTouchProcessor(val view: OrionScene, val activity: OrionViewerActivity) : GestureDetector.SimpleOnGestureListener() {
+open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewerActivity) : GestureDetector.SimpleOnGestureListener() {
 
     private val detector = GestureDetectorCompat(activity, this)
 
@@ -109,43 +110,12 @@ open class NewTouchProcessor(val view: OrionScene, val activity: OrionViewerActi
 
 
     override fun onScroll(e1: MotionEvent?, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+        println("onScroll $enableTouchMove")
         if (!enableTouchMove) {
             return false
         }
-        if (e1 == null) return false
 
-        if (state == State.UNDEFINED) {
-            info = view.info?.deepCopy() ?: return true
-            start0.x = e1.x.toInt()
-            start0.y = e1.y.toInt()
-            nextState = State.MOVE
-        } else {
-            //check same event
-        }
-
-        last0.x = e2.x.toInt()
-        last0.y = e2.y.toInt()
-        val width = view.sceneWidth
-
-        if (insideViewWidth(view.info)) {
-            last0.x = start0.x
-        } else {
-            val delta = last0.x - start0.x
-            val offset = -info!!.x.offset
-            if (delta < 0) {
-                if (offset + info!!.x.pageDimension + delta < width) {
-                    last0.x = start0.x - offset - info!!.x.pageDimension + width
-                }
-            } else {
-                if (offset + delta > 0) {
-                    last0.x = start0.x - offset
-                }
-            }
-        }
-
-        view.beforeScaling()
-        view.doScale(1f, start0, last0, true)
-        view.postInvalidate()
+        view.pageLayoutManager?.doScroll(e2.x, e2.y, -distanceX, -distanceY) ?: return false
         return true
     }
 

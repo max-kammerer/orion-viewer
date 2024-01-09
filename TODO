@@ -1,0 +1,22 @@
+что происходит при зыкрытии файла? у меня  у 3 контроллера
+
+screen dimension
+
+кеширование страниц
+
+https://stackoverflow.com/questions/27396892/what-are-advantages-of-setting-largeheap-to-true
+https://stackoverflow.com/questions/5350465/android-heap-size-on-different-phones-devices-and-os-versionss
+https://developer.android.com/topic/performance/graphics/manage-memory#:~:text=From%20Android%203.0%20(API%20level,stored%20in%20the%20native%20heap.
+
+scroll - changeid + 5
+
+
+ресайз
+обход части
+обход страницы
+
+менеджер прокрутки
+обработка цветовой схемы
+обработка водяных знаков
+очистка страницы
+долгое/простое нажатие при скроллинге

@@ -19,7 +19,6 @@
 
 package universe.constellation.orion.viewer
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -34,7 +33,6 @@ import android.text.method.PasswordTransformationMethod
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.*
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialog
 import androidx.core.internal.view.SupportMenuItem
 import androidx.core.view.doOnLayout
@@ -53,8 +51,8 @@ import universe.constellation.orion.viewer.selection.NewTouchProcessor
 import universe.constellation.orion.viewer.selection.NewTouchProcessorWithScale
 import universe.constellation.orion.viewer.selection.SelectionAutomata
 import universe.constellation.orion.viewer.view.FullScene
+import universe.constellation.orion.viewer.view.OrionDrawScene
 import universe.constellation.orion.viewer.view.OrionStatusBarHelper
-import universe.constellation.orion.viewer.view.Renderer
 import java.io.File
 import java.io.IOException
 import java.io.PrintWriter
@@ -95,7 +93,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private var zoomInternal = 0
 
-    override val view: OrionScene
+    val view: OrionDrawScene
         get() = fullScene.drawView
 
     val statusBarHelper: OrionStatusBarHelper
@@ -125,7 +123,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         hasActionBar = globalOptions.isActionBarVisible
         OptionActions.SHOW_ACTION_BAR.doAction(this, !hasActionBar, hasActionBar)
 
-        val view = findViewById<View>(R.id.view) as OrionScene
+        val view = findViewById<OrionDrawScene>(R.id.view)
+
         fullScene = FullScene(findViewById<View>(R.id.orion_full_scene) as ViewGroup, view, findViewById<View>(R.id.orion_status_bar) as ViewGroup, orionContext)
 
         OptionActions.SHOW_STATUS_BAR.doAction(this, !globalOptions.isStatusBarVisible, globalOptions.isStatusBarVisible)
@@ -287,7 +286,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     @Throws(Exception::class)
     private fun openFile(filePath: String) {
-        val stubController = initStubController(filePath, "Loading...")
+        val stubController = initStubController("$filePath", "Loading...")
         val stubDocument = stubController.document as StubDocument
 
         GlobalScope.launch(Dispatchers.Main) {
@@ -319,6 +318,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
                 val controller1 = Controller(this@OrionViewerActivity, newDocument, layoutStrategy, rootJob)
                 controller = controller1
+                bind(view, controller1)
                 stubController.destroy()
                 controller1.changeOrinatation(lastPageInfo1!!.screenOrientation)
 
@@ -329,7 +329,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
                 subscriptionManager.sendDocOpenedNotification(controller1)
 
-                view.setDimensionAware(controller1)
                 controller1.drawPage()
 
                 globalOptions.addRecentEntry(GlobalOptions.RecentEntry(File(filePath).absolutePath))
@@ -339,6 +338,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
                 askPassword(controller1)
                 orionContext.onNewBook(filePath)
+                //viewAsRecyclerView.adapter = PageAdapter(viewAsRecyclerView, this@OrionViewerActivity, controller!!, fullScene.colorStuff, fullScene.statusBarHelper)
+                //(view as OrionDrawScene).pageView = controller?.createCachePageView(0)
                 invalidateOptionsMenu()
                 showTapDialogIfNeeded()
             } catch (e: Exception) {
@@ -355,13 +356,19 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         val stubInfo = LastPageInfo.createDefaultLastPageInfo(initalizer(globalOptions))
         stubController.changeOrinatation(stubInfo.screenOrientation)
         stubController.init(stubInfo, Point(drawView.sceneWidth, drawView.sceneHeight))
-
-        view.setDimensionAware(stubController)
+        bind(view, stubController)
         stubController.drawPage()
-        controller = stubController
         updateViewOnNewBook(stubDocument.title)
         invalidateOptionsMenu()
         return stubController
+    }
+
+    private fun bind(view: OrionScene, controller: Controller) {
+        this.controller = controller
+        view.setDimensionAware(controller)
+//        val recyclerView = view as RecyclerView
+//        recyclerView.layoutManager = LinearLayoutManager(this)
+//        recyclerView.adapter = PageAdapter(recyclerView, this,controller, fullScene.colorStuff, fullScene.statusBarHelper)
     }
 
     private fun updateViewOnNewBook(title: String?) {
@@ -823,7 +830,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         dialog!!.setContentView(R.layout.options_dialog)
         animator = dialog!!.findViewById<View>(R.id.viewanim) as ViewAnimator?
 
-        view.setOnTouchListener { _, event -> newTouchProcessor!!.onTouch(event) }
+        view.setOnTouchListener{ _, event -> newTouchProcessor!!.onTouch(event) }
 
         dialog!!.setCanceledOnTouchOutside(true)
     }
@@ -1003,7 +1010,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         selectionAutomata.startSelection(isSingleSelection, translate)
     }
 
-    private class MyArrayAdapter constructor(context: Context) :
+    private class MyArrayAdapter(context: Context) :
             ArrayAdapter<CharSequence>(context, R.layout.support_simple_spinner_dropdown_item, context.resources.getTextArray(R.array.fits)), SpinnerAdapter {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View =
@@ -1037,11 +1044,13 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     private fun showTapDialogIfNeeded() {
-        if (globalOptions.isShowTapHelp) {
+
             (view as View).doOnLayout {
-                TapHelpDialog(this).showDialog()
+                if (globalOptions.isShowTapHelp) {
+                    TapHelpDialog(this).showDialog()
+                }
+                controller?.pageLayoutManager?.uploadNewPages()
             }
-        }
     }
 
     fun startSearch() {
