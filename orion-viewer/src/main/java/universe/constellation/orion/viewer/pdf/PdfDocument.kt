@@ -42,7 +42,7 @@ class PdfDocument @Throws(Exception::class) constructor(private val fileName: St
     }
 
     override fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int) {
-        core.drawPage(bitmap, pageNumber, left, top,  right, bottom, zoom.toFloat())
+        core.drawPage(bitmap, pageNumber, 0, 0, left, top, right, bottom, zoom.toFloat())
         updateContrast(bitmap, bitmap.width * bitmap.height * 4)
     }
 

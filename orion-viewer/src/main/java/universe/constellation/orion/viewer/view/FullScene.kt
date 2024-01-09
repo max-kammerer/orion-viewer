@@ -16,7 +16,7 @@ interface Scene  {
     }
 }
 
-class FullScene(private val scene: ViewGroup, val drawView: OrionScene, statusBar: ViewGroup, val context: Context) : Scene, OrionBookListener {
+class FullScene(private val scene: ViewGroup, val drawView: OrionDrawScene, statusBar: ViewGroup, val context: Context) : Scene, OrionBookListener {
 
     val statusBarHelper = OrionStatusBarHelper(statusBar)
 

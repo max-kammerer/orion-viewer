@@ -145,7 +145,34 @@ public class MuPDFCore
 		if (displayList == null || page == null)
 			return;
 
-		Device dev = new AndroidDrawDevice(bitmap, left, top, 0, 0, right - left, bottom - top);
+		Device dev = new AndroidDrawDevice(bitmap, left, top, 0, 0, right - left, bottom - top, true);
+		try {
+			displayList.run(dev, new Matrix(zoom, zoom), null);
+			dev.close();
+		} finally {
+			dev.destroy();
+		}
+	}
+
+	public synchronized void drawPage(Bitmap bitmap, int pageNum,
+									  int originX, int originY, int patchX0, int patchY0,
+									  int patchX1, int patchY1,
+									  float zoom) {
+		//destroyed, can be called in non-ui thread
+		if (doc == null) return;
+		gotoPage(pageNum);
+
+		if (displayList == null && page != null)
+			try {
+				displayList = page.toDisplayList();
+			} catch (Exception ex) {
+				displayList = null;
+			}
+
+		if (displayList == null || page == null)
+			return;
+
+		Device dev = new AndroidDrawDevice(bitmap, originX, originY, patchX0, patchY0, patchX1, patchY1);
 		try {
 			displayList.run(dev, new Matrix(zoom, zoom), null);
 			dev.close();

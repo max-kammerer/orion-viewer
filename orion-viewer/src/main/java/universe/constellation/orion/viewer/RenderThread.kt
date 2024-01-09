@@ -20,12 +20,13 @@
 package universe.constellation.orion.viewer
 
 import android.graphics.Bitmap
+import android.graphics.Rect
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.LayoutStrategy
 import java.util.concurrent.ConcurrentLinkedQueue
 
-private const val CACHE_SIZE = 4
+private const val BITMAP_CACHE_SIZE = 10
 
 open class BitmapCache : Thread() {
 
@@ -37,23 +38,29 @@ open class BitmapCache : Thread() {
 
     fun createBitmap(width: Int, height: Int): Bitmap {
         var bitmap: Bitmap? = null
-        if (cachedBitmaps.size >= CACHE_SIZE) {
+        if (cachedBitmaps.size >= BITMAP_CACHE_SIZE) {
             //TODO: add checks
-            val info = cachedBitmaps.remove()
-            info.isValid = false
+            val nonValids = cachedBitmaps.asSequence().filter { !it.isValid }
+            val cacheInfo =
+                nonValids.firstOrNull { info -> width <= info.bitmap.width && height <= info.bitmap.height }
 
-            if (width == info.bitmap.width && height == info.bitmap.height) {
-                bitmap = info.bitmap
+            if (cacheInfo == null) {
+                val info = nonValids.firstOrNull() ?: error("cache is full")
+                cachedBitmaps.remove(info)
+                info.bitmap.recycle()
             } else {
-                info.bitmap.recycle() //todo recycle from ui
+                bitmap = cacheInfo.bitmap
+                cacheInfo.isValid = true
             }
         }
+
         if (bitmap == null) {
             bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         } else {
             log("Using cached bitmap $bitmap")
         }
-        addToCache(CacheInfo(bitmap!!))
+        addToCache(CacheInfo(bitmap))
+        log("create bitmap: $width $height + $bitmap")
         return bitmap
     }
 
@@ -83,5 +90,11 @@ fun renderInner(curPos: LayoutPosition, doc: Document, bitmap: Bitmap, layout: L
     val height = curPos.y.screenDimension
     val leftTopCorner = layout.convertToPoint(curPos)
     doc.renderPage(curPos.pageNumber, bitmap, curPos.docZoom, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + width, leftTopCorner.y + height)
+    return bitmap
+}
+
+fun renderInner(bound: Rect, curPos: LayoutPosition, page: Int, doc: Document, bitmap: Bitmap, layout: LayoutStrategy): Bitmap {
+    println("Rendering $page: $bound")
+    doc.renderPage(page, bitmap, curPos.docZoom, bound.left, bound.top, bound.right, bound.bottom)
     return bitmap
 }

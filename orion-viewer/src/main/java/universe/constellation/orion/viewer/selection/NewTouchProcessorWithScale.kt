@@ -3,12 +3,12 @@ package universe.constellation.orion.viewer.selection
 import android.graphics.Point
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
-import universe.constellation.orion.viewer.OrionScene
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.prefs.OrionApplication
 import universe.constellation.orion.viewer.util.MoveUtil
+import universe.constellation.orion.viewer.view.OrionDrawScene
 
-class NewTouchProcessorWithScale(view: OrionScene, activity: OrionViewerActivity) :
+class NewTouchProcessorWithScale(view: OrionDrawScene, activity: OrionViewerActivity) :
         NewTouchProcessor(view, activity),
         ScaleGestureDetector.OnScaleGestureListener {
 

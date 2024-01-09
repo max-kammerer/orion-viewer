@@ -1,22 +1,3 @@
-/*
- * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
- *
- * Copyright (C) 2011-2013  Michael Bogdanov & Co
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package universe.constellation.orion.viewer.view
 
 import android.content.Context
@@ -32,18 +13,42 @@ import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.util.MoveUtil
 
-class OrionDrawScene : View, OrionScene {
+
+class PageScene : View, OrionScene {
+
+    val visibleRect = Rect()
+
+    init {
+        viewTreeObserver.addOnScrollChangedListener({
+            if (pageView != null) {
+                triggerPaint()
+            }
+        })
+
+    }
+
+    private fun triggerPaint() {
+        if (getGlobalVisibleRect(visibleRect)) {
+            println("Scroll global: " + pageView?.pageNum + " " + visibleRect)
+        }
+        if (getLocalVisibleRect(visibleRect)) {
+            println("Scroll: " + pageView?.pageNum + " " + visibleRect)
+            pageView?.render(visibleRect)
+        }
+    }
 
     internal lateinit var orionStatusBarHelper: OrionStatusBarHelper
 
     internal var pageView: PageView? = null
+        set(value) {
+            field = value
+            triggerPaint()
+        }
 
     override val info: LayoutPosition?
         get() = pageView?.layoutInfo
 
     private var dimensionAware: ViewDimensionAware? = null
-
-    var pageLayoutManager: PageLayoutManager? = null
 
     internal var scale = 1.0f
 
@@ -73,16 +78,17 @@ class OrionDrawScene : View, OrionScene {
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
-    override fun init(colorStuff: ColorStuff, statusBarHelper: OrionStatusBarHelper) {
+    override fun init(colorStuff: ColorStuff, orionStatusBarHelper: OrionStatusBarHelper) {
         this.stuff = colorStuff
         defaultPaint = colorStuff.backgroundPaint
         borderPaint = colorStuff.borderPaint
-        this.orionStatusBarHelper = statusBarHelper
+        this.orionStatusBarHelper = orionStatusBarHelper
         inited = true
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        println("Scene onDraw: ${pageView?.pageNum}")
         if (!inited) {
             return
         }
@@ -109,9 +115,8 @@ class OrionDrawScene : View, OrionScene {
             )
             canvas.scale(myScale, myScale)
         }
-        for (p in pageLayoutManager?.visiblePages ?: emptyList()) {
-            p.draw(canvas, this)
-        }
+
+        //pageView?.draw(canvas, this)
 
         if (inScaling) {
             canvas.restore()
@@ -129,14 +134,16 @@ class OrionDrawScene : View, OrionScene {
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        log("OrionView: onSizeChanged " + w + "x" + h)
+        log("PageScene: onSizeChanged " + w + "x" + h)
         super.onSizeChanged(w, h, oldw, oldh)
         if (w != oldw || h != oldh) {
             if (dimensionAware != null) {
                 dimensionAware!!.onDimensionChanged(width, height)
+                triggerPaint()
             }
         }
     }
+
 
     override fun isDefaultColorMatrix(): Boolean {
         return defaultPaint!!.colorFilter == null

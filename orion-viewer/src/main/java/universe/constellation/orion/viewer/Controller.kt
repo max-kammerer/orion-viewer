@@ -24,6 +24,7 @@ import android.graphics.Point
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
 import universe.constellation.orion.viewer.document.Document
@@ -34,14 +35,21 @@ import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.LayoutStrategy
 import universe.constellation.orion.viewer.layout.calcPageLayout
 import universe.constellation.orion.viewer.util.ColorUtil
+import universe.constellation.orion.viewer.view.OrionDrawScene
+import universe.constellation.orion.viewer.view.PageLayoutManager
 import universe.constellation.orion.viewer.view.ViewDimensionAware
+import java.util.concurrent.Executors
+
+private const val CACHE_SIZE = 5
 
 class Controller(
     val activity: OrionViewerActivity,
     val document: Document,
     val layoutStrategy: LayoutStrategy,
-    private val rootJob: Job = Job(),
+    val rootJob: Job = Job(),
 ) : ViewDimensionAware {
+
+    val context = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
     internal var bitmapCache: BitmapCache = BitmapCache()
 
@@ -60,23 +68,30 @@ class Controller(
 
     private var hasPendingEvents = false
 
-    init {
-        log("Creating controller...")
+    private val pages = LruCacheWithOnEvict<Int, PageView> (CACHE_SIZE) {
+        it.destroy()
+    }
 
+    val pageLayoutManager = PageLayoutManager(this, activity.view as OrionDrawScene)
+
+    init {
+        log("Creating controller for `$document`")
         listener = object : DocumentViewAdapter() {
             override fun viewParametersChanged() {
+                println("viewParametersChanged")
                 if (this@Controller.activity._isResumed) {
                     bitmapCache.invalidateCache()
-                    drawPage(layoutInfo)
+                    forcePageRecreation()
                     hasPendingEvents = false
                 } else {
                     hasPendingEvents = true
                 }
             }
         }
+        (activity.view as OrionDrawScene).pageLayoutManager = pageLayoutManager
 
         activity.subscriptionManager.addDocListeners(listener)
-        log("Controller was created successfully")
+
     }
 
     fun drawPage(page: Int) {
@@ -84,19 +99,24 @@ class Controller(
         drawPage(layoutInfo)
     }
 
+    fun forcePageRecreation() {
+        pages.snapshot().values.forEach {
+            it.invalidateAndUpdate()
+        }
+    }
+
     @JvmOverloads
     fun drawPage(info: LayoutPosition = layoutInfo) {
         log("Draw page " + document.title + " "+ info.pageNumber)
         layoutInfo = info
         sendPageChangedNotification()
-        //renderer.render(info)
         val scene = activity.fullScene.drawView
-        scene.addPage(PageView(info.pageNumber, document, scene, /*def pos*/ layoutStrategy = layoutStrategy, controller = this).apply {
-            if (scene.sceneWidth > 0 && scene.sceneHeight > 0) {
-                log("Update layout " + info.pageNumber)
-                this.layoutInfo(info)
-            }
-        })
+//        scene.addPage(PageView(info.pageNumber, document, scene, /*def pos*/ controller = this, rootJob = rootJob).apply {
+//            if (scene.sceneWidth > 0 && scene.sceneHeight > 0) {
+//                log("Update layout " + info.pageNumber)
+//                this.layoutInfo(info)
+//            }
+//        })
     }
 
     fun processPendingEvents() {
@@ -109,7 +129,7 @@ class Controller(
     override fun onDimensionChanged(newWidth: Int, newHeight: Int) {
         if (newWidth > 0 && newHeight > 0) {
             log("New screen size ${newWidth}x$newHeight")
-
+            pageLayoutManager.onDimensionChanged(newWidth, newHeight)
             layoutStrategy.setViewSceneDimension(newWidth, newHeight)
             val options = activity.globalOptions
             layoutStrategy.changeOverlapping(options.horizontalOverlapping, options.verticalOverlapping)
@@ -183,8 +203,10 @@ class Controller(
 
     fun destroy() {
         activity.subscriptionManager.unSubscribe(listener)
+        pageLayoutManager.destroy()
+        pages.evictAll()
         GlobalScope.launch(Dispatchers.Default) {
-            log("Destroying controller for ${document.title}...")
+            log("Destroying controller for ${document}...")
             rootJob.cancelAndJoin()
             document.destroy()
         }
@@ -358,6 +380,26 @@ class Controller(
             if (it) {
                 sendViewChangeNotification()
             }
+        }
+    }
+
+    fun createCachePageView(pageNum: Int): PageView {
+        val pageView = pages.get(pageNum)
+        if (pageView != null) {
+            if (pageView.state == State.CAN_BE_DELETED) {
+                pageView.reinit() //TODO: split bitmap invalidation and page unload
+            }
+            return pageView
+        } else {
+            val pageView = PageView(
+                pageNum,
+                document,
+                controller = this,
+                rootJob = rootJob,
+                pageLayoutManager = pageLayoutManager
+            ).apply { init() }
+            pages.put(pageNum, pageView)
+            return pageView
         }
     }
 
