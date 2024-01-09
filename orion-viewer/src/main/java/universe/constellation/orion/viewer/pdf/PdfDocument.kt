@@ -30,7 +30,7 @@ import universe.constellation.orion.viewer.PageInfo
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.OutlineItem
 
-class PdfDocument @Throws(Exception::class) constructor(fileName: String) : Document {
+class PdfDocument @Throws(Exception::class) constructor(private val fileName: String) : Document {
 
     private val core = MuPDFCore(fileName)
 
@@ -128,4 +128,8 @@ class PdfDocument @Throws(Exception::class) constructor(fileName: String) : Docu
     override fun authenticate(password: String) = core.authenticatePassword(password)
 
     override fun searchPage(pageNumber: Int, text: String): Array<RectF>? = core.searchPage(pageNumber, text)?.map { it.toRect().run { RectF(x0, y0, x1, y1) } }?.toTypedArray()
+
+    override fun toString(): String {
+        return fileName
+    }
 }

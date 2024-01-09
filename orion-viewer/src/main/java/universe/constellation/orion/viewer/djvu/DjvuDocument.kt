@@ -28,7 +28,7 @@ import universe.constellation.orion.viewer.pdf.DocInfo
 import universe.constellation.orion.viewer.timing
 import java.util.*
 
-class DjvuDocument(fileName: String) : Document {
+class DjvuDocument(private val fileName: String) : Document {
 
     private var lastPage = -1
     private var lastPagePointer = 0L
@@ -194,5 +194,9 @@ class DjvuDocument(fileName: String) : Document {
 
         @JvmStatic
         external fun getPageText(doc: Long, pageNumber: Int, stringBuilder: ArrayList<*>, positions: ArrayList<*>): Boolean
+    }
+
+    override fun toString(): String {
+        return fileName
     }
 }

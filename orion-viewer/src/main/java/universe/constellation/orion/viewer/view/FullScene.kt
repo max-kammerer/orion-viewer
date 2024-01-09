@@ -22,7 +22,7 @@ class FullScene(private val scene: ViewGroup, val drawView: OrionScene, statusBa
 
     val statusBarHelper = OrionStatusBarHelper(statusBar)
 
-    private val colorStuff = ColorStuff()
+    val colorStuff = ColorStuff()
 
     init {
         drawView.init(colorStuff)

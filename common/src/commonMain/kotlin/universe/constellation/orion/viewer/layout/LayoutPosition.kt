@@ -21,11 +21,6 @@ package universe.constellation.orion.viewer.layout
 
 import kotlin.math.min
 
-/**
- * User: mike
- * Date: 15.10.11
- * Time: 18:49
- */
 data class LayoutPosition(
         var x: OneDimension = OneDimension(),
         var y: OneDimension = OneDimension(),

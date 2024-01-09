@@ -130,6 +130,10 @@ class DocumentWithCachingImpl(val doc: Document) : DocumentWithCaching, Document
     }
 
     override fun hasCalculatedPageInfo(pageNumber: Int): Boolean = cache[pageNumber] != null
+
+    override fun toString(): String {
+        return doc.toString()
+    }
 }
 
 abstract class Image(val width: Int, val height: Int) {
