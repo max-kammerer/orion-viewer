@@ -20,17 +20,16 @@
 package universe.constellation.orion.viewer
 
 import android.graphics.Bitmap
-import java.util.LinkedList
-
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.LayoutStrategy
+import java.util.concurrent.ConcurrentLinkedQueue
 
 private const val CACHE_SIZE = 4
 
 open class BitmapCache : Thread() {
 
-    protected val cachedBitmaps = LinkedList<CacheInfo>()
+    private val cachedBitmaps = ConcurrentLinkedQueue<CacheInfo>()
 
     protected class CacheInfo(/*val info: LayoutPosition,*/ val bitmap: Bitmap) {
         var isValid = true
@@ -40,7 +39,7 @@ open class BitmapCache : Thread() {
         var bitmap: Bitmap? = null
         if (cachedBitmaps.size >= CACHE_SIZE) {
             //TODO: add checks
-            val info = cachedBitmaps.removeFirst()
+            val info = cachedBitmaps.remove()
             info.isValid = false
 
             if (width == info.bitmap.width && height == info.bitmap.height) {
@@ -60,10 +59,6 @@ open class BitmapCache : Thread() {
 
     protected fun addToCache(info: CacheInfo) {
         cachedBitmaps.add(info)
-    }
-
-    fun addToCache(info: Bitmap, pos: LayoutPosition) {
-        addToCache(CacheInfo(/*pos,*/ info))
     }
 
     fun free(info: Bitmap) {
