@@ -25,7 +25,7 @@ project.ext {
     isAndroid40Build = project.findProperty("orion.build.android40")?.toBoolean() ?: false
     orionMinSdk = !isAndroid40Build ? 16 : 14
     orionTargetSdk = 33
-    orionCompileSdk = 33
+    orionCompileSdk = 34
     orionBuildToolsVersion = "30.0.3"
     if (isCIBuild) {
         orionNdkVersion = "23.2.8568313"

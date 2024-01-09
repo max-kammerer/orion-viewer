@@ -107,10 +107,12 @@ open class NewTouchProcessor(val view: OrionScene, val activity: OrionViewerActi
         doAction(e.x.toInt(), e.y.toInt(), true)
     }
 
-    override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+
+    override fun onScroll(e1: MotionEvent?, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
         if (!enableTouchMove) {
             return false
         }
+        if (e1 == null) return false
 
         if (state == State.UNDEFINED) {
             info = view.info?.deepCopy() ?: return true
