@@ -19,6 +19,10 @@
 
 package universe.constellation.orion.viewer
 
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
+
 /*pages are zero based*/
 val Int.isZeroBasedEvenPage: Boolean
     get() = this % 2 == 1
@@ -29,11 +33,15 @@ inline fun <T> task(name: String, task: () -> T) {
     log("Task $name is finished!")
 }
 
-inline fun <R> timing(message: String, l: () -> R): R {
+@OptIn(ExperimentalContracts::class)
+inline fun <R> timing(message: String, block: () -> R): R {
+    contract {
+        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+    }
     log("Starting task '$message'...")
 
     val start = currentTimeMillis()
-    return l().also {
+    return block().also {
         log("Task '$message' is finished in ${currentTimeMillis() - start} ms")
     }
 }
