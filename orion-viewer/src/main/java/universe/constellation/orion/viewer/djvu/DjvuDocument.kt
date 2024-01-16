@@ -69,7 +69,7 @@ class DjvuDocument(fileName: String) : Document {
 
         val pagePointer = gotoPage(pageNumber)
         timing("Page $pageNumber rendering") {
-            drawPage(docPointer, pagePointer, bitmap, zoom.toFloat(), right - left, bottom - top, left, top, right - left, bottom - top)
+            drawPage(docPointer, pagePointer, bitmap, zoom.toFloat(), bitmap.width, bitmap.height, left, top, right - left, bottom - top, left, top)
         }
     }
 
@@ -184,9 +184,10 @@ class DjvuDocument(fileName: String) : Document {
         external fun getPageInfo(doc: Long, pageNum: Int, info: PageInfo): Int
 
         @JvmStatic
-        external fun drawPage(doc: Long, page: Long, bitmap: Bitmap, zoom: Float, pageW: Int, pageH: Int,
+        external fun drawPage(doc: Long, page: Long, bitmap: Bitmap, zoom: Float, bitmapWidth: Int, bitmapHeight: Int,
                               patchX: Int, patchY: Int,
-                              patchW: Int, patchH: Int): Boolean
+                              patchW: Int, patchH: Int,
+                              originX: Int, originY: Int): Boolean
 
         @JvmStatic
         external fun destroying(doc: Long, context: Long)

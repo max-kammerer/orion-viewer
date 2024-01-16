@@ -137,21 +137,20 @@ JNI_FN(DjvuDocument_getPageInfo)(JNIEnv *env, jclass type, jlong docl, jint page
 
 JNIEXPORT jboolean JNICALL
 JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong docl, jlong pagel, jobject bitmap,
-                 jfloat zoom, jint pageW, jint pageH, jint patchX, jint patchY, jint patchW,
-                 jint patchH) {
+                              jfloat zoom, jint bitmapWidth, jint bitmapHeight, jint patchX, jint patchY, jint patchW,
+                              jint patchH, jint originX, jint originY) {
     ddjvu_document_t *doc = (ddjvu_document_t *) docl;
     ddjvu_page_t *page = (ddjvu_page_t *) pagel;
 
     LOGI("==================Start Rendering==============");
     int ret;
     void *pixels;
-    int num_pixels = pageW * pageH;
 
 
 #ifdef ORION_FOR_ANDROID
     AndroidBitmapInfo info;
     LOGI("Rendering page=%dx%d patch=[%d,%d,%d,%d]",
-         pageW, pageH, patchX, patchY, patchW, patchH);
+         bitmapWidth, bitmapHeight, patchX, patchY, patchW, patchH);
     LOGI("page: %p", page);
 
     LOGI("In native method\n");
@@ -173,6 +172,7 @@ JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong docl, jlong pagel,
     }
 #endif
 
+    int num_pixels = bitmapWidth * bitmapHeight;
 
 
     //float zoom = 0.0001f * zoom10000;
@@ -193,17 +193,18 @@ JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong docl, jlong pagel,
     targetRect.w = (unsigned int)patchW;
     targetRect.h = (unsigned int)patchH;
 
-    int shift = 0;
-    if (targetRect.x < 0) {
-        shift = -targetRect.x;
-        targetRect.w += targetRect.x;
-        targetRect.x = 0;
-    }
-    if (targetRect.y < 0) {
-        shift += -targetRect.y * pageW;
-        targetRect.h += targetRect.y;
-        targetRect.y = 0;
-    }
+    int shift = targetRect.x + targetRect.y * bitmapWidth;
+//    int shift = 0;
+//    if (targetRect.x < 0) {
+//        shift = -targetRect.x;
+//        targetRect.w += targetRect.x;
+//        targetRect.x = 0;
+//    }
+//    if (targetRect.y < 0) {
+//        shift += -targetRect.y * bitmapWidth;
+//        targetRect.h += targetRect.y;
+//        targetRect.y = 0;
+//    }
 
 
     if (pageRect.w < targetRect.x + targetRect.w) {
@@ -212,7 +213,7 @@ JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong docl, jlong pagel,
     if (pageRect.h < targetRect.y + targetRect.h) {
         targetRect.h = targetRect.h - (targetRect.y + targetRect.h - pageRect.h);
     }
-    memset(pixels, 255, num_pixels * 4);
+    //memset(pixels, 255, num_pixels * 4);
 
     LOGI("Rendering page=%dx%d patch=[%d,%d,%d,%d]",
          patchW, patchH, targetRect.x, targetRect.y, targetRect.w, targetRect.h);
@@ -228,7 +229,7 @@ JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong docl, jlong pagel,
 
     char *buffer = &(((char *) pixels)[shift * 4]);
     /*jboolean result = */ddjvu_page_render(page, DDJVU_RENDER_COLOR, &pageRect, &targetRect,
-                                        pixelFormat, ((unsigned int)pageW) * 4, buffer);
+                                        pixelFormat, info.stride, buffer);
 
     ddjvu_format_release(pixelFormat);
 
