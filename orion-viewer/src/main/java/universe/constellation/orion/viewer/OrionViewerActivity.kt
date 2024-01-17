@@ -363,7 +363,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         return stubController
     }
 
-    private fun bind(view: OrionScene, controller: Controller) {
+    private fun bind(view: OrionDrawScene, controller: Controller) {
         this.controller = controller
         view.setDimensionAware(controller)
 //        val recyclerView = view as RecyclerView

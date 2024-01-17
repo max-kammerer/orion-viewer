@@ -4,16 +4,16 @@ import android.content.pm.ActivityInfo
 import androidx.test.filters.SdkSuppress
 import org.junit.Assert
 import org.junit.Test
-import universe.constellation.orion.viewer.OrionScene
 import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
+import universe.constellation.orion.viewer.view.OrionDrawScene
 
 class RotationTest : InstrumentationTestCase(BookDescription.SICP.toOpenIntent()) {
 
     @Test
     @SdkSuppress(minSdkVersion = 21)
     fun testRotation() {
-        lateinit var view: OrionScene
+        lateinit var view: OrionDrawScene
         activityScenarioRule.scenario.onActivity {
             view = it.view
         }

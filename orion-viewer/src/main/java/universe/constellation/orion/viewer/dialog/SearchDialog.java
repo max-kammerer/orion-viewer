@@ -28,7 +28,6 @@ import universe.constellation.orion.viewer.Controller;
 import universe.constellation.orion.viewer.layout.LayoutPosition;
 import universe.constellation.orion.viewer.layout.LayoutStrategy;
 import universe.constellation.orion.viewer.OrionBaseActivity;
-import universe.constellation.orion.viewer.OrionScene;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.PageWalker;
 import universe.constellation.orion.viewer.R;
@@ -37,6 +36,7 @@ import universe.constellation.orion.viewer.util.Util;
 import universe.constellation.orion.viewer.view.ColorStuff;
 import universe.constellation.orion.viewer.view.DrawContext;
 import universe.constellation.orion.viewer.view.DrawTask;
+import universe.constellation.orion.viewer.view.OrionDrawScene;
 
 import static universe.constellation.orion.viewer.LoggerKt.log;
 import static universe.constellation.orion.viewer.UtilKt.toAbsoluteRect;
@@ -105,7 +105,7 @@ public class SearchDialog extends DialogFragment {
         button.getBackground().setAlpha(ALPHA);
         button.setOnClickListener(v -> doSearch(controller.getCurrentPage(), -1, controller));
 
-        OrionScene view = controller.getActivity().getView();
+        OrionDrawScene view = controller.getActivity().getView();
         view.addTask(lastSearchResultRenderer);
 
         myTask = new SearchTask(getActivity(), controller.getDocument()) {
@@ -184,7 +184,7 @@ public class SearchDialog extends DialogFragment {
             myTask.stop();
         }
 
-        OrionScene view = ((OrionViewerActivity)getActivity()).getView();
+        OrionDrawScene view = ((OrionViewerActivity)getActivity()).getView();
         view.removeTask(lastSearchResultRenderer);
     }
 
