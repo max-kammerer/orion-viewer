@@ -63,7 +63,7 @@ class DjvuDocument(private val fileName: String) : Document {
         return res
     }
 
-    override fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int) {
+    override fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int, lefCrop: Int, topCrop: Int) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

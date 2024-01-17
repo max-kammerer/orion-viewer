@@ -21,7 +21,6 @@ package universe.constellation.orion.viewer.pdf
 
 import android.graphics.Bitmap
 import android.graphics.RectF
-import com.artifex.mupdf.fitz.Location
 import com.artifex.mupdf.fitz.Outline
 import com.artifex.mupdf.fitz.StructuredText
 import com.artifex.mupdf.viewer.MuPDFCore
@@ -41,8 +40,8 @@ class PdfDocument @Throws(Exception::class) constructor(private val fileName: St
         PageInfo(pageNum, x.toInt(), y.toInt())
     }
 
-    override fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int) {
-        core.drawPage(bitmap, pageNumber, 0, 0, left, top, right, bottom, zoom.toFloat())
+    override fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int, lefCrop: Int, topCrop: Int) {
+        core.drawPage(bitmap, pageNumber, lefCrop, topCrop, left, top, right, bottom, zoom.toFloat())
         updateContrast(bitmap, bitmap.width * bitmap.height * 4)
     }
 

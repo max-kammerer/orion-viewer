@@ -235,7 +235,7 @@ public class TexetDevice extends EInkDevice {
                 int xDelta = -(sizeX - (int)(zoom * pageInfo.width))/2;
                 int yDelta = -(sizeY - (int)(zoom * pageInfo.height))/2;
                 log("Cover info " + zoom + " xD: " + xDelta + " yD: " + yDelta + " bm: " + sizeX + "x" + sizeY);
-                doc.renderPage(0, bm, zoom, xDelta, yDelta, sizeX + xDelta, sizeY + yDelta);
+                doc.renderPage(0, bm, zoom, xDelta, yDelta, sizeX + xDelta, sizeY + yDelta, 0, 0);
                 writeCover(bm, coverFileName);
             } catch (FileNotFoundException e) {
                 log(e);
