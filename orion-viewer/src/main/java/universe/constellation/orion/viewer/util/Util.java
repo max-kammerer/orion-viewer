@@ -4,11 +4,6 @@ import android.graphics.RectF;
 
 import java.util.List;
 
-/**
- * User: mike
- * Date: 23.11.13
- * Time: 20:00
- */
 public class Util {
 
     public static void scale(RectF rect, double scale) {

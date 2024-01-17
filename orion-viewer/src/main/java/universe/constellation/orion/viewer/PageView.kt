@@ -223,6 +223,17 @@ class PageView(
         return controller.bitmapCache.createBitmap(width, height)
     }
 
+    internal fun renderVisible() {
+        val tmpRect = layoutData.tmpRect
+        tmpRect.set(wholePageRect)
+        tmpRect.offset(layoutData.position.x.toInt(), layoutData.position.y.toInt())
+
+        if (pageLayoutManager.isVisible(this)) {
+            tmpRect.offset((-layoutData.position.x).toInt(), (-layoutData.position.y).toInt())
+            render(tmpRect)
+        }
+    }
+
     internal fun render(rect: Rect) {
         val layoutStrategy = controller.layoutStrategy
         if (!(layoutStrategy.viewWidth > 0 &&  layoutStrategy.viewHeight > 0)) return

@@ -109,14 +109,7 @@ class Controller(
     fun drawPage(info: LayoutPosition = layoutInfo) {
         log("Draw page " + document.title + " "+ info.pageNumber)
         layoutInfo = info
-        sendPageChangedNotification()
-        val scene = activity.fullScene.drawView
-//        scene.addPage(PageView(info.pageNumber, document, scene, /*def pos*/ controller = this, rootJob = rootJob).apply {
-//            if (scene.sceneWidth > 0 && scene.sceneHeight > 0) {
-//                log("Update layout " + info.pageNumber)
-//                this.layoutInfo(info)
-//            }
-//        })
+        pageLayoutManager.showPageWithOffset(info.pageNumber, info.x.offset, info.y.offset)
     }
 
     fun processPendingEvents() {
