@@ -27,5 +27,5 @@ interface DocumentViewListener {
 
     fun pageChanged(newPage: Int, pageCount: Int)
 
-    fun viewParametersChanged()
+    fun renderingParametersChanged()
 }

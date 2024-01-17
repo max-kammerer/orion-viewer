@@ -30,7 +30,7 @@ class SubscriptionManager {
 
     fun sendViewChangeNotification() {
         listeners.forEach { documentListener ->
-            documentListener.viewParametersChanged()
+            documentListener.renderingParametersChanged()
         }
     }
 

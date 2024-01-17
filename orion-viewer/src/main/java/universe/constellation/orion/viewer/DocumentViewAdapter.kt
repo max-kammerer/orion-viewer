@@ -32,7 +32,7 @@ open class DocumentViewAdapter : DocumentViewListener {
 
     }
 
-    override fun viewParametersChanged() {
+    override fun renderingParametersChanged() {
 
     }
 }

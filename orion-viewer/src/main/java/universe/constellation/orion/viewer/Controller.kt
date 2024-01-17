@@ -72,12 +72,12 @@ class Controller(
         it.destroy()
     }
 
-    val pageLayoutManager = PageLayoutManager(this, activity.view as OrionDrawScene)
+    val pageLayoutManager = PageLayoutManager(this, activity.view)
 
     init {
         log("Creating controller for `$document`")
         listener = object : DocumentViewAdapter() {
-            override fun viewParametersChanged() {
+            override fun renderingParametersChanged() {
                 println("viewParametersChanged")
                 if (this@Controller.activity._isResumed) {
                     bitmapCache.invalidateCache()
@@ -88,7 +88,7 @@ class Controller(
                 }
             }
         }
-        (activity.view as OrionDrawScene).pageLayoutManager = pageLayoutManager
+        activity.view.pageLayoutManager = pageLayoutManager
 
         activity.subscriptionManager.addDocListeners(listener)
 
