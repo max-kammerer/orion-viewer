@@ -97,13 +97,13 @@ public class SearchDialog extends DialogFragment {
         searchField = dialog.findViewById(R.id.searchText);
         searchField.getBackground().setAlpha(ALPHA);
 
-        android.widget.ImageButton button = dialog.findViewById(R.id.searchNext);
-        button.getBackground().setAlpha(ALPHA);
-        button.setOnClickListener(v -> doSearch(controller.getCurrentPage(), +1, controller));
+        android.widget.ImageButton searchNext = dialog.findViewById(R.id.searchNext);
+        searchNext.getBackground().setAlpha(ALPHA);
+        searchNext.setOnClickListener(v -> doSearch(controller.getCurrentPage(), +1, controller));
 
-        button = dialog.findViewById(R.id.searchPrev);
-        button.getBackground().setAlpha(ALPHA);
-        button.setOnClickListener(v -> doSearch(controller.getCurrentPage(), -1, controller));
+        android.widget.ImageButton searchPrev = dialog.findViewById(R.id.searchPrev);
+        searchPrev.getBackground().setAlpha(ALPHA);
+        searchPrev.setOnClickListener(v -> doSearch(controller.getCurrentPage(), -1, controller));
 
         OrionDrawScene view = controller.getActivity().getView();
         view.addTask(lastSearchResultRenderer);
@@ -248,6 +248,7 @@ public class SearchDialog extends DialogFragment {
 
         lastSearchResultRenderer.setBatch(subBatch);
         controller.drawPage(subBatch.lp);
+        ((OrionViewerActivity)getActivity()).getView().postInvalidate();
     }
 
     @Override
@@ -282,6 +283,7 @@ public class SearchDialog extends DialogFragment {
         @Override
         public void drawOnCanvas(@NonNull Canvas canvas, @NonNull ColorStuff stuff, DrawContext drawContext) {
             if (batch != null) {
+                System.out.println("Draw search results");
                 Paint paint = stuff.getBorderPaint();
                 List<RectF> rects = batch.rects;
                 int index = 0;
