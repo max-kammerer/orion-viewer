@@ -953,7 +953,14 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     fun doubleClickAction(x: Int, y: Int) {
         SelectionAutomata.selectText(
                 this, true, true, selectionAutomata.dialog,
-                SelectionAutomata.getSelectionRectangle(x, y, 0, 0, true)
+                SelectionAutomata.getSelectionRectangle(
+                    x,
+                    y,
+                    0,
+                    0,
+                    true,
+                    controller!!.pageLayoutManager
+                )
         )
     }
 

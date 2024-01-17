@@ -5,6 +5,7 @@ import android.graphics.Rect
 import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.PageView
 import universe.constellation.orion.viewer.log
+import universe.constellation.orion.viewer.selection.PageAndSelection
 
 class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): ViewDimensionAware {
 
@@ -122,6 +123,20 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         updateStateAndRender(view)
     }
 
+    fun findPageAndPageRect(screenRect: Rect): List<PageAndSelection> {
+        return visiblePages.mapNotNull {
+            val visibleOnScreenPart = it.layoutData.visibleOnScreenPart(screenRect)
+            if (visibleOnScreenPart.intersect(screenRect)) {
+                val pageSelection = Rect(visibleOnScreenPart)
+                //TODO zoom and crop
+                pageSelection.minusOffset(it.layoutData.position)
+                PageAndSelection(it.pageNum, pageSelection)
+            } else {
+                null
+            }
+        }
+    }
+
     fun showPageWithOffset(pageNum: Int, x: Int, y: Int) {
         isSinglePageMode = true
         val iterator = visiblePages.iterator()
@@ -227,4 +242,12 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         }
         return rect
     }
+}
+
+fun Rect.offset(p: PointF) {
+    this.offset(p.x.toInt(), p.y.toInt())
+}
+
+fun Rect.minusOffset(p: PointF) {
+    this.offset(-p.x.toInt(), -p.y.toInt())
 }
