@@ -110,6 +110,9 @@ class PageView(
     private val nonRenderedRegion = Region()
     private val tempRegion = Region()
     private val visiblePart = Rect()
+    init {
+        wholePageRect.set(pageLayoutManager.defaultSize())
+    }
 
 
     val layoutInfo: LayoutPosition = LayoutPosition()
@@ -156,7 +159,7 @@ class PageView(
     fun reinit() {
         if (state == State.SIZE_AND_BITMAP_CREATED) return
         println("Page $pageNum reinit $state $document" )
-        wholePageRect.set(pageLayoutManager.defaultSize())
+        //wholePageRect.set(pageLayoutManager.defaultSize())
         //layoutData.wholePageRect.set(wholePageRect)
 
         state = State.CREATED
