@@ -58,7 +58,7 @@ interface Document : ImagePostProcessor {
 
     fun getPageInfo(pageNum: Int): PageInfo
 
-    fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int)
+    fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int, lefCrop: Int, topCrop: Int)
 
     fun getText(pageNumber: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): String?
 

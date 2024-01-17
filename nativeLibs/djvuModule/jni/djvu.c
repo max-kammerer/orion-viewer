@@ -193,7 +193,7 @@ JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong docl, jlong pagel,
     targetRect.w = (unsigned int)patchW;
     targetRect.h = (unsigned int)patchH;
 
-    int shift = targetRect.x + targetRect.y * bitmapWidth;
+    int shift = originX + originY * bitmapWidth;
 //    int shift = 0;
 //    if (targetRect.x < 0) {
 //        shift = -targetRect.x;

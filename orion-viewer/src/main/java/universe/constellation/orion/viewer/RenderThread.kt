@@ -85,16 +85,8 @@ open class BitmapCache : Thread() {
     }
 }
 
-fun renderInner(curPos: LayoutPosition, doc: Document, bitmap: Bitmap, layout: LayoutStrategy): Bitmap {
-    val width = curPos.x.screenDimension
-    val height = curPos.y.screenDimension
-    val leftTopCorner = layout.convertToPoint(curPos)
-    doc.renderPage(curPos.pageNumber, bitmap, curPos.docZoom, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + width, leftTopCorner.y + height)
-    return bitmap
-}
-
 fun renderInner(bound: Rect, curPos: LayoutPosition, page: Int, doc: Document, bitmap: Bitmap, layout: LayoutStrategy): Bitmap {
-    println("Rendering $page: $bound")
-    doc.renderPage(page, bitmap, curPos.docZoom, bound.left, bound.top, bound.right, bound.bottom)
+    println("Rendering $page: $bound $curPos")
+    doc.renderPage(page, bitmap, curPos.docZoom, bound.left, bound.top,  bound.right, bound.bottom, curPos.x.marginLess, curPos.y.marginLess)
     return bitmap
 }

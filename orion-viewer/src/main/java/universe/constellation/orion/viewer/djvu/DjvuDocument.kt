@@ -63,13 +63,13 @@ class DjvuDocument(private val fileName: String) : Document {
     }
 
     @Synchronized
-    override fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int) {
+    override fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int, lefCrop: Int, topCrop: Int) {
         //destroyed, can be called in non-ui thread
         if (docPointer == 0L) return
 
         val pagePointer = gotoPage(pageNumber)
         timing("Page $pageNumber rendering") {
-            drawPage(docPointer, pagePointer, bitmap, zoom.toFloat(), bitmap.width, bitmap.height, left, top, right - left, bottom - top, left, top)
+            drawPage(docPointer, pagePointer, bitmap, zoom.toFloat(), bitmap.width, bitmap.height, lefCrop + left, topCrop + top, right - left, bottom - top, left, top)
         }
     }
 
