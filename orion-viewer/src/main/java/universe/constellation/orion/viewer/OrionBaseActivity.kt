@@ -45,9 +45,6 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
     lateinit var toolbar: Toolbar
         private set
 
-    open val view: OrionScene?
-        get() = null
-
     val orionContext: OrionApplication
         get() = applicationContext as OrionApplication
 

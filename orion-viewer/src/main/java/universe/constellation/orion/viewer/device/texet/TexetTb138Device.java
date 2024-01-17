@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 
 import universe.constellation.orion.viewer.OperationHolder;
 import universe.constellation.orion.viewer.device.AndroidDevice;
+import universe.constellation.orion.viewer.view.OrionDrawScene;
 
 import static universe.constellation.orion.viewer.LoggerKt.log;
 
@@ -63,8 +64,9 @@ public class TexetTb138Device extends AndroidDevice {
 
     @Override
     public void flushBitmap() {
-        if (getActivity().getView() != null) {
-            boolean result = requestEpdMode(getActivity().getView().toView(), EPD_FULL);
+        OrionDrawScene view = getView();
+        if (view != null) {
+            boolean result = requestEpdMode(view, EPD_FULL);
             log("Invoked requestEpdMode: "+result);
         }
 

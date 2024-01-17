@@ -13,7 +13,7 @@ abstract class EInkDevice : EInkDeviceWithoutFastRefresh() {
 
     override fun flushBitmap() {
         val options = (activity as OrionViewerActivity).globalOptions
-        val view = activity.view!!.toView()
+        val view = view!!.toView()
         if (options.isEinkOptimization) {
             if (counter < options.einkRefreshAfter) {
                 doPartialUpdate(view)
