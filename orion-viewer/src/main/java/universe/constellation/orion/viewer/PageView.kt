@@ -89,8 +89,6 @@ class PageView(
     val height: Int
         get() = wholePageRect.height()
 
-
-
     internal var scene: PageScene? = null
     internal var pageAdapter: PageAdapter? = null
     internal var recyclerView: RecyclerView? = null
