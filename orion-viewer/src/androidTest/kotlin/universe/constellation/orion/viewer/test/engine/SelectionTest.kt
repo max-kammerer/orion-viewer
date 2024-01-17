@@ -31,7 +31,13 @@ class SelectionTest(
 
     @Test
     fun testSelection() {
-        val selectionRect = SelectionAutomata.getSelectionRectangle(absoluteRect.left, absoluteRect.top, absoluteRect.width(), absoluteRect.height(), isSingleWord)
+        val selectionRect = SelectionAutomata.getSelectionRect(
+            absoluteRect.left,
+            absoluteRect.top,
+            absoluteRect.width(),
+            absoluteRect.height(),
+            isSingleWord
+        )
         val text = document.getText(page1Based - 1/*zero based*/, selectionRect.left, selectionRect.top, selectionRect.width(), selectionRect.height(), isSingleWord)
         assertEquals(expectedText, text)
     }

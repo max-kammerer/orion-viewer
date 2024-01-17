@@ -248,7 +248,6 @@ public class SearchDialog extends DialogFragment {
 
         lastSearchResultRenderer.setBatch(subBatch);
         controller.drawPage(subBatch.lp);
-        ((OrionViewerActivity)getActivity()).getView().postInvalidate();
     }
 
     @Override

@@ -4,10 +4,15 @@ import android.app.Dialog;
 import android.graphics.Rect;
 import android.view.*;
 
+import androidx.annotation.NonNull;
+
+import java.util.List;
+
 import universe.constellation.orion.viewer.Action;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.R;
 import universe.constellation.orion.viewer.dialog.DialogOverView;
+import universe.constellation.orion.viewer.view.PageLayoutManager;
 
 public class SelectionAutomata extends DialogOverView {
 
@@ -83,10 +88,24 @@ public class SelectionAutomata extends DialogOverView {
 
     public static void selectText(
             OrionViewerActivity activity, boolean isSingleWord, boolean translate, Dialog dialog,
-            Rect rect
+            List<PageAndSelection> data
     ) {
-        String text = activity.getController().selectText(rect.left, rect.top, rect.width(), rect.height(), isSingleWord);
-        if (text != null && !"".equals(text)) {
+        //TODO crop support
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        for (PageAndSelection selection: data) {
+            Rect rect = selection.getRect();
+            String text = activity.getController().selectText(rect.left, rect.top, rect.width(), rect.height(), isSingleWord);
+            if (text != null) {
+                if (!first) {
+                    sb.append(" ");
+                }
+                sb.append(text);
+                first = false;
+            }
+        }
+        String text = sb.toString();
+        if (!"".equals(text)) {
             if (isSingleWord && translate) {
                 dialog.dismiss();
                 Action.DICTIONARY.doAction(activity.getController(), activity, text);
@@ -110,8 +129,6 @@ public class SelectionAutomata extends DialogOverView {
         this.translate = translate;
     }
 
-
-
     public boolean inSelection() {
         return state == STATE.START || state == STATE.MOVING;
     }
@@ -120,11 +137,17 @@ public class SelectionAutomata extends DialogOverView {
         return state == STATE.END;
     }
 
-    private Rect getSelectionRectangle() {
-        return getSelectionRectangle(startX, startY, width, height, isSingleWord);
+    private List<PageAndSelection> getSelectionRectangle() {
+        return getSelectionRectangle(startX, startY, width, height, isSingleWord, activity.getController().getPageLayoutManager());
     }
 
-    public static Rect getSelectionRectangle(int startX, int startY, int width, int height, boolean isSingleWord) {
+    public static List<PageAndSelection> getSelectionRectangle(int startX, int startY, int width, int height, boolean isSingleWord, PageLayoutManager pageLayoutManager) {
+        Rect rect = getSelectionRect(startX, startY, width, height, isSingleWord);
+        return pageLayoutManager.findPageAndPageRect(rect);
+    }
+
+    @NonNull
+    public static Rect getSelectionRect(int startX, int startY, int width, int height, boolean isSingleWord) {
         int singleWordDelta = isSingleWord ? SINGLE_WORD_AREA : 0;
         int x = startX - singleWordDelta;
         int y = startY - singleWordDelta;
