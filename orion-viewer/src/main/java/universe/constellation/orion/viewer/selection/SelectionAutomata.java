@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import java.util.List;
 
 import universe.constellation.orion.viewer.Action;
+import universe.constellation.orion.viewer.Controller;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.R;
 import universe.constellation.orion.viewer.dialog.DialogOverView;
@@ -90,12 +91,14 @@ public class SelectionAutomata extends DialogOverView {
             OrionViewerActivity activity, boolean isSingleWord, boolean translate, Dialog dialog,
             List<PageAndSelection> data
     ) {
-        //TODO crop support
         StringBuilder sb = new StringBuilder();
         boolean first = true;
+        Controller controller = activity.getController();
+        if (controller == null) return;
+
         for (PageAndSelection selection: data) {
-            Rect rect = selection.getRect();
-            String text = activity.getController().selectText(rect.left, rect.top, rect.width(), rect.height(), isSingleWord);
+            Rect rect = selection.getAbsoluteRectWithoutCrop();
+            String text = controller.selectRawText(selection.getPageNum(), rect.left, rect.top, rect.width(), rect.height(), isSingleWord);
             if (text != null) {
                 if (!first) {
                     sb.append(" ");
@@ -108,7 +111,7 @@ public class SelectionAutomata extends DialogOverView {
         if (!"".equals(text)) {
             if (isSingleWord && translate) {
                 dialog.dismiss();
-                Action.DICTIONARY.doAction(activity.getController(), activity, text);
+                Action.DICTIONARY.doAction(controller, activity, text);
             } else {
                 new SelectedTextActions(activity, dialog).show(text);
             }
@@ -138,6 +141,20 @@ public class SelectionAutomata extends DialogOverView {
     }
 
     private List<PageAndSelection> getSelectionRectangle() {
+        int startX = this.startX;
+        int startY = this.startY;
+        int width = this.width;
+        int height = this.height;
+
+        if (width < 0) {
+            startX += width;
+            width = -width;
+        }
+        if (height < 0) {
+            startY += height;
+            height = -height;
+        }
+
         return getSelectionRectangle(startX, startY, width, height, isSingleWord, activity.getController().getPageLayoutManager());
     }
 

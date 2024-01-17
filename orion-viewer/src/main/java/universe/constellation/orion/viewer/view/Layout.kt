@@ -34,11 +34,11 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         if (sceneWidth != newWidth && newHeight != sceneHeight) {
             sceneWidth = newWidth
             sceneHeight = newHeight
-            fixLayout()
+            updateRenderingParameters()
         }
     }
 
-    fun fixLayout() {
+    fun updateRenderingParameters() {
         //zoom
         isSinglePageMode = false
         uploadNewPages()
@@ -130,6 +130,13 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
                 val pageSelection = Rect(visibleOnScreenPart)
                 //TODO zoom and crop
                 pageSelection.minusOffset(it.layoutData.position)
+                val layoutInfo = it.layoutInfo
+                val zoom  = layoutInfo.docZoom
+                pageSelection.offset(layoutInfo.x.marginLess, layoutInfo.y.marginLess)
+                pageSelection.set((pageSelection.left/zoom).toInt(),
+                    (pageSelection.top/zoom).toInt(),
+                    (pageSelection.right/zoom).toInt(), (pageSelection.bottom/zoom).toInt()
+                )
                 PageAndSelection(it.pageNum, pageSelection)
             } else {
                 null
