@@ -35,7 +35,6 @@ import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.LayoutStrategy
 import universe.constellation.orion.viewer.layout.calcPageLayout
 import universe.constellation.orion.viewer.util.ColorUtil
-import universe.constellation.orion.viewer.view.OrionDrawScene
 import universe.constellation.orion.viewer.view.PageLayoutManager
 import universe.constellation.orion.viewer.view.ViewDimensionAware
 import java.util.concurrent.Executors
@@ -334,28 +333,9 @@ class Controller(
     val outline: Array<OutlineItem>?
         get() = document.outline
 
-    fun selectText(startX: Int, startY: Int, widht: Int, height: Int, isSingleWord: Boolean): String? {
-        var startX = startX
-        var startY = startY
-        var widht = widht
-        var height = height
-
-        if (widht < 0) {
-            startX += widht
-            widht = -widht
-        }
-        if (height < 0) {
-            startY += height
-            height = -height
-        }
-        val leftTopCorner = layoutStrategy.convertToPoint(layoutInfo)
+    fun selectRawText(pageNum: Int, startX: Int, startY: Int, widht: Int, height: Int, isSingleWord: Boolean): String? {
         return document.getText(
-                layoutInfo.pageNumber,
-                ((leftTopCorner.x + startX) / layoutInfo.docZoom).toInt(),
-                ((leftTopCorner.y + startY) / layoutInfo.docZoom).toInt(),
-                (widht / layoutInfo.docZoom).toInt(),
-                (height / layoutInfo.docZoom).toInt(),
-                isSingleWord
+            pageNum, startX, startY, widht, height, isSingleWord
         )?.trimText(isSingleWord)
     }
 
