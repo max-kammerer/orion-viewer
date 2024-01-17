@@ -46,6 +46,7 @@ import universe.constellation.orion.viewer.prefs.OrionPreferenceActivity;
 import universe.constellation.orion.viewer.prefs.TemporaryOptions;
 import universe.constellation.orion.viewer.util.ColorUtil;
 import universe.constellation.orion.viewer.view.FullScene;
+import universe.constellation.orion.viewer.view.OrionDrawScene;
 
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
@@ -234,7 +235,7 @@ public enum Action {
 
     SWITCH_COLOR_MODE (R.string.action_switch_color_mode, R.integer.action_switch_color_mode) {
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            OrionScene view = activity.getView();
+            OrionDrawScene view = activity.getView();
             FullScene scene = activity.getFullScene();
             LastPageInfo currentBookParameters = activity.getOrionContext().getCurrentBookParameters();
             if (currentBookParameters != null && ColorUtil.getColorMode(currentBookParameters.colorMode) == null) {

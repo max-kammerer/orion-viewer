@@ -7,8 +7,8 @@ import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 
-import universe.constellation.orion.viewer.OrionScene;
 import universe.constellation.orion.viewer.OrionViewerActivity;
+import universe.constellation.orion.viewer.view.OrionDrawScene;
 
 public class DialogOverView {
 
@@ -24,7 +24,7 @@ public class DialogOverView {
     }
 
     protected void initDialogSize() {
-        OrionScene view = activity.getView();
+        OrionDrawScene view = activity.getView();
         int width = view.getSceneWidth();
         int height = view.getSceneHeight();
         log("Dialog dim: " + width + "x" + height);

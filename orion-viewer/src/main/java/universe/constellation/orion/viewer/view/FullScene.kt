@@ -3,7 +3,6 @@ package universe.constellation.orion.viewer.view
 import android.content.Context
 import android.view.ViewGroup
 import universe.constellation.orion.viewer.OrionBookListener
-import universe.constellation.orion.viewer.OrionScene
 
 /**
  * Created by mike on 24.10.15.

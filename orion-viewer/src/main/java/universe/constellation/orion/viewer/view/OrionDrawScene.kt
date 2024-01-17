@@ -26,20 +26,15 @@ import android.graphics.Point
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
-import universe.constellation.orion.viewer.OrionScene
 import universe.constellation.orion.viewer.PageView
-import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.util.MoveUtil
 
-class OrionDrawScene : View, OrionScene {
+class OrionDrawScene : View {
 
     internal lateinit var orionStatusBarHelper: OrionStatusBarHelper
 
     internal var pageView: PageView? = null
-
-    override val info: LayoutPosition?
-        get() = pageView?.layoutInfo
 
     private var dimensionAware: ViewDimensionAware? = null
 
@@ -63,7 +58,7 @@ class OrionDrawScene : View, OrionScene {
 
     private var inited = false
 
-    override var sceneRect = Rect(0, 0, 0, 0)
+    var sceneRect = Rect(0, 0, 0, 0)
 
     private lateinit var stuff: ColorStuff
 
@@ -73,7 +68,7 @@ class OrionDrawScene : View, OrionScene {
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
-    override fun init(colorStuff: ColorStuff, statusBarHelper: OrionStatusBarHelper) {
+    fun init(colorStuff: ColorStuff, statusBarHelper: OrionStatusBarHelper) {
         this.stuff = colorStuff
         defaultPaint = colorStuff.backgroundPaint
         borderPaint = colorStuff.borderPaint
@@ -124,7 +119,7 @@ class OrionDrawScene : View, OrionScene {
 
     }
 
-    override fun setDimensionAware(dimensionAware: ViewDimensionAware) {
+    fun setDimensionAware(dimensionAware: ViewDimensionAware) {
         this.dimensionAware = dimensionAware
     }
 
@@ -138,42 +133,42 @@ class OrionDrawScene : View, OrionScene {
         }
     }
 
-    override fun isDefaultColorMatrix(): Boolean {
+    fun isDefaultColorMatrix(): Boolean {
         return defaultPaint!!.colorFilter == null
     }
 
-    override fun doScale(scale: Float, startFocus: Point, endFocus: Point, enableMoveOnPinchZoom: Boolean) {
+    fun doScale(scale: Float, startFocus: Point, endFocus: Point, enableMoveOnPinchZoom: Boolean) {
         this.scale = scale
         this.startFocus = startFocus
         this.endFocus = endFocus
         this.enableMoveOnPinchZoom = enableMoveOnPinchZoom
     }
 
-    override fun beforeScaling() {
+    fun beforeScaling() {
         inScaling = true
     }
 
-    override fun afterScaling() {
+    fun afterScaling() {
         this.inScaling = false
     }
 
-    override fun addTask(drawTask: DrawTask) {
+    fun addTask(drawTask: DrawTask) {
         tasks.add(drawTask)
     }
 
-    override fun removeTask(drawTask: DrawTask) {
+    fun removeTask(drawTask: DrawTask) {
         tasks.remove(drawTask)
     }
 
-    override fun toView(): View {
+    fun toView(): View {
         return this
     }
 
-    override val sceneWidth: Int
+    val sceneWidth: Int
         get() = width
-    override val sceneHeight: Int
+    val sceneHeight: Int
         get() = height
 
-    override val sceneYLocationOnScreen: Int
+    val sceneYLocationOnScreen: Int
         get() = IntArray(2).run { getLocationOnScreen(this); this[1] }
 }
