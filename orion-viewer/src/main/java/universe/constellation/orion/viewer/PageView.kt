@@ -21,8 +21,6 @@ import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.geometry.RectF
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.view.OrionDrawScene
-import universe.constellation.orion.viewer.view.PageAdapter
-import universe.constellation.orion.viewer.view.PageScene
 import universe.constellation.orion.viewer.view.PageLayoutManager
 import kotlin.math.max
 
@@ -38,6 +36,12 @@ class LayoutData {
     val position: PointF = PointF(0f, 0f)
     val wholePageRect: Rect = Rect()
     val tmpRect: Rect = Rect()
+
+    val globalLeft: Float
+        get() = position.x + wholePageRect.left
+
+    val globalRight: Float
+        get() = position.x + wholePageRect.right
 
     companion object {
         val EMPTY = Rect()
@@ -89,9 +93,7 @@ class PageView(
     val height: Int
         get() = wholePageRect.height()
 
-    internal var scene: PageScene? = null
-    internal var pageAdapter: PageAdapter? = null
-    internal var recyclerView: RecyclerView? = null
+    internal var scene: OrionDrawScene? = null
 
     var pageJobs = SupervisorJob(rootJob)
 
@@ -170,11 +172,6 @@ class PageView(
             if (isActive) {
                 withContext(Dispatchers.Main) {
                     if (isActive) {
-                        scene?.layoutParams?.apply {
-                            width = max(layoutInfo.x.pageDimension, layoutInfo.x.screenDimension)
-                            height = max(layoutInfo.y.pageDimension, layoutInfo.y.screenDimension)
-                            println("Update pageView dimension for page $pageNum: $width $height")
-                        }
                         initBitmap(layoutInfo)
                     }
                 }
@@ -258,18 +255,20 @@ class PageView(
                         if (kotlin.coroutines.coroutineContext.isActive) {
                             nonRenderedRegion.op(bound, Region.Op.DIFFERENCE)
                             log("new nonrender $pageNum: " + nonRenderedRegion.toString())
-                            log("invalidate $pageNum")
-                            scene?.postInvalidate()
+                            log("invalidate: $pageNum $layoutData")
+                            println("inv: $pageNum ")
+                            scene?.invalidate()
                         }
                     }
                 }
             }
         } else {
-            //scene?.invalidate()
+            scene?.invalidate()
         }
     }
 
     private fun draw(canvas: Canvas, bitmap: Bitmap, info: LayoutPosition, defaultPaint: Paint, scene: OrionDrawScene) {
+        println("DrawX $pageNum:  $bitmap")
         canvas.save()
         if (!bitmap.isRecycled) {
             val tmpRect  = Rect()

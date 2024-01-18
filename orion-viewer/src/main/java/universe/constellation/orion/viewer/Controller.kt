@@ -108,7 +108,7 @@ class Controller(
     fun drawPage(info: LayoutPosition = layoutInfo) {
         log("Draw page " + document.title + " "+ info.pageNumber)
         layoutInfo = info
-        pageLayoutManager.showPageWithOffset(info.pageNumber, info.x.offset, info.y.offset)
+        pageLayoutManager.renderPageWithOffset(info.pageNumber, info.x.offset, info.y.offset)
     }
 
     fun processPendingEvents() {
@@ -364,6 +364,7 @@ class Controller(
             }
             return pageView
         } else {
+            println("create page $pageNum")
             val pageView = PageView(
                 pageNum,
                 document,

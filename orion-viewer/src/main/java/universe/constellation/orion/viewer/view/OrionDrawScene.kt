@@ -104,7 +104,9 @@ class OrionDrawScene : View {
             )
             canvas.scale(myScale, myScale)
         }
+        println("OrionDrawScene")
         for (p in pageLayoutManager?.visiblePages ?: emptyList()) {
+            println("OrionDrawScene ${p.pageNum}")
             p.draw(canvas, this)
         }
 
@@ -112,6 +114,7 @@ class OrionDrawScene : View {
             canvas.restore()
         }
 
+        //TODO move to page
         for (drawTask in tasks) {
             drawTask.drawOnCanvas(canvas, stuff, null)
         }
