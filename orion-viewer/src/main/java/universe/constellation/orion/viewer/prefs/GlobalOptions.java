@@ -109,6 +109,10 @@ public class GlobalOptions implements Serializable, PageOptions {
 
     public final static String SHOW_TAP_HELP = "SHOW_TAP_HELP";
 
+    public final static String TEST_SCREEN_WIDTH = "TEST_SCREEN_WIDTH";
+
+    public final static String TEST_SCREEN_HEIGHT = "TEST_SCREEN_HEIGHT";
+
     public final static String SCREEN_BACKLIGHT_TIMEOUT = "SCREEN_BACKLIGHT_TIMEOUT";
 
     public final static String ENABLE_TOUCH_MOVE = "ENABLE_TOUCH_MOVE";

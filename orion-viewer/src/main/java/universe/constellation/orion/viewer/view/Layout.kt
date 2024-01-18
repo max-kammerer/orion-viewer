@@ -4,7 +4,9 @@ import android.graphics.PointF
 import android.graphics.Rect
 import androidx.core.math.MathUtils
 import universe.constellation.orion.viewer.Controller
+import universe.constellation.orion.viewer.PageInitListener
 import universe.constellation.orion.viewer.PageView
+import universe.constellation.orion.viewer.State
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.selection.PageAndSelection
 import kotlin.math.abs
@@ -52,6 +54,17 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         }
         visiblePages.clear()
     }
+
+
+    var pageListener: PageInitListener? = null
+        set(value) {
+            field = value
+            visiblePages.forEach {
+                if (it.state != State.CREATED) {
+                    value?.onPageInited(it)
+                }
+            }
+        }
 
     fun doScroll(xPos: Float, yPos: Float, distanceX: Float, distanceY: Float) {
         println("onScroll: $distanceX, $distanceY")
@@ -157,7 +170,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         }
     }
 
-    fun renderPageWithOffset(pageNum: Int, x: Int, y: Int) {
+    fun renderPageWithOffset(pageNum: Int, x: Int, y: Int, uiCallaback: Function1<Any, Unit>? = null) {
         isSinglePageMode = true
         val iterator = visiblePages.iterator()
         for (page in iterator) {
@@ -176,7 +189,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
 
         //TODO keep proper position
         page.layoutData.position.set(x.toFloat(), y.toFloat())
-        page.renderVisible()
+        page.renderVisible(uiCallaback)
     }
 
     fun dump() {
@@ -218,6 +231,8 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
     }
 
     fun onSizeCalculated(updatedView: PageView, oldArea: Rect) {
+        pageListener?.onPageInited(updatedView)
+
         log("onSizeCalculated ${updatedView.pageNum}: ${updatedView.layoutData} $oldArea")
         var found = false
         var shiftY = 0
