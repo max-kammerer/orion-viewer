@@ -2,10 +2,12 @@ package universe.constellation.orion.viewer.view
 
 import android.graphics.PointF
 import android.graphics.Rect
+import androidx.core.math.MathUtils
 import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.PageView
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.selection.PageAndSelection
+import kotlin.math.abs
 
 class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): ViewDimensionAware {
 
@@ -52,20 +54,27 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
     }
 
     fun doScroll(xPos: Float, yPos: Float, distanceX: Float, distanceY: Float) {
+        println("onScroll: $distanceX, $distanceY")
         isSinglePageMode = false
         val iterator = visiblePages.iterator()
         iterator.forEach {
-            it.layoutData.position.y += distanceY
-            if (it.layoutData.contains(xPos, yPos)) {
-                val screenPart = it.layoutData.visibleOnScreenPart(sceneRect)
-                if (distanceX < 0 && screenPart.right < sceneRect.right) {
-                    //nothing
-                } else if (distanceX > 0 && screenPart.left > sceneRect.left) {
-                    //nothing
-                } else {
-                    if (!it.layoutData.insideScreenX(sceneRect)) {
-                        it.layoutData.position.x += distanceX
+            val layoutData = it.layoutData
+            layoutData.position.y += distanceY
+            if (layoutData.contains(xPos, yPos)) {
+                val leftDelta = layoutData.globalLeft - sceneRect.left
+                val righDelta = sceneRect.right - layoutData.globalRight
+                if (layoutData.wholePageRect.width() < sceneRect.width()) {
+                    if (abs(leftDelta - righDelta) >= abs(leftDelta - righDelta + 2 * distanceX)) {
+                        layoutData.position.x += distanceX
                     }
+                } else {
+                    var newDistance = 0f
+                    if (distanceX > 0 && layoutData.globalLeft < 0) {
+                        newDistance = MathUtils.clamp(distanceX, distanceX, sceneRect.left - layoutData.globalLeft,)
+                    } else if (distanceX < 0 && layoutData.globalRight > sceneRect.right) {
+                        newDistance = -MathUtils.clamp(-distanceX, -distanceX, layoutData.globalRight - sceneRect.right)
+                    }
+                    layoutData.position.x += newDistance
                 }
             }
             if (!updateStateAndRender(it)) {
@@ -85,7 +94,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         if (visiblePages.isEmpty()) {
             val nextPageNum = 0
             val view = controller.createCachePageView(nextPageNum)
-            addPageInPosition(view, 0f)
+            addPageInPosition(view, pageYPos = 0f)
         } else {
             val lastView = visiblePages.last()
             val pageEnd = lastView.layoutData.position.y + lastView.layoutData.wholePageRect.height() + 1
@@ -101,7 +110,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
             println("Check new $pageStart ${firstView.pageNum} ${visiblePages.size}")
             if (pageStart > 5 && firstView.pageNum > 0) {
                 val newView = controller.createCachePageView(firstView.pageNum - 1)
-                addPageInPosition(newView, firstView.layoutData.position.y - newView.layoutData.wholePageRect.height() - 2, false)
+                addPageInPosition(newView, 0f, firstView.layoutData.position.y - newView.layoutData.wholePageRect.height() - 2, false)
             }
         }
         println("After uploadNewPages")
@@ -110,16 +119,18 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
 
     private fun addPageInPosition(pageNum: Int, pageYPos: Float) {
         val view = controller.createCachePageView(pageNum)
-        addPageInPosition(view, pageYPos)
+        addPageInPosition(view, pageYPos = pageYPos)
     }
 
-    private fun addPageInPosition(view: PageView, pageYPos: Float, last: Boolean = true) {
+    private fun addPageInPosition(view: PageView, pageXPos: Float = 0f, pageYPos: Float, last: Boolean = true) {
         view.layoutData.position.y = pageYPos
+        view.layoutData.position.x = pageXPos
         if (last) {
             visiblePages.add(view)
         } else {
             visiblePages.add(0, view)
         }
+        view.scene = scene
         updateStateAndRender(view)
     }
 
@@ -127,6 +138,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         return visiblePages.mapNotNull {
             val visibleOnScreenPart = it.layoutData.visibleOnScreenPart(screenRect)
             if (visibleOnScreenPart.intersect(screenRect)) {
+                println("selection: " + it.pageNum + visibleOnScreenPart)
                 val pageSelection = Rect(visibleOnScreenPart)
                 //TODO zoom and crop
                 pageSelection.minusOffset(it.layoutData.position)
@@ -137,6 +149,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
                     (pageSelection.top/zoom).toInt(),
                     (pageSelection.right/zoom).toInt(), (pageSelection.bottom/zoom).toInt()
                 )
+                println("selection: " + it.pageNum + pageSelection)
                 PageAndSelection(it.pageNum, pageSelection)
             } else {
                 null
@@ -144,7 +157,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         }
     }
 
-    fun showPageWithOffset(pageNum: Int, x: Int, y: Int) {
+    fun renderPageWithOffset(pageNum: Int, x: Int, y: Int) {
         isSinglePageMode = true
         val iterator = visiblePages.iterator()
         for (page in iterator) {
@@ -157,7 +170,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
             visiblePages.first()
         } else {
             val page = controller.createCachePageView(pageNum)
-            visiblePages.add(page)
+            addPageInPosition(page, x.toFloat(), y.toFloat())
             page
         }
 
