@@ -6,7 +6,6 @@ import android.graphics.Point
 import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.Region
-import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -29,6 +28,11 @@ enum class State(val interactWithUUI: Boolean) {
     SIZE_AND_BITMAP_CREATED(true),
     CAN_BE_DELETED(false),
     DESTROYED(false)
+}
+
+interface PageInitListener {
+
+    fun onPageInited(pageView: PageView)
 }
 
 class LayoutData {
@@ -221,18 +225,18 @@ class PageView(
         return controller.bitmapCache.createBitmap(width, height)
     }
 
-    internal fun renderVisible() {
+    internal fun renderVisible(uiCallaback: Function1<Any, Unit>? = null) {
         val tmpRect = layoutData.tmpRect
         tmpRect.set(wholePageRect)
         tmpRect.offset(layoutData.position.x.toInt(), layoutData.position.y.toInt())
 
         if (pageLayoutManager.isVisible(this)) {
             tmpRect.offset((-layoutData.position.x).toInt(), (-layoutData.position.y).toInt())
-            render(tmpRect)
+            render(tmpRect, uiCallaback)
         }
     }
 
-    internal fun render(rect: Rect) {
+    internal fun render(rect: Rect, uiCallaback: Function1<Any, Unit>? = null) {
         val layoutStrategy = controller.layoutStrategy
         if (!(layoutStrategy.viewWidth > 0 &&  layoutStrategy.viewHeight > 0)) return
 
@@ -258,12 +262,18 @@ class PageView(
                             log("invalidate: $pageNum $layoutData")
                             println("inv: $pageNum ")
                             scene?.invalidate()
+                            if (uiCallaback != null) {
+                                uiCallaback(bitmap!!)
+                            }
                         }
                     }
                 }
             }
         } else {
             scene?.invalidate()
+            if (uiCallaback != null) {
+                uiCallaback(bitmap!!)
+            }
         }
     }
 

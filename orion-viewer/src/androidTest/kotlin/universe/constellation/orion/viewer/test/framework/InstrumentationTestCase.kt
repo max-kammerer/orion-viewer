@@ -9,7 +9,7 @@ import universe.constellation.orion.viewer.prefs.GlobalOptions
 import universe.constellation.orion.viewer.prefs.OrionApplication
 
 
-abstract class InstrumentationTestCase(intent: Intent, private val showTapHelp: Boolean = false) : BaseTest() {
+abstract class InstrumentationTestCase(intent: Intent, private val showTapHelp: Boolean = false, additionalParams: (Intent) -> Unit = {}) : BaseTest() {
 
     @get:Rule
     var activityScenarioRule = activityScenarioRule<OrionViewerActivity>(intent.apply {
@@ -18,6 +18,7 @@ abstract class InstrumentationTestCase(intent: Intent, private val showTapHelp: 
         } else {
             putExtra(GlobalOptions.SHOW_TAP_HELP, false)
         }
+        additionalParams(this)
     })
 
     val globalOptions by lazy {

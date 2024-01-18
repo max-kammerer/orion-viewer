@@ -105,10 +105,10 @@ class Controller(
     }
 
     @JvmOverloads
-    fun drawPage(info: LayoutPosition = layoutInfo) {
-        log("Draw page " + document.title + " "+ info.pageNumber)
+    fun drawPage(info: LayoutPosition = layoutInfo, uiCallaback: Function1<Any, Unit>? = null) {
+        log("Controller drawPage: " + document.title + " "+ info)
         layoutInfo = info
-        pageLayoutManager.renderPageWithOffset(info.pageNumber, info.x.offset, info.y.offset)
+        pageLayoutManager.renderPageWithOffset(info.pageNumber, info.x.offset, info.y.offset, uiCallaback)
     }
 
     fun processPendingEvents() {
@@ -139,14 +139,16 @@ class Controller(
         }
     }
 
-    fun drawNext() {
+    @JvmOverloads
+    fun drawNext(uiCallaback: Function1<Any, Unit>? = null) {
         layoutStrategy.calcPageLayout(layoutInfo, true, pageCount)
-        drawPage(layoutInfo)
+        drawPage(layoutInfo, uiCallaback)
     }
 
-    fun drawPrev() {
+    @JvmOverloads
+    fun drawPrev(uiCallaback: Function1<Any, Unit>? = null) {
         layoutStrategy.calcPageLayout(layoutInfo, false, pageCount)
-        drawPage(layoutInfo)
+        drawPage(layoutInfo, uiCallaback)
     }
 
     fun translateAndZoom(changeZoom: Boolean, zoomScaling: Float, deltaX: Float, deltaY: Float) {
