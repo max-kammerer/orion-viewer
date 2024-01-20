@@ -99,6 +99,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     val statusBarHelper: OrionStatusBarHelper
         get() = fullScene.statusBarHelper
 
+    private var openAsTempTestBook = false
+
     val bookId: Long
         get() {
             log("Selecting book id...")
@@ -224,10 +226,13 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
 
                 if (controller != null && lastPageInfo != null) {
-                    if (lastPageInfo!!.openingFileName == filePath) {
-                        controller!!.drawPage()
-                        return
+                    lastPageInfo?.apply {
+                        if (openingFileName == filePath) {
+                            controller!!.drawPage(pageNumber, newOffsetX, newOffsetY)
+                            return
+                        }
                     }
+
                 }
 
                 if (!askReadPermissions(File(filePath), intent)) {
@@ -308,7 +313,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             try {
                 val lastPageInfo1 =
                     withContext(Dispatchers.Default + rootJob) {
-                        LastPageInfo.loadBookParameters(this@OrionViewerActivity, filePath, initalizer(globalOptions))
+                        LastPageInfo.loadBookParameters(
+                            this@OrionViewerActivity,
+                            if (openAsTempTestBook) "temp-test-bookx" else filePath,
+                            initalizer(globalOptions)
+                        )
                     }
                 lastPageInfo = lastPageInfo1
                 orionContext.currentBookParameters = lastPageInfo1
@@ -329,7 +338,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
                 subscriptionManager.sendDocOpenedNotification(controller1)
 
-                controller1.drawPage()
+                controller1.drawPage(lastPageInfo1.pageNumber, lastPageInfo1.newOffsetX, lastPageInfo1.newOffsetY)
 
                 globalOptions.addRecentEntry(GlobalOptions.RecentEntry(File(filePath).absolutePath))
 
@@ -357,7 +366,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         stubController.changeOrinatation(stubInfo.screenOrientation)
         stubController.init(stubInfo, Point(drawView.sceneWidth, drawView.sceneHeight))
         bind(view, stubController)
-        stubController.drawPage()
+        stubController.drawPage(0, 0, 0)
         updateViewOnNewBook(stubDocument.title)
         invalidateOptionsMenu()
         return stubController
@@ -662,7 +671,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         } else {
             if (controller != null) {
                 controller!!.processPendingEvents()
-                controller!!.drawPage()
+                controller!!.drawPage(lastPageInfo!!.pageNumber, lastPageInfo!!.newOffsetX, lastPageInfo!!.newOffsetY)
             }
         }
     }
@@ -683,7 +692,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     private fun saveBookPositionAndRecentFiles() {
         try {
             lastPageInfo?.let {
-                controller?.serializeAndSave(it, this)
+                if (!openAsTempTestBook) {
+                    controller?.serializeAndSave(it, this)
+                }
             }
         } catch (ex: Exception) {
             log(ex)
@@ -1086,6 +1097,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             view.layoutParams.height = newHeigth
             view.requestLayout()
         }
+        openAsTempTestBook = intent.getBooleanExtra(GlobalOptions.OPEN_AS_TEMP_BOOK, false)
     }
 
     companion object {
