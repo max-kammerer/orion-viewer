@@ -7,6 +7,7 @@ import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.PageInitListener
 import universe.constellation.orion.viewer.PageView
 import universe.constellation.orion.viewer.State
+import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.selection.PageAndSelection
 import kotlin.math.abs
@@ -60,11 +61,16 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         set(value) {
             field = value
             visiblePages.forEach {
-                if (it.state != State.CREATED) {
+                if (it.state == State.SIZE_AND_BITMAP_CREATED) {
                     value?.onPageInited(it)
                 }
             }
         }
+
+    fun currentPageLayout(): LayoutPosition? {
+        //TODO
+        return visiblePages.firstOrNull()?.layoutInfo;
+    }
 
     fun doScroll(xPos: Float, yPos: Float, distanceX: Float, distanceY: Float) {
         println("onScroll: $distanceX, $distanceY")
@@ -149,28 +155,24 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
 
     fun findPageAndPageRect(screenRect: Rect): List<PageAndSelection> {
         return visiblePages.mapNotNull {
-            val visibleOnScreenPart = it.layoutData.visibleOnScreenPart(screenRect)
-            if (visibleOnScreenPart.intersect(screenRect)) {
-                println("selection: " + it.pageNum + visibleOnScreenPart)
-                val pageSelection = Rect(visibleOnScreenPart)
-                //TODO zoom and crop
-                pageSelection.minusOffset(it.layoutData.position)
-                val layoutInfo = it.layoutInfo
-                val zoom  = layoutInfo.docZoom
-                pageSelection.offset(layoutInfo.x.marginLess, layoutInfo.y.marginLess)
-                pageSelection.set((pageSelection.left/zoom).toInt(),
-                    (pageSelection.top/zoom).toInt(),
-                    (pageSelection.right/zoom).toInt(), (pageSelection.bottom/zoom).toInt()
-                )
-                println("selection: " + it.pageNum + pageSelection)
-                PageAndSelection(it.pageNum, pageSelection)
-            } else {
-                null
-            }
+            val visibleOnScreenPart = it.layoutData.occupiedScreenPartInTmp(screenRect) ?: return@mapNotNull null
+            println("selection: " + it.pageNum + visibleOnScreenPart)
+            val pageSelection = Rect(visibleOnScreenPart)
+            //TODO zoom and crop
+            pageSelection.minusOffset(it.layoutData.position)
+            val layoutInfo = it.layoutInfo
+            val zoom  = layoutInfo.docZoom
+            pageSelection.offset(layoutInfo.x.marginLess, layoutInfo.y.marginLess)
+            pageSelection.set((pageSelection.left/zoom).toInt(),
+                (pageSelection.top/zoom).toInt(),
+                (pageSelection.right/zoom).toInt(), (pageSelection.bottom/zoom).toInt()
+            )
+            println("selection: " + it.pageNum + pageSelection)
+            PageAndSelection(it.pageNum, pageSelection)
         }
     }
 
-    fun renderPageWithOffset(pageNum: Int, x: Int, y: Int, uiCallaback: Function1<Any, Unit>? = null) {
+    fun renderPageAt(pageNum: Int, x: Int, y: Int, uiCallaback: Function1<Any, Unit>? = null) {
         isSinglePageMode = true
         val iterator = visiblePages.iterator()
         for (page in iterator) {
@@ -183,7 +185,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
             visiblePages.first()
         } else {
             val page = controller.createCachePageView(pageNum)
-            addPageInPosition(page, x.toFloat(), y.toFloat())
+            addPageInPosition(page, -x.toFloat(), -y.toFloat())
             page
         }
 
@@ -198,25 +200,24 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         }
 
         visiblePages.zipWithNext().forEach {
-            val visibleOnScreenPart = it.first.layoutData.visibleOnScreenPart(sceneRect)
-            val visible2 = it.second.layoutData.visibleOnScreenPart(sceneRect)
-            if (visibleOnScreenPart.intersect(visible2)) {
-                log("intersection: $visibleOnScreenPart")
-                log("intersection: ${it.first.layoutData.visibleOnScreenPart(sceneRect)} $visible2")
-                visibleOnScreenPart.intersect(visible2)
-                error("intersected rects ${it.first.pageNum} and ${it.second.pageNum}: $visibleOnScreenPart")
+            val rect1 = it.first.layoutData.globalRectInTmp()
+            val rect2 = it.second.layoutData.globalRectInTmp()
+            if (rect1.intersect(rect2)) {
+                log("intersection area: $rect1")
+                log("intersection rects: ${it.first.layoutData.globalRectInTmp()} $rect2")
+                error("intersected rects ${it.first.pageNum} and ${it.second.pageNum}: $rect1")
             }
         }
     }
 
     private fun updateStateAndRender(view: PageView): Boolean {
-        if (isVisible(view)) {
+        return if (isVisible(view)) {
             view.renderVisible()
-            return true
+            true
         } else {
             println("toInvisible ${view.pageNum}")
             view.toInvisibleState()
-            return false
+            false
         }
     }
 

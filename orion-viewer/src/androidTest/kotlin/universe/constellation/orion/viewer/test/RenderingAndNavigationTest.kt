@@ -7,9 +7,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.*
+import universe.constellation.orion.viewer.prefs.GlobalOptions.OPEN_AS_TEMP_BOOK
 import universe.constellation.orion.viewer.prefs.GlobalOptions.TEST_SCREEN_HEIGHT
 import universe.constellation.orion.viewer.prefs.GlobalOptions.TEST_SCREEN_WIDTH
-import universe.constellation.orion.viewer.prefs.initalizer
 import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
 import java.util.concurrent.CountDownLatch
@@ -22,6 +22,7 @@ class RenderingAndNavigationTest(private val book: BookDescription) : Instrument
     intent ->
     intent.putExtra(TEST_SCREEN_WIDTH, deviceSize.x)
     intent.putExtra(TEST_SCREEN_HEIGHT, deviceSize.y)
+    intent.putExtra(OPEN_AS_TEMP_BOOK, true)
 }) {
 
    companion object {
@@ -29,7 +30,7 @@ class RenderingAndNavigationTest(private val book: BookDescription) : Instrument
         @Parameterized.Parameters(name = "Test simple navigation in {0}")
         fun testData(): Iterable<Array<BookDescription>> {
             return BookDescription.values().map { arrayOf(it) }
-            //return arrayOf(arrayOf(BookDescription.entries.first())).asIterable()
+            //return arrayOf(arrayOf(BookDescription.values().first())).asIterable()
         }
     }
 
@@ -52,13 +53,19 @@ class RenderingAndNavigationTest(private val book: BookDescription) : Instrument
             val latch = CountDownLatch(1)
             activityScenarioRule.scenario.onActivity { activity ->
                 controller.drawNext()
+                val page = controller.currentPage
 
                 controller.pageLayoutManager.pageListener = object : PageInitListener {
+                    var counter = 0
                     override fun onPageInited(pageView: PageView) {
-                        controller.drawPage {
+                        val pinfo = controller.pageLayoutManager.currentPageLayout()!!
+                        controller.drawPage(pinfo.pageNumber, pinfo.x.offset, pinfo.y.offset) {
                             processBitmap(nextPageList, it as Bitmap)
+                            println("Process bitmap ${pageView.pageNum}")
                             controller.pageLayoutManager.pageListener = null
                             latch.countDown()
+                            assertEquals(1, ++counter)
+                            assertEquals(page, pageView.pageNum)
                         }
                     }
                 }
@@ -71,12 +78,19 @@ class RenderingAndNavigationTest(private val book: BookDescription) : Instrument
             val latch = CountDownLatch(1)
             activityScenarioRule.scenario.onActivity { activity ->
                 controller.drawPrev()
+                val page = controller.currentPage
+
                 controller.pageLayoutManager.pageListener = object : PageInitListener {
+                    var counter = 0
                     override fun onPageInited(pageView: PageView) {
-                        controller.drawPage {
+                        val pinfo = controller.pageLayoutManager.currentPageLayout()!!
+                        controller.drawPage(pinfo.pageNumber, pinfo.x.offset, pinfo.y.offset) {
                             processBitmap(prevPageList, it as Bitmap)
-                            latch.countDown()
+                            println("Process bitmap ${pageView.pageNum}")
                             controller.pageLayoutManager.pageListener = null
+                            latch.countDown()
+                            assertEquals(1, ++counter)
+                            assertEquals(page, pageView.pageNum)
                         }
                     }
                 }
@@ -89,11 +103,17 @@ class RenderingAndNavigationTest(private val book: BookDescription) : Instrument
         assertEquals(prevPageList.size, screens)
 
         nextPageList.zipWithNext().forEachIndexed { index, (left, right) ->
-            assertFalse("Screens $index and ${index+1} are equals: ${left.joinToString()}", left.contentEquals(right))
+            assertFalse(
+                "Next screens $index and ${index + 1} are equals: ${left.joinToString()}",
+                left.contentEquals(right)
+            )
         }
 
         prevPageList.zipWithNext().forEachIndexed { index, (left, right) ->
-            assertFalse("Screens $index and ${index+1} are equals: ${left.joinToString()}", left.contentEquals(right))
+            assertFalse(
+                "Prev screens $index and ${index + 1} are equals: ${left.joinToString()}",
+                left.contentEquals(right)
+            )
         }
 
         nextPageList.zip(prevPageList.reversed()).forEachIndexed() { index, (next, prev) ->
@@ -102,29 +122,16 @@ class RenderingAndNavigationTest(private val book: BookDescription) : Instrument
     }
 
     private fun processBitmap(list: MutableList<IntArray>, bitmap: Bitmap) {
-        assertNotNull(bitmap)
-
         val pixels = IntArray(bitmap.width * bitmap.height)
         bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
-
         list.add(pixels)
     }
 
     private fun prepareEngine(): Controller {
         val ref = AtomicReference<Controller>()
         activityScenarioRule.scenario.onActivity { activity ->
-//            val document = openTestBook(book)
-//            val layoutStrategy: LayoutStrategy = SimpleLayoutStrategy.create(document)
-//            val controller = Controller(activity, document, layoutStrategy)
-            val lastPageInfo =
-                LastPageInfo.loadBookParameters(activity, "123", initalizer(activity.globalOptions))
-//            controller.changeOrinatation(lastPageInfo.screenOrientation)
-
-            //getSubscriptionManager()?.sendDocOpenedNotification(controller)
             val controller = activity.controller!!
-            controller.init(lastPageInfo, deviceSize)
             controller.pageLayoutManager.isSinglePageMode = true
-            controller.forcePageRecreation()
             ref.set(controller)
         }
         return ref.get()
