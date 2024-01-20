@@ -55,13 +55,24 @@ class LayoutData {
         return wholePageRect.contains((x - position.x) .toInt(), (y-position.y).toInt())
     }
 
-    fun visibleOnScreenPart(screenRect: Rect): Rect {
+    fun occupiedScreenPart(screenRect: Rect): Rect {
         tmpRect.set(wholePageRect)
         tmpRect.offset(position.x.toInt(), position.y.toInt())
         if (tmpRect.intersect(screenRect)) {
             return tmpRect
         } else {
             return EMPTY
+        }
+    }
+
+    fun visibleOnScreenPart(screenRect: Rect): Rect? {
+        tmpRect.set(wholePageRect)
+        tmpRect.offset(position.x.toInt(), position.y.toInt())
+        if (tmpRect.intersect(screenRect)) {
+            tmpRect.offset(-position.x.toInt(), -position.y.toInt())
+            return tmpRect
+        } else {
+            return null
         }
     }
 
@@ -212,7 +223,7 @@ class PageView(
             println("Draw page $pageNum in state $state ${bitmap?.isRecycled} ${bitmap?.width} ${bitmap?.height} ")
             draw(canvas, bitmap!!, layoutInfo, scene.defaultPaint!!, scene)
         } else {
-            println("Draw border $pageNum in state $state: ${layoutData} on screen ${layoutData.visibleOnScreenPart(scene.pageLayoutManager!!.sceneRect)}")
+            println("Draw border $pageNum in state $state: ${layoutData} on screen ${layoutData.occupiedScreenPart(scene.pageLayoutManager!!.sceneRect)}")
             drawBorder(canvas, scene, layoutInfo)
         }
         scene.orionStatusBarHelper.onPageUpdate(layoutInfo)
@@ -230,10 +241,9 @@ class PageView(
         tmpRect.set(wholePageRect)
         tmpRect.offset(layoutData.position.x.toInt(), layoutData.position.y.toInt())
 
-        if (pageLayoutManager.isVisible(this)) {
-            tmpRect.offset((-layoutData.position.x).toInt(), (-layoutData.position.y).toInt())
-            render(tmpRect, uiCallaback)
-        }
+        layoutData.visibleOnScreenPart(pageLayoutManager.sceneRect)?.let {
+            render(it, uiCallaback)
+        } ?: println("Non visible")
     }
 
     internal fun render(rect: Rect, uiCallaback: Function1<Any, Unit>? = null) {
@@ -245,8 +255,6 @@ class PageView(
             //TODO processing
         }
 
-        println("Before check $pageNum: $nonRenderedRegion")
-        println("Before check to draw $pageNum: $rect")
         tempRegion.set(nonRenderedRegion)
         if (tempRegion.op(rect, nonRenderedRegion, Region.Op.INTERSECT)) {
             val bound = tempRegion.bounds
@@ -270,6 +278,8 @@ class PageView(
                 }
             }
         } else {
+            println("Already rendered $state $document $pageNum: $rect")
+            //println("Before check to draw $pageNum: $rect")
             scene?.invalidate()
             if (uiCallaback != null) {
                 uiCallaback(bitmap!!)
@@ -278,7 +288,7 @@ class PageView(
     }
 
     private fun draw(canvas: Canvas, bitmap: Bitmap, info: LayoutPosition, defaultPaint: Paint, scene: OrionDrawScene) {
-        println("DrawX $pageNum:  $bitmap")
+        println("DrawX $pageNum:  ${layoutData.position.x} ${layoutData.position.y}")
         canvas.save()
         if (!bitmap.isRecycled) {
             val tmpRect  = Rect()
