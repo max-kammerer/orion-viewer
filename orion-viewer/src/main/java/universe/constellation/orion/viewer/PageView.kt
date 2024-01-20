@@ -55,25 +55,25 @@ class LayoutData {
         return wholePageRect.contains((x - position.x) .toInt(), (y-position.y).toInt())
     }
 
-    fun occupiedScreenPart(screenRect: Rect): Rect {
+    fun globalRectInTmp(): Rect {
         tmpRect.set(wholePageRect)
         tmpRect.offset(position.x.toInt(), position.y.toInt())
-        if (tmpRect.intersect(screenRect)) {
-            return tmpRect
+        return tmpRect
+    }
+
+    fun occupiedScreenPartInTmp(screenRect: Rect): Rect? {
+        val globalPosition = globalRectInTmp()
+        return if (globalPosition.intersect(screenRect)) {
+            globalPosition
         } else {
-            return EMPTY
+            null
         }
     }
 
-    fun visibleOnScreenPart(screenRect: Rect): Rect? {
-        tmpRect.set(wholePageRect)
-        tmpRect.offset(position.x.toInt(), position.y.toInt())
-        if (tmpRect.intersect(screenRect)) {
-            tmpRect.offset(-position.x.toInt(), -position.y.toInt())
-            return tmpRect
-        } else {
-            return null
-        }
+    fun visibleOnScreenPartInTmp(screenRect: Rect): Rect? {
+        val occupiedScreenPart = occupiedScreenPartInTmp(screenRect) ?: return null
+        occupiedScreenPart.offset(-position.x.toInt(), -position.y.toInt())
+        return occupiedScreenPart
     }
 
     fun insideScreenX(screenRect: Rect): Boolean {
@@ -223,7 +223,7 @@ class PageView(
             println("Draw page $pageNum in state $state ${bitmap?.isRecycled} ${bitmap?.width} ${bitmap?.height} ")
             draw(canvas, bitmap!!, layoutInfo, scene.defaultPaint!!, scene)
         } else {
-            println("Draw border $pageNum in state $state: ${layoutData} on screen ${layoutData.occupiedScreenPart(scene.pageLayoutManager!!.sceneRect)}")
+            println("Draw border $pageNum in state $state: ${layoutData} on screen ${layoutData.occupiedScreenPartInTmp(scene.pageLayoutManager!!.sceneRect)}")
             drawBorder(canvas, scene, layoutInfo)
         }
         scene.orionStatusBarHelper.onPageUpdate(layoutInfo)
@@ -241,7 +241,7 @@ class PageView(
         tmpRect.set(wholePageRect)
         tmpRect.offset(layoutData.position.x.toInt(), layoutData.position.y.toInt())
 
-        layoutData.visibleOnScreenPart(pageLayoutManager.sceneRect)?.let {
+        layoutData.visibleOnScreenPartInTmp(pageLayoutManager.sceneRect)?.let {
             render(it, uiCallaback)
         } ?: println("Non visible")
     }
