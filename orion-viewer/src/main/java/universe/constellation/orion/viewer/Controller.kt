@@ -21,6 +21,7 @@ package universe.constellation.orion.viewer
 
 import android.app.Activity
 import android.graphics.Point
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -57,8 +58,6 @@ class Controller(
 
     private val listener: DocumentViewAdapter
 
-    private var lastPage = -1
-
     lateinit var screenOrientation: String
 
     private var lastScreenSize: Point? = null
@@ -79,12 +78,12 @@ class Controller(
         listener = object : DocumentViewAdapter() {
             override fun renderingParametersChanged() {
                 println("viewParametersChanged")
-                if (this@Controller.activity._isResumed) {
+                hasPendingEvents = if (this@Controller.activity._isResumed) {
                     bitmapCache.invalidateCache()
                     forcePageRecreation()
-                    hasPendingEvents = false
+                    false
                 } else {
-                    hasPendingEvents = true
+                    true
                 }
             }
         }
@@ -101,9 +100,9 @@ class Controller(
     }
 
     @JvmOverloads
-    fun drawPage(pageNum: Int, pageXOffset: Int = 0, pageYOffset: Int = 0, uiCallaback: Function1<Any, Unit>? = null) {
-        log("Controller drawPage ${document.title} $pageNum: $pageXOffset $pageYOffset")
-        pageLayoutManager.renderPageAt(pageNum, -pageXOffset, -pageYOffset, uiCallaback)
+    fun drawPage(pageNum: Int, pageXOffset: Int = 0, pageYOffset: Int = 0): Deferred<PageView?> {
+        log("Controller drawPage $document $pageNum: $pageXOffset $pageYOffset")
+        return pageLayoutManager.renderPageAt(pageNum, -pageXOffset, -pageYOffset)
     }
 
     fun processPendingEvents() {
@@ -124,25 +123,26 @@ class Controller(
         }
     }
 
-    @JvmOverloads
-    fun drawNext(uiCallaback: Function1<Any, Unit>? = null) {
+    fun drawNext(): Deferred<PageView?>? {
         layoutInfo?.let {
             val copy = it.copy()
             layoutStrategy.calcPageLayout(copy, true, pageCount)
-            drawPage(copy.pageNumber, copy.x.offset, copy.y.offset,  uiCallaback)
+            return drawPage(copy.pageNumber, copy.x.offset, copy.y.offset)
         } ?: run {
             log("Problem: no visible page invoking drawNext")
+            return null
         }
     }
 
-    @JvmOverloads
-    fun drawPrev(uiCallaback: Function1<Any, Unit>? = null) {
+    fun drawPrev(): Deferred<PageView?>? {
         layoutInfo?.let {
             val copy = it.copy()
             layoutStrategy.calcPageLayout(copy, false, pageCount)
-            drawPage(copy.pageNumber, copy.x.offset, copy.y.offset,  uiCallaback)
+            log("Controller drawPrev ${copy.pageNumber} $document: ${copy.x.offset} ${copy.y.offset}")
+            return drawPage(copy.pageNumber, copy.x.offset, copy.y.offset)
         } ?: run {
             log("Problem: no visible page invoking drawPrev")
+            return null
         }
     }
 
@@ -182,7 +182,7 @@ class Controller(
         pageLayoutManager.destroy()
         pages.evictAll()
         GlobalScope.launch(Dispatchers.Default) {
-            log("Destroying controller for ${document}...")
+            log("Destroying controller for $document...")
             rootJob.cancelAndJoin()
             document.destroy()
         }

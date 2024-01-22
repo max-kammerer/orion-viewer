@@ -2,11 +2,12 @@ package universe.constellation.orion.viewer
 
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.Point
 import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.Region
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -15,16 +16,21 @@ import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.geometry.RectF
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.view.OrionDrawScene
 import universe.constellation.orion.viewer.view.PageLayoutManager
+import kotlin.coroutines.coroutineContext
 import kotlin.math.max
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.job
 
 enum class State(val interactWithUUI: Boolean) {
-    CREATED(false),
+    STUB(false),
     SIZE_AND_BITMAP_CREATED(true),
     CAN_BE_DELETED(false),
     DESTROYED(false)
@@ -33,6 +39,11 @@ enum class State(val interactWithUUI: Boolean) {
 interface PageInitListener {
 
     fun onPageInited(pageView: PageView)
+}
+
+val handler = CoroutineExceptionHandler { _, _ ->
+    log("Bitmap rendering cancelled")
+    //TODO processing
 }
 
 class LayoutData {
@@ -47,9 +58,6 @@ class LayoutData {
     val globalRight: Float
         get() = position.x + wholePageRect.right
 
-    companion object {
-        val EMPTY = Rect()
-    }
 
     fun contains(x: Float, y: Float): Boolean {
         return wholePageRect.contains((x - position.x) .toInt(), (y-position.y).toInt())
@@ -98,8 +106,6 @@ class PageView(
         wholePageRect.set(pageLayoutManager.defaultSize())
     }
 
-    val offset: Position = Point(0, 0)
-
     val wholePageRect
         get() = layoutData.wholePageRect
 
@@ -111,13 +117,14 @@ class PageView(
     internal var scene: OrionDrawScene? = null
 
     var pageJobs = SupervisorJob(rootJob)
+    var pageInfoJob: Deferred<LayoutPosition>? = null
 
     @Volatile
     var bitmap: Bitmap? = null
 
     //TODO reset on lp changes
     @Volatile
-    var state: State = State.CREATED
+    var state: State = State.STUB
 
     @Volatile
     var marker: Int = 1
@@ -132,7 +139,15 @@ class PageView(
     }
 
 
+
+
+    val renderingScope = CoroutineScope(controller.context + pageJobs + handler)
+    val pageInfoScope = CoroutineScope(controller.context + pageJobs + handler)
+
     val layoutInfo: LayoutPosition = LayoutPosition()
+
+    @Volatile
+    lateinit var pageInfo: Deferred<PageView>
 
     private fun stopJobs() {
 
@@ -176,13 +191,9 @@ class PageView(
     fun reinit() {
         if (state == State.SIZE_AND_BITMAP_CREATED) return
         println("Page $pageNum reinit $state $document" )
-        //wholePageRect.set(pageLayoutManager.defaultSize())
-        //layoutData.wholePageRect.set(wholePageRect)
-
-        state = State.CREATED
         pageJobs.cancelChildren()
         val myMarker = marker
-        GlobalScope.launch(controller.context + pageJobs) {
+        pageInfo = GlobalScope.async (controller.context + pageJobs) {
             controller.layoutStrategy.reset(layoutInfo, pageNum)
             if (isActive) {
                 withContext(Dispatchers.Main) {
@@ -191,6 +202,7 @@ class PageView(
                     }
                 }
             }
+            this@PageView
         }
     }
 
@@ -212,13 +224,13 @@ class PageView(
                 null
             }
         } ?: createDefaultBitmap()
-        log("initBitmap $pageNum ${controller.document}: $nonRenderedRegion")
+        log("PageView.initBitmap $pageNum ${controller.document}: $nonRenderedRegion")
         state = State.SIZE_AND_BITMAP_CREATED
         pageLayoutManager.onSizeCalculated(this, oldSize)
     }
 
     fun draw(canvas: Canvas, scene: OrionDrawScene) {
-        if (state != State.CREATED && bitmap!= null && bitmap?.isRecycled != true) {
+        if (state != State.STUB && bitmap!= null && bitmap?.isRecycled != true) {
             //draw bitmap
             println("Draw page $pageNum in state $state ${bitmap?.isRecycled} ${bitmap?.width} ${bitmap?.height} ")
             draw(canvas, bitmap!!, layoutInfo, scene.defaultPaint!!, scene)
@@ -236,59 +248,67 @@ class PageView(
         return controller.bitmapCache.createBitmap(width, height)
     }
 
-    internal fun renderVisible(uiCallaback: Function1<Any, Unit>? = null) {
-        val tmpRect = layoutData.tmpRect
-        tmpRect.set(wholePageRect)
-        tmpRect.offset(layoutData.position.x.toInt(), layoutData.position.y.toInt())
-
-        layoutData.visibleOnScreenPartInTmp(pageLayoutManager.sceneRect)?.let {
-            render(it, uiCallaback)
-        } ?: println("Non visible")
+    internal fun renderVisibleAsync() {
+        GlobalScope.async (Dispatchers.Main + handler) {
+            renderVisible()
+        }
     }
 
-    internal fun render(rect: Rect, uiCallaback: Function1<Any, Unit>? = null) {
+    internal suspend fun renderVisible(): Deferred<PageView?>? {
+        return layoutData.visibleOnScreenPartInTmp(pageLayoutManager.sceneRect)?.let {
+            return coroutineScope {
+                async (Dispatchers.Main + handler) {
+                    render(it)?.await()
+                }
+            }
+        } ?: run { println("Non visible $pageNum"); null }
+
+    }
+
+    internal suspend fun render(rect: Rect): Deferred<PageView>? {
         val layoutStrategy = controller.layoutStrategy
-        if (!(layoutStrategy.viewWidth > 0 &&  layoutStrategy.viewHeight > 0)) return
+        if (!(layoutStrategy.viewWidth > 0 &&  layoutStrategy.viewHeight > 0)) return null
 
-        val handler = CoroutineExceptionHandler { _, _ ->
-            log("Bitmap rendering cancelled")
-            //TODO processing
+        if (state != State.SIZE_AND_BITMAP_CREATED) {
+            pageInfo.await()
         }
-
         tempRegion.set(nonRenderedRegion)
         if (tempRegion.op(rect, nonRenderedRegion, Region.Op.INTERSECT)) {
             val bound = tempRegion.bounds
-            GlobalScope.launch (controller.context + pageJobs + handler) {
-                timing("Rendering $pageNum page in rendering engine: $bound") {
-                    renderInner(bound, layoutInfo, pageNum, document, bitmap!!, layoutStrategy)
-                }
-                if (isActive) {
-                    withContext(Dispatchers.Main) {
-                        if (kotlin.coroutines.coroutineContext.isActive) {
-                            nonRenderedRegion.op(bound, Region.Op.DIFFERENCE)
-                            log("new nonrender $pageNum: " + nonRenderedRegion.toString())
-                            log("invalidate: $pageNum $layoutData")
-                            println("inv: $pageNum ")
-                            scene?.invalidate()
-                            if (uiCallaback != null) {
-                                uiCallaback(bitmap!!)
+            return coroutineScope {
+                async(controller.context + pageJobs + handler) {
+                    timing("Rendering $pageNum page in rendering engine: $bound") {
+                        renderInner(bound, layoutInfo, pageNum, document, bitmap!!)
+                    }
+                    if (isActive) {
+                        withContext(Dispatchers.Main) {
+                            if (kotlin.coroutines.coroutineContext.isActive) {
+                                nonRenderedRegion.op(bound, Region.Op.DIFFERENCE)
+                                log("PageView.render invalidate: $pageNum $layoutData")
+                                scene?.invalidate()
                             }
                         }
+                    } else {
+                        log("PageView.render: canceled")
                     }
+                    this@PageView
                 }
             }
         } else {
-            println("Already rendered $state $document $pageNum: $rect")
-            //println("Before check to draw $pageNum: $rect")
-            scene?.invalidate()
-            if (uiCallaback != null) {
-                uiCallaback(bitmap!!)
+            if (state == State.SIZE_AND_BITMAP_CREATED) {
+                println("Already rendered $state $document $pageNum: $rect")
+                scene?.invalidate()
+                val completableDeferred = CompletableDeferred<PageView>(coroutineContext.job)
+                completableDeferred.complete(this@PageView)
+                return completableDeferred
+            } else {
+                println("Skipped $state $document $pageNum")
             }
         }
+        return null
     }
 
     private fun draw(canvas: Canvas, bitmap: Bitmap, info: LayoutPosition, defaultPaint: Paint, scene: OrionDrawScene) {
-        println("DrawX $pageNum:  ${layoutData.position.x} ${layoutData.position.y}")
         canvas.save()
         if (!bitmap.isRecycled) {
             val tmpRect  = Rect()
@@ -298,15 +318,14 @@ class PageView(
             if (tmpRect.intersect(pageLayoutManager.sceneRect)) {
                 screenRect.set(tmpRect)
                 tmpRect.offset(-layoutData.position.x.toInt(), -layoutData.position.y.toInt())
-                //tmpRect2.offset(layoutData.position.x.toFloat(), layoutData.position.y.toFloat())
-                println("Draw $pageNum:  $tmpRect $screenRect $bitmap")
+                println("PageView.draw: $pageNum:  $tmpRect $screenRect ${bitmap.width * bitmap.height}")
                 canvas.drawBitmap(bitmap, tmpRect, screenRect, defaultPaint)
             }else {
-                println("Skip $tmpRect $screenRect")
+                println("PageView.draw: skipped $tmpRect $screenRect")
             }
             drawBorder(canvas, scene, info)
         } else {
-            println("Recycled: " + bitmap.isRecycled)
+            println("PageView.draw: recycled " + bitmap.isRecycled)
         }
         canvas.restore()
     }
@@ -316,10 +335,8 @@ class PageView(
         scene: OrionDrawScene,
         info: LayoutPosition
     ) {
-        //if (scene.inScaling) {
-            //log("Draw: border $info")
         canvas.save()
-        canvas.translate(layoutData.position.x.toFloat(), layoutData.position.y.toFloat())
+        canvas.translate(layoutData.position.x, layoutData.position.y)
             val left = 0
             val top = 0
 
@@ -334,7 +351,6 @@ class PageView(
                 scene.borderPaint!!
             )
         canvas.restore()
-        //}
     }
 
     fun free() {
@@ -349,7 +365,7 @@ class PageView(
 
     fun invalidateAndUpdate() {
         marker++
-        state = State.CREATED
+        state = State.STUB
         pageJobs.cancelChildren()
         reinit()
     }

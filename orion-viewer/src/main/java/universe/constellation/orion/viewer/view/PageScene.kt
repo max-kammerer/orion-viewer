@@ -30,8 +30,7 @@ class PageScene : View {
             println("Scroll global: " + pageView?.pageNum + " " + visibleRect)
         }
         if (getLocalVisibleRect(visibleRect)) {
-            println("Scroll: " + pageView?.pageNum + " " + visibleRect)
-            pageView?.render(visibleRect)
+            pageView?.renderVisibleAsync()
         }
     }
 

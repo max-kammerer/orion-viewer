@@ -311,14 +311,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             }
 
             try {
-                val lastPageInfo1 =
-                    withContext(Dispatchers.Default + rootJob) {
-                        loadBookParameters(
-                            this@OrionViewerActivity,
-                            if (openAsTempTestBook) "temp-test-bookx" else filePath,
-                            initalizer(globalOptions)
-                        )
-                    }
+                val lastPageInfo1 = loadBookParameters(rootJob, filePath)
                 lastPageInfo = lastPageInfo1
                 orionContext.currentBookParameters = lastPageInfo1
                 OptionActions.DEBUG.doAction(this@OrionViewerActivity, false, globalOptions.getBooleanProperty("DEBUG", false))
@@ -355,6 +348,27 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 log(e)
                 throw e
             }
+        }
+    }
+
+    private suspend fun loadBookParameters(
+        rootJob: CompletableJob,
+        filePath: String
+    ): LastPageInfo {
+        if (openAsTempTestBook) {
+            return loadBookParameters(
+                this@OrionViewerActivity,
+                "temp-test-bookx",
+                initalizer(globalOptions)
+            )
+        }
+
+        return withContext(Dispatchers.Default + rootJob) {
+            loadBookParameters(
+                this@OrionViewerActivity,
+                filePath,
+                initalizer(globalOptions)
+            )
         }
     }
 

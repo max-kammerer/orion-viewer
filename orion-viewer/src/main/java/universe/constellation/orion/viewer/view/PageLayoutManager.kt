@@ -3,10 +3,15 @@ package universe.constellation.orion.viewer.view
 import android.graphics.PointF
 import android.graphics.Rect
 import androidx.core.math.MathUtils
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.PageInitListener
 import universe.constellation.orion.viewer.PageView
 import universe.constellation.orion.viewer.State
+import universe.constellation.orion.viewer.handler
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.selection.PageAndSelection
@@ -69,12 +74,24 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
 
     fun currentPageLayout(): LayoutPosition? {
         //TODO
-        return visiblePages.firstOrNull()?.layoutInfo;
+        val page = visiblePages.firstOrNull() ?: return null
+        val layoutInfo = page.layoutInfo
+        val position = page.layoutData.position
+        layoutInfo.x.offset = -position.x.toInt()
+        layoutInfo.y.offset = -position.y.toInt()
+        return layoutInfo
     }
 
     fun doScroll(xPos: Float, yPos: Float, distanceX: Float, distanceY: Float) {
         println("onScroll: $distanceX, $distanceY")
         isSinglePageMode = false
+        doScrollOnly(xPos, yPos, distanceX, distanceY)
+        uploadNewPages()
+        scene.postInvalidate()
+    }
+
+    private fun doScrollOnly(xPos: Float, yPos: Float, distanceX: Float, distanceY: Float) {
+        log("onScrollOnly: $distanceX, $distanceY")
         val iterator = visiblePages.iterator()
         iterator.forEach {
             val layoutData = it.layoutData
@@ -102,8 +119,6 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
             }
         }
         dump()
-        uploadNewPages()
-        scene.postInvalidate()
     }
 
     fun uploadNewPages() {        //zoom
@@ -153,6 +168,17 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         updateStateAndRender(view)
     }
 
+    private fun updateStateAndRender(view: PageView): Boolean {
+        return if (isVisible(view)) {
+            view.renderVisibleAsync()
+            true
+        } else {
+            println("toInvisible ${view.pageNum}: ${view.layoutData.globalRectInTmp()}")
+            view.toInvisibleState()
+            false
+        }
+    }
+
     fun findPageAndPageRect(screenRect: Rect): List<PageAndSelection> {
         return visiblePages.mapNotNull {
             val visibleOnScreenPart = it.layoutData.occupiedScreenPartInTmp(screenRect) ?: return@mapNotNull null
@@ -172,7 +198,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         }
     }
 
-    fun renderPageAt(pageNum: Int, x: Int, y: Int, uiCallaback: Function1<Any, Unit>? = null) {
+    fun renderPageAt(pageNum: Int, x: Int, y: Int): Deferred<PageView?> {
         isSinglePageMode = true
         val iterator = visiblePages.iterator()
         for (page in iterator) {
@@ -189,12 +215,18 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
             page
         }
 
-        //TODO keep proper position
-        page.layoutData.position.set(x.toFloat(), y.toFloat())
-        page.renderVisible(uiCallaback)
+        return GlobalScope.async (Dispatchers.Main + handler) {
+            page.pageInfo.await()
+            if (isVisible(page)) {
+                val newPosition = page.layoutData.position
+                doScrollOnly(newPosition.x, newPosition.y, x - newPosition.x, y - newPosition.y)
+                page.renderVisible()?.await()
+            }
+            else null
+        }
     }
 
-    fun dump() {
+    private fun dump() {
         visiblePages.forEach{
             println("Dump ${it.pageNum}: ${it.layoutData.position} ${it.layoutData.wholePageRect}")
         }
@@ -207,17 +239,6 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
                 log("intersection rects: ${it.first.layoutData.globalRectInTmp()} $rect2")
                 error("intersected rects ${it.first.pageNum} and ${it.second.pageNum}: $rect1")
             }
-        }
-    }
-
-    private fun updateStateAndRender(view: PageView): Boolean {
-        return if (isVisible(view)) {
-            view.renderVisible()
-            true
-        } else {
-            println("toInvisible ${view.pageNum}")
-            view.toInvisibleState()
-            false
         }
     }
 
