@@ -107,57 +107,35 @@ android {
             universalApk false
         }
     }
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/main.kotlin_module']
+        }
+    }
 
     // make per-variant version code
     android.applicationVariants.configureEach { variant ->
         variant.outputs.each { output ->
             def filter = output.getFilter(com.android.build.OutputFile.ABI)
-            output.versionCodeOverride = project.ext.abiCodes.get(filter) + variant.versionCode
-            println "New version code for " + variant.buildType.name + "/" + filter + " is " + output.versionCodeOverride
-        }
-    }
-
-    lintOptions { abortOnError false }
-
-    packagingOptions {
-        exclude 'META-INF/main.kotlin_module'
-    }
-}
-
-kotlin {
-    sourceSets {
-        commonMain {
-            dependencies {
-                implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
-                implementation project(":common")
+            if (project.ext.abiCodes.get(filter)!= null) {
+                output.versionCodeOverride = project.ext.abiCodes.get(filter) + variant.versionCode
+                println "New version code for " + variant.buildType.name + "/" + filter + " is " + output.versionCodeOverride
             }
         }
-
-//        linuxAppMain {
-//            dependencies {
-//                implementation 'org.jetbrains.kotlin:kotlin-stdlib-native'
-//            }
-//
-//            kotlin.srcDir('../native/src/main')
-//        }
-
     }
 
-//    targets {
-//        fromPreset(presets.android, 'androidApp') {
-//
-//        }
-////        fromPreset(presets.linuxX64, 'linuxApp') {
-////            compilations.main {
-////                cinterops {
-////                    interopName {
-////                         defFile "../native/src/main/c_interop/gtk3.def"
-////                    }
-////                }
-////            }
-////        }
-//    }
+
+    namespace 'universe.constellation.orion.viewer'
+    lint {
+        abortOnError false
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
 }
+
 
 tasks.register('downloadTestFiles') {
     doFirst {

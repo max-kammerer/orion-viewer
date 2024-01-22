@@ -31,6 +31,7 @@ android {
             }
         }
     }
+    namespace 'universe.constellation.orion.viewer.djvu'
 //
 //    packagingOptions {
 //        // specify the path to your object binaries, or generally:

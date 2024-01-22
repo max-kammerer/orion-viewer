@@ -2,9 +2,8 @@ apply plugin: 'com.android.library'
 
 
 android {
-    compileSdkVersion orionCompileSdk
-    buildToolsVersion orionBuildToolsVersion
-
+    compileSdk orionCompileSdk
+    namespace = "pl.polidea.treeview"
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'

@@ -15,14 +15,19 @@ android {
         }
     }
 
-    sourceSets.main.java.srcDir("src/androidMain/kotlin")
+    namespace 'universe.constellation.orion.common'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
 }
 
 kotlin {
-    targets {
-        fromPreset(presets.android, 'androidLib')
-        fromPreset(presets.linuxX64, 'linuxLib')
-    }
+    androidTarget()
+//    targets {
+//        //fromPreset(presets.android, 'android')
+//        //fromPreset(presets.linuxX64, 'linuxLib')
+//    }
 
     sourceSets {
         commonMain {
@@ -32,9 +37,8 @@ kotlin {
         }
 
 
-        androidLibMain {
+        androidMain {
             dependencies {
-                implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
                 implementation 'androidx.collection:collection:1.2.0'
             }
         }

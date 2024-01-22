@@ -21,4 +21,5 @@ android {
             path "jni/CMakeLists.txt"
         }
     }
+    namespace 'universe.constellation.orion.viewer.mupdf'
 }
