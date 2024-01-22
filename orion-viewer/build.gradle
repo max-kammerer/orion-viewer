@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-multiplatform'
 apply from: '../project.gradle'
 
 project.ext {
@@ -125,6 +125,7 @@ android {
 }
 
 kotlin {
+    android {}
     sourceSets {
         commonMain {
             dependencies {
