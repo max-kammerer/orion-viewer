@@ -228,7 +228,7 @@ class SimpleLayoutStrategy private constructor(
     }
 
 
-    override fun init(info: State, options: PageOptions) {
+    override fun init(info: LastPageInfo, options: PageOptions) {
         changeCropMargins(CropMargins(info.leftMargin, info.rightMargin, info.topMargin, info.bottomMargin, info.leftEvenMargin, info.rightEventMargin, info.enableEvenCropping, info.cropMode))
         changeRotation(info.rotation)
         changeZoom(info.zoom)
@@ -237,7 +237,7 @@ class SimpleLayoutStrategy private constructor(
         changeOverlapping(options.horizontalOverlapping, options.verticalOverlapping)
     }
 
-    override fun serialize(info: State) {
+    override fun serialize(info: LastPageInfo) {
         info.screenHeight = viewHeight
         info.screenWidth = viewWidth
 

@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import universe.constellation.orion.viewer.PageInfo;
-import universe.constellation.orion.viewer.ShortFileInfo;
 import universe.constellation.orion.viewer.device.EInkDevice;
 import universe.constellation.orion.viewer.document.Document;
 
@@ -27,10 +26,10 @@ public class TexetDevice extends EInkDevice {
 
 
     @Override
-    public void onNewBook(@NotNull ShortFileInfo info, @NotNull Document document) {
+    public void onNewBook(@NotNull String filePath, @NotNull String simpleFileName, int page, long size,  @NotNull Document document) {
         try {
-            String coverFileName = getIconFileName(info.getSimpleFileName(), info.getFileSize());
-            shtampTexetFile(info.getFileName(), info.getSimpleFileName(), "", "" + document.getPageCount(), "" + info.getCurrentPage(), coverFileName);
+            String coverFileName = getIconFileName(simpleFileName, size);
+            shtampTexetFile(filePath, simpleFileName, "", "" + document.getPageCount(), "" + page, coverFileName);
             rememberCover(coverFileName, document);
         } catch (Exception e) {
             log(e);

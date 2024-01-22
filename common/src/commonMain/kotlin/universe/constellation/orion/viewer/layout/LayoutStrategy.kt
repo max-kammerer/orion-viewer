@@ -19,6 +19,7 @@
 
 package universe.constellation.orion.viewer.layout
 
+import universe.constellation.orion.viewer.LastPageInfo
 import universe.constellation.orion.viewer.PageInfo
 import universe.constellation.orion.viewer.PageOptions
 import universe.constellation.orion.viewer.PageWalker
@@ -54,9 +55,9 @@ interface LayoutStrategy {
 
     fun changeCropMargins(cropMargins: CropMargins): Boolean
 
-    fun init(info: State, options: PageOptions)
+    fun init(info: LastPageInfo, options: PageOptions)
 
-    fun serialize(info: State)
+    fun serialize(info: LastPageInfo)
 
     fun convertToPoint(pos: LayoutPosition): Point
 

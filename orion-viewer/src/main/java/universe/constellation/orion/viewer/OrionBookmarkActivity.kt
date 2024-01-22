@@ -241,8 +241,8 @@ class OrionBookmarkActivity : OrionBaseActivity(false) {
                 builder.setTitle("Select source book").setCancelable(true).setView(group)
                 builder.setPositiveButton("Import") { dialog, which ->
                     dialog.dismiss()
-                    val currentBookParameters = orionContext.currentBookParameters as ShortFileInfo
-                    val toBook = BookNameAndSize(currentBookParameters.simpleFileName, currentBookParameters.fileSize)
+                    val currentBookParameters = orionContext.currentBookParameters
+                    val toBook = BookNameAndSize(currentBookParameters!!.simpleFileName, currentBookParameters.fileSize)
                     doImport(fileName, getCheckedItems(tree), if (importCurrent) toBook else null)
                 }
                 builder.setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
@@ -300,8 +300,8 @@ class OrionBookmarkActivity : OrionBaseActivity(false) {
         val importer = BookmarkImporter(orionContext.getBookmarkAccessor(), fileName, books, toBook)
         try {
             importer.doImport()
-            val currentBookParameters = orionContext.currentBookParameters as ShortFileInfo
-            updateView(orionContext.getBookmarkAccessor().selectBookId(currentBookParameters.simpleFileName, currentBookParameters.fileSize))
+            val currentBookParameters = orionContext.currentBookParameters
+            updateView(orionContext.getBookmarkAccessor().selectBookId(currentBookParameters!!.simpleFileName, currentBookParameters.fileSize))
             showFastMessage("Imported successfully")
         } catch (e: OrionException) {
             showAlert("Error", e.message!!)

@@ -20,14 +20,13 @@
 package universe.constellation.orion.viewer.device
 
 import universe.constellation.orion.viewer.OperationHolder
-import universe.constellation.orion.viewer.ShortFileInfo
 import universe.constellation.orion.viewer.document.Document
 
 interface Device {
 
     fun onKeyUp(keyCode: Int, isLongPress: Boolean, operation: OperationHolder): Boolean
 
-    fun onNewBook(info: ShortFileInfo, document: Document) {}
+    fun onNewBook(fileName: String, filePath: String, page: Int, size: Long, document: Document) {}
 
     fun onBookClose(currentPage: Int, pageCount: Int) {}
 
