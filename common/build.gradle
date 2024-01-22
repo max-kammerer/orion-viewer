@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion orionCompileSdk
+    compileSdk = orionCompileSdk
     defaultConfig {
         minSdkVersion 14
     }
@@ -15,7 +15,7 @@ android {
         }
     }
 
-    sourceSets.main.java.srcDir("src/androidLibMain/kotlin")
+    sourceSets.main.java.srcDir("src/androidMain/kotlin")
 }
 
 kotlin {
