@@ -17,13 +17,14 @@ import universe.constellation.orion.viewer.prefs.GlobalOptions.TEST_SCREEN_HEIGH
 import universe.constellation.orion.viewer.prefs.GlobalOptions.TEST_SCREEN_WIDTH
 import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
+import universe.constellation.orion.viewer.test.framework.dumpBitmap
 import java.io.File
 import java.io.FileOutputStream
 import java.nio.IntBuffer
 
 
 private val deviceSize = Point(300, 350) //to split page on two screen - page size is 663x886
-private const val MANUAL_DEBUG = true
+internal const val MANUAL_DEBUG = false
 
 @RunWith(Parameterized::class)
 class RenderingAndNavigationTest(private val book: BookDescription) : InstrumentationTestCase(book.toOpenIntent(), additionalParams = {
@@ -173,19 +174,7 @@ class RenderingAndNavigationTest(private val book: BookDescription) : Instrument
 
     private fun dump(data: IntArray, index: Int, suffix: String ="") {
         bitmap.copyPixelsFromBuffer(IntBuffer.wrap(data))
-        val file = Environment.getExternalStorageDirectory().path + "/orion/test$suffix${String.format("%02d", index)}.png"
-        println("saving dump into $file")
-        val file1 = File(file)
-        file1.parentFile?.mkdirs()
-        file1.createNewFile()
-        FileOutputStream(file).use { stream ->
-            bitmap.compress(
-                CompressFormat.PNG,
-                100,
-                stream
-            )
-            stream.close()
-        }
 
+        dumpBitmap("rant","$suffix${String.format("%02d",index)}", bitmap)
     }
 }

@@ -24,10 +24,10 @@ import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.view.OrionDrawScene
 import universe.constellation.orion.viewer.view.PageLayoutManager
 import kotlin.coroutines.coroutineContext
-import kotlin.math.max
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.job
+import universe.constellation.orion.viewer.bitmap.FlexibleBitmap
 
 enum class State(val interactWithUUI: Boolean) {
     STUB(false),
@@ -41,8 +41,9 @@ interface PageInitListener {
     fun onPageInited(pageView: PageView)
 }
 
-val handler = CoroutineExceptionHandler { _, _ ->
+val handler = CoroutineExceptionHandler { _, ex ->
     log("Bitmap rendering cancelled")
+    ex.printStackTrace()
     //TODO processing
 }
 
@@ -116,11 +117,11 @@ class PageView(
 
     internal var scene: OrionDrawScene? = null
 
-    var pageJobs = SupervisorJob(rootJob)
-    var pageInfoJob: Deferred<LayoutPosition>? = null
+    private var pageJobs = SupervisorJob(rootJob)
+    private var pageInfoJob: Deferred<LayoutPosition>? = null
 
     @Volatile
-    var bitmap: Bitmap? = null
+    var bitmap: FlexibleBitmap? = null
 
     //TODO reset on lp changes
     @Volatile
@@ -141,8 +142,8 @@ class PageView(
 
 
 
-    val renderingScope = CoroutineScope(controller.context + pageJobs + handler)
-    val pageInfoScope = CoroutineScope(controller.context + pageJobs + handler)
+    private val renderingScope = CoroutineScope(controller.context + pageJobs + handler)
+    private val pageInfoScope = CoroutineScope(controller.context + pageJobs + handler)
 
     val layoutInfo: LayoutPosition = LayoutPosition()
 
@@ -163,7 +164,7 @@ class PageView(
         state = State.CAN_BE_DELETED
         pageJobs.cancelChildren()
         bitmap?.apply {
-            controller.bitmapCache.free(this)
+            this.free(controller.bitmapCache)
             bitmap = null
         }
     }
@@ -193,7 +194,7 @@ class PageView(
         println("Page $pageNum reinit $state $document" )
         pageJobs.cancelChildren()
         val myMarker = marker
-        pageInfo = GlobalScope.async (controller.context + pageJobs) {
+        pageInfo = GlobalScope.async(controller.context + pageJobs + handler) {
             controller.layoutStrategy.reset(layoutInfo, pageNum)
             if (isActive) {
                 withContext(Dispatchers.Main) {
@@ -210,42 +211,30 @@ class PageView(
         if (state == State.SIZE_AND_BITMAP_CREATED) return
         val oldSize = Rect(wholePageRect)
         wholePageRect.set(0, 0, layoutInfo.x.pageDimension, layoutInfo.y.pageDimension)
-        processingPagePart.set(wholePageRect) //TODO
-        nonRenderedRegion.set(processingPagePart)
-        bitmap = bitmap?.let {
-            if (!it.isRecycled) {
-                if (!(it.width >= wholePageRect.width() && it.height >= wholePageRect.height())) {
-                    controller.bitmapCache.free(it)
-                    null
-                } else {
-                    it
-                }
-            } else {
-                null
-            }
-        } ?: createDefaultBitmap()
+        nonRenderedRegion.set(wholePageRect)
+        bitmap = bitmap?.resize(wholePageRect.width(), wholePageRect.height(), controller.bitmapCache)
+            ?: createDefaultBitmap()
         log("PageView.initBitmap $pageNum ${controller.document}: $nonRenderedRegion")
         state = State.SIZE_AND_BITMAP_CREATED
         pageLayoutManager.onSizeCalculated(this, oldSize)
     }
 
     fun draw(canvas: Canvas, scene: OrionDrawScene) {
-        if (state != State.STUB && bitmap!= null && bitmap?.isRecycled != true) {
+        if (state != State.STUB && bitmap!= null) {
             //draw bitmap
-            println("Draw page $pageNum in state $state ${bitmap?.isRecycled} ${bitmap?.width} ${bitmap?.height} ")
-            draw(canvas, bitmap!!, layoutInfo, scene.defaultPaint!!, scene)
+            println("Draw page $pageNum in state $state ${bitmap?.width} ${bitmap?.height} ")
+            draw(canvas, bitmap!!, scene.defaultPaint!!, scene)
         } else {
             println("Draw border $pageNum in state $state: ${layoutData} on screen ${layoutData.occupiedScreenPartInTmp(scene.pageLayoutManager!!.sceneRect)}")
-            drawBorder(canvas, scene, layoutInfo)
+            drawBorder(canvas, scene)
         }
         scene.orionStatusBarHelper.onPageUpdate(layoutInfo)
     }
 
     //TODO scale up to necessary, tune to heap size
-    private fun createDefaultBitmap(): android.graphics.Bitmap {
-        val width = max(wholePageRect.width(), controller.layoutStrategy.viewWidth)
-        val height = max(wholePageRect.height(), controller.layoutStrategy.viewHeight)
-        return controller.bitmapCache.createBitmap(width, height)
+    private fun createDefaultBitmap(): FlexibleBitmap {
+        val deviceInfo = controller.getDeviceInfo()
+        return FlexibleBitmap(wholePageRect, deviceInfo.width / 2, deviceInfo.height / 2)
     }
 
     internal fun renderVisibleAsync() {
@@ -278,7 +267,7 @@ class PageView(
             return coroutineScope {
                 async(controller.context + pageJobs + handler) {
                     timing("Rendering $pageNum page in rendering engine: $bound") {
-                        renderInner(bound, layoutInfo, pageNum, document, bitmap!!)
+                        bitmap!!.render(bound, layoutInfo, pageNum, document, controller.bitmapCache)
                     }
                     if (isActive) {
                         withContext(Dispatchers.Main) {
@@ -308,59 +297,39 @@ class PageView(
         return null
     }
 
-    private fun draw(canvas: Canvas, bitmap: Bitmap, info: LayoutPosition, defaultPaint: Paint, scene: OrionDrawScene) {
+    private val drawTmp  = Rect()
+    private val drawSceneRect  = RectF()
+
+    private fun draw(canvas: Canvas, bitmap: FlexibleBitmap, defaultPaint: Paint, scene: OrionDrawScene) {
         canvas.save()
-        if (!bitmap.isRecycled) {
-            val tmpRect  = Rect()
-            val screenRect  = RectF(pageLayoutManager.sceneRect)
-            tmpRect.set(wholePageRect)
-            tmpRect.offset(layoutData.position.x.toInt(), layoutData.position.y.toInt())
-            if (tmpRect.intersect(pageLayoutManager.sceneRect)) {
-                screenRect.set(tmpRect)
-                tmpRect.offset(-layoutData.position.x.toInt(), -layoutData.position.y.toInt())
-                println("PageView.draw: $pageNum:  $tmpRect $screenRect ${bitmap.width * bitmap.height}")
-                canvas.drawBitmap(bitmap, tmpRect, screenRect, defaultPaint)
-            }else {
-                println("PageView.draw: skipped $tmpRect $screenRect")
-            }
-            drawBorder(canvas, scene, info)
+        drawTmp.set(wholePageRect)
+        drawTmp.offset(layoutData.position.x.toInt(), layoutData.position.y.toInt())
+        if (drawTmp.intersect(pageLayoutManager.sceneRect)) {
+            drawSceneRect.set(drawTmp)
+            drawTmp.offset(-layoutData.position.x.toInt(), -layoutData.position.y.toInt())
+            println("PageView.draw: $pageNum:  $drawTmp $drawSceneRect ${bitmap.width * bitmap.height}")
+            bitmap.draw(canvas, drawTmp, drawSceneRect, defaultPaint, scene.borderPaint!!)
         } else {
-            println("PageView.draw: recycled " + bitmap.isRecycled)
+            println("PageView.draw: skipped $drawTmp $drawSceneRect")
         }
+        drawBorder(canvas, scene)
+
         canvas.restore()
     }
 
     private fun drawBorder(
         canvas: Canvas,
         scene: OrionDrawScene,
-        info: LayoutPosition
     ) {
-        canvas.save()
-        canvas.translate(layoutData.position.x, layoutData.position.y)
-            val left = 0
-            val top = 0
-
-            val right = (info.x.pageDimension )
-            val bottom = (info.y.pageDimension )
-
-            canvas.drawRect(
-                left.toFloat(),
-                top.toFloat(),
-                right.toFloat(),
-                bottom.toFloat(),
-                scene.borderPaint!!
-            )
-        canvas.restore()
+        canvas.drawRect(
+            layoutData.globalRectInTmp(),
+            scene.borderPaint!!
+        )
     }
 
-    fun free() {
-        freeBitmap()
-    }
-
-    private fun freeBitmap() {
-        bitmap?.let {
-            controller.bitmapCache.free(it)
-        }
+    private fun i(): Int {
+        val bottom = wholePageRect.height()
+        return bottom
     }
 
     fun invalidateAndUpdate() {

@@ -215,8 +215,8 @@ JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong docl, jlong pagel,
     }
     //memset(pixels, 255, num_pixels * 4);
 
-    LOGI("Rendering page=%dx%d patch=[%d,%d,%d,%d]",
-         patchW, patchH, targetRect.x, targetRect.y, targetRect.w, targetRect.h);
+    LOGI("Rendering page=%dx%d patch=[%d,%d,%d,%d], shift=%d",
+         patchW, patchH, targetRect.x, targetRect.y, targetRect.w, targetRect.h, shift);
 
     unsigned int masks[4] = {0xff, 0xff00, 0xff0000, 0xff000000};
     ddjvu_format_t *pixelFormat = ddjvu_format_create(DDJVU_FORMAT_RGBMASK32, 4, masks);

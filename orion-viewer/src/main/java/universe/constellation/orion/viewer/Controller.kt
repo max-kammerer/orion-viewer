@@ -20,7 +20,11 @@
 package universe.constellation.orion.viewer
 
 import android.app.Activity
+import android.app.ActivityManager
+import android.content.Context.ACTIVITY_SERVICE
 import android.graphics.Point
+import android.os.Build
+import android.util.DisplayMetrics
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -28,6 +32,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
+import universe.constellation.orion.viewer.bitmap.DeviceInfo
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.DocumentWithCachingImpl
 import universe.constellation.orion.viewer.document.OutlineItem
@@ -355,5 +360,17 @@ class Controller(
     companion object {
         //https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
         val PUNCTUATION_CHARS = "!\"#\$%&'()*+,-./:;<=>?@[\\]^_`{|}~".toSet()
+    }
+
+    fun getDeviceInfo(): DeviceInfo {
+        val am = activity.getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        Runtime.getRuntime().maxMemory() / 1024
+        Runtime.getRuntime().totalMemory()
+        val dm = DisplayMetrics()
+        activity.windowManager.defaultDisplay.getMetrics(dm);
+
+        val width = dm.widthPixels
+        val height = dm.heightPixels
+        return DeviceInfo(am.memoryClass, width, height, Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1)
     }
 }

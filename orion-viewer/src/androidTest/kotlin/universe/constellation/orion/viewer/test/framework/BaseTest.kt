@@ -1,5 +1,6 @@
 package universe.constellation.orion.viewer.test.framework
 
+import android.graphics.Bitmap
 import android.os.Build
 import android.os.Environment
 import androidx.test.platform.app.InstrumentationRegistry
@@ -7,11 +8,11 @@ import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject2
-import androidx.test.uiautomator.UiSelector
 import androidx.test.uiautomator.Until
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
+import org.junit.rules.TestName
 import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.FileUtil
 import universe.constellation.orion.viewer.document.DocumentWithCaching
@@ -19,7 +20,12 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
+
 abstract class BaseTest {
+
+    @JvmField
+    @Rule
+    val name = TestName()
 
     @Before
     fun grantPermissions() {
@@ -43,6 +49,10 @@ abstract class BaseTest {
         android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
         android.Manifest.permission.READ_EXTERNAL_STORAGE
     )
+
+    fun dumpBitmap(suffix: String, bitmap: Bitmap) {
+        dumpBitmap(name.methodName, suffix, bitmap)
+    }
 
     companion object {
         val testFolder: File = File(Environment.getExternalStorageDirectory(), "Download/orion")
@@ -87,3 +97,19 @@ fun extractFileFromTestData(fileName: String): File {
 }
 
 fun getFileUnderTestData(relativePath: String): String = "testData/$relativePath"
+
+internal fun dumpBitmap(prefix: String = "test", suffix: String, bitmap: Bitmap) {
+    val file = Environment.getExternalStorageDirectory().path + "/orion/$prefix$suffix.png"
+    println("saving dump into $file")
+    val file1 = File(file)
+    file1.parentFile?.mkdirs()
+    file1.createNewFile()
+    FileOutputStream(file).use { stream ->
+        bitmap.compress(
+            Bitmap.CompressFormat.PNG,
+            100,
+            stream
+        )
+        stream.close()
+    }
+}

@@ -8,6 +8,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.OrionViewerActivity
+import universe.constellation.orion.viewer.test.MANUAL_DEBUG
 
 @RunWith(Parameterized::class)
 abstract class BookTest(path: String) : BaseTest() {
@@ -42,6 +43,16 @@ enum class BookDescription(
             )
             data = Uri.fromFile(path)
             addCategory(Intent.CATEGORY_DEFAULT)
+        }
+    }
+
+    companion object {
+        fun executionEntries(): List<BookDescription> {
+            if (MANUAL_DEBUG) {
+                return listOf(BookDescription.entries.first())
+            } else {
+                return BookDescription.entries
+            }
         }
     }
 }

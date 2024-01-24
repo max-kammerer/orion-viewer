@@ -23,18 +23,14 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Point
-import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
-import universe.constellation.orion.viewer.PageView
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.util.MoveUtil
 
 class OrionDrawScene : View {
 
     internal lateinit var orionStatusBarHelper: OrionStatusBarHelper
-
-    internal var pageView: PageView? = null
 
     private var dimensionAware: ViewDimensionAware? = null
 
@@ -57,8 +53,6 @@ class OrionDrawScene : View {
     private val tasks = ArrayList<DrawTask>()
 
     private var inited = false
-
-    var sceneRect = Rect(0, 0, 0, 0)
 
     private lateinit var stuff: ColorStuff
 

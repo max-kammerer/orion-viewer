@@ -2,14 +2,11 @@ package universe.constellation.orion.viewer
 
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.Rect
-import universe.constellation.orion.viewer.document.Document
-import universe.constellation.orion.viewer.layout.LayoutPosition
 import java.util.concurrent.ConcurrentLinkedQueue
 
-private const val BITMAP_CACHE_SIZE = 10
+private const val DEFAULT_BITMAP_CACHE_SIZE = 10
 
-open class BitmapCache : Thread() {
+open class BitmapCache(val size: Int = DEFAULT_BITMAP_CACHE_SIZE) {
 
     private val cachedBitmaps = ConcurrentLinkedQueue<CacheInfo>()
 
@@ -19,7 +16,7 @@ open class BitmapCache : Thread() {
 
     fun createBitmap(width: Int, height: Int): Bitmap {
         var bitmap: Bitmap? = null
-        if (cachedBitmaps.size >= BITMAP_CACHE_SIZE) {
+        if (cachedBitmaps.size >= size) {
             //TODO: add checks
             val nonValids = cachedBitmaps.asSequence().filter { !it.isValid }
             val cacheInfo =
@@ -37,13 +34,13 @@ open class BitmapCache : Thread() {
 
         if (bitmap == null) {
             bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            log("BitmapCache: new bitmap $width x $height created")
         } else {
             log("BitmapCache: using cached bitmap $bitmap")
         }
         addToCache(CacheInfo(bitmap))
         bitmap.eraseColor(Color.TRANSPARENT)
 
-        log("BitmapCache create bitmap: $width $height")
         return bitmap
     }
 
@@ -66,10 +63,10 @@ open class BitmapCache : Thread() {
         }
         log("BitmapCache: cache invalidated")
     }
-}
 
-fun renderInner(bound: Rect, curPos: LayoutPosition, page: Int, doc: Document, bitmap: Bitmap): Bitmap {
-    println("Rendering $page: $bound $curPos")
-    doc.renderPage(page, bitmap, curPos.docZoom, bound.left, bound.top,  bound.right, bound.bottom, curPos.x.marginLess, curPos.y.marginLess)
-    return bitmap
+    fun free() {
+        invalidateCache()
+        cachedBitmaps.map { it.bitmap.recycle() }
+        cachedBitmaps.clear()
+    }
 }
