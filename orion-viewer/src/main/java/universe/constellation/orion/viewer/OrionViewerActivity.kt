@@ -499,11 +499,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private fun initZoomScreen() {
         //zoom screen
-
-        val sp = findMyViewById(R.id.zoom_spinner) as Spinner
-
+        val spinner = findMyViewById(R.id.zoom_spinner) as Spinner
         val zoomText = findMyViewById(R.id.zoom_picker_message) as EditText
-
         val zoomSeek = findMyViewById(R.id.zoom_picker_seeker) as SeekBar
 
         zoomSeek.max = 300
@@ -511,10 +508,10 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 if (zoomInternal != 1) {
                     zoomText.setText("$progress")
-                    if (sp.selectedItemPosition != 0) {
+                    if (spinner.selectedItemPosition != 0) {
                         val oldInternal = zoomInternal
                         zoomInternal = 2
-                        sp.setSelection(0)
+                        spinner.setSelection(0)
                         zoomInternal = oldInternal
                     }
                 }
@@ -531,33 +528,31 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             }
         })
 
-        val zplus = findMyViewById(R.id.zoom_picker_plus) as ImageButton
-        zplus.setOnClickListener { zoomSeek.incrementProgressBy(1) }
+        val zoomPlus = findMyViewById(R.id.zoom_picker_plus) as ImageButton
+        zoomPlus.setOnClickListener { zoomSeek.incrementProgressBy(1) }
 
-        val zminus = findMyViewById(R.id.zoom_picker_minus) as ImageButton
-        zminus.setOnClickListener {
+        val zoomMinus = findMyViewById(R.id.zoom_picker_minus) as ImageButton
+        zoomMinus.setOnClickListener {
             if (zoomSeek.progress != 0) {
                 zoomSeek.incrementProgressBy(-1)
             }
         }
 
-        val closeZoomPeeker = findMyViewById(R.id.zoom_picker_close) as ImageButton
-        closeZoomPeeker.setOnClickListener {
-            //main menu
+        val closeZoomPicker = findMyViewById(R.id.zoom_picker_close) as ImageButton
+        closeZoomPicker.setOnClickListener {
             onAnimatorCancel()
-            //updateZoom();
         }
 
         val zoomPreview = findMyViewById(R.id.zoom_preview) as ImageButton
         zoomPreview.setOnClickListener {
             onApplyAction()
-            val index = sp.selectedItemPosition
+            val index = spinner.selectedItemPosition
             controller!!.changeZoom(if (index == 0) (java.lang.Float.parseFloat(zoomText.text.toString()) * 100).toInt() else -1 * (index - 1))
             updateZoom()
         }
 
-        sp.adapter = MyArrayAdapter(applicationContext)
-        sp.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        spinner.adapter = MyArrayAdapter(applicationContext)
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 val disable = position != 0
                 val oldZoomInternal = zoomInternal
@@ -572,8 +567,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     zoomInternal = oldZoomInternal
                 }
 
-                zminus.visibility = if (disable) View.GONE else View.VISIBLE
-                zplus.visibility = if (disable) View.GONE else View.VISIBLE
+                zoomMinus.visibility = if (disable) View.GONE else View.VISIBLE
+                zoomPlus.visibility = if (disable) View.GONE else View.VISIBLE
 
                 zoomText.isFocusable = !disable
                 zoomText.isFocusableInTouchMode = !disable
@@ -588,15 +583,14 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
 
         //by width
-        sp.setSelection(1)
-
+        spinner.setSelection(1)
     }
 
-    fun updateZoom() {
+    private fun updateZoom() {
         val zoomSeek = findMyViewById(R.id.zoom_picker_seeker) as SeekBar
         val textView = findMyViewById(R.id.zoom_picker_message) as TextView
 
-        val sp = findMyViewById(R.id.zoom_spinner) as Spinner
+        val spinner = findMyViewById(R.id.zoom_spinner) as Spinner
         val spinnerIndex: Int
         zoomInternal = 1
         try {
@@ -609,7 +603,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 textView.text = (zoom / 100f).toString()
             }
             zoomSeek.progress = zoom / 100
-            sp.setSelection(spinnerIndex)
+            spinner.setSelection(spinnerIndex)
         } finally {
             zoomInternal = 0
         }

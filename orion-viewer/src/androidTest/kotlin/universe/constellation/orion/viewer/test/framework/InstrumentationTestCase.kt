@@ -18,6 +18,7 @@ abstract class InstrumentationTestCase(intent: Intent, private val showTapHelp: 
         } else {
             putExtra(GlobalOptions.SHOW_TAP_HELP, false)
         }
+        intent.putExtra(GlobalOptions.OPEN_AS_TEMP_BOOK, true)
         additionalParams(this)
     })
 
