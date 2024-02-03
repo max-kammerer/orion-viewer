@@ -1051,13 +1051,12 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     private fun showTapDialogIfNeeded() {
-
-            (view as View).doOnLayout {
-                if (globalOptions.isShowTapHelp) {
-                    TapHelpDialog(this).showDialog()
-                }
-                controller?.pageLayoutManager?.uploadNewPages()
+        (view as View).doOnLayout {
+            if (globalOptions.isShowTapHelp) {
+                TapHelpDialog(this).showDialog()
             }
+            controller?.pageLayoutManager?.uploadNewPages()
+        }
     }
 
     fun startSearch() {

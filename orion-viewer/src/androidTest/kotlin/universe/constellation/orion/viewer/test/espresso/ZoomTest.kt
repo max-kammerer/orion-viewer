@@ -21,6 +21,7 @@ import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
 
 @SdkSuppress(minSdkVersion = 21)
+/*Default zoom is "Fit Width"*/
 open class BaseEspressoTest(bookDescription: BookDescription) : InstrumentationTestCase(bookDescription.toOpenIntent()) {
 
     companion object {

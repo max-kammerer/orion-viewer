@@ -17,6 +17,8 @@ import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.selection.PageAndSelection
 import kotlin.math.abs
 
+private const val VISIBLE_PAGE_LIMIT = 5
+
 class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): ViewDimensionAware {
 
     init {
@@ -130,6 +132,14 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
 
     fun uploadNewPages() {        //zoom
         if (isSinglePageMode) return
+        if (visiblePages.size >= VISIBLE_PAGE_LIMIT) {
+            if (visiblePages.size == VISIBLE_PAGE_LIMIT && visiblePages.first().layoutData.position.y < 0) {
+                //upload additional page
+            } else {
+                //don't add new pages
+                return
+            }
+        }
         println("Before uploadNewPages")
         dump()
         if (visiblePages.isEmpty()) {

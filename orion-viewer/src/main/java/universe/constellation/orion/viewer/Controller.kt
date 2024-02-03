@@ -45,7 +45,7 @@ import universe.constellation.orion.viewer.view.PageLayoutManager
 import universe.constellation.orion.viewer.view.ViewDimensionAware
 import java.util.concurrent.Executors
 
-private const val CACHE_SIZE = 5
+private const val CACHE_SIZE = 10
 
 class Controller(
     val activity: OrionViewerActivity,
