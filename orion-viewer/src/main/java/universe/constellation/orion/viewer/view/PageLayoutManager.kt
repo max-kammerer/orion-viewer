@@ -54,6 +54,13 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         uploadNewPages()
     }
 
+    fun forcePageUpdate() {
+        visiblePages.forEach {
+            it.invalidateAndUpdate()
+            println("Page force update " + it.pageNum)
+        }
+    }
+
     fun destroy() {
         visiblePages.forEach {
             it.toInvisibleState()
@@ -237,7 +244,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
             if (rect1.intersect(rect2)) {
                 log("intersection area: $rect1")
                 log("intersection rects: ${it.first.layoutData.globalRectInTmp()} $rect2")
-                error("intersected rects ${it.first.pageNum} and ${it.second.pageNum}: $rect1")
+                error("intersected pages ${it.first.pageNum} and ${it.second.pageNum} rects: $rect1")
             }
         }
     }
@@ -256,32 +263,33 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         pageListener?.onPageInited(updatedView)
 
         log("onSizeCalculated ${updatedView.pageNum}: ${updatedView.layoutData} $oldArea")
-        var found = false
-        var shiftY = 0
         if (updatedView.layoutData.position.y < 0) {
             if (isVisible(oldArea, updatedView.layoutData.position)) {
-                shiftY = oldArea.height() - updatedView.wholePageRect.height()
-                updatedView.layoutData.position.y += shiftY
+                updatedView.layoutData.position.y -= updatedView.wholePageRect.height() - oldArea.height()
                 updatedView.layoutData.wholePageRect.set(updatedView.wholePageRect)
                 dump()
             } else {
+                println("invisible $oldArea")
                 visiblePages.remove(updatedView)
             }
         }
         else {
+            var found = false
+            var shiftY = 0
             for (page in visiblePages) {
                 if (found) {
                     page.layoutData.position.y += shiftY
-                } else if (page == updatedView) {
+                } else if (page === updatedView) {
                     found = true
                     val viewDimension = page.layoutData.wholePageRect
-                    shiftY = page.wholePageRect.height() - viewDimension.height()
+                    shiftY = viewDimension.height() - oldArea.height()
                     viewDimension.set(page.wholePageRect)
                 }
             }
         }
         updateStateAndRender(updatedView)
         scene.invalidate()
+        dump()
     }
 
     fun onViewSizeChanged() {

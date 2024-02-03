@@ -193,7 +193,6 @@ class PageView(
         if (state == State.SIZE_AND_BITMAP_CREATED) return
         println("Page $pageNum reinit $state $document" )
         pageJobs.cancelChildren()
-        val myMarker = marker
         pageInfo = GlobalScope.async(controller.context + pageJobs + handler) {
             controller.layoutStrategy.reset(layoutInfo, pageNum)
             if (isActive) {
@@ -238,7 +237,7 @@ class PageView(
     }
 
     internal fun renderVisibleAsync() {
-        GlobalScope.async (Dispatchers.Main + handler) {
+        GlobalScope.launch (Dispatchers.Main + handler) {
             renderVisible()
         }
     }
@@ -292,6 +291,7 @@ class PageView(
                 return completableDeferred
             } else {
                 println("Skipped $state $document $pageNum")
+                scene?.invalidate()
             }
         }
         return null

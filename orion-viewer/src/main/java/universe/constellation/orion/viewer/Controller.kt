@@ -85,7 +85,7 @@ class Controller(
                 println("viewParametersChanged")
                 hasPendingEvents = if (this@Controller.activity._isResumed) {
                     bitmapCache.invalidateCache()
-                    forcePageRecreation()
+                    pageLayoutManager.forcePageUpdate()
                     false
                 } else {
                     true
@@ -96,12 +96,6 @@ class Controller(
 
         activity.subscriptionManager.addDocListeners(listener)
 
-    }
-
-    fun forcePageRecreation() {
-        pages.snapshot().values.forEach {
-            it.invalidateAndUpdate()
-        }
     }
 
     @JvmOverloads
