@@ -91,8 +91,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     lateinit var fullScene: FullScene
         private set
 
-    private var zoomInternal = 0
-
     val view: OrionDrawScene
         get() = fullScene.drawView
 
@@ -500,20 +498,14 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     private fun initZoomScreen() {
         //zoom screen
         val spinner = findMyViewById(R.id.zoom_spinner) as Spinner
-        val zoomText = findMyViewById(R.id.zoom_picker_message) as EditText
+        val zoomValueAsText = findMyViewById(R.id.zoom_picker_message) as EditText
         val zoomSeek = findMyViewById(R.id.zoom_picker_seeker) as SeekBar
-
         zoomSeek.max = 300
         zoomSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                if (zoomInternal != 1) {
-                    zoomText.setText("$progress")
-                    if (spinner.selectedItemPosition != 0) {
-                        val oldInternal = zoomInternal
-                        zoomInternal = 2
-                        spinner.setSelection(0)
-                        zoomInternal = oldInternal
-                    }
+                zoomValueAsText.setText("$progress")
+                if (spinner.selectedItemPosition != 0) {
+                    spinner.setSelection(0)
                 }
             }
 
@@ -524,7 +516,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
         subscriptionManager.addDocListeners(object : DocumentViewAdapter() {
             override fun documentOpened(controller: Controller) {
-                updateZoom()
+                actualizeZoomOptions()
             }
         })
 
@@ -547,33 +539,27 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         zoomPreview.setOnClickListener {
             onApplyAction()
             val index = spinner.selectedItemPosition
-            controller!!.changeZoom(if (index == 0) (java.lang.Float.parseFloat(zoomText.text.toString()) * 100).toInt() else -1 * (index - 1))
-            updateZoom()
+            controller!!.changeZoom(if (index == 0) (java.lang.Float.parseFloat(zoomValueAsText.text.toString()) * 100).toInt() else -1 * (index - 1))
         }
 
         spinner.adapter = MyArrayAdapter(applicationContext)
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                val disable = position != 0
-                val oldZoomInternal = zoomInternal
-                if (zoomInternal != 2) {
-                    zoomInternal = 1
-                    if (disable) {
-                        zoomText.setText(parent.adapter.getItem(position) as String)
-                    } else {
-                        zoomText.setText("${(controller!!.currentPageZoom * 10000).toInt() / 100f}")
-                        zoomSeek.progress = (controller!!.currentPageZoom * 100).toInt()
-                    }
-                    zoomInternal = oldZoomInternal
+                val disableChangeButtons = position != 0
+
+                if (disableChangeButtons) {
+                    zoomValueAsText.setText(parent.adapter.getItem(position) as String)
+                } else {
+                    zoomValueAsText.setText("${zoomSeek.progress}")
                 }
 
-                zoomMinus.visibility = if (disable) View.GONE else View.VISIBLE
-                zoomPlus.visibility = if (disable) View.GONE else View.VISIBLE
+                zoomMinus.visibility = if (disableChangeButtons) View.GONE else View.VISIBLE
+                zoomPlus.visibility = if (disableChangeButtons) View.GONE else View.VISIBLE
 
-                zoomText.isFocusable = !disable
-                zoomText.isFocusableInTouchMode = !disable
+                zoomValueAsText.isFocusable = !disableChangeButtons
+                zoomValueAsText.isFocusableInTouchMode = !disableChangeButtons
 
-                val parent1 = zoomText.parent as LinearLayout
+                val parent1 = zoomValueAsText.parent as LinearLayout
 
                 parent1.post { parent1.requestLayout() }
             }
@@ -586,27 +572,22 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         spinner.setSelection(1)
     }
 
-    private fun updateZoom() {
+    private fun actualizeZoomOptions() {
         val zoomSeek = findMyViewById(R.id.zoom_picker_seeker) as SeekBar
         val textView = findMyViewById(R.id.zoom_picker_message) as TextView
-
         val spinner = findMyViewById(R.id.zoom_spinner) as Spinner
+
+        var zoom = controller!!.zoom10000Factor
         val spinnerIndex: Int
-        zoomInternal = 1
-        try {
-            var zoom = controller!!.zoom10000Factor
-            if (zoom <= 0) {
-                spinnerIndex = -zoom + 1
-                zoom = (10000 * controller!!.currentPageZoom).toInt()
-            } else {
-                spinnerIndex = 0
-                textView.text = (zoom / 100f).toString()
-            }
-            zoomSeek.progress = zoom / 100
-            spinner.setSelection(spinnerIndex)
-        } finally {
-            zoomInternal = 0
+        if (zoom <= 0) {
+            spinnerIndex = -zoom + 1
+            zoom = (10000 * controller!!.currentPageZoom).toInt()
+        } else {
+            spinnerIndex = 0
+            textView.text = (zoom / 100f).toString()
         }
+        zoomSeek.progress = zoom / 100
+        spinner.setSelection(spinnerIndex)
     }
 
 
@@ -1011,7 +992,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     updatePageSeeker()
                 }
                 PAGE_SCREEN -> updatePageSeeker()
-                ZOOM_SCREEN -> updateZoom()
+                ZOOM_SCREEN -> actualizeZoomOptions()
             }
 
             if (action === Action.ADD_BOOKMARK) {
