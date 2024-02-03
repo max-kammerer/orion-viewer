@@ -59,6 +59,9 @@ class LayoutData {
     val globalRight: Float
         get() = position.x + wholePageRect.right
 
+    val globalBottom: Float
+        get() = position.y + wholePageRect.bottom
+
 
     fun contains(x: Float, y: Float): Boolean {
         return wholePageRect.contains((x - position.x) .toInt(), (y-position.y).toInt())

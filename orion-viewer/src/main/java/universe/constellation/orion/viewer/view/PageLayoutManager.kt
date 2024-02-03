@@ -16,6 +16,7 @@ import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.selection.PageAndSelection
 import kotlin.math.abs
+import kotlin.math.max
 
 private const val VISIBLE_PAGE_LIMIT = 5
 
@@ -101,10 +102,13 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
 
     private fun doScrollOnly(xPos: Float, yPos: Float, distanceX: Float, distanceY: Float) {
         log("onScrollOnly: $distanceX, $distanceY")
+        val distanceY2 = clampLimits(distanceY)
+        if (distanceY2 == 0f && distanceX == 0f) return
+
         val iterator = visiblePages.iterator()
         iterator.forEach {
             val layoutData = it.layoutData
-            layoutData.position.y += distanceY
+            layoutData.position.y += distanceY2
             if (layoutData.contains(xPos, yPos)) {
                 val leftDelta = layoutData.globalLeft - sceneRect.left
                 val righDelta = sceneRect.right - layoutData.globalRight
@@ -128,6 +132,25 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
             }
         }
         dump()
+    }
+
+    private fun clampLimits(distanceY: Float): Float {
+        if (visiblePages.isNotEmpty()) {
+            if (distanceY > 0) {
+                val first = visiblePages.first()
+                if (first.pageNum == 0) {
+                    val pageYPos = first.layoutData.position.y
+                    return MathUtils.clamp(distanceY, distanceY, max(0f, -pageYPos))
+                }
+            } else if (distanceY < 0) {
+                val last = visiblePages.last()
+                if (last.pageNum == controller.pageCount - 1) {
+                    val bottomPage = last.layoutData.globalBottom
+                    return -MathUtils.clamp(-distanceY, -distanceY, max(0f, bottomPage - sceneRect.bottom))
+                }
+            }
+        }
+        return distanceY
     }
 
     fun uploadNewPages() {        //zoom
