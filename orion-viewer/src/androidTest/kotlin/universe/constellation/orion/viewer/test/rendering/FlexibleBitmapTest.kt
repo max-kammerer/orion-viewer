@@ -26,9 +26,9 @@ class FlexibleBitmapTest(private val bookDescription: BookDescription) : BookTes
 
     companion object {
         @JvmStatic
-        @Parameterized.Parameters(name = "Render page 0 in {0} book")
-        fun testData(): Iterable<Array<Any>> {
-            return BookDescription.executionEntries().map { arrayOf(it) }
+        @Parameterized.Parameters(name = "Render page in {0} book")
+        fun testData(): Iterable<Array<BookDescription>> {
+            return BookDescription.testData()
         }
 
         val BITMAP_CACHE = BitmapCache(20)
@@ -39,12 +39,21 @@ class FlexibleBitmapTest(private val bookDescription: BookDescription) : BookTes
     private val flexibleBitmapFull: FlexibleBitmap = FlexibleBitmap(pageWidth, screenRect.width(), screenRect.height())
 
     @Test
-    fun test() {
+    fun test1Page() {
+        doTest(0)
+    }
+
+    @Test
+    fun test3Page() {
+        doTest(2)
+    }
+
+    private fun doTest(page: Int) {
         val simpleLayoutStrategy =
             SimpleLayoutStrategy.create(document as DocumentWithCaching)
         simpleLayoutStrategy.setViewSceneDimension(screenRect.width(), screenRect.height())
         val pos = LayoutPosition()
-        simpleLayoutStrategy.reset(pos, 0)
+        simpleLayoutStrategy.reset(pos, page)
         val rendering = Rect(0, 0, pos.x.pageDimension, pos.y.pageDimension)
 
         val (part, partData) = render(flexibleBitmapPart, rendering, pos)

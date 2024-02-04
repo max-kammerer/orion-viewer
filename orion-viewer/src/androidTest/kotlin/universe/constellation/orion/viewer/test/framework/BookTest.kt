@@ -47,12 +47,16 @@ enum class BookDescription(
     }
 
     companion object {
-        fun executionEntries(): List<BookDescription> {
+        private fun testEntries(): List<BookDescription> {
             if (MANUAL_DEBUG) {
-                return listOf(BookDescription.entries.first())
+                return listOf(BookDescription.entries[1])
             } else {
                 return BookDescription.entries
             }
+        }
+
+        fun testData(): Iterable<Array<BookDescription>> {
+            return testEntries().map { arrayOf(it) }
         }
     }
 }
