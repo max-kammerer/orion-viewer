@@ -294,7 +294,6 @@ class PageView(
                 return completableDeferred
             } else {
                 println("Skipped $state $document $pageNum")
-                scene?.invalidate()
             }
         }
         return null
