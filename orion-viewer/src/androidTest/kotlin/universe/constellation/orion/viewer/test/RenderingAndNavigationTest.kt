@@ -1,10 +1,9 @@
 package universe.constellation.orion.viewer.test
 
 import android.graphics.Bitmap
-import android.graphics.Bitmap.CompressFormat
 import android.graphics.Canvas
 import android.graphics.Point
-import android.os.Environment
+import android.graphics.Rect
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
@@ -18,8 +17,6 @@ import universe.constellation.orion.viewer.prefs.GlobalOptions.TEST_SCREEN_WIDTH
 import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
 import universe.constellation.orion.viewer.test.framework.dumpBitmap
-import java.io.File
-import java.io.FileOutputStream
 import java.nio.IntBuffer
 
 
@@ -40,11 +37,7 @@ class RenderingAndNavigationTest(private val book: BookDescription) : Instrument
         @JvmStatic
         @Parameterized.Parameters(name = "Test simple navigation in {0}")
         fun testData(): Iterable<Array<BookDescription>> {
-            return if (MANUAL_DEBUG) {
-                arrayOf(arrayOf(BookDescription.entries.first())).asIterable()
-            } else {
-                BookDescription.entries.map { arrayOf(it) }
-            }
+            return BookDescription.testData()
         }
     }
 
@@ -73,25 +66,29 @@ class RenderingAndNavigationTest(private val book: BookDescription) : Instrument
         assertEquals(0, controller.currentPage)
 
         val nextPageList = arrayListOf<IntArray>()
+        val nextPageRects = arrayListOf<Rect>()
         repeat(SCREENS) {
             lateinit var page: Deferred<PageView?>
             activityScenarioRule.scenario.onActivity { activity ->
                 page = controller.drawNext() ?: error("null on ${controller.pageLayoutManager.currentPageLayout()}")
             }
             runBlocking {
-                page.await()!!
+                val pageView = page.await()!!
+                nextPageRects.add(pageView.occupiedVisiblePartInNewRect()!!)
                 flushAndProcessBitmap("next", nextPageList)
             }
         }
 
         val prevPageList = arrayListOf<IntArray>()
+        val prevPageRects = arrayListOf<Rect>()
         repeat(SCREENS) {
             lateinit var page: Deferred<PageView?>
             activityScenarioRule.scenario.onActivity {
                 page = controller.drawPrev()!!
             }
             runBlocking {
-                page.await()!!
+                val pageView = page.await()!!
+                prevPageRects.add(pageView.occupiedVisiblePartInNewRect()!!)
                 flushAndProcessBitmap("prev", prevPageList)
             }
         }
@@ -121,11 +118,15 @@ class RenderingAndNavigationTest(private val book: BookDescription) : Instrument
             )
         }
 
+        nextPageRects.dropLast(1).reversed().zip(prevPageRects.dropLast(1)).forEachIndexed { index, (next, prev) ->
+            assertEquals("fail on ${SCREENS - index - 2} and $index", next, prev)
+        }
+
         nextPageList.dropLast(1).reversed().zip(prevPageList.dropLast(1)).forEachIndexed { index, (next, prev) ->
             if (!next.contentEquals(prev)) {
                 dump(next, prev, SCREENS - index - 2, index)
             }
-            assertArrayEquals("fail on ${SCREENS - index - 2} and ${index}", next, prev)
+            assertArrayEquals("fail on ${SCREENS - index - 2} and $index", next, prev)
         }
     }
 

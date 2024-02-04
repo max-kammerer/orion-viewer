@@ -10,7 +10,7 @@ import org.junit.Test
 import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.BitmapCache
 import universe.constellation.orion.viewer.bitmap.FlexibleBitmap
-import universe.constellation.orion.viewer.document.DocumentWithCaching
+import universe.constellation.orion.viewer.document.min
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
 import universe.constellation.orion.viewer.test.MANUAL_DEBUG
@@ -45,12 +45,17 @@ class FlexibleBitmapTest(private val bookDescription: BookDescription) : BookTes
 
     @Test
     fun test3Page() {
-        doTest(2)
+        doTest(min(3, bookDescription.pageCount))
+    }
+
+    @Test
+    fun test60Page() {
+        doTest(min(59, bookDescription.pageCount))
     }
 
     private fun doTest(page: Int) {
         val simpleLayoutStrategy =
-            SimpleLayoutStrategy.create(document as DocumentWithCaching)
+            SimpleLayoutStrategy.create(document)
         simpleLayoutStrategy.setViewSceneDimension(screenRect.width(), screenRect.height())
         val pos = LayoutPosition()
         simpleLayoutStrategy.reset(pos, page)
@@ -66,6 +71,11 @@ class FlexibleBitmapTest(private val bookDescription: BookDescription) : BookTes
             flexibleBitmapPart.bitmaps().forEachIndexed { i, b ->
                 dumpBitmap("Part$i", b)
             }
+            for ( i in partData.indices) {
+                if (partData[i] != fullData[i]) {
+                    println("" + i / screenRect.width() + " " + i % screenRect.width() + ": " + partData[i] + " "  + fullData[i])
+                }
+            }
         }
 
         Assert.assertArrayEquals(partData, fullData)
@@ -73,7 +83,7 @@ class FlexibleBitmapTest(private val bookDescription: BookDescription) : BookTes
 
     private fun render(adaptiveBitmap: FlexibleBitmap, rendering: Rect, pos: LayoutPosition): Pair<Bitmap, IntArray> {
         adaptiveBitmap.resize(pos.x.pageDimension, pos.y.pageDimension, BITMAP_CACHE)
-        adaptiveBitmap.render(rendering, pos, 0, document, BITMAP_CACHE)
+        adaptiveBitmap.render(rendering, pos, pos.pageNumber, document, BITMAP_CACHE)
 
         val bitmap = Bitmap.createBitmap(rendering.width(), rendering.height(), android.graphics.Bitmap.Config.ARGB_8888)
         val canvasPart = Canvas(bitmap)

@@ -49,7 +49,7 @@ enum class BookDescription(
     companion object {
         private fun testEntries(): List<BookDescription> {
             if (MANUAL_DEBUG) {
-                return listOf(BookDescription.entries[1])
+                return listOf(BookDescription.entries[0])
             } else {
                 return BookDescription.entries
             }

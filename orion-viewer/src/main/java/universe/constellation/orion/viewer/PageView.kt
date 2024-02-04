@@ -245,6 +245,10 @@ class PageView(
         }
     }
 
+    fun occupiedVisiblePartInNewRect(): Rect? {
+        return layoutData.occupiedScreenPartInTmp(pageLayoutManager.sceneRect)?.let { Rect(it) }
+    }
+
     internal suspend fun renderVisible(): Deferred<PageView?>? {
         return layoutData.visibleOnScreenPartInTmp(pageLayoutManager.sceneRect)?.let {
             return coroutineScope {
@@ -309,7 +313,7 @@ class PageView(
         if (drawTmp.intersect(pageLayoutManager.sceneRect)) {
             drawSceneRect.set(drawTmp)
             drawTmp.offset(-layoutData.position.x.toInt(), -layoutData.position.y.toInt())
-            println("PageView.draw: $pageNum:  $drawTmp $drawSceneRect ${bitmap.width * bitmap.height}")
+            println("PageView.draw: $pageNum:  $drawTmp $drawSceneRect")
             bitmap.draw(canvas, drawTmp, drawSceneRect, defaultPaint, scene.borderPaint!!)
         } else {
             println("PageView.draw: skipped $drawTmp $drawSceneRect")
