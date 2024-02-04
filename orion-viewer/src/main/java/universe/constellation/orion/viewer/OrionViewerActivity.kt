@@ -143,7 +143,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         initRotationScreen()
 
         //page chooser
-        initPagePeekerScreen()
+        initGoToPageScreen()
 
         initZoomScreen()
 
@@ -420,7 +420,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
     }
 
-    private fun initPagePeekerScreen() {
+    private fun initGoToPageScreen() {
         val pageSeek = findMyViewById(R.id.page_picker_seeker) as SeekBar
 
         subscriptionManager.addDocListeners(object : DocumentViewAdapter() {
