@@ -31,9 +31,7 @@ import universe.constellation.orion.viewer.*
 import universe.constellation.orion.viewer.BuildConfig.VERSION_NAME
 import universe.constellation.orion.viewer.bookmarks.BookmarkAccessor
 import universe.constellation.orion.viewer.device.*
-import universe.constellation.orion.viewer.device.texet.TexetTB176FLDevice
 import universe.constellation.orion.viewer.device.texet.TexetTB576HDDevice
-import universe.constellation.orion.viewer.device.texet.TexetTb138Device
 import java.util.*
 import kotlin.properties.Delegates
 
@@ -182,16 +180,6 @@ class OrionApplication : Application() {
 
         @JvmStatic
         fun createDevice(): AndroidDevice {
-            if (TEXET_TB_138) {
-                log("Using TexetTb138Device")
-                return TexetTb138Device()
-            }
-
-            if (TEXET_TB176FL) {
-                log("Using TEXET_TB176FL")
-                return TexetTB176FLDevice()
-            }
-
             if (TEXET_TB576HD) {
                 log("Using TEXET_TB576HD")
                 return TexetTB576HDDevice()
@@ -223,12 +211,6 @@ class OrionApplication : Application() {
 
         @JvmField
         val ONYX_DEVICE = "ONYX".equals(MANUFACTURER, ignoreCase = true) && OnyxUtil.isEinkDevice
-
-        @JvmField
-        val TEXET_TB_138 = "texet".equals(DEVICE, ignoreCase = true) && "rk29sdk".equals(MODEL, ignoreCase = true)
-
-        @JvmField
-        val TEXET_TB176FL = "texet".equals(MANUFACTURER, ignoreCase = true) && "TB-176FL".equals(DEVICE, ignoreCase = true) && "TB-176FL".equals(MODEL, ignoreCase = true)
 
         @JvmField
         val TEXET_TB576HD = "texet".equals(MANUFACTURER, ignoreCase = true) && "TB-576HD".equals(DEVICE, ignoreCase = true) && "TB-576HD".equals(MODEL, ignoreCase = true)
