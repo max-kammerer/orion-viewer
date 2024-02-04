@@ -97,7 +97,6 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
     }
 
     fun doScroll(xPos: Float, yPos: Float, distanceX: Float, distanceY: Float) {
-        log("onScroll: $distanceX, $distanceY")
         isSinglePageMode = false
         doScrollOnly(xPos, yPos, distanceX, distanceY)
         uploadNewPages()
@@ -105,7 +104,6 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
     }
 
     private fun doScrollOnly(xPos: Float, yPos: Float, distanceX: Float, distanceY: Float) {
-        log("onScrollOnly: $distanceX, $distanceY")
         val distanceY2 = clampLimits(distanceY)
         if (distanceY2 == 0f && distanceX == 0f) return
 
@@ -185,7 +183,6 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
 
             val firstView = visiblePages.first()
             val pageStart = firstView.layoutData.position.y
-            log("Check new $pageStart ${firstView.pageNum} ${visiblePages.size}")
             if (pageStart > 5 && firstView.pageNum > 0) {
                 val newView = controller.createCachePageView(firstView.pageNum - 1)
                 addPageInPosition(newView, 0f, firstView.layoutData.position.y - newView.layoutData.wholePageRect.height() - 2, false)

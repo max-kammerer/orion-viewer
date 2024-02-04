@@ -82,10 +82,10 @@ class LayoutData {
         }
     }
 
-    fun visibleOnScreenPartInTmp(screenRect: Rect): Rect? {
+    fun visibleOnScreenPart(screenRect: Rect): Rect? {
         val occupiedScreenPart = occupiedScreenPartInTmp(screenRect) ?: return null
         occupiedScreenPart.offset(-position.x.toInt(), -position.y.toInt())
-        return occupiedScreenPart
+        return Rect(occupiedScreenPart)
     }
 
     fun insideScreenX(screenRect: Rect): Boolean {
@@ -250,7 +250,7 @@ class PageView(
     }
 
     internal suspend fun renderVisible(): Deferred<PageView?>? {
-        return layoutData.visibleOnScreenPartInTmp(pageLayoutManager.sceneRect)?.let {
+        return layoutData.visibleOnScreenPart(pageLayoutManager.sceneRect)?.let {
             return coroutineScope {
                 async (Dispatchers.Main + handler) {
                     render(it)?.await()
@@ -313,7 +313,7 @@ class PageView(
         if (drawTmp.intersect(pageLayoutManager.sceneRect)) {
             drawSceneRect.set(drawTmp)
             drawTmp.offset(-layoutData.position.x.toInt(), -layoutData.position.y.toInt())
-            println("PageView.draw: $pageNum:  $drawTmp $drawSceneRect")
+            println("PageView.draw $pageNum: page=$drawTmp onScreen=$drawSceneRect")
             bitmap.draw(canvas, drawTmp, drawSceneRect, defaultPaint, scene.borderPaint!!)
         } else {
             println("PageView.draw: skipped $drawTmp $drawSceneRect")
