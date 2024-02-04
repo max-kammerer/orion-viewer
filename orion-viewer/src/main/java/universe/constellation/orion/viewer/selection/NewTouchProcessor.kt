@@ -25,8 +25,6 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
 
     protected var nextState = State.UNDEFINED
 
-    private var info: LayoutPosition? = null
-
     private val enableTouchMove = activity.globalOptions.isEnableTouchMove
 
     private val start0 = Point()
@@ -69,7 +67,6 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
 
     protected open fun reset() {
         state = State.UNDEFINED
-        info = null
         start0.x = -1
         start0.y = -1
         last0.x = -1
@@ -130,40 +127,4 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
         activity.doAction(code)
     }
 
-    private fun isRightHandSide(x: Int): Boolean {
-        return view.sceneWidth - x < 75
-    }
-
-    private fun isSupportLighting(): Boolean {
-        val device = activity.device
-        return device is EInkDevice && device.isLightingSupported
-    }
-
-
-
-    private val toast by lazy {
-        Toast.makeText(activity, "-1", Toast.LENGTH_SHORT)
-    }
-
-    private fun doLighting(delta: Int) {
-        val device = activity.device
-        if (device is EInkDevice) {
-            try {
-                val newBrightness = device.doLighting(delta / 5)
-                if (false) {
-                    toast!!.setText("" + newBrightness)
-                    toast!!.show()
-                }
-            } catch (e: Exception) {
-                toast!!.setText("Error " + e.message + " " + e.cause)
-                toast!!.show()
-                log(e)
-            }
-
-        }
-    }
-
-    private fun insideViewWidth(info: LayoutPosition?): Boolean {
-        return info != null && info.x.pageDimension <= view.sceneWidth
-    }
 }

@@ -135,6 +135,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
         intentProcessed = false
         newTouchProcessor = NewTouchProcessorWithScale(view, this)
+        view.setOnTouchListener{ _, event ->
+            newTouchProcessor!!.onTouch(event)
+        }
         initStubController("Processing intent...", "Processing intent...")
     }
 
@@ -829,9 +832,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         dialog!!.supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog!!.setContentView(R.layout.options_dialog)
         animator = dialog!!.findViewById<View>(R.id.viewanim) as ViewAnimator?
-
-        view.setOnTouchListener{ _, event -> newTouchProcessor!!.onTouch(event) }
-
         dialog!!.setCanceledOnTouchOutside(true)
     }
 
