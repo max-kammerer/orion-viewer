@@ -31,20 +31,24 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
     var isSinglePageMode = false
 
     val sceneRect = Rect(0, 0, scene.width, scene.height)
-    val tmpRect = Rect(0, 0, scene.width, scene.height)
-    var sceneWidth: Int
-        get() = scene.width
+
+    private val tmpRect = Rect(sceneRect)
+
+    private var sceneWidth: Int
+        get() = sceneRect.width()
         set(value) {
             sceneRect.right = value
         }
-    var sceneHeight: Int
-        get() = scene.height
+
+    private var sceneHeight: Int
+        get() = sceneRect.height()
         set(value)  {
             sceneRect.bottom = value
         }
 
     override fun onDimensionChanged(newWidth: Int, newHeight: Int) {
         if (sceneWidth != newWidth && newHeight != sceneHeight) {
+            log("New scene size: $sceneRect")
             sceneWidth = newWidth
             sceneHeight = newHeight
             updateRenderingParameters()
@@ -60,7 +64,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
     fun forcePageUpdate() {
         visiblePages.forEach {
             it.invalidateAndUpdate()
-            println("Page force update " + it.pageNum)
+            log("Page force update " + it.pageNum)
         }
     }
 
@@ -93,7 +97,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
     }
 
     fun doScroll(xPos: Float, yPos: Float, distanceX: Float, distanceY: Float) {
-        println("onScroll: $distanceX, $distanceY")
+        log("onScroll: $distanceX, $distanceY")
         isSinglePageMode = false
         doScrollOnly(xPos, yPos, distanceX, distanceY)
         uploadNewPages()
@@ -128,7 +132,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
             }
             if (!updateStateAndRender(it)) {
                 iterator.remove()
-                println("Remove ${it.pageNum}")
+                log("Remove ${it.pageNum}")
             }
         }
         dump()
@@ -163,7 +167,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
                 return
             }
         }
-        println("Before uploadNewPages")
+        log("Before uploadNewPages")
         dump()
         if (visiblePages.isEmpty()) {
             val nextPageNum = 0
@@ -181,13 +185,13 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
 
             val firstView = visiblePages.first()
             val pageStart = firstView.layoutData.position.y
-            println("Check new $pageStart ${firstView.pageNum} ${visiblePages.size}")
+            log("Check new $pageStart ${firstView.pageNum} ${visiblePages.size}")
             if (pageStart > 5 && firstView.pageNum > 0) {
                 val newView = controller.createCachePageView(firstView.pageNum - 1)
                 addPageInPosition(newView, 0f, firstView.layoutData.position.y - newView.layoutData.wholePageRect.height() - 2, false)
             }
         }
-        println("After uploadNewPages")
+        log("After uploadNewPages")
         dump()
     }
 
@@ -213,7 +217,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
             view.renderVisibleAsync()
             true
         } else {
-            println("toInvisible ${view.pageNum}: ${view.layoutData.globalRectInTmp()}")
+            log("toInvisible ${view.pageNum}: ${view.layoutData.globalRectInTmp()} $sceneRect")
             view.toInvisibleState()
             false
         }
@@ -222,7 +226,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
     fun findPageAndPageRect(screenRect: Rect): List<PageAndSelection> {
         return visiblePages.mapNotNull {
             val visibleOnScreenPart = it.layoutData.occupiedScreenPartInTmp(screenRect) ?: return@mapNotNull null
-            println("selection: " + it.pageNum + visibleOnScreenPart)
+            log("selection: " + it.pageNum + visibleOnScreenPart)
             val pageSelection = Rect(visibleOnScreenPart)
             //TODO zoom and crop
             pageSelection.minusOffset(it.layoutData.position)
@@ -233,7 +237,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
                 (pageSelection.top/zoom).toInt(),
                 (pageSelection.right/zoom).toInt(), (pageSelection.bottom/zoom).toInt()
             )
-            println("selection: " + it.pageNum + pageSelection)
+            log("selection: " + it.pageNum + pageSelection)
             PageAndSelection(it.pageNum, pageSelection)
         }
     }
@@ -268,7 +272,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
 
     private fun dump() {
         visiblePages.forEach{
-            println("Dump ${it.pageNum}: ${it.layoutData.position} ${it.layoutData.wholePageRect}")
+            log("Dump ${it.pageNum}: ${it.layoutData.position} ${it.layoutData.wholePageRect}")
         }
 
         visiblePages.zipWithNext().forEach {
@@ -302,7 +306,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
                 updatedView.layoutData.wholePageRect.set(updatedView.wholePageRect)
                 dump()
             } else {
-                println("invisible $oldArea")
+                log("invisible $oldArea")
                 visiblePages.remove(updatedView)
             }
         }
