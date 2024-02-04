@@ -3,6 +3,7 @@ package universe.constellation.orion.viewer.test.framework
 import android.content.Intent
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
 import org.junit.Rule
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.prefs.GlobalOptions
@@ -10,6 +11,10 @@ import universe.constellation.orion.viewer.prefs.OrionApplication
 
 
 abstract class InstrumentationTestCase(intent: Intent, private val showTapHelp: Boolean = false, additionalParams: (Intent) -> Unit = {}) : BaseTest() {
+
+    protected val device by lazy {
+        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+    }
 
     @get:Rule
     var activityScenarioRule = activityScenarioRule<OrionViewerActivity>(intent.apply {

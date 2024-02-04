@@ -25,7 +25,7 @@ open class BaseEspressoTest(val bookDescription: BookDescription) : Instrumentat
 
     companion object {
         @JvmStatic
-        @Parameterized.Parameters(name = "Zoom test for {0} book")
+        @Parameterized.Parameters(name = "Test for {0} book")
         fun testData(): Iterable<Array<BookDescription>> {
             return BookDescription.testData()
         }
