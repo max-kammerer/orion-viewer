@@ -3,7 +3,7 @@ package universe.constellation.orion.viewer.view
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.Point
+import android.graphics.PointF
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
@@ -44,9 +44,9 @@ class PageScene : View {
 
     internal var scale = 1.0f
 
-    private var startFocus: Point? = null
+    private var startFocus: PointF? = null
 
-    private var endFocus: Point? = null
+    private var endFocus: PointF? = null
 
     private var enableMoveOnPinchZoom: Boolean = false
 
@@ -119,11 +119,8 @@ class PageScene : View {
 
     }
 
-    fun isDefaultColorMatrix(): Boolean {
-        return defaultPaint!!.colorFilter == null
-    }
 
-    fun doScale(scale: Float, startFocus: Point, endFocus: Point, enableMoveOnPinchZoom: Boolean) {
+    fun doScale(scale: Float, startFocus: PointF, endFocus: PointF, enableMoveOnPinchZoom: Boolean) {
         this.scale = scale
         this.startFocus = startFocus
         this.endFocus = endFocus
@@ -145,16 +142,4 @@ class PageScene : View {
     fun removeTask(drawTask: DrawTask) {
         tasks.remove(drawTask)
     }
-
-    fun toView(): View {
-        return this
-    }
-
-    val sceneWidth: Int
-        get() = width
-    val sceneHeight: Int
-        get() = height
-
-    val sceneYLocationOnScreen: Int
-        get() = IntArray(2).run { getLocationOnScreen(this); this[1] }
 }

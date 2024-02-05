@@ -2,34 +2,33 @@ package universe.constellation.orion.viewer
 
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.Region
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
+import universe.constellation.orion.viewer.bitmap.FlexibleBitmap
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.geometry.RectF
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.view.OrionDrawScene
 import universe.constellation.orion.viewer.view.PageLayoutManager
 import kotlin.coroutines.coroutineContext
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.job
-import universe.constellation.orion.viewer.bitmap.FlexibleBitmap
 
-enum class State(val interactWithUUI: Boolean) {
+enum class PageState(val interactWithUUI: Boolean) {
     STUB(false),
     SIZE_AND_BITMAP_CREATED(true),
     CAN_BE_DELETED(false),
@@ -45,57 +44,6 @@ val handler = CoroutineExceptionHandler { _, ex ->
     log("Bitmap rendering cancelled")
     ex.printStackTrace()
     //TODO processing
-}
-
-class LayoutData {
-    var order: Int = 0
-    val position: PointF = PointF(0f, 0f)
-    val wholePageRect: Rect = Rect()
-    val tmpRect: Rect = Rect()
-
-    val globalLeft: Float
-        get() = position.x + wholePageRect.left
-
-    val globalRight: Float
-        get() = position.x + wholePageRect.right
-
-    val globalBottom: Float
-        get() = position.y + wholePageRect.bottom
-
-
-    fun contains(x: Float, y: Float): Boolean {
-        return wholePageRect.contains((x - position.x) .toInt(), (y-position.y).toInt())
-    }
-
-    fun globalRectInTmp(): Rect {
-        tmpRect.set(wholePageRect)
-        tmpRect.offset(position.x.toInt(), position.y.toInt())
-        return tmpRect
-    }
-
-    fun occupiedScreenPartInTmp(screenRect: Rect): Rect? {
-        val globalPosition = globalRectInTmp()
-        return if (globalPosition.intersect(screenRect)) {
-            globalPosition
-        } else {
-            null
-        }
-    }
-
-    fun visibleOnScreenPart(screenRect: Rect): Rect? {
-        val occupiedScreenPart = occupiedScreenPartInTmp(screenRect) ?: return null
-        occupiedScreenPart.offset(-position.x.toInt(), -position.y.toInt())
-        return Rect(occupiedScreenPart)
-    }
-
-    fun insideScreenX(screenRect: Rect): Boolean {
-        return wholePageRect.left >= screenRect.left && wholePageRect.right <= screenRect.right
-    }
-
-    override fun toString(): String {
-        return "LayoutData(order=$order, position=$position, viewDimension=$wholePageRect)"
-    }
-
 }
 
 class PageView(
@@ -121,50 +69,37 @@ class PageView(
     internal var scene: OrionDrawScene? = null
 
     private var pageJobs = SupervisorJob(rootJob)
-    private var pageInfoJob: Deferred<LayoutPosition>? = null
 
     @Volatile
     var bitmap: FlexibleBitmap? = null
 
     //TODO reset on lp changes
     @Volatile
-    var state: State = State.STUB
+    var state: PageState = PageState.STUB
 
     @Volatile
     var marker: Int = 1
 
-
     private val processingPagePart = Rect()
     private val nonRenderedRegion = Region()
     private val tempRegion = Region()
-    private val visiblePart = Rect()
     init {
         wholePageRect.set(pageLayoutManager.defaultSize())
     }
-
-
-
-
-    private val renderingScope = CoroutineScope(controller.context + pageJobs + handler)
-    private val pageInfoScope = CoroutineScope(controller.context + pageJobs + handler)
 
     val layoutInfo: LayoutPosition = LayoutPosition()
 
     @Volatile
     lateinit var pageInfo: Deferred<PageView>
 
-    private fun stopJobs() {
-
-    }
-
     fun init() {
        reinit()
     }
 
-    fun markAsDeattached() {
+    private fun markAsDeattached() {
         //TODO optimize canceling state
         println("Deattached $pageNum")
-        state = State.CAN_BE_DELETED
+        state = PageState.CAN_BE_DELETED
         pageJobs.cancelChildren()
         bitmap?.apply {
             this.free(controller.bitmapCache)
@@ -174,9 +109,9 @@ class PageView(
 
     fun destroy() {
         println("Destroy $pageNum")
-        assert(state == State.CAN_BE_DELETED) {"Wrong state calling destroy: $state"}
+        assert(state == PageState.CAN_BE_DELETED) {"Wrong state calling destroy: $state"}
         markAsDeattached()
-        state = State.DESTROYED
+        state = PageState.DESTROYED
         pageJobs.cancel()
         GlobalScope.launch(controller.context) {
             pageJobs.cancelAndJoin()
@@ -193,7 +128,7 @@ class PageView(
     }
 
     fun reinit() {
-        if (state == State.SIZE_AND_BITMAP_CREATED) return
+        if (state == PageState.SIZE_AND_BITMAP_CREATED) return
         println("Page $pageNum reinit $state $document" )
         pageJobs.cancelChildren()
         pageInfo = GlobalScope.async(controller.context + pageJobs + handler) {
@@ -210,19 +145,19 @@ class PageView(
     }
 
     private fun initBitmap(layoutInfo: LayoutPosition) {
-        if (state == State.SIZE_AND_BITMAP_CREATED) return
+        if (state == PageState.SIZE_AND_BITMAP_CREATED) return
         val oldSize = Rect(wholePageRect)
         wholePageRect.set(0, 0, layoutInfo.x.pageDimension, layoutInfo.y.pageDimension)
         nonRenderedRegion.set(wholePageRect)
         bitmap = bitmap?.resize(wholePageRect.width(), wholePageRect.height(), controller.bitmapCache)
             ?: createDefaultBitmap()
         log("PageView.initBitmap $pageNum ${controller.document}: $nonRenderedRegion")
-        state = State.SIZE_AND_BITMAP_CREATED
+        state = PageState.SIZE_AND_BITMAP_CREATED
         pageLayoutManager.onSizeCalculated(this, oldSize)
     }
 
     fun draw(canvas: Canvas, scene: OrionDrawScene) {
-        if (state != State.STUB && bitmap!= null) {
+        if (state != PageState.STUB && bitmap!= null) {
             //draw bitmap
             println("Draw page $pageNum in state $state ${bitmap?.width} ${bitmap?.height} ")
             draw(canvas, bitmap!!, scene.defaultPaint!!, scene)
@@ -264,7 +199,7 @@ class PageView(
         val layoutStrategy = controller.layoutStrategy
         if (!(layoutStrategy.viewWidth > 0 &&  layoutStrategy.viewHeight > 0)) return null
 
-        if (state != State.SIZE_AND_BITMAP_CREATED) {
+        if (state != PageState.SIZE_AND_BITMAP_CREATED) {
             pageInfo.await()
         }
         tempRegion.set(nonRenderedRegion)
@@ -279,7 +214,7 @@ class PageView(
                         withContext(Dispatchers.Main) {
                             if (kotlin.coroutines.coroutineContext.isActive) {
                                 nonRenderedRegion.op(bound, Region.Op.DIFFERENCE)
-                                log("PageView.render invalidate: $pageNum $layoutData")
+                                log("PageView.render invalidate: $pageNum $layoutData ${scene != null}")
                                 scene?.invalidate()
                             }
                         }
@@ -290,7 +225,7 @@ class PageView(
                 }
             }
         } else {
-            if (state == State.SIZE_AND_BITMAP_CREATED) {
+            if (state == PageState.SIZE_AND_BITMAP_CREATED) {
                 println("Already rendered $state $document $pageNum: $rect")
                 scene?.invalidate()
                 val completableDeferred = CompletableDeferred<PageView>(coroutineContext.job)
@@ -333,15 +268,14 @@ class PageView(
         )
     }
 
-    private fun i(): Int {
-        val bottom = wholePageRect.height()
-        return bottom
+    fun invalidateAndUpdate() {
+        invalidateAndMoveToStub()
+        reinit()
     }
 
-    fun invalidateAndUpdate() {
+    fun invalidateAndMoveToStub() {
         marker++
-        state = State.STUB
+        state = PageState.STUB
         pageJobs.cancelChildren()
-        reinit()
     }
 }

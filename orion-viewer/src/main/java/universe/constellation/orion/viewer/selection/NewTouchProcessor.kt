@@ -4,10 +4,7 @@ import android.graphics.Point
 import androidx.core.view.GestureDetectorCompat
 import android.view.GestureDetector
 import android.view.MotionEvent
-import android.widget.Toast
 import universe.constellation.orion.viewer.*
-import universe.constellation.orion.viewer.device.EInkDevice
-import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.view.OrionDrawScene
 
 enum class State {
@@ -40,8 +37,6 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
         var onTouchEvent = detector.onTouchEvent(e)
         if (e.action == MotionEvent.ACTION_UP) {
             if (state == State.MOVE) {
-                view.afterScaling()
-                activity.controller!!.translateAndZoom(false, 1f, (-last0.x + start0.x).toFloat(), (-last0.y + start0.y).toFloat())
                 resetNextState()
                 onTouchEvent = true
             }
@@ -83,6 +78,16 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
         return true
     }
 
+    override fun onScroll(e1: MotionEvent?, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+        println("onScroll $enableTouchMove")
+        if (!enableTouchMove) {
+            return false
+        }
+        nextState = State.MOVE
+        view.pageLayoutManager?.doScroll(e2.x, e2.y, -distanceX, -distanceY) ?: return false
+        return true
+    }
+
     override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
         log("onSingleTapConfirmed")
         resetNextState()
@@ -97,23 +102,10 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
         return true
     }
 
-
     override fun onLongPress(e: MotionEvent) {
         log("onLongPress $state $nextState")
         if (state != State.UNDEFINED) return
-
         doAction(e.x.toInt(), e.y.toInt(), true)
-    }
-
-
-    override fun onScroll(e1: MotionEvent?, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
-        println("onScroll $enableTouchMove")
-        if (!enableTouchMove) {
-            return false
-        }
-
-        view.pageLayoutManager?.doScroll(e2.x, e2.y, -distanceX, -distanceY) ?: return false
-        return true
     }
 
     private fun doAction(x: Int, y: Int, isLongClick: Boolean) {

@@ -2,6 +2,7 @@ package universe.constellation.orion.viewer.view
 
 import android.graphics.PointF
 import android.graphics.Rect
+import android.graphics.RectF
 import androidx.core.math.MathUtils
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -10,7 +11,7 @@ import kotlinx.coroutines.async
 import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.PageInitListener
 import universe.constellation.orion.viewer.PageView
-import universe.constellation.orion.viewer.State
+import universe.constellation.orion.viewer.PageState
 import universe.constellation.orion.viewer.handler
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.log
@@ -80,11 +81,32 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         set(value) {
             field = value
             visiblePages.forEach {
-                if (it.state == State.SIZE_AND_BITMAP_CREATED) {
+                if (it.state == PageState.SIZE_AND_BITMAP_CREATED) {
                     value?.onPageInited(it)
                 }
             }
         }
+
+    fun performTouchZoom(zoom: Float, startFocus: PointF, endFocus: PointF) {
+        visiblePages.forEach {
+            it.invalidateAndMoveToStub()
+        }
+
+        val tmp = PointF()
+        visiblePages.forEach {
+            tmp.set(it.layoutData.position)
+            tmp.minusOffset(startFocus)
+            tmp.zoom(zoom)
+            tmp.offset(startFocus)
+            it.layoutData.position.set(tmp)
+            it.wholePageRect.zoom(zoom)
+        }
+
+        //TODO delete pages
+        visiblePages.forEach {
+            it.reinit()
+        }
+    }
 
     fun currentPageLayout(): LayoutPosition? {
         //TODO
@@ -349,4 +371,25 @@ fun Rect.offset(p: PointF) {
 
 fun Rect.minusOffset(p: PointF) {
     this.offset(-p.x.toInt(), -p.y.toInt())
+}
+
+
+fun PointF.offset(p: PointF) {
+    this.offset(p.x, p.y)
+}
+
+fun PointF.zoom(zoom: Float) {
+    this.set(x * zoom, y * zoom)
+}
+
+fun RectF.zoom(zoom: Float) {
+    this.set(left * zoom, right * zoom, top * zoom, bottom * zoom)
+}
+
+fun Rect.zoom(zoom: Float) {
+    this.set((left * zoom).toInt(), (top * zoom).toInt(), (right * zoom).toInt(), (bottom * zoom).toInt())
+}
+
+fun PointF.minusOffset(p: PointF) {
+    this.offset(-p.x, -p.y)
 }

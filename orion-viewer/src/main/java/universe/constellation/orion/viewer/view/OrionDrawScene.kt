@@ -22,7 +22,7 @@ package universe.constellation.orion.viewer.view
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.Point
+import android.graphics.PointF
 import android.util.AttributeSet
 import android.view.View
 import universe.constellation.orion.viewer.log
@@ -38,9 +38,9 @@ class OrionDrawScene : View {
 
     internal var scale = 1.0f
 
-    private var startFocus: Point? = null
+    private var startFocus: PointF? = null
 
-    private var endFocus: Point? = null
+    private var endFocus: PointF? = null
 
     private var enableMoveOnPinchZoom: Boolean = false
 
@@ -48,7 +48,7 @@ class OrionDrawScene : View {
 
     internal var defaultPaint: Paint? = null
 
-    internal var inScaling = false
+    private var inScalingMode = false
 
     private val tasks = ArrayList<DrawTask>()
 
@@ -79,7 +79,7 @@ class OrionDrawScene : View {
         canvas.save()
         val myScale = scale
 
-        if (inScaling) {
+        if (inScalingMode) {
             log("in scaling")
             canvas.save()
             canvas.translate(
@@ -102,7 +102,7 @@ class OrionDrawScene : View {
             p.draw(canvas, this)
         }
 
-        if (inScaling) {
+        if (inScalingMode) {
             canvas.restore()
         }
 
@@ -111,7 +111,6 @@ class OrionDrawScene : View {
             drawTask.drawOnCanvas(canvas, stuff, null)
         }
         canvas.restore()
-
     }
 
     fun setDimensionAware(dimensionAware: ViewDimensionAware) {
@@ -132,19 +131,19 @@ class OrionDrawScene : View {
         return defaultPaint!!.colorFilter == null
     }
 
-    fun doScale(scale: Float, startFocus: Point, endFocus: Point, enableMoveOnPinchZoom: Boolean) {
+    fun doScale(scale: Float, startFocus: PointF, endFocus: PointF, enableMoveOnPinchZoom: Boolean) {
         this.scale = scale
         this.startFocus = startFocus
         this.endFocus = endFocus
         this.enableMoveOnPinchZoom = enableMoveOnPinchZoom
     }
 
-    fun beforeScaling() {
-        inScaling = true
+    fun inScalingMode() {
+        inScalingMode = true
     }
 
-    fun afterScaling() {
-        this.inScaling = false
+    fun inNormalMode() {
+        this.inScalingMode = false
     }
 
     fun addTask(drawTask: DrawTask) {

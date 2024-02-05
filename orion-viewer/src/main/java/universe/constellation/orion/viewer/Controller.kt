@@ -23,6 +23,7 @@ import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context.ACTIVITY_SERVICE
 import android.graphics.Point
+import android.graphics.PointF
 import android.os.Build
 import android.util.DisplayMetrics
 import kotlinx.coroutines.Deferred
@@ -145,11 +146,13 @@ class Controller(
         }
     }
 
-    fun translateAndZoom(changeZoom: Boolean, zoomScaling: Float, deltaX: Float, deltaY: Float) {
-        if (changeZoom) {
-            //layoutStrategy.changeZoom((10000.0f * zoomScaling * layoutInfo.docZoom).toInt())
+    fun translateAndZoom(zoomScaling: Float, startFocus: PointF, endFocus: PointF, deltaX: Float, deltaY: Float) {
+        layoutInfo?.let {
+            layoutStrategy.changeZoom((10000.0f * zoomScaling * it.docZoom).toInt())
+            pageLayoutManager.performTouchZoom(zoomScaling, startFocus, endFocus)
+            //TODO split notification into page geometry and book info
+            //sendViewChangeNotification()
         }
-        sendViewChangeNotification()
     }
 
     fun changeZoom(zoom: Int) {
@@ -329,7 +332,7 @@ class Controller(
     fun createCachePageView(pageNum: Int): PageView {
         val pageView = pages.get(pageNum)
         if (pageView != null) {
-            if (pageView.state == State.CAN_BE_DELETED) {
+            if (pageView.state == PageState.CAN_BE_DELETED) {
                 pageView.reinit() //TODO: split bitmap invalidation and page unload
             }
             return pageView

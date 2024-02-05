@@ -5,7 +5,7 @@ package universe.constellation.orion.viewer.util;
  */
 public class MoveUtil {
 
-    public static float calcOffset(int startPoint, int endPoint, float scale, boolean supportMove) {
+    public static float calcOffset(float startPoint, float endPoint, float scale, boolean supportMove) {
         if (supportMove) {
             return (int) ((startPoint) * (scale - 1) + (startPoint - endPoint));
         } else {
