@@ -16,6 +16,7 @@ import universe.constellation.orion.viewer.prefs.GlobalOptions.TEST_SCREEN_HEIGH
 import universe.constellation.orion.viewer.prefs.GlobalOptions.TEST_SCREEN_WIDTH
 import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
+import universe.constellation.orion.viewer.test.framework.compareBitmaps
 import universe.constellation.orion.viewer.test.framework.dumpBitmap
 import java.nio.IntBuffer
 
@@ -123,10 +124,9 @@ class RenderingAndNavigationTest(private val book: BookDescription) : Instrument
         }
 
         nextPageList.dropLast(1).reversed().zip(prevPageList.dropLast(1)).forEachIndexed { index, (next, prev) ->
-            if (!next.contentEquals(prev)) {
+            compareBitmaps(next, prev, bitmap.width, "Fail on ${SCREENS - index - 2} and $index") {
                 dump(next, prev, SCREENS - index - 2, index)
             }
-            assertArrayEquals("fail on ${SCREENS - index - 2} and $index", next, prev)
         }
     }
 
