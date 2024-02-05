@@ -3,11 +3,13 @@ package universe.constellation.orion.viewer.test.framework
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Environment
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
-import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
 import org.junit.Assert
 import org.junit.Assert.assertTrue
@@ -16,16 +18,17 @@ import org.junit.Rule
 import org.junit.rules.TestName
 import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.FileUtil
+import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.djvu.DjvuDocument
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.DocumentWithCaching
 import universe.constellation.orion.viewer.document.DocumentWithCachingImpl
-import universe.constellation.orion.viewer.test.MANUAL_DEBUG
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import kotlin.math.abs
 
+internal const val MANUAL_DEBUG = false
 
 abstract class BaseTest {
 
@@ -38,15 +41,20 @@ abstract class BaseTest {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return
 
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        val grant = device.findObject(By.textContains("Grant")) ?: return
-
-        if (grant.clickAndWait(Until.newWindow(), 1000)) {
-            val findObject: UiObject2 = device.findObject(By.checkable(true))
-            findObject.click()
-            assertTrue(findObject.isChecked)
-            device.pressBack()
-            Thread.sleep(1000)
+        if (BookDescription.SICP.asFile().canRead()) {
+            return
         }
+
+        val grant = device.wait(Until.findObject(By.textContains("Grant")), 30000) ?: error("Can't find grant action in warning dialog")
+        grant.click()
+
+        val allowField = device.wait(Until.findObject(By.textContains("Allow")), 30000)
+        allowField.click()
+        assertTrue(device.findObject(By.checkable(true)).isChecked)
+        device.pressBack()
+        Espresso.onView(ViewMatchers.withId(R.id.view)).check(matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(ViewMatchers.withId(R.id.view)).check(matches(ViewMatchers.isCompletelyDisplayed()))
+        assertTrue(BookDescription.SICP.asFile().canRead())
     }
 
     @Rule

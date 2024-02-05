@@ -16,21 +16,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: gradle/wrapper-validation-action@v1
+      - uses: actions/checkout@v4
+      - uses: gradle/wrapper-validation-action@v2
 
       - name: set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: 17
           distribution: corretto
 
       - name: Setup Gradle Cache
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
 
       - name: Restore Native Libs
         id: restore-nativeLibs
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             nativeLibs/djvu
@@ -56,22 +56,22 @@ jobs:
           property: 'orion.version.name'
 
       - name: Upload arm7 APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: orion-viewer-${{steps.read_version_property.outputs.value}}-${{github.run_number}}-armeabi-v7a-debug.apk
           path: orion-viewer/build/outputs/apk/debug/orion-viewer-*-v7a-debug.apk
       - name: Upload arm64 APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: orion-viewer-${{steps.read_version_property.outputs.value}}-${{github.run_number}}-arm64-v8a-debug.apk
           path: orion-viewer/build/outputs/apk/debug/orion-viewer-*-v8a-debug.apk
       - name: Upload x86 APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: orion-viewer-${{steps.read_version_property.outputs.value}}-${{github.run_number}}-x86-debug.apk
           path: orion-viewer/build/outputs/apk/debug/orion-viewer-*-x86-debug.apk
       - name: Upload x86_64 APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: orion-viewer-${{steps.read_version_property.outputs.value}}-${{github.run_number}}-x86_64-debug.apk
           path: orion-viewer/build/outputs/apk/debug/orion-viewer-*-x86_64-debug.apk
@@ -81,25 +81,24 @@ jobs:
       ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 170
     strategy:
       matrix:
-        arch: [[16, x86], [21, x86], [23, x86], [28, x86], [29, x86_64], [31, x86_64], [32, x86_64], [33, x86_64]]
-        os: [macos-latest]
-    runs-on: ${{ matrix.os }}
+        arch: [[16, x86, ubuntu-latest], [21, x86, ubuntu-latest], [23, x86, ubuntu-latest], [28, x86, macos-latest], [30, x86_64, macos-latest], [31, x86_64, macos-latest], [32, x86_64, macos-latest], [33, x86_64, macos-latest]]
+    runs-on: ${{ matrix.arch[2] }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: 17
           distribution: corretto
 
       - name: Setup Gradle Cache
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
 
-      - name: Restore Native Libs 2
+      - name: Restore Native Libs
         id: restore-nativeLibs
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             nativeLibs/djvu
@@ -107,6 +106,7 @@ jobs:
             nativeLibs/mupdfModule/build
             nativeLibs/mupdfModule/.cxx
             nativeLibs/djvuModule/build
+            nativeLibs/djvuModule/.cxx
           key: ${{ runner.os }}-native-libs-${{ hashFiles('thirdparty_build.gradle') }}
 
       - name: Prepare thirdparty
@@ -127,5 +127,5 @@ jobs:
       - name: Test Summary
         uses: test-summary/action@v2
         with:
-          paths: orion-viewer/build/outputs/androidTest-results/connected/TEST-*.xml
+          paths: orion-viewer/build/outputs/androidTest-results/connected/debug/TEST-*.xml
         if: always()

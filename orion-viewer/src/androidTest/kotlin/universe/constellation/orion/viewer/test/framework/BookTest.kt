@@ -8,17 +8,22 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.OrionViewerActivity
-import universe.constellation.orion.viewer.test.MANUAL_DEBUG
+import java.io.File
 
 @RunWith(Parameterized::class)
 abstract class BookTest(path: String) : BaseTest() {
 
     constructor(bookDescription: BookDescription): this(bookDescription.path)
 
-    protected val document by lazy {  openTestBook(path) }
+    private val documentDelegate = lazy {  openTestBook(path) }
+
+    protected val document by documentDelegate
+
     @After
     fun close() {
-        document.destroy()
+        if (documentDelegate.isInitialized()) {
+            document.destroy()
+        }
     }
 }
 
@@ -46,12 +51,14 @@ enum class BookDescription(
         }
     }
 
+    fun asFile() = File(BaseTest.testFolder, path)
+
     companion object {
         private fun testEntries(): List<BookDescription> {
-            if (MANUAL_DEBUG) {
-                return listOf(BookDescription.entries[0])
+            return if (MANUAL_DEBUG) {
+                listOf(BookDescription.entries[0])
             } else {
-                return BookDescription.entries
+                BookDescription.entries
             }
         }
 

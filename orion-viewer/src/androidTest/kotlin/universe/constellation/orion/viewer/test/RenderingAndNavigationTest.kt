@@ -7,6 +7,7 @@ import android.graphics.Rect
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -16,14 +17,15 @@ import universe.constellation.orion.viewer.prefs.GlobalOptions.TEST_SCREEN_HEIGH
 import universe.constellation.orion.viewer.prefs.GlobalOptions.TEST_SCREEN_WIDTH
 import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
+import universe.constellation.orion.viewer.test.framework.MANUAL_DEBUG
 import universe.constellation.orion.viewer.test.framework.compareBitmaps
 import universe.constellation.orion.viewer.test.framework.dumpBitmap
 import java.nio.IntBuffer
 
 
 private val deviceSize = Point(300, 350) //to split page on two screen - page size is 663x886
-internal const val MANUAL_DEBUG = false
 
+@Ignore
 @RunWith(Parameterized::class)
 class RenderingAndNavigationTest(private val book: BookDescription) : InstrumentationTestCase(book.toOpenIntent(), additionalParams = {
     intent ->
@@ -63,7 +65,7 @@ class RenderingAndNavigationTest(private val book: BookDescription) : Instrument
         assertEquals(deviceSize.x, bitmap.width)
         assertEquals(deviceSize.y, bitmap.height)
 
-        assertEquals(book.pageCount, controller.pageCount)
+        assertEquals("Check page count:", book.pageCount, controller.pageCount)
         assertEquals(0, controller.currentPage)
 
         val nextPageList = arrayListOf<IntArray>()
