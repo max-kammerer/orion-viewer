@@ -370,4 +370,8 @@ class Controller(
         val height = dm.heightPixels
         return DeviceInfo(am.memoryClass, width, height, Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1)
     }
+
+    override fun toString(): String {
+        return "Controller for $document (controller identity hashCode=${System.identityHashCode(this)}})"
+    }
 }
