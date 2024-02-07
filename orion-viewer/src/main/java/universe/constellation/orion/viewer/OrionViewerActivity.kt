@@ -292,7 +292,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     @Throws(Exception::class)
     private fun openFile(filePath: String) {
-        val stubController = initStubController("$filePath", "Loading...")
+        val stubController = initStubController(filePath, "Loading...")
         val stubDocument = stubController.document as StubDocument
 
         GlobalScope.launch(Dispatchers.Main) {
