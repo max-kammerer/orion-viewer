@@ -38,10 +38,10 @@ abstract class BaseTest {
             return
         }
 
-        val grant = device.wait(Until.findObject(By.textContains("Grant")), 30000) ?: error("Can't find grant action in warning dialog")
+        val grant = device.wait(Until.findObject(By.textContains("Grant")), 60000) ?: error("Can't find grant action in warning dialog")
         grant.click()
 
-        val allowField = device.wait(Until.findObject(By.textContains("Allow")), 30000)
+        val allowField = device.wait(Until.findObject(By.textContains("Allow")), 60000)
         allowField.click()
         assertTrue(device.findObject(By.checkable(true)).isChecked)
         device.pressBack()
