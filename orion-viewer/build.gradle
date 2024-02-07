@@ -136,6 +136,11 @@ android {
     }
 }
 
+android.testOptions.unitTests.all {
+    testLogging {
+        exceptionFormat = "full"
+    }
+}
 
 tasks.register('downloadTestFiles') {
     doFirst {
