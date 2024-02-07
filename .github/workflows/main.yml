@@ -128,4 +128,12 @@ jobs:
         uses: test-summary/action@v2
         with:
           paths: orion-viewer/build/outputs/androidTest-results/connected/debug/TEST-*.xml
+          output: test-summary-${{ matrix.arch[0] }}.md
+        if: always()
+
+      - name: Upload test summary
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-summary-${{ matrix.arch[0] }}.md
+          path: test-summary-${{ matrix.arch[0] }}.md
         if: always()

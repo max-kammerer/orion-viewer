@@ -36,8 +36,8 @@ class RotationTest : BaseEspressoTest(BookDescription.SICP) {
 
         assertNotEquals("Orientation not changed: $orientation", orientation, newOrientation)
         val (rotatedWidth, rotatedHeight)  = getViewSize()
-        assertNotEquals("Widths are equal, original orientation: $orientation", width, rotatedWidth)
-        assertNotEquals("Heights are equal, original orientation: $orientation", height, rotatedHeight)
+        assertNotEquals("Widths should not be equal, original orientation: $orientation", width, rotatedWidth)
+        assertNotEquals("Heights should not be equal, original orientation: $orientation", height, rotatedHeight)
 
         activityScenarioRule.scenario.onActivity {
             it.controller!!.changeOrinatation("PORTRAIT")
