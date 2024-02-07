@@ -8,13 +8,13 @@ import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.BookTest
 
-class SimpleBookTest(private val bookDescription: BookDescription) : BookTest(bookDescription) {
+class SimpleBookTest(bookDescription: BookDescription) : BookTest(bookDescription) {
 
     companion object {
         @JvmStatic
         @Parameterized.Parameters(name = "Open book {0} with expected page count {1} and outlines {2}")
-        fun testData(): Iterable<Array<Any>> {
-            return BookDescription.values().map { arrayOf(it) }
+        fun testData(): Iterable<Array<BookDescription>> {
+            return BookDescription.testData()
         }
     }
 

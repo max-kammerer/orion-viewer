@@ -19,7 +19,7 @@ import universe.constellation.orion.viewer.test.framework.compareBitmaps
 import universe.constellation.orion.viewer.view.ColorStuff
 import java.nio.IntBuffer
 
-class FlexibleBitmapTest(private val bookDescription: BookDescription) : BookTest(bookDescription) {
+class FlexibleBitmapTest(bookDescription: BookDescription) : BookTest(bookDescription) {
 
     companion object {
         @JvmStatic
