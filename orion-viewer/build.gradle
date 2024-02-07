@@ -139,6 +139,7 @@ android {
 android.testOptions.unitTests.all {
     testLogging {
         exceptionFormat = "full"
+        showStandardStreams = true
     }
 }
 
