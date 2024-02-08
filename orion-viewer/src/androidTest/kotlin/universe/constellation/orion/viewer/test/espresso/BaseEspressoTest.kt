@@ -9,6 +9,8 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matcher
 import org.junit.After
 import org.junit.Assert
@@ -35,7 +37,13 @@ open class BaseEspressoTest(val bookDescription: BookDescription) : Instrumentat
 
     @Before
     fun checkStartInvariant() {
-        println("BaseInv")
+        lateinit var job: Job
+        activityScenarioRule.scenario.onActivity {
+            job = it.openJob
+        }
+        runBlocking {
+            job.join()
+        }
         activityScenarioRule.scenario.onActivity {
             controller = it.controller!!
             Assert.assertEquals(it.controller!!.pageCount, bookDescription.pageCount)

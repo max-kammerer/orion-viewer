@@ -99,6 +99,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private var openAsTempTestBook = false
 
+    @Volatile
+    internal lateinit var openJob: Job
+
     val bookId: Long
         get() {
             log("Selecting book id...")
@@ -295,7 +298,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         val stubController = initStubController(filePath, "Loading...")
         val stubDocument = stubController.document as StubDocument
 
-        GlobalScope.launch(Dispatchers.Main) {
+        openJob = GlobalScope.launch(Dispatchers.Main) {
             log("Trying to open file: $filePath")
             val rootJob = Job()
             val newDocument = try {
