@@ -124,12 +124,12 @@ jobs:
           sdcard-path-or-size: 900M
           script: ./gradlew connectedDebugAndroidTest -Porion.CIBuild=true
 
-      - name: Test Summary
-        uses: test-summary/action@v2
+      - uses: dorny/test-reporter@v1
         with:
-          paths: orion-viewer/build/outputs/androidTest-results/connected/debug/TEST-*.xml
-          output: test-summary-${{ matrix.arch[0] }}.md
-        if: always()
+          artifact: test-results            # artifact name
+          name: Tests                  # Name of the check run which will be created
+          path: orion-viewer/build/outputs/androidTest-results/connected/debug/TEST-*.xml
+          reporter: java-junit              # Format of test results
 
       - name: Upload test summary
         uses: actions/upload-artifact@v3
