@@ -1,7 +1,11 @@
 package universe.constellation.orion.viewer.test.espresso
 
+import android.app.Dialog
+import android.os.Build
 import android.view.View
+import android.widget.Button
 import android.widget.SeekBar
+import androidx.appcompat.app.AppCompatDialog
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
@@ -9,6 +13,8 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.Until
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matcher
@@ -18,10 +24,11 @@ import org.junit.Before
 import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.R
+import universe.constellation.orion.viewer.prefs.isVersionLess
 import universe.constellation.orion.viewer.test.framework.BookDescription
+import universe.constellation.orion.viewer.test.framework.ESPRESSO_DELAY
 import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
 
-@SdkSuppress(minSdkVersion = 21)
 /*Default zoom is "Fit Width"*/
 open class BaseEspressoTest(val bookDescription: BookDescription) : InstrumentationTestCase(bookDescription.toOpenIntent()) {
 
@@ -72,11 +79,21 @@ open class BaseEspressoTest(val bookDescription: BookDescription) : Instrumentat
     protected fun openZoom() {
         Espresso.openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
         Espresso.onView(ViewMatchers.withText("Zoom")).perform(ViewActions.click())
+        waitOptionDialog()
+    }
+
+    private fun waitOptionDialog() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            device.wait(Until.findObject(By.clazz(Dialog::class.java)), ESPRESSO_DELAY)
+        } else {
+            Espresso.onIdle()
+        }
     }
 
     protected fun openGoTo() {
         Espresso.openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
         Espresso.onView(ViewMatchers.withText("Go To")).perform(ViewActions.click())
+        waitOptionDialog()
     }
 }
 

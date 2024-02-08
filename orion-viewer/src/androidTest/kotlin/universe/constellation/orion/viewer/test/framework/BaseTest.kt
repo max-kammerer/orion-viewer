@@ -15,19 +15,27 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.rules.TestName
+import org.junit.rules.Timeout
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.djvu.DjvuDocument
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.DocumentWithCachingImpl
 import java.io.File
+import java.util.concurrent.TimeUnit
+
 
 internal const val MANUAL_DEBUG = false
+internal const val ESPRESSO_DELAY = 60000L
 
 abstract class BaseTest {
 
     @JvmField
     @Rule
     val name = TestName()
+
+    @JvmField
+    @Rule
+    val timeout = Timeout(5, TimeUnit.MINUTES)
 
     @Before
     fun grantPermissions() {
@@ -38,10 +46,10 @@ abstract class BaseTest {
             return
         }
 
-        val grant = device.wait(Until.findObject(By.textContains("Grant")), 60000) ?: error("Can't find grant action in warning dialog")
+        val grant = device.wait(Until.findObject(By.textContains("Grant")), ESPRESSO_DELAY) ?: error("Can't find grant action in warning dialog")
         grant.click()
 
-        val allowField = device.wait(Until.findObject(By.textContains("Allow")), 60000)
+        val allowField = device.wait(Until.findObject(By.textContains("Allow")), ESPRESSO_DELAY)
         allowField.click()
         assertTrue(device.findObject(By.checkable(true)).isChecked)
         device.pressBack()

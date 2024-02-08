@@ -24,7 +24,7 @@ class RotationTest : BaseEspressoTest(BookDescription.SICP) {
         var orientation: Int = Int.MIN_VALUE
         activityScenarioRule.scenario.onActivity {
             orientation = it.resources!!.configuration.orientation
-            it.controller!!.changeOrinatation(if (orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) "PORTRAIT" else "LANDSCAPE")
+            it.controller!!.changeOrinatation("LANDSCAPE")
         }
         device.waitForIdle()
         assertFalse(device.isNaturalOrientation)
