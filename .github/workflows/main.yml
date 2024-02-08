@@ -12,7 +12,7 @@ on:
 
 jobs:
   build_and_upload_artifacts:
-    name: Generate APK
+    name: Generate APKs
     runs-on: ubuntu-latest
 
     steps:
@@ -124,8 +124,10 @@ jobs:
           sdcard-path-or-size: 900M
           script: ./gradlew connectedDebugAndroidTest -Porion.CIBuild=true
 
-      - name: Test Summary
-        uses: test-summary/action@v2
+      - uses: dorny/test-reporter@v1
         with:
-          paths: orion-viewer/build/outputs/androidTest-results/connected/debug/TEST-*.xml
-        if: always()
+          name: Test results ${{ matrix.arch[0] }}
+          path: orion-viewer/build/outputs/androidTest-results/connected/debug/TEST-*.xml
+          reporter: java-junit
+        if: failure()
+
