@@ -4,9 +4,6 @@ import android.content.Context
 import android.view.ViewGroup
 import universe.constellation.orion.viewer.OrionBookListener
 
-/**
- * Created by mike on 24.10.15.
- */
 interface Scene  {
     fun setColorMatrix(colorMatrix: FloatArray?) {
     }

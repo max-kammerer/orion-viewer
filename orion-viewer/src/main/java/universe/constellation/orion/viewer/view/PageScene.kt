@@ -14,20 +14,20 @@ import universe.constellation.orion.viewer.util.MoveUtil
 
 class PageScene : View {
 
-    val visibleRect = Rect()
+    private val visibleRect = Rect()
 
     init {
-        viewTreeObserver.addOnScrollChangedListener({
+        viewTreeObserver.addOnScrollChangedListener {
             if (pageView != null) {
                 triggerPaint()
             }
-        })
+        }
 
     }
 
     private fun triggerPaint() {
         if (getGlobalVisibleRect(visibleRect)) {
-            println("Scroll global: " + pageView?.pageNum + " " + visibleRect)
+            println("PageView.triggerPaint " + pageView?.pageNum + ": " + visibleRect)
         }
         if (getLocalVisibleRect(visibleRect)) {
             pageView?.renderVisibleAsync()

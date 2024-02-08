@@ -19,11 +19,6 @@
 
 package universe.constellation.orion.viewer.bookmarks;
 
-/**
- * User: mike
- * Date: 25.02.12
- * Time: 17:10
- */
 public class Bookmark  {
 
     public int page;

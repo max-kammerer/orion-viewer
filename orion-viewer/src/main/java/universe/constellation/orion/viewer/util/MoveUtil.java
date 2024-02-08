@@ -1,8 +1,5 @@
 package universe.constellation.orion.viewer.util;
 
-/**
- * Created by mike on 8/7/14.
- */
 public class MoveUtil {
 
     public static float calcOffset(float startPoint, float endPoint, float scale, boolean supportMove) {
