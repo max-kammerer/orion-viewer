@@ -1,20 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <!--Do not translate this section and do not include it in result localization: start-->
-        <string name="lang_default" translatable="false">DEFAULT</string>
-        <string name="lang_english" translatable="false">en</string>
-        <string name="lang_russian" translatable="false">ru</string>
-        <string name="lang_hebrew" translatable="false">iw</string>
-        <string name="lang_chinese" translatable="false">zh</string>
-        <string name="lang_italian" translatable="false">it</string>
-        <string name="lang_spanish" translatable="false">es</string>
-        <string name="lang_ukrainian" translatable="false">ua</string>
-        <string name="lang_german" translatable="false">de</string>
-        <string name="lang_french" translatable="false">fr</string>
-        <string name="lang_turkish" translatable="false">tr</string>
-    <!--Do not translate this section and do not include it in result localization: end-->
-
     <string name="lang_default_user">System Language</string>
     <string name="lang_english_user">English</string>
     <string name="lang_russian_user">Russian</string>
