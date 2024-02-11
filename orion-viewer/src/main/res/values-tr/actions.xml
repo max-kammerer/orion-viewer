@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="action_none">Hiç biri</string>
+    <string name="action_menu">Ana menü</string>
+    <string name="action_next_page">Sonraki sayfa</string>
+    <string name="action_prev_page">Önceki sayfa</string>
+    <string name="action_first_page">İlk sayfa</string>
+    <string name="action_last_page">Son sayfa</string>
+    <string name="action_crop_page">Kırpma diyalogu</string>
+    <string name="action_zoom_page">Yakınlaştırma diyaloğu</string>
+    <string name="action_layout_page">@string/menu_navigation_text</string>
+    <string name="action_rotation_page">Döndürme diyalogu</string>
+    <string name="action_options_page">Seçenekler</string>
+    <string name="action_book_options">@string/menu_book_preferences</string>
+    <string name="action_goto_page">Git</string>
+    <string name="action_dictionary">Sözlüğü aç</string>
+    <string name="action_open">Kitabı aç</string>
+    <string name="action_outline">@string/menu_outline_text</string>
+    <string name="action_add_bookmark">Yer imi ekle</string>
+    <string name="action_open_bookmarks">Yer imlerini aç</string>
+    <string name="action_full_screen">Tam ekran aç</string>
+    <string name="action_switch_color_mode">Renk modunu değiştir</string>
+    <string name="action_close">Uygulamayı kapat</string>
+
+    <string name="action_crop_left">Sol kenar boşluğunu kırp</string>
+    <string name="action_crop_right">Sağ kenar boşluğunu kırp</string>
+    <string name="action_crop_top">Üst kenar boşluğunu kırp</string>
+    <string name="action_crop_bottom">Alt kenar boşluğunu kırp</string>
+
+    <string name="action_uncrop_left">Sol kenar boşluğunu artır</string>
+    <string name="action_uncrop_right">Sağ kenar boşluğunu artır</string>
+    <string name="action_uncrop_top">Üst kenar boşluğunu artır</string>
+    <string name="action_uncrop_bottom">Alt kenar boşluğunu artır</string>
+    <string name="action_inverse_crops">Kırpma/kenar boşluğunu artırma arasında geçiş yapın</string>
+    <string name="action_switch_long_crop">Küçük/büyük kırpma arasında geçiş yapın</string>
+
+    <string name="action_next_10">10 sayfa ileri sar</string>
+    <string name="action_prev_10">10 sayfa geri sars</string>
+
+    <string name="action_rotate_90">90/-90 derece döndür</string>
+    <string name="action_rotate_270">270/-270 derece döndür</string>
+
+    <string name="action_select_text">@string/menu_select_text</string>
+    <string name="action_select_word">Kelime seç</string>
+    <string name="action_select_word_and_translate">Kelime seç ve çevir</string>
+
+    <string name="action_fit_width">Genişliği sığdır</string>
+    <string name="action_fit_height">Yüksekliği sığdır</string>
+    <string name="action_fit_page">Sayfayı sığdır</string>
+</resources>
