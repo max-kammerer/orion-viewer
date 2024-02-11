@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="navigation">Sayfa geçişi</string>
+    <string name="crop_left">Sol</string>
+    <string name="enable_even_crop">Çift sayfalar için başka bir kırpma işlemi daha</string>
+    <string name="crop_right">Sağ</string>
+    <string name="crop_top">Üst</string>
+    <string name="crop_bottom">Alt</string>
+
+    <string name="crop_auto">Otomatik kırpma</string>
+    <string name="crop_manual">Manuel kırpma</string>
+    <string name="crop_auto_manual">Otomatik ve manuel</string>
+    <string name="crop_manual_auto">Manuel ve otomatik</string>
+    <string name="crop_warning">Daha iyi performans için manuel kırpmayı kullanın</string>
+
+    <string name="rotate_0">0 derece</string>
+    <string name="rotate_90">90 derece</string>
+    <string name="rotate_270">270 derece</string>
+    <string name="long_click">Uzun tıklamada</string>
+    <string name="short_click">Kısa tıklamada</string>
+    <string name="binding_click">Bağlamada</string>
+    <string name="key_binder_reset_all">Hepsini sıfırla</string>
+
+    <string name="orientation_default">Varsayılam</string>
+    <string name="orientation_default_rotation">Uygulama varsayılanı</string>
+    <string name="orientation_landscape">Yatay ekran</string>
+    <string name="orientation_portrait">Dikey ekran</string>
+    <string name="orientation_landscape_inverse">Yatay ekran (270)</string>
+    <string name="orientation_portrait_inverse">Dikey ekran (180)</string>
+
+
+    <string name="fit_width">Genişliği sığdır</string>
+    <string name="fit_height">Yüksekliği sığdır</string>
+    <string name="fit_page">Sayfayı sığdır</string>
+    <string name="fit_custom">Özel…</string>
+
+    <string name="key_binder_message">Herhangi bir tuşa basın ve bunları bağlamak için eylemi seçin!</string>
+    <string name="key_binder_warning">Sıfır anahtar koduyla anahtar bağlanamadı, başka bir anahtar deneyin!</string>
+    <string name="table_of_contents">İçindekiler</string>
+
+    <string name="warn_no_text_in_selection">Seçimde metin yok!</string>
+    <string name="warn_no_outline">Ana hat yok!</string>
+
+    <string name="color_mode_normal">Normal renkler (beyaz zemin üzerine siyah)</string>
+    <string name="color_mode_inverted">Tersine çevrilmiş renkler</string>
+    <string name="color_mode_black_on_yellowish">Sarı zemin üzerine siyah</string>
+    <string name="color_mode_grayscale_light">Grimsi zemin üzerine gri tonlamalı</string>
+    <string name="color_mode_grayscale">Gri zemin üzerine gri tonlamalı</string>
+    <string name="color_mode_grayscale_dark">Koyu gri zemin üzerine gri tonlamalı</string>
+    <string name="color_mode_yellow_on_dark">Siyah zemin üzerine sarı</string>
+    <string name="color_mode_white_on_blue">Mavi zemin üzerine beyaz</string>
+    <string name="select_color_mode">Geçiş yapılacak renk modunu seçin</string>
+
+    <string name="saveFileNameTooltip">DosyaAdı.uzantı</string>
+    <string name="save">Kaydet</string>
+</resources>
