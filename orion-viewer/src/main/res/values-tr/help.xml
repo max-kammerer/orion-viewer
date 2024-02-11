@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="zoom">Yakınlaştırma iletişim kutusunu açar. Sıfır yakınlaştırma değeri genişliğe göre yakınlaştırma anlamına gelir.</string>
+    <string name="rotation">Belgeyi saat yönünde 90 derece döndürür. Uzun tıklama saat yönünün tersine döner.</string>
+
+    <string name="crop">Kenarlıkları kırpma iletişim kutusunu açar. Değerler sayfa boyutuna göre tanımlanır. Bu iletişim kutusundaki artı veya eksi işaretine uzun tıklamak, kırpma değerini %10 değiştirir. Negatif değer ek kenarlıklar ekler.</string>
+
+    <string name="apply">Mevcut seçenekleri uygulayın.</string>
+    <string name="escape">Geri Dön/Çık.</string>
+
+    <string name="general_usage">Nasıl kullanılır:</string>
+
+    <string name="general_usage_step1">1. Belgeyi aç (varsayılan olarak genişliğe göre yakınlaştır)
+        </string>
+
+    <string name="general_usage_step2">
+        2. Uygun yönü seçin: dikey veya yatay
+        </string>
+
+    <string name="general_usage_step3">
+        3. Kenarlıkları kırp, metin boyutu değişen kenarlıklara göre değişecektir (genişliğe göre yakınlaştırma belirtilmişse)
+        </string>
+
+    <string name="general_usage_step4">
+        4. Okumanın tadını çıkarın!</string>
+
+    <!--<string name="help_taps">-->
+        <!--Click on screen - go to next page, long click - go to prev page.</string>-->
+
+    <string name="option_help">
+        Uygulama parametreleri</string>
+
+    <string name="navigation_help">
+        Sayfa düzeni iletişim kutusunu açar. Çizgi roman okurken veya resimli kitapları görüntülerken uygun sayfa düzenini seçebilirsiniz.</string>
+
+    <string name="dictionary_help">
+        Harici sözlüğü açar. Ayarlarda uygun sözlük uygulamasını seçin.</string>
+
+    <string name="tap_help">
+        Dokunma bölgeleri, kullanıcının cihaz ekranının farklı bölümlerini yaygın olarak kullanılan komutlara bağlamasına olanak tanır.
+        Kullanıcının kısa (üst etiket) ve uzun (alt etiket) tıklamalara yönelik eylemleri tanımlayabileceği 3x3 hücre vardır.</string>
+
+    <string name="bookmarks_export_help">
+        Kullanıcının yer işaretlerini dışa aktarmasına izin ver (tüm kitaplar için veya mevcut kitap için).
+        Yer imleri, açılan kitabın adı + [bookmarks.xml veya all_bookmarks.xml] son ekiyle xml dosyasına aktarılır.
+        Bu seçenek yer işaretleri ekran menüsünde mevcuttur.</string>
+</resources>
