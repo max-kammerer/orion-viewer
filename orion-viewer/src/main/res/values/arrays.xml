@@ -136,6 +136,7 @@
         <item>@string/lang_ukrainian</item>
         <item>@string/lang_german</item>
         <item>@string/lang_french</item>
+        <item>@string/lang_turkish</item>
     </string-array>
 
     <string-array name="pref_languages_desc">
@@ -149,6 +150,7 @@
         <item>@string/lang_ukrainian_user</item>
         <item>@string/lang_german_user</item>
         <item>@string/lang_french_user</item>
+        <item>@string/lang_turkish_user</item>
     </string-array>
 
     <string-array name="color_mode_desc">
