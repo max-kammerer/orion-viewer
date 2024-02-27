@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import java.util.concurrent.ConcurrentLinkedQueue
 
-private const val DEFAULT_BITMAP_CACHE_SIZE = 10
+private const val DEFAULT_BITMAP_CACHE_SIZE = 20
 
 open class BitmapCache(val size: Int = DEFAULT_BITMAP_CACHE_SIZE) {
 
@@ -12,6 +12,7 @@ open class BitmapCache(val size: Int = DEFAULT_BITMAP_CACHE_SIZE) {
 
     protected class CacheInfo(val bitmap: Bitmap) {
         var isValid = true
+        var isBusy = false
     }
 
     fun createBitmap(width: Int, height: Int): Bitmap {

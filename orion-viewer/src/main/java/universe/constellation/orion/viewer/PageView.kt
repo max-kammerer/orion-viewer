@@ -6,7 +6,6 @@ import android.graphics.Rect
 import android.graphics.Region
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -26,6 +25,7 @@ import universe.constellation.orion.viewer.geometry.RectF
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.view.OrionDrawScene
 import universe.constellation.orion.viewer.view.PageLayoutManager
+import universe.constellation.orion.viewer.view.uploadBorders
 import kotlin.coroutines.coroutineContext
 
 enum class PageState(val interactWithUUI: Boolean) {
@@ -81,8 +81,10 @@ class PageView(
     var marker: Int = 1
 
     private val processingPagePart = Rect()
-    private val nonRenderedRegion = Region()
-    private val tempRegion = Region()
+
+    private val renderedRegion = Rect()
+    internal val nonRenderedRegion = Region()
+    internal  val tempRegion = Region()
     init {
         wholePageRect.set(pageLayoutManager.defaultSize())
     }
@@ -149,11 +151,12 @@ class PageView(
         val oldSize = Rect(wholePageRect)
         wholePageRect.set(0, 0, layoutInfo.x.pageDimension, layoutInfo.y.pageDimension)
         nonRenderedRegion.set(wholePageRect)
+        renderedRegion.set(0, 0, 0, 0)
         bitmap = bitmap?.resize(wholePageRect.width(), wholePageRect.height(), controller.bitmapCache)
-            ?: createDefaultBitmap()
+            ?: pageLayoutManager.bitmapManager.createDefaultBitmap(wholePageRect)
         log("PageView.initBitmap $pageNum ${controller.document}: $nonRenderedRegion")
         state = PageState.SIZE_AND_BITMAP_CREATED
-        pageLayoutManager.onSizeCalculated(this, oldSize)
+        pageLayoutManager.onPageSizeCalculated(this, oldSize)
     }
 
     fun draw(canvas: Canvas, scene: OrionDrawScene) {
@@ -168,12 +171,6 @@ class PageView(
         scene.orionStatusBarHelper.onPageUpdate(layoutInfo)
     }
 
-    //TODO scale up to necessary, tune to heap size
-    private fun createDefaultBitmap(): FlexibleBitmap {
-        val deviceInfo = controller.getDeviceInfo()
-        return FlexibleBitmap(wholePageRect, deviceInfo.width / 2, deviceInfo.height / 2)
-    }
-
     internal fun renderVisibleAsync() {
         GlobalScope.launch (Dispatchers.Main + handler) {
             renderVisible()
@@ -184,18 +181,27 @@ class PageView(
         return layoutData.occupiedScreenPartInTmp(pageLayoutManager.sceneRect)?.let { Rect(it) }
     }
 
+    fun visibleRect(): Rect? {
+        return layoutData.visibleOnScreenPart(pageLayoutManager.sceneRect)
+    }
+
     internal suspend fun renderVisible(): Deferred<PageView?>? {
         return layoutData.visibleOnScreenPart(pageLayoutManager.sceneRect)?.let {
             return coroutineScope {
                 async (Dispatchers.Main + handler) {
-                    render(it)?.await()
+                    render(it, true)?.await()
                 }
             }
         } ?: run { println("Non visible $pageNum"); null }
 
     }
 
-    internal suspend fun render(rect: Rect): Deferred<PageView>? {
+    internal suspend fun renderInvisible(rect: Rect): Deferred<PageView?>? {
+        //TODO yield
+        return render(rect, false)
+    }
+
+    internal suspend fun render(rect: Rect, fromUI: Boolean): Deferred<PageView>? {
         val layoutStrategy = controller.layoutStrategy
         if (!(layoutStrategy.viewWidth > 0 &&  layoutStrategy.viewHeight > 0)) return null
 
@@ -203,8 +209,9 @@ class PageView(
             pageInfo.await()
         }
         tempRegion.set(nonRenderedRegion)
-        if (tempRegion.op(rect, nonRenderedRegion, Region.Op.INTERSECT)) {
-            val bound = tempRegion.bounds
+        if (true || tempRegion.op(rect, nonRenderedRegion, Region.Op.INTERSECT)) {
+            //val bound = tempRegion.bounds
+            val bound = Rect(rect)
             return coroutineScope {
                 async(controller.context + pageJobs + handler) {
                     timing("Rendering $pageNum page in rendering engine: $bound") {
@@ -214,8 +221,12 @@ class PageView(
                         withContext(Dispatchers.Main) {
                             if (kotlin.coroutines.coroutineContext.isActive) {
                                 nonRenderedRegion.op(bound, Region.Op.DIFFERENCE)
+                                renderedRegion.union(bound)
                                 log("PageView.render invalidate: $pageNum $layoutData ${scene != null}")
                                 scene?.invalidate()
+                                if (fromUI) {
+                                    uploadBorders()
+                                }
                             }
                         }
                     } else {
@@ -230,6 +241,9 @@ class PageView(
                 scene?.invalidate()
                 val completableDeferred = CompletableDeferred<PageView>(coroutineContext.job)
                 completableDeferred.complete(this@PageView)
+                if (fromUI) {
+                    uploadBorders()
+                }
                 return completableDeferred
             } else {
                 println("Skipped $state $document $pageNum")

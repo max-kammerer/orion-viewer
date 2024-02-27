@@ -12,6 +12,7 @@ import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.PageInitListener
 import universe.constellation.orion.viewer.PageView
 import universe.constellation.orion.viewer.PageState
+import universe.constellation.orion.viewer.bitmap.BitmapManager
 import universe.constellation.orion.viewer.handler
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.log
@@ -26,6 +27,8 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
     init {
         scene.setDimensionAware(this)
     }
+
+    val bitmapManager: BitmapManager = BitmapManager(this)
 
     val visiblePages: MutableList<PageView> = arrayListOf()
 
@@ -233,6 +236,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
 
     private fun updateStateAndRender(view: PageView): Boolean {
         return if (isVisible(view)) {
+            bitmapManager.actualizeActive(view)
             view.renderVisibleAsync()
             true
         } else {
@@ -315,7 +319,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         return tmpRect.intersect(sceneRect)
     }
 
-    fun onSizeCalculated(updatedView: PageView, oldArea: Rect) {
+    fun onPageSizeCalculated(updatedView: PageView, oldArea: Rect) {
         pageListener?.onPageInited(updatedView)
 
         log("onSizeCalculated ${updatedView.pageNum}: ${updatedView.layoutData} $oldArea")
