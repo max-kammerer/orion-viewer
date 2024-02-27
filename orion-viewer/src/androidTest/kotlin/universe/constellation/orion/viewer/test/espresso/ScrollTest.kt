@@ -4,13 +4,10 @@ import androidx.test.espresso.Espresso.*
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.Matchers.*
-import org.junit.After
 import org.junit.Assert
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.test.framework.BookDescription
 

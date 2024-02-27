@@ -21,6 +21,7 @@ package universe.constellation.orion.viewer.djvu
 
 import android.graphics.Bitmap
 import android.graphics.RectF
+import org.jetbrains.annotations.TestOnly
 import universe.constellation.orion.viewer.PageInfo
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.OutlineItem
@@ -84,6 +85,11 @@ class DjvuDocument(private val fileName: String) : Document {
     private fun releasePage() {
         releasePage(lastPagePointer)
         lastPagePointer = 0
+    }
+
+    @TestOnly
+    override fun goToPageInt(pageNum: Int) {
+        gotoPage(pageNum)
     }
 
     @Synchronized

@@ -26,18 +26,7 @@ abstract class BookTest(protected val bookDescription: BookDescription) : BaseTe
     }
 }
 
-enum class BookDescription(
-        val path: String,
-        val pageCount: Int,
-        val title: String?,
-        val topLevelOutlineItems: Int,
-        val allOutlineItems: Int = topLevelOutlineItems,
-        val pageSize: Point = Point(0, 0)
-) {
-    SICP(BaseTest.SICP, 762, "", 15, 139, Point(662, 885)),
-    ALICE(BaseTest.ALICE, 77, null, 0,  pageSize = Point(2481, 3508)),
-    DJVU_SPEC(BaseTest.DJVU_SPEC, 71, null, 1, 100, Point(2539, 3295));
-
+open class BookFile(val path: String) {
     fun toOpenIntent(): Intent {
         return Intent(Intent.ACTION_VIEW).apply {
             setClassName(
@@ -53,12 +42,39 @@ enum class BookDescription(
 
     fun openBook() = FileUtil.openFile(asFile())
 
+    fun openBookNoCacheWrapper() = FileUtil.openDocWithoutCacheWrapper(asFile().absolutePath)
+
+    override fun toString(): String {
+        return "BookFile(path='$path')"
+    }
+
+    companion object {
+
+        fun testEntriesWithCustoms(): List<BookFile> {
+            return BaseTest.testFolder.list()?.map { BookFile(it) } ?: error("no books")
+        }
+    }
+}
+
+sealed class BookDescription(
+        path: String,
+        val pageCount: Int,
+        val title: String?,
+        val topLevelOutlineItems: Int,
+        val allOutlineItems: Int = topLevelOutlineItems,
+        val pageSize: Point = Point(0, 0)
+): BookFile(path) {
+
+    data object SICP: BookDescription(BaseTest.SICP, 762, "", 15, 139, Point(662, 885))
+    data object ALICE: BookDescription(BaseTest.ALICE, 77, null, 0,  pageSize = Point(2481, 3508))
+    data object DJVU_SPEC: BookDescription(BaseTest.DJVU_SPEC, 71, null, 1, 100, Point(2539, 3295))
+
     companion object {
         private fun testEntries(): List<BookDescription> {
             return if (MANUAL_DEBUG) {
-                listOf(BookDescription.entries[0])
+                listOf(SICP)
             } else {
-                BookDescription.entries
+                listOf(SICP, ALICE, DJVU_SPEC)
             }
         }
 

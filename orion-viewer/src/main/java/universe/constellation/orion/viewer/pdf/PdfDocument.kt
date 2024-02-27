@@ -21,10 +21,12 @@ package universe.constellation.orion.viewer.pdf
 
 import android.graphics.Bitmap
 import android.graphics.RectF
+import com.artifex.mupdf.fitz.DisplayList
 import com.artifex.mupdf.fitz.Outline
 import com.artifex.mupdf.fitz.StructuredText
 import com.artifex.mupdf.viewer.MuPDFCore
 import com.artifex.mupdfdemo.TextWord
+import org.jetbrains.annotations.TestOnly
 import universe.constellation.orion.viewer.PageInfo
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.OutlineItem
@@ -40,6 +42,11 @@ class PdfDocument @Throws(Exception::class) constructor(private val fileName: St
         PageInfo(pageNum, x.toInt(), y.toInt())
     }
 
+    @TestOnly
+    override fun goToPageInt(pageNum: Int) {
+        core.gotoPage(pageNum)
+    }
+
     override fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int, leftOffset: Int, topOffset: Int) {
         core.drawPage(bitmap, pageNumber, leftOffset, topOffset, left, top, right, bottom, zoom.toFloat())
         updateContrast(bitmap, bitmap.width * bitmap.height * 4)
@@ -49,6 +56,11 @@ class PdfDocument @Throws(Exception::class) constructor(private val fileName: St
 
     override val title: String? by lazy {
         core.title
+    }
+
+    @TestOnly
+    fun createDisplayListForCurrentPage(): DisplayList? {
+        return core.page.toDisplayList()
     }
 
     external override fun setContrast(contrast: Int)

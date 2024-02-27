@@ -62,7 +62,7 @@ abstract class BaseTest {
     }
 
     companion object {
-        val testFolder: File = File(Environment.getExternalStorageDirectory(), "Download/orion")
+        val testFolder: File = File(Environment.getExternalStorageDirectory(), "Download/orion/testData")
 
         const val SICP: String = "sicp.pdf"
 

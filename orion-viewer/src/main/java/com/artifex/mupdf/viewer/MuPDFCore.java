@@ -79,7 +79,7 @@ public class MuPDFCore
 		return oldPage;
 	}
 
-	private synchronized void gotoPage(int pageNum) {
+	public synchronized void gotoPage(int pageNum) {
 		/* TODO: page cache */
 		if (pageNum > pageCount-1)
 			pageNum = pageCount-1;
@@ -243,5 +243,9 @@ public class MuPDFCore
  	public int pageNumberFromOutline(Outline ol){
 		Location loc = doc.resolveLink(ol);
 		return doc.pageNumberFromLocation(loc);
+	}
+
+	public Page getPage() {
+		return page;
 	}
 }

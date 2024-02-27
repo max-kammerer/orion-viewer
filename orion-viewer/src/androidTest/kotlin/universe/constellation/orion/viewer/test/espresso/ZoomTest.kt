@@ -1,14 +1,8 @@
 package universe.constellation.orion.viewer.test.espresso
 
-import android.view.View
-import android.widget.SeekBar
 import androidx.test.espresso.Espresso.*
-import androidx.test.espresso.UiController
-import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.*
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import org.hamcrest.Matcher
 import org.hamcrest.Matchers.*
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -22,6 +22,10 @@ class StubDocument(override var title: String?, var bodyText: String? = title) :
         return getPageInfo(pageNum)
     }
 
+    override fun goToPageInt(pageNum: Int) {
+
+    }
+
     override fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int, leftOffset: Int, topOffset: Int) {
         //TODO: render body text
     }
