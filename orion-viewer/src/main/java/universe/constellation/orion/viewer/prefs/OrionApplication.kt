@@ -27,12 +27,20 @@ import android.os.Build
 import android.os.Build.VERSION.CODENAME
 import android.os.Build.VERSION.RELEASE
 import android.preference.PreferenceManager
-import universe.constellation.orion.viewer.*
+import universe.constellation.orion.viewer.AndroidLogger
 import universe.constellation.orion.viewer.BuildConfig.VERSION_NAME
+import universe.constellation.orion.viewer.LastPageInfo
+import universe.constellation.orion.viewer.OrionViewerActivity
+import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.bookmarks.BookmarkAccessor
-import universe.constellation.orion.viewer.device.*
-import universe.constellation.orion.viewer.device.texet.TexetTB576HDDevice
-import java.util.*
+import universe.constellation.orion.viewer.device.AndroidDevice
+import universe.constellation.orion.viewer.device.EInkDeviceWithoutFastRefresh
+import universe.constellation.orion.viewer.device.MagicBookBoeyeDevice
+import universe.constellation.orion.viewer.device.OnyxDevice
+import universe.constellation.orion.viewer.device.OnyxUtil
+import universe.constellation.orion.viewer.log
+import universe.constellation.orion.viewer.logger
+import java.util.Locale
 import kotlin.properties.Delegates
 
 /**
@@ -180,11 +188,6 @@ class OrionApplication : Application() {
 
         @JvmStatic
         fun createDevice(): AndroidDevice {
-            if (TEXET_TB576HD) {
-                log("Using TEXET_TB576HD")
-                return TexetTB576HDDevice()
-            }
-
             if (ONYX_DEVICE) {
                 log("Using Onyx Device")
                 return OnyxDevice()
@@ -211,9 +214,6 @@ class OrionApplication : Application() {
 
         @JvmField
         val ONYX_DEVICE = "ONYX".equals(MANUFACTURER, ignoreCase = true) && OnyxUtil.isEinkDevice
-
-        @JvmField
-        val TEXET_TB576HD = "texet".equals(MANUFACTURER, ignoreCase = true) && "TB-576HD".equals(DEVICE, ignoreCase = true) && "TB-576HD".equals(MODEL, ignoreCase = true)
 
         @JvmField
         val RK30SDK = "rk30sdk".equals(MODEL, ignoreCase = true) && ("T62D".equals(DEVICE, ignoreCase = true) || DEVICE.lowercase(Locale.getDefault()).contains("onyx"))
