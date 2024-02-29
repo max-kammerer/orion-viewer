@@ -92,8 +92,8 @@ JNI_FN(DjvuDocument_gotoPageInternal)(JNIEnv *env, jclass type, jlong docl, jint
     return jlong_cast(page);
 }
 
-JNIEXPORT jobject JNICALL
-JNI_FN(DjvuDocument_getPageInfo)(JNIEnv *env, jclass type, jlong docl, jint pageNum, PageInfo(info)) {
+JNIEXPORT PageDimension JNICALL
+JNI_FN(DjvuDocument_getPageDimension)(JNIEnv *env, jclass type, jlong docl, jint pageNum, PageDimension info) {
     clock_t start, end;
     ddjvu_document_t *doc = (ddjvu_document_t *) docl;
     LOGI("Obtaining page %i info in %p!", pageNum, doc);

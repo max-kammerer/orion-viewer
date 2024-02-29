@@ -19,15 +19,16 @@
 
 package universe.constellation.orion.viewer.layout
 
-import universe.constellation.orion.viewer.*
-import universe.constellation.orion.viewer.document.DocumentWithCaching
-import universe.constellation.orion.viewer.document.DocumentWithCachingImpl
-import universe.constellation.orion.viewer.document.PageInfoProvider
+import universe.constellation.orion.viewer.LastPageInfo
+import universe.constellation.orion.viewer.PageInfo
+import universe.constellation.orion.viewer.PageOptions
+import universe.constellation.orion.viewer.PageWalker
+import universe.constellation.orion.viewer.document.PageWithAutoCrop
 import universe.constellation.orion.viewer.geometry.Point
+import universe.constellation.orion.viewer.log
+import universe.constellation.orion.viewer.walkOrder
 
 class SimpleLayoutStrategy private constructor(
-        private val pageInfoProvider: PageInfoProvider,
-        private val pageCount: Int,
         private val center: Boolean = false
 ) : LayoutStrategy {
 
@@ -90,21 +91,12 @@ class SimpleLayoutStrategy private constructor(
         return false
     }
 
-    override fun reset(pos: LayoutPosition, pageNumber: Int) {
-        reset(pos, pageNumber, true)
+    override fun reset(pos: LayoutPosition, page: PageWithAutoCrop) {
+        reset(pos, page, true)
     }
 
-    override fun reset(pos: LayoutPosition, pageNumber: Int, forward: Boolean) {
-        var pageNum = pageNumber
-        if (pageCount - 1 < pageNum) {
-            pageNum = pageCount - 1
-        }
-        if (pageNum < 0) {
-            pageNum = 0
-        }
-
-        //original width and height without cropped margins
-        reset(pos, forward, pageInfoProvider.getPageInfo(pageNum, margins.cropMode), margins.cropMode, zoom, center)
+    override fun reset(pos: LayoutPosition, page: PageWithAutoCrop, forward: Boolean) {
+        reset(pos, forward, page.getPageInfo(this, margins.cropMode), margins.cropMode, zoom, center)
     }
 
     override fun reset(info: LayoutPosition, forward: Boolean, pageInfo: PageInfo, cropMode: Int, zoom: Int, doCentering: Boolean) {
@@ -267,13 +259,8 @@ class SimpleLayoutStrategy private constructor(
 
     companion object {
 
-        fun create(doc: DocumentWithCaching): SimpleLayoutStrategy {
-            val simpleLayoutStrategy = SimpleLayoutStrategy(doc, doc.pageCount)
-            if (doc is DocumentWithCachingImpl) {
-                //TODO: ugly hack
-                doc.strategy = simpleLayoutStrategy
-            }
-            return simpleLayoutStrategy
+        fun create(): SimpleLayoutStrategy {
+            return SimpleLayoutStrategy()
         }
     }
 }

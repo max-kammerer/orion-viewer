@@ -7,7 +7,7 @@ import org.junit.After
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.BuildConfig
-import universe.constellation.orion.viewer.FileUtil
+import universe.constellation.orion.viewer.FileUtil.openFile
 import universe.constellation.orion.viewer.OrionViewerActivity
 import java.io.File
 
@@ -40,9 +40,7 @@ open class BookFile(val path: String) {
 
     fun asFile() = File(BaseTest.testFolder, path)
 
-    fun openBook() = FileUtil.openFile(asFile())
-
-    fun openBookNoCacheWrapper() = FileUtil.openDocWithoutCacheWrapper(asFile().absolutePath)
+    fun openBook() = openFile(asFile())
 
     override fun toString(): String {
         return "BookFile(path='$path')"

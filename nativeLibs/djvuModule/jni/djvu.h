@@ -2,10 +2,10 @@
 
 #ifdef ORION_FOR_ANDROID
 #define DocInfo jobject
-#define PageInfo(A) jobject A
+#define PageDimension jobject
 #else
 #define DocInfo long *
-#define PageInfo(A) void * (*  A)(int, int, int)
+#define PageDimension(A) void * (*  A)(int, int, int)
 #endif
 
 
@@ -16,5 +16,5 @@ JNI_FN(DjvuDocument_openFile)(JNIEnv *env, jclass type, jstring jfileName, DocIn
 
 extern JNIEXPORT void JNICALL JNI_FN(DjvuDocument_destroying)(JNIEnv *env, jclass type, jlong doc, jlong context);
 
-extern JNIEXPORT jobject JNICALL
-JNI_FN(DjvuDocument_getPageInfo)(JNIEnv *env, jclass type, jlong docl, jint pageNum, PageInfo(info));
+extern JNIEXPORT PageDimension JNICALL
+JNI_FN(DjvuDocument_getPageInfo)(JNIEnv *env, jclass type, jlong docl, jint pageNum, PageDimension info);

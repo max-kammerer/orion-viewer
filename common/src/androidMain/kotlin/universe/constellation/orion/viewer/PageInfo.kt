@@ -32,3 +32,13 @@ actual data class PageInfo @JvmOverloads constructor(
     @JvmField
     actual var autoCrop: AutoCropMargins? = null
 }
+
+
+actual data class PageDimension @JvmOverloads constructor(
+    /*used from jni*/
+    @JvmField actual var width: Int = 0,
+    /*used from jni*/
+    @JvmField actual var height: Int = 0
+) {
+
+}

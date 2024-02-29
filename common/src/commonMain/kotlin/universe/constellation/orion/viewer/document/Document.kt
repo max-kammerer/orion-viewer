@@ -20,8 +20,10 @@
 package universe.constellation.orion.viewer.document
 
 import universe.constellation.orion.viewer.Bitmap
+import universe.constellation.orion.viewer.PageDimension
 import universe.constellation.orion.viewer.PageInfo
 import universe.constellation.orion.viewer.geometry.RectF
+import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
 
 expect class OutlineItem {
     val level: Int
@@ -30,7 +32,7 @@ expect class OutlineItem {
 }
 
 interface PageInfoProvider {
-    fun getPageInfo(pageNum: Int, cropMode: Int): PageInfo
+    fun getPageInfo(layoutStrategy: SimpleLayoutStrategy, cropMode: Int): PageInfo
 }
 
 /**
@@ -46,7 +48,43 @@ interface ImagePostProcessor {
     fun setContrast(contrast: Int)
 }
 
-interface DocumentWithCaching: PageInfoProvider, Document
+interface Page {
+
+    val pageNum: Int
+
+    fun getPageDimension(): PageDimension
+
+    fun renderPage(bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int, leftOffset: Int, topOffset: Int)
+
+    fun readPageDataForRendering()
+
+    fun destroy()
+}
+
+abstract class AbstractDocument : Document {
+
+    private val pages = HashMap<Int, PageWithAutoCrop>()
+
+    @Synchronized
+    final override fun getOrCreatePageAdapter(pageNum: Int): PageWithAutoCrop {
+        return pages.getOrPut(pageNum) { createPage(pageNum) }
+    }
+
+    abstract fun createPage(pageNum: Int): PageWithAutoCrop
+
+    @Synchronized
+    fun destroyPages() {
+        ArrayList(pages.values).forEach {
+            destroyPage(it)
+        }
+        pages.clear()
+    }
+
+    override fun destroyPage(page: Page) {
+        pages.remove(page.pageNum)
+        page.destroy()
+    }
+}
 
 interface Document : ImagePostProcessor {
 
@@ -56,21 +94,17 @@ interface Document : ImagePostProcessor {
 
     val outline: Array<OutlineItem>?
 
-    fun getPageInfo(pageNum: Int): PageInfo
+    fun getOrCreatePageAdapter(pageNum: Int): PageWithAutoCrop
 
-    fun goToPageInt(pageNum: Int)
-
-    fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int, leftOffset: Int, topOffset: Int)
-
-    fun getText(pageNumber: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): String?
+    fun getText(pageNum: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): String?
 
     fun destroy()
+
+    fun destroyPage(page: Page)
 
     fun needPassword(): Boolean = false
 
     fun authenticate(password: String): Boolean = true
 
     fun searchPage(pageNumber: Int, text: String): Array<RectF>?
-
-    fun hasCalculatedPageInfo(pageNumber: Int): Boolean = false
 }

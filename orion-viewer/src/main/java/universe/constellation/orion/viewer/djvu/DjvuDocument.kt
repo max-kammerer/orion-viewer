@@ -19,20 +19,80 @@
 
 package universe.constellation.orion.viewer.djvu
 
-import android.graphics.Bitmap
 import android.graphics.RectF
-import org.jetbrains.annotations.TestOnly
-import universe.constellation.orion.viewer.PageInfo
-import universe.constellation.orion.viewer.document.Document
+import universe.constellation.orion.viewer.Bitmap
+import universe.constellation.orion.viewer.PageDimension
+import universe.constellation.orion.viewer.document.AbstractDocument
 import universe.constellation.orion.viewer.document.OutlineItem
+import universe.constellation.orion.viewer.document.PageWithAutoCrop
 import universe.constellation.orion.viewer.pdf.DocInfo
 import universe.constellation.orion.viewer.timing
-import java.util.*
+import java.util.Locale
 
-class DjvuDocument(private val fileName: String) : Document {
+class DjvuDocument(private val fileName: String) : AbstractDocument() {
 
-    private var lastPage = -1
-    private var lastPagePointer = 0L
+    inner class DjvuPage(pageNum: Int) : PageWithAutoCrop(pageNum) {
+        @Volatile
+        private var pagePointer: Long = 0
+        @Volatile
+        private var destroyed = false
+
+        override fun getPageDimension(): PageDimension {
+            //TODO default page size
+            if (docPointer == 0L || destroyed) return dimensionForCorruptedPage()
+
+            PageDimension().also {
+                timing("Page $pageNum info calculation") {
+                    return getPageDimension(docPointer, pageNum, it) ?: dimensionForCorruptedPage()
+                }
+            }
+        }
+
+        override fun readPageDataForRendering() {
+            if (destroyed) return
+            if (pagePointer == 0L && docPointer != 0L) {
+                pagePointer = gotoPageInternal(docPointer, pageNum)
+            }
+        }
+
+        override fun renderPage(
+            bitmap: Bitmap,
+            zoom: Double,
+            left: Int,
+            top: Int,
+            right: Int,
+            bottom: Int,
+            leftOffset: Int,
+            topOffset: Int
+        ) {
+            if (destroyed) return
+            renderPage(
+                pageNum,
+                pagePointer,
+                bitmap,
+                zoom,
+                left,
+                top,
+                right,
+                bottom,
+                leftOffset,
+                topOffset
+            )
+        }
+
+        override fun destroy() {
+            if (!destroyed) {
+                destroyed = true
+                if (pagePointer != 0L) {
+                    releasePage(pagePointer)
+                    pagePointer = 0
+                }
+                destroyPage(this)
+            }
+        }
+    }
+
+    @Volatile
     private var docPointer = 0L
     private var contextPointer = 0L
     private val docInfo = DocInfo()
@@ -51,63 +111,26 @@ class DjvuDocument(private val fileName: String) : Document {
     override val pageCount: Int
         get() = docInfo.pageCount
 
-    @Synchronized
-    override fun getPageInfo(pageNum: Int): PageInfo {
-        //destroyed, can be called in non-ui thread
-        if (docPointer == 0L) return PageInfo(pageNum, 300, 400)
-
-        return PageInfo(pageNum).also {
-            timing("Page $pageNum info calculation") {
-                getPageInfo(docPointer, pageNum, it)
-            }
-        }
+    override fun createPage(pageNum: Int): PageWithAutoCrop {
+        return DjvuPage(pageNum)
     }
 
     @Synchronized
-    override fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int, leftOffset: Int, topOffset: Int) {
+    private fun renderPage(pageNum: Int, pagePointer: Long, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int, leftOffset: Int, topOffset: Int) {
         //destroyed, can be called in non-ui thread
-        if (docPointer == 0L) return
+        if (docPointer == 0L || pagePointer == 0L) return
 
-        val pagePointer = gotoPage(pageNumber)
-        timing("Page $pageNumber rendering") {
+        timing("Page $pageNum ($pagePointer) rendering") {
             drawPage(docPointer, pagePointer, bitmap, zoom.toFloat(), bitmap.width, bitmap.height, leftOffset + left, topOffset + top, right - left, bottom - top, left, top)
         }
     }
 
     @Synchronized
     override fun destroy() {
-        releasePage()
+        destroyPages()
         destroying(docPointer, contextPointer)
         docPointer = 0
         contextPointer = 0
-    }
-
-    private fun releasePage() {
-        releasePage(lastPagePointer)
-        lastPagePointer = 0
-    }
-
-    @TestOnly
-    override fun goToPageInt(pageNum: Int) {
-        gotoPage(pageNum)
-    }
-
-    @Synchronized
-    private fun gotoPage(page: Int): Long {
-        if (lastPage != page) {
-            timing("Changing page...") {
-                releasePage()
-                lastPagePointer = gotoPageInternal(docPointer,
-                        when {
-                            page > docInfo.pageCount - 1 -> docInfo.pageCount - 1
-                            page < 0 -> 0
-                            else -> page
-                        }
-                )
-                lastPage = page
-            }
-        }
-        return lastPagePointer
     }
 
     override val title: String?
@@ -166,10 +189,8 @@ class DjvuDocument(private val fileName: String) : Document {
         return rects[position]
     }
 
-    override fun getText(pageNumber: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean) =
-            getText(docPointer, pageNumber, absoluteX, absoluteY, width, height)
-
-    override fun hasCalculatedPageInfo(pageNumber: Int): Boolean = false
+    override fun getText(pageNum: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean) =
+            getText(docPointer, pageNum, absoluteX, absoluteY, width, height)
 
     companion object {
 
@@ -187,7 +208,7 @@ class DjvuDocument(private val fileName: String) : Document {
         external fun gotoPageInternal(doc: Long, pageNum: Int): Long
 
         @JvmStatic
-        external fun getPageInfo(doc: Long, pageNum: Int, info: PageInfo): Int
+        external fun getPageDimension(doc: Long, pageNum: Int, info: PageDimension): PageDimension?
 
         @JvmStatic
         external fun drawPage(doc: Long, page: Long, bitmap: Bitmap, zoom: Float, bitmapWidth: Int, bitmapHeight: Int,

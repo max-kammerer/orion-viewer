@@ -18,7 +18,6 @@ import org.junit.rules.TestName
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.djvu.DjvuDocument
 import universe.constellation.orion.viewer.document.Document
-import universe.constellation.orion.viewer.document.DocumentWithCachingImpl
 import java.io.File
 
 internal const val MANUAL_DEBUG = false
@@ -73,6 +72,5 @@ abstract class BaseTest {
 }
 
 internal fun isDjvuDocument(document: Document): Boolean {
-    val doc = (document as? DocumentWithCachingImpl)?.doc ?: document
-    return doc is DjvuDocument
+    return document is DjvuDocument
 }

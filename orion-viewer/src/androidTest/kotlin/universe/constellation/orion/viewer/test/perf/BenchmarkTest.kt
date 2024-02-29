@@ -2,19 +2,34 @@ package universe.constellation.orion.viewer.test.perf
 
 import android.graphics.Color
 import com.artifex.mupdf.fitz.Context
-import com.artifex.mupdf.fitz.StructuredText.TextBlock
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import universe.constellation.orion.viewer.Bitmap
 import universe.constellation.orion.viewer.djvu.DjvuDocument
-import universe.constellation.orion.viewer.pdf.PdfDocument
 import universe.constellation.orion.viewer.test.framework.BaseTest
 import universe.constellation.orion.viewer.test.framework.BookFile
 
 class BenchmarkTest : BaseTest() {
 
-    data class Info(val book: BookFile, val openTime: Long, val pageInfoAvg: Long, val gotoPageAvg: Long, val displayListAvg: Long, val pureRendering: Long, val closeTime: Long)
+    class DataList(val list: List<Long>) {
+        override fun toString(): String {
+            return "" + list.min() + "-" + list.average().toLong() + '-' + list.max() + "("+ list.indexOf(list.max()) + ")"
+        }
+    }
+
+    class Info(
+        val openTime: Long,
+        val pageInfoAvg: DataList,
+        val readPageData: DataList,
+        val pureRendering: DataList,
+        val closeTime: Long,
+        val book: BookFile
+    ) {
+        override fun toString(): String {
+            return "pageInfo=$pageInfoAvg, readPageData=$readPageData, pureRendering=$pureRendering, openTime=$openTime, closeTime=$closeTime, book=$book"
+        }
+    }
 
     private val bitmap = Bitmap.createBitmap(800, 1024, android.graphics.Bitmap.Config.ARGB_8888)
 
@@ -33,51 +48,44 @@ class BenchmarkTest : BaseTest() {
     fun benchmark() {
         val infos = BookFile.testEntriesWithCustoms().map {
             val time = time()
-            val book = it.openBookNoCacheWrapper()
+            val book = it.openBook()
             val openTime = timeDelta(time)
 
-            val gotoAvg = (1..20).map {
-                val goto = time()
-                book.goToPageInt(it)
-                timeDelta(goto)
-            }.average().toLong()
-
-            val pageInfo = (21..40).map {
-                val goto = time()
-                book.getPageInfo(it)
-                timeDelta(goto)
-            }.average().toLong()
-
             val pureRendering = mutableListOf<Long>()
+            val pageInfo = mutableListOf<Long>()
 
-            val displayList = (1..20).map {
+            val readData = (0..20).map { pageNum ->
                 bitmap.eraseColor(Color.TRANSPARENT)
-                book.goToPageInt(it)
+                val page = book.getOrCreatePageAdapter(pageNum)
+                pageInfo.add(
+                    time {
+                        page.getPageDimension()
+                    }
+                )
                 val goto = time()
-                if (book is PdfDocument) {
-                    val displayList = book.createDisplayListForCurrentPage()
-                    val res = timeDelta(goto)
-                    pureRendering.add(
-                        timeDelta {
-                            book.renderPage(it, bitmap, 1.0, 0, 0, bitmap.width, bitmap.height, 0, 0)
-                        }
-                    )
-                    displayList?.destroy()
-                    res
-                } else {
-                    pureRendering.add(
-                        timeDelta {
-                            book.renderPage(it, bitmap, 1.0, 0, 0, bitmap.width, bitmap.height, 0, 0)
-                        }
-                    )
-                    0
-                }
-            }.average().toLong()
+                page.readPageDataForRendering()
+                val res = timeDelta(goto)
+                pureRendering.add(
+                    time {
+                        page.renderPage(bitmap, 1.0, 0, 0, bitmap.width, bitmap.height, 0, 0)
+                    }
+                )
+                page.destroy()
+                res
+            }
 
-            val close = time()
-            book.destroy()
-            val closeTime = timeDelta(close)
-            Info(it, openTime, pageInfo, gotoAvg, displayList, pureRendering.average().toLong(), closeTime)
+            val closeTime = time {
+                book.destroy()
+            }
+
+            Info(
+                openTime,
+                DataList(pageInfo),
+                DataList(readData),
+                DataList(pureRendering),
+                closeTime,
+                it
+            )
         }
 
         println(infos.joinToString("\n"))
@@ -87,7 +95,7 @@ class BenchmarkTest : BaseTest() {
 
     private fun timeDelta(start: Long) = System.currentTimeMillis() - start
 
-    private inline fun timeDelta(block: () -> Unit): Long {
+    private inline fun time(block: () -> Unit): Long {
         val start = time()
         block()
         return timeDelta(start)

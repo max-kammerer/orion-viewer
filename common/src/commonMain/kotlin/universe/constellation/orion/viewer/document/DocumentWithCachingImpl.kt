@@ -32,46 +32,33 @@ private const val HEIGHT = 800
 private const val THRESHOLD = 255 - 10
 private const val VOTE_THRESHOLD = 3
 
+private val bitmap: Bitmap by lazy {
+    createBitmap(WIDTH, HEIGHT)
+}
+
+private val bitmapArray: IntArray by lazy {
+    IntArray(WIDTH * HEIGHT)
+}
 
 
-class DocumentWithCachingImpl(val doc: Document) : DocumentWithCaching, Document by doc {
+abstract class PageWithAutoCrop(override val pageNum: Int) : PageInfoProvider, Page {
 
-    private val cache = createCache<Int, PageInfo?>(100)
+    protected fun dimensionForCorruptedPage() = PageDimension(300, 400)
 
-    private val bitmap: Bitmap by lazy {
-        createBitmap(WIDTH, HEIGHT)
-    }
+    override fun getPageInfo(layoutStrategy: SimpleLayoutStrategy, cropMode: Int): PageInfo {
+        val info = getPageDimension()
+        val pageInfo = PageInfo(pageNum, info.width, info.height)
 
-    //TODO: ugly hack
-    lateinit var strategy: SimpleLayoutStrategy
-
-    private val bitmapArray: IntArray by lazy {
-        IntArray(WIDTH * HEIGHT)
-    }
-
-    fun resetCache() {
-        cache.evictAll()
-    }
-
-    override fun getPageInfo(pageNum: Int, cropMode: Int): PageInfo {
-        return doc.mySynchronized {
-            var pageInfo = cache.get(pageNum)
-            if (pageInfo == null) {
-                pageInfo = doc.getPageInfo(pageNum)
-                cache.put(pageNum, pageInfo)
+        if (cropMode != 0 && (pageInfo.autoCrop == null)) {
+            timing("Full auto crop") {
+                fillAutoCropInfo(layoutStrategy, pageInfo, cropMode)
             }
-
-            if (cropMode != 0 && (pageInfo.autoCrop == null)) {
-                timing("Full auto crop") {
-                    fillAutoCropInfo(pageInfo, cropMode)
-                }
-            }
-
-            pageInfo
         }
+
+        return pageInfo
     }
 
-    private fun fillAutoCropInfo(page: PageInfo, cropMode: Int) {
+    private fun fillAutoCropInfo(strategy: SimpleLayoutStrategy, page: PageInfo, cropMode: Int) {
         if (page.width == 0 || page.height == 0) {
             page.autoCrop = AutoCropMargins(0, 0, 0, 0)
             return
@@ -106,7 +93,7 @@ class DocumentWithCachingImpl(val doc: Document) : DocumentWithCaching, Document
         timing("Render page for auto crop processing") {
             val leftTopCorner = strategy.convertToPoint(curPos)
             //TODO:
-            doc.renderPage(curPos.pageNumber, bitmap, curPos.docZoom, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + newWidth, leftTopCorner.y + newHeight, 0, 0)
+            renderPage(bitmap, curPos.docZoom, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + newWidth, leftTopCorner.y + newHeight, 0, 0)
         }
 
         timing("Extract pixels from bitmap") {
@@ -130,10 +117,8 @@ class DocumentWithCachingImpl(val doc: Document) : DocumentWithCaching, Document
         log("Unzoomed result: ${page.pageNum0}: ${page.autoCrop}")
     }
 
-    override fun hasCalculatedPageInfo(pageNumber: Int): Boolean = cache[pageNumber] != null
-
     override fun toString(): String {
-        return doc.toString()
+        return "Page $pageNum"
     }
 }
 

@@ -35,12 +35,10 @@ import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
 import universe.constellation.orion.viewer.bitmap.DeviceInfo
 import universe.constellation.orion.viewer.document.Document
-import universe.constellation.orion.viewer.document.DocumentWithCachingImpl
 import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.layout.CropMargins
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.LayoutStrategy
-import universe.constellation.orion.viewer.layout.calcPageLayout
 import universe.constellation.orion.viewer.util.ColorUtil
 import universe.constellation.orion.viewer.view.PageLayoutManager
 import universe.constellation.orion.viewer.view.ViewDimensionAware
@@ -124,26 +122,11 @@ class Controller(
     }
 
     fun drawNext(): Deferred<PageView?>? {
-        layoutInfo?.let {
-            val copy = it.copy()
-            layoutStrategy.calcPageLayout(copy, true, pageCount)
-            return drawPage(copy.pageNumber, copy.x.offset, copy.y.offset)
-        } ?: run {
-            log("Problem: no visible page invoking drawNext")
-            return null
-        }
+        return pageLayoutManager.renderNextOrPrev(true)
     }
 
     fun drawPrev(): Deferred<PageView?>? {
-        layoutInfo?.let {
-            val copy = it.copy()
-            layoutStrategy.calcPageLayout(copy, false, pageCount)
-            log("Controller drawPrev ${copy.pageNumber} $document: ${copy.x.offset} ${copy.y.offset}")
-            return drawPage(copy.pageNumber, copy.x.offset, copy.y.offset)
-        } ?: run {
-            log("Problem: no visible page invoking drawPrev")
-            return null
-        }
+        return pageLayoutManager.renderNextOrPrev(false)
     }
 
     fun translateAndZoom(zoomScaling: Float, startFocus: PointF, endFocus: PointF, deltaX: Float, deltaY: Float) {
@@ -169,9 +152,7 @@ class Controller(
 
     fun changeCropMargins(cropMargins: CropMargins) {
         if (layoutStrategy.changeCropMargins(cropMargins)) {
-            if (document is DocumentWithCachingImpl) {
-                document.resetCache()
-            }
+            //TODO: cache auto crop and reset it here
             sendViewChangeNotification()
         }
     }
@@ -350,8 +331,8 @@ class Controller(
         }
     }
 
-    fun drawPage(lp: LayoutPosition) {
-        drawPage(lp.pageNumber, lp.x.offset, lp.y.offset)
+    fun drawPage(lp: LayoutPosition): Deferred<PageView?> {
+        return drawPage(lp.pageNumber, lp.x.offset, lp.y.offset)
     }
 
     companion object {

@@ -5,10 +5,12 @@ import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.RectF
 import org.junit.After
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.BitmapCache
 import universe.constellation.orion.viewer.bitmap.FlexibleBitmap
+import universe.constellation.orion.viewer.document.Page
 import universe.constellation.orion.viewer.document.min
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
@@ -31,12 +33,12 @@ class FlexibleBitmapTest(bookDescription: BookDescription) : BookTest(bookDescri
         private val BITMAP_CACHE = BitmapCache(20)
         private val PAINTS = ColorStuff()
 
-        private val screenRect = Rect(0,0,600, 800)
-        private val pageWidth = Rect(0,0,600, 800)
+        private val screenRect = Rect(0, 0, 600, 800)
+        private val pageRect = Rect(0, 0, 600, 800)
     }
 
-    private val flexibleBitmapPart: FlexibleBitmap = FlexibleBitmap(pageWidth, screenRect.centerX(), screenRect.centerY())
-    private val flexibleBitmapFull: FlexibleBitmap = FlexibleBitmap(pageWidth, screenRect.width(), screenRect.height())
+    private val flexibleBitmapPart: FlexibleBitmap = FlexibleBitmap(pageRect, screenRect.centerX(), screenRect.centerY())
+    private val flexibleBitmapFull: FlexibleBitmap = FlexibleBitmap(pageRect, screenRect.width(), screenRect.height())
 
     @Test
     fun test1Page() {
@@ -55,16 +57,16 @@ class FlexibleBitmapTest(bookDescription: BookDescription) : BookTest(bookDescri
         doTest(min(59, bookDescription.pageCount), colorDelta)
     }
 
-    private fun doTest(page: Int, colorDelta: Int = DEFAULT_COLOR_DELTA) {
-        val simpleLayoutStrategy =
-            SimpleLayoutStrategy.create(document)
+    private fun doTest(pageNum: Int, colorDelta: Int = DEFAULT_COLOR_DELTA) {
+        val page = document.getOrCreatePageAdapter(pageNum)
+        val simpleLayoutStrategy = SimpleLayoutStrategy.create()
         simpleLayoutStrategy.setViewSceneDimension(screenRect.width(), screenRect.height())
         val pos = LayoutPosition()
         simpleLayoutStrategy.reset(pos, page)
         val rendering = Rect(0, 0, pos.x.pageDimension, pos.y.pageDimension)
 
-        val (part, partData) = render(flexibleBitmapPart, rendering, pos)
-        val (full, fullData) = render(flexibleBitmapFull, rendering, pos)
+        val (part, partData) = render(flexibleBitmapPart, rendering, pos, page)
+        val (full, fullData) = render(flexibleBitmapFull, rendering, pos, page)
 
         compareBitmaps(partData, fullData, screenRect.width(), colorDelta = colorDelta) {
             dumpBitmap("Part", part)
@@ -73,11 +75,12 @@ class FlexibleBitmapTest(bookDescription: BookDescription) : BookTest(bookDescri
                 dumpBitmap("Part$i", b)
             }
         }
+        page.destroy()
     }
 
-    private fun render(adaptiveBitmap: FlexibleBitmap, rendering: Rect, pos: LayoutPosition): Pair<Bitmap, IntArray> {
+    private fun render(adaptiveBitmap: FlexibleBitmap, rendering: Rect, pos: LayoutPosition, page: Page): Pair<Bitmap, IntArray> {
         adaptiveBitmap.resize(pos.x.pageDimension, pos.y.pageDimension, BITMAP_CACHE)
-        adaptiveBitmap.render(rendering, pos, pos.pageNumber, document, BITMAP_CACHE)
+        adaptiveBitmap.render(rendering, pos, page, BITMAP_CACHE)
 
         val bitmap = Bitmap.createBitmap(rendering.width(), rendering.height(), android.graphics.Bitmap.Config.ARGB_8888)
         val canvasPart = Canvas(bitmap)
@@ -87,6 +90,28 @@ class FlexibleBitmapTest(bookDescription: BookDescription) : BookTest(bookDescri
         return bitmap to partBuf.array()
     }
 
+    @Test
+    fun checkPartCountTest() {
+        val bm = FlexibleBitmap(pageRect, pageRect.width(), pageRect.height())
+        checkPartCount(bm, 1)
+
+        bm.resize(pageRect.width(), pageRect.height(), BITMAP_CACHE)
+        checkPartCount(bm, 1)
+
+        bm.resize(pageRect.width() - 1, pageRect.height() - 1, BITMAP_CACHE)
+        checkPartCount(bm, 1)
+
+        bm.resize(pageRect.width() + 1, pageRect.height() + 1, BITMAP_CACHE)
+        checkPartCount(bm, 2, 2)
+    }
+
+    private fun checkPartCount(bm: FlexibleBitmap, expectedRows: Int, expectedCols: Int = expectedRows) {
+        var counter = 0
+        bm.forAllTest { ++counter }
+        Assert.assertEquals(expectedRows * expectedCols, counter)
+        Assert.assertEquals(expectedRows, bm.data.size)
+        Assert.assertEquals(expectedCols, bm.data[0].size)
+    }
 
     @After
     fun after() {

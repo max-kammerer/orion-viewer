@@ -80,7 +80,7 @@ class PageView(
     @Volatile
     var marker: Int = 1
 
-    private val processingPagePart = Rect()
+    internal val page = document.getOrCreatePageAdapter(pageNum)
 
     private val renderedRegion = Rect()
     internal val nonRenderedRegion = Region()
@@ -118,6 +118,7 @@ class PageView(
         GlobalScope.launch(controller.context) {
             pageJobs.cancelAndJoin()
             freePagePointer()
+            page.destroy()
         }
     }
 
@@ -134,7 +135,7 @@ class PageView(
         println("Page $pageNum reinit $state $document" )
         pageJobs.cancelChildren()
         pageInfo = GlobalScope.async(controller.context + pageJobs + handler) {
-            controller.layoutStrategy.reset(layoutInfo, pageNum)
+            controller.layoutStrategy.reset(layoutInfo, page)
             if (isActive) {
                 withContext(Dispatchers.Main) {
                     if (isActive) {
@@ -153,7 +154,7 @@ class PageView(
         nonRenderedRegion.set(wholePageRect)
         renderedRegion.set(0, 0, 0, 0)
         bitmap = bitmap?.resize(wholePageRect.width(), wholePageRect.height(), controller.bitmapCache)
-            ?: pageLayoutManager.bitmapManager.createDefaultBitmap(wholePageRect)
+            ?: pageLayoutManager.bitmapManager.createDefaultBitmap(Rect(wholePageRect))
         log("PageView.initBitmap $pageNum ${controller.document}: $nonRenderedRegion")
         state = PageState.SIZE_AND_BITMAP_CREATED
         pageLayoutManager.onPageSizeCalculated(this, oldSize)
@@ -215,7 +216,7 @@ class PageView(
             return coroutineScope {
                 async(controller.context + pageJobs + handler) {
                     timing("Rendering $pageNum page in rendering engine: $bound") {
-                        bitmap!!.render(bound, layoutInfo, pageNum, document, controller.bitmapCache)
+                        bitmap!!.render(bound, layoutInfo, page, controller.bitmapCache)
                     }
                     if (isActive) {
                         withContext(Dispatchers.Main) {

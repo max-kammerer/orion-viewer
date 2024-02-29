@@ -19,37 +19,106 @@
 
 package universe.constellation.orion.viewer.pdf
 
-import android.graphics.Bitmap
 import android.graphics.RectF
+import com.artifex.mupdf.fitz.Device
 import com.artifex.mupdf.fitz.DisplayList
+import com.artifex.mupdf.fitz.Matrix
 import com.artifex.mupdf.fitz.Outline
+import com.artifex.mupdf.fitz.Page
 import com.artifex.mupdf.fitz.StructuredText
+import com.artifex.mupdf.fitz.android.AndroidDrawDevice
 import com.artifex.mupdf.viewer.MuPDFCore
 import com.artifex.mupdfdemo.TextWord
 import org.jetbrains.annotations.TestOnly
-import universe.constellation.orion.viewer.PageInfo
-import universe.constellation.orion.viewer.document.Document
+import universe.constellation.orion.viewer.Bitmap
+import universe.constellation.orion.viewer.PageDimension
+import universe.constellation.orion.viewer.document.AbstractDocument
 import universe.constellation.orion.viewer.document.OutlineItem
+import universe.constellation.orion.viewer.document.PageWithAutoCrop
 
-class PdfDocument @Throws(Exception::class) constructor(private val fileName: String) : Document {
+class PdfDocument @Throws(Exception::class) constructor(private val fileName: String) : AbstractDocument() {
+
+    inner class PdfPage(pageNum: Int) : PageWithAutoCrop(pageNum) {
+        @Volatile
+        private var page: Page? = null
+        private var displayList: DisplayList? = null
+        private var destroyed = false
+
+        private fun readPageDataIfNeeded() {
+            if (destroyed) return
+            if (page == null) {
+                page = core.doc.loadPage(pageNum)
+            }
+        }
+
+        override fun getPageDimension(): PageDimension {
+            //TODO default page size
+            readPageDataIfNeeded()
+            if (page == null) {
+                return dimensionForCorruptedPage()
+            }
+
+            return core.getPageSize(pageNum).run {
+                val b = page!!.bounds
+                val pageWidth = b.x1 - b.x0
+                val pageHeight = b.y1 - b.y0
+                PageDimension(pageWidth.toInt(), pageHeight.toInt())
+            }
+        }
+
+        override fun renderPage(
+            bitmap: Bitmap,
+            zoom: Double,
+            left: Int,
+            top: Int,
+            right: Int,
+            bottom: Int,
+            leftOffset: Int,
+            topOffset: Int
+        ) {
+            readPageDataForRendering()
+            if (displayList == null) return
+            val dev: Device =
+                AndroidDrawDevice(bitmap, leftOffset, topOffset, left, top, right, bottom)
+            val zoom1 = zoom.toFloat()
+            displayList!!.run(dev, Matrix(zoom1, zoom1), null)
+            updateContrast(bitmap, bitmap.width * bitmap.height * 4)
+        }
+
+        private fun getOrCreateDisplayList() {
+            if (displayList != null) return
+            displayList = page?.toDisplayList()
+        }
+
+        override fun readPageDataForRendering() {
+            readPageDataIfNeeded()
+            getOrCreateDisplayList()
+        }
+
+        override fun destroy() {
+            if (!destroyed) {
+                destroyed = true
+                if (displayList != null) {
+                    displayList?.destroy()
+                    displayList = null
+                }
+                if (page != null) {
+                    page?.destroy()
+                    page = null
+                }
+                destroyPage(this)
+            }
+        }
+    }
+
 
     private val core = MuPDFCore(fileName)
 
     override val pageCount: Int
         get() = core.countPages()
 
-    override fun getPageInfo(pageNum: Int): PageInfo = core.getPageSize(pageNum).run {
-        PageInfo(pageNum, x.toInt(), y.toInt())
-    }
-
-    @TestOnly
-    override fun goToPageInt(pageNum: Int) {
-        core.gotoPage(pageNum)
-    }
-
-    override fun renderPage(pageNumber: Int, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int, leftOffset: Int, topOffset: Int) {
-        core.drawPage(bitmap, pageNumber, leftOffset, topOffset, left, top, right, bottom, zoom.toFloat())
-        updateContrast(bitmap, bitmap.width * bitmap.height * 4)
+    override fun createPage(pageNum: Int): PageWithAutoCrop {
+        return PdfPage(pageNum)
     }
 
     override fun destroy() = core.onDestroy()
@@ -58,18 +127,13 @@ class PdfDocument @Throws(Exception::class) constructor(private val fileName: St
         core.title
     }
 
-    @TestOnly
-    fun createDisplayListForCurrentPage(): DisplayList? {
-        return core.page.toDisplayList()
-    }
-
     external override fun setContrast(contrast: Int)
     external fun updateContrast(bitmap: Bitmap, size: Int)
 
     external override fun setThreshold(threshold: Int)
 
-    override fun getText(pageNumber: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): String? {
-        val text: StructuredText = core.getText(pageNumber)
+    override fun getText(pageNum: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): String? {
+        val text: StructuredText = core.getText(pageNum)
 
         // The text of the page held in a hierarchy (blocks, lines, spans).
         // Currently we don't need to distinguish the blocks level or

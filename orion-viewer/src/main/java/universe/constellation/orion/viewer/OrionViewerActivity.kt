@@ -320,7 +320,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 orionContext.currentBookParameters = lastPageInfo1
                 OptionActions.DEBUG.doAction(this@OrionViewerActivity, false, globalOptions.getBooleanProperty("DEBUG", false))
 
-                val layoutStrategy = SimpleLayoutStrategy.create(newDocument)
+                val layoutStrategy = SimpleLayoutStrategy.create()
 
                 val controller1 = Controller(this@OrionViewerActivity, newDocument, layoutStrategy, rootJob)
                 controller = controller1
@@ -378,7 +378,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private fun initStubController(title: String, bodyText: String): Controller {
         val stubDocument = StubDocument(title, bodyText)
-        val stubController = Controller(this, stubDocument, SimpleLayoutStrategy.create(stubDocument))
+        val stubController = Controller(this, stubDocument, SimpleLayoutStrategy.create())
         val drawView = fullScene.drawView
         val stubInfo = createDefaultLastPageInfo(initalizer(globalOptions))
         stubController.changeOrinatation(stubInfo.screenOrientation)

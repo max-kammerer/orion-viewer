@@ -16,7 +16,7 @@ class BitmapManager(val pageLayoutManager: PageLayoutManager) {
         actualizeActive(bitmap, pageView.layoutData.visibleOnScreenPart(pageLayoutManager.sceneRect)?: return)
     }
 
-    fun actualizeActive(
+    private fun actualizeActive(
         bitmap: FlexibleBitmap,
         visiblePart: Rect
     ) {

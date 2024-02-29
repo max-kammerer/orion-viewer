@@ -18,7 +18,7 @@ import com.artifex.mupdf.fitz.android.AndroidDrawDevice;
 
 public class MuPDFCore
 {
-	private Document doc;
+	public Document doc;
 	private Outline[] outline;
 	private int pageCount = -1;
 	private int currentPage;

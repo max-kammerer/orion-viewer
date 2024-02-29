@@ -6,7 +6,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Region
 import universe.constellation.orion.viewer.BitmapCache
-import universe.constellation.orion.viewer.document.Document
+import universe.constellation.orion.viewer.document.Page
 import universe.constellation.orion.viewer.geometry.RectF
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.log
@@ -25,6 +25,8 @@ data class PagePart(val absPartRect: Rect) {
 
     //access from renderer thread
     private var rendTmp = Rect()
+
+    @Volatile
     private var nonRenderedPart = Region(absPartRect)
     private var nonRenderedPartTmp = Region(absPartRect)
 
@@ -33,9 +35,7 @@ data class PagePart(val absPartRect: Rect) {
         zoom: Double,
         cropLeft: Int,
         cropTop: Int,
-        page: Int,
-        doc: Document,
-        bitmapCache: BitmapCache
+        page: Page
     ) {
         if (!isActive) return
         if (nonRenderedPart.isEmpty) return
@@ -55,7 +55,6 @@ data class PagePart(val absPartRect: Rect) {
                     absPartRect.left + cropLeft,
                     absPartRect.top + cropTop,
                     page,
-                    doc,
                     bitmap
                 )
                 rendTmp.offset(absPartRect.left, absPartRect.top)
@@ -80,6 +79,7 @@ data class PagePart(val absPartRect: Rect) {
     internal fun activate(bitmapCache: BitmapCache) {
         isActive = true
         bitmap = bitmapCache.createBitmap(absPartRect.width(), absPartRect.height())
+        nonRenderedPart.set(absPartRect)
     }
 
     internal fun deactivate(bitmapCache: BitmapCache) {
@@ -88,15 +88,15 @@ data class PagePart(val absPartRect: Rect) {
             bitmapCache.free(it)
         }
         bitmap = null
-        nonRenderedPart.set(absPartRect)
     }
 }
 
 class FlexibleBitmap(initialArea: Rect, val partWidth: Int, val partHeight: Int) {
-    private var renderingArea = initialArea
+    private var renderingArea = Rect(initialArea)
         private set
 
-    private var data = initData(renderingArea.width(), renderingArea.height())
+    var data = initData(renderingArea.width(), renderingArea.height())
+        private set
 
     val width: Int
         get() =  renderingArea.width()
@@ -104,8 +104,8 @@ class FlexibleBitmap(initialArea: Rect, val partWidth: Int, val partHeight: Int)
     val height: Int
         get() =  renderingArea.height()
 
-    private fun initData(width: Int, height: Int) = Array(height / partHeight + 1) { row ->
-        Array(width / partWidth + 1) { col ->
+    private fun initData(width: Int, height: Int) = Array(height.countCells(partHeight)) { row ->
+        Array(width.countCells(partWidth)) { col ->
             val left = partWidth * col
             val top = partHeight * row
             PagePart(
@@ -123,25 +123,28 @@ class FlexibleBitmap(initialArea: Rect, val partWidth: Int, val partHeight: Int)
         free(bitmapCache)
         data = initData(width, height)
         renderingArea.set(0, 0, width, height)
+
         return this
     }
 
     fun updateDrawAreaAndUpdateNonRenderingPart(activationRect: Rect, cache: BitmapCache) {
+        //free out of view bitmaps
         forAll {
             val newState = Rect.intersects(this.absPartRect, activationRect)
-            if (isActive) {
-                if (!newState) {
-                    deactivate(cache)
-                }
-            } else {
-                if (newState) {
-                    activate(cache)
-                }
+            if (isActive && !newState) {
+                deactivate(cache)
+            }
+        }
+        //then enable visible ones
+        forAll {
+            val newState = Rect.intersects(this.absPartRect, activationRect)
+            if (!isActive && newState) {
+                activate(cache)
             }
         }
     }
 
-    fun render(renderingArea: Rect, curPos: LayoutPosition, page: Int, doc: Document, bitmapCache: BitmapCache) {
+    fun render(renderingArea: Rect, curPos: LayoutPosition, page: Page, bitmapCache: BitmapCache) {
         forEach(renderingArea) {
             render(
                 renderingArea,
@@ -149,10 +152,12 @@ class FlexibleBitmap(initialArea: Rect, val partWidth: Int, val partHeight: Int)
                 curPos.x.marginLess,
                 curPos.y.marginLess,
                 page,
-                doc,
-                bitmapCache
             )
         }
+    }
+
+    fun forAllTest(body: PagePart.() -> Unit) {
+        forAll(body)
     }
 
     private inline fun forAll(body: PagePart.() -> Unit) {
@@ -164,7 +169,6 @@ class FlexibleBitmap(initialArea: Rect, val partWidth: Int, val partHeight: Int)
         val top = rect.top / partHeight
         val right = rect.rightInc / partWidth
         val bottom = rect.bottomInc / partHeight
-
         for (r in top..bottom) {
             for (c in left..right) {
                 body(data[r][c])
@@ -198,19 +202,23 @@ class FlexibleBitmap(initialArea: Rect, val partWidth: Int, val partHeight: Int)
     }
 }
 
+fun Int.countCells(cellSize: Int): Int {
+    if (this == 0) return 1
+    return (this - 1) / cellSize + 1
+}
+
 private val Rect.rightInc get() = right - 1
 private val Rect.bottomInc get() = bottom - 1
 
-private fun renderInner(bound: Rect, curPos: LayoutPosition, page: Int, doc: Document, bitmap: Bitmap): Bitmap {
+private fun renderInner(bound: Rect, curPos: LayoutPosition, page: Page, bitmap: Bitmap): Bitmap {
     println("Rendering $page: $bound $curPos")
-    doc.renderPage(page, bitmap, curPos.docZoom, bound.left, bound.top,  bound.right, bound.bottom, curPos.x.marginLess, curPos.y.marginLess)
+    page.renderPage(bitmap, curPos.docZoom, bound.left, bound.top,  bound.right, bound.bottom, curPos.x.marginLess, curPos.y.marginLess)
     return bitmap
 }
 
-private fun renderInner(bound: Rect, zoom: Double, offsetX: Int, offsetY: Int, page: Int, doc: Document, bitmap: Bitmap): Bitmap {
+private fun renderInner(bound: Rect, zoom: Double, offsetX: Int, offsetY: Int, page: Page, bitmap: Bitmap): Bitmap {
     println("Rendering $page: $bound $offsetX $offsetY")
-    doc.renderPage(
-        page,
+    page.renderPage(
         bitmap,
         zoom,
         bound.left,

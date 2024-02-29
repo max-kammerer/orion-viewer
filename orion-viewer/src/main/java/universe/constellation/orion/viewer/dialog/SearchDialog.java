@@ -41,11 +41,6 @@ import universe.constellation.orion.viewer.view.OrionDrawScene;
 import static universe.constellation.orion.viewer.LoggerKt.log;
 import static universe.constellation.orion.viewer.UtilKt.toAbsoluteRect;
 
-/**
- * User: mike
- * Date: 23.11.13
- * Time: 11:39
- */
 public class SearchDialog extends DialogFragment {
 
     private SearchTask myTask;
@@ -74,7 +69,7 @@ public class SearchDialog extends DialogFragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Dialog dialog = getDialog();
+        Dialog dialog = requireDialog();
         dialog.setCanceledOnTouchOutside(true);
 
 
@@ -111,19 +106,22 @@ public class SearchDialog extends DialogFragment {
         myTask = new SearchTask(getActivity(), controller.getDocument()) {
             @Override
             protected void onResult(boolean isSuccessful, SearchTaskResult result) {
-                boolean forward = lastDirectionOnSearch == +1;
-                LayoutPosition position = new LayoutPosition();
-                LayoutStrategy layoutStrategy = controller.getLayoutStrategy();
-                PageWalker walker = layoutStrategy.getWalker();
-                layoutStrategy.reset(position, result.pageNumber, forward);
+                if (false) { //TODO rewrite search in new architecture
+                    boolean forward = lastDirectionOnSearch == +1;
+                    LayoutPosition position = new LayoutPosition();
+                    LayoutStrategy layoutStrategy = controller.getLayoutStrategy();
+                    PageWalker walker = layoutStrategy.getWalker();
+                    //layoutStrategy.reset(position, result.pageNumber, forward);
 
-                List<SubBatch> subBatches = prepareResults(result, forward, position, walker, layoutStrategy);
-                lastPosition = forward ? 0 : subBatches.size() -1;
-                screens = subBatches;
+                    List<SubBatch> subBatches = prepareResults(result, forward, position, walker, layoutStrategy);
+                    lastPosition = forward ? 0 : subBatches.size() - 1;
+                    screens = subBatches;
 
-                SubBatch toShow = subBatches.get(lastPosition);
-                toShow.active += lastDirectionOnSearch;
-                drawBatch(toShow, controller);
+                    SubBatch toShow = subBatches.get(lastPosition);
+                    toShow.active += lastDirectionOnSearch;
+                    drawBatch(toShow, controller);
+                }
+
             }
 
             private List<SubBatch> prepareResults(SearchTaskResult result, boolean forward, LayoutPosition position, PageWalker walker, LayoutStrategy layoutStrategy) {
@@ -251,7 +249,7 @@ public class SearchDialog extends DialogFragment {
     }
 
     @Override
-    public void onDismiss(DialogInterface dialog) {
+    public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
         lastSearchResultRenderer.setBatch(null);
     }
@@ -286,7 +284,7 @@ public class SearchDialog extends DialogFragment {
                 Paint paint = stuff.getBorderPaint();
                 List<RectF> rects = batch.rects;
                 int index = 0;
-                int prevAlpgha = paint.getAlpha();
+                int prevAlpha = paint.getAlpha();
                 Paint.Style style = paint.getStyle();
                 paint.setStyle(Paint.Style.FILL);
                 for (RectF rect : rects) {
@@ -295,7 +293,7 @@ public class SearchDialog extends DialogFragment {
                     int top = batch.lp.getY().getMarginLess() + batch.lp.getY().getOffset();
                     canvas.drawRect(rect.left - left, rect.top - top, rect.right - left, rect.bottom - top, paint);
                 }
-                paint.setAlpha(prevAlpgha);
+                paint.setAlpha(prevAlpha);
                 paint.setStyle(style);
             }
         }

@@ -23,6 +23,7 @@ import universe.constellation.orion.viewer.LastPageInfo
 import universe.constellation.orion.viewer.PageInfo
 import universe.constellation.orion.viewer.PageOptions
 import universe.constellation.orion.viewer.PageWalker
+import universe.constellation.orion.viewer.document.PageWithAutoCrop
 import universe.constellation.orion.viewer.geometry.Point
 
 interface LayoutStrategy {
@@ -41,9 +42,9 @@ interface LayoutStrategy {
 
     fun prevPage(pos: LayoutPosition): Int
 
-    fun reset(pos: LayoutPosition, pageNumber: Int)
+    fun reset(pos: LayoutPosition, page: PageWithAutoCrop)
 
-    fun reset(pos: LayoutPosition, pageNumber: Int, forward: Boolean)
+    fun reset(pos: LayoutPosition, page: PageWithAutoCrop, forward: Boolean)
 
     fun changeRotation(rotation: Int): Boolean
 
@@ -73,23 +74,10 @@ interface LayoutStrategy {
 
 }
 
-fun LayoutStrategy.calcPageLayout(layoutInfo: LayoutPosition, nextNotPrev: Boolean, pageCount: Int) {
-    val result =
-            if (nextNotPrev)
+fun LayoutStrategy.calcPageLayout(layoutInfo: LayoutPosition, nextNotPrev: Boolean): Int {
+    return  if (nextNotPrev)
                 nextPage(layoutInfo)
             else
                 prevPage(layoutInfo)
 
-    when (result) {
-        0 -> return
-        1 ->
-            if (layoutInfo.pageNumber < pageCount - 1) {
-                reset(layoutInfo, layoutInfo.pageNumber + 1)
-            }
-        -1 ->
-            if (layoutInfo.pageNumber > 0) {
-                reset(layoutInfo, layoutInfo.pageNumber - 1, false)
-            }
-        else -> throw RuntimeException("Unknown result $result")
-    }
 }
