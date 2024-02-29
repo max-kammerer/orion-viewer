@@ -244,8 +244,4 @@ public class MuPDFCore
 		Location loc = doc.resolveLink(ol);
 		return doc.pageNumberFromLocation(loc);
 	}
-
-	public Page getPage() {
-		return page;
-	}
 }

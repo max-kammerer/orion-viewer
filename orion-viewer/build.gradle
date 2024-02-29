@@ -154,7 +154,7 @@ tasks.register('downloadTestFiles') {
 tasks.register('uploadTestData') {
     doLast {
         exec {
-            commandLine(androidComponents.sdkComponents.adb.get(), "push", "--sync", "src/androidTest/assets/testData/", "/sdcard/Download/orion")
+            commandLine(androidComponents.sdkComponents.adb.get(), "push", "--sync", "src/androidTest/assets/.", "/sdcard/Download/orion")
         }
     }
 }

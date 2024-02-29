@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Region
+import org.jetbrains.annotations.TestOnly
 import universe.constellation.orion.viewer.BitmapCache
 import universe.constellation.orion.viewer.document.Page
 import universe.constellation.orion.viewer.geometry.RectF
@@ -91,9 +92,11 @@ data class PagePart(val absPartRect: Rect) {
     }
 }
 
-class FlexibleBitmap(initialArea: Rect, val partWidth: Int, val partHeight: Int) {
-    private var renderingArea = Rect(initialArea)
-        private set
+class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight: Int) {
+
+    constructor(initialArea: Rect, partWidth: Int, partHeight: Int): this(initialArea.width(), initialArea.height(), partWidth, partHeight)
+
+    private var renderingArea = Rect(0, 0, width, height)
 
     var data = initData(renderingArea.width(), renderingArea.height())
         private set
@@ -127,6 +130,14 @@ class FlexibleBitmap(initialArea: Rect, val partWidth: Int, val partHeight: Int)
         return this
     }
 
+    fun enableAll(cache: BitmapCache) {
+        updateDrawAreaAndUpdateNonRenderingPart(renderingArea, cache)
+    }
+
+    fun disableAll(cache: BitmapCache) {
+        updateDrawAreaAndUpdateNonRenderingPart(Rect(-1, -1, -1, -1), cache)
+    }
+
     fun updateDrawAreaAndUpdateNonRenderingPart(activationRect: Rect, cache: BitmapCache) {
         //free out of view bitmaps
         forAll {
@@ -144,7 +155,20 @@ class FlexibleBitmap(initialArea: Rect, val partWidth: Int, val partHeight: Int)
         }
     }
 
-    fun render(renderingArea: Rect, curPos: LayoutPosition, page: Page, bitmapCache: BitmapCache) {
+    @TestOnly
+    fun renderFull(zoom: Double, page: Page) {
+        forEach(renderingArea) {
+            render(
+                renderingArea,
+                zoom,
+                0,
+                0,
+                page,
+            )
+        }
+    }
+
+    fun render(renderingArea: Rect, curPos: LayoutPosition, page: Page) {
         forEach(renderingArea) {
             render(
                 renderingArea,

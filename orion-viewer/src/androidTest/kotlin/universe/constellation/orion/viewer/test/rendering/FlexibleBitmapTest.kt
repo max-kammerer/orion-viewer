@@ -80,7 +80,7 @@ class FlexibleBitmapTest(bookDescription: BookDescription) : BookTest(bookDescri
 
     private fun render(adaptiveBitmap: FlexibleBitmap, rendering: Rect, pos: LayoutPosition, page: Page): Pair<Bitmap, IntArray> {
         adaptiveBitmap.resize(pos.x.pageDimension, pos.y.pageDimension, BITMAP_CACHE)
-        adaptiveBitmap.render(rendering, pos, page, BITMAP_CACHE)
+        adaptiveBitmap.render(rendering, pos, page)
 
         val bitmap = Bitmap.createBitmap(rendering.width(), rendering.height(), android.graphics.Bitmap.Config.ARGB_8888)
         val canvasPart = Canvas(bitmap)

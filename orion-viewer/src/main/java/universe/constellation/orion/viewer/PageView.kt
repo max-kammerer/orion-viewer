@@ -216,7 +216,7 @@ class PageView(
             return coroutineScope {
                 async(controller.context + pageJobs + handler) {
                     timing("Rendering $pageNum page in rendering engine: $bound") {
-                        bitmap!!.render(bound, layoutInfo, page, controller.bitmapCache)
+                        bitmap!!.render(bound, layoutInfo, page)
                     }
                     if (isActive) {
                         withContext(Dispatchers.Main) {

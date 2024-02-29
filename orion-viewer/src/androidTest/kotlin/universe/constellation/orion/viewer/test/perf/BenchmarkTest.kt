@@ -6,9 +6,14 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import universe.constellation.orion.viewer.Bitmap
+import universe.constellation.orion.viewer.BitmapCache
+import universe.constellation.orion.viewer.bitmap.FlexibleBitmap
 import universe.constellation.orion.viewer.djvu.DjvuDocument
 import universe.constellation.orion.viewer.test.framework.BaseTest
 import universe.constellation.orion.viewer.test.framework.BookFile
+
+const val WIDTH = 800
+const val HEIGHT = 1024
 
 class BenchmarkTest : BaseTest() {
 
@@ -23,15 +28,23 @@ class BenchmarkTest : BaseTest() {
         val pageInfoAvg: DataList,
         val readPageData: DataList,
         val pureRendering: DataList,
+        val bigPartRendering: DataList,
+        val partRendering: DataList,
         val closeTime: Long,
         val book: BookFile
     ) {
         override fun toString(): String {
-            return "pageInfo=$pageInfoAvg, readPageData=$readPageData, pureRendering=$pureRendering, openTime=$openTime, closeTime=$closeTime, book=$book"
+            return "pageInfo=$pageInfoAvg, readPageData=$readPageData, \npure=$pureRendering, \nbigg=$bigPartRendering, \npart=$partRendering, \nopenTime=$openTime, closeTime=$closeTime, book=$book"
         }
     }
 
-    private val bitmap = Bitmap.createBitmap(800, 1024, android.graphics.Bitmap.Config.ARGB_8888)
+    companion object {
+        private val BITMAP_CACHE = BitmapCache(20)
+    }
+
+    private val bitmap = Bitmap.createBitmap(WIDTH, HEIGHT, android.graphics.Bitmap.Config.ARGB_8888)
+    private val bitmapFull = FlexibleBitmap(WIDTH, HEIGHT, WIDTH, HEIGHT)
+    private val bitmap4Parts = FlexibleBitmap(WIDTH, HEIGHT, WIDTH / 2, HEIGHT / 2)
 
     @Before
     fun setUp() {
@@ -42,6 +55,7 @@ class BenchmarkTest : BaseTest() {
     @After
     fun tearDown() {
         bitmap.recycle()
+        BITMAP_CACHE.free()
     }
 
     @Test
@@ -53,6 +67,8 @@ class BenchmarkTest : BaseTest() {
 
             val pureRendering = mutableListOf<Long>()
             val pageInfo = mutableListOf<Long>()
+            val partRendering = mutableListOf<Long>()
+            val bigPartRendering = mutableListOf<Long>()
 
             val readData = (0..20).map { pageNum ->
                 bitmap.eraseColor(Color.TRANSPARENT)
@@ -70,6 +86,24 @@ class BenchmarkTest : BaseTest() {
                         page.renderPage(bitmap, 1.0, 0, 0, bitmap.width, bitmap.height, 0, 0)
                     }
                 )
+
+                bitmapFull.enableAll(BITMAP_CACHE)
+                bigPartRendering.add(
+                    time {
+                        bitmapFull.renderFull(1.0, page)
+                    }
+                )
+                bitmapFull.disableAll(BITMAP_CACHE)
+
+                bitmap4Parts.enableAll(BITMAP_CACHE)
+                partRendering.add(
+                    time {
+                        bitmap4Parts.renderFull(1.0, page)
+                    }
+                )
+                bitmap4Parts.disableAll(BITMAP_CACHE)
+
+
                 page.destroy()
                 res
             }
@@ -83,6 +117,8 @@ class BenchmarkTest : BaseTest() {
                 DataList(pageInfo),
                 DataList(readData),
                 DataList(pureRendering),
+                DataList(bigPartRendering),
+                DataList(partRendering),
                 closeTime,
                 it
             )
