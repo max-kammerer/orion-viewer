@@ -5,7 +5,7 @@ import android.graphics.Region
 import universe.constellation.orion.viewer.PageState
 import universe.constellation.orion.viewer.PageView
 
-suspend fun PageView.uploadBorders() {
+suspend fun PageView.precache() {
     if (this.state != PageState.SIZE_AND_BITMAP_CREATED) return
     if (nonRenderedRegion.isEmpty) return
 

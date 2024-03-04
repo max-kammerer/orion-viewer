@@ -9,9 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import universe.constellation.orion.viewer.Controller
-import universe.constellation.orion.viewer.PageInitListener
 import universe.constellation.orion.viewer.PageView
-import universe.constellation.orion.viewer.PageState
 import universe.constellation.orion.viewer.bitmap.BitmapManager
 import universe.constellation.orion.viewer.handler
 import universe.constellation.orion.viewer.layout.LayoutPosition
@@ -76,20 +74,10 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
     fun destroy() {
         visiblePages.forEach {
             it.toInvisibleState()
+            it.destroy()
         }
         visiblePages.clear()
     }
-
-
-    var pageListener: PageInitListener? = null
-        set(value) {
-            field = value
-            visiblePages.forEach {
-                if (it.state == PageState.SIZE_AND_BITMAP_CREATED) {
-                    value?.onPageInited(it)
-                }
-            }
-        }
 
     fun performTouchZoom(zoom: Float, startFocus: PointF, endFocus: PointF) {
         visiblePages.forEach {
@@ -359,8 +347,6 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
     }
 
     fun onPageSizeCalculated(updatedView: PageView, oldArea: Rect) {
-        pageListener?.onPageInited(updatedView)
-
         log("onSizeCalculated ${updatedView.pageNum}: ${updatedView.layoutData} $oldArea")
         if (updatedView.layoutData.position.y < 0) {
             if (isVisible(oldArea, updatedView.layoutData.position)) {

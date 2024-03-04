@@ -25,7 +25,7 @@ import universe.constellation.orion.viewer.geometry.RectF
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.view.OrionDrawScene
 import universe.constellation.orion.viewer.view.PageLayoutManager
-import universe.constellation.orion.viewer.view.uploadBorders
+import universe.constellation.orion.viewer.view.precache
 import kotlin.coroutines.coroutineContext
 
 enum class PageState(val interactWithUUI: Boolean) {
@@ -100,7 +100,7 @@ class PageView(
 
     private fun markAsDeattached() {
         //TODO optimize canceling state
-        println("Deattached $pageNum")
+        log("Deattached $pageNum")
         state = PageState.CAN_BE_DELETED
         pageJobs.cancelChildren()
         bitmap?.apply {
@@ -110,7 +110,7 @@ class PageView(
     }
 
     fun destroy() {
-        println("Destroy $pageNum")
+        log("Destroy $pageNum")
         assert(state == PageState.CAN_BE_DELETED) {"Wrong state calling destroy: $state"}
         markAsDeattached()
         state = PageState.DESTROYED
@@ -118,12 +118,11 @@ class PageView(
         GlobalScope.launch(controller.context) {
             pageJobs.cancelAndJoin()
             freePagePointer()
-            page.destroy()
         }
     }
 
     private fun freePagePointer() {
-        
+        page.destroy()
     }
 
     fun toInvisibleState() {
@@ -132,7 +131,7 @@ class PageView(
 
     fun reinit() {
         if (state == PageState.SIZE_AND_BITMAP_CREATED) return
-        println("Page $pageNum reinit $state $document" )
+        log("Page $pageNum reinit $state $document" )
         pageJobs.cancelChildren()
         pageInfo = GlobalScope.async(controller.context + pageJobs + handler) {
             controller.layoutStrategy.reset(layoutInfo, page)
@@ -163,10 +162,10 @@ class PageView(
     fun draw(canvas: Canvas, scene: OrionDrawScene) {
         if (state != PageState.STUB && bitmap!= null) {
             //draw bitmap
-            println("Draw page $pageNum in state $state ${bitmap?.width} ${bitmap?.height} ")
+            log("Draw page $pageNum in state $state ${bitmap?.width} ${bitmap?.height} ")
             draw(canvas, bitmap!!, scene.defaultPaint!!, scene)
         } else {
-            println("Draw border $pageNum in state $state: ${layoutData} on screen ${layoutData.occupiedScreenPartInTmp(scene.pageLayoutManager!!.sceneRect)}")
+            log("Draw border $pageNum in state $state: ${layoutData} on screen ${layoutData.occupiedScreenPartInTmp(scene.pageLayoutManager!!.sceneRect)}")
             drawBorder(canvas, scene)
         }
         scene.orionStatusBarHelper.onPageUpdate(layoutInfo)
@@ -193,7 +192,7 @@ class PageView(
                     render(it, true)?.await()
                 }
             }
-        } ?: run { println("Non visible $pageNum"); null }
+        } ?: run { log("Non visible $pageNum"); null }
 
     }
 
@@ -226,7 +225,7 @@ class PageView(
                                 log("PageView.render invalidate: $pageNum $layoutData ${scene != null}")
                                 scene?.invalidate()
                                 if (fromUI) {
-                                    uploadBorders()
+                                    precache()
                                 }
                             }
                         }
@@ -238,16 +237,16 @@ class PageView(
             }
         } else {
             if (state == PageState.SIZE_AND_BITMAP_CREATED) {
-                println("Already rendered $state $document $pageNum: $rect")
+                log("Already rendered $state $document $pageNum: $rect")
                 scene?.invalidate()
                 val completableDeferred = CompletableDeferred<PageView>(coroutineContext.job)
                 completableDeferred.complete(this@PageView)
                 if (fromUI) {
-                    uploadBorders()
+                    precache()
                 }
                 return completableDeferred
             } else {
-                println("Skipped $state $document $pageNum")
+                log("Skipped $state $document $pageNum")
             }
         }
         return null
@@ -263,10 +262,10 @@ class PageView(
         if (drawTmp.intersect(pageLayoutManager.sceneRect)) {
             drawSceneRect.set(drawTmp)
             drawTmp.offset(-layoutData.position.x.toInt(), -layoutData.position.y.toInt())
-            println("PageView.draw $pageNum: page=$drawTmp onScreen=$drawSceneRect")
+            log("PageView.draw $pageNum: page=$drawTmp onScreen=$drawSceneRect")
             bitmap.draw(canvas, drawTmp, drawSceneRect, defaultPaint, scene.borderPaint!!)
         } else {
-            println("PageView.draw: skipped $drawTmp $drawSceneRect")
+            log("PageView.draw: skipped $drawTmp $drawSceneRect")
         }
         drawBorder(canvas, scene)
 
