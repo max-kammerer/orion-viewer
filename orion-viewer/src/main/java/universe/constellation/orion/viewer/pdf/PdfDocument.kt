@@ -76,6 +76,7 @@ class PdfDocument @Throws(Exception::class) constructor(private val fileName: St
             leftOffset: Int,
             topOffset: Int
         ) {
+            if (destroyed) return
             readPageDataForRendering()
             if (displayList == null) return
             val dev: Device =

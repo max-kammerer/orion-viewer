@@ -80,6 +80,7 @@ abstract class AbstractDocument : Document {
         pages.clear()
     }
 
+    @Synchronized
     override fun destroyPage(page: Page) {
         pages.remove(page.pageNum)
         page.destroy()

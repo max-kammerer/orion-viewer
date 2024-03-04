@@ -66,6 +66,7 @@ class DjvuDocument(private val fileName: String) : AbstractDocument() {
             topOffset: Int
         ) {
             if (destroyed) return
+            readPageDataForRendering()
             renderPage(
                 pageNum,
                 pagePointer,
