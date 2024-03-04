@@ -31,6 +31,9 @@ data class PagePart(val absPartRect: Rect) {
     private var nonRenderedPart = Region(absPartRect)
     private var nonRenderedPartTmp = Region(absPartRect)
 
+    @Volatile
+    private var opMarker = 1
+
     fun render(
         requestedArea: Rect,
         zoom: Double,
@@ -39,10 +42,15 @@ data class PagePart(val absPartRect: Rect) {
         page: Page
     ) {
         if (!isActive) return
-        if (nonRenderedPart.isEmpty) return
 
-        //TODO add busy flag
-        val bitmap = bitmap ?: return
+        val bitmap: Bitmap
+        val marker = synchronized(this) {
+            if (nonRenderedPart.isEmpty) return
+            //TODO add busy flag
+            bitmap = this.bitmap ?: return
+            opMarker
+        }
+
         //TODO: join bitmap
         rendTmp.set(absPartRect)
         if (rendTmp.intersect(requestedArea)) {
@@ -58,8 +66,12 @@ data class PagePart(val absPartRect: Rect) {
                     page,
                     bitmap
                 )
-                rendTmp.offset(absPartRect.left, absPartRect.top)
-                nonRenderedPart.op(rendTmp, Region.Op.DIFFERENCE)
+                synchronized(this) {
+                    if (opMarker == marker) {
+                        rendTmp.offset(absPartRect.left, absPartRect.top)
+                        nonRenderedPart.op(rendTmp, Region.Op.DIFFERENCE)
+                    }
+                }
             }
         }
     }
@@ -78,17 +90,24 @@ data class PagePart(val absPartRect: Rect) {
     }
 
     internal fun activate(bitmapCache: BitmapCache) {
-        isActive = true
-        bitmap = bitmapCache.createBitmap(absPartRect.width(), absPartRect.height())
-        nonRenderedPart.set(absPartRect)
+        assert(!isActive)
+        synchronized(this) {
+            isActive = true
+            opMarker++
+            bitmap = bitmapCache.createBitmap(absPartRect.width(), absPartRect.height())
+            nonRenderedPart.set(absPartRect)
+        }
     }
 
     internal fun deactivate(bitmapCache: BitmapCache) {
-        isActive = false
-        bitmap?.let {
-            bitmapCache.free(it)
+        synchronized(this) {
+            isActive = false
+            opMarker++
+            bitmap?.let {
+                bitmapCache.free(it)
+            }
+            bitmap = null
         }
-        bitmap = null
     }
 }
 
@@ -234,14 +253,8 @@ fun Int.countCells(cellSize: Int): Int {
 private val Rect.rightInc get() = right - 1
 private val Rect.bottomInc get() = bottom - 1
 
-private fun renderInner(bound: Rect, curPos: LayoutPosition, page: Page, bitmap: Bitmap): Bitmap {
-    println("Rendering $page: $bound $curPos")
-    page.renderPage(bitmap, curPos.docZoom, bound.left, bound.top,  bound.right, bound.bottom, curPos.x.marginLess, curPos.y.marginLess)
-    return bitmap
-}
-
 private fun renderInner(bound: Rect, zoom: Double, offsetX: Int, offsetY: Int, page: Page, bitmap: Bitmap): Bitmap {
-    println("Rendering $page: $bound $offsetX $offsetY")
+    log("Rendering $page: $bound $offsetX $offsetY")
     page.renderPage(
         bitmap,
         zoom,
