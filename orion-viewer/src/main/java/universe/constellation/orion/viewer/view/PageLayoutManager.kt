@@ -1,5 +1,6 @@
 package universe.constellation.orion.viewer.view
 
+import android.graphics.Canvas
 import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.RectF
@@ -9,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import universe.constellation.orion.viewer.Controller
+import universe.constellation.orion.viewer.PageState
 import universe.constellation.orion.viewer.PageView
 import universe.constellation.orion.viewer.bitmap.BitmapManager
 import universe.constellation.orion.viewer.handler
@@ -73,7 +75,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
 
     fun destroy() {
         visiblePages.forEach {
-            it.toInvisibleState()
+            it.toInvisible()
             it.destroy()
         }
         visiblePages.clear()
@@ -121,8 +123,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         val distanceY2 = clampLimits(distanceY)
         if (distanceY2 == 0f && distanceX == 0f) return
 
-        val iterator = visiblePages.iterator()
-        iterator.forEach {
+        visiblePages.forEach {
             val layoutData = it.layoutData
             layoutData.position.y += distanceY2
             if (layoutData.contains(xPos, yPos)) {
@@ -142,12 +143,25 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
                     layoutData.position.x += newDistance
                 }
             }
-            if (!updateStateAndRender(it)) {
-                iterator.remove()
-                log("Remove ${it.pageNum}")
-            }
+            updateStateAndRenderVisible(it)
         }
+        updateCache()
         dump()
+    }
+
+    private val toDestroy = hashSetOf<PageView>()
+
+    private fun updateCache() {
+        visiblePages.zipWithNext { f, s ->
+            if (s.state == PageState.CAN_BE_DELETED && f.state == PageState.CAN_BE_DELETED) {
+                toDestroy.add(f)
+                f.destroy()
+                log("Destroyed ${f.pageNum}")
+            }
+            println("${f.pageNum} ${f.state}")
+        }
+        visiblePages.removeAll(toDestroy)
+        toDestroy.clear()
     }
 
     private fun clampLimits(distanceY: Float): Float {
@@ -186,24 +200,42 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
             val view = controller.createCachePageView(nextPageNum)
             addPageInPosition(view, pageYPos = 0f)
         } else {
-            val lastView = visiblePages.last()
-            val pageEnd = lastView.layoutData.position.y + lastView.layoutData.wholePageRect.height() + 1
-            if (pageEnd < sceneHeight) {
-                val pageNum = lastView.pageNum + 1
-                if (pageNum < controller.pageCount) {
-                    addPageInPosition(pageNum, pageEnd)
-                }
-            }
+            uploadNextPage(visiblePages.last())
 
-            val firstView = visiblePages.first()
-            val pageStart = firstView.layoutData.position.y
-            if (pageStart > 5 && firstView.pageNum > 0) {
-                val newView = controller.createCachePageView(firstView.pageNum - 1)
-                addPageInPosition(newView, 0f, firstView.layoutData.position.y - newView.layoutData.wholePageRect.height() - 2, false)
-            }
+            uploadPrevPage(visiblePages.first())
         }
         log("After uploadNewPages")
         dump()
+    }
+
+    private fun uploadPrevPage(page: PageView, addIfAbsent: Boolean = false) {
+        if (page.pageNum <= 0) return
+        val pageNum = page.pageNum - 1
+        if (addIfAbsent && visiblePages.any { it.pageNum == pageNum }) return
+
+        val pageStart = page.layoutData.position.y
+        if (pageStart > 5 || addIfAbsent) {
+            val newView = controller.createCachePageView(pageNum)
+            addPageInPosition(
+                newView,
+                0f,
+                page.layoutData.position.y - newView.layoutData.wholePageRect.height() - 2,
+                false
+            )
+        }
+    }
+
+    private fun uploadNextPage(page: PageView, addIfAbsent: Boolean = false) {
+        val pageNum = page.pageNum + 1
+        if (addIfAbsent && visiblePages.any { it.pageNum == pageNum }) return
+
+        val pageEnd =
+            page.layoutData.position.y + page.layoutData.wholePageRect.height() + 1
+        if (pageEnd < sceneHeight || addIfAbsent) {
+            if (pageNum < controller.pageCount) {
+                addPageInPosition(pageNum, pageEnd)
+            }
+        }
     }
 
     private fun addPageInPosition(pageNum: Int, pageYPos: Float) {
@@ -220,19 +252,23 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
             visiblePages.add(0, view)
         }
         view.scene = scene
-        updateStateAndRender(view)
+        updateStateAndRenderVisible(view)
     }
 
-    private fun updateStateAndRender(view: PageView): Boolean {
-        return if (isVisible(view)) {
-            bitmapManager.actualizeActive(view)
+    private fun updateStateAndRenderVisible(view: PageView) {
+        if (view.updateState()) {
             view.renderVisibleAsync()
-            true
-        } else {
-            log("toInvisible ${view.pageNum}: ${view.layoutData.globalRectInTmp()} $sceneRect")
-            view.toInvisibleState()
-            false
         }
+    }
+
+    private fun PageView.updateState(): Boolean {
+        bitmapManager.actualizeActive(this)
+        val visible = this.isVisible
+        if (!visible) {
+            log("toInvisible ${this.pageNum}: ${this.layoutData.globalRectInTmp()} $sceneRect")
+            this.toInvisible()
+        }
+        return visible
     }
 
     fun findPageAndPageRect(screenRect: Rect): List<PageAndSelection> {
@@ -251,6 +287,15 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
             )
             log("selection: " + it.pageNum + pageSelection)
             PageAndSelection(it.pageNum, pageSelection)
+        }
+    }
+
+    fun renderVisiblePages(canvas: Canvas, scene: OrionDrawScene) {
+        visiblePages.forEach {
+            if (it.isVisible) {
+                it.draw(canvas, scene)
+                if (isSinglePageMode) return
+            }
         }
     }
 
@@ -298,7 +343,9 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         val iterator = visiblePages.iterator()
         for (page in iterator) {
             if (page.pageNum != pageNum) {
-                page.toInvisibleState()
+                //TODO optimize
+                page.toInvisible()
+                page.destroy()
                 iterator.remove()
             }
         }
@@ -343,36 +390,34 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
     fun isVisible(pageRect: Rect, pos: PointF): Boolean {
         tmpRect.set(pageRect)
         tmpRect.offset(pos.x.toInt(), pos.y.toInt())
-        return tmpRect.intersect(sceneRect)
+        return Rect.intersects(tmpRect, sceneRect)
     }
 
     fun onPageSizeCalculated(updatedView: PageView, oldArea: Rect) {
         log("onSizeCalculated ${updatedView.pageNum}: ${updatedView.layoutData} $oldArea")
+        val delta = updatedView.wholePageRect.height() - oldArea.height()
+
+        var found = false
         if (updatedView.layoutData.position.y < 0) {
-            if (isVisible(oldArea, updatedView.layoutData.position)) {
-                updatedView.layoutData.position.y -= updatedView.wholePageRect.height() - oldArea.height()
-                updatedView.layoutData.wholePageRect.set(updatedView.wholePageRect)
-                dump()
-            } else {
-                log("invisible $oldArea")
-                visiblePages.remove(updatedView)
+            for (page in visiblePages) {
+                page.layoutData.position.y -= delta
+                page.updateState()
+                if (updatedView === page) break
             }
-        }
-        else {
-            var found = false
-            var shiftY = 0
+        } else {
             for (page in visiblePages) {
                 if (found) {
-                    page.layoutData.position.y += shiftY
+                    page.layoutData.position.y += delta
+                    page.updateState()
                 } else if (page === updatedView) {
                     found = true
-                    val viewDimension = page.layoutData.wholePageRect
-                    shiftY = viewDimension.height() - oldArea.height()
-                    viewDimension.set(page.wholePageRect)
                 }
             }
         }
-        updateStateAndRender(updatedView)
+
+        updateStateAndRenderVisible(updatedView)
+        updateCache()
+
         scene.invalidate()
         dump()
     }

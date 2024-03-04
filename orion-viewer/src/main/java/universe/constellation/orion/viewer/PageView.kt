@@ -35,11 +35,6 @@ enum class PageState(val interactWithUUI: Boolean) {
     DESTROYED(false)
 }
 
-interface PageInitListener {
-
-    fun onPageInited(pageView: PageView)
-}
-
 val handler = CoroutineExceptionHandler { _, ex ->
     log("Bitmap rendering cancelled")
     ex.printStackTrace()
@@ -60,6 +55,9 @@ class PageView(
 
     val wholePageRect
         get() = layoutData.wholePageRect
+
+    val isVisible
+        get() = pageLayoutManager.isVisible(this)
 
     val width: Int
         get() = wholePageRect.width()
@@ -98,23 +96,21 @@ class PageView(
        reinit()
     }
 
-    private fun markAsDeattached() {
+    fun toInvisible() {
         //TODO optimize canceling state
-        log("Deattached $pageNum")
+        log("PV: toInvisible $pageNum")
         state = PageState.CAN_BE_DELETED
         pageJobs.cancelChildren()
-        bitmap?.apply {
-            this.free(controller.bitmapCache)
-            bitmap = null
-        }
     }
 
     fun destroy() {
         log("Destroy $pageNum")
         assert(state == PageState.CAN_BE_DELETED) {"Wrong state calling destroy: $state"}
-        markAsDeattached()
+        toInvisible()
         state = PageState.DESTROYED
         pageJobs.cancel()
+        bitmap?.disableAll(controller.bitmapCache)
+        bitmap = null
         GlobalScope.launch(controller.context) {
             pageJobs.cancelAndJoin()
             freePagePointer()
@@ -123,10 +119,6 @@ class PageView(
 
     private fun freePagePointer() {
         page.destroy()
-    }
-
-    fun toInvisibleState() {
-        markAsDeattached()
     }
 
     fun reinit() {

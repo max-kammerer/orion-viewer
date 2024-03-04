@@ -98,9 +98,8 @@ class OrionDrawScene : View {
             )
             canvas.scale(myScale, myScale)
         }
-        for (p in pageLayoutManager?.visiblePages ?: emptyList()) {
-            p.draw(canvas, this)
-        }
+
+        pageLayoutManager?.renderVisiblePages(canvas, this)
 
         if (inScalingMode) {
             canvas.restore()

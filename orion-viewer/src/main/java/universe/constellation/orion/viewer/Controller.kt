@@ -71,10 +71,6 @@ class Controller(
 
     private var hasPendingEvents = false
 
-    private val pages = LruCacheWithOnEvict<Int, PageView> (CACHE_SIZE) {
-        it.destroy()
-    }
-
     val pageLayoutManager = PageLayoutManager(this, activity.view)
 
     init {
@@ -163,7 +159,6 @@ class Controller(
     fun destroy() {
         activity.subscriptionManager.unSubscribe(listener)
         pageLayoutManager.destroy()
-        pages.evictAll()
         GlobalScope.launch(Dispatchers.Default) {
             log("Destroying controller for $document...")
             rootJob.cancelAndJoin()
@@ -311,24 +306,13 @@ class Controller(
     }
 
     fun createCachePageView(pageNum: Int): PageView {
-        val pageView = pages.get(pageNum)
-        if (pageView != null) {
-            if (pageView.state == PageState.CAN_BE_DELETED) {
-                pageView.reinit() //TODO: split bitmap invalidation and page unload
-            }
-            return pageView
-        } else {
-            println("create page $pageNum")
-            val pageView = PageView(
-                pageNum,
-                document,
-                controller = this,
-                rootJob = rootJob,
-                pageLayoutManager = pageLayoutManager
-            ).apply { init() }
-            pages.put(pageNum, pageView)
-            return pageView
-        }
+        return PageView(
+            pageNum,
+            document,
+            controller = this,
+            rootJob = rootJob,
+            pageLayoutManager = pageLayoutManager
+        ).apply { init() }
     }
 
     fun drawPage(lp: LayoutPosition): Deferred<PageView?> {
