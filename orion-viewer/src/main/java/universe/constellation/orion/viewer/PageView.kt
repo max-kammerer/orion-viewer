@@ -31,7 +31,6 @@ import kotlin.coroutines.coroutineContext
 enum class PageState(val interactWithUUI: Boolean) {
     STUB(false),
     SIZE_AND_BITMAP_CREATED(true),
-    CAN_BE_DELETED(false),
     DESTROYED(false)
 }
 
@@ -56,7 +55,7 @@ class PageView(
     val wholePageRect
         get() = layoutData.wholePageRect
 
-    val isVisible
+    val isOnScreen
         get() = pageLayoutManager.isVisible(this)
 
     val width: Int
@@ -65,6 +64,9 @@ class PageView(
         get() = wholePageRect.height()
 
     internal var scene: OrionDrawScene? = null
+
+    @Volatile
+    var isVisibleState = false
 
     private var pageJobs = SupervisorJob(rootJob)
 
@@ -99,13 +101,19 @@ class PageView(
     fun toInvisible() {
         //TODO optimize canceling state
         log("PV: toInvisible $pageNum")
-        state = PageState.CAN_BE_DELETED
-        pageJobs.cancelChildren()
+        //state = PageState.CAN_BE_DELETED
+        //pageJobs.cancelChildren()
+        isVisibleState = false
+    }
+
+    fun toVisible() {
+        //TODO optimize canceling state
+        log("PV: to visible $pageNum")
+        isVisibleState = true
     }
 
     fun destroy() {
         log("Destroy $pageNum")
-        assert(state == PageState.CAN_BE_DELETED) {"Wrong state calling destroy: $state"}
         toInvisible()
         state = PageState.DESTROYED
         pageJobs.cancel()

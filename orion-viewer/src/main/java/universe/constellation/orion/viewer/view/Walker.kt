@@ -33,4 +33,7 @@ suspend fun PageView.precache() {
     renderInvisible(l)
     val r = Rect(right, top, right + deltaX, bottom)
     renderInvisible(r)
+
+    this.pageLayoutManager.uploadNextPage(this, true)
+    this.pageLayoutManager.uploadPrevPage(this, true)
 }

@@ -37,7 +37,7 @@ class ScrollTest(bookDescription: BookDescription): BaseEspressoTest(bookDescrip
         onView(withId(R.id.view)).perform(swipeDown())
         activityScenarioRule.scenario.onActivity {
             Assert.assertEquals(it.controller!!.pageCount, bookDescription.pageCount)
-            val first = it.controller!!.pageLayoutManager.visiblePages.first()
+            val first = it.controller!!.pageLayoutManager.activePages.first()
             Assert.assertEquals(0, first.pageNum)
             Assert.assertEquals(0f, first.layoutData.position.y, 0.0f)
         }
@@ -52,8 +52,8 @@ class ScrollTest(bookDescription: BookDescription): BaseEspressoTest(bookDescrip
 
         activityScenarioRule.scenario.onActivity { activity ->
             val pageLayoutManager = activity.controller!!.pageLayoutManager
-            val last = pageLayoutManager.visiblePages.last()
-            Assert.assertEquals(pageLayoutManager.visiblePages.joinToString(" ") {it.pageNum.toString()}, activity.controller!!.pageCount - 1, last.pageNum)
+            val last = pageLayoutManager.activePages.last()
+            Assert.assertEquals(pageLayoutManager.activePages.joinToString(" ") {it.pageNum.toString()}, activity.controller!!.pageCount - 1, last.pageNum)
             Assert.assertTrue(last.layoutData.globalBottom <= pageLayoutManager.sceneRect.bottom)
         }
     }

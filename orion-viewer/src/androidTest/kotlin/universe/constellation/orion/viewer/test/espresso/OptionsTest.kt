@@ -19,13 +19,13 @@ class OptionsTest(bookDescription: BookDescription): BaseEspressoTest(bookDescri
     fun testLongClick() {
         onView(withId(R.id.view)).perform(swipeUp())
         activityScenarioRule.scenario.onActivity {
-            Assert.assertEquals(2, it.controller!!.pageLayoutManager.visiblePages.count())
+            Assert.assertEquals(2, it.controller!!.pageLayoutManager.activePages.count())
         }
         onView(withId(R.id.view)).perform(longClick())
         device.pressBack()
 
         activityScenarioRule.scenario.onActivity {
-            Assert.assertEquals(2, it.controller!!.pageLayoutManager.visiblePages.count())
+            Assert.assertEquals(2, it.controller!!.pageLayoutManager.activePages.count())
         }
 
         //TODO check pages and their positions
