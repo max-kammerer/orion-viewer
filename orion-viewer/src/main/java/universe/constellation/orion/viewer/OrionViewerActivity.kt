@@ -585,9 +585,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
         var zoom = controller!!.zoom10000Factor
         val spinnerIndex: Int
-        if (zoom <= 0) {
+        if (zoom in -3..0) {
             spinnerIndex = -zoom + 1
-            zoom = (10000 * controller!!.currentPageZoom).toInt()
+            zoom = (10000 * controller!!.currentPageZoom).toInt() 
         } else {
             spinnerIndex = 0
             textView.text = (zoom / 100f).toString()
