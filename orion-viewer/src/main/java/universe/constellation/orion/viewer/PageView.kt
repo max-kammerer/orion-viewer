@@ -153,7 +153,7 @@ class PageView(
         nonRenderedRegion.set(wholePageRect)
         renderedRegion.set(0, 0, 0, 0)
         bitmap = bitmap?.resize(wholePageRect.width(), wholePageRect.height(), controller.bitmapCache)
-            ?: pageLayoutManager.bitmapManager.createDefaultBitmap(Rect(wholePageRect))
+            ?: pageLayoutManager.bitmapManager.createDefaultBitmap(wholePageRect.width(), wholePageRect.height())
         log("PageView.initBitmap $pageNum ${controller.document}: $nonRenderedRegion")
         state = PageState.SIZE_AND_BITMAP_CREATED
         pageLayoutManager.onPageSizeCalculated(this, oldSize)
@@ -252,23 +252,11 @@ class PageView(
         return null
     }
 
-    private val drawTmp  = Rect()
-    private val drawSceneRect  = RectF()
-
     private fun draw(canvas: Canvas, bitmap: FlexibleBitmap, defaultPaint: Paint, scene: OrionDrawScene) {
         canvas.save()
-        drawTmp.set(wholePageRect)
-        drawTmp.offset(layoutData.position.x.toInt(), layoutData.position.y.toInt())
-        if (drawTmp.intersect(pageLayoutManager.sceneRect)) {
-            drawSceneRect.set(drawTmp)
-            drawTmp.offset(-layoutData.position.x.toInt(), -layoutData.position.y.toInt())
-            log("PageView.draw $pageNum: page=$drawTmp onScreen=$drawSceneRect")
-            bitmap.draw(canvas, drawTmp, drawSceneRect, defaultPaint, scene.borderPaint!!)
-        } else {
-            log("PageView.draw: skipped $drawTmp $drawSceneRect")
-        }
+        canvas.translate(layoutData.position.x, layoutData.position.y)
+        bitmap.draw(canvas, layoutData.wholePageRect, defaultPaint)
         drawBorder(canvas, scene)
-
         canvas.restore()
     }
 
@@ -277,7 +265,7 @@ class PageView(
         scene: OrionDrawScene,
     ) {
         canvas.drawRect(
-            layoutData.globalRectInTmp(),
+            layoutData.wholePageRect,
             scene.borderPaint!!
         )
     }

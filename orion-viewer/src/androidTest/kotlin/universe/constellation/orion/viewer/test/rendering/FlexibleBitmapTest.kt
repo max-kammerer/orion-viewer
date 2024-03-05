@@ -84,7 +84,7 @@ class FlexibleBitmapTest(bookDescription: BookDescription) : BookTest(bookDescri
 
         val bitmap = Bitmap.createBitmap(rendering.width(), rendering.height(), android.graphics.Bitmap.Config.ARGB_8888)
         val canvasPart = Canvas(bitmap)
-        adaptiveBitmap.draw(canvasPart, rendering, RectF(rendering), PAINTS.backgroundPaint, PAINTS.borderPaint)
+        adaptiveBitmap.draw(canvasPart, rendering, PAINTS.backgroundPaint)
         val partBuf = IntBuffer.allocate(bitmap.width*bitmap.height)
         bitmap.copyPixelsToBuffer(partBuf)
         return bitmap to partBuf.array()

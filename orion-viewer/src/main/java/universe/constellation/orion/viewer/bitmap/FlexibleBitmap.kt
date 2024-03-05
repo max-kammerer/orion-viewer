@@ -8,9 +8,9 @@ import android.graphics.Region
 import org.jetbrains.annotations.TestOnly
 import universe.constellation.orion.viewer.BitmapCache
 import universe.constellation.orion.viewer.document.Page
-import universe.constellation.orion.viewer.geometry.RectF
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.log
+import kotlin.math.min
 
 data class PagePart(val absPartRect: Rect) {
 
@@ -21,11 +21,10 @@ data class PagePart(val absPartRect: Rect) {
     internal var isActive: Boolean = false
 
     //access from UI thread
-    private var drawTmp = Rect()
-    private var sceneTmp = RectF()
+    private val localPartRect = Rect(0, 0, absPartRect.width(), absPartRect.height())
 
     //access from renderer thread
-    private var rendTmp = Rect()
+    private val rendTmp = Rect()
 
     @Volatile
     private var nonRenderedPart = Region(absPartRect)
@@ -76,25 +75,18 @@ data class PagePart(val absPartRect: Rect) {
         }
     }
 
-    fun draw(canvas: Canvas, pageVisiblePart: Rect, scene: RectF, defaultPaint: Paint) {
-        drawTmp.set(absPartRect)
-        if (bitmap != null && drawTmp.intersect(pageVisiblePart)) {
-            val deltaX = -(pageVisiblePart.left - scene.left)
-            val deltaY = -(pageVisiblePart.top - scene.top)
-            sceneTmp.set(drawTmp)
-            sceneTmp.offset(deltaX, deltaY)
-            drawTmp.offset(-absPartRect.left, -absPartRect.top)
-            canvas.drawBitmap(bitmap!!, drawTmp, sceneTmp, defaultPaint)
-            log("DrawPart: $drawTmp $sceneTmp")
+    fun draw(canvas: Canvas, pageVisiblePart: Rect, defaultPaint: Paint) {
+        if (bitmap != null && localPartRect.intersect(pageVisiblePart)) {
+            canvas.drawBitmap(bitmap!!, localPartRect, absPartRect, defaultPaint)
         }
     }
 
-    internal fun activate(bitmapCache: BitmapCache) {
+    internal fun activate(bitmapCache: BitmapCache, partWidth: Int, partHeight: Int) {
         assert(!isActive)
         synchronized(this) {
             isActive = true
             opMarker++
-            bitmap = bitmapCache.createBitmap(absPartRect.width(), absPartRect.height())
+            bitmap = bitmapCache.createBitmap(partWidth, partHeight)
             nonRenderedPart.set(absPartRect)
         }
     }
@@ -126,18 +118,24 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
     val height: Int
         get() =  renderingArea.height()
 
-    private fun initData(width: Int, height: Int) = Array(height.countCells(partHeight)) { row ->
-        Array(width.countCells(partWidth)) { col ->
-            val left = partWidth * col
-            val top = partHeight * row
-            PagePart(
-                Rect(
-                    left,
-                    top,
-                    left + partWidth,
-                    top + partHeight
+    private fun initData(width: Int, height: Int): Array<Array<PagePart>> {
+        val rowCount = height.countCells(partHeight)
+        return Array(rowCount) { row ->
+            val colCount = width.countCells(partWidth)
+            Array(colCount) { col ->
+                val left = partWidth * col
+                val top = partHeight * row
+                val partWidth = min(width - left, partWidth)
+                val partHeight = min(height - top, partHeight)
+                PagePart(
+                    Rect(
+                        left,
+                        top,
+                        left + partWidth,
+                        top + partHeight
+                    )
                 )
-            )
+            }
         }
     }
 
@@ -169,8 +167,25 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
         forAll {
             val newState = Rect.intersects(this.absPartRect, activationRect)
             if (!isActive && newState) {
-                activate(cache)
+                activate(cache, partWidth, partHeight)
             }
+        }
+        var count = 0
+        forAll {
+
+            if (isActive ) {
+                count++
+            }
+        }
+        println("Cache active parts " + count)
+        if (count == 20) {
+            print("Cache part $activationRect ${activationRect.width()} ${activationRect.height()}")
+//            forAll {
+//                if (isActive) {
+//                    print("" + this.absPartRect + ", ")
+//                }
+//            }
+            println("")
         }
     }
 
@@ -219,9 +234,9 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
         }
     }
 
-    fun draw(canvas: Canvas, srcRect: Rect, scene: RectF, defaultPaint: Paint, borderPaint: Paint) {
+    fun draw(canvas: Canvas, srcRect: Rect, defaultPaint: Paint) {
         forAll {
-            draw(canvas, srcRect, scene, defaultPaint)
+            draw(canvas, srcRect, defaultPaint)
         }
     }
 
