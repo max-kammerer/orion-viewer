@@ -4,55 +4,60 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import java.util.concurrent.ConcurrentLinkedQueue
 
-private const val DEFAULT_BITMAP_CACHE_SIZE = 20
+private const val DEFAULT_BITMAP_CACHE_SIZE = 25
 
 open class BitmapCache(val size: Int = DEFAULT_BITMAP_CACHE_SIZE) {
 
     private val cachedBitmaps = ConcurrentLinkedQueue<CacheInfo>()
 
     protected class CacheInfo(val bitmap: Bitmap) {
-        var isValid = true
+        var owned = true
+        @Volatile
         var isBusy = false
     }
 
     fun createBitmap(width: Int, height: Int): Bitmap {
         var bitmap: Bitmap? = null
-        if (cachedBitmaps.size >= size) {
+        if (cachedBitmaps.size >= size / 2) {
             //TODO: add checks
-            val nonValids = cachedBitmaps.asSequence().filter { !it.isValid }
+            val nonValids = cachedBitmaps.asSequence().filter { !it.owned && !it.isBusy }
             val cacheInfo =
                 nonValids.firstOrNull { info -> width <= info.bitmap.width && height <= info.bitmap.height }
 
-            if (cacheInfo == null) {
-                val info = nonValids.firstOrNull() ?: error("cache is full")
-                cachedBitmaps.remove(info)
-                info.bitmap.recycle()
-            } else {
+            if (cacheInfo != null) {
                 bitmap = cacheInfo.bitmap
-                cacheInfo.isValid = true
+                cacheInfo.owned = true
+            } else {
+                val info = nonValids.firstOrNull()
+                if (info == null) {
+                    if (cachedBitmaps.size >= size) error("cache is full: ${cachedBitmaps.joinToString{"" + it.owned}}")
+                } else {
+                    cachedBitmaps.remove(info)
+                    info.bitmap.recycle()
+                }
             }
         }
 
         if (bitmap == null) {
             bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
             log("BitmapCache: new bitmap $width x $height created")
+            addToCache(CacheInfo(bitmap))
         } else {
             log("BitmapCache: using cached bitmap $bitmap")
         }
-        addToCache(CacheInfo(bitmap))
         bitmap.eraseColor(Color.TRANSPARENT)
-
+        println("Cache size ${cachedBitmaps.size}")
         return bitmap
     }
 
-    protected fun addToCache(info: CacheInfo) {
+    private fun addToCache(info: CacheInfo) {
         cachedBitmaps.add(info)
     }
 
     fun free(info: Bitmap) {
         for (next in cachedBitmaps) {
             if (next.bitmap === info) {
-                next.isValid = false
+                next.owned = false
                 break
             }
         }
@@ -60,7 +65,7 @@ open class BitmapCache(val size: Int = DEFAULT_BITMAP_CACHE_SIZE) {
 
     fun invalidateCache() {
         for (next in cachedBitmaps) {
-            next.isValid = false
+            next.owned = false
         }
         log("BitmapCache: cache invalidated")
     }
