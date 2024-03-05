@@ -6,21 +6,38 @@ import universe.constellation.orion.viewer.view.PageLayoutManager
 
 class BitmapManager(val pageLayoutManager: PageLayoutManager) {
 
-    fun createDefaultBitmap(wholePageRect: Rect): FlexibleBitmap {
-        val deviceInfo = pageLayoutManager.controller.getDeviceInfo()
-        return FlexibleBitmap(wholePageRect, deviceInfo.width / 2, deviceInfo.height / 2)
+    private val viewInfo
+        get() = pageLayoutManager.sceneRect
+
+
+    private val Int.upperHalf
+        get(): Int {
+            return this /2 + this % 2
+        }
+
+    fun createDefaultBitmap(width: Int, height: Int): FlexibleBitmap {
+        return FlexibleBitmap(width, height, viewInfo.width().upperHalf, viewInfo.height().upperHalf)
     }
 
+    private val rect = Rect()
+
     fun actualizeActive(pageView: PageView) {
+        rect.set(pageLayoutManager.sceneRect)
         val bitmap = pageView.bitmap ?: return
-        actualizeActive(bitmap, pageView.layoutData.visibleOnScreenPart(pageLayoutManager.sceneRect)?: return)
+        rect.inset(-viewInfo.width().upperHalf / 2, -viewInfo.height().upperHalf / 2)
+
+        actualizeActive(
+            bitmap,
+            pageView.layoutData.visibleOnScreenPart(rect) ?: run {
+                bitmap.disableAll(pageLayoutManager.controller.bitmapCache)
+                return
+            })
     }
 
     private fun actualizeActive(
         bitmap: FlexibleBitmap,
         visiblePart: Rect
     ) {
-        visiblePart.inset(-bitmap.partWidth / 2, -bitmap.partHeight / 2)
         bitmap.updateDrawAreaAndUpdateNonRenderingPart(
             visiblePart,
             pageLayoutManager.controller.bitmapCache
