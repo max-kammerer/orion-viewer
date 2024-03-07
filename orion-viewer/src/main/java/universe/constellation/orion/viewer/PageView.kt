@@ -3,8 +3,6 @@ package universe.constellation.orion.viewer
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
-import android.graphics.Region
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -16,17 +14,14 @@ import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.isActive
-import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import universe.constellation.orion.viewer.bitmap.FlexibleBitmap
 import universe.constellation.orion.viewer.document.Document
-import universe.constellation.orion.viewer.geometry.RectF
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.view.OrionDrawScene
 import universe.constellation.orion.viewer.view.PageLayoutManager
 import universe.constellation.orion.viewer.view.precache
-import kotlin.coroutines.coroutineContext
 
 enum class PageState(val interactWithUUI: Boolean) {
     STUB(false),
@@ -82,9 +77,6 @@ class PageView(
 
     internal val page = document.getOrCreatePageAdapter(pageNum)
 
-    private val renderedRegion = Rect()
-    internal val nonRenderedRegion = Region()
-    internal  val tempRegion = Region()
     init {
         wholePageRect.set(pageLayoutManager.defaultSize())
     }
@@ -154,11 +146,9 @@ class PageView(
         if (state == PageState.SIZE_AND_BITMAP_CREATED) return
         val oldSize = Rect(wholePageRect)
         wholePageRect.set(0, 0, layoutInfo.x.pageDimension, layoutInfo.y.pageDimension)
-        nonRenderedRegion.set(wholePageRect)
-        renderedRegion.set(0, 0, 0, 0)
         bitmap = bitmap?.resize(wholePageRect.width(), wholePageRect.height(), controller.bitmapCache)
             ?: pageLayoutManager.bitmapManager.createDefaultBitmap(wholePageRect.width(), wholePageRect.height())
-        log("PageView.initBitmap $pageNum ${controller.document}: $nonRenderedRegion")
+        log("PageView.initBitmap $pageNum ${controller.document}")
         state = PageState.SIZE_AND_BITMAP_CREATED
         pageLayoutManager.onPageSizeCalculated(this, oldSize)
     }
@@ -169,7 +159,7 @@ class PageView(
             log("Draw page $pageNum in state $state ${bitmap?.width} ${bitmap?.height} ")
             draw(canvas, bitmap!!, scene.defaultPaint!!, scene)
         } else {
-            log("Draw border $pageNum in state $state: ${layoutData} on screen ${layoutData.occupiedScreenPartInTmp(scene.pageLayoutManager!!.sceneRect)}")
+            log("Draw border $pageNum in state $state: $layoutData on screen ${layoutData.occupiedScreenPartInTmp(scene.pageLayoutManager!!.sceneRect)}")
             drawBorder(canvas, scene)
         }
     }
@@ -201,7 +191,10 @@ class PageView(
 
     internal suspend fun renderInvisible(rect: Rect): Deferred<PageView?>? {
         //TODO yield
-        return render(rect, false)
+        if (Rect.intersects(rect, wholePageRect)) {
+            return render(rect, false)
+        }
+        return null
     }
 
     internal suspend fun render(rect: Rect, fromUI: Boolean): Deferred<PageView>? {
@@ -211,7 +204,6 @@ class PageView(
         if (state != PageState.SIZE_AND_BITMAP_CREATED) {
             pageInfo.await()
         }
-        tempRegion.set(nonRenderedRegion)
         //val bound = tempRegion.bounds
         val bound = Rect(rect)
         val bitmap = bitmap!!
@@ -224,8 +216,6 @@ class PageView(
                 if (isActive) {
                     withContext(Dispatchers.Main) {
                         if (kotlin.coroutines.coroutineContext.isActive) {
-                            nonRenderedRegion.op(bound, Region.Op.DIFFERENCE)
-                            renderedRegion.union(bound)
                             log("PageView.render invalidate: $pageNum $layoutData ${scene != null}")
                             scene?.invalidate()
                             if (fromUI) {

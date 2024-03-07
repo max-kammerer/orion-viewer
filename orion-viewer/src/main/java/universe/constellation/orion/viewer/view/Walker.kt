@@ -7,24 +7,16 @@ import universe.constellation.orion.viewer.PageView
 
 suspend fun PageView.precache() {
     if (this.state != PageState.SIZE_AND_BITMAP_CREATED) return
-    if (nonRenderedRegion.isEmpty) return
 
     val visibleRect = this.visibleRect() ?: return
     val top = visibleRect.top
     val bottom = visibleRect.bottom
     val left = visibleRect.left
     val right = visibleRect.right
-    val width = visibleRect.width()
-    val height = visibleRect.height()
+    val sceneInfo = pageLayoutManager.sceneRect
 
-
-    this.tempRegion.set(nonRenderedRegion)
-    if (tempRegion.op(visibleRect, Region.Op.INTERSECT)) return //UI will trigger necessary event
-
-    this.tempRegion.set(nonRenderedRegion)
-
-    val deltaX = width/3
-    val deltaY = height/3
+    val deltaX = sceneInfo.width().upperHalf / 2
+    val deltaY = sceneInfo.height().upperHalf / 2
     val t = Rect(left - deltaX, top - deltaY, right + deltaX, top)
     renderInvisible(t)
     val b = Rect(left - deltaX, bottom, right + deltaX, bottom + deltaY)
@@ -37,3 +29,14 @@ suspend fun PageView.precache() {
     this.pageLayoutManager.uploadNextPage(this, true)
     this.pageLayoutManager.uploadPrevPage(this, true)
 }
+
+fun Rect.screenForPrecache(pageLayoutManager: PageLayoutManager) {
+    val sceneInfo = pageLayoutManager.sceneRect
+    set(pageLayoutManager.sceneRect)
+    inset(-sceneInfo.width().upperHalf / 2, -sceneInfo.height().upperHalf / 2)
+}
+
+internal val Int.upperHalf
+    get(): Int {
+        return this / 2 + this % 2
+    }
