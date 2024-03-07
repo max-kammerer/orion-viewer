@@ -34,7 +34,7 @@ class BenchmarkTest : BaseTest() {
         val book: BookFile
     ) {
         override fun toString(): String {
-            return "pageInfo=$pageInfoAvg, readPageData=$readPageData, \npure=$pureRendering, \nbigg=$bigPartRendering, \npart=$partRendering, \nopenTime=$openTime, closeTime=$closeTime, book=$book"
+            return "book=$book, openTime=$openTime, closeTime=$closeTime, \npageInfo=$pageInfoAvg, readPageData=$readPageData, \npure=$pureRendering, \nbigg=$bigPartRendering, \npart=$partRendering"
         }
     }
 
@@ -78,9 +78,10 @@ class BenchmarkTest : BaseTest() {
                         page.getPageDimension()
                     }
                 )
-                val goto = time()
-                page.readPageDataForRendering()
-                val res = timeDelta(goto)
+                val res = time {
+                    page.readPageDataForRendering()
+                }
+
                 pureRendering.add(
                     time {
                         page.renderPage(bitmap, 1.0, 0, 0, bitmap.width, bitmap.height, 0, 0)
@@ -124,7 +125,7 @@ class BenchmarkTest : BaseTest() {
             )
         }
 
-        println(infos.joinToString("\n"))
+        println(infos.joinToString("\n\n"))
     }
 
     private fun time() = System.currentTimeMillis()
