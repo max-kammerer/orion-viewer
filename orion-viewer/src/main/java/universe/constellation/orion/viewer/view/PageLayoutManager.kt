@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import universe.constellation.orion.viewer.Controller
+import universe.constellation.orion.viewer.PageState
 import universe.constellation.orion.viewer.PageView
 import universe.constellation.orion.viewer.bitmap.BitmapManager
 import universe.constellation.orion.viewer.handler
@@ -124,7 +125,6 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
 
         activePages.forEach {
             val layoutData = it.layoutData
-            layoutData.position.y += distanceY2
             if (layoutData.contains(xPos, yPos)) {
                 val leftDelta = layoutData.globalLeft - sceneRect.left
                 val righDelta = sceneRect.right - layoutData.globalRight
@@ -142,6 +142,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
                     layoutData.position.x += newDistance
                 }
             }
+            layoutData.position.y += distanceY2
             updateStateAndRenderVisible(it)
         }
         updateCache()
@@ -346,10 +347,10 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
                         return renderPageAt(copy.pageNumber - 1, 0, 0) { page ->
                             val pos = page.layoutInfo.copy()
                             layoutStrategy.reset(pos, page.page, next)
-                            val newPosition = page.layoutData.position
+                            val oldPosition = page.layoutData.position
                             val x = -pos.x.offset
                             val y = -pos.y.offset
-                            doScrollOnly(newPosition.x, newPosition.y, x - newPosition.x, y - newPosition.y)
+                            doScrollOnly(oldPosition.x, oldPosition.y, x - oldPosition.x, y - oldPosition.y)
                         }
                     }
 
@@ -363,6 +364,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         val newPosition = page.layoutData.position
         doScrollOnly(newPosition.x, newPosition.y, x - newPosition.x, y - newPosition.y)
     }): Deferred<PageView?> {
+        println("RenderPageAt $pageNum $x $y")
         isSinglePageMode = true
         val iterator = activePages.iterator()
         for (page in iterator) {
@@ -383,12 +385,14 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
 
         return GlobalScope.async (Dispatchers.Main + handler) {
             page.pageInfo.await()
-            if (isVisible(page)) {
-                doScroll(page)
-                //page.updateState()
-                page.renderVisible()?.await()
+            if (page.state != PageState.DESTROYED) {
+                //if (isVisible(page)) {
+                    doScroll(page)
+                    page.updateState()
+                    return@async page.renderVisible()?.await()
+                //}
             }
-            else null
+            null
         }
     }
 
