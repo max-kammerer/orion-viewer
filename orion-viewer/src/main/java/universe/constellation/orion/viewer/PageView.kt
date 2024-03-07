@@ -172,7 +172,6 @@ class PageView(
             log("Draw border $pageNum in state $state: ${layoutData} on screen ${layoutData.occupiedScreenPartInTmp(scene.pageLayoutManager!!.sceneRect)}")
             drawBorder(canvas, scene)
         }
-        scene.orionStatusBarHelper.onPageUpdate(layoutInfo)
     }
 
     internal fun renderVisibleAsync() {

@@ -7,15 +7,14 @@ import android.view.ViewGroup
 import android.widget.TextView
 import universe.constellation.orion.viewer.*
 import universe.constellation.orion.viewer.document.abs
-import universe.constellation.orion.viewer.layout.LayoutPosition
 
 class OrionStatusBarHelper(val view: ViewGroup) : OrionBookListener {
-    val panel = view.findViewById<View>(R.id.orion_status_bar) as ViewGroup
-    val title = view.findViewById<View>(R.id.title) as TextView
-    val offset = view.findViewById<View>(R.id.offset) as TextView
-    val page = view.findViewById<View>(R.id.page) as TextView
-    val totalPages = view.findViewById<View>(R.id.totalPages) as TextView
-    var info: LayoutPosition? = null
+
+    private val panel = view.findViewById<View>(R.id.orion_status_bar) as ViewGroup
+    private val title = view.findViewById<View>(R.id.title) as TextView
+    private val offset = view.findViewById<View>(R.id.offset) as TextView
+    private val page = view.findViewById<View>(R.id.page) as TextView
+    private val totalPages = view.findViewById<View>(R.id.totalPages) as TextView
 
     @SuppressLint("SetTextI18n")
     override fun onNewBook(title: String?, pageCount: Int) {
@@ -26,11 +25,9 @@ class OrionStatusBarHelper(val view: ViewGroup) : OrionBookListener {
     }
 
     @SuppressLint("SetTextI18n")
-    fun onPageUpdate(info: LayoutPosition) {
-        info?.let {
-            offset.text = "[${pad(info.x.offset)}:${pad(info.y.offset)}]"
-            page.text = "${info.pageNumber + 1}"
-        }
+    fun onPageUpdate(pageNum: Int, x: Int, y: Int) {
+        offset.text = "[${pad(x)}:${pad(y)}]"
+        page.text = "${pageNum + 1}"
     }
 
     private fun pad(value: Int): String {

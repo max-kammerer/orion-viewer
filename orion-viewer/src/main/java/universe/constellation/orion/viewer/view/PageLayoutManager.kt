@@ -10,7 +10,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import universe.constellation.orion.viewer.Controller
-import universe.constellation.orion.viewer.PageState
 import universe.constellation.orion.viewer.PageView
 import universe.constellation.orion.viewer.bitmap.BitmapManager
 import universe.constellation.orion.viewer.handler
@@ -310,9 +309,15 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
     }
 
     fun renderVisiblePages(canvas: Canvas, scene: OrionDrawScene) {
+        var first = true
         activePages.forEach {
             if (it.isOnScreen) {
                 it.draw(canvas, scene)
+                if (first) {
+                    val visibleRect = it.visibleRect()
+                    scene.orionStatusBarHelper.onPageUpdate(it.pageNum, visibleRect?.left ?: 0, visibleRect?.top ?: 0)
+                    first = false
+                }
                 if (isSinglePageMode) return
             }
         }
