@@ -177,16 +177,16 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
                 count++
             }
         }
-        println("Cache active parts " + count)
-        if (count == 20) {
-            print("Cache part $activationRect ${activationRect.width()} ${activationRect.height()}")
-//            forAll {
-//                if (isActive) {
-//                    print("" + this.absPartRect + ", ")
-//                }
-//            }
-            println("")
-        }
+//        println("Cache active parts " + count)
+//        if (count == 20) {
+//            print("Cache part $activationRect ${activationRect.width()} ${activationRect.height()}")
+////            forAll {
+////                if (isActive) {
+////                    print("" + this.absPartRect + ", ")
+////                }
+////            }
+//            println("")
+//        }
     }
 
     @TestOnly

@@ -100,16 +100,20 @@ class PageView(
 
     fun toInvisible() {
         //TODO optimize canceling state
-        log("PV: toInvisible $pageNum")
-        //state = PageState.CAN_BE_DELETED
-        //pageJobs.cancelChildren()
-        isVisibleState = false
+        if (isVisibleState) {
+            log("PV: toInvisible $pageNum")
+            //state = PageState.CAN_BE_DELETED
+            //pageJobs.cancelChildren()
+            isVisibleState = false
+        }
     }
 
     fun toVisible() {
         //TODO optimize canceling state
-        log("PV: to visible $pageNum")
-        isVisibleState = true
+        if (!isVisibleState) {
+            log("PV: to visible $pageNum")
+            isVisibleState = true
+        }
     }
 
     fun destroy() {
@@ -209,47 +213,34 @@ class PageView(
             pageInfo.await()
         }
         tempRegion.set(nonRenderedRegion)
-        if (true || tempRegion.op(rect, nonRenderedRegion, Region.Op.INTERSECT)) {
-            //val bound = tempRegion.bounds
-            val bound = Rect(rect)
-            return coroutineScope {
-                async(controller.context + pageJobs + handler) {
-                    timing("Rendering $pageNum page in rendering engine: $bound") {
-                        bitmap!!.render(bound, layoutInfo, page)
-                    }
-                    if (isActive) {
-                        withContext(Dispatchers.Main) {
-                            if (kotlin.coroutines.coroutineContext.isActive) {
-                                nonRenderedRegion.op(bound, Region.Op.DIFFERENCE)
-                                renderedRegion.union(bound)
-                                log("PageView.render invalidate: $pageNum $layoutData ${scene != null}")
-                                scene?.invalidate()
-                                if (fromUI) {
-                                    precache()
-                                }
+        //val bound = tempRegion.bounds
+        val bound = Rect(rect)
+        val bitmap = bitmap!!
+
+        return coroutineScope {
+            async(controller.context + pageJobs + handler) {
+                timing("Rendering $pageNum page in rendering engine: $bound") {
+                    bitmap.render(bound, layoutInfo, page)
+                }
+                if (isActive) {
+                    withContext(Dispatchers.Main) {
+                        if (kotlin.coroutines.coroutineContext.isActive) {
+                            nonRenderedRegion.op(bound, Region.Op.DIFFERENCE)
+                            renderedRegion.union(bound)
+                            log("PageView.render invalidate: $pageNum $layoutData ${scene != null}")
+                            scene?.invalidate()
+                            if (fromUI) {
+                                precache()
                             }
                         }
-                    } else {
-                        log("PageView.render: canceled")
                     }
-                    this@PageView
+                } else {
+                    log("PageView.render: canceled")
                 }
-            }
-        } else {
-            if (state == PageState.SIZE_AND_BITMAP_CREATED) {
-                log("Already rendered $state $document $pageNum: $rect")
-                scene?.invalidate()
-                val completableDeferred = CompletableDeferred<PageView>(coroutineContext.job)
-                completableDeferred.complete(this@PageView)
-                if (fromUI) {
-                    precache()
-                }
-                return completableDeferred
-            } else {
-                log("Skipped $state $document $pageNum")
+                this@PageView
             }
         }
-        return null
+
     }
 
     private fun draw(canvas: Canvas, bitmap: FlexibleBitmap, defaultPaint: Paint, scene: OrionDrawScene) {

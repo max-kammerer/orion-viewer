@@ -79,7 +79,6 @@ class Controller(
             override fun renderingParametersChanged() {
                 println("viewParametersChanged")
                 hasPendingEvents = if (this@Controller.activity._isResumed) {
-                    bitmapCache.invalidateCache()
                     pageLayoutManager.forcePageUpdate()
                     false
                 } else {
@@ -305,7 +304,7 @@ class Controller(
         }
     }
 
-    fun createCachePageView(pageNum: Int): PageView {
+    fun createPageView(pageNum: Int): PageView {
         return PageView(
             pageNum,
             document,

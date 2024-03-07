@@ -212,7 +212,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         dump()
         if (activePages.isEmpty()) {
             val nextPageNum = 0
-            val view = controller.createCachePageView(nextPageNum)
+            val view = controller.createPageView(nextPageNum)
             addPageInPosition(view, pageYPos = 0f)
         } else {
             uploadNextPage(activePages.last())
@@ -225,8 +225,8 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
 
     internal fun uploadPrevPage(page: PageView, addIfAbsent: Boolean = false) {
         if (page.pageNum <= 0) return
-        val pageNum = page.pageNum - 1
-        val existingPage = activePages.firstOrNull { it.pageNum == pageNum }
+        val prevPageNum = page.pageNum - 1
+        val existingPage = activePages.firstOrNull { it.pageNum == prevPageNum }
         if (existingPage != null) {
             //updateStateAndRenderVisible(existingPage)
             return
@@ -234,46 +234,40 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
 
         val pageStart = page.layoutData.position.y
         if (pageStart > 5 || addIfAbsent) {
-            val newView = controller.createCachePageView(pageNum)
+            val newView = controller.createPageView(prevPageNum)
             addPageInPosition(
                 newView,
                 0f,
                 page.layoutData.position.y - newView.layoutData.wholePageRect.height() - 2,
-                false
+                0
             )
         }
     }
 
     internal fun uploadNextPage(page: PageView, addIfAbsent: Boolean = false) {
-        val pageNum = page.pageNum + 1
-        val existingPage = activePages.firstOrNull { it.pageNum == pageNum }
+        val nextPageNum = page.pageNum + 1
+        val existingPage = activePages.firstOrNull { it.pageNum == nextPageNum }
         if (existingPage != null) {
             //updateStateAndRenderVisible(existingPage)
             return
         }
 
         val pageEnd =
-            page.layoutData.position.y + page.layoutData.wholePageRect.height() + 1
+            page.layoutData.position.y + page.layoutData.wholePageRect.height() + 2
         if (pageEnd < sceneHeight || addIfAbsent) {
-            if (pageNum < controller.pageCount) {
-                addPageInPosition(pageNum, pageEnd)
-            }
+            addPageInPosition(nextPageNum, pageEnd)
         }
     }
 
     private fun addPageInPosition(pageNum: Int, pageYPos: Float) {
-        val view = controller.createCachePageView(pageNum)
+        val view = controller.createPageView(pageNum)
         addPageInPosition(view, pageYPos = pageYPos)
     }
 
-    private fun addPageInPosition(view: PageView, pageXPos: Float = 0f, pageYPos: Float, last: Boolean = true) {
+    private fun addPageInPosition(view: PageView, pageXPos: Float = 0f, pageYPos: Float, index: Int = activePages.size) {
         view.layoutData.position.y = pageYPos
         view.layoutData.position.x = pageXPos
-        if (last) {
-            activePages.add(view)
-        } else {
-            activePages.add(0, view)
-        }
+        activePages.add(index, view)
         view.scene = scene
         updateStateAndRenderVisible(view)
     }
@@ -366,33 +360,47 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
     }): Deferred<PageView?> {
         println("RenderPageAt $pageNum $x $y")
         isSinglePageMode = true
-        val iterator = activePages.iterator()
-        for (page in iterator) {
-            if (page.pageNum != pageNum) {
-                //TODO optimize
-                page.toInvisible()
-                page.destroy()
-                iterator.remove()
-            }
-        }
-        val page = if (activePages.isNotEmpty()) {
-            activePages.first()
+        val index = activePages.binarySearch { it.pageNum.compareTo(pageNum) }
+
+        val page = if (index >= 0) {
+            activePages[index]
         } else {
-            val page = controller.createCachePageView(pageNum)
-            addPageInPosition(page, -x.toFloat(), -y.toFloat())
-            page
+            val insertIndex = -(index + 1)
+
+            val destroy = when (insertIndex) {
+                0 -> (activePages.firstOrNull()?.pageNum ?: -1) != pageNum + 1
+                activePages.size -> (activePages.lastOrNull()?.pageNum ?: -1) != pageNum - 1
+                else -> false
+            }
+            println("insertIndex: $insertIndex ${activePages.size} $destroy")
+            if (destroy) {
+                destroyPages()
+            }
+            val newPage = controller.createPageView(pageNum)
+            addPageInPosition(newPage, -x.toFloat(), -y.toFloat(), if (destroy) 0 else insertIndex)
+            newPage
         }
 
         return GlobalScope.async (Dispatchers.Main + handler) {
             page.pageInfo.await()
-            if (page.state != PageState.DESTROYED) {
+            //if (page.state != PageState.DESTROYED) {
                 //if (isVisible(page)) {
                     doScroll(page)
                     page.updateState()
                     return@async page.renderVisible()?.await()
                 //}
-            }
+            //}
             null
+        }
+    }
+
+    private fun destroyPages() {
+        val iterator = activePages.iterator()
+        for (page in iterator) {
+            //TODO optimize
+            page.toInvisible()
+            page.destroy()
+            iterator.remove()
         }
     }
 
