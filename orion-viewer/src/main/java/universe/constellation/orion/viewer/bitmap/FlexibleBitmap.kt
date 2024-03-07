@@ -219,7 +219,13 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
     }
 
     private inline fun forAll(body: PagePart.() -> Unit) {
-        forEach(renderingArea, body)
+        if (partWidth == 0 || partHeight == 0) {
+            data.forEach {
+                it.forEach { part -> part.body() }
+            }
+        } else {
+            forEach(renderingArea, body)
+        }
     }
 
     private inline fun forEach(rect: Rect, body: PagePart.() -> Unit) {
@@ -229,7 +235,7 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
         val bottom = rect.bottomInc / partHeight
         for (r in top..bottom) {
             for (c in left..right) {
-                body(data[r][c])
+                data[r][c].body()
             }
         }
     }
@@ -261,7 +267,7 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
 }
 
 fun Int.countCells(cellSize: Int): Int {
-    if (this == 0) return 1
+    if (this == 0) return 0
     return (this - 1) / cellSize + 1
 }
 
