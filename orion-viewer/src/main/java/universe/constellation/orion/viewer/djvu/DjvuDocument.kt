@@ -29,7 +29,7 @@ import universe.constellation.orion.viewer.pdf.DocInfo
 import universe.constellation.orion.viewer.timing
 import java.util.Locale
 
-class DjvuDocument(private val fileName: String) : AbstractDocument() {
+class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
 
     inner class DjvuPage(pageNum: Int) : PageWithAutoCrop(pageNum) {
         @Volatile
@@ -103,10 +103,10 @@ class DjvuDocument(private val fileName: String) : AbstractDocument() {
 
     init {
         contextPointer = initContext()
-        docInfo.fileName = fileName
+        docInfo.fileName = filePath
         if (contextPointer == 0L) throw RuntimeException("Can't create djvu contextPointer").also { destroy() }
-        docPointer = openFile(fileName, docInfo, contextPointer)
-        if (docPointer == 0L) throw RuntimeException("Can't open file $fileName").also { destroy() }
+        docPointer = openFile(filePath, docInfo, contextPointer)
+        if (docPointer == 0L) throw RuntimeException("Can't open file $filePath").also { destroy() }
     }
 
     override val pageCount: Int
@@ -222,9 +222,5 @@ class DjvuDocument(private val fileName: String) : AbstractDocument() {
 
         @JvmStatic
         external fun getPageText(doc: Long, pageNumber: Int, stringBuilder: ArrayList<*>, positions: ArrayList<*>): Boolean
-    }
-
-    override fun toString(): String {
-        return fileName
     }
 }

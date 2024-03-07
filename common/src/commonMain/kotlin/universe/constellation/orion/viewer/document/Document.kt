@@ -61,7 +61,7 @@ interface Page {
     fun destroy()
 }
 
-abstract class AbstractDocument : Document {
+abstract class AbstractDocument(override val filePath: String) : Document {
 
     private val pages = HashMap<Int, PageWithAutoCrop>()
 
@@ -85,11 +85,17 @@ abstract class AbstractDocument : Document {
         pages.remove(page.pageNum)
         page.destroy()
     }
+
+    override fun toString(): String {
+        return filePath
+    }
 }
 
 interface Document : ImagePostProcessor {
 
     val pageCount: Int
+
+    val filePath: String
 
     val title: String?
 

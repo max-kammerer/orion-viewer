@@ -6,7 +6,7 @@ import universe.constellation.orion.viewer.PageInfo
 import universe.constellation.orion.viewer.geometry.RectF
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
 
-class StubDocument(override var title: String?, var bodyText: String? = title) : AbstractDocument() {
+class StubDocument(override var title: String?, var bodyText: String? = title) : AbstractDocument("Stub[$title]") {
 
     override fun createPage(pageNum: Int): PageWithAutoCrop {
         return object: PageWithAutoCrop(pageNum) {
@@ -53,8 +53,4 @@ class StubDocument(override var title: String?, var bodyText: String? = title) :
     override fun destroy() {}
 
     override fun searchPage(pageNumber: Int, text: String): Array<RectF>? = null
-
-    override fun toString(): String {
-        return "Stub[$title]"
-    }
 }

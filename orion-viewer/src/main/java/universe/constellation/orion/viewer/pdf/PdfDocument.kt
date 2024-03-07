@@ -29,14 +29,13 @@ import com.artifex.mupdf.fitz.StructuredText
 import com.artifex.mupdf.fitz.android.AndroidDrawDevice
 import com.artifex.mupdf.viewer.MuPDFCore
 import com.artifex.mupdfdemo.TextWord
-import org.jetbrains.annotations.TestOnly
 import universe.constellation.orion.viewer.Bitmap
 import universe.constellation.orion.viewer.PageDimension
 import universe.constellation.orion.viewer.document.AbstractDocument
 import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.document.PageWithAutoCrop
 
-class PdfDocument @Throws(Exception::class) constructor(private val fileName: String) : AbstractDocument() {
+class PdfDocument @Throws(Exception::class) constructor(filePath: String) : AbstractDocument(filePath) {
 
     inner class PdfPage(pageNum: Int) : PageWithAutoCrop(pageNum) {
         @Volatile
@@ -113,7 +112,7 @@ class PdfDocument @Throws(Exception::class) constructor(private val fileName: St
     }
 
 
-    private val core = MuPDFCore(fileName)
+    private val core = MuPDFCore(filePath)
 
     override val pageCount: Int
         get() = core.countPages()
@@ -204,8 +203,4 @@ class PdfDocument @Throws(Exception::class) constructor(private val fileName: St
     override fun authenticate(password: String) = core.authenticatePassword(password)
 
     override fun searchPage(pageNumber: Int, text: String): Array<RectF>? = core.searchPage(pageNumber, text)?.map { it.toRect().run { RectF(x0, y0, x1, y1) } }?.toTypedArray()
-
-    override fun toString(): String {
-        return fileName
-    }
 }
