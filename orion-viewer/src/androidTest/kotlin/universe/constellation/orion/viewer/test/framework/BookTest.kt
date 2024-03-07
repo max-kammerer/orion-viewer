@@ -9,6 +9,9 @@ import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.FileUtil.openFile
 import universe.constellation.orion.viewer.OrionViewerActivity
+import universe.constellation.orion.viewer.test.framework.BaseTest.Companion.ALICE
+import universe.constellation.orion.viewer.test.framework.BaseTest.Companion.DJVU_SPEC
+import universe.constellation.orion.viewer.test.framework.BaseTest.Companion.SICP
 import java.io.File
 
 @RunWith(Parameterized::class)
@@ -26,7 +29,7 @@ abstract class BookTest(protected val bookDescription: BookDescription) : BaseTe
     }
 }
 
-open class BookFile(val path: String) {
+open class BookFile(private val simpleFileName: String) {
     fun toOpenIntent(): Intent {
         return Intent(Intent.ACTION_VIEW).apply {
             setClassName(
@@ -38,18 +41,48 @@ open class BookFile(val path: String) {
         }
     }
 
-    fun asFile() = File(BaseTest.testFolder, path)
+    fun asFile() = File(BaseTest.testFolder, simpleFileName)
+
+    fun asPath() = asFile().absolutePath
 
     fun openBook() = openFile(asFile())
 
     override fun toString(): String {
-        return "BookFile(path='$path')"
+        return "BookFile(path='$simpleFileName')"
     }
 
     companion object {
 
+        private val EXTENDED_HARD_CODED_TEST = System.getenv("test.books.extended")?.toBoolean() ?: false
+
         fun testEntriesWithCustoms(): List<BookFile> {
-            return BaseTest.testFolder.list()?.map { BookFile(it) } ?: error("no books")
+            val files = BaseTest.testFolder.list()
+            if (files == null || files.isEmpty()) return hardCodedEntries()
+            return files.map { BookFile(it) }
+        }
+
+        private fun hardCodedEntries(): List<BookFile> {
+            return (if (EXTENDED_HARD_CODED_TEST)
+                listOf(
+                ALICE,
+                "an1.pdf",
+                "cr1.pdf",
+                "cr2.pdf",
+                "decode.pdf",
+                DJVU_SPEC,
+                "h1.djvu",
+                "oz1.pdf",
+                "quest.pdf",
+                SICP
+            ) else {
+                listOf(
+                    ALICE,
+                    DJVU_SPEC,
+                    SICP
+                )
+            }).map {
+                BookFile(it)
+            }
         }
     }
 }

@@ -9,10 +9,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.R
-import universe.constellation.orion.viewer.test.framework.BookDescription
+import universe.constellation.orion.viewer.test.framework.BookFile
 
 @RunWith(Parameterized::class)
-class ScrollTest(bookDescription: BookDescription): BaseEspressoTest(bookDescription) {
+class ScrollTest(bookDescription: BookFile): BaseEspressoTest(bookDescription) {
 
     @Test
     fun testSwipeUpAndDownWithZoomIn3() {
@@ -36,7 +36,7 @@ class ScrollTest(bookDescription: BookDescription): BaseEspressoTest(bookDescrip
         applyGoTo()
         onView(withId(R.id.view)).perform(swipeDown())
         activityScenarioRule.scenario.onActivity {
-            Assert.assertEquals(it.controller!!.pageCount, bookDescription.pageCount)
+            Assert.assertEquals(it.controller!!.document.filePath, bookDescription.asPath())
             val first = it.controller!!.pageLayoutManager.activePages.first()
             Assert.assertEquals(0, first.pageNum)
             Assert.assertEquals(0f, first.layoutData.position.y, 0.0f)
@@ -46,7 +46,11 @@ class ScrollTest(bookDescription: BookDescription): BaseEspressoTest(bookDescrip
     @Test
     fun testLastPageSwipeUp() {
         openGoTo()
-        onView(withId(R.id.page_picker_seeker)).perform(setSeekBarProgress { bookDescription.pageCount - 1 })
+        var pageCount = -1
+        activityScenarioRule.scenario.onActivity {
+            pageCount = it.controller!!.document.pageCount
+        }
+        onView(withId(R.id.page_picker_seeker)).perform(setSeekBarProgress { pageCount - 1 })
         applyGoTo()
         onView(withId(R.id.view)).perform(swipeUp())
 

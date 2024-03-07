@@ -8,10 +8,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.R
-import universe.constellation.orion.viewer.test.framework.BookDescription
+import universe.constellation.orion.viewer.test.framework.BookFile
 
 @RunWith(Parameterized::class)
-class ZoomTest(bookDescription: BookDescription): BaseEspressoTest(bookDescription) {
+class ZoomTest(bookDescription: BookFile): BaseEspressoTest(bookDescription) {
 
     @Test
     fun testZoomChange() {

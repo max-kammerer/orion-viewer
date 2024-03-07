@@ -51,6 +51,5 @@ class SimpleBookTest(bookDescription: BookDescription) : BookTest(bookDescriptio
     fun findNonExistingText() {
         val result = document.searchPage(0, "abcdefghjklm....")
         assertTrue("Search should return nothing", result.isNullOrEmpty())
-
     }
 }

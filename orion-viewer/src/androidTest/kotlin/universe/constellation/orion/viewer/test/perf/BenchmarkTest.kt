@@ -88,22 +88,17 @@ class BenchmarkTest : BaseTest() {
                     }
                 )
 
-                bitmapFull.enableAll(BITMAP_CACHE)
                 bigPartRendering.add(
-                    time {
+                    time(bitmapFull) {
                         bitmapFull.renderFull(1.0, page)
                     }
                 )
-                bitmapFull.disableAll(BITMAP_CACHE)
 
-                bitmap4Parts.enableAll(BITMAP_CACHE)
                 partRendering.add(
-                    time {
+                    time(bitmap4Parts) {
                         bitmap4Parts.renderFull(1.0, page)
                     }
                 )
-                bitmap4Parts.disableAll(BITMAP_CACHE)
-
 
                 page.destroy()
                 res
@@ -132,10 +127,11 @@ class BenchmarkTest : BaseTest() {
 
     private fun timeDelta(start: Long) = System.currentTimeMillis() - start
 
-    private inline fun time(block: () -> Unit): Long {
+    private inline fun time(bitmap: FlexibleBitmap? = null, block: () -> Unit): Long {
+        bitmap?.enableAll(BITMAP_CACHE)
         val start = time()
         block()
-        return timeDelta(start)
+        return timeDelta(start).also { bitmap?.disableAll(BITMAP_CACHE) }
     }
 
 }

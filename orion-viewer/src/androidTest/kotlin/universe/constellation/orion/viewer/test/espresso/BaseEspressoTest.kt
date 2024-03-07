@@ -18,18 +18,18 @@ import org.junit.Before
 import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.R
-import universe.constellation.orion.viewer.test.framework.BookDescription
+import universe.constellation.orion.viewer.test.framework.BookFile
 import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
 
 @SdkSuppress(minSdkVersion = 21)
 /*Default zoom is "Fit Width"*/
-open class BaseEspressoTest(val bookDescription: BookDescription) : InstrumentationTestCase(bookDescription.toOpenIntent()) {
+open class BaseEspressoTest(val bookDescription: BookFile) : InstrumentationTestCase(bookDescription.toOpenIntent()) {
 
     companion object {
         @JvmStatic
         @Parameterized.Parameters(name = "Test for {0} book")
-        fun testData(): Iterable<Array<BookDescription>> {
-            return BookDescription.testData()
+        fun testData(): Iterable<BookFile> {
+            return BookFile.testEntriesWithCustoms()
         }
     }
 
@@ -46,7 +46,7 @@ open class BaseEspressoTest(val bookDescription: BookDescription) : Instrumentat
         }
         activityScenarioRule.scenario.onActivity {
             controller = it.controller!!
-            Assert.assertEquals(it.controller!!.pageCount, bookDescription.pageCount)
+            Assert.assertEquals(it.controller!!.document.filePath, bookDescription.asPath())
             Assert.assertFalse(controller.pageLayoutManager.sceneRect.isEmpty)
         }
     }
