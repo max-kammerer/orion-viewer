@@ -1,3 +1,8 @@
+===== 0.90 Alpha (Mat 07, 2024) =====
+* New rendering engine
+    ** Support of continuous page mode
+* Added Turkish translation (thanks for @symbuzzer)
+
 ===== 0.82.6 (Dec 25, 2023) =====
 Small fixes and improvements
 
