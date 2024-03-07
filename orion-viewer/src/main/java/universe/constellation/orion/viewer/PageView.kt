@@ -72,9 +72,6 @@ class PageView(
     @Volatile
     var state: PageState = PageState.STUB
 
-    @Volatile
-    var marker: Int = 1
-
     internal val page = document.getOrCreatePageAdapter(pageNum)
 
     init {
@@ -256,7 +253,6 @@ class PageView(
     }
 
     fun invalidateAndMoveToStub() {
-        marker++
         state = PageState.STUB
         pageJobs.cancelChildren()
     }

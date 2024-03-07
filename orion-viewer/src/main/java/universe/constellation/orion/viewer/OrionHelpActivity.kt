@@ -37,9 +37,9 @@ class OrionHelpActivity : OrionBaseActivity(false) {
             return inflater.inflate(R.layout.general_help, container, false)
         }
 
-        override fun onActivityCreated(savedInstanceState: Bundle?) {
-            super.onActivityCreated(savedInstanceState)
-            val btn = requireActivity().findViewById<View>(R.id.help_close) as ImageButton
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
+            val btn = view.findViewById<View>(R.id.help_close) as ImageButton
             btn.setOnClickListener { requireActivity().finish() }
         }
     }
@@ -53,9 +53,9 @@ class OrionHelpActivity : OrionBaseActivity(false) {
             return view
         }
 
-        override fun onActivityCreated(savedInstanceState: Bundle?) {
-            super.onActivityCreated(savedInstanceState)
-            val btn = requireActivity().findViewById<View>(R.id.info_close) as ImageButton
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
+            val btn = view.findViewById<View>(R.id.info_close) as ImageButton
             btn.setOnClickListener { requireActivity().finish() }
         }
     }

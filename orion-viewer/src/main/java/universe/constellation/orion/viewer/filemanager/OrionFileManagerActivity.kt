@@ -1,22 +1,3 @@
-/*
- * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
- *
- * Copyright (C) 2011-2017 Michael Bogdanov & Co
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package universe.constellation.orion.viewer.filemanager
 
 import android.Manifest
@@ -108,26 +89,25 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
 
         }
 
-    class FoldersFragment : Fragment() {
+    class FileManagerFragment : Fragment() {
 
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
             return inflater.inflate(R.layout.folder_view, container, false)
 
         }
 
-        override fun onActivityCreated(savedInstanceState: Bundle?) {
-            super.onActivityCreated(savedInstanceState)
-            (activity as OrionFileManagerActivityBase).createFileView(
-                requireActivity().findViewById(R.id.listView),
-                requireActivity().findViewById(R.id.path)
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
+            (activity as OrionFileManagerActivityBase).initializeFileView(
+                view.findViewById(R.id.listView),
+                view.findViewById(R.id.path)
             )
         }
     }
 
     class RecentListFragment : ListFragment() {
-        override fun onActivityCreated(savedInstanceState: Bundle?) {
-            super.onActivityCreated(savedInstanceState)
-
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
             listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
                 val entry = parent.getItemAtPosition(position) as GlobalOptions.RecentEntry
                 val file = File(entry.path)
@@ -205,17 +185,16 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         }
     }
 
-    private fun createFileView(list: ListView, path: TextView) {
-        list.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+    private fun initializeFileView(list: ListView, path: TextView) {
+        list.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
             val file = parent.getItemAtPosition(position) as File
             if (file.isDirectory) {
                 val newFolder = (parent.adapter as FileChooserAdapter).changeFolder(file)
                 path.text = newFolder.absolutePath
             } else {
                 if (showRecentsAndSavePath) {
-                    val editor = prefs!!.edit()
-                    editor.putString(LAST_OPENED_DIRECTORY, file.parentFile.absolutePath)
-                    editor.commit()
+                    val absolutePath = file.parentFile?.absolutePath
+                    prefs!!.edit().putString(LAST_OPENED_DIRECTORY, absolutePath).apply()
                 }
                 openFile(file)
             }
@@ -281,7 +260,7 @@ internal class SimplePagerAdapter(fm: androidx.fragment.app.FragmentManager, pri
 
     override fun getItem(i: Int): Fragment {
         return if (i == 0)
-            OrionFileManagerActivityBase.FoldersFragment()
+            OrionFileManagerActivityBase.FileManagerFragment()
         else
             OrionFileManagerActivityBase.RecentListFragment()
     }
