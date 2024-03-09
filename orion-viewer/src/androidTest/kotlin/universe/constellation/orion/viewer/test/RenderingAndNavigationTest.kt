@@ -77,7 +77,12 @@ class RenderingAndNavigationTest(private val book: BookDescription) : Instrument
             }
             runBlocking {
                 val pageView = page.await()!!
-                nextPageRects.add(pageView.occupiedVisiblePartInNewRect()!!)
+                nextPageRects.add(
+                    pageView.layoutData.pagePartOnScreen(
+                        pageView.pageLayoutManager.sceneRect,
+                        Rect()
+                    )!!
+                )
                 flushAndProcessBitmap("next", nextPageList)
             }
         }
@@ -91,7 +96,12 @@ class RenderingAndNavigationTest(private val book: BookDescription) : Instrument
             }
             runBlocking {
                 val pageView = page.await()!!
-                prevPageRects.add(pageView.occupiedVisiblePartInNewRect()!!)
+                prevPageRects.add(
+                    pageView.layoutData.pagePartOnScreen(
+                        pageView.pageLayoutManager.sceneRect,
+                        Rect()
+                    )!!
+                )
                 flushAndProcessBitmap("prev", prevPageList)
             }
         }

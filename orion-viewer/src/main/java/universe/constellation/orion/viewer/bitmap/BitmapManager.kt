@@ -20,15 +20,15 @@ class BitmapManager(val pageLayoutManager: PageLayoutManager) {
         return FlexibleBitmap(width, height, viewInfo.width().upperHalf, viewInfo.height().upperHalf)
     }
 
-    private val rect = Rect()
+    private val precacheScreeen = Rect()
 
     fun actualizeActive(pageView: PageView) {
-        rect.screenForPrecache(pageLayoutManager)
+        precacheScreeen.screenForPrecache(pageLayoutManager)
         val bitmap = pageView.bitmap ?: return
 
         actualizeActive(
             bitmap,
-            pageView.layoutData.visibleOnScreenPart(rect) ?: run {
+            pageView.layoutData.visibleOnScreenPart(precacheScreeen) ?: run {
                 bitmap.disableAll(pageLayoutManager.controller.bitmapCache)
                 return
             })

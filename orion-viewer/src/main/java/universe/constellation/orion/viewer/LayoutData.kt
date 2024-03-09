@@ -2,11 +2,11 @@ package universe.constellation.orion.viewer
 
 import android.graphics.PointF
 import android.graphics.Rect
+import android.graphics.RectF
 
 class LayoutData {
     val position: PointF = PointF(0f, 0f)
     val wholePageRect: Rect = Rect()
-    val tmpRect: Rect = Rect()
 
     val globalLeft: Float
         get() = position.x + wholePageRect.left
@@ -22,14 +22,20 @@ class LayoutData {
         return wholePageRect.contains((x - position.x) .toInt(), (y-position.y).toInt())
     }
 
-    fun globalRectInTmp(): Rect {
-        tmpRect.set(wholePageRect)
-        tmpRect.offset(position.x.toInt(), position.y.toInt())
-        return tmpRect
+    fun globalRect(target: Rect): Rect {
+        target.set(wholePageRect)
+        target.offset(position.x.toInt(), position.y.toInt())
+        return target
     }
 
-    fun occupiedScreenPartInTmp(screenRect: Rect): Rect? {
-        val globalPosition = globalRectInTmp()
+    fun globalRect(target: RectF): RectF {
+        target.set(wholePageRect)
+        target.offset(position.x, position.y)
+        return target
+    }
+
+    fun pagePartOnScreen(screenRect: Rect, target: Rect): Rect? {
+        val globalPosition = globalRect(target)
         return if (globalPosition.intersect(screenRect)) {
             globalPosition
         } else {
@@ -38,13 +44,9 @@ class LayoutData {
     }
 
     fun visibleOnScreenPart(screenRect: Rect): Rect? {
-        val occupiedScreenPart = occupiedScreenPartInTmp(screenRect) ?: return null
+        val occupiedScreenPart = pagePartOnScreen(screenRect, Rect()) ?: return null
         occupiedScreenPart.offset(-position.x.toInt(), -position.y.toInt())
-        return Rect(occupiedScreenPart)
-    }
-
-    fun insideScreenX(screenRect: Rect): Boolean {
-        return wholePageRect.left >= screenRect.left && wholePageRect.right <= screenRect.right
+        return occupiedScreenPart
     }
 
     override fun toString(): String {

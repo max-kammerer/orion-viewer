@@ -47,6 +47,9 @@ class PageView(
         wholePageRect.set(pageLayoutManager.defaultSize())
     }
 
+    val pageEndY: Float
+        get() = layoutData.position.y + wholePageRect.height()
+
     val wholePageRect
         get() = layoutData.wholePageRect
 
@@ -156,7 +159,7 @@ class PageView(
             log("Draw page $pageNum in state $state ${bitmap?.width} ${bitmap?.height} ")
             draw(canvas, bitmap!!, scene.defaultPaint!!, scene)
         } else {
-            log("Draw border $pageNum in state $state: $layoutData on screen ${layoutData.occupiedScreenPartInTmp(scene.pageLayoutManager!!.sceneRect)}")
+            log("Draw border $pageNum in state $state")
             drawBorder(canvas, scene)
         }
     }
@@ -165,10 +168,6 @@ class PageView(
         GlobalScope.launch (Dispatchers.Main + handler) {
             renderVisible()
         }
-    }
-
-    fun occupiedVisiblePartInNewRect(): Rect? {
-        return layoutData.occupiedScreenPartInTmp(pageLayoutManager.sceneRect)?.let { Rect(it) }
     }
 
     fun visibleRect(): Rect? {

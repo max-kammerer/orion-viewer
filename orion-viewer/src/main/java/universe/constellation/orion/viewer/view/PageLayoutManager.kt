@@ -36,7 +36,9 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
 
     val sceneRect = Rect(0, 0, scene.width, scene.height)
 
-    private val tmpRect = Rect(sceneRect)
+    private val tmpRect = Rect()
+    private val tmpRect2 = Rect()
+
 
     private var sceneWidth: Int
         get() = sceneRect.width()
@@ -252,8 +254,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
             return
         }
 
-        val pageEnd =
-            page.layoutData.position.y + page.layoutData.wholePageRect.height() + 2
+        val pageEnd = page.pageEndY + 2
         if (pageEnd < sceneHeight || addIfAbsent) {
             addPageInPosition(nextPageNum, pageEnd)
         }
@@ -282,7 +283,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         bitmapManager.actualizeActive(this)
         val visible = this.isOnScreen
         if (!visible) {
-            log("toInvisible ${this.pageNum}: ${this.layoutData.globalRectInTmp()} $sceneRect")
+            log("toInvisible ${this.pageNum}: ${this.layoutData.globalRect(tmpRect)} $sceneRect")
             this.toInvisible()
         } else {
             this.toVisible()
@@ -292,9 +293,8 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
 
     fun findPageAndPageRect(screenRect: Rect): List<PageAndSelection> {
         return activePages.mapNotNull {
-            val visibleOnScreenPart = it.layoutData.occupiedScreenPartInTmp(screenRect) ?: return@mapNotNull null
-            log("selection: " + it.pageNum + visibleOnScreenPart)
-            val pageSelection = Rect(visibleOnScreenPart)
+            val pageSelection = it.layoutData.pagePartOnScreen(screenRect, Rect()) ?: return@mapNotNull null
+            log("selection: " + it.pageNum + pageSelection)
             //TODO zoom and crop
             pageSelection.minusOffset(it.layoutData.position)
             val layoutInfo = it.layoutInfo
@@ -416,24 +416,21 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         }
 
         activePages.zipWithNext().forEach {
-            val rect1 = it.first.layoutData.globalRectInTmp()
-            val rect2 = it.second.layoutData.globalRectInTmp()
-            if (rect1.intersect(rect2)) {
-                log("intersection area: $rect1")
-                log("intersection rects: ${it.first.layoutData.globalRectInTmp()} $rect2")
-                error("intersected pages ${it.first.pageNum} and ${it.second.pageNum} rects: $rect1")
+            val rect1 = it.first.layoutData.globalRect(tmpRect)
+            val rect2 = it.second.layoutData.globalRect(tmpRect2)
+            if (Rect.intersects(rect1, rect2)) {
+                val intersection = Rect(rect1)
+                intersection.intersect(rect2)
+                val message =
+                    "intersected pages ${it.first.pageNum} and ${it.second.pageNum} rects: $rect1 $rect2, intersection $intersection"
+                log(message)
+                error(message)
             }
         }
     }
 
     fun isVisible(view: PageView): Boolean {
-        return isVisible(view.wholePageRect, view.layoutData.position)
-    }
-
-    fun isVisible(pageRect: Rect, pos: PointF): Boolean {
-        tmpRect.set(pageRect)
-        tmpRect.offset(pos.x.toInt(), pos.y.toInt())
-        return Rect.intersects(tmpRect, sceneRect)
+        return view.layoutData.pagePartOnScreen(sceneRect, tmpRect) != null
     }
 
     fun onPageSizeCalculated(updatedView: PageView, oldArea: Rect) {
