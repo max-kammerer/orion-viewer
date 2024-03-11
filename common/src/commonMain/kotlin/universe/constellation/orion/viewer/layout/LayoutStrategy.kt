@@ -42,9 +42,7 @@ interface LayoutStrategy {
 
     fun prevPage(pos: LayoutPosition): Int
 
-    fun reset(pos: LayoutPosition, page: PageWithAutoCrop)
-
-    fun reset(pos: LayoutPosition, page: PageWithAutoCrop, forward: Boolean)
+    fun reset(pos: LayoutPosition, page: PageInfo, forward: Boolean = true)
 
     fun changeRotation(rotation: Int): Boolean
 
@@ -71,7 +69,11 @@ interface LayoutStrategy {
     val viewWidth: Int
 
     val viewHeight: Int
+}
 
+//TODO: move getPageInfo into background thread
+fun LayoutStrategy.reset(pos: LayoutPosition, page: PageWithAutoCrop, next: Boolean) {
+    reset(pos, page.getPageInfo(this as SimpleLayoutStrategy, this.margins.cropMode), next)
 }
 
 fun LayoutStrategy.calcPageLayout(layoutInfo: LayoutPosition, nextNotPrev: Boolean): Int {

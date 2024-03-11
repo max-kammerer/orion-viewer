@@ -15,6 +15,7 @@ import universe.constellation.orion.viewer.bitmap.BitmapManager
 import universe.constellation.orion.viewer.handler
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.calcPageLayout
+import universe.constellation.orion.viewer.layout.reset
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.selection.PageAndSelection
 import kotlin.math.abs

@@ -14,6 +14,7 @@ import universe.constellation.orion.viewer.document.Page
 import universe.constellation.orion.viewer.document.min
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
+import universe.constellation.orion.viewer.layout.reset
 import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.BookTest
 import universe.constellation.orion.viewer.test.framework.DEFAULT_COLOR_DELTA
@@ -62,7 +63,7 @@ class FlexibleBitmapTest(bookDescription: BookDescription) : BookTest(bookDescri
         val simpleLayoutStrategy = SimpleLayoutStrategy.create()
         simpleLayoutStrategy.setViewSceneDimension(screenRect.width(), screenRect.height())
         val pos = LayoutPosition()
-        simpleLayoutStrategy.reset(pos, page)
+        simpleLayoutStrategy.reset(pos, page, true)
         val rendering = Rect(0, 0, pos.x.pageDimension, pos.y.pageDimension)
 
         val (part, partData) = render(flexibleBitmapPart, rendering, pos, page)

@@ -91,12 +91,8 @@ class SimpleLayoutStrategy private constructor(
         return false
     }
 
-    override fun reset(pos: LayoutPosition, page: PageWithAutoCrop) {
-        reset(pos, page, true)
-    }
-
-    override fun reset(pos: LayoutPosition, page: PageWithAutoCrop, forward: Boolean) {
-        reset(pos, forward, page.getPageInfo(this, margins.cropMode), margins.cropMode, zoom, center)
+    override fun reset(pos: LayoutPosition, page: PageInfo, forward: Boolean) {
+        reset(pos, forward, page, margins.cropMode, zoom, center)
     }
 
     override fun reset(info: LayoutPosition, forward: Boolean, pageInfo: PageInfo, cropMode: Int, zoom: Int, doCentering: Boolean) {

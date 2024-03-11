@@ -19,6 +19,7 @@ import kotlinx.coroutines.withContext
 import universe.constellation.orion.viewer.bitmap.FlexibleBitmap
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.layout.LayoutPosition
+import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
 import universe.constellation.orion.viewer.view.OrionDrawScene
 import universe.constellation.orion.viewer.view.PageLayoutManager
 import universe.constellation.orion.viewer.view.precache
@@ -84,7 +85,7 @@ class PageView(
     val layoutInfo: LayoutPosition = LayoutPosition()
 
     @Volatile
-    lateinit var pageInfo: Deferred<PageView>
+    lateinit var pageInfo: Deferred<PageInfo>
 
     fun init() {
        reinit()
@@ -130,15 +131,16 @@ class PageView(
         log("Page $pageNum reinit $state $document" )
         pageJobs.cancelChildren()
         pageInfo = GlobalScope.async(controller.context + pageJobs + handler) {
-            controller.layoutStrategy.reset(layoutInfo, page)
+            val info = page.getPageInfo(controller.layoutStrategy as SimpleLayoutStrategy, controller.layoutStrategy.margins.cropMode)
             if (isActive) {
                 withContext(Dispatchers.Main) {
                     if (isActive) {
+                        controller.layoutStrategy.reset(layoutInfo, info)
                         initBitmap(layoutInfo)
                     }
                 }
             }
-            this@PageView
+            info
         }
     }
 
