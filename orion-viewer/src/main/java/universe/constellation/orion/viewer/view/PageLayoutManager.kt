@@ -6,10 +6,10 @@ import android.graphics.Rect
 import android.graphics.RectF
 import androidx.core.math.MathUtils
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.PageView
 import universe.constellation.orion.viewer.bitmap.BitmapManager
@@ -331,27 +331,36 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         }
     }
 
-    fun renderNextOrPrev(next: Boolean): Deferred<PageView?>? {
+    fun renderNextOrPrev(next: Boolean): Pair<PageView, Job>? {
         currentPageLayout()?.let {
             val copy = it.copy()
             val layoutStrategy = controller.layoutStrategy
+            val currentPageNum = copy.pageNumber
             when (val res = layoutStrategy.calcPageLayout(copy, next)) {
                 0 -> {
                     return controller.drawPage(copy)
                 }
 
                 1 ->
-                    return renderPageAt(copy.pageNumber + 1, 0, 0) { page ->
-                        val pos = page.layoutInfo.copy()
-                        layoutStrategy.reset(pos, page.page, next)
-                        val newPosition = page.layoutData.position
-                        val x = -pos.x.offset
-                        val y = -pos.y.offset
-                        doScrollOnly(newPosition.x, newPosition.y, x - newPosition.x, y - newPosition.y)
+                    if (currentPageNum + 1 < controller.document.pageCount) {
+                        return renderPageAt(currentPageNum + 1, 0, 0) { page ->
+                            val pos = page.layoutInfo.copy()
+                            layoutStrategy.reset(pos, page.page, next)
+                            val newPosition = page.layoutData.position
+                            val x = -pos.x.offset
+                            val y = -pos.y.offset
+                            doScrollOnly(
+                                newPosition.x,
+                                newPosition.y,
+                                x - newPosition.x,
+                                y - newPosition.y
+                            )
+                        }
                     }
+
                 -1 ->
-                    if (copy.pageNumber > 0) {
-                        return renderPageAt(copy.pageNumber - 1, 0, 0) { page ->
+                    if (currentPageNum > 0) {
+                        return renderPageAt(currentPageNum - 1, 0, 0) { page ->
                             val pos = page.layoutInfo.copy()
                             layoutStrategy.reset(pos, page.page, next)
                             val oldPosition = page.layoutData.position
@@ -370,7 +379,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
     fun renderPageAt(pageNum: Int, x: Int, y: Int, doScroll: (PageView) -> Unit = {page ->
         val newPosition = page.layoutData.position
         doScrollOnly(newPosition.x, newPosition.y, x - newPosition.x, y - newPosition.y)
-    }): Deferred<PageView?> {
+    }): Pair<PageView, Job> {
         println("RenderPageAt $pageNum $x $y")
         isSinglePageMode = true
         val index = activePages.binarySearch { it.pageNum.compareTo(pageNum) }
@@ -394,16 +403,15 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
             newPage
         }
 
-        return GlobalScope.async (Dispatchers.Main + handler) {
+        return page to GlobalScope.launch(Dispatchers.Main + page.pageJobs +  handler) {
             page.pageInfo.await()
             //if (page.state != PageState.DESTROYED) {
                 //if (isVisible(page)) {
                     doScroll(page)
                     page.updateState()
-                    return@async page.renderVisible()?.await()
+                    page.renderVisible()
                 //}
             //}
-            null
         }
     }
 

@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Point
 import android.graphics.Rect
-import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Ignore
@@ -71,15 +71,15 @@ class RenderingAndNavigationTest(private val book: BookDescription) : Instrument
         val nextPageList = arrayListOf<IntArray>()
         val nextPageRects = arrayListOf<Rect>()
         repeat(SCREENS) {
-            lateinit var page: Deferred<PageView?>
-            activityScenarioRule.scenario.onActivity { activity ->
-                page = controller.drawNext() ?: error("null on ${controller.pageLayoutManager.currentPageLayout()}")
+            lateinit var pageView: Pair<PageView, Job>
+            activityScenarioRule.scenario.onActivity {
+                pageView = controller.drawNext() ?: error("null page on ${controller.pageLayoutManager.currentPageLayout()}")
             }
             runBlocking {
-                val pageView = page.await()!!
+                pageView.second.join()
                 nextPageRects.add(
-                    pageView.layoutData.pagePartOnScreen(
-                        pageView.pageLayoutManager.sceneRect,
+                    pageView.first.layoutData.pagePartOnScreen(
+                        pageView.first.pageLayoutManager.sceneRect,
                         Rect()
                     )!!
                 )
@@ -90,17 +90,17 @@ class RenderingAndNavigationTest(private val book: BookDescription) : Instrument
         val prevPageList = arrayListOf<IntArray>()
         val prevPageRects = arrayListOf<Rect>()
         repeat(SCREENS) {
-            lateinit var page: Deferred<PageView?>
+            lateinit var pageView: Pair<PageView, Job>
             activityScenarioRule.scenario.onActivity {
-                page = controller.drawPrev()!!
+                pageView = controller.drawPrev() ?: error("null page on ${controller.pageLayoutManager.currentPageLayout()}")
             }
             runBlocking {
-                val pageView = page.await()!!
+                pageView.second.join()
                 prevPageRects.add(
-                    pageView.layoutData.pagePartOnScreen(
-                        pageView.pageLayoutManager.sceneRect,
+                    pageView.first.layoutData.pagePartOnScreen(
+                        pageView.first.pageLayoutManager.sceneRect,
                         Rect()
-                    )!!
+                    ) ?: error("invisible")
                 )
                 flushAndProcessBitmap("prev", prevPageList)
             }

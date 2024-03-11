@@ -93,7 +93,7 @@ class Controller(
     }
 
     @JvmOverloads
-    fun drawPage(pageNum: Int, pageXOffset: Int = 0, pageYOffset: Int = 0): Deferred<PageView?> {
+    fun drawPage(pageNum: Int, pageXOffset: Int = 0, pageYOffset: Int = 0): Pair<PageView, Job> {
         log("Controller drawPage $document $pageNum: $pageXOffset $pageYOffset")
         return pageLayoutManager.renderPageAt(pageNum, -pageXOffset, -pageYOffset)
     }
@@ -116,11 +116,11 @@ class Controller(
         }
     }
 
-    fun drawNext(): Deferred<PageView?>? {
+    fun drawNext(): Pair<PageView, Job>? {
         return pageLayoutManager.renderNextOrPrev(true)
     }
 
-    fun drawPrev(): Deferred<PageView?>? {
+    fun drawPrev(): Pair<PageView, Job>? {
         return pageLayoutManager.renderNextOrPrev(false)
     }
 
@@ -314,7 +314,7 @@ class Controller(
         ).apply { init() }
     }
 
-    fun drawPage(lp: LayoutPosition): Deferred<PageView?> {
+    fun drawPage(lp: LayoutPosition): Pair<PageView, Job> {
         return drawPage(lp.pageNumber, lp.x.offset, lp.y.offset)
     }
 

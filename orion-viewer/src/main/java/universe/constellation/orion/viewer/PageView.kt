@@ -68,7 +68,7 @@ class PageView(
     @Volatile
     var isVisibleState = false
 
-    private var pageJobs = SupervisorJob(rootJob)
+    internal var pageJobs = SupervisorJob(rootJob)
 
     @Volatile
     var bitmap: FlexibleBitmap? = null
@@ -177,32 +177,31 @@ class PageView(
         return layoutData.visibleOnScreenPart(pageLayoutManager.sceneRect)
     }
 
-    internal suspend fun renderVisible(): Deferred<PageView?>? {
+    internal suspend fun renderVisible() {
         if (!isOnScreen) {
             log("Non visible $pageNum");
-            return null
+            return
         }
 
-        return coroutineScope {
-            async (Dispatchers.Main + handler) {
+        coroutineScope {
+            launch (Dispatchers.Main + pageJobs + handler) {
                 layoutData.visibleOnScreenPart(pageLayoutManager.sceneRect)?.let {
-                    render(it, true)?.await()
+                    render(it, true)
                 }
-            }
+            }/*.join()*/
         }
     }
 
-    internal suspend fun renderInvisible(rect: Rect): Deferred<PageView?>? {
+    internal suspend fun renderInvisible(rect: Rect) {
         //TODO yield
         if (Rect.intersects(rect, wholePageRect)) {
-            return render(rect, false)
+            render(rect, false)
         }
-        return null
     }
 
-    internal suspend fun render(rect: Rect, fromUI: Boolean): Deferred<PageView>? {
+    private suspend fun render(rect: Rect, fromUI: Boolean) {
         val layoutStrategy = controller.layoutStrategy
-        if (!(layoutStrategy.viewWidth > 0 &&  layoutStrategy.viewHeight > 0)) return null
+        if (!(layoutStrategy.viewWidth > 0 &&  layoutStrategy.viewHeight > 0)) return
 
         if (state != PageState.SIZE_AND_BITMAP_CREATED) {
             pageInfo.await()
@@ -211,8 +210,8 @@ class PageView(
         val bound = Rect(rect)
         val bitmap = bitmap!!
 
-        return coroutineScope {
-            async(controller.context + pageJobs + handler) {
+        coroutineScope {
+            launch(controller.context + pageJobs + handler) {
                 timing("Rendering $pageNum page in rendering engine: $bound") {
                     bitmap.render(bound, layoutInfo, page)
                 }
@@ -229,10 +228,8 @@ class PageView(
                 } else {
                     log("PageView.render: canceled")
                 }
-                this@PageView
-            }
+            }/*.join()*/
         }
-
     }
 
     private fun draw(canvas: Canvas, bitmap: FlexibleBitmap, defaultPaint: Paint, scene: OrionDrawScene) {
