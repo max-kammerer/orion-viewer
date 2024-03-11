@@ -232,11 +232,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 if (controller != null && lastPageInfo != null) {
                     lastPageInfo?.apply {
                         if (openingFileName == filePath) {
+                            println("Fast processing")
                             controller!!.drawPage(pageNumber, newOffsetX, newOffsetY)
                             return
                         }
                     }
-
                 }
 
                 if (!askReadPermissions(File(filePath), intent)) {
@@ -336,8 +336,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
                 subscriptionManager.sendDocOpenedNotification(controller1)
 
-                controller1.drawPage(lastPageInfo1.pageNumber, lastPageInfo1.newOffsetX, lastPageInfo1.newOffsetY)
-
                 globalOptions.addRecentEntry(GlobalOptions.RecentEntry(File(filePath).absolutePath))
 
                 lastPageInfo1.totalPages = newDocument.pageCount
@@ -345,10 +343,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
                 askPassword(controller1)
                 orionContext.onNewBook(filePath)
-                //viewAsRecyclerView.adapter = PageAdapter(viewAsRecyclerView, this@OrionViewerActivity, controller!!, fullScene.colorStuff, fullScene.statusBarHelper)
-                //(view as OrionDrawScene).pageView = controller?.createCachePageView(0)
                 invalidateOptionsMenu()
-                showTapDialogIfNeeded()
+                doOnLayout(lastPageInfo1)
             } catch (e: Exception) {
                 log(e)
                 throw e
@@ -1054,11 +1050,12 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
     }
 
-    private fun showTapDialogIfNeeded() {
+    private fun doOnLayout(lastPageInfo1: LastPageInfo) {
         (view as View).doOnLayout {
             if (globalOptions.isShowTapHelp) {
                 TapHelpDialog(this).showDialog()
             }
+            controller?.drawPage(lastPageInfo1.pageNumber, lastPageInfo1.newOffsetX, lastPageInfo1.newOffsetY)
             controller?.pageLayoutManager?.uploadNewPages()
         }
     }
