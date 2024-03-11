@@ -300,7 +300,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
             pageSelection.minusOffset(it.layoutData.position)
             val layoutInfo = it.layoutInfo
             val zoom  = layoutInfo.docZoom
-            pageSelection.offset(layoutInfo.x.marginLess, layoutInfo.y.marginLess)
+            pageSelection.offset(layoutInfo.x.marginLeft, layoutInfo.y.marginLeft)
             pageSelection.set((pageSelection.left/zoom).toInt(),
                 (pageSelection.top/zoom).toInt(),
                 (pageSelection.right/zoom).toInt(), (pageSelection.bottom/zoom).toInt()

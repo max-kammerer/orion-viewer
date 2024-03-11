@@ -28,7 +28,7 @@ fun getPrefKey(keyCode: Int, isLong: Boolean): String {
 }
 
 fun LayoutPosition.toAbsoluteRect(): RectF {
-    val left = x.offset + x.marginLess
-    val top = y.offset + y.marginLess
+    val left = x.offset + x.marginLeft
+    val top = y.offset + y.marginLeft
     return RectF(left.toFloat(), top.toFloat(), (left + x.screenDimension).toFloat(), (top + y.screenDimension).toFloat())///
 }

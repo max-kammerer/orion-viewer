@@ -25,12 +25,12 @@ data class OneDimension(
         var offset: Int = 0,
         var pageDimension: Int = 0,
         var screenDimension: Int = 0,
-        var marginLess: Int = 0
+        var marginLeft: Int = 0
 ) {
 
     var overlap: Int = 0
 
-    var marginMore: Int = 0
+    var marginRight: Int = 0
 
     val occupiedAreaStart: Int
         get() = max(0, -offset)

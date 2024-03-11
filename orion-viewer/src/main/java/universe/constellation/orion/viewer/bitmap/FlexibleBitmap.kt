@@ -207,8 +207,8 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
             render(
                 renderingArea,
                 curPos.docZoom,
-                curPos.x.marginLess,
-                curPos.y.marginLess,
+                curPos.x.marginLeft,
+                curPos.y.marginLeft,
                 page,
             )
         }

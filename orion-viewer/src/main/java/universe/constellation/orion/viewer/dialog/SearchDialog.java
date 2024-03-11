@@ -289,8 +289,8 @@ public class SearchDialog extends DialogFragment {
                 paint.setStyle(Paint.Style.FILL);
                 for (RectF rect : rects) {
                     paint.setAlpha(index++ == batch.active ? activeAlpha : generalAlpha);
-                    int left = batch.lp.getX().getMarginLess() + batch.lp.getX().getOffset();
-                    int top = batch.lp.getY().getMarginLess() + batch.lp.getY().getOffset();
+                    int left = batch.lp.getX().getMarginLeft() + batch.lp.getX().getOffset();
+                    int top = batch.lp.getY().getMarginLeft() + batch.lp.getY().getOffset();
                     canvas.drawRect(rect.left - left, rect.top - top, rect.right - left, rect.bottom - top, paint);
                 }
                 paint.setAlpha(prevAlpha);

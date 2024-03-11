@@ -23,7 +23,6 @@ import universe.constellation.orion.viewer.LastPageInfo
 import universe.constellation.orion.viewer.PageInfo
 import universe.constellation.orion.viewer.PageOptions
 import universe.constellation.orion.viewer.PageWalker
-import universe.constellation.orion.viewer.document.PageWithAutoCrop
 import universe.constellation.orion.viewer.geometry.Point
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.walkOrder
@@ -130,8 +129,8 @@ class SimpleLayoutStrategy private constructor(
         //set zoom and zoom margins and dimensions
         info.setDocZoom(zoom)
 
-        info.x.marginLess = (info.docZoom * info.x.marginLess).toInt()
-        info.y.marginLess = (info.docZoom * info.y.marginLess).toInt()
+        info.x.marginLeft = (info.docZoom * info.x.marginLeft).toInt()
+        info.y.marginLeft = (info.docZoom * info.y.marginLeft).toInt()
 
         //zoomed with and height
         info.x.pageDimension = (info.docZoom * info.x.pageDimension).toInt()
@@ -153,30 +152,30 @@ class SimpleLayoutStrategy private constructor(
         val yLess = (margins.top.toDouble() * pageHeight.toDouble() * 0.01).toInt()
         val yMore = (pageHeight.toDouble() * margins.bottom.toDouble() * 0.01).toInt()
 
-        info.x.marginLess += xLess
-        info.x.marginMore += xMore
-        info.y.marginLess += yLess
-        info.y.marginMore += yMore
+        info.x.marginLeft += xLess
+        info.x.marginRight += xMore
+        info.y.marginLeft += yLess
+        info.y.marginRight += yMore
 
         info.x.pageDimension -= xLess + xMore
         info.y.pageDimension -= yLess + yMore
     }
 
     private fun appendAutoCropMargins(info: LayoutPosition, autoCrop: AutoCropMargins) {
-        info.x.marginLess += autoCrop.left
-        info.x.marginMore += autoCrop.right
-        info.y.marginLess += autoCrop.top
-        info.y.marginMore += autoCrop.bottom
+        info.x.marginLeft += autoCrop.left
+        info.x.marginRight += autoCrop.right
+        info.y.marginLeft += autoCrop.top
+        info.y.marginRight += autoCrop.bottom
 
         info.x.pageDimension -= autoCrop.left + autoCrop.right
         info.y.pageDimension -= autoCrop.top + autoCrop.bottom
     }
 
     private fun resetMargins(info: LayoutPosition, pageWidth: Int, pageHeight: Int) {
-        info.x.marginLess = 0
-        info.y.marginLess = 0
-        info.x.marginMore = 0
-        info.y.marginMore = 0
+        info.x.marginLeft = 0
+        info.y.marginLeft = 0
+        info.x.marginRight = 0
+        info.y.marginRight = 0
         info.x.pageDimension = pageWidth
         info.y.pageDimension = pageHeight
     }
@@ -245,7 +244,7 @@ class SimpleLayoutStrategy private constructor(
     }
 
     override fun convertToPoint(pos: LayoutPosition): Point {
-        return Point(pos.x.marginLess + pos.x.offset, pos.y.marginLess + pos.y.offset)
+        return Point(pos.x.marginLeft + pos.x.offset, pos.y.marginLeft + pos.y.offset)
     }
 
     override fun setViewSceneDimension(width: Int, height: Int) {
