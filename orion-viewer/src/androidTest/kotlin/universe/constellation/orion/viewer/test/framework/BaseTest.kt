@@ -11,6 +11,7 @@ import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
+import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -18,6 +19,7 @@ import org.junit.rules.TestName
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.djvu.DjvuDocument
 import universe.constellation.orion.viewer.document.Document
+import universe.constellation.orion.viewer.log
 import java.io.File
 
 internal const val MANUAL_DEBUG = false
@@ -27,6 +29,16 @@ abstract class BaseTest {
     @JvmField
     @Rule
     val name = TestName()
+
+    @Before
+    fun testStart() {
+        log("Starting test: ${name.methodName}" )
+    }
+
+    @After
+    fun testEnd() {
+        log("Finishing test: ${name.methodName}" )
+    }
 
     @Before
     fun grantPermissions() {

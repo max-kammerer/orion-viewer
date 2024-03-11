@@ -54,14 +54,14 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
 
     override fun onDimensionChanged(newWidth: Int, newHeight: Int) {
         if (sceneWidth != newWidth && newHeight != sceneHeight) {
-            log("New scene size: $sceneRect")
+            log("New scene size: $newWidth $newHeight, old=$sceneRect")
             sceneWidth = newWidth
             sceneHeight = newHeight
             updateRenderingParameters()
         }
     }
 
-    fun updateRenderingParameters() {
+    private fun updateRenderingParameters() {
         //zoom
         isSinglePageMode = false
         uploadNewPages()
