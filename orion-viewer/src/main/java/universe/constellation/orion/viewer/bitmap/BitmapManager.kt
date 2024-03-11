@@ -16,8 +16,8 @@ class BitmapManager(val pageLayoutManager: PageLayoutManager) {
             return this /2 + this % 2
         }
 
-    fun createDefaultBitmap(width: Int, height: Int): FlexibleBitmap {
-        return FlexibleBitmap(width, height, viewInfo.width().upperHalf, viewInfo.height().upperHalf)
+    fun createDefaultBitmap(width: Int, height: Int, pageNum: Int): FlexibleBitmap {
+        return FlexibleBitmap(width, height, viewInfo.width().upperHalf, viewInfo.height().upperHalf, pageNum)
     }
 
     private val precacheScreeen = Rect()

@@ -76,7 +76,8 @@ data class PagePart(val absPartRect: Rect) {
     }
 
     fun draw(canvas: Canvas, pageVisiblePart: Rect, defaultPaint: Paint) {
-        if (bitmap != null && localPartRect.intersect(pageVisiblePart)) {
+        if (!isActive) return
+        if (bitmap != null && Rect.intersects(localPartRect, pageVisiblePart)) {
             canvas.drawBitmap(bitmap!!, localPartRect, absPartRect, defaultPaint)
         }
     }
@@ -96,29 +97,36 @@ data class PagePart(val absPartRect: Rect) {
             isActive = false
             opMarker++
             bitmap?.let {
-                bitmapCache.free(it)
+                bitmapCache.markFree(it)
             }
             bitmap = null
         }
     }
 }
 
-class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight: Int) {
+class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight: Int, val pageNum: Int = -1) {
 
-    constructor(initialArea: Rect, partWidth: Int, partHeight: Int): this(initialArea.width(), initialArea.height(), partWidth, partHeight)
+    constructor(initialArea: Rect, partWidth: Int, partHeight: Int) : this(
+        initialArea.width(),
+        initialArea.height(),
+        partWidth,
+        partHeight
+    )
 
     private var renderingArea = Rect(0, 0, width, height)
 
+    @Volatile
     var data = initData(renderingArea.width(), renderingArea.height())
         private set
 
     val width: Int
-        get() =  renderingArea.width()
+        get() = renderingArea.width()
 
     val height: Int
-        get() =  renderingArea.height()
+        get() = renderingArea.height()
 
     private fun initData(width: Int, height: Int): Array<Array<PagePart>> {
+        log("FB: initData $pageNum $width $height")
         val rowCount = height.countCells(partHeight)
         return Array(rowCount) { row ->
             val colCount = width.countCells(partWidth)
@@ -140,6 +148,7 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
     }
 
     fun resize(width: Int, height: Int, bitmapCache: BitmapCache): FlexibleBitmap {
+        log("FB: resize $pageNum $width $height")
         free(bitmapCache)
         data = initData(width, height)
         renderingArea.set(0, 0, width, height)
@@ -157,41 +166,24 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
 
     fun updateDrawAreaAndUpdateNonRenderingPart(activationRect: Rect, cache: BitmapCache) {
         //free out of view bitmaps
-        forAll {
-            val newState = Rect.intersects(this.absPartRect, activationRect)
+        forEach {
+            val newState = Rect.intersects(absPartRect, activationRect)
             if (isActive && !newState) {
                 deactivate(cache)
             }
         }
         //then enable visible ones
-        forAll {
-            val newState = Rect.intersects(this.absPartRect, activationRect)
+        forEach {
+            val newState = Rect.intersects(absPartRect, activationRect)
             if (!isActive && newState) {
                 activate(cache, partWidth, partHeight)
             }
         }
-        var count = 0
-        forAll {
-
-            if (isActive ) {
-                count++
-            }
-        }
-//        println("Cache active parts " + count)
-//        if (count == 20) {
-//            print("Cache part $activationRect ${activationRect.width()} ${activationRect.height()}")
-////            forAll {
-////                if (isActive) {
-////                    print("" + this.absPartRect + ", ")
-////                }
-////            }
-//            println("")
-//        }
     }
 
     @TestOnly
     fun renderFull(zoom: Double, page: Page) {
-        forEach(renderingArea) {
+        forEach {
             render(
                 renderingArea,
                 zoom,
@@ -203,7 +195,8 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
     }
 
     fun render(renderingArea: Rect, curPos: LayoutPosition, page: Page) {
-        forEach(renderingArea) {
+        log("FB rendering $renderingArea")
+        forEach {
             render(
                 renderingArea,
                 curPos.docZoom,
@@ -215,54 +208,28 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
     }
 
     fun forAllTest(body: PagePart.() -> Unit) {
-        forAll(body)
+        forEach(body)
     }
 
-    private inline fun forAll(body: PagePart.() -> Unit) {
-        if (partWidth == 0 || partHeight == 0) {
-            data.forEach {
-                it.forEach { part -> part.body() }
-            }
-        } else {
-            forEach(renderingArea, body)
-        }
-    }
-
-    private inline fun forEach(rect: Rect, body: PagePart.() -> Unit) {
-        val left = rect.left / partWidth
-        val top = rect.top / partHeight
-        val right = rect.rightInc / partWidth
-        val bottom = rect.bottomInc / partHeight
-        for (r in top..bottom) {
-            for (c in left..right) {
-                data[r][c].body()
-            }
+    private inline fun forEach(body: PagePart.() -> Unit) {
+        this.data.forEach {
+            it.forEach { part -> part.body() }
         }
     }
 
     fun draw(canvas: Canvas, srcRect: Rect, defaultPaint: Paint) {
-        forAll {
-            draw(canvas, srcRect, defaultPaint)
-        }
+        forEach { draw(canvas, srcRect, defaultPaint) }
     }
 
     fun free(cache: BitmapCache) {
-        forAll {
-            deactivate(cache)
-        }
+        forEach { deactivate(cache) }
     }
 
+    @TestOnly
     fun bitmaps(): List<Bitmap> {
         val res = mutableListOf<Bitmap>()
-        forAll {
-            bitmap?.let { res.add(it) }
-        }
+        forEach { bitmap?.let { res.add(it) } }
         return res
-    }
-
-    fun parts(): List<PagePart> {
-        val res = mutableListOf<Bitmap>()
-        return data.flatMap { it.map { it } }
     }
 }
 
@@ -270,9 +237,6 @@ fun Int.countCells(cellSize: Int): Int {
     if (this == 0) return 0
     return (this - 1) / cellSize + 1
 }
-
-private val Rect.rightInc get() = right - 1
-private val Rect.bottomInc get() = bottom - 1
 
 private fun renderInner(bound: Rect, zoom: Double, offsetX: Int, offsetY: Int, page: Page, bitmap: Bitmap): Bitmap {
     log("Rendering $page: $bound $offsetX $offsetY")

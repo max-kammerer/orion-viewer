@@ -30,12 +30,6 @@ enum class PageState(val interactWithUUI: Boolean) {
     DESTROYED(false)
 }
 
-val handler = CoroutineExceptionHandler { _, ex ->
-    log("Bitmap rendering cancelled")
-    ex.printStackTrace()
-    //TODO processing
-}
-
 class PageView(
     val pageNum: Int,
     val document: Document,
@@ -43,6 +37,13 @@ class PageView(
     val rootJob: Job,
     val pageLayoutManager: PageLayoutManager
 ) {
+
+    private val handler = CoroutineExceptionHandler { _, ex ->
+        log("Processing error for page $pageNum")
+        ex.printStackTrace()
+        //TODO processing
+    }
+
 
     val layoutData: LayoutData = LayoutData().apply {
         wholePageRect.set(pageLayoutManager.defaultSize())
@@ -88,7 +89,7 @@ class PageView(
     lateinit var pageInfo: Deferred<PageInfo>
 
     fun init() {
-       reinit()
+       reinit("init")
     }
 
     fun toInvisible() {
@@ -126,9 +127,9 @@ class PageView(
         page.destroy()
     }
 
-    fun reinit() {
+    fun reinit(marker: String = "reinit") {
         if (state == PageState.SIZE_AND_BITMAP_CREATED) return
-        log("Page $pageNum reinit $state $document" )
+        log("Page $pageNum $marker $state $document" )
         pageJobs.cancelChildren()
         pageInfo = GlobalScope.async(controller.context + pageJobs + handler) {
             val info = page.getPageInfo(controller.layoutStrategy as SimpleLayoutStrategy, controller.layoutStrategy.margins.cropMode)
@@ -149,8 +150,8 @@ class PageView(
         val oldSize = Rect(wholePageRect)
         wholePageRect.set(0, 0, layoutInfo.x.pageDimension, layoutInfo.y.pageDimension)
         bitmap = bitmap?.resize(wholePageRect.width(), wholePageRect.height(), controller.bitmapCache)
-            ?: pageLayoutManager.bitmapManager.createDefaultBitmap(wholePageRect.width(), wholePageRect.height())
-        log("PageView.initBitmap $pageNum ${controller.document}")
+            ?: pageLayoutManager.bitmapManager.createDefaultBitmap(wholePageRect.width(), wholePageRect.height(), pageNum)
+        log("PageView.initBitmap $pageNum ${controller.document} $wholePageRect")
         state = PageState.SIZE_AND_BITMAP_CREATED
         pageLayoutManager.onPageSizeCalculated(this, oldSize)
     }
@@ -167,7 +168,7 @@ class PageView(
     }
 
     internal fun renderVisibleAsync() {
-        GlobalScope.launch (Dispatchers.Main + handler) {
+        GlobalScope.launch (Dispatchers.Main + pageJobs + handler) {
             renderVisible()
         }
     }
@@ -177,14 +178,18 @@ class PageView(
     }
 
     internal suspend fun renderVisible(): Deferred<PageView?>? {
-        return layoutData.visibleOnScreenPart(pageLayoutManager.sceneRect)?.let {
-            return coroutineScope {
-                async (Dispatchers.Main + handler) {
+        if (!isOnScreen) {
+            log("Non visible $pageNum");
+            return null
+        }
+
+        return coroutineScope {
+            async (Dispatchers.Main + handler) {
+                layoutData.visibleOnScreenPart(pageLayoutManager.sceneRect)?.let {
                     render(it, true)?.await()
                 }
             }
-        } ?: run { log("Non visible $pageNum"); null }
-
+        }
     }
 
     internal suspend fun renderInvisible(rect: Rect): Deferred<PageView?>? {

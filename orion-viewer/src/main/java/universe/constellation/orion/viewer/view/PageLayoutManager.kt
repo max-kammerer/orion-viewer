@@ -5,6 +5,7 @@ import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.RectF
 import androidx.core.math.MathUtils
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -12,7 +13,6 @@ import kotlinx.coroutines.async
 import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.PageView
 import universe.constellation.orion.viewer.bitmap.BitmapManager
-import universe.constellation.orion.viewer.handler
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.calcPageLayout
 import universe.constellation.orion.viewer.layout.reset
@@ -24,6 +24,12 @@ import kotlin.math.max
 private const val VISIBLE_PAGE_LIMIT = 5
 
 class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): ViewDimensionAware {
+
+    private val handler = CoroutineExceptionHandler { _, ex ->
+        log("Processing error in PageLayoutManager")
+        ex.printStackTrace()
+        //TODO processing
+    }
 
     init {
         scene.setDimensionAware(this)
@@ -435,7 +441,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
     }
 
     fun onPageSizeCalculated(updatedView: PageView, oldArea: Rect) {
-        log("onSizeCalculated ${updatedView.pageNum}: ${updatedView.layoutData} $oldArea")
+        log("onSizeCalculated ${updatedView.pageNum}: ${updatedView.layoutData} old=$oldArea")
         val delta = updatedView.wholePageRect.height() - oldArea.height()
 
         var found = false

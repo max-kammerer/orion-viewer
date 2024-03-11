@@ -54,7 +54,7 @@ open class BitmapCache(val size: Int = DEFAULT_BITMAP_CACHE_SIZE) {
         cachedBitmaps.add(info)
     }
 
-    fun free(info: Bitmap) {
+    fun markFree(info: Bitmap) {
         for (next in cachedBitmaps) {
             if (next.bitmap === info) {
                 next.owned = false
@@ -63,7 +63,7 @@ open class BitmapCache(val size: Int = DEFAULT_BITMAP_CACHE_SIZE) {
         }
     }
 
-    fun invalidateCache() {
+    private fun invalidateCache() {
         for (next in cachedBitmaps) {
             next.owned = false
         }
