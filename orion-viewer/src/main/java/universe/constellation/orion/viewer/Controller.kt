@@ -26,11 +26,11 @@ import android.graphics.Point
 import android.graphics.PointF
 import android.os.Build
 import android.util.DisplayMetrics
-import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExecutorCoroutineDispatcher
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
 import universe.constellation.orion.viewer.bitmap.DeviceInfo
@@ -42,18 +42,14 @@ import universe.constellation.orion.viewer.layout.LayoutStrategy
 import universe.constellation.orion.viewer.util.ColorUtil
 import universe.constellation.orion.viewer.view.PageLayoutManager
 import universe.constellation.orion.viewer.view.ViewDimensionAware
-import java.util.concurrent.Executors
-
-private const val CACHE_SIZE = 10
 
 class Controller(
     val activity: OrionViewerActivity,
     val document: Document,
     val layoutStrategy: LayoutStrategy,
     val rootJob: Job = Job(),
+    val context: CoroutineDispatcher = Dispatchers.Default
 ) : ViewDimensionAware {
-
-    val context = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
     internal var bitmapCache: BitmapCache = BitmapCache()
 
@@ -161,6 +157,9 @@ class Controller(
         GlobalScope.launch(Dispatchers.Default) {
             log("Destroying controller for $document...")
             rootJob.cancelAndJoin()
+            if (context != Dispatchers.Default && context is ExecutorCoroutineDispatcher) {
+                context.close()
+            }
             document.destroy()
         }
     }

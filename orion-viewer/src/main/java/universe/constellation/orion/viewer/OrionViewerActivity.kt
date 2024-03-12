@@ -57,6 +57,7 @@ import java.io.File
 import java.io.IOException
 import java.io.PrintWriter
 import java.io.StringWriter
+import java.util.concurrent.Executors
 
 class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVITY) {
 
@@ -301,8 +302,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         openJob = GlobalScope.launch(Dispatchers.Main) {
             log("Trying to open file: $filePath")
             val rootJob = Job()
+            val executor = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
             val newDocument = try {
-                withContext(Dispatchers.Default + rootJob) {
+                withContext(executor + rootJob) {
                     FileUtil.openFile(filePath)
                 }
             } catch (e: Exception) {
@@ -311,6 +313,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 stubDocument.title = e.message
                 updateViewOnNewBook(stubDocument.title)
                 showErrorReportDialog(filePath, e, intent)
+                executor.close()
                 return@launch
             }
 
@@ -323,7 +326,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
                 val layoutStrategy = SimpleLayoutStrategy.create()
 
-                val controller1 = Controller(this@OrionViewerActivity, newDocument, layoutStrategy, rootJob)
+                val controller1 = Controller(this@OrionViewerActivity, newDocument, layoutStrategy, rootJob, context = executor)
                 controller = controller1
                 bind(view, controller1)
                 stubController.destroy()
@@ -375,7 +378,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private fun initStubController(title: String, bodyText: String): Controller {
         val stubDocument = StubDocument(title, bodyText)
-        val stubController = Controller(this, stubDocument, SimpleLayoutStrategy.create())
+        val stubController = Controller(this, stubDocument, SimpleLayoutStrategy.create(), context = Dispatchers.Default)
         val drawView = fullScene.drawView
         val stubInfo = createDefaultLastPageInfo(initalizer(globalOptions))
         stubController.changeOrinatation(stubInfo.screenOrientation)
