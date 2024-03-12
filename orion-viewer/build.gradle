@@ -99,6 +99,14 @@ android {
                 signingConfig signingConfigs.release
             }
         }
+        debug {
+            def api = System.getenv("EMULATOR_API")
+            if (api == null || api.toInteger() >= 23) {
+                adbOptions {
+                    installOptions '-g', '-r'
+                }
+            }
+        }
     }
 
     splits {
