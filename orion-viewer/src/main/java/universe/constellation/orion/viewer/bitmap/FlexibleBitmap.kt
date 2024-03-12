@@ -5,11 +5,13 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Region
+import kotlinx.coroutines.isActive
 import org.jetbrains.annotations.TestOnly
 import universe.constellation.orion.viewer.BitmapCache
 import universe.constellation.orion.viewer.document.Page
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.log
+import kotlin.coroutines.coroutineContext
 import kotlin.math.min
 
 data class PagePart(val absPartRect: Rect) {
@@ -33,7 +35,7 @@ data class PagePart(val absPartRect: Rect) {
     @Volatile
     private var opMarker = 1
 
-    fun render(
+    suspend fun render(
         requestedArea: Rect,
         zoom: Double,
         cropLeft: Int,
@@ -44,7 +46,7 @@ data class PagePart(val absPartRect: Rect) {
 
         val bitmap: Bitmap
         val marker = synchronized(this) {
-            if (nonRenderedPart.isEmpty) return
+            if (nonRenderedPart.isEmpty || !coroutineContext.isActive) return
             //TODO add busy flag
             bitmap = this.bitmap ?: return
             opMarker
@@ -182,7 +184,7 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
     }
 
     @TestOnly
-    fun renderFull(zoom: Double, page: Page) {
+    suspend fun renderFull(zoom: Double, page: Page) {
         forEach {
             render(
                 renderingArea,
@@ -194,7 +196,7 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
         }
     }
 
-    fun render(renderingArea: Rect, curPos: LayoutPosition, page: Page) {
+    suspend fun render(renderingArea: Rect, curPos: LayoutPosition, page: Page) {
         log("FB rendering $renderingArea")
         forEach {
             render(

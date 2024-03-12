@@ -3,7 +3,7 @@ package universe.constellation.orion.viewer.test.rendering
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Rect
-import android.graphics.RectF
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert
 import org.junit.Test
@@ -81,7 +81,9 @@ class FlexibleBitmapTest(bookDescription: BookDescription) : BookTest(bookDescri
 
     private fun render(adaptiveBitmap: FlexibleBitmap, rendering: Rect, pos: LayoutPosition, page: Page): Pair<Bitmap, IntArray> {
         adaptiveBitmap.resize(pos.x.pageDimension, pos.y.pageDimension, BITMAP_CACHE)
-        adaptiveBitmap.render(rendering, pos, page)
+        runBlocking {
+            adaptiveBitmap.render(rendering, pos, page)
+        }
 
         val bitmap = Bitmap.createBitmap(rendering.width(), rendering.height(), android.graphics.Bitmap.Config.ARGB_8888)
         val canvasPart = Canvas(bitmap)
