@@ -121,7 +121,7 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
         //destroyed, can be called in non-ui thread
         if (docPointer == 0L || pagePointer == 0L) return
 
-        timing("Page $pageNum ($pagePointer) rendering") {
+        timing("Page rendering: $pageNum ($pagePointer) $zoom, ${leftOffset + left}, ${topOffset + top}, ${leftOffset + right}, ${topOffset + bottom}") {
             drawPage(docPointer, pagePointer, bitmap, zoom.toFloat(), bitmap.width, bitmap.height, leftOffset + left, topOffset + top, right - left, bottom - top, left, top)
         }
     }
