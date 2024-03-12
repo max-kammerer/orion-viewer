@@ -19,10 +19,13 @@
 
 package universe.constellation.orion.viewer.prefs;
 
+import static universe.constellation.orion.viewer.LoggerKt.log;
+
 import android.content.SharedPreferences;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
@@ -34,13 +37,6 @@ import universe.constellation.orion.viewer.PageWalker;
 import universe.constellation.orion.viewer.device.EInkDeviceWithoutFastRefresh;
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity;
 
-import static universe.constellation.orion.viewer.LoggerKt.log;
-
-/**
- * User: mike
- * Date: 26.11.11
- * Time: 16:18
- */
 public class GlobalOptions implements Serializable, PageOptions {
 
     public static final int MAX_RECENT_ENTRIES = 20;
@@ -127,10 +123,6 @@ public class GlobalOptions implements Serializable, PageOptions {
 
     protected final SharedPreferences prefs;
 
-    private final SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener;
-
-    private final Map<String, Object> prefValues = new HashMap<>();
-
     GlobalOptions(final OrionApplication context, SharedPreferences preferences, boolean loadRecents) {
         prefs = preferences;
 
@@ -146,9 +138,9 @@ public class GlobalOptions implements Serializable, PageOptions {
             }
         }
 
-        onSharedPreferenceChangeListener = (preferences1, name) -> {
+        //TODO ?
+        SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener = (preferences1, name) -> {
             log("onSharedPreferenceChanged " + name);
-            Object oldValue = prefValues.remove(name);
 
             OrionViewerActivity activity = context.getViewActivity();
             if (activity != null) {
@@ -203,14 +195,10 @@ public class GlobalOptions implements Serializable, PageOptions {
         }
     }
 
-    public void saveDirectory() {
-        //TODO
-    }
-
     public void saveProperty(String property, String value) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(property, value);
-        editor.commit();
+        editor.apply();
     }
 
     public void saveRecents() {
@@ -220,7 +208,7 @@ public class GlobalOptions implements Serializable, PageOptions {
             RecentEntry next =  iterator.next();
             editor.putString(RECENT_PREFIX  + i, next.getPath());
         }
-        editor.commit();
+        editor.apply();
     }
 
     public static class RecentEntry implements Serializable{
@@ -240,6 +228,7 @@ public class GlobalOptions implements Serializable, PageOptions {
             return path.substring(path.lastIndexOf("/") + 1);
         }
 
+        @NonNull
         @Override
         public String toString() {
             return getLastPathElement();
@@ -313,7 +302,6 @@ public class GlobalOptions implements Serializable, PageOptions {
         String key = OrionTapActivity.getKey(i, j, isLong);
         int code = getInt(key, -1);
         if (code == -1) {
-            prefValues.remove(key);
             code = getInt(key, OrionTapActivity.getDefaultAction(i, j, isLong));
         }
         return code;
@@ -332,48 +320,33 @@ public class GlobalOptions implements Serializable, PageOptions {
     }
 
     public int getIntFromStringProperty(String key, int defaultValue) {
-        if (!prefValues.containsKey(key)) {
-            String value = prefs.getString(key, null);
-            Integer newIntValue;
-            if (value == null || "".equals(value)) {
-                newIntValue = defaultValue;
-            } else {
-                newIntValue = Integer.valueOf(value);
-            }
-            prefValues.put(key, newIntValue);
+        String value = prefs.getString(key, null);
+        int newIntValue;
+        if (value == null || "".equals(value)) {
+            newIntValue = defaultValue;
+        } else {
+            newIntValue = Integer.parseInt(value);
         }
-        return (Integer) prefValues.get(key);
+        return newIntValue;
     }
 
     public int getInt(String key, int defaultValue) {
-        if (!prefValues.containsKey(key)) {
-            int value = prefs.getInt(key, defaultValue);
-            prefValues.put(key, value);
-        }
-        return (Integer) prefValues.get(key);
+        return prefs.getInt(key, defaultValue);
     }
 
     public String getStringProperty(String key, String defaultValue) {
-        if (!prefValues.containsKey(key)) {
-            String value = prefs.getString(key, defaultValue);
-            prefValues.put(key, value);
-        }
-        return (String) prefValues.get(key);
+        return prefs.getString(key, defaultValue);
     }
 
     public boolean getBooleanProperty(String key, boolean defaultValue) {
-        if (!prefValues.containsKey(key)) {
-            boolean value = prefs.getBoolean(key, defaultValue);
-            prefValues.put(key, value);
-        }
-        return (Boolean) prefValues.get(key);
+        return prefs.getBoolean(key, defaultValue);
     }
 
 
     public void saveBooleanProperty(String key, boolean newValue) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(key, newValue);
-        editor.commit();
+        editor.apply();
     }
 
 
@@ -453,16 +426,15 @@ public class GlobalOptions implements Serializable, PageOptions {
 //    }
 
     public void removePreference(String name) {
-        prefs.edit().remove(name).commit();
+        prefs.edit().remove(name).apply();
     }
 
     public void putIntPreference(String name, int value) {
-        prefs.edit().putInt(name, value).commit();
+        prefs.edit().putInt(name, value).apply();
     }
 
     public void removeAll() {
-        prefs.edit().clear().commit();
-        prefValues.clear();
+        prefs.edit().clear().apply();
     }
 
     public Map<String, ?> getAllProperties() {
