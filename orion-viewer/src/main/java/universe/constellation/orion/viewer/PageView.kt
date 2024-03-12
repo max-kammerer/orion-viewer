@@ -39,11 +39,10 @@ class PageView(
 ) {
 
     private val handler = CoroutineExceptionHandler { _, ex ->
-        log("Processing error for page $pageNum")
+        logError("Processing error for page $pageNum")
         ex.printStackTrace()
         //TODO processing
     }
-
 
     val layoutData: LayoutData = LayoutData().apply {
         wholePageRect.set(pageLayoutManager.defaultSize())

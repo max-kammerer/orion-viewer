@@ -33,6 +33,8 @@ var logger = object : Logger {}
 
 fun log(m: String) = logger.log(m)
 
+fun logError(m: String) = logger.log(m)
+
 fun log(e: Exception) = logger.log(e.message, e)
 
 fun log(m: String, e: Exception) {

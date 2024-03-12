@@ -32,3 +32,14 @@ fun LayoutPosition.toAbsoluteRect(): RectF {
     val top = y.offset + y.marginLeft
     return RectF(left.toFloat(), top.toFloat(), (left + x.screenDimension).toFloat(), (top + y.screenDimension).toFloat())///
 }
+
+inline fun errorInDebug(message: String) {
+    if (BuildConfig.DEBUG) {
+        error(message)
+    }
+}
+
+inline fun <T> errorInDebugOr(message: String, elseBody: () -> T) : T {
+    errorInDebug(message)
+    return elseBody()
+}

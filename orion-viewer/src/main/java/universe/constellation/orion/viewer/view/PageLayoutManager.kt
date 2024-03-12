@@ -13,10 +13,12 @@ import kotlinx.coroutines.launch
 import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.PageView
 import universe.constellation.orion.viewer.bitmap.BitmapManager
+import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.calcPageLayout
 import universe.constellation.orion.viewer.layout.reset
 import universe.constellation.orion.viewer.log
+import universe.constellation.orion.viewer.logError
 import universe.constellation.orion.viewer.selection.PageAndSelection
 import kotlin.math.abs
 import kotlin.math.max
@@ -26,7 +28,7 @@ private const val VISIBLE_PAGE_LIMIT = 5
 class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): ViewDimensionAware {
 
     private val handler = CoroutineExceptionHandler { _, ex ->
-        log("Processing error in PageLayoutManager")
+        logError("Processing error in PageLayoutManager")
         ex.printStackTrace()
         //TODO processing
     }
@@ -441,8 +443,8 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
                 intersection.intersect(rect2)
                 val message =
                     "intersected pages ${it.first.pageNum} and ${it.second.pageNum} rects: $rect1 $rect2, intersection $intersection"
-                log(message)
-                error(message)
+                logError(message)
+                errorInDebug(message)
             }
         }
     }
