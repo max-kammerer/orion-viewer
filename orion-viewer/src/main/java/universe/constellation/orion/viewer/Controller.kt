@@ -27,12 +27,14 @@ import android.graphics.PointF
 import android.os.Build
 import android.util.DisplayMetrics
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExecutorCoroutineDispatcher
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import universe.constellation.orion.viewer.bitmap.DeviceInfo
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.OutlineItem
@@ -50,6 +52,8 @@ class Controller(
     val rootJob: Job = Job(),
     val context: CoroutineDispatcher = Dispatchers.Default
 ) : ViewDimensionAware {
+
+    val scope = CoroutineScope(context + rootJob)
 
     internal var bitmapCache: BitmapCache = BitmapCache()
 
@@ -277,8 +281,7 @@ class Controller(
         }
     }
 
-    val outline: Array<OutlineItem>?
-        get() = document.outline
+    fun getOutline(): Array<OutlineItem>? = document.outline
 
     fun selectRawText(pageNum: Int, startX: Int, startY: Int, widht: Int, height: Int, isSingleWord: Boolean): String? {
         return document.getText(
@@ -336,5 +339,17 @@ class Controller(
 
     override fun toString(): String {
         return "Controller for $document (controller identity hashCode=${System.identityHashCode(this)}})"
+    }
+
+    suspend fun <T> runInBackground(body: Controller.() -> T): T {
+        return withContext(context + rootJob) {
+            this@Controller.body()
+        }
+    }
+
+    fun runInScope(body: suspend Controller.() -> Unit) {
+        scope.launch {
+            this@Controller.body()
+        }
     }
 }

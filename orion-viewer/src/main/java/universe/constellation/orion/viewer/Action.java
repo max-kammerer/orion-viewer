@@ -21,24 +21,14 @@ package universe.constellation.orion.viewer;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import androidx.appcompat.app.AppCompatDialog;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.res.ResourcesCompat;
 
-import android.view.View;
-import android.view.Window;
 import android.widget.Toast;
 
 import java.util.HashMap;
-import java.util.List;
 
-import pl.polidea.treeview.InMemoryTreeStateManager;
-import pl.polidea.treeview.TreeViewList;
 import universe.constellation.orion.viewer.dialog.CropDialogBuilderKt;
-import universe.constellation.orion.viewer.document.OutlineItem;
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity;
 import universe.constellation.orion.viewer.layout.CropMargins;
-import universe.constellation.orion.viewer.outline.OutlineAdapter;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionApplication;
 import universe.constellation.orion.viewer.prefs.OrionBookPreferences;
@@ -51,6 +41,7 @@ import universe.constellation.orion.viewer.view.OrionDrawScene;
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
 import static universe.constellation.orion.viewer.LoggerKt.log;
+import static universe.constellation.orion.viewer.outline.ShowOutlineKt.showOutline;
 
 /**
  * User: mike
@@ -138,51 +129,7 @@ public enum Action {
     SHOW_OUTLINE (R.string.action_outline, R.integer.action_open_outline) {
 		public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
             log("Show Outline...");
-            OutlineItem[] outline = controller.getOutline();
-
-			if (outline != null && outline.length != 0) {
-                final AppCompatDialog dialog = new AppCompatDialog(activity);
-                dialog.supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.outline);
-
-                final Toolbar toolbar = dialog.findViewById(R.id.toolbar);
-                toolbar.setTitle(R.string.menu_outline_text);
-                toolbar.setLogo(R.drawable.collapsed);
-
-                final InMemoryTreeStateManager<Integer> manager = new InMemoryTreeStateManager<>();
-                manager.setVisibleByDefault(false);
-                int navigateTo = OutlineAdapter.initializeTreeManager(manager, outline, controller.getCurrentPage());
-                TreeViewList tocTree = dialog.findViewById(R.id.mainTreeView);
-                tocTree.setDivider(ResourcesCompat.getDrawable(activity.getResources(), android.R.drawable.divider_horizontal_bright, null));
-
-                tocTree.setAdapter(new OutlineAdapter(controller, activity, dialog, manager, outline));
-                tocTree.setSelection(navigateTo);
-                dialog.setCanceledOnTouchOutside(true);
-                dialog.show();
-
-                toolbar.setOnClickListener(new View.OnClickListener() {
-
-                    boolean expanded = false;
-
-                    @Override
-                    public void onClick(View v) {
-                        if (expanded) {
-                            toolbar.setLogo(R.drawable.collapsed);
-                            List<Integer> children = manager.getChildren(null);
-                            for (Integer child : children) {
-                                manager.collapseChildren(child);
-                            }
-                        } else {
-                            toolbar.setLogo(R.drawable.expanded);
-                            manager.expandEverythingBelow(null);
-                        }
-
-                        expanded = !expanded;
-                    }
-                });
-            } else {
-                activity.showWarning(R.string.warn_no_outline);
-            }
+            showOutline(controller, activity);
         }
     },
 
