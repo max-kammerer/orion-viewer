@@ -1,5 +1,8 @@
 package universe.constellation.orion.viewer.dialog;
 
+import static universe.constellation.orion.viewer.LoggerKt.log;
+import static universe.constellation.orion.viewer.UtilKt.toAbsoluteRect;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,8 +11,6 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,27 +20,29 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+
 import com.artifex.mupdfdemo.SearchTaskResult;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import universe.constellation.orion.viewer.Controller;
-import universe.constellation.orion.viewer.layout.LayoutPosition;
-import universe.constellation.orion.viewer.layout.LayoutStrategy;
-import universe.constellation.orion.viewer.OrionBaseActivity;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.PageWalker;
 import universe.constellation.orion.viewer.R;
+import universe.constellation.orion.viewer.document.Page;
+import universe.constellation.orion.viewer.layout.LayoutPosition;
+import universe.constellation.orion.viewer.layout.LayoutStrategy;
+import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy;
 import universe.constellation.orion.viewer.search.SearchTask;
 import universe.constellation.orion.viewer.util.Util;
 import universe.constellation.orion.viewer.view.ColorStuff;
 import universe.constellation.orion.viewer.view.DrawContext;
 import universe.constellation.orion.viewer.view.DrawTask;
 import universe.constellation.orion.viewer.view.OrionDrawScene;
-
-import static universe.constellation.orion.viewer.LoggerKt.log;
-import static universe.constellation.orion.viewer.UtilKt.toAbsoluteRect;
 
 public class SearchDialog extends DialogFragment {
 
@@ -52,6 +55,8 @@ public class SearchDialog extends DialogFragment {
     private int lastPosition;
 
     private volatile int lastDirectionOnSearch = 0;
+
+    private volatile Page lastPage;
 
     private EditText searchField;
 
@@ -78,7 +83,7 @@ public class SearchDialog extends DialogFragment {
         window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.TOP;
-        androidx.appcompat.widget.Toolbar toolbar = ((OrionBaseActivity) getActivity()).getToolbar();
+        androidx.appcompat.widget.Toolbar toolbar = requireOrionActivity().getToolbar();
         wlp.y = toolbar.getHeight() + 5;
 
         window.setAttributes(wlp);
@@ -87,7 +92,7 @@ public class SearchDialog extends DialogFragment {
         dialog.setContentView(R.layout.search_dialog);
         View resultView = super.onCreateView(inflater, container, savedInstanceState);
 
-        final Controller controller = ((OrionViewerActivity) getActivity()).getController();
+        final Controller controller = requireOrionActivity().getController();
 
         searchField = dialog.findViewById(R.id.searchText);
         searchField.getBackground().setAlpha(ALPHA);
@@ -106,24 +111,23 @@ public class SearchDialog extends DialogFragment {
         myTask = new SearchTask(getActivity(), controller.getDocument()) {
             @Override
             protected void onResult(boolean isSuccessful, SearchTaskResult result) {
-                if (false) { //TODO rewrite search in new architecture
-                    boolean forward = lastDirectionOnSearch == +1;
-                    LayoutPosition position = new LayoutPosition();
-                    LayoutStrategy layoutStrategy = controller.getLayoutStrategy();
-                    PageWalker walker = layoutStrategy.getWalker();
-                    //layoutStrategy.reset(position, result.pageNumber, forward);
+                boolean forward = lastDirectionOnSearch == +1;
+                LayoutPosition position = new LayoutPosition();
+                LayoutStrategy layoutStrategy = controller.getLayoutStrategy();
+                PageWalker walker = layoutStrategy.getWalker();
+                layoutStrategy.reset(position, result.info, forward);
 
-                    List<SubBatch> subBatches = prepareResults(result, forward, position, walker, layoutStrategy);
-                    lastPosition = forward ? 0 : subBatches.size() - 1;
-                    screens = subBatches;
+                List<SubBatch> subBatches = prepareResults(result, forward, position, walker, layoutStrategy);
+                lastPosition = forward ? 0 : subBatches.size() - 1;
+                screens = subBatches;
+                lastPage = result.page;
 
-                    SubBatch toShow = subBatches.get(lastPosition);
-                    toShow.active += lastDirectionOnSearch;
-                    drawBatch(toShow, controller);
-                }
-
+                SubBatch toShow = subBatches.get(lastPosition);
+                toShow.active += lastDirectionOnSearch;
+                drawBatch(toShow, controller);
             }
 
+            @NonNull
             private List<SubBatch> prepareResults(SearchTaskResult result, boolean forward, LayoutPosition position, PageWalker walker, LayoutStrategy layoutStrategy) {
                 List<SubBatch> screens = new ArrayList<>();
                 RectF[] searchBoxes = result.searchBoxes;
@@ -174,6 +178,7 @@ public class SearchDialog extends DialogFragment {
         searchField.requestFocus();
     }
 
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -181,9 +186,15 @@ public class SearchDialog extends DialogFragment {
             log("Stopping search task");
             myTask.stop();
         }
+    }
 
-        OrionDrawScene view = ((OrionViewerActivity)getActivity()).getView();
-        view.removeTask(lastSearchResultRenderer);
+
+    private void destroyLastPage() {
+        if (lastPage != null) {
+            log("Search: destroying page " + lastPage.getPageNum());
+            lastPage.destroy();
+            lastPage = null;
+        }
     }
 
     private void doSearch(int page, int direction, Controller controller) {
@@ -196,7 +207,7 @@ public class SearchDialog extends DialogFragment {
         String newSearch = searchField.getText().toString();
         lastDirectionOnSearch = direction;
         if ("".equals(newSearch)) {
-            ((OrionBaseActivity)getActivity()).showAlert(R.string.msg_error, R.string.msg_specify_keyword_for_search);
+            requireOrionActivity().showAlert(R.string.msg_error, R.string.msg_specify_keyword_for_search);
             return;
         }
 
@@ -228,13 +239,19 @@ public class SearchDialog extends DialogFragment {
 
         if (performRealSearch) {
             log("Real search for " + page);
-            myTask.go(newSearch, direction, page, -1);
+            destroyLastPage();
+            myTask.go(newSearch, direction, page, -1, (SimpleLayoutStrategy) controller.getLayoutStrategy());
         } else {
             SubBatch subBatch = screens.get(lastPosition);
             drawBatch(subBatch, controller);
         }
 
         lastSearch = newSearch;
+    }
+
+    @Nullable
+    private OrionViewerActivity requireOrionActivity() {
+        return (OrionViewerActivity) getActivity();
     }
 
     private void drawBatch(SubBatch subBatch, Controller controller) {
@@ -252,6 +269,9 @@ public class SearchDialog extends DialogFragment {
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
         lastSearchResultRenderer.setBatch(null);
+        destroyLastPage();
+        OrionDrawScene view = requireOrionActivity().getView();
+        view.removeTask(lastSearchResultRenderer);
     }
 
     private static class SubBatch {

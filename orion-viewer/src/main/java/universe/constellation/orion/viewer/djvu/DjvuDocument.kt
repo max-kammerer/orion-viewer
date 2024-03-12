@@ -19,7 +19,6 @@
 
 package universe.constellation.orion.viewer.djvu
 
-import android.graphics.RectF
 import universe.constellation.orion.viewer.Bitmap
 import universe.constellation.orion.viewer.PageDimension
 import universe.constellation.orion.viewer.document.AbstractDocument
@@ -27,6 +26,7 @@ import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.document.PageWithAutoCrop
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.errorInDebugOr
+import universe.constellation.orion.viewer.geometry.RectF
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.pdf.DocInfo
 import universe.constellation.orion.viewer.timing
@@ -82,6 +82,10 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
                 leftOffset,
                 topOffset
             )
+        }
+
+        override fun searchText(text: String): Array<RectF>? {
+            return searchPage(this.pageNum, text)
         }
 
         override fun destroyInternal() {
@@ -149,12 +153,14 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
 
     override fun authenticate(password: String) = true
 
-    override fun searchPage(pageNumber: Int, text: String): Array<RectF>? {
+    private fun searchPage(pageNum: Int, text: String): Array<RectF>? {
         val textToSearch = text.lowercase(Locale.getDefault())
-
         val strings = ArrayList<String>(500)
         val positions = ArrayList<RectF>(500)
-        getPageText(docPointer, pageNumber, strings, positions)
+
+//        synchronized(this) {
+            getPageText(docPointer, pageNum, strings, positions)
+  //      }
 
         var prevIndex = 0
         val indexes = ArrayList<Int>(500)

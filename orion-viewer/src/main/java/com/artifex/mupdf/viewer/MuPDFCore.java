@@ -186,8 +186,7 @@ public class MuPDFCore
 		return page != null ? page.getLinks() : null;
 	}
 
-	public synchronized Quad[] searchPage(int pageNum, String text) {
-		gotoPage(pageNum);
+	public synchronized Quad[] searchPage(Page page, String text) {
 		Quad[][] quads = page.search(text);
 		if (quads == null)
 			return null;

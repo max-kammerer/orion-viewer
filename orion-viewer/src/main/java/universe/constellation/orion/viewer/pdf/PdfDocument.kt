@@ -106,6 +106,14 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
             }
         }
 
+        override fun searchText(text: String): Array<RectF>? {
+            readPageDataIfNeeded()
+
+            return (page ?: errorInDebugOr("No page") {return null}).let {
+                core.searchPage(page, text)?.map { it.toRect().run { RectF(x0, y0, x1, y1) } }?.toTypedArray()
+            }
+        }
+
         override fun destroy() {
             destroyPage(this)
         }
@@ -202,5 +210,4 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
 
     override fun authenticate(password: String) = core.authenticatePassword(password)
 
-    override fun searchPage(pageNumber: Int, text: String): Array<RectF>? = core.searchPage(pageNumber, text)?.map { it.toRect().run { RectF(x0, y0, x1, y1) } }?.toTypedArray()
 }

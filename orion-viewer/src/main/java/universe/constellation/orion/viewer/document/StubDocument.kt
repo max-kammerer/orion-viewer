@@ -13,8 +13,7 @@ class StubDocument(override var title: String?, var bodyText: String? = title) :
             override fun getPageDimension(): PageDimension = PageDimension(300, 400)
 
             override fun getPageInfo(
-                layoutStrategy: SimpleLayoutStrategy,
-                cropMode: Int
+                layoutStrategy: SimpleLayoutStrategy
             ): PageInfo {
                 val pageDim = getPageDimension()
                 return PageInfo(pageNum, pageDim.width, pageDim.height)
@@ -37,6 +36,10 @@ class StubDocument(override var title: String?, var bodyText: String? = title) :
             override fun destroy() {}
 
             override fun destroyInternal() {}
+
+            override fun searchText(text: String): Array<RectF>? {
+                return null
+            }
         }
     }
 
@@ -53,6 +56,4 @@ class StubDocument(override var title: String?, var bodyText: String? = title) :
             null
 
     override fun destroy() {}
-
-    override fun searchPage(pageNumber: Int, text: String): Array<RectF>? = null
 }

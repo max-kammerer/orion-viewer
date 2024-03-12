@@ -52,6 +52,8 @@ interface Page {
 
     fun readPageDataForRendering()
 
+    fun searchText(text: String): Array<RectF>?
+
     fun destroy()
 }
 
@@ -111,6 +113,4 @@ interface Document : ImagePostProcessor {
     fun needPassword(): Boolean = false
 
     fun authenticate(password: String): Boolean = true
-
-    fun searchPage(pageNumber: Int, text: String): Array<RectF>?
 }

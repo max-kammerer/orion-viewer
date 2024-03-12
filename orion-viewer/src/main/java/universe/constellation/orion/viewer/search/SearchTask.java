@@ -11,6 +11,8 @@ import com.artifex.mupdfdemo.SearchTaskResult;
 
 import universe.constellation.orion.viewer.document.Document;
 import universe.constellation.orion.viewer.R;
+import universe.constellation.orion.viewer.document.PageWithAutoCrop;
+import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy;
 
 import static universe.constellation.orion.viewer.LoggerKt.log;
 
@@ -58,7 +60,7 @@ public abstract class SearchTask {
         }
     }
 
-    public void go(final String text, int direction, int displayPage, int searchPage) {
+    public void go(final String text, int direction, int displayPage, int searchPage, SimpleLayoutStrategy layoutStrategy) {
         if (document == null)
             return;
         stop();
@@ -79,11 +81,13 @@ public abstract class SearchTask {
 
                 while (0 <= index && index < document.getPageCount() && !isCancelled()) {
                     publishProgress(index);
-                    RectF searchHits[] = document.searchPage(index, text);
+                    PageWithAutoCrop page = document.getOrCreatePageAdapter(index);
 
-                    if (searchHits != null && searchHits.length > 0)
-                        return new SearchTaskResult(text, index, searchHits);
-
+                    RectF searchHits[] = page.searchText(text);
+                    if (searchHits != null && searchHits.length > 0) {
+                        return new SearchTaskResult(text, index, searchHits, page.getPageInfo(layoutStrategy), page);
+                    }
+                    page.destroy();
                     index += increment;
                 }
                 return null;
@@ -97,7 +101,7 @@ public abstract class SearchTask {
                     onResult(true, result);
                 } else {
                     log("fail");
-                    mAlertBuilder.setTitle(SearchTaskResult.get() == null ? R.string.warn_text_not_found: R.string.warn_no_further_occurrences_found);
+                    mAlertBuilder.setTitle(R.string.warn_text_not_found);
                     AlertDialog alert = mAlertBuilder.create();
                     alert.setButton(AlertDialog.BUTTON_POSITIVE, mContext.getString(R.string.msg_dialog_dismis),
                             (DialogInterface.OnClickListener) null);

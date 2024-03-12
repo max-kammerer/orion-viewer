@@ -59,9 +59,10 @@ abstract class PageWithAutoCrop(override val pageNum: Int) :Page {
 
     protected fun dimensionForCorruptedPage() = PageDimension(300, 400)
 
-    open fun getPageInfo(layoutStrategy: SimpleLayoutStrategy, cropMode: Int): PageInfo {
+    open fun getPageInfo(layoutStrategy: SimpleLayoutStrategy): PageInfo {
         val info = getPageDimension()
         val pageInfo = PageInfo(pageNum, info.width, info.height)
+        val cropMode = layoutStrategy.margins.cropMode
 
         if (cropMode != 0 && (pageInfo.autoCrop == null)) {
             timing("Full auto crop") {

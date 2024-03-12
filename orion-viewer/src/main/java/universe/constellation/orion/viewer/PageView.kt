@@ -131,7 +131,7 @@ class PageView(
         log("Page $pageNum $marker $state $document" )
         pageJobs.cancelChildren()
         pageInfo = GlobalScope.async(controller.context + pageJobs + handler) {
-            val info = page.getPageInfo(controller.layoutStrategy as SimpleLayoutStrategy, controller.layoutStrategy.margins.cropMode)
+            val info = page.getPageInfo(controller.layoutStrategy as SimpleLayoutStrategy)
             if (isActive) {
                 withContext(Dispatchers.Main) {
                     if (isActive) {
