@@ -430,7 +430,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
 
     private fun dump() {
         activePages.forEach{
-            log("Dump ${it.pageNum}: ${it.layoutData.position} ${it.layoutData.wholePageRect}")
+            log("Dump ${it.pageNum} ${it.state}: ${it.layoutData}")
         }
 
         activePages.zipWithNext().forEach {
