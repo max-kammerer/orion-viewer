@@ -5,6 +5,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runners.Parameterized
+import universe.constellation.orion.viewer.document.withPage
 import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.BookTest
 
@@ -49,7 +50,9 @@ class SimpleBookTest(bookDescription: BookDescription) : BookTest(bookDescriptio
 
     @Test
     fun findNonExistingText() {
-        val result = document.searchPage(0, "abcdefghjklm....")
+        val result = document.withPage(0) {
+            searchText("abcdefghjklm....")
+        }
         assertTrue("Search should return nothing", result.isNullOrEmpty())
     }
 }

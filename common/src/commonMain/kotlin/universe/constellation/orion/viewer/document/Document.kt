@@ -114,3 +114,12 @@ interface Document : ImagePostProcessor {
 
     fun authenticate(password: String): Boolean = true
 }
+
+inline fun <T> Document.withPage(pageNum: Int, body: Page.() -> T): T {
+    val page = getOrCreatePageAdapter(pageNum)
+    try {
+        return page.body()
+    } finally {
+        page.destroy()
+    }
+}

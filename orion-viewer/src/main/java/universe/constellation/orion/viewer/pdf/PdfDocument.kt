@@ -87,7 +87,9 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
 
         private fun getOrCreateDisplayList() {
             if (displayList != null) return
-            displayList = page?.toDisplayList()
+            synchronized(core) {
+                displayList = page?.toDisplayList()
+            }
         }
 
         override fun readPageDataForRendering() {

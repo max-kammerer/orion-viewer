@@ -3,6 +3,7 @@ package universe.constellation.orion.viewer.test.engine
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runners.Parameterized
+import universe.constellation.orion.viewer.document.withPage
 import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.BookTest
 
@@ -30,7 +31,9 @@ class SearchTest(
 
     @Test
     fun testSelection() {
-        val result = document.searchPage(page1Based - 1, text)
+        val result = document.withPage(page1Based - 1) {
+            searchText(text)
+        }
         assertEquals("Number of `$text` occurrences", occurrences, result?.size ?: 0)
     }
 }
