@@ -81,7 +81,7 @@ task downloadMupdf {
         }
         else {
             exec {
-                commandLine = ['git', 'clone', 'git://git.ghostscript.com/mupdf.git', mupdf]
+                commandLine = ['git', 'clone', 'https://github.com/ArtifexSoftware/mupdf.git', mupdf]
             }
         }
 
