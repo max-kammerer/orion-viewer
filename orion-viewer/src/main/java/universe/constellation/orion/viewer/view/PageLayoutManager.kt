@@ -39,6 +39,9 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
 
     val activePages: MutableList<PageView> = arrayListOf()
 
+    val visiblePages: List<PageView>
+        get() = activePages.filter { it.isOnScreen && it.isVisibleState }
+
     var isSinglePageMode = false
 
     val sceneRect = Rect(0, 0, scene.width, scene.height)
