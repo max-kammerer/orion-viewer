@@ -247,7 +247,7 @@ JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong docl, jlong pagel,
 }
 
 
-JNIEXPORT void JNICALL JNI_FN(DjvuDocument_destroying)(JNIEnv *env, jclass type, jlong doc, jlong context) {
+JNIEXPORT void JNICALL JNI_FN(DjvuDocument_destroy)(JNIEnv *env, jclass type, jlong doc, jlong context) {
     LOGI("Closing doc...");
 
     if (doc != 0) {
@@ -260,7 +260,7 @@ JNIEXPORT void JNICALL JNI_FN(DjvuDocument_destroying)(JNIEnv *env, jclass type,
     }
 }
 
-JNIEXPORT void JNICALL JNI_FN(DjvuDocument_releasePage)(JNIEnv *env, jobject thiz, jlong page) {
+JNIEXPORT void JNICALL JNI_FN(DjvuDocument_releasePage)(JNIEnv *env, jclass clazz, jlong page) {
     if (page != 0) {
         ddjvu_page_release((ddjvu_page_t *) page);
     }
@@ -332,7 +332,7 @@ int buildTOC(ddjvu_document_t *doc, miniexp_t expr, list *myList, jint level, JN
 }
 
 #ifdef ORION_FOR_ANDROID
-JNIEXPORT jobjectArray JNICALL JNI_FN(DjvuDocument_getOutline)(JNIEnv *env, jobject thiz, jlong docl) {
+JNIEXPORT jobjectArray JNICALL JNI_FN(DjvuDocument_getOutline)(JNIEnv *env, jclass clazz, jlong docl) {
     ddjvu_document_t *doc = (ddjvu_document_t *) docl;
     miniexp_t outline = ddjvu_document_get_outline(doc);
 
@@ -470,7 +470,7 @@ int extractText(miniexp_t item, Arraylist list, fz_bbox *target) {
 }
 
 
-JNIEXPORT jstring JNICALL JNI_FN(DjvuDocument_getText)(JNIEnv *env, jobject thiz, jlong docl, jint pageNumber,
+JNIEXPORT jstring JNICALL JNI_FN(DjvuDocument_getText)(JNIEnv *env, jclass clazz, jlong docl, jint pageNumber,
                                           int startX, jint startY, jint width, jint height) {
     ddjvu_document_t *doc = (ddjvu_document_t *) docl;
     LOGI("==================Start Text Extraction==============");

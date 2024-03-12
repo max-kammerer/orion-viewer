@@ -70,18 +70,28 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
         ) {
             if (destroyed) return
             readPageDataForRendering()
-            renderPage(
-                pageNum,
-                pagePointer,
-                bitmap,
-                zoom,
-                left,
-                top,
-                right,
-                bottom,
-                leftOffset,
-                topOffset
-            )
+            if (docPointer == 0L || pagePointer == 0L) return
+
+            timing(
+                "Page rendering: $pageNum ($pagePointer) $zoom, ${leftOffset + left}, ${
+                    topOffset + top
+                }, ${leftOffset + right}, ${topOffset + bottom}"
+            ) {
+                drawPage(
+                    docPointer,
+                    pagePointer,
+                    bitmap,
+                    zoom.toFloat(),
+                    bitmap.width,
+                    bitmap.height,
+                    leftOffset + left,
+                    topOffset + top,
+                    right - left,
+                    bottom - top,
+                    left,
+                    top
+                )
+            }
         }
 
         override fun searchText(text: String): Array<RectF>? {
@@ -123,19 +133,9 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
     }
 
     @Synchronized
-    private fun renderPage(pageNum: Int, pagePointer: Long, bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int, leftOffset: Int, topOffset: Int) {
-        //destroyed, can be called in non-ui thread
-        if (docPointer == 0L || pagePointer == 0L) return
-
-        timing("Page rendering: $pageNum ($pagePointer) $zoom, ${leftOffset + left}, ${topOffset + top}, ${leftOffset + right}, ${topOffset + bottom}") {
-            drawPage(docPointer, pagePointer, bitmap, zoom.toFloat(), bitmap.width, bitmap.height, leftOffset + left, topOffset + top, right - left, bottom - top, left, top)
-        }
-    }
-
-    @Synchronized
     override fun destroy() {
         destroyPages()
-        destroying(docPointer, contextPointer)
+        destroy(docPointer, contextPointer)
         docPointer = 0
         contextPointer = 0
     }
@@ -145,9 +145,6 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
 
     external override fun setContrast(contrast: Int)
     external override fun setThreshold(threshold: Int)
-    external fun getOutline(doc: Long): Array<OutlineItem>
-    external fun getText(doc: Long, pageNumber: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int): String
-    external fun releasePage(page: Long)
 
     override fun needPassword() = false
 
@@ -158,9 +155,7 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
         val strings = ArrayList<String>(500)
         val positions = ArrayList<RectF>(500)
 
-//        synchronized(this) {
-            getPageText(docPointer, pageNum, strings, positions)
-  //      }
+        getPageText(docPointer, pageNum, strings, positions)
 
         var prevIndex = 0
         val indexes = ArrayList<Int>(500)
@@ -207,28 +202,36 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
             System.loadLibrary("djvu")
         }
 
-        @JvmStatic
+        @JvmStatic @Synchronized
         external fun initContext(): Long
 
-        @JvmStatic
+        @JvmStatic @Synchronized
         external fun openFile(filename: String, info: DocInfo, context: Long): Long
 
-        @JvmStatic
+        @JvmStatic @Synchronized
         external fun gotoPageInternal(doc: Long, pageNum: Int): Long
 
-        @JvmStatic
+        @JvmStatic @Synchronized
         external fun getPageDimension(doc: Long, pageNum: Int, info: PageDimension): PageDimension?
 
-        @JvmStatic
+        @JvmStatic @Synchronized
         external fun drawPage(doc: Long, page: Long, bitmap: Bitmap, zoom: Float, bitmapWidth: Int, bitmapHeight: Int,
                               patchX: Int, patchY: Int,
                               patchW: Int, patchH: Int,
                               originX: Int, originY: Int): Boolean
 
-        @JvmStatic
-        external fun destroying(doc: Long, context: Long)
+        @JvmStatic @Synchronized
+        external fun destroy(doc: Long, context: Long)
 
-        @JvmStatic
+        @JvmStatic @Synchronized
         external fun getPageText(doc: Long, pageNumber: Int, stringBuilder: ArrayList<*>, positions: ArrayList<*>): Boolean
+
+        @JvmStatic @Synchronized
+        external fun getOutline(doc: Long): Array<OutlineItem>
+        @JvmStatic @Synchronized
+        external fun getText(doc: Long, pageNumber: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int): String
+
+        @JvmStatic @Synchronized
+        external fun releasePage(page: Long)
     }
 }
