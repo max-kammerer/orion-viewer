@@ -35,6 +35,8 @@ class StubDocument(override var title: String?, var bodyText: String? = title) :
             override fun readPageDataForRendering() {}
 
             override fun destroy() {}
+
+            override fun destroyInternal() {}
         }
     }
 

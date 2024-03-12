@@ -23,6 +23,7 @@ package universe.constellation.orion.viewer.document
 import universe.constellation.orion.viewer.*
 import universe.constellation.orion.viewer.geometry.Rect
 import universe.constellation.orion.viewer.layout.*
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.floor
 import kotlin.math.sqrt
 
@@ -41,11 +42,24 @@ private val bitmapArray: IntArray by lazy {
 }
 
 
-abstract class PageWithAutoCrop(override val pageNum: Int) : PageInfoProvider, Page {
+abstract class PageWithAutoCrop(override val pageNum: Int) :Page {
+
+    private val counter = AtomicInteger(0)
+
+    @Volatile
+    protected var destroyed = false
+
+    fun increaseUsages() {
+        counter.incrementAndGet()
+    }
+
+    fun decreaseUsages(): Int {
+        return counter.decrementAndGet()
+    }
 
     protected fun dimensionForCorruptedPage() = PageDimension(300, 400)
 
-    override fun getPageInfo(layoutStrategy: SimpleLayoutStrategy, cropMode: Int): PageInfo {
+    open fun getPageInfo(layoutStrategy: SimpleLayoutStrategy, cropMode: Int): PageInfo {
         val info = getPageDimension()
         val pageInfo = PageInfo(pageNum, info.width, info.height)
 
@@ -120,6 +134,8 @@ abstract class PageWithAutoCrop(override val pageNum: Int) : PageInfoProvider, P
     override fun toString(): String {
         return "Page $pageNum"
     }
+
+    abstract fun destroyInternal()
 }
 
 abstract class Image(val width: Int, val height: Int) {

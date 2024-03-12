@@ -25,6 +25,9 @@ import universe.constellation.orion.viewer.PageDimension
 import universe.constellation.orion.viewer.document.AbstractDocument
 import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.document.PageWithAutoCrop
+import universe.constellation.orion.viewer.errorInDebug
+import universe.constellation.orion.viewer.errorInDebugOr
+import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.pdf.DocInfo
 import universe.constellation.orion.viewer.timing
 import java.util.Locale
@@ -34,22 +37,22 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
     inner class DjvuPage(pageNum: Int) : PageWithAutoCrop(pageNum) {
         @Volatile
         private var pagePointer: Long = 0
-        @Volatile
-        private var destroyed = false
 
         override fun getPageDimension(): PageDimension {
             //TODO default page size
-            if (docPointer == 0L || destroyed) return dimensionForCorruptedPage()
+            if (docPointer == 0L || destroyed) return errorInDebugOr("Page $pageNum already destroyed or doc is null") { dimensionForCorruptedPage() }
 
             PageDimension().also {
                 timing("Page $pageNum info calculation") {
-                    return getPageDimension(docPointer, pageNum, it) ?: dimensionForCorruptedPage()
+                    return getPageDimension(docPointer, pageNum, it).also {
+                        log("Djvu: page $pageNum size is $it")
+                    } ?: dimensionForCorruptedPage()
                 }
             }
         }
 
         override fun readPageDataForRendering() {
-            if (destroyed) return
+            if (destroyed) return errorInDebug("Page $pageNum already destroyed")
             if (pagePointer == 0L && docPointer != 0L) {
                 pagePointer = gotoPageInternal(docPointer, pageNum)
             }
@@ -81,15 +84,14 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
             )
         }
 
+        override fun destroyInternal() {
+            destroyed = true
+            releasePage(pagePointer)
+            pagePointer = 0
+        }
+
         override fun destroy() {
-            if (!destroyed) {
-                destroyed = true
-                if (pagePointer != 0L) {
-                    releasePage(pagePointer)
-                    pagePointer = 0
-                }
-                destroyPage(this)
-            }
+            destroyPage(this)
         }
     }
 

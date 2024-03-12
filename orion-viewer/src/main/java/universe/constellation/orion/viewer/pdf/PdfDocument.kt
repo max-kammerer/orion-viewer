@@ -34,6 +34,7 @@ import universe.constellation.orion.viewer.PageDimension
 import universe.constellation.orion.viewer.document.AbstractDocument
 import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.document.PageWithAutoCrop
+import universe.constellation.orion.viewer.errorInDebugOr
 
 class PdfDocument @Throws(Exception::class) constructor(filePath: String) : AbstractDocument(filePath) {
 
@@ -41,10 +42,9 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
         @Volatile
         private var page: Page? = null
         private var displayList: DisplayList? = null
-        private var destroyed = false
 
         private fun readPageDataIfNeeded() {
-            if (destroyed) return
+            if (destroyed) return errorInDebugOr("Page $pageNum already destroyed") { dimensionForCorruptedPage() }
             if (page == null) {
                 page = core.doc.loadPage(pageNum)
             }
@@ -95,19 +95,19 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
             getOrCreateDisplayList()
         }
 
-        override fun destroy() {
-            if (!destroyed) {
-                destroyed = true
-                if (displayList != null) {
-                    displayList?.destroy()
-                    displayList = null
-                }
-                if (page != null) {
-                    page?.destroy()
-                    page = null
-                }
-                destroyPage(this)
+        override fun destroyInternal() {
+            if (displayList != null) {
+                displayList?.destroy()
+                displayList = null
             }
+            if (page != null) {
+                page?.destroy()
+                page = null
+            }
+        }
+
+        override fun destroy() {
+            destroyPage(this)
         }
     }
 

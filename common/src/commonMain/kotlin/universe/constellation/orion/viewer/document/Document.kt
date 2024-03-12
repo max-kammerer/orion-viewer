@@ -21,18 +21,12 @@ package universe.constellation.orion.viewer.document
 
 import universe.constellation.orion.viewer.Bitmap
 import universe.constellation.orion.viewer.PageDimension
-import universe.constellation.orion.viewer.PageInfo
 import universe.constellation.orion.viewer.geometry.RectF
-import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
 
 expect class OutlineItem {
     val level: Int
     val title: String
     val page: Int
-}
-
-interface PageInfoProvider {
-    fun getPageInfo(layoutStrategy: SimpleLayoutStrategy, cropMode: Int): PageInfo
 }
 
 /**
@@ -67,7 +61,9 @@ abstract class AbstractDocument(override val filePath: String) : Document {
 
     @Synchronized
     final override fun getOrCreatePageAdapter(pageNum: Int): PageWithAutoCrop {
-        return pages.getOrPut(pageNum) { createPage(pageNum) }
+        val page = pages.getOrPut(pageNum) { createPage(pageNum) }
+        page.increaseUsages()
+        return page
     }
 
     abstract fun createPage(pageNum: Int): PageWithAutoCrop
@@ -82,8 +78,11 @@ abstract class AbstractDocument(override val filePath: String) : Document {
 
     @Synchronized
     override fun destroyPage(page: Page) {
-        pages.remove(page.pageNum)
-        page.destroy()
+        val usages = (page as PageWithAutoCrop).decreaseUsages()
+        if (usages == 0) {
+            pages.remove(page.pageNum)
+            page.destroyInternal()
+        }
     }
 
     override fun toString(): String {
