@@ -8,11 +8,10 @@ import java.io.FileOutputStream
 import kotlin.math.abs
 
 internal fun dumpBitmap(prefix: String = "test", suffix: String, bitmap: Bitmap) {
-    val file = Environment.getExternalStorageDirectory().path + "/orion/$prefix$suffix.png"
-    println("saving dump into $file")
-    val file1 = File(file)
-    file1.parentFile?.mkdirs()
-    file1.createNewFile()
+    val file = File(BaseTest.testFailures, "$prefix$suffix.png")
+    println("saving dump into ${file.absoluteFile}")
+    file.parentFile?.mkdirs()
+    file.createNewFile()
     FileOutputStream(file).use { stream ->
         bitmap.compress(
             Bitmap.CompressFormat.PNG,

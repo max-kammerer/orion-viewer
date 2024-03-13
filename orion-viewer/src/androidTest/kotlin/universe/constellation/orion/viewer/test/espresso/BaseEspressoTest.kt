@@ -15,6 +15,7 @@ import org.hamcrest.Matcher
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Rule
 import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.R
@@ -32,6 +33,10 @@ open class BaseEspressoTest(val bookDescription: BookFile) : InstrumentationTest
             return BookFile.testEntriesWithCustoms()
         }
     }
+
+    @JvmField
+    @Rule
+    val screenshotRule = ScreenshotTakingRule()
 
     private lateinit var controller: Controller
 

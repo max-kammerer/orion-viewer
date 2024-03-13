@@ -41,7 +41,7 @@ open class BookFile(private val simpleFileName: String) {
         }
     }
 
-    fun asFile() = File(BaseTest.testFolder, simpleFileName)
+    fun asFile() = File(BaseTest.testDataFolder, simpleFileName)
 
     fun asPath() = asFile().absolutePath
 
@@ -56,7 +56,7 @@ open class BookFile(private val simpleFileName: String) {
         private val EXTENDED_HARD_CODED_TEST = System.getenv("test.books.extended")?.toBoolean() ?: false
 
         fun testEntriesWithCustoms(): List<BookFile> {
-            val files = BaseTest.testFolder.listFiles()
+            val files = BaseTest.testDataFolder.listFiles()
             if (files == null || files.isEmpty()) return hardCodedEntries()
             return files.mapNotNull {
                 if (it.isDirectory) {

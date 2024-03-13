@@ -161,14 +161,61 @@ tasks.register('downloadTestFiles') {
     }
 }
 
+
+// Tests routine
+def testDir = "/sdcard/Download/orion"
+def screenShotDir = "$testDir/failures"
+def localScreenShotDir = getLayout().getBuildDirectory().get().toString() + "/failures"
+
 tasks.register('uploadTestData') {
     doLast {
         exec {
-            commandLine(androidComponents.sdkComponents.adb.get(), "push", "--sync", "src/androidTest/assets/.", "/sdcard/Download/orion")
+            commandLine(androidComponents.sdkComponents.adb.get(), "push", "--sync", "src/androidTest/assets/.", testDir)
         }
+    }
+}
+
+def clearScreenshotsTask = tasks.register("clearScreenshots") {
+    doFirst {
+        exec {
+            commandLine(androidComponents.sdkComponents.adb.get(), "shell", "rm", "-r", screenShotDir)
+        }
+    }
+
+}
+
+def createScreenshotDirectoryTask = tasks.register('createScreenshotDirectory') {
+    doFirst {
+        exec {
+            commandLine(androidComponents.sdkComponents.adb.get(), "shell", "mkdir", "-p", screenShotDir)
+        }
+    }
+
+}
+
+def fetchScreenshotsTask = tasks.register('fetchScreenshots') {
+    doLast {
+        exec {
+            commandLine("mkdir", "-p",  localScreenShotDir)
+        }
+        exec {
+            commandLine(androidComponents.sdkComponents.adb.get(), "pull",  screenShootDir + "/.", localScreenShotDir)
+        }
+    }
+
+    finalizedBy clearScreenshotsTask
+
+
+    dependsOn {
+        createScreenshotDirectoryTask
+    }
+
+    doFirst {
+        new File(screenShotDir).mkdirs()
     }
 }
 
 afterEvaluate {
     connectedDebugAndroidTest.dependsOn 'uploadTestData'
+    connectedDebugAndroidTest.finalizedBy fetchScreenshotsTask
 }
