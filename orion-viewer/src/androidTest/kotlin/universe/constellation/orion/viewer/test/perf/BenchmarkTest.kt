@@ -60,7 +60,11 @@ class BenchmarkTest : BaseTest() {
     }
 
     @Test
-    fun benchmark() {
+    fun benchmarkOrigin() {
+        benchmark(1.0)
+    }
+
+    private fun benchmark(zoom: Double) {
         val infos = BookFile.testEntriesWithCustoms().map {
             val time = time()
             val book = it.openBook()
@@ -85,14 +89,14 @@ class BenchmarkTest : BaseTest() {
 
                 pureRendering.add(
                     time {
-                        page.renderPage(bitmap, 1.0, 0, 0, bitmap.width, bitmap.height, 0, 0)
+                        page.renderPage(bitmap, zoom, 0, 0, bitmap.width, bitmap.height, 0, 0)
                     }
                 )
 
                 bigPartRendering.add(
                     time(bitmapFull) {
                         runBlocking {
-                            bitmapFull.renderFull(1.0, page)
+                            bitmapFull.renderFull(zoom, page)
                         }
                     }
                 )
@@ -100,7 +104,7 @@ class BenchmarkTest : BaseTest() {
                 partRendering.add(
                     time(bitmap4Parts) {
                         runBlocking {
-                            bitmap4Parts.renderFull(1.0, page)
+                            bitmap4Parts.renderFull(zoom, page)
                         }
                     }
                 )

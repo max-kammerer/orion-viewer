@@ -20,14 +20,16 @@ class OptionsTest(bookDescription: BookFile): BaseEspressoTest(bookDescription) 
         onView(withId(R.id.view)).perform(swipeUp())
         var pageCount = -10
         activityScenarioRule.scenario.onActivity {
-            pageCount = it.controller!!.pageLayoutManager.visiblePages.count()
-            Assert.assertTrue(it.controller!!.pageLayoutManager.visiblePages.count() > 1)
+            val count = it.controller!!.pageLayoutManager.visiblePages.count()
+            pageCount = count
+            Assert.assertTrue("$count should be > 1",count > 1)
         }
         onView(withId(R.id.view)).perform(longClick())
         device.pressBack()
 
         activityScenarioRule.scenario.onActivity {
-            Assert.assertTrue(pageCount <= it.controller!!.pageLayoutManager.visiblePages.count())
+            val count = it.controller!!.pageLayoutManager.visiblePages.count()
+            Assert.assertTrue("$pageCount should be <= $count", pageCount <= count)
         }
 
         //TODO check pages and their positions
