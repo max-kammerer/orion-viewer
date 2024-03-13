@@ -39,7 +39,10 @@
     <string name="crash_on_book_opening_message_header">Ошибка при открытии \`%1$s\` файла. Пожалуйста, отправьте сообщение об ошибке (с прикрепленным файлом, если это возможно):</string>
 
     <string name="string_cancel">Отмена</string>
+    <string name="string_apply">Применить</string>
     <string name="string_send">Отправить…</string>
+    <string name="string_wrong_password">Неверный пароль</string>
+    <string name="password_for_file">Пароль для файла</string>
 
     <string name="send_report_header">[Пожалуйста, укажите дополнительную информацию и/или прикрепите файл]</string>
 </resources>

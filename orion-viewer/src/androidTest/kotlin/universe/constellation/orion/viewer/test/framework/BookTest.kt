@@ -56,9 +56,15 @@ open class BookFile(private val simpleFileName: String) {
         private val EXTENDED_HARD_CODED_TEST = System.getenv("test.books.extended")?.toBoolean() ?: false
 
         fun testEntriesWithCustoms(): List<BookFile> {
-            val files = BaseTest.testFolder.list()
+            val files = BaseTest.testFolder.listFiles()
             if (files == null || files.isEmpty()) return hardCodedEntries()
-            return files.map { BookFile(it) }
+            return files.mapNotNull {
+                if (it.isDirectory) {
+                    null
+                } else {
+                    BookFile(it.name)
+                }
+            }
         }
 
         private fun hardCodedEntries(): List<BookFile> {

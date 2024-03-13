@@ -298,12 +298,12 @@ class Controller(
         return document.needPassword()
     }
 
-    fun authenticate(password: String): Boolean {
-        return document.authenticate(password).also {
-            if (it) {
-                sendViewChangeNotification()
-            }
+    suspend fun authenticate(password: String): Boolean {
+        val result = withContext(context) { document.authenticate(password) }
+        if (result) {
+            sendViewChangeNotification()
         }
+        return result
     }
 
     fun createPageView(pageNum: Int): PageView {

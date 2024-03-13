@@ -29,13 +29,14 @@ import android.os.Bundle
 import android.os.Debug
 import android.os.ParcelFileDescriptor
 import android.system.Os
-import android.text.method.PasswordTransformationMethod
 import android.view.*
-import android.view.inputmethod.EditorInfo
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialog
 import androidx.core.internal.view.SupportMenuItem
 import androidx.core.view.doOnLayout
+import androidx.lifecycle.lifecycleScope
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.*
 import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAccessPermissionOrReadOne
 import universe.constellation.orion.viewer.android.FileUtils
@@ -58,6 +59,7 @@ import java.io.IOException
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.util.concurrent.Executors
+import kotlin.coroutines.resume
 
 class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVITY) {
 
@@ -318,19 +320,23 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             }
 
             try {
+                val layoutStrategy = SimpleLayoutStrategy.create()
+                val controller1 = Controller(this@OrionViewerActivity, newDocument, layoutStrategy, rootJob, context = executor)
+
+                if (!askPassword(controller1)) {
+                    return@launch
+                }
+
                 val lastPageInfo1 = loadBookParameters(rootJob, filePath)
                 log("Read LastPageInfo for page ${lastPageInfo1.pageNumber}")
                 lastPageInfo = lastPageInfo1
                 orionContext.currentBookParameters = lastPageInfo1
                 OptionActions.DEBUG.doAction(this@OrionViewerActivity, false, globalOptions.getBooleanProperty("DEBUG", false))
 
-                val layoutStrategy = SimpleLayoutStrategy.create()
-
-                val controller1 = Controller(this@OrionViewerActivity, newDocument, layoutStrategy, rootJob, context = executor)
                 controller = controller1
                 bind(view, controller1)
                 stubController.destroy()
-                controller1.changeOrinatation(lastPageInfo1!!.screenOrientation)
+                controller1.changeOrinatation(lastPageInfo1.screenOrientation)
 
                 updateViewOnNewBook((newDocument.title?.takeIf { it.isNotBlank() } ?: filePath.substringAfterLast('/').substringBeforeLast(".")))
 
@@ -343,8 +349,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
                 lastPageInfo1.totalPages = newDocument.pageCount
                 device!!.onNewBook(lastPageInfo1.openingFileName ?: "<no data>", lastPageInfo1.simpleFileName ?: "<no data>", lastPageInfo1.pageNumber , lastPageInfo1.fileSize, newDocument)
-
-                askPassword(controller1)
                 orionContext.onNewBook(filePath)
                 invalidateOptionsMenu()
                 doOnLayout(lastPageInfo1)
@@ -1029,27 +1033,43 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 }
     }
 
-    private fun askPassword(controller: Controller) {
+    private suspend fun askPassword(controller: Controller): Boolean {
         if (controller.needPassword()) {
+            val view = layoutInflater.inflate(R.layout.password, null)
             val builder = createThemedAlertBuilder()
-            builder.setTitle("Password")
 
-            val input = EditText(this)
-            input.inputType = EditorInfo.TYPE_TEXT_VARIATION_PASSWORD
-            input.transformationMethod = PasswordTransformationMethod()
-            builder.setView(input)
+            builder.setView(view)
+                .setNegativeButton(R.string.string_cancel) { dialog, _ -> dialog.dismiss() }
+                .setPositiveButton(R.string.string_apply) { _, _ -> }
 
-            builder.setPositiveButton("OK") { dialog, _ ->
-                if (controller.authenticate(input.text.toString())) {
-                    dialog.dismiss()
-                } else {
-                    askPassword(controller)
-                    showWarning("Wrong password!")
+
+            val dialog = builder.create()
+            dialog.setCanceledOnTouchOutside(false)
+            dialog.show()
+
+            return suspendCancellableCoroutine { continuation ->
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                    lifecycleScope.launch {
+                        val input = view.findViewById<TextInputEditText>(R.id.password)!!
+                        if (controller.authenticate(input.text.toString())) {
+                            dialog.dismiss()
+                            continuation.resume(true)
+                        } else {
+                            input.error = getString(R.string.string_wrong_password)
+                        }
+                    }
+                }
+                dialog.setOnCancelListener {
+                    continuation.resume(false)
+                }
+
+                continuation.invokeOnCancellation {
+                    controller.destroy()
+                    dialog.cancel()
                 }
             }
-
-            builder.setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
-            builder.create().show()
+        } else {
+            return true
         }
     }
 

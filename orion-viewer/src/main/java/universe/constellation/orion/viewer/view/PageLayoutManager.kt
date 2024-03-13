@@ -33,10 +33,6 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
         //TODO processing
     }
 
-    init {
-        scene.setDimensionAware(this)
-    }
-
     val bitmapManager: BitmapManager = BitmapManager(this)
 
     val activePages: MutableList<PageView> = arrayListOf()
