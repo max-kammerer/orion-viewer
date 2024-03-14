@@ -22,6 +22,7 @@ package universe.constellation.orion.viewer.document
 import universe.constellation.orion.viewer.Bitmap
 import universe.constellation.orion.viewer.PageDimension
 import universe.constellation.orion.viewer.geometry.RectF
+import universe.constellation.orion.viewer.log
 
 expect class OutlineItem {
     val level: Int
@@ -83,6 +84,7 @@ abstract class AbstractDocument(override val filePath: String) : Document {
         val usages = (page as PageWithAutoCrop).decreaseUsages()
         if (usages == 0) {
             pages.remove(page.pageNum)
+            log("Destroying ${page.pageNum} in $this")
             page.destroyInternal()
         }
     }

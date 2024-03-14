@@ -38,10 +38,14 @@ class PageView(
     val pageLayoutManager: PageLayoutManager
 ) {
 
+    init {
+        if (pageNum < 0) errorInDebug("Invalid page number: $pageNum")
+    }
+
     private val handler = CoroutineExceptionHandler { _, ex ->
         logError("Processing error for page $pageNum")
         ex.printStackTrace()
-        //TODO processing
+        errorInDebug(ex.message ?: ex.toString())
     }
 
     val layoutData: LayoutData = LayoutData().apply {

@@ -35,6 +35,7 @@ fun LayoutPosition.toAbsoluteRect(): RectF {
 
 inline fun errorInDebug(message: String) {
     if (BuildConfig.DEBUG) {
+        log("Error: $message")
         error(message)
     }
 }

@@ -49,11 +49,11 @@ class Controller(
     val activity: OrionViewerActivity,
     val document: Document,
     val layoutStrategy: LayoutStrategy,
-    val rootJob: Job = Job(),
+    private val rootJob: Job = Job(),
     val context: CoroutineDispatcher = Dispatchers.Default
 ) : ViewDimensionAware {
 
-    val scope = CoroutineScope(context + rootJob)
+    private val scope = CoroutineScope(context + rootJob)
 
     internal var bitmapCache: BitmapCache = BitmapCache()
 
@@ -71,7 +71,7 @@ class Controller(
 
     private var hasPendingEvents = false
 
-    val pageLayoutManager = PageLayoutManager(this, activity.view)
+    lateinit var pageLayoutManager: PageLayoutManager
 
     init {
         log("Creating controller for `$document`")
@@ -86,10 +86,6 @@ class Controller(
                 }
             }
         }
-        activity.view.pageLayoutManager = pageLayoutManager
-
-        activity.subscriptionManager.addDocListeners(listener)
-
     }
 
     @JvmOverloads
@@ -157,7 +153,8 @@ class Controller(
 
     fun destroy() {
         activity.subscriptionManager.unSubscribe(listener)
-        pageLayoutManager.destroy()
+        if (::pageLayoutManager.isInitialized)
+            pageLayoutManager.destroy()
         GlobalScope.launch(Dispatchers.Default) {
             log("Destroying controller for $document...")
             rootJob.cancelAndJoin()
@@ -186,14 +183,15 @@ class Controller(
         }
 
     val currentPage: Int
-        get() = pageLayoutManager.currentPageLayout()?.pageNumber ?: -1
+        get() = pageLayoutManager.currentPageLayout()?.pageNumber
+            ?: errorInDebugOr("No active page $document") { 0 }
 
     val pageCount: Int
         get() = document.pageCount
 
 
-    fun init(info: LastPageInfo, dimension: Point) {
-        task("init controller") {
+    fun init(info: LastPageInfo, viewWidth: Int, viewHeight: Int) {
+        task("init controller: $viewWidth $viewHeight") {
             document.setContrast(info.contrast)
             document.setThreshold(info.threshold)
 
@@ -203,7 +201,11 @@ class Controller(
             changeOrinatation(screenOrientation)
             changeColorMode(info.colorMode, false)
 
-            onDimensionChanged(dimension.x, dimension.y)
+            pageLayoutManager = PageLayoutManager(this, activity.view)
+            activity.subscriptionManager.addDocListeners(listener)
+            activity.view.pageLayoutManager = pageLayoutManager
+
+            onDimensionChanged(viewHeight, viewHeight)
         }
     }
 

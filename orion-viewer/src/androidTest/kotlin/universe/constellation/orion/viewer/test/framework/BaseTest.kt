@@ -30,14 +30,17 @@ abstract class BaseTest {
     @Rule
     val name = TestName()
 
+    @Rule
+    @JvmField
+    val mRuntimePermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
+        android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        android.Manifest.permission.READ_EXTERNAL_STORAGE
+    )
+
+
     @Before
     fun testStart() {
         log("Starting test: ${name.methodName}" )
-    }
-
-    @After
-    fun testEnd() {
-        log("Finishing test: ${name.methodName}" )
     }
 
     @Before
@@ -61,12 +64,10 @@ abstract class BaseTest {
         assertTrue(BookDescription.SICP.asFile().canRead())
     }
 
-    @Rule
-    @JvmField
-    val mRuntimePermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
-        android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        android.Manifest.permission.READ_EXTERNAL_STORAGE
-    )
+    @After
+    fun testEnd() {
+        log("Finishing test: ${name.methodName}" )
+    }
 
     fun dumpBitmap(suffix: String, bitmap: Bitmap) {
         dumpBitmap(name.methodName, suffix, bitmap)

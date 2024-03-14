@@ -30,7 +30,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
     private val handler = CoroutineExceptionHandler { _, ex ->
         logError("Processing error in PageLayoutManager")
         ex.printStackTrace()
-        //TODO processing
+        errorInDebug(ex.message ?: ex.toString())
     }
 
     val bitmapManager: BitmapManager = BitmapManager(this)
