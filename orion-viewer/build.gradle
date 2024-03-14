@@ -203,8 +203,7 @@ def fetchScreenshotsTask = tasks.register('fetchScreenshots') {
         }
     }
 
-    finalizedBy clearScreenshotsTask
-
+    //finalizedBy clearScreenshotsTask
 
     dependsOn {
         createScreenshotDirectoryTask

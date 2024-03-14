@@ -12,6 +12,12 @@ private val simpleDateFormat: SimpleDateFormat = SimpleDateFormat("yyMMdd_HH_mm"
 class ScreenshotTakingRule : TestWatcher() {
 
     override fun failed(e: Throwable?, description: Description) {
-        dumpBitmap(description.methodName.take(15), simpleDateFormat.format(Date()), takeScreenshot())
+        dump(description.methodName.take(15))
+    }
+
+    companion object {
+        fun dump(filePrefix: String) {
+            dumpBitmap(filePrefix, simpleDateFormat.format(Date()), takeScreenshot())
+        }
     }
 }

@@ -18,6 +18,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.Controller
+import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.test.framework.BookFile
 import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
@@ -82,6 +83,14 @@ open class BaseEspressoTest(val bookDescription: BookFile) : InstrumentationTest
     protected fun openGoTo() {
         Espresso.openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
         Espresso.onView(ViewMatchers.withText("Go To")).perform(ViewActions.click())
+    }
+
+    fun <T: Any> onActivity(body: (OrionViewerActivity) -> T): T {
+        lateinit var res: T
+        activityScenarioRule.scenario.onActivity {
+            res = body(it)
+        }
+        return res
     }
 }
 
