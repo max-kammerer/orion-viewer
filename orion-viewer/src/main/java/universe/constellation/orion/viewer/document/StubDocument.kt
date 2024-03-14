@@ -6,7 +6,9 @@ import universe.constellation.orion.viewer.PageInfo
 import universe.constellation.orion.viewer.geometry.RectF
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
 
-class StubDocument(override var title: String?, var bodyText: String? = title) : AbstractDocument("Stub[$title]") {
+class StubDocument(pathOrMessage: String, var bodyText: String = pathOrMessage) : AbstractDocument("Stub[$pathOrMessage]") {
+
+    override var title: String = pathOrMessage.substringAfterLast("/")
 
     override fun createPage(pageNum: Int): PageWithAutoCrop {
         return object: PageWithAutoCrop(pageNum) {

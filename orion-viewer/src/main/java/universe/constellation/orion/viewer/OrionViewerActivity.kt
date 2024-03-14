@@ -311,8 +311,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 }
             } catch (e: Exception) {
                 log(e)
-                stubDocument.bodyText = e.message
-                stubDocument.title = e.message
+                stubDocument.bodyText = e.message ?: e.toString()
+                stubDocument.title = e.message ?: e.toString()
                 updateViewOnNewBook(stubDocument.title)
                 showErrorReportDialog(filePath, e, intent)
                 executor.close()
