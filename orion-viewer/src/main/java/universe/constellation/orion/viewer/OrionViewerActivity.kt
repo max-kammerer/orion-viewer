@@ -397,9 +397,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     private fun bind(view: OrionDrawScene, controller: Controller) {
         this.controller = controller
         view.setDimensionAware(controller)
-//        val recyclerView = view as RecyclerView
-//        recyclerView.layoutManager = LinearLayoutManager(this)
-//        recyclerView.adapter = PageAdapter(recyclerView, this,controller, fullScene.colorStuff, fullScene.statusBarHelper)
     }
 
     private fun updateViewOnNewBook(title: String?) {
@@ -436,7 +433,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         subscriptionManager.addDocListeners(object : DocumentViewAdapter() {
             override fun documentOpened(controller: Controller) {
                 pageSeek.max = controller.pageCount - 1
-                pageSeek.progress = controller.currentPage
             }
 
             override fun pageChanged(newPage: Int, pageCount: Int) {
@@ -1088,12 +1084,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     private fun destroyController(controller: Controller?) {
-        controller?.let {
-            val currentPage = it.currentPage
-            val pageCount = it.document.pageCount
-            it.destroy()
-            device!!.onBookClose(currentPage, pageCount)
-        }
+        controller?.destroy()
     }
 
     private fun processAdditionalOptionsInIntent(intent: Intent) {
