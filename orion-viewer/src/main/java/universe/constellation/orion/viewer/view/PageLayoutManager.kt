@@ -129,7 +129,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         scene.postInvalidate()
     }
 
-    private fun doScrollOnly(xPos: Float, yPos: Float, distanceX: Float, distanceY: Float) {
+    private fun doScrollOnly(xPos: Float, yPos: Float, distanceX: Float, distanceY: Float, isTapNavigation: Boolean = false) {
         val distanceY2 = clampLimits(distanceY)
         if (distanceY2 == 0f && distanceX == 0f) return
 
@@ -142,7 +142,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
                     if (abs(leftDelta - righDelta) >= abs(leftDelta - righDelta + 2 * distanceX)) {
                         layoutData.position.x += distanceX
                     }
-                } else {
+                } else if (!isTapNavigation) {
                     var newDistance = 0f
                     if (distanceX > 0 && layoutData.globalLeft < 0) {
                         newDistance = MathUtils.clamp(distanceX, distanceX, sceneRect.left - layoutData.globalLeft,)
@@ -150,8 +150,11 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
                         newDistance = -MathUtils.clamp(-distanceX, -distanceX, layoutData.globalRight - sceneRect.right)
                     }
                     layoutData.position.x += newDistance
+                } else {
+                    layoutData.position.x += distanceX
                 }
             }
+
             layoutData.position.y += distanceY2
             updateStateAndRenderVisible(it)
         }
@@ -343,35 +346,36 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
                 0 -> {
                     log("renderNextOrPrev new params: $copy")
                     if (isTapNavigation && !next && copy.y.offset < 0) { copy.y.offset = 0 }
-                    return controller.drawPage(copy)
+                    return controller.drawPage(copy, isTapNavigation = isTapNavigation)
                 }
 
                 1 ->
                     if (currentPageNum + 1 < controller.document.pageCount) {
-                        return renderPageAt(currentPageNum + 1, 0, 0) { page ->
+                        return renderPageAt(currentPageNum + 1, 0, 0, isTapNavigation) { page ->
                             val pos = page.layoutInfo.copy()
                             layoutStrategy.reset(pos, page.page, next)
-                            val newPosition = page.layoutData.position
+                            val oldPosition = page.layoutData.position
                             val x = -pos.x.offset
                             val y = -pos.y.offset
                             doScrollOnly(
-                                newPosition.x,
-                                newPosition.y,
-                                x - newPosition.x,
-                                y - newPosition.y
+                                oldPosition.x,
+                                oldPosition.y,
+                                x - oldPosition.x,
+                                y - oldPosition.y,
+                                isTapNavigation
                             )
                         }
                     }
 
                 -1 ->
                     if (currentPageNum > 0) {
-                        return renderPageAt(currentPageNum - 1, 0, 0) { page ->
+                        return renderPageAt(currentPageNum - 1, 0, 0, isTapNavigation) { page ->
                             val pos = page.layoutInfo.copy()
                             layoutStrategy.reset(pos, page.page, next)
                             val oldPosition = page.layoutData.position
                             val x = -pos.x.offset
                             val y = -pos.y.offset
-                            doScrollOnly(oldPosition.x, oldPosition.y, x - oldPosition.x, y - oldPosition.y)
+                            doScrollOnly(oldPosition.x, oldPosition.y, x - oldPosition.x, y - oldPosition.y, isTapNavigation)
                         }
                     }
 
@@ -381,9 +385,9 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         return null
     }
 
-    fun renderPageAt(pageNum: Int, x: Int, y: Int, doScroll: (PageView) -> Unit = {page ->
+    fun renderPageAt(pageNum: Int, x: Int, y: Int, isTapNavigation: Boolean = false, doScroll: (PageView) -> Unit = {page ->
         val newPosition = page.layoutData.position
-        doScrollOnly(newPosition.x, newPosition.y, x - newPosition.x, y - newPosition.y)
+        doScrollOnly(newPosition.x, newPosition.y, x - newPosition.x, y - newPosition.y, isTapNavigation)
     }): Pair<PageView, Job> {
         println("RenderPageAt $pageNum $x $y")
         isSinglePageMode = true

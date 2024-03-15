@@ -89,9 +89,9 @@ class Controller(
     }
 
     @JvmOverloads
-    fun drawPage(pageNum: Int, pageXOffset: Int = 0, pageYOffset: Int = 0): Pair<PageView, Job> {
+    fun drawPage(pageNum: Int, pageXOffset: Int = 0, pageYOffset: Int = 0, isTapNavigation: Boolean = false): Pair<PageView, Job> {
         log("Controller drawPage $document $pageNum: $pageXOffset $pageYOffset")
-        return pageLayoutManager.renderPageAt(pageNum, -pageXOffset, -pageYOffset)
+        return pageLayoutManager.renderPageAt(pageNum, -pageXOffset, -pageYOffset, isTapNavigation)
     }
 
     fun processPendingEvents() {
@@ -319,8 +319,9 @@ class Controller(
         ).apply { init() }
     }
 
-    fun drawPage(lp: LayoutPosition): Pair<PageView, Job> {
-        return drawPage(lp.pageNumber, lp.x.offset, lp.y.offset)
+    @JvmOverloads
+    fun drawPage(lp: LayoutPosition, isTapNavigation: Boolean = false): Pair<PageView, Job> {
+        return drawPage(lp.pageNumber, lp.x.offset, lp.y.offset, isTapNavigation)
     }
 
     companion object {
