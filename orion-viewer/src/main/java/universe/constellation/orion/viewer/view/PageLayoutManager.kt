@@ -25,7 +25,7 @@ import kotlin.math.max
 
 private const val VISIBLE_PAGE_LIMIT = 5
 
-class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): ViewDimensionAware {
+class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
 
     private val handler = CoroutineExceptionHandler { _, ex ->
         logError("Processing error in PageLayoutManager")
@@ -61,8 +61,8 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
             sceneRect.bottom = value
         }
 
-    override fun onDimensionChanged(newWidth: Int, newHeight: Int) {
-        if (sceneWidth != newWidth && newHeight != sceneHeight) {
+    fun onDimensionChanged(newWidth: Int, newHeight: Int) {
+        if (sceneWidth != newWidth || newHeight != sceneHeight) {
             log("New scene size: $newWidth $newHeight, old=$sceneRect")
             sceneWidth = newWidth
             sceneHeight = newHeight

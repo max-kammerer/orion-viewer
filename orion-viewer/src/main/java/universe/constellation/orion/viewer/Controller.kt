@@ -162,6 +162,7 @@ class Controller(
                 context.close()
             }
             document.destroy()
+            bitmapCache.free()
         }
     }
 
@@ -205,7 +206,7 @@ class Controller(
             activity.subscriptionManager.addDocListeners(listener)
             activity.view.pageLayoutManager = pageLayoutManager
 
-            onDimensionChanged(viewHeight, viewHeight)
+            onDimensionChanged(viewWidth, viewHeight)
         }
     }
 
