@@ -113,11 +113,11 @@ class Controller(
     }
 
     fun drawNext(): Pair<PageView, Job>? {
-        return pageLayoutManager.renderNextOrPrev(true)
+        return pageLayoutManager.renderNextOrPrev(true, isTapNavigation = true)
     }
 
     fun drawPrev(): Pair<PageView, Job>? {
-        return pageLayoutManager.renderNextOrPrev(false)
+        return pageLayoutManager.renderNextOrPrev(false, isTapNavigation = true)
     }
 
     fun translateAndZoom(zoomScaling: Float, startFocus: PointF, endFocus: PointF, deltaX: Float, deltaY: Float) {

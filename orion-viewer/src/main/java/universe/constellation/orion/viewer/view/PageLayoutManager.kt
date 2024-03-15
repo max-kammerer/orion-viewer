@@ -333,13 +333,16 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         }
     }
 
-    fun renderNextOrPrev(next: Boolean): Pair<PageView, Job>? {
+    fun renderNextOrPrev(next: Boolean, isTapNavigation: Boolean = false): Pair<PageView, Job>? {
         currentPageLayout()?.let {
             val copy = it.copy()
             val layoutStrategy = controller.layoutStrategy
             val currentPageNum = copy.pageNumber
+            log("renderNextOrPrev $copy")
             when (val res = layoutStrategy.calcPageLayout(copy, next)) {
                 0 -> {
+                    log("renderNextOrPrev new params: $copy")
+                    if (isTapNavigation && !next && copy.y.offset < 0) { copy.y.offset = 0 }
                     return controller.drawPage(copy)
                 }
 
