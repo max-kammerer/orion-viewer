@@ -45,7 +45,8 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
     val sceneRect = Rect(0, 0, scene.width, scene.height)
 
     private val tmpRect = Rect()
-    private val tmpRect2 = Rect()
+    private val tmpRectF = RectF()
+    private val tmpRectF2 = RectF()
 
 
     private var sceneWidth: Int
@@ -428,14 +429,14 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene): 
 
     private fun dump() {
         activePages.forEach{
-            log("Dump ${it.pageNum} ${it.state}: ${it.layoutData}")
+            log("Dump ${it.pageNum} ${it.state}: ${it.layoutData.globalRect(tmpRectF)}")
         }
 
         activePages.zipWithNext().forEach {
-            val rect1 = it.first.layoutData.globalRect(tmpRect)
-            val rect2 = it.second.layoutData.globalRect(tmpRect2)
-            if (Rect.intersects(rect1, rect2)) {
-                val intersection = Rect(rect1)
+            val rect1 = it.first.layoutData.globalRect(tmpRectF)
+            val rect2 = it.second.layoutData.globalRect(tmpRectF2)
+            if (RectF.intersects(rect1, rect2)) {
+                val intersection = RectF(rect1)
                 intersection.intersect(rect2)
                 val message =
                     "intersected pages ${it.first.pageNum} and ${it.second.pageNum} rects: $rect1 $rect2, intersection $intersection"
