@@ -1,48 +1,16 @@
-/*
- * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
- *
- * Copyright (C) 2011-2013  Michael Bogdanov & Co
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package universe.constellation.orion.viewer;
 
-import androidx.core.internal.view.SupportMenuItem;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 
-import java.util.HashMap;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.internal.view.SupportMenuItem;
 
-/**
- * User: mike
- * Date: 20.05.12
- * Time: 16:41
- */
+
 public enum OptionActions {
 
     NONE("NONE"),
-
-    FULL_SCREEN("FULL_SCREEN") {
-        public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
-            activity.getWindow().setFlags(newValue ? WindowManager.LayoutParams.FLAG_FULLSCREEN : 0, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            activity.getDevice().fullScreen(newValue, activity);
-        }
-    },
 
     SHOW_ACTION_BAR("SHOW_ACTION_BAR") {
         public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
@@ -119,20 +87,6 @@ public enum OptionActions {
     };
 
 
-    private static final HashMap<String, OptionActions> actions = new HashMap<>();
-
-    static {
-        OptionActions[] values = values();
-        for (OptionActions value : values) {
-            actions.put(value.getKey(), value);
-        }
-    }
-
-    public static OptionActions getAction(String key) {
-        OptionActions result = actions.get(key);
-        return result != null ? result : NONE;
-    }
-
     private final String key;
 
     OptionActions(String key) {
@@ -144,10 +98,6 @@ public enum OptionActions {
     }
 
     public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
-
-    }
-
-    public void doAction(OrionViewerActivity activity, String oldValue, String newValue) {
 
     }
 
