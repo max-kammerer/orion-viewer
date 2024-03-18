@@ -1074,7 +1074,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             if (globalOptions.isShowTapHelp) {
                 TapHelpDialog(this).showDialog()
             }
-            controller?.drawPage(lastPageInfo1.pageNumber, lastPageInfo1.newOffsetX, lastPageInfo1.newOffsetY)
+            controller?.drawPage(lastPageInfo1.pageNumber, lastPageInfo1.newOffsetX, lastPageInfo1.newOffsetY, lastPageInfo1.isSinglePageMode)
             controller?.pageLayoutManager?.uploadNewPages()
         }
     }

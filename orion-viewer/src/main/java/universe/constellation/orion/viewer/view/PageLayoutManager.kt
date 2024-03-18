@@ -11,6 +11,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import universe.constellation.orion.viewer.Controller
+import universe.constellation.orion.viewer.LastPageInfo
 import universe.constellation.orion.viewer.PageView
 import universe.constellation.orion.viewer.bitmap.BitmapManager
 import universe.constellation.orion.viewer.errorInDebug
@@ -390,7 +391,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         doScrollOnly(newPosition.x, newPosition.y, x - newPosition.x, y - newPosition.y, isTapNavigation)
     }): Pair<PageView, Job> {
         println("RenderPageAt $pageNum $x $y")
-        isSinglePageMode = true
+        isSinglePageMode = isTapNavigation
         val index = activePages.binarySearch { it.pageNum.compareTo(pageNum) }
 
         val page = if (index >= 0) {
@@ -505,6 +506,10 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
             rect.bottom = 400
         }
         return rect
+    }
+
+    fun serialize(info: LastPageInfo) {
+        info.isSinglePageMode = isSinglePageMode
     }
 }
 

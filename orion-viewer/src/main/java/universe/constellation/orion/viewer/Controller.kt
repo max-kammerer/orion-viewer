@@ -212,6 +212,7 @@ class Controller(
 
     fun serializeAndSave(info: LastPageInfo, activity: Activity) {
         layoutStrategy.serialize(info)
+        pageLayoutManager.serialize(info)
         info.newOffsetX = layoutInfo?.x?.offset ?: 0
         info.newOffsetY = layoutInfo?.y?.offset ?: 0
         info.pageNumber = layoutInfo?.pageNumber ?: 0

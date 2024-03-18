@@ -85,5 +85,8 @@ class LastPageInfo {
     @JvmField
     var colorMode = "CM_NORMAL"
 
+    @JvmField
+    var isSinglePageMode = true
+
 }
 
