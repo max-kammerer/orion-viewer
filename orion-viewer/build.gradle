@@ -199,7 +199,7 @@ def fetchScreenshotsTask = tasks.register('fetchScreenshots') {
             commandLine("mkdir", "-p",  localScreenShotDir)
         }
         exec {
-            commandLine(androidComponents.sdkComponents.adb.get(), "pull",  screenShootDir + "/.", localScreenShotDir)
+            commandLine(androidComponents.sdkComponents.adb.get(), "pull",  screenShotDir + "/.", localScreenShotDir)
         }
     }
 
