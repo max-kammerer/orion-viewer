@@ -23,6 +23,7 @@ import universe.constellation.orion.viewer.log
 import java.io.File
 
 internal const val MANUAL_DEBUG = false
+internal const val WAIT_TIMEOUT: Long = 15000
 
 abstract class BaseTest {
 
@@ -52,10 +53,17 @@ abstract class BaseTest {
             return
         }
 
-        val grant = device.wait(Until.findObject(By.textContains("Grant")), 30000) ?: error("Can't find grant action in warning dialog")
+
+        val grant = device.wait(Until.findObject(By.textContains("Grant")), WAIT_TIMEOUT) ?:
+            run {
+                //in case of problem with system UI
+                device.wait(Until.findObject(By.textContains("Wait")), 1000)?.click()
+                device.wait(Until.findObject(By.textContains("Grant")), WAIT_TIMEOUT) ?: error("Can't find grant action in warning dialog")
+            }
+
         grant.click()
 
-        val allowField = device.wait(Until.findObject(By.textContains("Allow")), 30000)
+        val allowField = device.wait(Until.findObject(By.textContains("Allow")), WAIT_TIMEOUT)
         allowField.click()
         assertTrue(device.findObject(By.checkable(true)).isChecked)
         device.pressBack()
