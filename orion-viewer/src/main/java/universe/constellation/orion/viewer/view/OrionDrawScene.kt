@@ -106,10 +106,15 @@ class OrionDrawScene : View {
         }
 
         //TODO move to page
-        for (drawTask in tasks) {
-            drawTask.drawOnCanvas(canvas, stuff, null)
-        }
         canvas.restore()
+    }
+
+    fun runAdditionalTaskInPageCanvasAndCoord(canvas: Canvas, page: Int) {
+        for (drawTask in tasks) {
+            if (drawTask.accept(page)) {
+                drawTask.drawOnCanvas(canvas, stuff, null)
+            }
+        }
     }
 
     fun setDimensionAware(dimensionAware: ViewDimensionAware) {

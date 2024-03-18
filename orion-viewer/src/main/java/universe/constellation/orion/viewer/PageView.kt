@@ -240,6 +240,7 @@ class PageView(
         canvas.translate(layoutData.position.x, layoutData.position.y)
         bitmap.draw(canvas, layoutData.wholePageRect, defaultPaint)
         drawBorder(canvas, scene)
+        scene.runAdditionalTaskInPageCanvasAndCoord(canvas, pageNum)
         canvas.restore()
     }
 

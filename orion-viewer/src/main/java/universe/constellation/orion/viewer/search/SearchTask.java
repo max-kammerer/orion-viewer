@@ -74,7 +74,7 @@ public abstract class SearchTask {
         progressDialog.setOnCancelListener(dialog -> stop());
         progressDialog.setMax(document.getPageCount());
 
-        mSearchTask = new AsyncTask<Void, Integer, SearchTaskResult>() {
+        mSearchTask = new AsyncTask<>() {
             @Override
             protected SearchTaskResult doInBackground(Void... params) {
                 int index = startIndex;

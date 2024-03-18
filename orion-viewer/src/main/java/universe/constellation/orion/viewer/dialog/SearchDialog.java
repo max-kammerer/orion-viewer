@@ -21,7 +21,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.artifex.mupdfdemo.SearchTaskResult;
@@ -83,7 +82,8 @@ public class SearchDialog extends DialogFragment {
         window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.TOP;
-        androidx.appcompat.widget.Toolbar toolbar = requireOrionActivity().getToolbar();
+        OrionViewerActivity orionViewerActivity = requireOrionActivity();
+        androidx.appcompat.widget.Toolbar toolbar = orionViewerActivity.getToolbar();
         wlp.y = toolbar.getHeight() + 5;
 
         window.setAttributes(wlp);
@@ -92,7 +92,7 @@ public class SearchDialog extends DialogFragment {
         dialog.setContentView(R.layout.search_dialog);
         View resultView = super.onCreateView(inflater, container, savedInstanceState);
 
-        final Controller controller = requireOrionActivity().getController();
+        final Controller controller = orionViewerActivity.getController();
 
         searchField = dialog.findViewById(R.id.searchText);
         searchField.getBackground().setAlpha(ALPHA);
@@ -105,7 +105,7 @@ public class SearchDialog extends DialogFragment {
         searchPrev.getBackground().setAlpha(ALPHA);
         searchPrev.setOnClickListener(v -> doSearch(controller.getCurrentPage(), -1, controller));
 
-        OrionDrawScene view = controller.getActivity().getView();
+        OrionDrawScene view = orionViewerActivity.getView();
         view.addTask(lastSearchResultRenderer);
 
         myTask = new SearchTask(getActivity(), controller.getDocument()) {
@@ -206,7 +206,7 @@ public class SearchDialog extends DialogFragment {
         boolean performRealSearch = false;
         String newSearch = searchField.getText().toString();
         lastDirectionOnSearch = direction;
-        if ("".equals(newSearch)) {
+        if (newSearch.isEmpty()) {
             requireOrionActivity().showAlert(R.string.msg_error, R.string.msg_specify_keyword_for_search);
             return;
         }
@@ -249,9 +249,9 @@ public class SearchDialog extends DialogFragment {
         lastSearch = newSearch;
     }
 
-    @Nullable
+    @NonNull
     private OrionViewerActivity requireOrionActivity() {
-        return (OrionViewerActivity) getActivity();
+        return (OrionViewerActivity) requireActivity();
     }
 
     private void drawBatch(SubBatch subBatch, Controller controller) {
@@ -293,6 +293,11 @@ public class SearchDialog extends DialogFragment {
 
         }
 
+        @Override
+        public boolean accept(int page) {
+            return batch != null && batch.lp.getPageNumber() == page;
+        }
+
         public void setBatch(SubBatch batch) {
             this.batch = batch;
         }
@@ -309,8 +314,8 @@ public class SearchDialog extends DialogFragment {
                 paint.setStyle(Paint.Style.FILL);
                 for (RectF rect : rects) {
                     paint.setAlpha(index++ == batch.active ? activeAlpha : generalAlpha);
-                    int left = batch.lp.getX().getMarginLeft() + batch.lp.getX().getOffset();
-                    int top = batch.lp.getY().getMarginLeft() + batch.lp.getY().getOffset();
+                    int left = batch.lp.getX().getMarginLeft();
+                    int top = batch.lp.getY().getMarginLeft();
                     canvas.drawRect(rect.left - left, rect.top - top, rect.right - left, rect.bottom - top, paint);
                 }
                 paint.setAlpha(prevAlpha);
