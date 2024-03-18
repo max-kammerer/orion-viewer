@@ -34,6 +34,7 @@ import universe.constellation.orion.viewer.PageDimension
 import universe.constellation.orion.viewer.document.AbstractDocument
 import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.document.PageWithAutoCrop
+import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.errorInDebugOr
 
 class PdfDocument @Throws(Exception::class) constructor(filePath: String) : AbstractDocument(filePath) {
@@ -44,23 +45,22 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
         private var displayList: DisplayList? = null
 
         private fun readPageDataIfNeeded() {
-            if (destroyed) return errorInDebugOr("Page $pageNum already destroyed") { dimensionForCorruptedPage() }
+            if (destroyed) return errorInDebug("Page $pageNum already destroyed")
             if (page == null) {
-                page = core.doc.loadPage(pageNum)
+                synchronized(core) {
+                    page = core.doc.loadPage(pageNum)
+                }
             }
         }
 
         override fun getPageDimension(): PageDimension {
-            //TODO default page size
             readPageDataIfNeeded()
-            if (page == null) {
-                return dimensionForCorruptedPage()
-            }
-
-            return core.getPageSize(pageNum).run {
-                val b = page!!.bounds
-                val pageWidth = b.x1 - b.x0
-                val pageHeight = b.y1 - b.y0
+            return if (page == null) {
+                dimensionForCorruptedPage()
+            } else {
+                val bbox = page?.bounds ?: errorInDebugOr("Problem extracting page dimension") { return dimensionForCorruptedPage()}
+                val pageWidth = bbox.x1 - bbox.x0
+                val pageHeight = bbox.y1 - bbox.y0
                 PageDimension(pageWidth.toInt(), pageHeight.toInt())
             }
         }
@@ -116,6 +116,13 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
             }
         }
 
+        override fun getText(absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): String? {
+            if (destroyed) return null
+            readPageDataIfNeeded()
+            if (page == null) return null
+            return getText(page!!, absoluteX, absoluteY, width, height, singleWord)
+        }
+
         override fun destroy() {
             destroyPage(this)
         }
@@ -142,8 +149,8 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
 
     external override fun setThreshold(threshold: Int)
 
-    override fun getText(pageNum: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): String? {
-        val text: StructuredText = core.getText(pageNum)
+    private fun getText(page: Page, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): String? {
+        val text: StructuredText = synchronized(core) { page.toStructuredText() }
 
         // The text of the page held in a hierarchy (blocks, lines, spans).
         // Currently we don't need to distinguish the blocks level or

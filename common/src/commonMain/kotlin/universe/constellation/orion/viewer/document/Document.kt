@@ -55,6 +55,8 @@ interface Page {
 
     fun searchText(text: String): Array<RectF>?
 
+    fun getText(absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): String?
+
     fun destroy()
 }
 
@@ -105,8 +107,6 @@ interface Document : ImagePostProcessor {
     val outline: Array<OutlineItem>?
 
     fun getOrCreatePageAdapter(pageNum: Int): PageWithAutoCrop
-
-    fun getText(pageNum: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): String?
 
     fun destroy()
 

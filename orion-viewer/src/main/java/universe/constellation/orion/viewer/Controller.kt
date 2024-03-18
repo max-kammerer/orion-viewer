@@ -38,6 +38,7 @@ import kotlinx.coroutines.withContext
 import universe.constellation.orion.viewer.bitmap.DeviceInfo
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.OutlineItem
+import universe.constellation.orion.viewer.document.Page
 import universe.constellation.orion.viewer.layout.CropMargins
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.LayoutStrategy
@@ -287,10 +288,9 @@ class Controller(
 
     fun getOutline(): Array<OutlineItem>? = document.outline
 
-    fun selectRawText(pageNum: Int, startX: Int, startY: Int, widht: Int, height: Int, isSingleWord: Boolean): String? {
-        return document.getText(
-            pageNum, startX, startY, widht, height, isSingleWord
-        )?.trimText(isSingleWord)
+    fun selectRawText(page: Page, startX: Int, startY: Int, widht: Int, height: Int, isSingleWord: Boolean): String? {
+        return page.getText(startX, startY, widht, height, isSingleWord)?.trimText(isSingleWord)
+            ?.apply { log("Text selection in ${page.pageNum}: $this") }
     }
 
     private fun String.trimText(isSingleWord: Boolean): String {

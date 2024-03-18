@@ -4,6 +4,7 @@ import android.graphics.Rect
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runners.Parameterized
+import universe.constellation.orion.viewer.document.withPage
 import universe.constellation.orion.viewer.selection.SelectionAutomata
 import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.BookTest
@@ -39,7 +40,15 @@ class SelectionTest(
             absoluteRect.height(),
             isSingleWord
         )
-        val text = document.getText(page1Based - 1/*zero based*/, selectionRect.left, selectionRect.top, selectionRect.width(), selectionRect.height(), isSingleWord)
-        assertEquals(expectedText, text)
+        document.withPage(page1Based - 1 /*zero based*/) {
+            val text = getText(
+                selectionRect.left,
+                selectionRect.top,
+                selectionRect.width(),
+                selectionRect.height(),
+                isSingleWord
+            )
+            assertEquals(expectedText, text)
+        }
     }
 }

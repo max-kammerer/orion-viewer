@@ -98,6 +98,16 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
             return searchPage(this.pageNum, text)
         }
 
+        override fun getText(
+            absoluteX: Int,
+            absoluteY: Int,
+            width: Int,
+            height: Int,
+            singleWord: Boolean
+        ): String? {
+            return getText(pageNum, absoluteX, absoluteY, width, height, singleWord)
+        }
+
         override fun destroyInternal() {
             destroyed = true
             releasePage(pagePointer)
@@ -193,7 +203,7 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
         return rects[position]
     }
 
-    override fun getText(pageNum: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean) =
+    fun getText(pageNum: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean) =
             getText(docPointer, pageNum, absoluteX, absoluteY, width, height)
 
     companion object {

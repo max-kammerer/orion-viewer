@@ -98,7 +98,7 @@ public class SelectionAutomata extends DialogOverView {
 
         for (PageAndSelection selection: data) {
             Rect rect = selection.getAbsoluteRectWithoutCrop();
-            String text = controller.selectRawText(selection.getPageNum(), rect.left, rect.top, rect.width(), rect.height(), isSingleWord);
+            String text = controller.selectRawText(selection.getPage(), rect.left, rect.top, rect.width(), rect.height(), isSingleWord);
             if (text != null) {
                 if (!first) {
                     sb.append(" ");
@@ -108,7 +108,7 @@ public class SelectionAutomata extends DialogOverView {
             }
         }
         String text = sb.toString();
-        if (!"".equals(text)) {
+        if (!text.isEmpty()) {
             if (isSingleWord && translate) {
                 dialog.dismiss();
                 Action.DICTIONARY.doAction(controller, activity, text);

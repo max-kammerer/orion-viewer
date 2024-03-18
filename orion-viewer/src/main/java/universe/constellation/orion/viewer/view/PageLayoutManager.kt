@@ -318,7 +318,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
                 (pageSelection.right/zoom).toInt(), (pageSelection.bottom/zoom).toInt()
             )
             log("selection: " + it.pageNum + pageSelection)
-            PageAndSelection(it.pageNum, pageSelection)
+            PageAndSelection(it.page, pageSelection)
         }
     }
 

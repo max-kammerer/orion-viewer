@@ -1,5 +1,6 @@
 package universe.constellation.orion.viewer.selection
 
 import android.graphics.Rect
+import universe.constellation.orion.viewer.document.Page
 
-class PageAndSelection(val pageNum: Int, val absoluteRectWithoutCrop: Rect)
+class PageAndSelection(val page: Page, val absoluteRectWithoutCrop: Rect)

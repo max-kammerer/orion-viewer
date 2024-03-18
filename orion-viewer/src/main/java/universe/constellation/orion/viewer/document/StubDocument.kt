@@ -42,6 +42,16 @@ class StubDocument(pathOrMessage: String, var bodyText: String = pathOrMessage) 
             override fun searchText(text: String): Array<RectF>? {
                 return null
             }
+
+            override fun getText(
+                absoluteX: Int,
+                absoluteY: Int,
+                width: Int,
+                height: Int,
+                singleWord: Boolean
+            ): String? {
+                return null
+            }
         }
     }
 
@@ -53,9 +63,6 @@ class StubDocument(pathOrMessage: String, var bodyText: String = pathOrMessage) 
         get() = 1
 
     override val outline: Array<OutlineItem> = emptyArray()
-
-    override fun getText(pageNum: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): String? =
-            null
 
     override fun destroy() {}
 }
