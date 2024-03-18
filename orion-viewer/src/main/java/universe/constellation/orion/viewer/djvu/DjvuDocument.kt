@@ -39,8 +39,8 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
         private var pagePointer: Long = 0
 
         override fun getPageDimension(): PageDimension {
-            //TODO default page size
-            if (docPointer == 0L || destroyed) return errorInDebugOr("Page $pageNum already destroyed or doc is null") { dimensionForCorruptedPage() }
+            if (docPointer == 0L) return errorInDebugOr("Document for $pageNum is null") { dimensionForCorruptedPage() }
+            if (destroyed) return errorInDebugOr("Page $pageNum already destroyed") { dimensionForCorruptedPage() }
 
             PageDimension().also {
                 timing("Page $pageNum info calculation") {

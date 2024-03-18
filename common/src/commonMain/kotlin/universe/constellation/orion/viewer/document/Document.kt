@@ -21,6 +21,7 @@ package universe.constellation.orion.viewer.document
 
 import universe.constellation.orion.viewer.Bitmap
 import universe.constellation.orion.viewer.PageDimension
+import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.geometry.RectF
 import universe.constellation.orion.viewer.log
 
@@ -85,7 +86,8 @@ abstract class AbstractDocument(override val filePath: String) : Document {
     override fun destroyPage(page: Page) {
         val usages = (page as PageWithAutoCrop).decreaseUsages()
         if (usages == 0) {
-            pages.remove(page.pageNum)
+            val removed = pages.remove(page.pageNum)
+            if (page != removed) errorInDebug("Pages doesn't match ${page.pageNum} ${removed?.pageNum}")
             log("Destroying ${page.pageNum} in $this")
             page.destroyInternal()
         }

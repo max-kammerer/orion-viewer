@@ -19,6 +19,8 @@
 
 package universe.constellation.orion.viewer
 
+import universe.constellation.orion.common.BuildConfig
+
 interface Logger {
     fun log(m: String) = println(m)
 
@@ -39,4 +41,16 @@ fun log(e: Exception) = logger.log(e.message, e)
 
 fun log(m: String, e: Exception) {
     logger.log(m, e)
+}
+
+inline fun errorInDebug(message: String) {
+    log("Error: $message")
+    if (BuildConfig.DEBUG) {
+        error(message)
+    }
+}
+
+inline fun <T> errorInDebugOr(message: String, elseBody: () -> T) : T {
+    errorInDebug(message)
+    return elseBody()
 }
