@@ -229,7 +229,7 @@ class PageView(
                         }
                     }
                 } else {
-                    log("PageView.render: canceled")
+                    log("PageView.render $pageNum $layoutData: canceled")
                 }
             }/*.join()*/
         }

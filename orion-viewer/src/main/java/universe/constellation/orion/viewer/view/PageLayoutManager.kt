@@ -168,6 +168,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
     private fun updateCache() {
         var head = true
         activePages.zipWithNext { f, s ->
+            val oldState = f.state
             if (head && !s.isVisibleState && !f.isVisibleState) {
                 toDestroy.add(f)
                 f.destroy()
@@ -175,11 +176,12 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
             } else {
                 head = false
             }
-            println("${f.pageNum} ${f.state}")
+            log("Cache update: ${f.pageNum} newState=${f.state} oldState=$oldState")
         }
 
         head = true
         activePages.asReversed().zipWithNext { f, s ->
+            val oldState = f.state
             if (head && !s.isVisibleState && !f.isVisibleState) {
                 toDestroy.add(f)
                 f.destroy()
@@ -187,7 +189,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
             } else {
                 head = false
             }
-            println("${f.pageNum} ${f.state}")
+            log("Cache update: ${f.pageNum} newState=${f.state} oldState=$oldState")
         }
         activePages.removeAll(toDestroy)
         toDestroy.clear()
