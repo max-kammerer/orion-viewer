@@ -45,34 +45,35 @@ abstract class BaseTest {
     }
 
     @Before
-    fun grantPermissions() {
+    fun grantPermissionsAndCheckInvariants() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return
 
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         //workaround problem "system ui is not responding" problem
         device.findObject(By.textContains("Wait"))?.click()
 
-        if (BookDescription.SICP.asFile().canRead()) {
-            return
+        if (!BookDescription.SICP.asFile().canRead()) {
+            val grant =
+                device.wait(Until.findObject(By.textContains("Grant")), WAIT_TIMEOUT) ?: run {
+                    //in case of problem with system UI
+                    device.wait(Until.findObject(By.textContains("Wait")), 1000)?.click()
+                    device.wait(Until.findObject(By.textContains("Grant")), WAIT_TIMEOUT)
+                        ?: error("Can't find grant action in warning dialog")
+                }
+
+            grant.click()
+
+            val allowField = device.wait(Until.findObject(By.textContains("Allow")), WAIT_TIMEOUT)
+            allowField.click()
+            device.wait(Until.findObject(By.checkable(true)), WAIT_TIMEOUT)
+            assertTrue(device.findObject(By.checkable(true)).isChecked)
+            device.pressBack()
+            Espresso.onView(ViewMatchers.withId(R.id.view))
+                .check(matches(ViewMatchers.isDisplayed()))
+            Espresso.onView(ViewMatchers.withId(R.id.view))
+                .check(matches(ViewMatchers.isCompletelyDisplayed()))
+            assertTrue(BookDescription.SICP.asFile().canRead())
         }
-
-        val grant = device.wait(Until.findObject(By.textContains("Grant")), WAIT_TIMEOUT) ?:
-            run {
-                //in case of problem with system UI
-                device.wait(Until.findObject(By.textContains("Wait")), 1000)?.click()
-                device.wait(Until.findObject(By.textContains("Grant")), WAIT_TIMEOUT) ?: error("Can't find grant action in warning dialog")
-            }
-
-        grant.click()
-
-        val allowField = device.wait(Until.findObject(By.textContains("Allow")), WAIT_TIMEOUT)
-        allowField.click()
-        device.wait(Until.findObject(By.checkable(true)), WAIT_TIMEOUT)
-        assertTrue(device.findObject(By.checkable(true)).isChecked)
-        device.pressBack()
-        Espresso.onView(ViewMatchers.withId(R.id.view)).check(matches(ViewMatchers.isDisplayed()))
-        Espresso.onView(ViewMatchers.withId(R.id.view)).check(matches(ViewMatchers.isCompletelyDisplayed()))
-        assertTrue(BookDescription.SICP.asFile().canRead())
     }
 
     @After

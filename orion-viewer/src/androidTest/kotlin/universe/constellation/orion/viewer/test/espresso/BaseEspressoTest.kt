@@ -1,5 +1,6 @@
 package universe.constellation.orion.viewer.test.espresso
 
+import android.os.Build
 import android.view.View
 import android.widget.SeekBar
 import androidx.test.espresso.Espresso
@@ -9,6 +10,8 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.Until
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matcher
@@ -22,6 +25,8 @@ import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.test.framework.BookFile
 import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
+import universe.constellation.orion.viewer.test.framework.WAIT_TIMEOUT
+import universe.constellation.orion.viewer.view.OrionDrawScene
 
 @SdkSuppress(minSdkVersion = 21)
 /*Default zoom is "Fit Width"*/
@@ -55,6 +60,10 @@ open class BaseEspressoTest(val bookDescription: BookFile) : InstrumentationTest
             Assert.assertEquals(it.controller!!.document.filePath, bookDescription.asPath())
             Assert.assertFalse(controller.pageLayoutManager.sceneRect.isEmpty)
         }
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            device.wait(Until.findObject(By.clazz(OrionDrawScene::class.java)), 1000)
+        }
     }
 
     @After
@@ -77,11 +86,17 @@ open class BaseEspressoTest(val bookDescription: BookFile) : InstrumentationTest
 
     protected fun openZoom() {
         Espresso.openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
+        if (Build.VERSION.SDK_INT >= 21) {
+            device.wait(Until.findObject(By.textContains("Zoom")), 1000)
+        }
         Espresso.onView(ViewMatchers.withText("Zoom")).perform(ViewActions.click())
     }
 
     protected fun openGoTo() {
         Espresso.openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
+        if (Build.VERSION.SDK_INT >= 21) {
+            device.wait(Until.findObject(By.textContains("Go To")), 1000)
+        }
         Espresso.onView(ViewMatchers.withText("Go To")).perform(ViewActions.click())
     }
 
