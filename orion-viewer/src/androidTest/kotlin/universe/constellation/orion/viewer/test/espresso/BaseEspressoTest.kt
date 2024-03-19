@@ -26,6 +26,7 @@ import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.test.framework.BookFile
 import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
 import universe.constellation.orion.viewer.test.framework.WAIT_TIMEOUT
+import universe.constellation.orion.viewer.view.OrionDrawScene
 
 @SdkSuppress(minSdkVersion = 21)
 /*Default zoom is "Fit Width"*/
@@ -58,6 +59,10 @@ open class BaseEspressoTest(val bookDescription: BookFile) : InstrumentationTest
             controller = it.controller!!
             Assert.assertEquals(it.controller!!.document.filePath, bookDescription.asPath())
             Assert.assertFalse(controller.pageLayoutManager.sceneRect.isEmpty)
+        }
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            device.wait(Until.findObject(By.clazz(OrionDrawScene::class.java)), 1000)
         }
     }
 
