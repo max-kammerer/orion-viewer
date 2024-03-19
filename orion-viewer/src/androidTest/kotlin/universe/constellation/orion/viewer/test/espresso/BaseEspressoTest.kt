@@ -1,5 +1,6 @@
 package universe.constellation.orion.viewer.test.espresso
 
+import android.os.Build
 import android.view.View
 import android.widget.SeekBar
 import androidx.test.espresso.Espresso
@@ -80,7 +81,9 @@ open class BaseEspressoTest(val bookDescription: BookFile) : InstrumentationTest
 
     protected fun openZoom() {
         Espresso.openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
-        device.wait(Until.findObject(By.textContains("Zoom")), 1000)
+        if (Build.VERSION.SDK_INT >= 21) {
+            device.wait(Until.findObject(By.textContains("Zoom")), 1000)
+        }
         Espresso.onView(ViewMatchers.withText("Zoom")).perform(ViewActions.click())
     }
 
