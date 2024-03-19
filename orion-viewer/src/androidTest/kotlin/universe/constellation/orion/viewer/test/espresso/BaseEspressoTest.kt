@@ -9,6 +9,8 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.Until
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matcher
@@ -22,6 +24,7 @@ import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.test.framework.BookFile
 import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
+import universe.constellation.orion.viewer.test.framework.WAIT_TIMEOUT
 
 @SdkSuppress(minSdkVersion = 21)
 /*Default zoom is "Fit Width"*/
@@ -77,6 +80,7 @@ open class BaseEspressoTest(val bookDescription: BookFile) : InstrumentationTest
 
     protected fun openZoom() {
         Espresso.openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
+        device.wait(Until.findObject(By.textContains("Zoom")), 1000)
         Espresso.onView(ViewMatchers.withText("Zoom")).perform(ViewActions.click())
     }
 
