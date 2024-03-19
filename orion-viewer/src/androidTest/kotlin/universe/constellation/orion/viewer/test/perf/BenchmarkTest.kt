@@ -80,7 +80,7 @@ class BenchmarkTest : BaseTest() {
                 val page = book.getOrCreatePageAdapter(pageNum)
                 pageInfo.add(
                     time {
-                        page.getPageDimension()
+                        page.getPageSize()
                     }
                 )
                 val res = time {

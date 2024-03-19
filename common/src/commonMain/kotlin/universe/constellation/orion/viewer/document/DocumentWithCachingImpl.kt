@@ -50,7 +50,7 @@ abstract class PageWithAutoCrop(override val pageNum: Int) : Page {
     protected var destroyed = false
 
     @Volatile
-    lateinit var pageDimension: PageDimension
+    private lateinit var pageSize: PageSize
 
     fun increaseUsages() {
         counter.incrementAndGet()
@@ -60,24 +60,24 @@ abstract class PageWithAutoCrop(override val pageNum: Int) : Page {
         return counter.decrementAndGet()
     }
 
-    protected abstract fun readPageDimension(): PageDimension?
+    protected abstract fun readPageSize(): PageSize?
 
-    override fun getPageDimension(): PageDimension {
-        if (!::pageDimension.isInitialized) {
+    override fun getPageSize(): PageSize {
+        if (!::pageSize.isInitialized) {
             timing("Page $pageNum dimension extraction") {
-                pageDimension = readPageDimension() ?: dimensionForCorruptedPage().also {
+                pageSize = readPageSize() ?: dimensionForCorruptedPage().also {
                     logError("Page $pageNum is corrupted")
                 }
             }
-            log("Page $pageNum dimension: $pageDimension")
+            log("Page $pageNum dimension: $pageSize")
         }
-        return pageDimension
+        return pageSize
     }
 
-    private fun dimensionForCorruptedPage() = PageDimension(300, 400)
+    private fun dimensionForCorruptedPage() = PageSize(300, 400)
 
     open fun getPageInfo(layoutStrategy: SimpleLayoutStrategy): PageInfo {
-        val info = getPageDimension()
+        val info = getPageSize()
         val pageInfo = PageInfo(pageNum, info.width, info.height)
         val cropMode = layoutStrategy.margins.cropMode
 

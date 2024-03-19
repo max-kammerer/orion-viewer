@@ -34,7 +34,7 @@ actual data class PageInfo @JvmOverloads constructor(
 }
 
 
-actual data class PageDimension @JvmOverloads constructor(
+actual data class PageSize @JvmOverloads constructor(
     /*used from jni*/
     @JvmField actual var width: Int = 0,
     /*used from jni*/

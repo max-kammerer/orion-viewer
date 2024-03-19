@@ -20,7 +20,7 @@
 package universe.constellation.orion.viewer.document
 
 import universe.constellation.orion.viewer.Bitmap
-import universe.constellation.orion.viewer.PageDimension
+import universe.constellation.orion.viewer.PageSize
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.geometry.RectF
 import universe.constellation.orion.viewer.log
@@ -48,7 +48,7 @@ interface Page {
 
     val pageNum: Int
 
-    fun getPageDimension(): PageDimension
+    fun getPageSize(): PageSize
 
     fun renderPage(bitmap: Bitmap, zoom: Double, left: Int, top: Int, right: Int, bottom: Int, leftOffset: Int, topOffset: Int)
 

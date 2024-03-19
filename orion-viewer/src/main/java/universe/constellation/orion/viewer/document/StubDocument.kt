@@ -1,7 +1,7 @@
 package universe.constellation.orion.viewer.document
 
 import universe.constellation.orion.viewer.Bitmap
-import universe.constellation.orion.viewer.PageDimension
+import universe.constellation.orion.viewer.PageSize
 import universe.constellation.orion.viewer.PageInfo
 import universe.constellation.orion.viewer.geometry.RectF
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
@@ -13,14 +13,14 @@ class StubDocument(pathOrMessage: String, var bodyText: String = pathOrMessage) 
     override fun createPage(pageNum: Int): PageWithAutoCrop {
         return object: PageWithAutoCrop(pageNum) {
 
-            override fun readPageDimension(): PageDimension {
-                return PageDimension(300, 400)
+            override fun readPageSize(): PageSize {
+                return PageSize(300, 400)
             }
 
             override fun getPageInfo(
                 layoutStrategy: SimpleLayoutStrategy
             ): PageInfo {
-                val pageDim = getPageDimension()
+                val pageDim = getPageSize()
                 return PageInfo(pageNum, pageDim.width, pageDim.height)
             }
 

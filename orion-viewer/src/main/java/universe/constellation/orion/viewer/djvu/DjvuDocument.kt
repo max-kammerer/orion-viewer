@@ -20,7 +20,7 @@
 package universe.constellation.orion.viewer.djvu
 
 import universe.constellation.orion.viewer.Bitmap
-import universe.constellation.orion.viewer.PageDimension
+import universe.constellation.orion.viewer.PageSize
 import universe.constellation.orion.viewer.document.AbstractDocument
 import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.document.PageWithAutoCrop
@@ -37,10 +37,10 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
         @Volatile
         private var pagePointer: Long = 0
 
-        override fun readPageDimension(): PageDimension? {
+        override fun readPageSize(): PageSize? {
             if (docPointer == 0L) return errorInDebugOr("Document for $pageNum is null") { null }
             if (destroyed) return errorInDebugOr("Page $pageNum already destroyed") { null }
-            return getPageDimension(docPointer, pageNum, PageDimension())
+            return getPageDimension(docPointer, pageNum, PageSize())
         }
 
         override fun readPageDataForRendering() {
@@ -214,7 +214,7 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
         external fun gotoPageInternal(doc: Long, pageNum: Int): Long
 
         @JvmStatic @Synchronized
-        external fun getPageDimension(doc: Long, pageNum: Int, info: PageDimension): PageDimension?
+        external fun getPageDimension(doc: Long, pageNum: Int, info: PageSize): PageSize?
 
         @JvmStatic @Synchronized
         external fun drawPage(doc: Long, page: Long, bitmap: Bitmap, zoom: Float, bitmapWidth: Int, bitmapHeight: Int,

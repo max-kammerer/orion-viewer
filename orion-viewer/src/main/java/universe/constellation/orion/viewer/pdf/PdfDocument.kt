@@ -30,7 +30,7 @@ import com.artifex.mupdf.fitz.android.AndroidDrawDevice
 import com.artifex.mupdf.viewer.MuPDFCore
 import com.artifex.mupdfdemo.TextWord
 import universe.constellation.orion.viewer.Bitmap
-import universe.constellation.orion.viewer.PageDimension
+import universe.constellation.orion.viewer.PageSize
 import universe.constellation.orion.viewer.document.AbstractDocument
 import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.document.PageWithAutoCrop
@@ -53,13 +53,13 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
             }
         }
 
-        override fun readPageDimension(): PageDimension? {
+        override fun readPageSize(): PageSize? {
             readPageDataIfNeeded()
             val bbox = page?.bounds ?: return null
                 ?: errorInDebugOr("Problem extracting page dimension") { return null }
             val pageWidth = bbox.x1 - bbox.x0
             val pageHeight = bbox.y1 - bbox.y0
-            return PageDimension(pageWidth.toInt(), pageHeight.toInt())
+            return PageSize(pageWidth.toInt(), pageHeight.toInt())
         }
 
         override fun renderPage(
