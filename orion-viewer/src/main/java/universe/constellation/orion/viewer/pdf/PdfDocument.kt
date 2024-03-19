@@ -53,16 +53,13 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
             }
         }
 
-        override fun getPageDimension(): PageDimension {
+        override fun readPageDimension(): PageDimension? {
             readPageDataIfNeeded()
-            return if (page == null) {
-                dimensionForCorruptedPage()
-            } else {
-                val bbox = page?.bounds ?: errorInDebugOr("Problem extracting page dimension") { return dimensionForCorruptedPage()}
-                val pageWidth = bbox.x1 - bbox.x0
-                val pageHeight = bbox.y1 - bbox.y0
-                PageDimension(pageWidth.toInt(), pageHeight.toInt())
-            }
+            val bbox = page?.bounds ?: return null
+                ?: errorInDebugOr("Problem extracting page dimension") { return null }
+            val pageWidth = bbox.x1 - bbox.x0
+            val pageHeight = bbox.y1 - bbox.y0
+            return PageDimension(pageWidth.toInt(), pageHeight.toInt())
         }
 
         override fun renderPage(

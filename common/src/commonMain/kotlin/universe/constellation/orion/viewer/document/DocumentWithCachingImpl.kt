@@ -42,12 +42,15 @@ private val bitmapArray: IntArray by lazy {
 }
 
 
-abstract class PageWithAutoCrop(override val pageNum: Int) :Page {
+abstract class PageWithAutoCrop(override val pageNum: Int) : Page {
 
     private val counter = AtomicInteger(0)
 
     @Volatile
     protected var destroyed = false
+
+    @Volatile
+    lateinit var pageDimension: PageDimension
 
     fun increaseUsages() {
         counter.incrementAndGet()
@@ -57,7 +60,21 @@ abstract class PageWithAutoCrop(override val pageNum: Int) :Page {
         return counter.decrementAndGet()
     }
 
-    protected fun dimensionForCorruptedPage() = PageDimension(300, 400)
+    protected abstract fun readPageDimension(): PageDimension?
+
+    override fun getPageDimension(): PageDimension {
+        if (!::pageDimension.isInitialized) {
+            timing("Page $pageNum dimension extraction") {
+                pageDimension = readPageDimension() ?: dimensionForCorruptedPage().also {
+                    logError("Page $pageNum is corrupted")
+                }
+            }
+            log("Page $pageNum dimension: $pageDimension")
+        }
+        return pageDimension
+    }
+
+    private fun dimensionForCorruptedPage() = PageDimension(300, 400)
 
     open fun getPageInfo(layoutStrategy: SimpleLayoutStrategy): PageInfo {
         val info = getPageDimension()

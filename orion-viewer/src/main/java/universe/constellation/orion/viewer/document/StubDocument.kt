@@ -12,7 +12,10 @@ class StubDocument(pathOrMessage: String, var bodyText: String = pathOrMessage) 
 
     override fun createPage(pageNum: Int): PageWithAutoCrop {
         return object: PageWithAutoCrop(pageNum) {
-            override fun getPageDimension(): PageDimension = PageDimension(300, 400)
+
+            override fun readPageDimension(): PageDimension {
+                return PageDimension(300, 400)
+            }
 
             override fun getPageInfo(
                 layoutStrategy: SimpleLayoutStrategy

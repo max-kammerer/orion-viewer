@@ -27,7 +27,6 @@ import universe.constellation.orion.viewer.document.PageWithAutoCrop
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.errorInDebugOr
 import universe.constellation.orion.viewer.geometry.RectF
-import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.pdf.DocInfo
 import universe.constellation.orion.viewer.timing
 import java.util.Locale
@@ -38,17 +37,10 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
         @Volatile
         private var pagePointer: Long = 0
 
-        override fun getPageDimension(): PageDimension {
-            if (docPointer == 0L) return errorInDebugOr("Document for $pageNum is null") { dimensionForCorruptedPage() }
-            if (destroyed) return errorInDebugOr("Page $pageNum already destroyed") { dimensionForCorruptedPage() }
-
-            PageDimension().also {
-                timing("Page $pageNum info calculation") {
-                    return getPageDimension(docPointer, pageNum, it).also {
-                        log("Djvu: page $pageNum size is $it")
-                    } ?: dimensionForCorruptedPage()
-                }
-            }
+        override fun readPageDimension(): PageDimension? {
+            if (docPointer == 0L) return errorInDebugOr("Document for $pageNum is null") { null }
+            if (destroyed) return errorInDebugOr("Page $pageNum already destroyed") { null }
+            return getPageDimension(docPointer, pageNum, PageDimension())
         }
 
         override fun readPageDataForRendering() {
