@@ -183,9 +183,10 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         activePages.asReversed().zipWithNext { f, s ->
             val oldState = f.state
             if (head && !s.isVisibleState && !f.isVisibleState) {
-                toDestroy.add(f)
-                f.destroy()
-                log("Destroyed ${f.pageNum}")
+                if (toDestroy.add(f)) {
+                    f.destroy()
+                    log("Destroyed ${f.pageNum}")
+                }
             } else {
                 head = false
             }
