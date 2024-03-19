@@ -175,10 +175,14 @@ tasks.register('uploadTestData') {
     }
 }
 
-def clearScreenshotsTask = tasks.register("clearScreenshots") {
-    doFirst {
-        exec {
-            commandLine(androidComponents.sdkComponents.adb.get(), "shell", "rm", "-r", screenShotDir)
+def forwardLogcat = tasks.register("forwardLogcat") {
+    //TODO support logcat redirection on Mac
+    if (System.getProperty("os.name").toLowerCase().contains("linux")) {
+        doLast {
+            exec {
+                executable("../utils/adbrun.sh")
+                args(androidComponents.sdkComponents.adb.get())
+            }
         }
     }
 
@@ -202,8 +206,6 @@ def fetchScreenshotsTask = tasks.register('fetchScreenshots') {
             commandLine(androidComponents.sdkComponents.adb.get(), "pull",  screenShotDir + "/.", localScreenShotDir)
         }
     }
-
-    //finalizedBy clearScreenshotsTask
 
     dependsOn {
         createScreenshotDirectoryTask

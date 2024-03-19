@@ -123,7 +123,7 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           sdcard-path-or-size: 900M
-          script: ./gradlew connectedDebugAndroidTest -Porion.CIBuild=true
+          script: ./gradlew forwardLogcat connectedDebugAndroidTest -Porion.CIBuild=true
 
       - uses: dorny/test-reporter@v1
         with:
@@ -132,10 +132,10 @@ jobs:
           reporter: java-junit
         if: failure()
 
-      - name: Upload screenshots
+      - name: Upload screenshots and logcat
         uses: actions/upload-artifact@v4
         with:
-          name: screenshots${{ matrix.arch[0] }}
+          name: screenshotsAndLogcat${{ matrix.arch[0] }}
           path: orion-viewer/build/failures/
           if-no-files-found: ignore
         if: failure()
