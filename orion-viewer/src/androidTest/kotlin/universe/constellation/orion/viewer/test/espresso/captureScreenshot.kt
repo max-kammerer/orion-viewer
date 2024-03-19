@@ -12,7 +12,11 @@ private val simpleDateFormat: SimpleDateFormat = SimpleDateFormat("yyMMdd_HH_mm"
 class ScreenshotTakingRule : TestWatcher() {
 
     override fun failed(e: Throwable?, description: Description) {
-        dump(description.methodName.take(15))
+        try {
+            dump(description.methodName.take(15))
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     companion object {
