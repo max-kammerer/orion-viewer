@@ -4,11 +4,11 @@ import android.content.pm.ActivityInfo
 import androidx.test.filters.SdkSuppress
 import org.junit.Assert
 import org.junit.Test
+import universe.constellation.orion.viewer.test.espresso.BaseEspressoTest
 import universe.constellation.orion.viewer.test.framework.BookDescription
-import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
 import universe.constellation.orion.viewer.view.OrionDrawScene
 
-class RotationTest : InstrumentationTestCase(BookDescription.SICP.toOpenIntent()) {
+class RotationTest : BaseEspressoTest(BookDescription.SICP) {
 
     @Test
     @SdkSuppress(minSdkVersion = 21)

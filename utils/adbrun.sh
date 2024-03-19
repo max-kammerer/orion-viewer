@@ -1,3 +1,3 @@
-#echo $1
 mkdir -p build/failures
-$1 logcat > build/failures/logcat.txt &
+echo $1
+nohup $1 logcat > build/failures/logcat.txt &

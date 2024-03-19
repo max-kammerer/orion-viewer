@@ -23,7 +23,7 @@ import universe.constellation.orion.viewer.log
 import java.io.File
 
 internal const val MANUAL_DEBUG = false
-internal const val WAIT_TIMEOUT: Long = 15000
+internal const val WAIT_TIMEOUT: Long = 10000
 
 abstract class BaseTest {
 
@@ -49,10 +49,12 @@ abstract class BaseTest {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return
 
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        //workaround problem "system ui is not responding" problem
+        device.findObject(By.textContains("Wait"))?.click()
+
         if (BookDescription.SICP.asFile().canRead()) {
             return
         }
-
 
         val grant = device.wait(Until.findObject(By.textContains("Grant")), WAIT_TIMEOUT) ?:
             run {
@@ -65,6 +67,7 @@ abstract class BaseTest {
 
         val allowField = device.wait(Until.findObject(By.textContains("Allow")), WAIT_TIMEOUT)
         allowField.click()
+        device.wait(Until.findObject(By.checkable(true)), WAIT_TIMEOUT)
         assertTrue(device.findObject(By.checkable(true)).isChecked)
         device.pressBack()
         Espresso.onView(ViewMatchers.withId(R.id.view)).check(matches(ViewMatchers.isDisplayed()))
