@@ -26,8 +26,6 @@ interface Device {
 
     fun onKeyUp(keyCode: Int, isLongPress: Boolean, operation: OperationHolder): Boolean
 
-    fun onNewBook(fileName: String, filePath: String, page: Int, size: Long, document: Document) {}
-
     fun onBookClose(currentPage: Int, pageCount: Int) {}
 
     fun onDestroy() {}
