@@ -20,6 +20,7 @@ import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.*
 import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAccessPermissionOrReadOne
 import universe.constellation.orion.viewer.android.FileUtils
+import universe.constellation.orion.viewer.android.getPath
 import universe.constellation.orion.viewer.device.Device
 import universe.constellation.orion.viewer.dialog.SearchDialog
 import universe.constellation.orion.viewer.dialog.TapHelpDialog
@@ -163,8 +164,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         setIntent(intent)
     }
 
-    private fun askReadPermissions(file: File, intent: Intent): Boolean {
-        if (file.canRead()) return true
+    private fun askReadPermissions(file: FileInfo, intent: Intent): Boolean {
+        log("Checking permissions for: $file")
+        if (file.file.canRead()) return true
 
         return checkAndRequestStorageAccessPermissionOrReadOne(Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN, doRequest = false).apply {
             if (!this) {
@@ -181,34 +183,18 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         if (uri != null) {
             log("Try to open file by $uri")
             try {
-                val filePath: String =
-                        if ("content".equals(uri.scheme, ignoreCase = true)) {
-                            try {
-                                FileUtils.getPath(this, uri).takeIf { File(it).exists() }
-                            } catch (e: Exception) {
-                                log(e)
-                                null
-                            } ?: run {
-                                try {
-                                    contentResolver.openFileDescriptor(uri, "r")?.use { getFileDescriptorPath(it) }
-                                        ?.takeIf { File(it).exists() }
-                                } catch (e: Throwable) {
-                                    null
-                                } ?: run {
-                                    if (controller == null) {
-                                        initStubController("Can't extract file path from URI", "Can't extract file path from URI")
-                                    }
-                                    IntentFallbackDialog().showIntentFallbackDialog(this, intent).show()
-                                    return
-                                }
-                            }
-                        } else uri.path ?: run {
-                            if (controller == null) {
-                                initStubController("Can't extract file path from URI", "Can't extract file path from URI")
-                            }
-                            IntentFallbackDialog().showIntentFallbackDialog(this, intent).show()
-                            return
+                val info: FileInfo =
+                    getPath(this, uri) ?: run {
+                        if (controller == null) { //TODO init stub controller with error
+                            initStubController(
+                                "Can't extract file path from URI",
+                                "Can't extract file path from URI"
+                            )
                         }
+                        IntentFallbackDialog().showIntentFallbackDialog(this, intent).show()
+                        return
+                    }
+                val filePath = info.canonicalPath
 
 
                 if (controller != null && lastPageInfo != null) {
@@ -221,7 +207,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     }
                 }
 
-                if (!askReadPermissions(File(filePath), intent)) {
+                if (!askReadPermissions(info, intent)) {
                     log("Waiting for read permissions for $intent")
                     return
                 }
@@ -247,32 +233,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         destroyController(controller).also { controller = null }
         AndroidLogger.stopLogger()
         openFile(filePath)
-    }
-
-    /**
-     * Copied from koreader
-     * tries to get the absolute path of a file from a content provider. It works with most
-     * applications that use a fileProvider to deliver files to other applications.
-     * If the data in the uri is not a file this will fail
-     *
-     * @param pfd - parcelable file descriptor from contentResolver.openFileDescriptor
-     * @return absolute path to file or null
-     */
-    private fun getFileDescriptorPath(pfd: ParcelFileDescriptor?): String? {
-        return pfd?.use {  parcel ->
-            try {
-                val file = File("/proc/self/fd/" + parcel.fd)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    Os.readlink(file.absolutePath)
-                } else {
-                    file.canonicalPath
-                }
-            } catch (e: IOException) {
-                null
-            } catch (e: Exception) {
-                null
-            }
-        }
     }
 
     @Throws(Exception::class)
