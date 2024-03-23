@@ -36,6 +36,7 @@ import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.document.PageWithAutoCrop
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.errorInDebugOr
+import java.lang.RuntimeException
 
 class PdfDocument @Throws(Exception::class) constructor(filePath: String) : AbstractDocument(filePath) {
 
@@ -126,7 +127,15 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
     }
 
 
-    private val core = MuPDFCore(filePath)
+    private val core: MuPDFCore
+
+    init {
+        try {
+            core = MuPDFCore(filePath)
+        } catch (e: Throwable) {
+            throw RuntimeException("Error on open file `$filePath`, " + e.message, e)
+        }
+    }
 
     override val pageCount: Int
         get() = core.countPages()
