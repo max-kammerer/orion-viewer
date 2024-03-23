@@ -3,6 +3,7 @@ package universe.constellation.orion.viewer
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -43,11 +44,23 @@ internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: String, messag
 }
 
 internal fun OrionBaseActivity.reportErrorVia(viaEmail: Boolean, messageTitle: String, intentOrException: String) {
-    val bodyWithException = applicationContext.getString(R.string.send_report_header) + "\n\nAndroid Version: ${android.os.Build.VERSION.RELEASE}(${android.os.Build.VERSION.SDK_INT})\n```\n$intentOrException\n```"
+    val bodyWithException =
+        """
+            ${applicationContext.getString(R.string.send_report_header)}
+
+            Orion Version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})}
+            Android Version: ${Build.VERSION.RELEASE} (${Build.VERSION.SDK_INT})
+            ${if (viaEmail) "" else "```"}
+            $intentOrException
+            ${if (viaEmail) "" else "```"}
+        """.trimIndent()
+
     if (viaEmail) {
         val intent = Intent(Intent.ACTION_SENDTO)
         val email = "mikhael" + "." + "bogdanov" + "+" + "orion" + "@" + "gmail" + "." + "com"
-        intent.data = Uri.Builder().scheme("mailto").opaquePart(email).appendQueryParameter("subject", "Orion Viewer: $messageTitle").appendQueryParameter("body", bodyWithException).build()
+        intent.data = Uri.Builder().scheme("mailto").opaquePart(email)
+            .appendQueryParameter("subject", "Orion Viewer: $messageTitle")
+            .appendQueryParameter("body", bodyWithException).build()
 
         intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
         intent.putExtra(Intent.EXTRA_SUBJECT, "Orion Viewer: $messageTitle")
@@ -55,7 +68,6 @@ internal fun OrionBaseActivity.reportErrorVia(viaEmail: Boolean, messageTitle: S
 
         startActivity(Intent.createChooser(intent, "Send Email..."))
     } else {
-
         val myIntent = Intent(
                 Intent.ACTION_VIEW,
                 Uri.parse("https://github.com/max-kammerer/orion-viewer/issues/new").buildUpon().appendQueryParameter("title", messageTitle).appendQueryParameter("body", bodyWithException).build()
