@@ -146,3 +146,9 @@ jobs:
           path: orion-viewer/build/failures/
           if-no-files-found: ignore
         if: failure()
+
+      - name: Test Summary
+        uses: test-summary/action@v2
+        with:
+          paths: orion-viewer/build/outputs/androidTest-results/connected/debug/TEST-*.xml
+        if: always()
