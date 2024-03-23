@@ -51,6 +51,10 @@ abstract class BaseTest {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         //workaround problem "system ui is not responding" problem
         device.findObject(By.textContains("Wait"))?.click()
+        if (device.findObject(By.textContains("stopping")) != null) {
+            //workaround for: bluetooth keeps stopping
+            device.findObject(By.textContains("Close app"))?.click()
+        }
 
         if (!BookDescription.SICP.asFile().canRead()) {
             val grant =

@@ -30,7 +30,10 @@ import universe.constellation.orion.viewer.view.OrionDrawScene
 
 @SdkSuppress(minSdkVersion = 21)
 /*Default zoom is "Fit Width"*/
-open class BaseEspressoTest(val bookDescription: BookFile) : InstrumentationTestCase(bookDescription.toOpenIntent()) {
+open class BaseEspressoTest(
+    val bookDescription: BookFile,
+    showTapHelp: Boolean = false
+) : InstrumentationTestCase(bookDescription.toOpenIntent(), showTapHelp) {
 
     companion object {
         @JvmStatic
@@ -39,10 +42,6 @@ open class BaseEspressoTest(val bookDescription: BookFile) : InstrumentationTest
             return BookFile.testEntriesWithCustoms()
         }
     }
-
-    @JvmField
-    @Rule
-    val screenshotRule = ScreenshotTakingRule()
 
     private lateinit var controller: Controller
 
@@ -69,7 +68,9 @@ open class BaseEspressoTest(val bookDescription: BookFile) : InstrumentationTest
     @After
     fun checkEndInvariant() {
         activityScenarioRule.scenario.onActivity {
-            Assert.assertEquals(it.controller!!, controller)
+            if (::controller.isInitialized) {
+                Assert.assertEquals(it.controller!!, controller)
+            }
         }
     }
 

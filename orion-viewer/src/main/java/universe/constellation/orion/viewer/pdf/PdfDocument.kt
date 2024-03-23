@@ -49,7 +49,9 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
             if (destroyed) return errorInDebug("Page $pageNum already destroyed")
             if (page == null) {
                 synchronized(core) {
-                    page = core.doc.loadPage(pageNum)
+                    if (page == null) {
+                        page = core.doc.loadPage(pageNum)
+                    }
                 }
             }
         }

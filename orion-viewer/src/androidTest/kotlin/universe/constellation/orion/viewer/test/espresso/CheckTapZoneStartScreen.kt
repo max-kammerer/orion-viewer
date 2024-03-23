@@ -34,7 +34,7 @@ class NoBookNoStartTapScreen: InstrumentationTestCase(BookDescription.SICP.toOpe
 
 @RunWith(AndroidJUnit4::class)
 @SdkSuppress(minSdkVersion = 21)
-class BookWithStartTapScreen: InstrumentationTestCase(BookDescription.SICP.toOpenIntent(), true) {
+class BookWithStartTapScreen: BaseEspressoTest(BookDescription.SICP, true) {
     @Test
     fun testStartScreen() {
         assertTrue(globalOptions.isShowTapHelp)

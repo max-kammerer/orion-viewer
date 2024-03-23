@@ -8,6 +8,7 @@ import org.junit.Rule
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import universe.constellation.orion.viewer.prefs.OrionApplication
+import universe.constellation.orion.viewer.test.espresso.ScreenshotTakingRule
 
 
 abstract class InstrumentationTestCase(intent: Intent, private val showTapHelp: Boolean = false, additionalParams: (Intent) -> Unit = {}) : BaseTest() {
@@ -26,6 +27,10 @@ abstract class InstrumentationTestCase(intent: Intent, private val showTapHelp: 
         intent.putExtra(GlobalOptions.OPEN_AS_TEMP_BOOK, true)
         additionalParams(this)
     })
+
+    @JvmField
+    @Rule
+    val screenshotRule = ScreenshotTakingRule()
 
     val globalOptions by lazy {
         (InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as OrionApplication).options
