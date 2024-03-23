@@ -1,4 +1,4 @@
-package universe.constellation.orion.viewer.test
+package universe.constellation.orion.viewer.test.engine
 
 import android.graphics.Point
 import org.junit.Assert.assertEquals
