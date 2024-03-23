@@ -27,7 +27,7 @@ class FlexibleBitmapTest(bookDescription: BookDescription) : BookTest(bookDescri
     companion object {
         @JvmStatic
         @Parameterized.Parameters(name = "Render page in {0} book")
-        fun testData(): Iterable<Array<BookDescription>> {
+        fun testData(): List<BookDescription> {
             return BookDescription.testData()
         }
 

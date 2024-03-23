@@ -107,16 +107,12 @@ sealed class BookDescription(
     data object DJVU_SPEC: BookDescription(BaseTest.DJVU_SPEC, 71, null, 1, 100, Point(2539, 3295))
 
     companion object {
-        private fun testEntries(): List<BookDescription> {
+        fun testData(): List<BookDescription> {
             return if (MANUAL_DEBUG) {
                 listOf(SICP)
             } else {
                 listOf(SICP, ALICE, DJVU_SPEC)
             }
-        }
-
-        fun testData(): Iterable<Array<BookDescription>> {
-            return testEntries().map { arrayOf(it) }
         }
     }
 }

@@ -39,7 +39,7 @@ class RenderingAndNavigationTest(private val book: BookDescription) : Instrument
 
         @JvmStatic
         @Parameterized.Parameters(name = "Test simple navigation in {0}")
-        fun testData(): Iterable<Array<BookDescription>> {
+        fun testData(): List<BookDescription> {
             return BookDescription.testData()
         }
     }

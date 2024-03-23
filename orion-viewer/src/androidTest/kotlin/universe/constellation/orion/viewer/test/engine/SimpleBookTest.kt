@@ -13,8 +13,8 @@ class SimpleBookTest(bookDescription: BookDescription) : BookTest(bookDescriptio
 
     companion object {
         @JvmStatic
-        @Parameterized.Parameters(name = "Open book {0} with expected page count {1} and outlines {2}")
-        fun testData(): Iterable<Array<BookDescription>> {
+        @Parameterized.Parameters(name = "Simple book {0} test")
+        fun testData(): List<BookDescription> {
             return BookDescription.testData()
         }
     }
