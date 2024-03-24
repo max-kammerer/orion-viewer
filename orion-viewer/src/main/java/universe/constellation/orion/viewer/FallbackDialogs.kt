@@ -161,7 +161,7 @@ open class FallbackDialogs {
             }
 
             R.string.fileopen_open_in_temporary_file -> {
-                saveInTmpFile(uri, intent.type, activity, alertDialog, intent, activity)
+                saveInTmpFile(uri, activity, alertDialog, intent, activity, fileInfo)
             }
 
             R.string.fileopen_open_recent_files -> {
@@ -207,8 +207,12 @@ open class FallbackDialogs {
             return toFile
         }
 
-        internal fun createTmpFile(context: Context, extension: String) =
-            File.createTempFile("temp_book", ".$extension", context.cacheDir)!!
+        internal fun createTmpFile(context: Context, fileName: String, extension: String) =
+            File.createTempFile(
+                if (fileName.length < 3) "tmp$fileName" else fileName,
+                ".$extension",
+                context.cacheDir
+            )
 
         fun getExtension(uri: Uri, mimeType: String?, contentResolver: ContentResolver): String? {
             return uri.path?.substringAfterLast("/")?.substringAfterLast('.').takeIf {
@@ -302,13 +306,13 @@ open class FallbackDialogs {
 
 private fun saveInTmpFile(
     uri: Uri,
-    mimeType: String?,
     myActivity: OrionViewerActivity,
     dialog: DialogInterface,
     intent: Intent,
-    activity: Activity
+    activity: Activity,
+    fileInfo: FileInfo?
 ) {
-    val extension = FallbackDialogs.getExtension(uri, mimeType, myActivity.contentResolver)
+    val extension = FallbackDialogs.getExtension(uri, intent.type, myActivity.contentResolver)
     if (extension == null) {
         dialog.dismiss()
         myActivity.showErrorReportDialog(
@@ -321,6 +325,7 @@ private fun saveInTmpFile(
 
     val toFile = FallbackDialogs.createTmpFile(
         activity,
+        fileInfo?.name?.substringBeforeLast('.') ?: "temp_book",
         extension
     )
 
