@@ -169,9 +169,12 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
     }
 
+    internal fun onNewIntentInternal(intent: Intent) {
+        onNewIntent(intent)
+    }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        setIntent(intent)
         processIntentAndCheckPermission(intent)
     }
 
@@ -200,8 +203,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         return null
     }
 
-    private fun processIntentAndCheckPermission(intent: Intent) {
+    internal fun processIntentAndCheckPermission(intent: Intent) {
         log("Trying to open document by $intent...")
+        setIntent(intent)
         processAdditionalOptionsInIntent(intent)
         myState = MyState.PROCESSING_INTENT
 
@@ -948,8 +952,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 if (resultCode == Activity.RESULT_OK) {
                     if (data?.data != null && intent.data != null) {
                         FallbackDialogs.saveFileIntoUri(this, intent.data?: return, data.data!!) {
-                            intent = data
-                            onNewIntent(intent)
+                            onNewIntent(data)
                         }
                         return
                     }

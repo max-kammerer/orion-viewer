@@ -326,12 +326,11 @@ private fun saveInTmpFile(
 
     FallbackDialogs.saveFileAndDoAction(myActivity, uri, toFile) {
         dialog.dismiss()
-        myActivity.startActivity(
+        myActivity.onNewIntentInternal(
             Intent(Intent.ACTION_VIEW).apply {
                 setClass(myActivity.applicationContext, OrionViewerActivity::class.java)
                 data = Uri.fromFile(toFile)
                 addCategory(Intent.CATEGORY_DEFAULT)
-                putExtra("from_intent_fallback", true)
             }
         )
     }
