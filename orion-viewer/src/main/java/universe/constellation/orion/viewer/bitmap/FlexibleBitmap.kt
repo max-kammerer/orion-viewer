@@ -197,7 +197,7 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
     }
 
     suspend fun render(renderingArea: Rect, curPos: LayoutPosition, page: Page) {
-        log("FB rendering $renderingArea")
+        log("FB rendering $page $renderingArea")
         forEach {
             render(
                 renderingArea,

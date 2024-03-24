@@ -129,15 +129,7 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
     }
 
 
-    private val core: MuPDFCore
-
-    init {
-        try {
-            core = MuPDFCore(filePath)
-        } catch (e: Throwable) {
-            throw RuntimeException("Error on open file `$filePath`, " + e.message, e)
-        }
-    }
+    private val core = MuPDFCore(filePath)
 
     override val pageCount: Int
         get() = core.countPages()
