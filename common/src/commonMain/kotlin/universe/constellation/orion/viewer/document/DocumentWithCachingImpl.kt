@@ -64,12 +64,12 @@ abstract class PageWithAutoCrop(override val pageNum: Int) : Page {
 
     override fun getPageSize(): PageSize {
         if (!::pageSize.isInitialized) {
-            timing("Page $pageNum dimension extraction") {
+            timing("Page $pageNum size extraction") {
                 pageSize = readPageSize() ?: dimensionForCorruptedPage().also {
                     logError("Page $pageNum is corrupted")
                 }
             }
-            log("Page $pageNum dimension: $pageSize")
+            log("Page $pageNum size: $pageSize")
         }
         return pageSize
     }

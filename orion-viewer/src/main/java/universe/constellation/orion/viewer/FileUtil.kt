@@ -4,6 +4,7 @@ import universe.constellation.orion.viewer.djvu.DjvuDocument
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.pdf.PdfDocument
 import java.io.File
+import java.lang.RuntimeException
 import java.util.Locale
 
 object FileUtil {
@@ -14,18 +15,22 @@ object FileUtil {
 
     @JvmStatic
     @Throws(Exception::class)
-    fun openFile(fileName: String): Document {
-        return if (isDjvuFile(fileName.lowercase(Locale.getDefault()))) {
-            DjvuDocument(fileName)
-        } else {
-            PdfDocument(fileName)
+    fun openFile(absolutePath: String): Document {
+        try {
+            return if (isDjvuFile(absolutePath.lowercase(Locale.getDefault()))) {
+                DjvuDocument(absolutePath)
+            } else {
+                PdfDocument(absolutePath)
+            }
+        } catch (e: Exception) {
+            throw RuntimeException("Error on open file `$absolutePath`, " + e.message, e)
         }
     }
 
     @JvmStatic
     @Throws(Exception::class)
-    fun openFile(fileName: File): Document {
-        return openFile(fileName.absolutePath)
+    fun openFile(file: File): Document {
+        return openFile(file.absolutePath)
     }
 
 }

@@ -385,6 +385,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
 
     public override fun onPause() {
+        log("Orion: onPause")
         _isResumed = false
         super.onPause()
         controller?.let {
