@@ -46,7 +46,7 @@ fun getPath(context: Context, uri: Uri): FileInfo? {
     ) {
         log("isDocumentUri")
         // ExternalStorageProvider
-        if (FileUtils.isExternalStorageDocument(uri)) {
+        if (isExternalStorageDocument(uri)) {
             val docId = DocumentsContract.getDocumentId(uri)
             val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }
                 .toTypedArray()
@@ -60,13 +60,13 @@ fun getPath(context: Context, uri: Uri): FileInfo? {
                 path = externalStorageDirectory + "/" + split[1]
             }
             // TODO handle non-primary volumes
-        } else if (FileUtils.isDownloadsDocument(uri)) {
+        } else if (isDownloadsDocument(uri)) {
             val id = DocumentsContract.getDocumentId(uri)
             val contentUri = ContentUris.withAppendedId(
                 Uri.parse("content://downloads/public_downloads"), id.toLong()
             )
             path = getDataColumn(context, contentUri, null, null)
-        } else if (FileUtils.isMediaDocument(uri)) {
+        } else if (isMediaDocument(uri)) {
             val docId = DocumentsContract.getDocumentId(uri)
             val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }
                 .toTypedArray()
@@ -85,7 +85,7 @@ fun getPath(context: Context, uri: Uri): FileInfo? {
                 path = getDataColumn(context, contentUri, selection, selectionArgs)
             }
         }
-    } else if ("com.google.android.apps.photos.content" == uri.authority) {
+    } else if (isGooglePhotosUri(uri)) {
         path = uri.lastPathSegment
     }
 
@@ -185,4 +185,20 @@ private fun getPathFromDescriptor(pfd: ParcelFileDescriptor): String? {
     } catch (e: Exception) {
         null
     }
+}
+
+fun isExternalStorageDocument(uri: Uri): Boolean {
+    return "com.android.externalstorage.documents" == uri.authority
+}
+
+fun isDownloadsDocument(uri: Uri): Boolean {
+    return "com.android.providers.downloads.documents" == uri.authority
+}
+
+fun isMediaDocument(uri: Uri): Boolean {
+    return "com.android.providers.media.documents" == uri.authority
+}
+
+fun isGooglePhotosUri(uri: Uri): Boolean {
+    return "com.google.android.apps.photos.content" == uri.authority
 }
