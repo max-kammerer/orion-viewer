@@ -9,13 +9,13 @@
         android:id="@+id/intent_problem_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/intent_fail_fallbacks" />
+        android:text="@string/fileopen_error_during_intent_processing_info"
+        android:padding="10dp"/>
 
     <ListView
         android:id="@+id/intent_fallback_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:entries="@array/open_intent_fallbacks">
+        android:layout_height="match_parent">
     </ListView>
 
 </LinearLayout>

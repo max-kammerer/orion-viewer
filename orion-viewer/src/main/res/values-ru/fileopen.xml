@@ -1,0 +1,17 @@
+<resources>
+    <string name="fileopen_error_during_intent_processing">Ошибка при обработке запроса</string>
+    <string name="fileopen_error_during_intent_processing_info">Не извлечь путь к файлу из запроса. Пожалуйста, сохраните данные запроса в файл, чтобы открыть или:</string>
+
+    <string name="fileopen_private_resource_access">Доступ к приватному файлу</string>
+    <string name="fileopen_private_resource_access_info">Не возможно получить доступ к файлу напрямую, пожалуйста, выберите одну из опций:</string>
+
+    <string name="fileopen_permission_dialog">Пожалуйста, предоставте права на чтение</string>
+    <string name="fileopen_permission_dialog_info">Пожалуйста, предоставте права на чтение файла напрямую или выберите опцию ниже:</string>
+
+    <string name="fileopen_permissions_grant_read">Предоставить права на чтение диска…</string>
+    <string name="fileopen_save_to_file">Сохранить в новый файл…</string>
+    <string name="fileopen_open_in_temporary_file">Открыть через временный файл</string>
+    <string name="fileopen_open_recent_files">Перейти к недавно открытым книгам…</string>
+    <string name="fileopen_report_error_by_github_and_return">Создать ошибку на github и вернуться к диалогу…</string>
+    <string name="fileopen_report_error_by_email_and_return">Отправить ошибку по e-mail и вернуться к диалогу…</string>
+</resources>

@@ -160,22 +160,24 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         setIntent(intent)
     }
 
-    private fun askReadPermissionsOrCopyFile(fileInfo: FileInfo, intent: Intent): FileInfo? {
+    private fun askReadPermissions(fileInfo: FileInfo, intent: Intent): FileInfo? {
         log("Checking permissions for: $fileInfo")
         if (fileInfo.file.canRead()) return fileInfo
         if (fileInfo.isRestrictedAccessPath()) {
-
-            //file.copy(canonicalPath = )
+            FallbackDialogs().createPrivateResourceFallbackDialog(this, intent).show()
         } else {
             checkAndRequestStorageAccessPermissionOrReadOne(
                 Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN,
                 doRequest = false
             ).apply {
-                FilePermissionsDialog().showReadPermissionDialog(
-                    this@OrionViewerActivity,
-                    intent,
-                    this
-                ).show()
+                if (this) {
+                    FallbackDialogs().createProvidePermissionsDialog(
+                        this@OrionViewerActivity,
+                        intent
+                    ).show()
+                } else {
+                    FallbackDialogs().createPrivateResourceFallbackDialog(this@OrionViewerActivity, intent).show()
+                }
             }
         }
         return null
@@ -197,11 +199,10 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                                 "Can't extract file path from URI"
                             )
                         }
-                        IntentFallbackDialog().showIntentFallbackDialog(this, intent).show()
+                        FallbackDialogs().createBadIntentFallbackDialog(this, intent).show()
                         return
                     }
                 val filePath = info.canonicalPath
-
 
                 if (controller != null && lastPageInfo != null) {
                     lastPageInfo?.apply {
@@ -213,7 +214,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     }
                 }
 
-                if (askReadPermissionsOrCopyFile(info, intent) == null) {
+                if (askReadPermissions(info, intent) == null) {
                     log("Waiting for read permissions for $intent")
                     return
                 }

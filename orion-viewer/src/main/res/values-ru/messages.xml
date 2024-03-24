@@ -13,26 +13,13 @@
     <string name="msg_warning">Предупреждение</string>
     <string name="msg_specify_keyword_for_search">Не задано слово для поиска</string>
 
-    <string name="please_save_file">Ошибка при обработке запроса</string>
-    <string name="intent_fail_fallbacks">Не извлечь путь к файлу из запроса. Пожалуйста, сохраните данные запроса в файл, чтобы открыть или…</string>
-    <string name="save_to_file">Сохранить в файл…</string>
-    <string name="open_in_temporary_file">Открыть через временный файл</string>
-    <string name="open_recent_files">Перейти к недавно открытым книгам…</string>
-    <string name="report_error_by_github_and_return">Создать ошибку на github и вернуться к диалогу…</string>
-    <string name="report_error_by_email_and_return">Отправить ошибку по e-mail и вернуться к диалогу…</string>
-
     <string name="recent_book_not_found">Не могу найти файл книги!</string>
 
     <string name="tap_zones_header">Тап Зоны по-умолчанию</string>
 
-    <string name="permission_read_file_warning">Пожалуйста, предоставте права на чтение файла напрямую или откройте документ через временный файл</string>
-    <string name="permission_file_read_dialog_title">Пожалуйста, предоставте права на чтение</string>
     <string name="permission_directory_warning">Пожалуйста, предоставте права на чтение данных диска</string>
     <string name="permission_grant">Предоставить…</string>
     <string name="permission_cancel">Отмена</string>
-
-    <string name="permissions_grant_read">Предоставить права на чтение диска</string>
-    <string name="permissions_open_via_temp_file">Открыть документ через временный файл</string>
 
     <string name="crash_on_book_opening_title">Ошибка при открытии файла</string>
     <string name="crash_on_intent_opening_title">Ошибка при обработке интента</string>

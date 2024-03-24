@@ -174,16 +174,4 @@
         <!--<item>CM_YELLOW_ON_BLACK</item>-->
     </string-array>
 
-    <string-array name="open_intent_fallbacks">
-        <item>@string/save_to_file</item>
-        <item>@string/open_in_temporary_file</item>
-        <item>@string/open_recent_files</item>
-        <item>@string/report_error_by_github_and_return</item>
-        <item>@string/report_error_by_email_and_return</item>
-    </string-array>
-
-    <string-array name="read_permission_fallbacks">
-        <item>@string/permissions_grant_read</item>
-        <item>@string/permissions_open_via_temp_file</item>
-    </string-array>
 </resources>

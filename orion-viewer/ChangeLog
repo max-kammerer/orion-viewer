@@ -1,3 +1,6 @@
+===== 0.90.1Beta (Mar 24, 2024) =====
+* Reworked file access and permission check logic
+
 ===== 0.90.0 (Mar 19, 2024) =====
 * New rendering engine
     ** Support of continuous page mode
