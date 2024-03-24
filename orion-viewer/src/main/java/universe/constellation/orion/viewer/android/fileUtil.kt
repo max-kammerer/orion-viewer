@@ -17,17 +17,20 @@ import java.io.File
 import java.io.IOException
 
 fun getPath(context: Context, uri: Uri): FileInfo? {
+    val authority = uri.authority
+    val id = uri.lastPathSegment
+    val host = uri.host
     log(
         """ 
             Uri:            
-            Authority: ${uri.authority}
+            Authority: $authority
             Fragment: ${uri.fragment}
             Port: ${uri.port}
             Query: ${uri.query}
             Scheme: ${uri.scheme}
-            Host: ${uri.host}
+            Host: $host
             Segments: ${uri.pathSegments}
-            Id: ${uri.lastPathSegment}
+            Id: $id
             """.trimIndent()
     )
 
@@ -86,10 +89,14 @@ fun getPath(context: Context, uri: Uri): FileInfo? {
             }
         }
     } else if (isGooglePhotosUri(uri)) {
-        path = uri.lastPathSegment
+        path = id
     }
 
-    checkIsFile(path)?.let {
+    val name = getKeyFromCursor(MediaStore.MediaColumns.DISPLAY_NAME, context, uri)
+    val size = getKeyFromCursor(MediaStore.MediaColumns.SIZE, context, uri)
+
+
+    checkIsFile(path, host = host)?.let {
         return it
     }
 
@@ -99,24 +106,20 @@ fun getPath(context: Context, uri: Uri): FileInfo? {
         null,
         null
     )
-    checkIsFile(dataPath, false)?.let {
+    checkIsFile(dataPath, false, host)?.let {
         log("data uri")
         return it
     }
 
-    val id = uri.lastPathSegment
-    val name = getKeyFromCursor(MediaStore.MediaColumns.DISPLAY_NAME, context, uri)
-    val size = getKeyFromCursor(MediaStore.MediaColumns.SIZE, context, uri)
-
     try {
-        log("Obtaining path through descriptor")
+        log("Obtaining path through descriptor via $authority")
         val pathFromDescriptor = context.contentResolver.openFileDescriptor(uri, "r")?.use { getPathFromDescriptor(it) } ?: return null
         return FileInfo(
             name,
             size?.toLong() ?: 0,
             id,
             pathFromDescriptor,
-            true
+            host
         ).also {
             log("Returning descriptor file info: $it")
         }
@@ -156,10 +159,10 @@ private fun getKeyFromCursor(
     }
 }
 
-private fun checkIsFile(path: String?, checkIsFile: Boolean = true): FileInfo? {
+private fun checkIsFile(path: String?, checkIsFile: Boolean = true, host: String? = null): FileInfo? {
     if (path == null) return null
     val file = File(path)
-    if (!checkIsFile || file.isFile) return FileInfo(file.name, file.length(), file.canonicalPath, path)
+    if (!checkIsFile || file.isFile) return FileInfo(file.name, file.length(), file.canonicalPath, path, host)
     return null
 }
 
@@ -187,18 +190,28 @@ private fun getPathFromDescriptor(pfd: ParcelFileDescriptor): String? {
     }
 }
 
-fun isExternalStorageDocument(uri: Uri): Boolean {
+private fun isExternalStorageDocument(uri: Uri): Boolean {
     return "com.android.externalstorage.documents" == uri.authority
 }
 
-fun isDownloadsDocument(uri: Uri): Boolean {
+private fun isDownloadsDocument(uri: Uri): Boolean {
     return "com.android.providers.downloads.documents" == uri.authority
 }
 
-fun isMediaDocument(uri: Uri): Boolean {
+private fun isMediaDocument(uri: Uri): Boolean {
     return "com.android.providers.media.documents" == uri.authority
 }
 
-fun isGooglePhotosUri(uri: Uri): Boolean {
+private fun isGooglePhotosUri(uri: Uri): Boolean {
     return "com.google.android.apps.photos.content" == uri.authority
+}
+
+fun FileInfo.isRestrictedAccessPath(): Boolean {
+    val path = canonicalPath
+    if (path.startsWith("/data/data")) return true
+    if (path.startsWith("/data/obb")) return true
+    if (!path.startsWith("/storage/emulated/")) return false
+    var suffix = path.substringAfter("/storage/emulated/")
+    suffix = suffix.substringAfter("/")
+    return suffix.startsWith("Android/data/") || suffix.startsWith("Android/obb/")
 }

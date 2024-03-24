@@ -46,35 +46,7 @@ open class IntentFallbackDialog {
                      alertDialog.dismiss()
                  }
                  1 -> {
-                     val extension = getExtension(uri, mimeType, myActivity.contentResolver)
-                     if (extension == null) {
-                         alertDialog.dismiss()
-                         myActivity.showErrorReportDialog(
-                                 myActivity.applicationContext.getString(R.string.crash_on_intent_opening_title),
-                                 myActivity.applicationContext.getString(R.string.crash_on_intent_opening_title),
-                                 intent.toString()
-                         )
-                         return@setOnItemClickListener
-                     }
-
-                     //should be granted automatically
-                     Permissions.checkWritePermission(myActivity)
-                     val toFile = createTmpFile(
-                             activity,
-                             extension
-                     )
-
-                     saveFileAndDoAction(myActivity, uri, toFile) {
-                         alertDialog.dismiss()
-                         myActivity.startActivity(
-                                 Intent(Intent.ACTION_VIEW).apply {
-                                     setClass(myActivity.applicationContext, OrionViewerActivity::class.java)
-                                     data = Uri.fromFile(toFile)
-                                     addCategory(Intent.CATEGORY_DEFAULT)
-                                     putExtra("from_intent_fallback", true)
-                                 }
-                         )
-                     }
+                     saveInTmpFile(uri, mimeType, myActivity, alertDialog, intent, activity)
 
                  }
                  2 -> {

@@ -7,7 +7,7 @@ val FileInfo?.sizeOrZero: Long
         return this?.size ?: 0
     }
 
-data class FileInfo(val name: String?, val size: Long, val id: String?, val canonicalPath: String, val isFromDescriptor: Boolean = false) {
+data class FileInfo(val name: String?, val size: Long, val id: String?, val canonicalPath: String, val host: String? = null) {
 
     val file: File
         get() = File(canonicalPath)

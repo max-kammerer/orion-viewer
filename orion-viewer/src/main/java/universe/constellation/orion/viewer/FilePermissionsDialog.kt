@@ -14,7 +14,7 @@ import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
 
 
 open class FilePermissionsDialog {
-     fun showReadPermissionDialog(activity: Activity, intent: Intent): Dialog {
+     fun showReadPermissionDialog(activity: Activity, intent: Intent, hasFullAccess: Boolean): Dialog {
          val uri = intent.data!!
          val mimeType = intent.type
          val builder = AlertDialog.Builder(activity)
@@ -33,58 +33,51 @@ open class FilePermissionsDialog {
                      alertDialog.dismiss()
                  }
                  1 -> {
-                     val extension = getExtension(uri, mimeType, myActivity.contentResolver)
-                     if (extension == null) {
-                         alertDialog.dismiss()
-                         myActivity.showErrorReportDialog(
-                                 myActivity.applicationContext.getString(R.string.crash_on_intent_opening_title),
-                                 myActivity.applicationContext.getString(R.string.crash_on_intent_opening_title),
-                                 intent.toString()
-                         )
-                         return@setOnItemClickListener
-                     }
-
-                     //should be granted automatically
-                     Permissions.checkWritePermission(myActivity)
-                     val toFile = createTmpFile(
-                             activity,
-                             extension
-                     )
-
-                     saveFileAndDoAction(myActivity, uri, toFile) {
-                         alertDialog.dismiss()
-                         myActivity.startActivity(
-                                 Intent(Intent.ACTION_VIEW).apply {
-                                     setClass(myActivity.applicationContext, OrionViewerActivity::class.java)
-                                     data = Uri.fromFile(toFile)
-                                     addCategory(Intent.CATEGORY_DEFAULT)
-                                     putExtra("from_intent_fallback", true)
-                                 }
-                         )
-                     }
-
-                 }
-                 2 -> {
-                     alertDialog.dismiss()
-                     myActivity.startActivity(
-                             Intent(myActivity, OrionFileManagerActivity::class.java).apply {
-                                 putExtra(OrionFileManagerActivity.OPEN_RECENTS_TAB, true)
-
-                             })
-                 }
-                 3 -> {
-                     val title = myActivity.applicationContext.getString(R.string.crash_on_intent_opening_title)
-                     myActivity.reportErrorVia(false, title, intent.toString())
-
-                 }
-                 4 -> {
-                     val title = myActivity.applicationContext.getString(R.string.crash_on_intent_opening_title)
-                     myActivity.reportErrorVia(true, title, intent.toString())
+                     saveInTmpFile(uri, mimeType, myActivity, alertDialog, intent, activity)
                  }
                  else -> error("Unknown save option: $position")
              }
          }
          return alertDialog
+    }
+
+
+}
+
+internal fun saveInTmpFile(
+    uri: Uri,
+    mimeType: String?,
+    myActivity: OrionViewerActivity,
+    alertDialog: AlertDialog,
+    intent: Intent,
+    activity: Activity
+) {
+    val extension = getExtension(uri, mimeType, myActivity.contentResolver)
+    if (extension == null) {
+        alertDialog.dismiss()
+        myActivity.showErrorReportDialog(
+            myActivity.applicationContext.getString(R.string.crash_on_intent_opening_title),
+            myActivity.applicationContext.getString(R.string.crash_on_intent_opening_title),
+            intent.toString()
+        )
+        return
+    }
+
+    val toFile = createTmpFile(
+        activity,
+        extension
+    )
+
+    saveFileAndDoAction(myActivity, uri, toFile) {
+        alertDialog.dismiss()
+        myActivity.startActivity(
+            Intent(Intent.ACTION_VIEW).apply {
+                setClass(myActivity.applicationContext, OrionViewerActivity::class.java)
+                data = Uri.fromFile(toFile)
+                addCategory(Intent.CATEGORY_DEFAULT)
+                putExtra("from_intent_fallback", true)
+            }
+        )
     }
 }
 

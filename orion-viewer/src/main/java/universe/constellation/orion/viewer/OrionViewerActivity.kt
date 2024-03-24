@@ -4,11 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.Debug
-import android.os.ParcelFileDescriptor
-import android.system.Os
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -20,6 +17,7 @@ import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.*
 import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAccessPermissionOrReadOne
 import universe.constellation.orion.viewer.android.getPath
+import universe.constellation.orion.viewer.android.isRestrictedAccessPath
 import universe.constellation.orion.viewer.device.Device
 import universe.constellation.orion.viewer.dialog.SearchDialog
 import universe.constellation.orion.viewer.dialog.TapHelpDialog
@@ -35,7 +33,6 @@ import universe.constellation.orion.viewer.view.FullScene
 import universe.constellation.orion.viewer.view.OrionDrawScene
 import universe.constellation.orion.viewer.view.OrionStatusBarHelper
 import java.io.File
-import java.io.IOException
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.util.concurrent.Executors
@@ -163,15 +160,25 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         setIntent(intent)
     }
 
-    private fun askReadPermissions(file: FileInfo, intent: Intent): Boolean {
-        log("Checking permissions for: $file")
-        if (file.file.canRead()) return true
+    private fun askReadPermissionsOrCopyFile(fileInfo: FileInfo, intent: Intent): FileInfo? {
+        log("Checking permissions for: $fileInfo")
+        if (fileInfo.file.canRead()) return fileInfo
+        if (fileInfo.isRestrictedAccessPath()) {
 
-        return checkAndRequestStorageAccessPermissionOrReadOne(Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN, doRequest = false).apply {
-            if (!this) {
-                FilePermissionsDialog().showReadPermissionDialog(this@OrionViewerActivity,  intent).show()
+            //file.copy(canonicalPath = )
+        } else {
+            checkAndRequestStorageAccessPermissionOrReadOne(
+                Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN,
+                doRequest = false
+            ).apply {
+                FilePermissionsDialog().showReadPermissionDialog(
+                    this@OrionViewerActivity,
+                    intent,
+                    this
+                ).show()
             }
         }
+        return null
     }
 
     private fun processIntentAndCheckPermission(intent: Intent) {
@@ -206,7 +213,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     }
                 }
 
-                if (!askReadPermissions(info, intent)) {
+                if (askReadPermissionsOrCopyFile(info, intent) == null) {
                     log("Waiting for read permissions for $intent")
                     return
                 }
