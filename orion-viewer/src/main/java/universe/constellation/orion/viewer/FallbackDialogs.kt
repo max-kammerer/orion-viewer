@@ -9,10 +9,12 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.webkit.MimeTypeMap
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -38,10 +40,11 @@ open class FallbackDialogs {
     private fun hasReadPermissions(activity: OrionViewerActivity) =
         Permissions.checkReadPermission(activity, doRequest = false)
 
-    fun createBadIntentFallbackDialog(activity: OrionViewerActivity, intent: Intent): Dialog {
+    fun createBadIntentFallbackDialog(activity: OrionViewerActivity, fileInfo: FileInfo?, intent: Intent): Dialog {
         val isContentScheme = intent.isContentScheme()
         return createFallbackDialog(
             activity,
+            fileInfo,
             intent,
             R.string.fileopen_error_during_intent_processing,
             R.string.fileopen_error_during_intent_processing_info,
@@ -57,10 +60,11 @@ open class FallbackDialogs {
         )
     }
 
-    fun createPrivateResourceFallbackDialog(activity: OrionViewerActivity, intent: Intent): Dialog {
+    fun createPrivateResourceFallbackDialog(activity: OrionViewerActivity, fileInfo: FileInfo, intent: Intent): Dialog {
         val isContentScheme = intent.isContentScheme()
         return createFallbackDialog(
             activity,
+            fileInfo,
             intent,
             R.string.fileopen_private_resource_access,
             R.string.fileopen_private_resource_access_info,
@@ -76,10 +80,11 @@ open class FallbackDialogs {
         )
     }
 
-    fun createProvidePermissionsDialog(activity: OrionViewerActivity, intent: Intent): Dialog {
+    fun createProvidePermissionsDialog(activity: OrionViewerActivity, fileInfo: FileInfo, intent: Intent): Dialog {
         val isContentScheme = intent.isContentScheme()
         return createFallbackDialog(
             activity,
+            fileInfo,
             intent,
             R.string.fileopen_permission_dialog,
             R.string.fileopen_permission_dialog_info,
@@ -94,9 +99,8 @@ open class FallbackDialogs {
     }
 
      //content intent
-     private fun createFallbackDialog(activity: OrionViewerActivity, intent: Intent, title: Int, info: Int, defaultAction: Int?, list: List<Int>): Dialog {
+     private fun createFallbackDialog(activity: OrionViewerActivity, fileInfo: FileInfo?, intent: Intent, title: Int, info: Int, defaultAction: Int?, list: List<Int>): Dialog {
          val uri = intent.data!!
-         val mimeType = intent.type
 
          val view = activity.layoutInflater.inflate(R.layout.intent_problem_dialog, null)
          val infoText = view.findViewById<TextView>(R.id.intent_problem_info)
@@ -109,8 +113,8 @@ open class FallbackDialogs {
              }
 
          if (defaultAction != null) {
-             builder.setPositiveButton(R.string.fileopen_open_in_temporary_file) { dialog, _ ->
-                 processAction(defaultAction, activity, dialog, uri, mimeType, intent)
+             builder.setPositiveButton(defaultAction) { dialog, _ ->
+                 processAction(defaultAction, activity, fileInfo, dialog, uri, intent)
              }
          }
 
@@ -121,7 +125,7 @@ open class FallbackDialogs {
 
          fallbacks.setOnItemClickListener { _, _, position, _ ->
              val id = (fallbacks.adapter.getItem(position) as ResourceIdAndString).id
-             processAction(id, activity, alertDialog, uri, mimeType, intent)
+             processAction(id, activity, fileInfo, alertDialog, uri, intent)
          }
          return alertDialog
     }
@@ -129,9 +133,9 @@ open class FallbackDialogs {
     private fun processAction(
         id: Int,
         activity: OrionViewerActivity,
+        fileInfo: FileInfo?,
         alertDialog: DialogInterface,
         uri: Uri,
-        mimeType: String?,
         intent: Intent
     ) {
         when (id) {
@@ -141,16 +145,23 @@ open class FallbackDialogs {
             }
 
             R.string.fileopen_save_to_file -> {
-                activity.startActivity(
-                    Intent(activity, OrionSaveFileActivity::class.java).apply {
-                        putExtra(URI, uri)
-                    }
-                )
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    sendCreateFileRequest(activity, fileInfo, intent)
+                } else {
+                    activity.startActivity(
+                        Intent(activity, OrionSaveFileActivity::class.java).apply {
+                            putExtra(URI, uri)
+                            fileInfo?.name?.let {
+                                putExtra(OrionSaveFileActivity.SUGGESTED_FILE_NAME, it)
+                            }
+                        }
+                    )
+                }
                 alertDialog.dismiss()
             }
 
             R.string.fileopen_open_in_temporary_file -> {
-                saveInTmpFile(uri, mimeType, activity, alertDialog, intent, activity)
+                saveInTmpFile(uri, intent.type, activity, alertDialog, intent, activity)
             }
 
             R.string.fileopen_open_recent_files -> {
@@ -186,7 +197,7 @@ open class FallbackDialogs {
         private fun saveFileInto(context: Context, uri: Uri, toFile: File): File {
             toFile.parentFile?.mkdirs()
 
-            val input = context.contentResolver.openInputStream(uri) ?: error("Can't write to file: $uri")
+            val input = context.contentResolver.openInputStream(uri) ?: error("Can't read file data: $uri")
 
             input.use {
                 toFile.outputStream().use { outputStream ->
@@ -252,6 +263,40 @@ open class FallbackDialogs {
             }
         }
 
+        fun saveFileIntoUri(
+            myActivity: Activity,
+            uri: Uri,
+            toFile: Uri,
+            action: (Uri) -> Unit
+        ) {
+            val handler = CoroutineExceptionHandler { _, exception ->
+                exception.printStackTrace()
+                AlertDialog.Builder(myActivity).setMessage(exception.message)
+                    .setPositiveButton("OK"
+                    ) { dialog, _ -> dialog.dismiss() }.create().show()
+            }
+
+            GlobalScope.launch(Dispatchers.Main + handler) {
+                val progressBar = ProgressDialog(myActivity)
+                progressBar.isIndeterminate = true
+                progressBar.show()
+                try {
+                    withContext(Dispatchers.IO) {
+                        val outputStream = myActivity.contentResolver.openOutputStream(toFile) ?: error("Can't open output stream for $toFile")
+                        val input = myActivity.contentResolver.openInputStream(uri) ?: error("Can't read file data: $uri")
+
+                        input.use {
+                            outputStream.use { outputStream ->
+                                input.copyTo(outputStream)
+                            }
+                        }
+                    }
+                    action(toFile)
+                } finally {
+                    progressBar.dismiss()
+                }
+            }
+        }
     }
 }
 
@@ -292,3 +337,19 @@ private fun saveInTmpFile(
     }
 }
 
+
+@RequiresApi(Build.VERSION_CODES.KITKAT)
+private fun sendCreateFileRequest(activity: Activity, fileInfo: FileInfo?, readIntent: Intent) {
+    val createFileIntent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+    createFileIntent.addCategory(Intent.CATEGORY_OPENABLE)
+    val mimeType = readIntent.type ?: readIntent.data?.let {
+        activity.contentResolver.getType(it)
+    }
+    if (mimeType != null) {
+        createFileIntent.type = mimeType
+    }
+    fileInfo?.name?.let {
+        createFileIntent.putExtra(Intent.EXTRA_TITLE, it)
+    }
+    activity.startActivityForResult(createFileIntent, OrionViewerActivity.SAVE_FILE_RESULT)
+}

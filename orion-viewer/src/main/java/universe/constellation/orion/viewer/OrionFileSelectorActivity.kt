@@ -41,12 +41,15 @@ class OrionSaveFileActivity : OrionFileManagerActivityBase(
         File(dir, filename).isDirectory
     }) {
 
+    companion object {
+        const val SUGGESTED_FILE_NAME = "SUGGESTED_FILE_NAME"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         findViewById<View>(R.id.saveFileIdView).visibility = View.VISIBLE
         findViewById<Button>(R.id.saveFile).setOnClickListener {
-            //should be granted automatically
             if (checkWritePermission(this)) {
                 val fileName = findViewById<TextView>(R.id.fileName).text.toString()
                 val currentFolder = (findViewById<ListView>(R.id.listView).adapter as FileChooserAdapter).currentFolder
@@ -68,7 +71,15 @@ class OrionSaveFileActivity : OrionFileManagerActivityBase(
                 }
             }
         }
-        //should be granted automatically
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        intent?.let {
+            it.getStringExtra(SUGGESTED_FILE_NAME)?.let { name ->
+                findViewById<TextView>(R.id.fileName).text = name
+            }
+        }
         checkWritePermission(this)
     }
 

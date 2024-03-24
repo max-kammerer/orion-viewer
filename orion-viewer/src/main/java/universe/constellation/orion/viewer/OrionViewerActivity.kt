@@ -164,19 +164,20 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         log("Checking permissions for: $fileInfo")
         if (fileInfo.file.canRead()) return fileInfo
         if (fileInfo.isRestrictedAccessPath()) {
-            FallbackDialogs().createPrivateResourceFallbackDialog(this, intent).show()
+            FallbackDialogs().createPrivateResourceFallbackDialog(this, fileInfo, intent).show()
         } else {
             checkAndRequestStorageAccessPermissionOrReadOne(
                 Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN,
                 doRequest = false
             ).apply {
                 if (this) {
+                    FallbackDialogs().createPrivateResourceFallbackDialog(this@OrionViewerActivity, fileInfo, intent).show()
+                } else {
                     FallbackDialogs().createProvidePermissionsDialog(
                         this@OrionViewerActivity,
+                        fileInfo,
                         intent
                     ).show()
-                } else {
-                    FallbackDialogs().createPrivateResourceFallbackDialog(this@OrionViewerActivity, intent).show()
                 }
             }
         }
@@ -199,7 +200,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                                 "Can't extract file path from URI"
                             )
                         }
-                        FallbackDialogs().createBadIntentFallbackDialog(this, intent).show()
+                        FallbackDialogs().createBadIntentFallbackDialog(this, null, intent).show()
                         return
                     }
                 val filePath = info.canonicalPath
@@ -914,15 +915,32 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == OPEN_BOOKMARK_ACTIVITY_RESULT && resultCode == Activity.RESULT_OK) {
-            if (controller != null) {
-                val page = data!!.getIntExtra(OrionBookmarkActivity.OPEN_PAGE, -1)
-                if (page != -1) {
-                    controller!!.drawPage(page)
-                } else {
-                    doAction(Action.GOTO)
+        when (requestCode) {
+            OPEN_BOOKMARK_ACTIVITY_RESULT -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    if (controller != null) {
+                        val page = data!!.getIntExtra(OrionBookmarkActivity.OPEN_PAGE, -1)
+                        if (page != -1) {
+                            controller!!.drawPage(page)
+                        } else {
+                            doAction(Action.GOTO)
+                        }
+                    }
                 }
             }
+            SAVE_FILE_RESULT -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    if (data?.data != null && intent.data != null) {
+                        FallbackDialogs.saveFileIntoUri(this, intent.data?: return, data.data!!) {
+                            intent = data
+                            onNewIntent(intent)
+                        }
+                        return
+                    }
+                }
+                //show dialog once again
+            }
+
         }
     }
 
