@@ -1,13 +1,10 @@
 package universe.constellation.orion.viewer.android
 
 import android.content.ContentResolver
-import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.os.ParcelFileDescriptor
-import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.system.Os
 import universe.constellation.orion.viewer.FileInfo
@@ -16,7 +13,7 @@ import universe.constellation.orion.viewer.log
 import java.io.File
 import java.io.IOException
 
-fun getPath(context: Context, uri: Uri): FileInfo? {
+fun getFileInfo(context: Context, uri: Uri): FileInfo? {
     val authority = uri.authority
     val id = uri.lastPathSegment
     val host = uri.host
@@ -40,65 +37,8 @@ fun getPath(context: Context, uri: Uri): FileInfo? {
 
     if (!ContentResolver.SCHEME_CONTENT.equals(uri.scheme, ignoreCase = true)) return null
 
-    var path: String? = null
-    // DocumentProvider
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(
-            context,
-            uri
-        )
-    ) {
-        log("isDocumentUri")
-        // ExternalStorageProvider
-        if (isExternalStorageDocument(uri)) {
-            val docId = DocumentsContract.getDocumentId(uri)
-            val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }
-                .toTypedArray()
-            val type = split[0]
-            val externalStorageDirectory = Environment.getExternalStorageDirectory().absolutePath
-            if ("primary".equals(
-                    type,
-                    ignoreCase = true
-                ) || externalStorageDirectory.endsWith(type)
-            ) {
-                path = externalStorageDirectory + "/" + split[1]
-            }
-            // TODO handle non-primary volumes
-        } else if (isDownloadsDocument(uri)) {
-            val id = DocumentsContract.getDocumentId(uri)
-            val contentUri = ContentUris.withAppendedId(
-                Uri.parse("content://downloads/public_downloads"), id.toLong()
-            )
-            path = getDataColumn(context, contentUri, null, null)
-        } else if (isMediaDocument(uri)) {
-            val docId = DocumentsContract.getDocumentId(uri)
-            val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }
-                .toTypedArray()
-            val type = split[0]
-            var contentUri: Uri? = null
-            when (type) {
-                "image" -> contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                "video" -> contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-                "audio" -> contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-            }
-            val selection = "_id=?"
-            val selectionArgs = arrayOf(
-                split[1]
-            )
-            if (contentUri != null) {
-                path = getDataColumn(context, contentUri, selection, selectionArgs)
-            }
-        }
-    } else if (isGooglePhotosUri(uri)) {
-        path = id
-    }
-
     val name = getKeyFromCursor(MediaStore.MediaColumns.DISPLAY_NAME, context, uri)
     val size = getKeyFromCursor(MediaStore.MediaColumns.SIZE, context, uri)
-
-
-    checkIsFile(path, host = host)?.let {
-        return it
-    }
 
     val dataPath = getDataColumn(
         context,
@@ -188,22 +128,6 @@ private fun getPathFromDescriptor(pfd: ParcelFileDescriptor): String? {
     } catch (e: Exception) {
         null
     }
-}
-
-private fun isExternalStorageDocument(uri: Uri): Boolean {
-    return "com.android.externalstorage.documents" == uri.authority
-}
-
-private fun isDownloadsDocument(uri: Uri): Boolean {
-    return "com.android.providers.downloads.documents" == uri.authority
-}
-
-private fun isMediaDocument(uri: Uri): Boolean {
-    return "com.android.providers.media.documents" == uri.authority
-}
-
-private fun isGooglePhotosUri(uri: Uri): Boolean {
-    return "com.google.android.apps.photos.content" == uri.authority
 }
 
 fun FileInfo.isRestrictedAccessPath(): Boolean {

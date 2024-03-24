@@ -29,7 +29,7 @@ import android.os.Environment
 import android.provider.Settings
 
 object Permissions {
-    private const val ASK_PERMISSION_COMMON = 111
+    const val ASK_PERMISSION_COMMON = 111
     const val ASK_READ_PERMISSION_FOR_BOOK_OPEN = 112
     const val ASK_READ_PERMISSION_FOR_FILE_MANAGER = 113
 
@@ -47,7 +47,7 @@ object Permissions {
                     val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
                     val uri = Uri.fromParts("package", packageName, null)
                     intent.data = uri
-                    startActivity(intent)
+                    startActivityForResult(intent, code)
                 }
             } else {
                 return true

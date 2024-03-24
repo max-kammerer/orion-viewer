@@ -52,7 +52,7 @@ open class FallbackDialogs {
             listOfNotNull(
                 R.string.fileopen_permissions_grant_read.takeIf { !hasReadPermissions(activity) },
                 R.string.fileopen_open_in_temporary_file.takeIf { isContentScheme },
-                R.string.fileopen_save_to_file.takeIf { isContentScheme },
+                //R.string.fileopen_save_to_file.takeIf { isContentScheme && hasReadPermissions(activity)},
                 R.string.fileopen_open_recent_files,
                 R.string.fileopen_report_error_by_github_and_return,
                 R.string.fileopen_report_error_by_email_and_return
@@ -72,7 +72,7 @@ open class FallbackDialogs {
             listOfNotNull(
                 R.string.fileopen_permissions_grant_read.takeIf { !isContentScheme && !hasReadPermissions(activity) },
                 R.string.fileopen_open_in_temporary_file.takeIf { isContentScheme },
-                R.string.fileopen_save_to_file.takeIf { isContentScheme },
+                //R.string.fileopen_save_to_file.takeIf { isContentScheme && hasReadPermissions(activity) },
                 R.string.fileopen_open_recent_files.takeIf { isContentScheme },
                 R.string.fileopen_report_error_by_github_and_return.takeIf { !isContentScheme },
                 R.string.fileopen_report_error_by_email_and_return.takeIf { !isContentScheme }
@@ -92,7 +92,7 @@ open class FallbackDialogs {
             listOfNotNull(
                 R.string.fileopen_permissions_grant_read,
                 R.string.fileopen_open_in_temporary_file.takeIf { isContentScheme },
-                R.string.fileopen_save_to_file.takeIf { isContentScheme },
+                //R.string.fileopen_save_to_file.takeIf { isContentScheme },
                 R.string.fileopen_open_recent_files
             )
         )

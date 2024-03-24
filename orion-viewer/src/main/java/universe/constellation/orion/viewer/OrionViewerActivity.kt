@@ -15,8 +15,9 @@ import androidx.core.view.doOnLayout
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.*
+import universe.constellation.orion.viewer.Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN
 import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAccessPermissionOrReadOne
-import universe.constellation.orion.viewer.android.getPath
+import universe.constellation.orion.viewer.android.getFileInfo
 import universe.constellation.orion.viewer.android.isRestrictedAccessPath
 import universe.constellation.orion.viewer.device.Device
 import universe.constellation.orion.viewer.dialog.SearchDialog
@@ -38,6 +39,12 @@ import java.io.StringWriter
 import java.util.concurrent.Executors
 import kotlin.coroutines.resume
 
+enum class MyState {
+    PROCESSING_INTENT,
+    WAITING_ACTION,
+    FINISHED
+}
+
 class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVITY) {
 
     private var dialog: AppCompatDialog? = null
@@ -55,7 +62,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         orionContext.options
     }
 
-    private var intentProcessed: Boolean = false
+    private var myState: MyState = MyState.PROCESSING_INTENT
 
     @JvmField
     var _isResumed: Boolean = false
@@ -115,12 +122,20 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
         initDialogs()
 
-        intentProcessed = false
         newTouchProcessor = NewTouchProcessorWithScale(view, this)
         view.setOnTouchListener{ _, event ->
             newTouchProcessor!!.onTouch(event)
         }
         initStubController("Processing intent...", "Processing intent...")
+        processIntentAndCheckPermission(intent)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (ASK_READ_PERMISSION_FOR_BOOK_OPEN == requestCode) {
+            println("Permission callback $requestCode...")
+            processIntentAndCheckPermission(intent ?: return)
+        }
     }
 
     private fun initDialogs() {
@@ -156,18 +171,19 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        intentProcessed = false
         setIntent(intent)
+        processIntentAndCheckPermission(intent)
     }
 
-    private fun askReadPermissions(fileInfo: FileInfo, intent: Intent): FileInfo? {
+    private fun askReadPermissionOrAction(fileInfo: FileInfo, intent: Intent): FileInfo? {
         log("Checking permissions for: $fileInfo")
         if (fileInfo.file.canRead()) return fileInfo
+        myState = MyState.WAITING_ACTION
         if (fileInfo.isRestrictedAccessPath()) {
             FallbackDialogs().createPrivateResourceFallbackDialog(this, fileInfo, intent).show()
         } else {
             checkAndRequestStorageAccessPermissionOrReadOne(
-                Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN,
+                ASK_READ_PERMISSION_FOR_BOOK_OPEN,
                 doRequest = false
             ).apply {
                 if (this) {
@@ -187,13 +203,14 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     private fun processIntentAndCheckPermission(intent: Intent) {
         log("Trying to open document by $intent...")
         processAdditionalOptionsInIntent(intent)
+        myState = MyState.PROCESSING_INTENT
 
         val uri = intent.data
         if (uri != null) {
             log("Try to open file by $uri")
             try {
                 val info: FileInfo =
-                    getPath(this, uri) ?: run {
+                    getFileInfo(this, uri) ?: run {
                         if (controller == null) { //TODO init stub controller with error
                             initStubController(
                                 "Can't extract file path from URI",
@@ -215,14 +232,13 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     }
                 }
 
-                if (askReadPermissions(info, intent) == null) {
+                if (askReadPermissionOrAction(info, intent) == null) {
                     log("Waiting for read permissions for $intent")
                     return
                 }
 
-                intentProcessed = true
+                myState = MyState.FINISHED
                 openFileAndDestroyOldController(filePath)
-
             } catch (e: Exception) {
                 showAlertWithExceptionThrow(intent, e)
             }
@@ -604,17 +620,16 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         _isResumed = true
         super.onResume()
         updateBrightness()
-
         log("onResume")
         val intent = intent
-        if (intent != null && !intentProcessed) {
-            processIntentAndCheckPermission(intent)
-        } else {
-            if (controller != null) {
-                controller!!.processPendingEvents()
-                //controller!!.drawPage(lastPageInfo!!.pageNumber, lastPageInfo!!.newOffsetX, lastPageInfo!!.newOffsetY)
-            }
+
+        if (controller != null) {
+            controller!!.processPendingEvents()
+            //controller!!.drawPage(lastPageInfo!!.pageNumber, lastPageInfo!!.newOffsetX, lastPageInfo!!.newOffsetY)
+        } else if (myState == MyState.FINISHED) {
+            errorInDebugOr("Wrong state") { onNewIntent(intent) }
         }
+
     }
 
     override fun onDestroy() {
@@ -915,6 +930,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        log("On activity result requestCode=$requestCode resultCode=$resultCode data=$data originalIntent=$intent")
         when (requestCode) {
             OPEN_BOOKMARK_ACTIVITY_RESULT -> {
                 if (resultCode == Activity.RESULT_OK) {
@@ -938,9 +954,10 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                         return
                     }
                 }
-                //show dialog once again
+                processIntentAndCheckPermission(intent ?: return)
             }
-
+            PERMISSION_READ_RESULT ->
+                processIntentAndCheckPermission(intent ?: return)
         }
     }
 
@@ -1083,6 +1100,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         const val OPEN_BOOKMARK_ACTIVITY_RESULT = 1
 
         const val SAVE_FILE_RESULT = 2
+
+        const val PERMISSION_READ_RESULT = Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN
 
         const val ROTATION_SCREEN = 0
 
