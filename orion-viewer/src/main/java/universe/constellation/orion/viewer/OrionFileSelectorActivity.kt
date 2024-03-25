@@ -28,6 +28,8 @@ import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.net.toUri
+import universe.constellation.orion.viewer.FallbackDialogs.Companion.saveFileByUri
 import universe.constellation.orion.viewer.Permissions.checkWritePermission
 import universe.constellation.orion.viewer.filemanager.FileChooserAdapter
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivityBase
@@ -89,7 +91,7 @@ class OrionSaveFileActivity : OrionFileManagerActivityBase(
     }
 
     private fun saveFile(target: File, fileUri: Uri) {
-        FallbackDialogs.saveFileAndDoAction(this, fileUri, target) {
+        saveFileByUri(fileUri, target.toUri()) {
             openFile(target)
         }
     }
