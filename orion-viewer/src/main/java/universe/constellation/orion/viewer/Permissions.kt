@@ -33,11 +33,9 @@ object Permissions {
     const val ASK_READ_PERMISSION_FOR_BOOK_OPEN = 112
     const val ASK_READ_PERMISSION_FOR_FILE_MANAGER = 113
 
-    @JvmStatic
-    fun checkReadPermission(activity: Activity, code: Int = ASK_PERMISSION_COMMON, doRequest: Boolean = true) =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                checkPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE, code, doRequest)
-            else true
+    fun hasReadStoragePermission(activity: Activity, code: Int = ASK_PERMISSION_COMMON): Boolean {
+        return activity.checkAndRequestStorageAccessPermissionOrReadOne(code, doRequest = false)
+    }
 
     @JvmStatic
     fun Activity.checkAndRequestStorageAccessPermissionOrReadOne(code: Int, doRequest: Boolean = true): Boolean {
@@ -52,8 +50,10 @@ object Permissions {
             } else {
                 return true
             }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return checkPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, code, doRequest)
         } else {
-            return checkReadPermission(this, code, doRequest)
+            return true
         }
         return false
     }
