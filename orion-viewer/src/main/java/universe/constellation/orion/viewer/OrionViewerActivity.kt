@@ -192,7 +192,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 if (this) {
                     FallbackDialogs().createPrivateResourceFallbackDialog(this@OrionViewerActivity, fileInfo, intent).show()
                 } else {
-                    FallbackDialogs().createProvidePermissionsDialog(
+                    FallbackDialogs().createGrantReadPermissionsDialog(
                         this@OrionViewerActivity,
                         fileInfo,
                         intent
@@ -625,6 +625,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         _isResumed = true
         super.onResume()
         updateBrightness()
+
         log("onResume")
         val intent = intent
 
@@ -952,7 +953,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             SAVE_FILE_RESULT -> {
                 if (resultCode == Activity.RESULT_OK) {
                     if (data?.data != null && intent.data != null) {
-                        FallbackDialogs.saveFileIntoUri(this, intent.data?: return, data.data!!) {
+                        FallbackDialogs.saveFileByUri(this, intent.data?: return, data.data!!) {
                             onNewIntent(data)
                         }
                         return

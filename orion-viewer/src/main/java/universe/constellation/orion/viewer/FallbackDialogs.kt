@@ -21,6 +21,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAccessPermissionOrReadOne
+import universe.constellation.orion.viewer.Permissions.hasReadStoragePermission
 import universe.constellation.orion.viewer.filemanager.FileChooserAdapter
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
 import java.io.File
@@ -37,9 +38,6 @@ open class FallbackDialogs {
         return ContentResolver.SCHEME_CONTENT.equals(data?.scheme, ignoreCase = true)
     }
 
-    private fun hasReadPermissions(activity: OrionViewerActivity) =
-        Permissions.checkReadPermission(activity, doRequest = false)
-
     fun createBadIntentFallbackDialog(activity: OrionViewerActivity, fileInfo: FileInfo?, intent: Intent): Dialog {
         val isContentScheme = intent.isContentScheme()
         return createFallbackDialog(
@@ -50,9 +48,9 @@ open class FallbackDialogs {
             R.string.fileopen_error_during_intent_processing_info,
             if (isContentScheme) R.string.fileopen_open_in_temporary_file else null,
             listOfNotNull(
-                R.string.fileopen_permissions_grant_read.takeIf { !hasReadPermissions(activity) },
+                R.string.fileopen_permissions_grant_read.takeIf { !hasReadStoragePermission(activity) },
                 R.string.fileopen_open_in_temporary_file.takeIf { isContentScheme },
-                //R.string.fileopen_save_to_file.takeIf { isContentScheme && hasReadPermissions(activity)},
+                R.string.fileopen_save_to_file.takeIf {isContentScheme && hasReadStoragePermission(activity)},
                 R.string.fileopen_open_recent_files,
                 R.string.fileopen_report_error_by_github_and_return,
                 R.string.fileopen_report_error_by_email_and_return
@@ -70,9 +68,9 @@ open class FallbackDialogs {
             R.string.fileopen_private_resource_access_info,
             if (isContentScheme) R.string.fileopen_open_in_temporary_file else null,
             listOfNotNull(
-                R.string.fileopen_permissions_grant_read.takeIf { !isContentScheme && !hasReadPermissions(activity) },
+                R.string.fileopen_permissions_grant_read.takeIf { !isContentScheme && !hasReadStoragePermission(activity)},
                 R.string.fileopen_open_in_temporary_file.takeIf { isContentScheme },
-                //R.string.fileopen_save_to_file.takeIf { isContentScheme && hasReadPermissions(activity) },
+                R.string.fileopen_save_to_file.takeIf {isContentScheme && hasReadStoragePermission(activity)},
                 R.string.fileopen_open_recent_files.takeIf { isContentScheme },
                 R.string.fileopen_report_error_by_github_and_return.takeIf { !isContentScheme },
                 R.string.fileopen_report_error_by_email_and_return.takeIf { !isContentScheme }
@@ -80,7 +78,7 @@ open class FallbackDialogs {
         )
     }
 
-    fun createProvidePermissionsDialog(activity: OrionViewerActivity, fileInfo: FileInfo, intent: Intent): Dialog {
+    fun createGrantReadPermissionsDialog(activity: OrionViewerActivity, fileInfo: FileInfo, intent: Intent): Dialog {
         val isContentScheme = intent.isContentScheme()
         return createFallbackDialog(
             activity,
@@ -92,7 +90,6 @@ open class FallbackDialogs {
             listOfNotNull(
                 R.string.fileopen_permissions_grant_read,
                 R.string.fileopen_open_in_temporary_file.takeIf { isContentScheme },
-                //R.string.fileopen_save_to_file.takeIf { isContentScheme },
                 R.string.fileopen_open_recent_files
             )
         )
