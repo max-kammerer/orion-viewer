@@ -15,11 +15,13 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.core.net.toUri
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import universe.constellation.orion.viewer.FallbackDialogs.Companion.saveFileByUri
 import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAccessPermissionOrReadOne
 import universe.constellation.orion.viewer.Permissions.hasReadStoragePermission
 import universe.constellation.orion.viewer.filemanager.FileChooserAdapter
@@ -191,19 +193,6 @@ open class FallbackDialogs {
 
         const val URI = "URI"
 
-        private fun saveFileInto(context: Context, uri: Uri, toFile: File): File {
-            toFile.parentFile?.mkdirs()
-
-            val input = context.contentResolver.openInputStream(uri) ?: error("Can't read file data: $uri")
-
-            input.use {
-                toFile.outputStream().use { outputStream ->
-                    input.copyTo(outputStream)
-                }
-            }
-            return toFile
-        }
-
         internal fun createTmpFile(context: Context, fileName: String, extension: String) =
             File.createTempFile(
                 if (fileName.length < 3) "tmp$fileName" else fileName,
@@ -232,67 +221,32 @@ open class FallbackDialogs {
             }
         }
 
-        fun saveFileAndDoAction(
-                myActivity: Activity,
-                uri: Uri,
-                toFile: File,
-                action: (File) -> Unit
+
+        fun Activity.saveFileByUri(
+            originalContentUri: Uri,
+            targetFileUri: Uri,
+            callbackAction: () -> Unit
         ) {
             val handler = CoroutineExceptionHandler { _, exception ->
                 exception.printStackTrace()
-                AlertDialog.Builder(myActivity).setMessage(exception.message)
-                    .setPositiveButton("OK"
-                    ) { dialog, _ -> dialog.dismiss() }.create().show()
+                AlertDialog.Builder(this).setMessage(exception.message)
+                    .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+                    .create().show()
             }
 
             GlobalScope.launch(Dispatchers.Main + handler) {
-                val progressBar = ProgressDialog(myActivity)
+                val progressBar = ProgressDialog(this@saveFileByUri)
                 progressBar.isIndeterminate = true
                 progressBar.show()
                 try {
                     withContext(Dispatchers.IO) {
-                        saveFileInto(
-                                myActivity,
-                                uri,
-                                toFile.also { log("Trying to save file into $it") }
-                        )
+                        (contentResolver.openInputStream(originalContentUri)?.use { input ->
+                            contentResolver.openOutputStream(targetFileUri)?.use { output ->
+                                input.copyTo(output)
+                            } ?: error("Can't open output stream for $targetFileUri")
+                        } ?: error("Can't read file data: $originalContentUri"))
                     }
-                    action(toFile)
-                } finally {
-                    progressBar.dismiss()
-                }
-            }
-        }
-
-        fun saveFileIntoUri(
-            myActivity: Activity,
-            uri: Uri,
-            toFile: Uri,
-            action: (Uri) -> Unit
-        ) {
-            val handler = CoroutineExceptionHandler { _, exception ->
-                exception.printStackTrace()
-                AlertDialog.Builder(myActivity).setMessage(exception.message)
-                    .setPositiveButton("OK"
-                    ) { dialog, _ -> dialog.dismiss() }.create().show()
-            }
-
-            GlobalScope.launch(Dispatchers.Main + handler) {
-                val progressBar = ProgressDialog(myActivity)
-                progressBar.isIndeterminate = true
-                progressBar.show()
-                try {
-                    withContext(Dispatchers.IO) {
-                        val outputStream = myActivity.contentResolver.openOutputStream(toFile) ?: error("Can't open output stream for $toFile")
-                        val input = myActivity.contentResolver.openInputStream(uri) ?: error("Can't read file data: $uri")
-
-                        input.use {
-                            outputStream.use { outputStream ->
-                                input.copyTo(outputStream)
-                            }
-                        }
-                    }
-                    action(toFile)
+                    callbackAction()
                 } finally {
                     progressBar.dismiss()
                 }
@@ -326,7 +280,7 @@ private fun saveInTmpFile(
         extension
     )
 
-    FallbackDialogs.saveFileAndDoAction(myActivity, uri, toFile) {
+    myActivity.saveFileByUri(uri, toFile.toUri()) {
         dialog.dismiss()
         myActivity.onNewIntentInternal(
             Intent(Intent.ACTION_VIEW).apply {

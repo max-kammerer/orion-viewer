@@ -15,6 +15,7 @@ import androidx.core.view.doOnLayout
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.*
+import universe.constellation.orion.viewer.FallbackDialogs.Companion.saveFileByUri
 import universe.constellation.orion.viewer.Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN
 import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAccessPermissionOrReadOne
 import universe.constellation.orion.viewer.android.getFileInfo
@@ -953,7 +954,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             SAVE_FILE_RESULT -> {
                 if (resultCode == Activity.RESULT_OK) {
                     if (data?.data != null && intent.data != null) {
-                        FallbackDialogs.saveFileByUri(this, intent.data?: return, data.data!!) {
+                        saveFileByUri(intent.data?: return, data.data!!) {
                             onNewIntent(data)
                         }
                         return
