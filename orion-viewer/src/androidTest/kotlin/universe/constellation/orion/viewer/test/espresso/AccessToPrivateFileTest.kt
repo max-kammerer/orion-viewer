@@ -77,7 +77,7 @@ class AccessToPrivateFileTest(val bookDesc: BookFile) :
 private fun Intent.prepareIntent(bookDesc: BookFile) {
     val fileName = bookDesc.simpleFileName
     val uri = Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT)
-        .authority(BuildConfig.APPLICATION_ID + ".fileprovider").
+        .authority(BuildConfig.APPLICATION_ID + ".fileprovider")
         .encodedPath(fileName).appendQueryParameter("displayName", fileName).build()
 
     instrumentationContext.grantUriPermission(
