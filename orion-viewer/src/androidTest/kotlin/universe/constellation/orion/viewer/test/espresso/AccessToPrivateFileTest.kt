@@ -86,6 +86,6 @@ private fun Intent.prepareIntent(bookDesc: BookFile) {
         uri,
         Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
     )
-    val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileName.substringAfter('.'))
+    val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileName.substringAfterLast('.'))
     setDataAndType(uri, mimeType)
 }
