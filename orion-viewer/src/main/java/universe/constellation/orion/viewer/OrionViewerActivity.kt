@@ -251,9 +251,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 showAlertWithExceptionThrow(intent, e)
             }
 
-        } else
-        /*if (intent.getAction().endsWith("MAIN"))*/ {
-            //TODO error
+        } else {
+            errorInDebug("No uri in intent $intent")
         }
     }
 
