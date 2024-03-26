@@ -52,10 +52,10 @@ abstract class InstrumentationTestCase(intent: Intent, private val showTapHelp: 
     }
 }
 
-fun InstrumentationTestCase.failWithScreenShot(message: String) {
-    screenshotRule.takeScreenshot(name.methodName)
+fun InstrumentationTestCase.failWithScreenShot(message: String, namePrefix: String = name.methodName): Nothing {
+    screenshotRule.takeScreenshot(namePrefix)
     logError(message)
-    Assert.fail(message)
+    error(Assert.fail(message))
 }
 
 fun <T: Any> InstrumentationTestCase.onActivity(body: (OrionViewerActivity) -> T): T {

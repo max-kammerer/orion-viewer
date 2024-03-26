@@ -51,17 +51,7 @@ abstract class BaseTest(private val forceGrantAction: Boolean = true) {
 
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         //workaround problem "system ui is not responding" problem
-        repeat(3) {
-            device.findObject(By.textContains("Wait"))?.click()
-            if (device.findObject(By.textContains("stopping")) != null) {
-                //workaround for: bluetooth keeps stopping
-                device.findObject(By.textContains("Close app"))?.click()
-            }
-            if (device.findObject(By.textContains("has stopped")) != null) {
-                //workaround for: ... process has stopped
-                device.findObject(By.textContains("OK"))?.click()
-            }
-        }
+        processEmulatorErrors(device)
 
         if (forceGrantAction && !BookDescription.SICP.asFile().canRead()) {
             val grant =
@@ -84,6 +74,20 @@ abstract class BaseTest(private val forceGrantAction: Boolean = true) {
             Espresso.onView(ViewMatchers.withId(R.id.view))
                 .check(matches(ViewMatchers.isCompletelyDisplayed()))
             assertTrue(BookDescription.SICP.asFile().canRead())
+        }
+    }
+
+    protected fun processEmulatorErrors(device: UiDevice) {
+        repeat(3) {
+            device.findObject(By.textContains("Wait"))?.click()
+            if (device.findObject(By.textContains("stopping")) != null) {
+                //workaround for: bluetooth keeps stopping
+                device.findObject(By.textContains("Close app"))?.click()
+            }
+            if (device.findObject(By.textContains("has stopped")) != null) {
+                //workaround for: ... process has stopped
+                device.findObject(By.textContains("OK"))?.click()
+            }
         }
     }
 
