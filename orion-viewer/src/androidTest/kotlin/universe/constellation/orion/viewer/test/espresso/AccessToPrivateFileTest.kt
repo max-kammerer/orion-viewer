@@ -83,8 +83,7 @@ private fun Intent.prepareIntent(bookDesc: BookFile) {
     instrumentationContext.grantUriPermission(
         universe.constellation.orion.viewer.BuildConfig.APPLICATION_ID,
         uri,
-        Intent.FLAG_GRANT_READ_URI_PERMISSION
+        Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
     )
-    data = uri
-    type="application/pdf"
+    setDataAndType(uri, "application/pdf")
 }
