@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION_CODES.KITKAT
 import android.os.Build.VERSION_CODES.LOLLIPOP
+import android.webkit.MimeTypeMap
 import androidx.test.filters.SdkSuppress
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
@@ -85,5 +86,6 @@ private fun Intent.prepareIntent(bookDesc: BookFile) {
         uri,
         Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
     )
-    setDataAndType(uri, "application/pdf")
+    val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileName.substringAfter('.'))
+    setDataAndType(uri, mimeType)
 }
