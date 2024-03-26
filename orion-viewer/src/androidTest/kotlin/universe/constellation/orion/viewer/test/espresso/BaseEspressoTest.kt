@@ -1,5 +1,6 @@
 package universe.constellation.orion.viewer.test.espresso
 
+import android.content.Intent
 import android.os.Build
 import android.view.View
 import android.widget.SeekBar
@@ -12,28 +13,24 @@ import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matcher
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
-import org.junit.Rule
 import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.Controller
-import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.test.framework.BookFile
 import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
-import universe.constellation.orion.viewer.test.framework.WAIT_TIMEOUT
 import universe.constellation.orion.viewer.view.OrionDrawScene
 
 @SdkSuppress(minSdkVersion = 21)
 /*Default zoom is "Fit Width"*/
 open class BaseEspressoTest(
     val bookDescription: BookFile,
-    showTapHelp: Boolean = false
-) : InstrumentationTestCase(bookDescription.toOpenIntent(), showTapHelp) {
+    showTapHelp: Boolean = false,
+    additionalParams: (Intent) -> Unit = {}
+) : InstrumentationTestCase(bookDescription.toOpenIntent(), showTapHelp, additionalParams = additionalParams) {
 
     companion object {
         @JvmStatic
@@ -47,13 +44,7 @@ open class BaseEspressoTest(
 
     @Before
     fun checkStartInvariant() {
-        lateinit var job: Job
-        activityScenarioRule.scenario.onActivity {
-            job = it.openJob
-        }
-        runBlocking {
-            job.join()
-        }
+        awaitBookLoading()
         activityScenarioRule.scenario.onActivity {
             controller = it.controller!!
             Assert.assertEquals(it.controller!!.document.filePath, bookDescription.asPath())
@@ -64,6 +55,7 @@ open class BaseEspressoTest(
             device.wait(Until.findObject(By.clazz(OrionDrawScene::class.java)), 1000)
         }
     }
+
 
     @After
     fun checkEndInvariant() {
@@ -99,14 +91,6 @@ open class BaseEspressoTest(
             device.wait(Until.findObject(By.textContains("Go To")), 1000)
         }
         Espresso.onView(ViewMatchers.withText("Go To")).perform(ViewActions.click())
-    }
-
-    fun <T: Any> onActivity(body: (OrionViewerActivity) -> T): T {
-        lateinit var res: T
-        activityScenarioRule.scenario.onActivity {
-            res = body(it)
-        }
-        return res
     }
 }
 

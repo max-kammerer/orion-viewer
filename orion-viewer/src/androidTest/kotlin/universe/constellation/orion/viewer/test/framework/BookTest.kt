@@ -3,6 +3,7 @@ package universe.constellation.orion.viewer.test.framework
 import android.content.Intent
 import android.graphics.Point
 import android.net.Uri
+import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.After
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -29,7 +30,7 @@ abstract class BookTest(protected val bookDescription: BookDescription) : BaseTe
     }
 }
 
-open class BookFile(private val simpleFileName: String) {
+open class BookFile(val simpleFileName: String) {
     fun toOpenIntent(): Intent {
         return Intent(Intent.ACTION_VIEW).apply {
             setClassName(
@@ -42,6 +43,9 @@ open class BookFile(private val simpleFileName: String) {
     }
 
     fun asFile() = File(BaseTest.testDataFolder, simpleFileName)
+
+    fun asAssetsFileStream() =
+        InstrumentationRegistry.getInstrumentation().context.resources.assets.open(BaseTest.testDataFolder.name + "/" + simpleFileName)
 
     fun asPath() = asFile().absolutePath
 

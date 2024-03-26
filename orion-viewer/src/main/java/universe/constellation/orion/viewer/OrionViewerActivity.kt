@@ -206,7 +206,10 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     internal fun processIntentAndCheckPermission(intent: Intent) {
         log("Trying to open document by $intent...")
-        setIntent(intent)
+        if (!openAsTempTestBook) {
+            //UGLY hack: otherwise Espresso can't recognize that it's test activity
+            setIntent(intent)
+        }
         processAdditionalOptionsInIntent(intent)
         myState = MyState.PROCESSING_INTENT
 
