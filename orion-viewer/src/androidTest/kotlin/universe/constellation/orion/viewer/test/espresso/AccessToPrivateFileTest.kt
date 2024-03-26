@@ -57,7 +57,6 @@ class AccessToPrivateFileTest(val bookDesc: BookFile) :
     }
 
     @Test
-    @SdkSuppress(minSdkVersion = LOLLIPOP)
     fun openViaNewFile() {
         //screenshotRule.takeScreenshot(bookDesc.simpleFileName)
         device.wait(Until.findObject(By.textContains("new file")), LONG_TIMEOUT)?.click() ?: failWithScreenShot("No dialog")
@@ -78,7 +77,7 @@ class AccessToPrivateFileTest(val bookDesc: BookFile) :
 private fun Intent.prepareIntent(bookDesc: BookFile) {
     val fileName = bookDesc.simpleFileName
     val uri = Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT)
-        .authority(BuildConfig.APPLICATION_ID + ".fileprovider")
+        .authority(BuildConfig.APPLICATION_ID + ".fileprovider").
         .encodedPath(fileName).appendQueryParameter("displayName", fileName).build()
 
     instrumentationContext.grantUriPermission(
@@ -87,4 +86,5 @@ private fun Intent.prepareIntent(bookDesc: BookFile) {
         Intent.FLAG_GRANT_READ_URI_PERMISSION
     )
     data = uri
+    type="application/pdf"
 }
