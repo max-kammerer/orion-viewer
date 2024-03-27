@@ -3,7 +3,6 @@ package universe.constellation.orion.viewer.test.espresso
 import androidx.test.espresso.Espresso.*
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import org.hamcrest.Matchers.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -11,7 +10,7 @@ import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.test.framework.BookFile
 
 @RunWith(Parameterized::class)
-class ZoomTest(bookDescription: BookFile): BaseEspressoTest(bookDescription) {
+class ZoomTest(bookDescription: BookFile): BaseOrionActivityTest(bookDescription) {
 
     @Test
     fun testZoomChange() {

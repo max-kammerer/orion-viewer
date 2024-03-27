@@ -3,7 +3,6 @@ package universe.constellation.orion.viewer.test.espresso
 import androidx.test.espresso.Espresso.*
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import org.hamcrest.Matchers.*
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -12,7 +11,7 @@ import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.test.framework.BookFile
 
 @RunWith(Parameterized::class)
-class ScrollTest(bookDescription: BookFile): BaseEspressoTest(bookDescription) {
+class ScrollTest(bookDescription: BookFile): BaseOrionActivityTest(bookDescription) {
 
     @Test
     fun testSwipeUpAndDownWithZoomIn3() {

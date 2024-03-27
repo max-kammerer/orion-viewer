@@ -26,7 +26,7 @@ import universe.constellation.orion.viewer.view.OrionDrawScene
 
 @SdkSuppress(minSdkVersion = 21)
 /*Default zoom is "Fit Width"*/
-open class BaseEspressoTest(
+open class BaseOrionActivityTest(
     val bookDescription: BookFile,
     showTapHelp: Boolean = false,
     additionalParams: (Intent) -> Unit = {}
