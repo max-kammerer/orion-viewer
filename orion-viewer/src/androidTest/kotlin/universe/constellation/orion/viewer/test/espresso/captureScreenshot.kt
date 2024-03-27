@@ -3,6 +3,7 @@ package universe.constellation.orion.viewer.test.espresso
 import androidx.test.core.app.takeScreenshot
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
+import universe.constellation.orion.viewer.android.isAtLeastKitkat
 import universe.constellation.orion.viewer.test.framework.dumpBitmap
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -21,6 +22,7 @@ class ScreenshotTakingRule : TestWatcher() {
 
     companion object {
         fun dump(filePrefix: String) {
+            if (!isAtLeastKitkat()) return
             dumpBitmap(filePrefix, simpleDateFormat.format(Date()), takeScreenshot())
         }
     }

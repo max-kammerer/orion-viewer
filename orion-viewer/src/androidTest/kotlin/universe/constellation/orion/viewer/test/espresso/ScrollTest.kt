@@ -9,6 +9,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.test.framework.BookFile
+import universe.constellation.orion.viewer.test.framework.onActivity
 
 @RunWith(Parameterized::class)
 class ScrollTest(bookDescription: BookFile): BaseViewerActivityTest(bookDescription) {
@@ -46,14 +47,14 @@ class ScrollTest(bookDescription: BookFile): BaseViewerActivityTest(bookDescript
     fun testLastPageSwipeUp() {
         openGoTo()
         var pageCount = -1
-        activityScenarioRule.scenario.onActivity {
+        onActivity {
             pageCount = it.controller!!.document.pageCount
         }
         onView(withId(R.id.page_picker_seeker)).perform(setSeekBarProgress { pageCount - 1 })
         applyGoTo()
         onView(withId(R.id.view)).perform(swipeUp())
 
-        activityScenarioRule.scenario.onActivity { activity ->
+        onActivity { activity ->
             val pageLayoutManager = activity.controller!!.pageLayoutManager
             val last = pageLayoutManager.activePages.last()
             Assert.assertEquals(pageLayoutManager.activePages.joinToString(" ") {it.pageNum.toString()}, activity.controller!!.pageCount - 1, last.pageNum)

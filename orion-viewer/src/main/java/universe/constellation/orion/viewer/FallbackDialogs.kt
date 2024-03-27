@@ -24,6 +24,7 @@ import kotlinx.coroutines.withContext
 import universe.constellation.orion.viewer.FallbackDialogs.Companion.saveFileByUri
 import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAccessPermissionOrReadOne
 import universe.constellation.orion.viewer.Permissions.hasReadStoragePermission
+import universe.constellation.orion.viewer.android.isAtLeastKitkat
 import universe.constellation.orion.viewer.filemanager.FileChooserAdapter
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
 import java.io.File
@@ -144,7 +145,7 @@ open class FallbackDialogs {
             }
 
             R.string.fileopen_save_to_file -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                if (isAtLeastKitkat()) {
                     sendCreateFileRequest(activity, fileInfo, intent)
                 } else {
                     activity.startActivity(

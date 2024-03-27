@@ -1,6 +1,7 @@
 package universe.constellation.orion.viewer.test.espresso
 
 import android.graphics.Rect
+import android.os.Build
 import android.view.View
 import androidx.test.espresso.Espresso.*
 import androidx.test.espresso.action.ViewActions.*
@@ -23,8 +24,6 @@ import universe.constellation.orion.viewer.test.framework.BaseUITest
 import universe.constellation.orion.viewer.test.framework.openOrionIntent
 import java.util.concurrent.atomic.AtomicReference
 
-@RunWith(AndroidJUnit4::class)
-@SdkSuppress(minSdkVersion = 21)
 class NoBookNoStartTapScreen : BaseUITest(openOrionIntent {
     putExtra(GlobalOptions.SHOW_TAP_HELP, true)
 }, true) {
@@ -35,18 +34,16 @@ class NoBookNoStartTapScreen : BaseUITest(openOrionIntent {
     }
 }
 
-@RunWith(AndroidJUnit4::class)
-@SdkSuppress(minSdkVersion = 21)
 class BookWithStartTapScreen :
     BaseViewerActivityTest(
         BookDescription.SICP,
         BookDescription.SICP.toOpenIntent {
             putExtra(GlobalOptions.SHOW_TAP_HELP, true)
         }) {
+
     @Test
     fun testStartScreen() {
         assertTrue(globalOptions.isShowTapHelp)
-        Thread.sleep(1000)
         onView(withId(R.id.tap_help_close)).check(matches(isDisplayed()))
         checkSizeAndPosition()
 

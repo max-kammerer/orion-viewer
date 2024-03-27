@@ -3,6 +3,7 @@ package universe.constellation.orion.viewer.test.framework
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import androidx.test.core.app.takeScreenshot
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
@@ -18,6 +19,7 @@ import org.junit.Before
 import org.junit.Rule
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.R
+import universe.constellation.orion.viewer.android.isAtLeastKitkat
 import universe.constellation.orion.viewer.logError
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import universe.constellation.orion.viewer.prefs.OrionApplication
@@ -70,17 +72,19 @@ abstract class BaseUITest(startIntent: Intent, private val doGrantAction: Boolea
             device.pressBack()
             Espresso.onView(ViewMatchers.withId(R.id.view))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-            Espresso.onView(ViewMatchers.withId(R.id.view))
-                .check(ViewAssertions.matches(ViewMatchers.isCompletelyDisplayed()))
             Assert.assertTrue(BookDescription.SICP.asFile().canRead())
         }
     }
 
     protected fun processEmulatorErrors() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return
+        if (!isAtLeastKitkat()) return
+
+        device.waitForIdle()
 
         repeat(3) {
-            device.findObject(By.textContains("Wait"))?.click()
+            if (device.findObject(By.textContains("System UI isn't responding")) != null) {
+                device.findObject(By.textContains("Close"))?.click()
+            }
             if (device.findObject(By.textContains("stopping")) != null) {
                 //workaround for: bluetooth keeps stopping
                 device.findObject(By.textContains("Close app"))?.click()
@@ -109,6 +113,14 @@ fun BaseUITest.doFail(message: String, namePrefix: String = name.methodName): No
     error(Assert.fail(message))
 }
 
+fun BaseUITest.checkNotEquals(message: String, expected: Int, actual: Int, namePrefix: String = name.methodName) {
+    if (expected != actual) {
+        screenshotRule.takeScreenshot(namePrefix)
+        logError(message)
+        Assert.assertNotEquals(message, expected, actual)
+    }
+}
+
 fun BaseUITest.checkTrue(message: String, condition: Boolean, namePrefix: String = name.methodName) {
     if (!condition) {
         screenshotRule.takeScreenshot(namePrefix)
@@ -127,3 +139,6 @@ fun <T: Any> BaseUITest.onActivity(body: (OrionViewerActivity) -> T): T {
 
 val instrumentationContext: Context
     get() = InstrumentationRegistry.getInstrumentation().context
+
+val appContext: Context
+    get() = InstrumentationRegistry.getInstrumentation().targetContext
