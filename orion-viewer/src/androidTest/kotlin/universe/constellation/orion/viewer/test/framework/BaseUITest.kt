@@ -103,10 +103,18 @@ abstract class BaseUITest(startIntent: Intent, private val doGrantAction: Boolea
     }
 }
 
-fun BaseUITest.failWithScreenShot(message: String, namePrefix: String = name.methodName): Nothing {
+fun BaseUITest.doFail(message: String, namePrefix: String = name.methodName): Nothing {
     screenshotRule.takeScreenshot(namePrefix)
     logError(message)
     error(Assert.fail(message))
+}
+
+fun BaseUITest.checkTrue(message: String, condition: Boolean, namePrefix: String = name.methodName) {
+    if (!condition) {
+        screenshotRule.takeScreenshot(namePrefix)
+        logError(message)
+        Assert.assertTrue(message, condition)
+    }
 }
 
 fun <T: Any> BaseUITest.onActivity(body: (OrionViewerActivity) -> T): T {

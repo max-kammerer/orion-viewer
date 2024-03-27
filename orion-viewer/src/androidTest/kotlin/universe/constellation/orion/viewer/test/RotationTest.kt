@@ -6,6 +6,7 @@ import org.junit.Assert
 import org.junit.Test
 import universe.constellation.orion.viewer.test.espresso.BaseViewerActivityTest
 import universe.constellation.orion.viewer.test.framework.BookDescription
+import universe.constellation.orion.viewer.test.framework.checkTrue
 import universe.constellation.orion.viewer.view.OrionDrawScene
 
 class RotationTest : BaseViewerActivityTest(BookDescription.SICP) {
@@ -21,8 +22,8 @@ class RotationTest : BaseViewerActivityTest(BookDescription.SICP) {
         val width = view.sceneWidth
         val height = view.sceneHeight
 
-        Assert.assertTrue(width != 0)
-        Assert.assertTrue(height != 0)
+        checkTrue("Width is empty", width != 0)
+        checkTrue("Height is empty", height != 0)
 
         var orientation: Int = Int.MIN_VALUE
         activityScenarioRule.scenario.onActivity {
@@ -41,8 +42,8 @@ class RotationTest : BaseViewerActivityTest(BookDescription.SICP) {
             Assert.assertNotEquals("Orientation not changed: $orientation", orientation, newOrientation)
             val width2 = view.sceneWidth
             val height2 = view.sceneHeight
-            Assert.assertTrue("w1: $width, w2: $width2, original orientation: $orientation", width != width2)
-            Assert.assertTrue("h1: $height, h2: $$height2, original orientation: $orientation", height != height2)
+            checkTrue("w1: $width, w2: $width2, original orientation: $orientation", width != width2)
+            checkTrue("h1: $height, h2: $$height2, original orientation: $orientation", height != height2)
         } finally {
             activityScenarioRule.scenario.onActivity {
                 it.controller!!.changeOrinatation("PORTRAIT")

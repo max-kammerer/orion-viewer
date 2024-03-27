@@ -23,7 +23,7 @@ import universe.constellation.orion.viewer.test.framework.BookFile
 import universe.constellation.orion.viewer.test.framework.BaseUITest
 import universe.constellation.orion.viewer.test.framework.LONG_TIMEOUT
 import universe.constellation.orion.viewer.test.framework.SHORT_TIMEOUT
-import universe.constellation.orion.viewer.test.framework.failWithScreenShot
+import universe.constellation.orion.viewer.test.framework.doFail
 import universe.constellation.orion.viewer.test.framework.instrumentationContext
 import universe.constellation.orion.viewer.test.framework.onActivity
 import universe.constellation.orion.viewer.view.OrionDrawScene
@@ -49,7 +49,7 @@ class AccessToPrivateFileTest(private val bookDesc: BookFile) :
     fun openViaTemporaryFile() {
         //TODO investigate problem on LOLLIPOP with test framework
         if (Build.VERSION.SDK_INT == LOLLIPOP) return
-        device.wait(Until.findObject(By.textContains("temporary")), LONG_TIMEOUT)?.click() ?: failWithScreenShot("No dialog")
+        device.wait(Until.findObject(By.textContains("temporary")), LONG_TIMEOUT)?.click() ?: doFail("No dialog")
 
         checkFileWasOpen()
     }
@@ -59,20 +59,20 @@ class AccessToPrivateFileTest(private val bookDesc: BookFile) :
         //TODO investigate problem on LOLLIPOP and KITKAT with test framework
         if (Build.VERSION.SDK_INT <= LOLLIPOP) return
 
-        device.wait(Until.findObject(By.textContains("new file")), LONG_TIMEOUT)?.click() ?: failWithScreenShot("No dialog")
+        device.wait(Until.findObject(By.textContains("new file")), LONG_TIMEOUT)?.click() ?: doFail("No dialog")
         processEmulatorErrors()
 
         if (Build.VERSION.SDK_INT <= M && device.wait(Until.findObject(By.textContains("Save to")), LONG_TIMEOUT) != null) {
             device.wait(Until.findObject(By.textContains("Downloads")), SHORT_TIMEOUT)?.click()
         }
 
-        val editField = device.wait(Until.findObject(By.clazz(EditText::class.java)), LONG_TIMEOUT) ?: failWithScreenShot("No edit field")
+        val editField = device.wait(Until.findObject(By.clazz(EditText::class.java)), LONG_TIMEOUT) ?: doFail("No edit field")
         editField.text = bookDesc.simpleFileName
 
         val saveButton =
             device.findObject(By.textContains("SAVE"))
                 ?: device.findObject(By.clazz(Button::class.java))
-                ?: failWithScreenShot("No save button")
+                ?: doFail("No save button")
 
         saveButton.click()
 
