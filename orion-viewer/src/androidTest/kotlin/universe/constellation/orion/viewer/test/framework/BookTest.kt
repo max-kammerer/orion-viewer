@@ -7,9 +7,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.After
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.FileUtil.openFile
-import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.test.framework.BaseTest.Companion.ALICE
 import universe.constellation.orion.viewer.test.framework.BaseTest.Companion.DJVU_SPEC
 import universe.constellation.orion.viewer.test.framework.BaseTest.Companion.SICP
@@ -31,14 +29,10 @@ abstract class BookTest(protected val bookDescription: BookDescription) : BaseTe
 }
 
 open class BookFile(val simpleFileName: String) {
-    fun toOpenIntent(): Intent {
-        return Intent(Intent.ACTION_VIEW).apply {
-            setClassName(
-                BuildConfig.APPLICATION_ID,
-                OrionViewerActivity::class.qualifiedName!!
-            )
+    fun toOpenIntent(body: Intent.() -> Unit = {}): Intent {
+        return openOrionIntent {
             data = Uri.fromFile(asFile())
-            addCategory(Intent.CATEGORY_DEFAULT)
+            body()
         }
     }
 

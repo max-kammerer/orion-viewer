@@ -15,6 +15,7 @@ import universe.constellation.orion.viewer.*
 import universe.constellation.orion.viewer.prefs.GlobalOptions.OPEN_AS_TEMP_BOOK
 import universe.constellation.orion.viewer.prefs.GlobalOptions.TEST_SCREEN_HEIGHT
 import universe.constellation.orion.viewer.prefs.GlobalOptions.TEST_SCREEN_WIDTH
+import universe.constellation.orion.viewer.test.espresso.BaseOrionActivityTest
 import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.BaseUITest
 import universe.constellation.orion.viewer.test.framework.MANUAL_DEBUG
@@ -27,12 +28,11 @@ private val deviceSize = Point(300, 350) //to split page on two screen - page si
 
 @Ignore
 @RunWith(Parameterized::class)
-class RenderingAndNavigationTest(private val book: BookDescription) : BaseUITest(book.toOpenIntent(), additionalParams = {
-    intent ->
-    intent.putExtra(TEST_SCREEN_WIDTH, deviceSize.x)
-    intent.putExtra(TEST_SCREEN_HEIGHT, deviceSize.y)
-    intent.putExtra(OPEN_AS_TEMP_BOOK, true)
-}) {
+class RenderingAndNavigationTest(private val book: BookDescription) :
+    BaseOrionActivityTest(book, book.toOpenIntent {
+        putExtra(TEST_SCREEN_WIDTH, deviceSize.x)
+        putExtra(TEST_SCREEN_HEIGHT, deviceSize.y)
+    }) {
 
    companion object {
         const val SCREENS = 21

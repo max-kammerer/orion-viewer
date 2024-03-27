@@ -24,17 +24,14 @@ import universe.constellation.orion.viewer.prefs.OrionApplication
 import universe.constellation.orion.viewer.test.espresso.ScreenshotTakingRule
 
 
-abstract class BaseUITest(intent: Intent, private val showTapHelp: Boolean = false, val doGrantAction: Boolean = true, additionalParams: (Intent) -> Unit = {}) : BaseTest() {
+abstract class BaseUITest(startIntent: Intent, private val doGrantAction: Boolean = true) : BaseTest() {
 
     @get:Rule
-    val activityScenarioRule = activityScenarioRule<OrionViewerActivity>(intent.apply {
-        if (showTapHelp) {
-            putExtra(GlobalOptions.SHOW_TAP_HELP, true)
-        } else {
+    val activityScenarioRule = activityScenarioRule<OrionViewerActivity>(startIntent.apply {
+        if (!hasExtra(GlobalOptions.SHOW_TAP_HELP)) {
             putExtra(GlobalOptions.SHOW_TAP_HELP, false)
         }
         putExtra(GlobalOptions.OPEN_AS_TEMP_BOOK, true)
-        additionalParams(this)
     })
 
     @JvmField

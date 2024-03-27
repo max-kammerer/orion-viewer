@@ -17,13 +17,17 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import universe.constellation.orion.viewer.R
+import universe.constellation.orion.viewer.prefs.GlobalOptions
 import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.BaseUITest
+import universe.constellation.orion.viewer.test.framework.openOrionIntent
 import java.util.concurrent.atomic.AtomicReference
 
 @RunWith(AndroidJUnit4::class)
 @SdkSuppress(minSdkVersion = 21)
-class NoBookNoStartTapScreen: BaseUITest(BookDescription.SICP.toOpenIntent().apply { data = null;}, true) {
+class NoBookNoStartTapScreen : BaseUITest(openOrionIntent {
+    putExtra(GlobalOptions.SHOW_TAP_HELP, true)
+}, true) {
     @Test
     fun testStartScreenAbsent() {
         onView(withId(R.id.tap_help_close)).check(doesNotExist())
@@ -33,7 +37,12 @@ class NoBookNoStartTapScreen: BaseUITest(BookDescription.SICP.toOpenIntent().app
 
 @RunWith(AndroidJUnit4::class)
 @SdkSuppress(minSdkVersion = 21)
-class BookWithStartTapScreen: BaseOrionActivityTest(BookDescription.SICP, true) {
+class BookWithStartTapScreen :
+    BaseOrionActivityTest(
+        BookDescription.SICP,
+        BookDescription.SICP.toOpenIntent {
+            putExtra(GlobalOptions.SHOW_TAP_HELP, true)
+        }) {
     @Test
     fun testStartScreen() {
         assertTrue(globalOptions.isShowTapHelp)

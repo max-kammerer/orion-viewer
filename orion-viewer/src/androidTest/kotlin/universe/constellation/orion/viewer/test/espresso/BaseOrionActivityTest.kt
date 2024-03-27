@@ -24,13 +24,12 @@ import universe.constellation.orion.viewer.test.framework.BookFile
 import universe.constellation.orion.viewer.test.framework.BaseUITest
 import universe.constellation.orion.viewer.view.OrionDrawScene
 
-@SdkSuppress(minSdkVersion = 21)
 /*Default zoom is "Fit Width"*/
+@SdkSuppress(minSdkVersion = 21)
 open class BaseOrionActivityTest(
     val bookDescription: BookFile,
-    showTapHelp: Boolean = false,
-    additionalParams: (Intent) -> Unit = {}
-) : BaseUITest(bookDescription.toOpenIntent(), showTapHelp, additionalParams = additionalParams) {
+    startIntent: Intent = bookDescription.toOpenIntent(),
+) : BaseUITest(startIntent) {
 
     companion object {
         @JvmStatic

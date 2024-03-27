@@ -31,10 +31,10 @@ import universe.constellation.orion.viewer.view.OrionDrawScene
 
 @SdkSuppress(minSdkVersion = KITKAT)
 @RunWith(Parameterized::class)
-class AccessToPrivateFileTest(val bookDesc: BookFile) :
-    BaseUITest(bookDesc.toOpenIntent(), doGrantAction = false, additionalParams = { intent ->
-        intent.prepareIntent(bookDesc)
-    }) {
+class AccessToPrivateFileTest(private val bookDesc: BookFile) :
+    BaseUITest(bookDesc.toOpenIntent {
+        prepareIntent(bookDesc)
+    }, false) {
 
 
     companion object {
