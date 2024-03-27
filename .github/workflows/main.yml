@@ -39,6 +39,7 @@ jobs:
             nativeLibs/mupdfModule/.cxx
             nativeLibs/djvuModule/build
             nativeLibs/djvuModule/.cxx
+            orion-viewer/build
           key: ${{ runner.os }}-native-libs-${{ hashFiles('thirdparty_build.gradle') }}
 
       - name: Prepare thirdparty
@@ -115,6 +116,8 @@ jobs:
             nativeLibs/mupdfModule/.cxx
             nativeLibs/djvuModule/build
             nativeLibs/djvuModule/.cxx
+            orion-viewer/build
+
           key: ${{ runner.os }}-native-libs-${{ hashFiles('thirdparty_build.gradle') }}
 
       - name: Prepare thirdparty
