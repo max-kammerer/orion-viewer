@@ -39,8 +39,8 @@ jobs:
             nativeLibs/mupdfModule/.cxx
             nativeLibs/djvuModule/build
             nativeLibs/djvuModule/.cxx
-          key: ${{ runner.os }}-native-libs-${{ hashFiles('thirdparty_build.gradle') }}
-
+            orion-viewer/build
+          key: ${{ runner.os }}-native-libs-${{ hashFiles('thirdparty_build.gradle') }}2
       - name: Prepare thirdparty
         run: bash ./gradlew -b thirdparty_build.gradle downloadAndPatchDjvu downloadAndMakeMupdf
         if: steps.restore-nativeLibs.outputs.cache-hit != 'true'
@@ -115,7 +115,9 @@ jobs:
             nativeLibs/mupdfModule/.cxx
             nativeLibs/djvuModule/build
             nativeLibs/djvuModule/.cxx
-          key: ${{ runner.os }}-native-libs-${{ hashFiles('thirdparty_build.gradle') }}
+            orion-viewer/build
+
+          key: ${{ runner.os }}-native-libs-${{ hashFiles('thirdparty_build.gradle') }}2
 
       - name: Prepare thirdparty
         run: bash ./gradlew -b thirdparty_build.gradle downloadAndPatchDjvu downloadAndMakeMupdf
