@@ -11,7 +11,7 @@ import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.test.framework.BookFile
 
 @RunWith(Parameterized::class)
-class ScrollTest(bookDescription: BookFile): BaseOrionActivityTest(bookDescription) {
+class ScrollTest(bookDescription: BookFile): BaseViewerActivityTest(bookDescription) {
 
     @Test
     fun testSwipeUpAndDownWithZoomIn3() {

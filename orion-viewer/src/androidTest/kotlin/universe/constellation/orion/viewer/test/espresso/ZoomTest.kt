@@ -10,7 +10,7 @@ import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.test.framework.BookFile
 
 @RunWith(Parameterized::class)
-class ZoomTest(bookDescription: BookFile): BaseOrionActivityTest(bookDescription) {
+class ZoomTest(bookDescription: BookFile): BaseViewerActivityTest(bookDescription) {
 
     @Test
     fun testZoomChange() {

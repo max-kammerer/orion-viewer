@@ -13,7 +13,7 @@ import universe.constellation.orion.viewer.test.framework.BookFile
 
 @SdkSuppress(minSdkVersion = 21)
 @RunWith(Parameterized::class)
-class OptionsTest(bookDescription: BookFile): BaseOrionActivityTest(bookDescription) {
+class OptionsTest(bookDescription: BookFile): BaseViewerActivityTest(bookDescription) {
     @Test
     fun testLongClick() {
         onView(withId(R.id.view)).perform(swipeUp())

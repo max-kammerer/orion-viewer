@@ -12,12 +12,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.*
-import universe.constellation.orion.viewer.prefs.GlobalOptions.OPEN_AS_TEMP_BOOK
 import universe.constellation.orion.viewer.prefs.GlobalOptions.TEST_SCREEN_HEIGHT
 import universe.constellation.orion.viewer.prefs.GlobalOptions.TEST_SCREEN_WIDTH
-import universe.constellation.orion.viewer.test.espresso.BaseOrionActivityTest
+import universe.constellation.orion.viewer.test.espresso.BaseViewerActivityTest
 import universe.constellation.orion.viewer.test.framework.BookDescription
-import universe.constellation.orion.viewer.test.framework.BaseUITest
 import universe.constellation.orion.viewer.test.framework.MANUAL_DEBUG
 import universe.constellation.orion.viewer.test.framework.compareBitmaps
 import universe.constellation.orion.viewer.test.framework.dumpBitmap
@@ -29,7 +27,7 @@ private val deviceSize = Point(300, 350) //to split page on two screen - page si
 @Ignore
 @RunWith(Parameterized::class)
 class RenderingAndNavigationTest(private val book: BookDescription) :
-    BaseOrionActivityTest(book, book.toOpenIntent {
+    BaseViewerActivityTest(book, book.toOpenIntent {
         putExtra(TEST_SCREEN_WIDTH, deviceSize.x)
         putExtra(TEST_SCREEN_HEIGHT, deviceSize.y)
     }) {

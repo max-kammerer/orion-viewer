@@ -38,7 +38,7 @@ class NoBookNoStartTapScreen : BaseUITest(openOrionIntent {
 @RunWith(AndroidJUnit4::class)
 @SdkSuppress(minSdkVersion = 21)
 class BookWithStartTapScreen :
-    BaseOrionActivityTest(
+    BaseViewerActivityTest(
         BookDescription.SICP,
         BookDescription.SICP.toOpenIntent {
             putExtra(GlobalOptions.SHOW_TAP_HELP, true)
