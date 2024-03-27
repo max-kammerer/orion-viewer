@@ -27,6 +27,9 @@ jobs:
 
       - name: Setup Gradle Cache
         uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/dev_pr45' }}
+
 
       - name: Restore Native Libs
         id: restore-nativeLibs
