@@ -26,7 +26,7 @@ internal const val MANUAL_DEBUG = false
 internal const val LONG_TIMEOUT: Long = 10000
 internal const val SHORT_TIMEOUT: Long = 1000
 
-abstract class BaseTest(private val forceGrantAction: Boolean = true) {
+abstract class BaseTest {
 
     @JvmField
     @Rule
@@ -43,52 +43,6 @@ abstract class BaseTest(private val forceGrantAction: Boolean = true) {
     @Before
     fun testStart() {
         log("Starting test: ${name.methodName}" )
-    }
-
-    @Before
-    fun grantPermissionsAndCheckInvariants() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return
-
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        //workaround problem "system ui is not responding" problem
-        processEmulatorErrors(device)
-
-        if (forceGrantAction && !BookDescription.SICP.asFile().canRead()) {
-            val grant =
-                device.wait(Until.findObject(By.textContains("Grant")), LONG_TIMEOUT) ?: run {
-                    //in case of problem with system UI
-                    device.wait(Until.findObject(By.textContains("Wait")), SHORT_TIMEOUT)?.click()
-                    device.wait(Until.findObject(By.textContains("Grant")), LONG_TIMEOUT)
-                        ?: error("Can't find grant action in warning dialog")
-                }
-
-            grant.click()
-
-            val allowField = device.wait(Until.findObject(By.textContains("Allow")), LONG_TIMEOUT)
-            allowField.click()
-            device.wait(Until.findObject(By.checkable(true)), LONG_TIMEOUT)
-            assertTrue(device.findObject(By.checkable(true)).isChecked)
-            device.pressBack()
-            Espresso.onView(ViewMatchers.withId(R.id.view))
-                .check(matches(ViewMatchers.isDisplayed()))
-            Espresso.onView(ViewMatchers.withId(R.id.view))
-                .check(matches(ViewMatchers.isCompletelyDisplayed()))
-            assertTrue(BookDescription.SICP.asFile().canRead())
-        }
-    }
-
-    protected fun processEmulatorErrors(device: UiDevice) {
-        repeat(3) {
-            device.findObject(By.textContains("Wait"))?.click()
-            if (device.findObject(By.textContains("stopping")) != null) {
-                //workaround for: bluetooth keeps stopping
-                device.findObject(By.textContains("Close app"))?.click()
-            }
-            if (device.findObject(By.textContains("has stopped")) != null) {
-                //workaround for: ... process has stopped
-                device.findObject(By.textContains("OK"))?.click()
-            }
-        }
     }
 
     @After

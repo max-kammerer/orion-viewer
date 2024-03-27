@@ -2,21 +2,29 @@ package universe.constellation.orion.viewer.test.framework
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.Until
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Rule
 import universe.constellation.orion.viewer.OrionViewerActivity
+import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.logError
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import universe.constellation.orion.viewer.prefs.OrionApplication
 import universe.constellation.orion.viewer.test.espresso.ScreenshotTakingRule
 
 
-abstract class BaseUITest(intent: Intent, private val showTapHelp: Boolean = false, forceGrantAction: Boolean = true, additionalParams: (Intent) -> Unit = {}) : BaseTest(forceGrantAction) {
+abstract class BaseUITest(intent: Intent, private val showTapHelp: Boolean = false, val doGrantAction: Boolean = true, additionalParams: (Intent) -> Unit = {}) : BaseTest() {
 
     @get:Rule
     val activityScenarioRule = activityScenarioRule<OrionViewerActivity>(intent.apply {
@@ -39,6 +47,52 @@ abstract class BaseUITest(intent: Intent, private val showTapHelp: Boolean = fal
 
     val globalOptions by lazy {
         (InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as OrionApplication).options
+    }
+
+    @Before
+    fun grantPermissionsAndCheckInvariants() {
+        processEmulatorErrors()
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return
+
+        if (doGrantAction && !BookDescription.SICP.asFile().canRead()) {
+            val grant =
+                device.wait(Until.findObject(By.textContains("Grant")), LONG_TIMEOUT) ?: run {
+                    //in case of problem with system UI
+                    device.wait(Until.findObject(By.textContains("Wait")), SHORT_TIMEOUT)?.click()
+                    device.wait(Until.findObject(By.textContains("Grant")), LONG_TIMEOUT)
+                        ?: error("Can't find grant action in warning dialog")
+                }
+
+            grant.click()
+
+            val allowField = device.wait(Until.findObject(By.textContains("Allow")), LONG_TIMEOUT)
+            allowField.click()
+            device.wait(Until.findObject(By.checkable(true)), LONG_TIMEOUT)
+            Assert.assertTrue(device.findObject(By.checkable(true)).isChecked)
+            device.pressBack()
+            Espresso.onView(ViewMatchers.withId(R.id.view))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+            Espresso.onView(ViewMatchers.withId(R.id.view))
+                .check(ViewAssertions.matches(ViewMatchers.isCompletelyDisplayed()))
+            Assert.assertTrue(BookDescription.SICP.asFile().canRead())
+        }
+    }
+
+    protected fun processEmulatorErrors() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return
+
+        repeat(3) {
+            device.findObject(By.textContains("Wait"))?.click()
+            if (device.findObject(By.textContains("stopping")) != null) {
+                //workaround for: bluetooth keeps stopping
+                device.findObject(By.textContains("Close app"))?.click()
+            }
+            if (device.findObject(By.textContains("has stopped")) != null) {
+                //workaround for: ... process has stopped
+                device.findObject(By.textContains("OK"))?.click()
+            }
+        }
     }
 
     protected fun awaitBookLoading() {

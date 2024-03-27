@@ -32,7 +32,7 @@ import universe.constellation.orion.viewer.view.OrionDrawScene
 @SdkSuppress(minSdkVersion = KITKAT)
 @RunWith(Parameterized::class)
 class AccessToPrivateFileTest(val bookDesc: BookFile) :
-    BaseUITest(bookDesc.toOpenIntent(), forceGrantAction = false, additionalParams = { intent ->
+    BaseUITest(bookDesc.toOpenIntent(), doGrantAction = false, additionalParams = { intent ->
         intent.prepareIntent(bookDesc)
     }) {
 
@@ -60,7 +60,7 @@ class AccessToPrivateFileTest(val bookDesc: BookFile) :
         if (Build.VERSION.SDK_INT <= LOLLIPOP) return
 
         device.wait(Until.findObject(By.textContains("new file")), LONG_TIMEOUT)?.click() ?: failWithScreenShot("No dialog")
-        processEmulatorErrors(device)
+        processEmulatorErrors()
 
         if (Build.VERSION.SDK_INT <= M && device.wait(Until.findObject(By.textContains("Save to")), LONG_TIMEOUT) != null) {
             device.wait(Until.findObject(By.textContains("Downloads")), SHORT_TIMEOUT)?.click()
