@@ -46,7 +46,7 @@ jobs:
         if: steps.restore-nativeLibs.outputs.cache-hit != 'true'
 
       - name: Build debug APK
-        run: bash ./gradlew assembleDebug --stacktrace -Porion.CIBuild=true
+        run: bash ./gradlew assembleDebug --stacktrace -Porion.CIBuild=true --build-cache
 
       - name: Read value from Properties-file
         id: read_version_property
@@ -130,7 +130,7 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           sdcard-path-or-size: 900M
-          script: ./gradlew forwardLogcat connectedDebugAndroidTest -Porion.CIBuild=true
+          script: ./gradlew forwardLogcat connectedDebugAndroidTest -Porion.CIBuild=true --build-cache
 
       - uses: dorny/test-reporter@v1
         with:
