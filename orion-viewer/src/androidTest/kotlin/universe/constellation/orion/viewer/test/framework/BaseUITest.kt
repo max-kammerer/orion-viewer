@@ -16,7 +16,7 @@ import universe.constellation.orion.viewer.prefs.OrionApplication
 import universe.constellation.orion.viewer.test.espresso.ScreenshotTakingRule
 
 
-abstract class InstrumentationTestCase(intent: Intent, private val showTapHelp: Boolean = false, forceGrantAction: Boolean = true, additionalParams: (Intent) -> Unit = {}) : BaseTest(forceGrantAction) {
+abstract class BaseUITest(intent: Intent, private val showTapHelp: Boolean = false, forceGrantAction: Boolean = true, additionalParams: (Intent) -> Unit = {}) : BaseTest(forceGrantAction) {
 
     @get:Rule
     val activityScenarioRule = activityScenarioRule<OrionViewerActivity>(intent.apply {
@@ -52,13 +52,13 @@ abstract class InstrumentationTestCase(intent: Intent, private val showTapHelp: 
     }
 }
 
-fun InstrumentationTestCase.failWithScreenShot(message: String, namePrefix: String = name.methodName): Nothing {
+fun BaseUITest.failWithScreenShot(message: String, namePrefix: String = name.methodName): Nothing {
     screenshotRule.takeScreenshot(namePrefix)
     logError(message)
     error(Assert.fail(message))
 }
 
-fun <T: Any> InstrumentationTestCase.onActivity(body: (OrionViewerActivity) -> T): T {
+fun <T: Any> BaseUITest.onActivity(body: (OrionViewerActivity) -> T): T {
     lateinit var res: T
     activityScenarioRule.scenario.onActivity {
         res = body(it)

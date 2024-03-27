@@ -10,7 +10,6 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
-import org.hamcrest.Matchers.*
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -19,12 +18,12 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.test.framework.BookDescription
-import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
+import universe.constellation.orion.viewer.test.framework.BaseUITest
 import java.util.concurrent.atomic.AtomicReference
 
 @RunWith(AndroidJUnit4::class)
 @SdkSuppress(minSdkVersion = 21)
-class NoBookNoStartTapScreen: InstrumentationTestCase(BookDescription.SICP.toOpenIntent().apply { data = null;}, true) {
+class NoBookNoStartTapScreen: BaseUITest(BookDescription.SICP.toOpenIntent().apply { data = null;}, true) {
     @Test
     fun testStartScreenAbsent() {
         onView(withId(R.id.tap_help_close)).check(doesNotExist())

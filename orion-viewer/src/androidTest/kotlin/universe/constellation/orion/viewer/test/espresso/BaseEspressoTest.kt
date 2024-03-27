@@ -21,7 +21,7 @@ import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.test.framework.BookFile
-import universe.constellation.orion.viewer.test.framework.InstrumentationTestCase
+import universe.constellation.orion.viewer.test.framework.BaseUITest
 import universe.constellation.orion.viewer.view.OrionDrawScene
 
 @SdkSuppress(minSdkVersion = 21)
@@ -30,7 +30,7 @@ open class BaseEspressoTest(
     val bookDescription: BookFile,
     showTapHelp: Boolean = false,
     additionalParams: (Intent) -> Unit = {}
-) : InstrumentationTestCase(bookDescription.toOpenIntent(), showTapHelp, additionalParams = additionalParams) {
+) : BaseUITest(bookDescription.toOpenIntent(), showTapHelp, additionalParams = additionalParams) {
 
     companion object {
         @JvmStatic
