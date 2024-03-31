@@ -8,8 +8,6 @@ import universe.constellation.orion.viewer.test.framework.dumpBitmap
 import java.text.SimpleDateFormat
 import java.util.Date
 
-private val simpleDateFormat: SimpleDateFormat = SimpleDateFormat("yyMMdd_HH_mm_ss")
-
 class ScreenshotTakingRule : TestWatcher() {
 
     override fun failed(e: Throwable?, description: Description) {
@@ -21,6 +19,9 @@ class ScreenshotTakingRule : TestWatcher() {
     }
 
     companion object {
+
+        private val simpleDateFormat: SimpleDateFormat = SimpleDateFormat("yyMMdd_HH_mm_ss")
+
         fun dump(filePrefix: String) {
             if (!isAtLeastKitkat()) return
             dumpBitmap(filePrefix, simpleDateFormat.format(Date()), takeScreenshot())
