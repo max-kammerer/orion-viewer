@@ -43,7 +43,7 @@ fun getFileInfo(context: Context, uri: Uri): FileInfo? {
     if (ContentResolver.SCHEME_CONTENT != scheme) return null
 
     val displayName = getKeyFromCursor(MediaStore.MediaColumns.DISPLAY_NAME, context, uri)
-    val size = getKeyFromCursor(MediaStore.MediaColumns.SIZE, context, uri)
+    val sizeOrZero = getKeyFromCursor(MediaStore.MediaColumns.SIZE, context, uri)?.toLongOrNull() ?: 0
 
     val dataPath = getDataColumn(
         context,
@@ -54,7 +54,7 @@ fun getFileInfo(context: Context, uri: Uri): FileInfo? {
 
     dataPath?.let {
         val file = File(it)
-        val fileSize = if (file.length() != 0L) file.length() else size?.toLongOrNull() ?: 0
+        val fileSize = if (file.length() != 0L) file.length() else sizeOrZero
         return FileInfo(displayName, fileSize, id, dataPath, uri)
     }
 
@@ -64,7 +64,7 @@ fun getFileInfo(context: Context, uri: Uri): FileInfo? {
         if (pathFromDescriptor == null) return null
         return FileInfo(
             displayName,
-            if (fileLength != 0L) fileLength else size?.toLongOrNull() ?: 0,
+            if (fileLength != 0L) fileLength else sizeOrZero,
             id,
             pathFromDescriptor,
             uri
@@ -75,7 +75,7 @@ fun getFileInfo(context: Context, uri: Uri): FileInfo? {
         errorInDebugOr(e.toString()) { e.printStackTrace() }
     }
 
-    return null
+    return FileInfo(displayName, sizeOrZero, id, "", uri)
 }
 
 

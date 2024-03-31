@@ -179,9 +179,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         processIntentAndCheckPermission(intent)
     }
 
-    private fun askReadPermissionOrAction(fileInfo: FileInfo, intent: Intent): FileInfo? {
+    private fun askReadPermissionOrOpenExisting(fileInfo: FileInfo, intent: Intent) {
         log("Checking permissions for: $fileInfo")
-        if (fileInfo.file.canRead()) return fileInfo
         myState = MyState.WAITING_ACTION
         if (fileInfo.isRestrictedAccessPath() || hasReadStoragePermission(this)) {
             FallbackDialogs().createPrivateResourceFallbackDialog(this, fileInfo, intent).show()
@@ -192,7 +191,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 intent
             ).show()
         }
-        return null
     }
 
     internal fun processIntentAndCheckPermission(intent: Intent) {
@@ -208,18 +206,19 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         if (uri != null) {
             log("Try to open file by $uri")
             try {
-                val info: FileInfo =
-                    getFileInfo(this, uri) ?: run {
-                        if (controller == null) { //TODO init stub controller with error
-                            initStubController(
-                                "Can't extract file path from URI",
-                                "Can't extract file path from URI"
-                            )
-                        }
-                        FallbackDialogs().createBadIntentFallbackDialog(this, null, intent).show()
-                        return
+                val fileInfo = getFileInfo(this, uri)
+                val filePath = fileInfo?.path
+
+                if (fileInfo == null || filePath.isNullOrBlank()) {
+                    if (controller == null) { //TODO init stub controller with error
+                        initStubController(
+                            "Can't extract file path from URI",
+                            "Can't extract file path from URI"
+                        )
                     }
-                val filePath = info.path
+                    FallbackDialogs().createBadIntentFallbackDialog(this, null, intent).show()
+                    return
+                }
 
                 if (controller != null && lastPageInfo != null) {
                     lastPageInfo?.apply {
@@ -231,13 +230,24 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     }
                 }
 
-                if (askReadPermissionOrAction(info, intent) == null) {
-                    log("Waiting for read permissions for $intent")
-                    return
+
+                val filePathToOpen = if (!fileInfo.file.canRead()) {
+                    val cacheFileIfExists =
+                        getCacheFileIfExists(fileInfo)?.takeIf { it.length() == fileInfo.size }
+
+                    if (cacheFileIfExists == null) {
+                        askReadPermissionOrOpenExisting(fileInfo, intent)
+                        log("Waiting for read permissions for $intent")
+                        return
+                    } else {
+                        cacheFileIfExists.absolutePath
+                    }
+                } else {
+                    filePath
                 }
 
                 myState = MyState.FINISHED
-                openFileAndDestroyOldController(filePath)
+                openFileAndDestroyOldController(filePathToOpen)
             } catch (e: Exception) {
                 showAlertWithExceptionThrow(intent, e)
             }

@@ -26,6 +26,7 @@ import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAcc
 import universe.constellation.orion.viewer.Permissions.hasReadStoragePermission
 import universe.constellation.orion.viewer.android.isAtLeastKitkat
 import universe.constellation.orion.viewer.android.isContentScheme
+import universe.constellation.orion.viewer.android.isContentUri
 import universe.constellation.orion.viewer.filemanager.FileChooserAdapter
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
 import java.io.File
@@ -158,7 +159,7 @@ open class FallbackDialogs {
             }
 
             R.string.fileopen_open_in_temporary_file -> {
-                saveInTmpFile(uri, activity, alertDialog, intent, activity, fileInfo)
+                saveContentInTmpFile(uri, activity, alertDialog, intent, activity, fileInfo)
             }
 
             R.string.fileopen_open_recent_files -> {
@@ -190,13 +191,6 @@ open class FallbackDialogs {
     companion object {
 
         const val URI = "URI"
-
-        internal fun createTmpFile(context: Context, fileName: String, extension: String) =
-            File.createTempFile(
-                if (fileName.length < 3) "tmp$fileName" else fileName,
-                ".$extension",
-                context.cacheDir
-            )
 
         fun getExtension(uri: Uri, mimeType: String?, contentResolver: ContentResolver): String? {
             return uri.path?.substringAfterLast("/")?.substringAfterLast('.').takeIf {
@@ -253,7 +247,13 @@ open class FallbackDialogs {
     }
 }
 
-private fun saveInTmpFile(
+private fun Context.tmpContentFolderForFile(fileInfo: FileInfo?): File {
+    val contentFolder = File(cacheDir, ContentResolver.SCHEME_CONTENT)
+    return if (fileInfo == null) contentFolder
+    else File(contentFolder, fileInfo.uri.host + "/" + (fileInfo.id ?: ("_" + fileInfo.size)) + "/")
+}
+
+private fun saveContentInTmpFile(
     uri: Uri,
     myActivity: OrionViewerActivity,
     dialog: DialogInterface,
@@ -272,11 +272,7 @@ private fun saveInTmpFile(
         return
     }
 
-    val toFile = FallbackDialogs.createTmpFile(
-        activity,
-        fileInfo?.name?.substringBeforeLast('.') ?: "temp_book",
-        extension
-    )
+    val toFile = activity.createTmpFile(fileInfo, extension)
 
     myActivity.saveFileByUri(uri, toFile.toUri()) {
         dialog.dismiss()
@@ -289,6 +285,22 @@ private fun saveInTmpFile(
         )
     }
 }
+
+internal fun Context.createTmpFile(fileInfo: FileInfo?, extension: String): File {
+    val fileFolder = tmpContentFolderForFile(fileInfo)
+    fileFolder.mkdirs()
+    if (fileInfo?.canHaveTmpVersion() == true) {
+        return File(fileFolder, fileInfo.name!!)
+    } else {
+        val fileName = (fileInfo?.name ?: fileInfo?.path?.substringAfterLast("/") ?: "test_bool").substringBeforeLast(".")
+        return File.createTempFile(
+            if (fileName.length < 3) "tmp$fileName" else fileName,
+            ".$extension",
+            fileFolder
+        )
+    }
+}
+
 
 
 @RequiresApi(Build.VERSION_CODES.KITKAT)
@@ -306,3 +318,14 @@ private fun sendCreateFileRequest(activity: Activity, fileInfo: FileInfo?, readI
     }
     activity.startActivityForResult(createFileIntent, OrionViewerActivity.SAVE_FILE_RESULT)
 }
+
+fun FileInfo.canHaveTmpVersion(): Boolean {
+    return !id.isNullOrBlank() && size != 0L && !name.isNullOrBlank() && uri.isContentUri
+}
+
+fun Context.getCacheFileIfExists(fileInfo: FileInfo): File? {
+    if (!fileInfo.canHaveTmpVersion()) return null
+    val file = File(tmpContentFolderForFile(fileInfo), fileInfo.name ?: return null)
+    return file.takeIf { it.exists() }
+}
+
