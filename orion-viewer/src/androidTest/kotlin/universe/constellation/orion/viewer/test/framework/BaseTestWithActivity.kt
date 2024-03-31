@@ -2,30 +2,23 @@ package universe.constellation.orion.viewer.test.framework
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.By
-import androidx.test.uiautomator.UiDevice
-import androidx.test.uiautomator.Until
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
-import org.junit.Before
 import org.junit.Rule
 import universe.constellation.orion.viewer.OrionViewerActivity
-import universe.constellation.orion.viewer.R
-import universe.constellation.orion.viewer.android.isAtLeastKitkat
 import universe.constellation.orion.viewer.logError
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import universe.constellation.orion.viewer.prefs.OrionApplication
-import universe.constellation.orion.viewer.test.espresso.ScreenshotTakingRule
 
+abstract class BaseTestWithActivity(startIntent: Intent) : BaseInstrumentationTest() {
 
-abstract class BaseTestWithActivity(startIntent: Intent) : BaseTest() {
+    val globalOptions by lazy {
+        (InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as OrionApplication).options
+    }
 
     @get:Rule
     val activityScenarioRule = activityScenarioRule<OrionViewerActivity>(startIntent.apply {
@@ -35,46 +28,8 @@ abstract class BaseTestWithActivity(startIntent: Intent) : BaseTest() {
         putExtra(GlobalOptions.OPEN_AS_TEMP_BOOK, true)
     })
 
-    @JvmField
-    @Rule
-    val screenshotRule = ScreenshotTakingRule()
-
-    protected val device: UiDevice by lazy {
-        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-    }
-
-    val globalOptions by lazy {
-        (InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as OrionApplication).options
-    }
-
-    protected fun processEmulatorErrors() {
-        if (!isAtLeastKitkat()) return
-
-        device.waitForIdle()
-
-        repeat(3) {
-            if (device.findObject(By.textContains("System UI isn't responding")) != null) {
-                device.findObject(By.textContains("Close"))?.click()
-            }
-            if (device.findObject(By.textContains("stopping")) != null) {
-                //workaround for: bluetooth keeps stopping
-                device.findObject(By.textContains("Close app"))?.click()
-            }
-            if (device.findObject(By.textContains("has stopped")) != null) {
-                //workaround for: ... process has stopped
-                device.findObject(By.textContains("OK"))?.click()
-            }
-        }
-    }
-
     protected fun awaitBookLoading() {
-        lateinit var job: Job
-        onActivity {
-            job = it.openJob
-        }
-        runBlocking {
-            job.join()
-        }
+        activityScenarioRule.awaitBookLoading()
     }
 }
 
@@ -101,11 +56,25 @@ fun BaseTestWithActivity.checkTrue(message: String, condition: Boolean, namePref
 }
 
 fun <T: Any> BaseTestWithActivity.onActivity(body: (OrionViewerActivity) -> T): T {
+    return activityScenarioRule.onActivity(body)
+}
+
+fun <T: Any> ActivityScenarioRule<OrionViewerActivity>.onActivity(body: (OrionViewerActivity) -> T): T {
     lateinit var res: T
-    activityScenarioRule.scenario.onActivity {
+    scenario.onActivity {
         res = body(it)
     }
     return res
+}
+
+fun ActivityScenarioRule<OrionViewerActivity>.awaitBookLoading() {
+    lateinit var job: Job
+    onActivity {
+        job = it.openJob
+    }
+    runBlocking {
+        job.join()
+    }
 }
 
 val instrumentationContext: Context
@@ -113,3 +82,4 @@ val instrumentationContext: Context
 
 val appContext: Context
     get() = InstrumentationRegistry.getInstrumentation().targetContext
+
