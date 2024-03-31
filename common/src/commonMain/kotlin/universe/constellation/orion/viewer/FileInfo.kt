@@ -1,14 +1,19 @@
 package universe.constellation.orion.viewer
 
+import android.net.Uri
 import java.io.File
 
-val FileInfo?.sizeOrZero: Long
-    get() {
-        return this?.size ?: 0
-    }
-
-data class FileInfo(val name: String?, val size: Long, val id: String?, val canonicalPath: String, val host: String? = null) {
+data class FileInfo(
+    val name: String?,
+    val size: Long,
+    val id: String?,
+    val path: String,
+    val uri: Uri
+) {
 
     val file: File
-        get() = File(canonicalPath)
+        get() = File(path)
+
+    val scheme
+        get() = uri.scheme!!
 }

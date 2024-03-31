@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.ParcelFileDescriptor
 import android.provider.MediaStore
 import android.system.Os
+import androidx.core.database.getStringOrNull
 import universe.constellation.orion.viewer.FileInfo
 import universe.constellation.orion.viewer.errorInDebugOr
 import universe.constellation.orion.viewer.log
@@ -17,6 +18,7 @@ fun getFileInfo(context: Context, uri: Uri): FileInfo? {
     val authority = uri.authority
     val id = uri.lastPathSegment
     val host = uri.host
+    val scheme = uri.scheme
     log(
         """ 
             Uri:            
@@ -24,20 +26,23 @@ fun getFileInfo(context: Context, uri: Uri): FileInfo? {
             Fragment: ${uri.fragment}
             Port: ${uri.port}
             Query: ${uri.query}
-            Scheme: ${uri.scheme}
+            Scheme: $scheme
             Host: $host
             Segments: ${uri.pathSegments}
             Id: $id
             """.trimIndent()
     )
 
-    if (ContentResolver.SCHEME_FILE.equals(uri.scheme, ignoreCase = true)) {
-        checkIsFile(uri.path)?.let { return it }
+    if (ContentResolver.SCHEME_FILE == scheme) {
+        return uri.path?.let { path ->
+            val file = File(path)
+            FileInfo(file.name, file.length(), file.name, path, uri)
+        }
     }
 
-    if (!ContentResolver.SCHEME_CONTENT.equals(uri.scheme, ignoreCase = true)) return null
+    if (ContentResolver.SCHEME_CONTENT != scheme) return null
 
-    val name = getKeyFromCursor(MediaStore.MediaColumns.DISPLAY_NAME, context, uri)
+    val displayName = getKeyFromCursor(MediaStore.MediaColumns.DISPLAY_NAME, context, uri)
     val size = getKeyFromCursor(MediaStore.MediaColumns.SIZE, context, uri)
 
     val dataPath = getDataColumn(
@@ -46,20 +51,23 @@ fun getFileInfo(context: Context, uri: Uri): FileInfo? {
         null,
         null
     )
-    checkIsFile(dataPath, false, host)?.let {
-        log("data uri")
-        return it
+
+    dataPath?.let {
+        val file = File(it)
+        val fileSize = if (file.length() != 0L) file.length() else size?.toLongOrNull() ?: 0
+        return FileInfo(displayName, fileSize, id, dataPath, uri)
     }
 
     try {
         log("Obtaining path through descriptor via $authority")
-        val pathFromDescriptor = context.contentResolver.openFileDescriptor(uri, "r")?.use { getPathFromDescriptor(it) } ?: return null
+        val (pathFromDescriptor, fileLength) = context.contentResolver.openFileDescriptor(uri, "r")?.use { getFileDataFromDescriptor(it) } ?: return null
+        if (pathFromDescriptor == null) return null
         return FileInfo(
-            name,
-            size?.toLong() ?: 0,
+            displayName,
+            if (fileLength != 0L) fileLength else size?.toLongOrNull() ?: 0,
             id,
             pathFromDescriptor,
-            host
+            uri
         ).also {
             log("Returning descriptor file info: $it")
         }
@@ -95,34 +103,18 @@ private fun getKeyFromCursor(
         if (!it.moveToFirst()) return null
         val columnIndex = it.getColumnIndex(column)
         if (columnIndex < 0) return null
-        return it.getString(columnIndex)
+        return it.getStringOrNull(columnIndex)
     }
 }
 
-private fun checkIsFile(path: String?, checkIsFile: Boolean = true, host: String? = null): FileInfo? {
-    if (path == null) return null
-    val file = File(path)
-    if (!checkIsFile || file.isFile) return FileInfo(file.name, file.length(), file.canonicalPath, path, host)
-    return null
-}
-
-/**
- * Copied from koreader
- * tries to get the absolute path of a file from a content provider. It works with most
- * applications that use a fileProvider to deliver files to other applications.
- * If the data in the uri is not a file this will fail
- *
- * @param pfd - parcelable file descriptor from contentResolver.openFileDescriptor
- * @return absolute path to file or null
- */
-private fun getPathFromDescriptor(pfd: ParcelFileDescriptor): String? {
+private fun getFileDataFromDescriptor(pfd: ParcelFileDescriptor): Pair<String?, Long>? {
     return try {
         val file = File("/proc/self/fd/" + pfd.fd)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Os.readlink(file.absolutePath)
         } else {
             file.canonicalPath
-        }
+        } to file.length()
     } catch (e: IOException) {
         null
     } catch (e: Exception) {
@@ -131,7 +123,7 @@ private fun getPathFromDescriptor(pfd: ParcelFileDescriptor): String? {
 }
 
 fun FileInfo.isRestrictedAccessPath(): Boolean {
-    val path = canonicalPath
+    val path = path
     if (path.startsWith("/data/data")) return true
     if (path.startsWith("/data/obb")) return true
     if (!path.startsWith("/storage/emulated/")) return false
