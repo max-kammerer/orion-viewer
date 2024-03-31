@@ -11,11 +11,6 @@ import universe.constellation.orion.viewer.R;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionTapActivity;
 
-/**
- * User: mike
- * Date: 12.11.13
- * Time: 20:47
- */
 public class TapHelpDialog extends DialogOverView {
 
     public TapHelpDialog(OrionViewerActivity activity) {
@@ -23,7 +18,6 @@ public class TapHelpDialog extends DialogOverView {
         dialog.setTitle(R.string.tap_zones_header);
 
         TableLayout table = dialog.findViewById(R.id.tap_table);
-        table.setBackgroundColor(0);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         for (int i = 0; i < table.getChildCount(); i++) {
@@ -41,7 +35,7 @@ public class TapHelpDialog extends DialogOverView {
                 }
                 Action saction = Action.getAction(shortCode);
                 //ffcc66
-                layout.setBackgroundColor(saction == Action.NEXT ? 0xDDddaa44 : (saction == Action.PREV ? 0xDDeebb55 : 0xDDffcc66));
+                layout.setBackgroundColor(saction == Action.NEXT ? 0xFFddaa44 : (saction == Action.PREV ? 0xFFeebb55 : 0xFFffcc66));
 
                 shortText.setText(activity.getResources().getString(saction.getName()));
 
