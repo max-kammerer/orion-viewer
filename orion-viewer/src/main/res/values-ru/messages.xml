@@ -31,5 +31,5 @@
     <string name="string_wrong_password">Неверный пароль</string>
     <string name="password_for_file">Пароль для файла</string>
 
-    <string name="send_report_header">[Пожалуйста, укажите дополнительную информацию и/или прикрепите файл]</string>
+    <string name="send_report_header">[Пожалуйста, укажите дополнительную информацию]</string>
 </resources>
