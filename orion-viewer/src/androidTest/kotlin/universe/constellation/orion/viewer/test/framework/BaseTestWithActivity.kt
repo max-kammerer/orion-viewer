@@ -3,7 +3,6 @@ package universe.constellation.orion.viewer.test.framework
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import androidx.test.core.app.takeScreenshot
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
@@ -26,7 +25,7 @@ import universe.constellation.orion.viewer.prefs.OrionApplication
 import universe.constellation.orion.viewer.test.espresso.ScreenshotTakingRule
 
 
-abstract class BaseUITest(startIntent: Intent, private val doGrantAction: Boolean = true) : BaseTest() {
+abstract class BaseTestWithActivity(startIntent: Intent) : BaseTest() {
 
     @get:Rule
     val activityScenarioRule = activityScenarioRule<OrionViewerActivity>(startIntent.apply {
@@ -46,34 +45,6 @@ abstract class BaseUITest(startIntent: Intent, private val doGrantAction: Boolea
 
     val globalOptions by lazy {
         (InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as OrionApplication).options
-    }
-
-    @Before
-    fun grantPermissionsAndCheckInvariants() {
-        processEmulatorErrors()
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return
-
-        if (doGrantAction && !BookDescription.SICP.asFile().canRead()) {
-            val grant =
-                device.wait(Until.findObject(By.textContains("Grant")), LONG_TIMEOUT) ?: run {
-                    //in case of problem with system UI
-                    device.wait(Until.findObject(By.textContains("Wait")), SHORT_TIMEOUT)?.click()
-                    device.wait(Until.findObject(By.textContains("Grant")), LONG_TIMEOUT)
-                        ?: error("Can't find grant action in warning dialog")
-                }
-
-            grant.click()
-
-            val allowField = device.wait(Until.findObject(By.textContains("Allow")), LONG_TIMEOUT)
-            allowField.click()
-            device.wait(Until.findObject(By.checkable(true)), LONG_TIMEOUT)
-            Assert.assertTrue(device.findObject(By.checkable(true)).isChecked)
-            device.pressBack()
-            Espresso.onView(ViewMatchers.withId(R.id.view))
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-            Assert.assertTrue(BookDescription.SICP.asFile().canRead())
-        }
     }
 
     protected fun processEmulatorErrors() {
@@ -107,13 +78,13 @@ abstract class BaseUITest(startIntent: Intent, private val doGrantAction: Boolea
     }
 }
 
-fun BaseUITest.doFail(message: String, namePrefix: String = name.methodName): Nothing {
+fun BaseTestWithActivity.doFail(message: String, namePrefix: String = name.methodName): Nothing {
     screenshotRule.takeScreenshot(namePrefix)
     logError(message)
     error(Assert.fail(message))
 }
 
-fun BaseUITest.checkNotEquals(message: String, expected: Int, actual: Int, namePrefix: String = name.methodName) {
+fun BaseTestWithActivity.checkNotEquals(message: String, expected: Int, actual: Int, namePrefix: String = name.methodName) {
     if (expected != actual) {
         screenshotRule.takeScreenshot(namePrefix)
         logError(message)
@@ -121,7 +92,7 @@ fun BaseUITest.checkNotEquals(message: String, expected: Int, actual: Int, nameP
     }
 }
 
-fun BaseUITest.checkTrue(message: String, condition: Boolean, namePrefix: String = name.methodName) {
+fun BaseTestWithActivity.checkTrue(message: String, condition: Boolean, namePrefix: String = name.methodName) {
     if (!condition) {
         screenshotRule.takeScreenshot(namePrefix)
         logError(message)
@@ -129,7 +100,7 @@ fun BaseUITest.checkTrue(message: String, condition: Boolean, namePrefix: String
     }
 }
 
-fun <T: Any> BaseUITest.onActivity(body: (OrionViewerActivity) -> T): T {
+fun <T: Any> BaseTestWithActivity.onActivity(body: (OrionViewerActivity) -> T): T {
     lateinit var res: T
     activityScenarioRule.scenario.onActivity {
         res = body(it)

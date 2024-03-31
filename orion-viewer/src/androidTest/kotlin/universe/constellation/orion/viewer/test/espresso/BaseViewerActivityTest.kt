@@ -1,13 +1,16 @@
 package universe.constellation.orion.viewer.test.espresso
 
 import android.content.Intent
+import android.os.Build
 import android.view.View
 import android.widget.SeekBar
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
@@ -20,8 +23,11 @@ import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.android.isAtLeastKitkat
-import universe.constellation.orion.viewer.test.framework.BaseUITest
+import universe.constellation.orion.viewer.test.framework.BaseTestWithActivity
+import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.BookFile
+import universe.constellation.orion.viewer.test.framework.LONG_TIMEOUT
+import universe.constellation.orion.viewer.test.framework.SHORT_TIMEOUT
 import universe.constellation.orion.viewer.test.framework.appContext
 import universe.constellation.orion.viewer.test.framework.onActivity
 
@@ -29,7 +35,7 @@ import universe.constellation.orion.viewer.test.framework.onActivity
 abstract class BaseViewerActivityTest(
     val bookDescription: BookFile,
     startIntent: Intent = bookDescription.toOpenIntent(),
-) : BaseUITest(startIntent) {
+) : BaseTestWithActivity(startIntent) {
 
     companion object {
         @JvmStatic
@@ -42,7 +48,36 @@ abstract class BaseViewerActivityTest(
     private lateinit var controller: Controller
 
     @Before
-    fun checkStartInvariant() {
+    fun grantPermissionsAndProcessErrors() {
+        processEmulatorErrors()
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !BookDescription.SICP.asFile().canRead()) {
+            val grant =
+                device.wait(Until.findObject(By.textContains("Grant")), LONG_TIMEOUT) ?: run {
+                    //in case of problem with system UI
+                    device.wait(Until.findObject(By.textContains("Wait")), SHORT_TIMEOUT)?.click()
+                    device.wait(Until.findObject(By.textContains("Grant")), LONG_TIMEOUT)
+                        ?: error("Can't find grant action in warning dialog")
+                }
+
+            grant.click()
+
+            val allowField = device.wait(Until.findObject(By.textContains("Allow")), LONG_TIMEOUT)
+            allowField.click()
+            device.wait(Until.findObject(By.checkable(true)), LONG_TIMEOUT)
+            Assert.assertTrue(device.findObject(By.checkable(true)).isChecked)
+            device.pressBack()
+            Espresso.onView(ViewMatchers.withId(R.id.view))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+            Assert.assertTrue(BookDescription.SICP.asFile().canRead())
+        }
+
+        checkStartInvariant()
+    }
+
+    private fun checkStartInvariant() {
         awaitBookLoading()
         activityScenarioRule.scenario.onActivity {
             controller = it.controller!!

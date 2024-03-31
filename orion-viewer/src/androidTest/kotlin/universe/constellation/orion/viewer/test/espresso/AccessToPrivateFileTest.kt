@@ -20,7 +20,7 @@ import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.filemanager.fileExtension
 import universe.constellation.orion.viewer.test.BuildConfig
 import universe.constellation.orion.viewer.test.framework.BookFile
-import universe.constellation.orion.viewer.test.framework.BaseUITest
+import universe.constellation.orion.viewer.test.framework.BaseTestWithActivity
 import universe.constellation.orion.viewer.test.framework.LONG_TIMEOUT
 import universe.constellation.orion.viewer.test.framework.SHORT_TIMEOUT
 import universe.constellation.orion.viewer.test.framework.doFail
@@ -32,9 +32,9 @@ import universe.constellation.orion.viewer.view.OrionDrawScene
 @SdkSuppress(minSdkVersion = KITKAT)
 @RunWith(Parameterized::class)
 class AccessToPrivateFileTest(private val bookDesc: BookFile) :
-    BaseUITest(bookDesc.toOpenIntent {
+    BaseTestWithActivity(bookDesc.toOpenIntent {
         prepareIntent(bookDesc)
-    }, false) {
+    }) {
 
 
     companion object {

@@ -1,7 +1,6 @@
 package universe.constellation.orion.viewer.test.espresso
 
 import android.graphics.Rect
-import android.os.Build
 import android.view.View
 import androidx.test.espresso.Espresso.*
 import androidx.test.espresso.action.ViewActions.*
@@ -9,24 +8,21 @@ import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.filters.SdkSuppress
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import org.junit.runner.RunWith
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import universe.constellation.orion.viewer.test.framework.BookDescription
-import universe.constellation.orion.viewer.test.framework.BaseUITest
+import universe.constellation.orion.viewer.test.framework.BaseTestWithActivity
 import universe.constellation.orion.viewer.test.framework.openOrionIntent
 import java.util.concurrent.atomic.AtomicReference
 
-class NoBookNoStartTapScreen : BaseUITest(openOrionIntent {
+class NoBookNoStartTapScreen : BaseTestWithActivity(openOrionIntent {
     putExtra(GlobalOptions.SHOW_TAP_HELP, true)
-}, true) {
+}) {
     @Test
     fun testStartScreenAbsent() {
         onView(withId(R.id.tap_help_close)).check(doesNotExist())
