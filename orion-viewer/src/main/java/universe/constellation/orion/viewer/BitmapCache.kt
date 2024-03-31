@@ -4,7 +4,8 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import java.util.concurrent.ConcurrentLinkedQueue
 
-private const val DEFAULT_BITMAP_CACHE_SIZE = 25
+private const val DEFAULT_BITMAP_CACHE_SIZE = 32
+private const val CLEAN_THREASHHOLD = 5
 
 open class BitmapCache(val size: Int = DEFAULT_BITMAP_CACHE_SIZE) {
 
@@ -30,10 +31,9 @@ open class BitmapCache(val size: Int = DEFAULT_BITMAP_CACHE_SIZE) {
             } else {
                 val info = nonValids.firstOrNull()
                 if (info == null) {
-                    if (cachedBitmaps.size >= size) error("cache is full: ${cachedBitmaps.joinToString{"" + it.owned}}")
+                    if (BuildConfig.DEBUG && cachedBitmaps.size >= size) error("cache is full: ${cachedBitmaps.joinToString{"" + it.owned}}")
                 } else {
                     cachedBitmaps.remove(info)
-                    info.bitmap.recycle()
                 }
             }
         }
@@ -41,7 +41,7 @@ open class BitmapCache(val size: Int = DEFAULT_BITMAP_CACHE_SIZE) {
         if (bitmap == null) {
             bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
             log("BitmapCache: new bitmap $width x $height created")
-            addToCache(CacheInfo(bitmap))
+            cachedBitmaps.add(CacheInfo(bitmap))
         } else {
             log("BitmapCache: using cached bitmap $bitmap")
         }
@@ -50,15 +50,24 @@ open class BitmapCache(val size: Int = DEFAULT_BITMAP_CACHE_SIZE) {
         return bitmap
     }
 
-    private fun addToCache(info: CacheInfo) {
-        cachedBitmaps.add(info)
-    }
-
     fun markFree(info: Bitmap) {
         for (next in cachedBitmaps) {
             if (next.bitmap === info) {
                 next.owned = false
                 break
+            }
+        }
+    }
+
+    fun cleanIfNeeded() {
+        var toClean = cachedBitmaps.count { !it.owned } - CLEAN_THREASHHOLD
+        if (toClean > 0) {
+            val it = cachedBitmaps.iterator()
+            while (it.hasNext() && toClean >= 0) {
+                if (!it.next().owned) {
+                    it.remove()
+                    toClean--
+                }
             }
         }
     }
@@ -72,7 +81,6 @@ open class BitmapCache(val size: Int = DEFAULT_BITMAP_CACHE_SIZE) {
 
     fun free() {
         invalidateCache()
-        cachedBitmaps.map { it.bitmap.recycle() }
         cachedBitmaps.clear()
     }
 }
