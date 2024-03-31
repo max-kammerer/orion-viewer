@@ -17,10 +17,10 @@ import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.BaseTestWithActivity
-import universe.constellation.orion.viewer.test.framework.openOrionIntent
+import universe.constellation.orion.viewer.test.framework.createTestViewerIntent
 import java.util.concurrent.atomic.AtomicReference
 
-class NoBookNoStartTapScreen : BaseTestWithActivity(openOrionIntent {
+class NoBookNoStartTapScreen : BaseTestWithActivity(createTestViewerIntent {
     putExtra(GlobalOptions.SHOW_TAP_HELP, true)
 }) {
     @Test

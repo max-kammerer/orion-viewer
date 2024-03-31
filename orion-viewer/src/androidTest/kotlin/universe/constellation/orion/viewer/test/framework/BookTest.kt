@@ -30,7 +30,7 @@ abstract class BookTest(protected val bookDescription: BookDescription) : BaseTe
 
 open class BookFile(val simpleFileName: String) {
     fun toOpenIntent(body: Intent.() -> Unit = {}): Intent {
-        return openOrionIntent {
+        return createTestViewerIntent {
             data = Uri.fromFile(asFile())
             body()
         }

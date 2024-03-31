@@ -233,7 +233,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
                 val filePathToOpen = if (!fileInfo.file.canRead()) {
                     val cacheFileIfExists =
-                        getCacheFileIfExists(fileInfo)?.takeIf { it.length() == fileInfo.size }
+                        getStableTmpFileIfExists(fileInfo)?.takeIf { it.length() == fileInfo.size }
 
                     if (cacheFileIfExists == null) {
                         askReadPermissionOrOpenExisting(fileInfo, intent)

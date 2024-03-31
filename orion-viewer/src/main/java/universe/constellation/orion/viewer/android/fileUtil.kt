@@ -63,7 +63,7 @@ fun getFileInfo(context: Context, uri: Uri): FileInfo? {
         val (pathFromDescriptor, fileLength) = context.contentResolver.openFileDescriptor(uri, "r")?.use { getFileDataFromDescriptor(it) } ?: return null
         if (pathFromDescriptor == null) return null
         return FileInfo(
-            displayName,
+            displayName ?: pathFromDescriptor.substringAfterLast("/"),
             if (fileLength != 0L) fileLength else sizeOrZero,
             id,
             pathFromDescriptor,

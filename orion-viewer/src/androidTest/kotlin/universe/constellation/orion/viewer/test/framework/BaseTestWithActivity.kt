@@ -2,6 +2,7 @@ package universe.constellation.orion.viewer.test.framework
 
 import android.content.Context
 import android.content.Intent
+import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
@@ -11,7 +12,6 @@ import org.junit.Assert
 import org.junit.Rule
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.logError
-import universe.constellation.orion.viewer.prefs.GlobalOptions
 import universe.constellation.orion.viewer.prefs.OrionApplication
 
 abstract class BaseTestWithActivity(startIntent: Intent) : BaseInstrumentationTest() {
@@ -21,19 +21,14 @@ abstract class BaseTestWithActivity(startIntent: Intent) : BaseInstrumentationTe
     }
 
     @get:Rule
-    val activityScenarioRule = activityScenarioRule<OrionViewerActivity>(startIntent.apply {
-        if (!hasExtra(GlobalOptions.SHOW_TAP_HELP)) {
-            putExtra(GlobalOptions.SHOW_TAP_HELP, false)
-        }
-        putExtra(GlobalOptions.OPEN_AS_TEMP_BOOK, true)
-    })
+    val activityScenarioRule = activityScenarioRule<OrionViewerActivity>(startIntent)
 
     protected fun awaitBookLoading() {
-        activityScenarioRule.awaitBookLoading()
+        activityScenarioRule.scenario.awaitBookLoading()
     }
 }
 
-fun BaseTestWithActivity.doFail(message: String, namePrefix: String = name.methodName): Nothing {
+fun BaseInstrumentationTest.doFail(message: String, namePrefix: String = name.methodName): Nothing {
     screenshotRule.takeScreenshot(namePrefix)
     logError(message)
     error(Assert.fail(message))
@@ -67,7 +62,15 @@ fun <T: Any> ActivityScenarioRule<OrionViewerActivity>.onActivity(body: (OrionVi
     return res
 }
 
-fun ActivityScenarioRule<OrionViewerActivity>.awaitBookLoading() {
+fun <T: Any> ActivityScenario<OrionViewerActivity>.onActivityRes(body: (OrionViewerActivity) -> T): T {
+    lateinit var res: T
+    onActivity {
+        res = body(it)
+    }
+    return res
+}
+
+fun ActivityScenario<OrionViewerActivity>.awaitBookLoading() {
     lateinit var job: Job
     onActivity {
         job = it.openJob

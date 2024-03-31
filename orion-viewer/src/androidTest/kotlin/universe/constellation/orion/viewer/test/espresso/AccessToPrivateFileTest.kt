@@ -1,48 +1,46 @@
 package universe.constellation.orion.viewer.test.espresso
 
-import android.content.ContentResolver
-import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION_CODES.KITKAT
 import android.os.Build.VERSION_CODES.LOLLIPOP
 import android.os.Build.VERSION_CODES.M
-import android.webkit.MimeTypeMap
 import android.widget.Button
 import android.widget.EditText
 import androidx.test.filters.SdkSuppress
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
+import org.junit.After
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import universe.constellation.orion.viewer.filemanager.fileExtension
-import universe.constellation.orion.viewer.test.BuildConfig
-import universe.constellation.orion.viewer.test.framework.BookFile
+import universe.constellation.orion.viewer.cacheContentFolder
 import universe.constellation.orion.viewer.test.framework.BaseTestWithActivity
 import universe.constellation.orion.viewer.test.framework.LONG_TIMEOUT
 import universe.constellation.orion.viewer.test.framework.SHORT_TIMEOUT
+import universe.constellation.orion.viewer.test.framework.appContext
+import universe.constellation.orion.viewer.test.framework.createContentIntentWithGenerated
 import universe.constellation.orion.viewer.test.framework.doFail
-import universe.constellation.orion.viewer.test.framework.instrumentationContext
 import universe.constellation.orion.viewer.test.framework.onActivity
 import universe.constellation.orion.viewer.view.OrionDrawScene
 
 
 @SdkSuppress(minSdkVersion = KITKAT)
 @RunWith(Parameterized::class)
-class AccessToPrivateFileTest(private val bookDesc: BookFile) :
-    BaseTestWithActivity(bookDesc.toOpenIntent {
-        prepareIntent(bookDesc)
-    }) {
-
+class AccessToPrivateFileTest(private val simpleFileName: String) :
+    BaseTestWithActivity(createContentIntentWithGenerated(simpleFileName)) {
 
     companion object {
         @JvmStatic
         @Parameterized.Parameters(name = "Test for {0} book")
-        fun testData(): Iterable<BookFile> {
-            return listOf(BookFile("1.10.pdf") , BookFile("2.20.pdf"), BookFile("3.30.pdf"))
+        fun testData(): Iterable<String> {
+            return listOf("1.10.pdf", "2.20.pdf")
         }
+    }
+
+    @After
+    fun clean() {
+        appContext.cacheContentFolder().deleteRecursively()
     }
 
     @Test
@@ -67,7 +65,7 @@ class AccessToPrivateFileTest(private val bookDesc: BookFile) :
         }
 
         val editField = device.wait(Until.findObject(By.clazz(EditText::class.java)), LONG_TIMEOUT) ?: doFail("No edit field")
-        editField.text = bookDesc.simpleFileName
+        editField.text = simpleFileName
 
         val saveButton =
             device.findObject(By.textContains("SAVE"))
@@ -86,23 +84,8 @@ class AccessToPrivateFileTest(private val bookDesc: BookFile) :
             Assert.assertNotNull(it.controller)
             Assert.assertEquals(
                 it.controller!!.document.pageCount,
-                bookDesc.simpleFileName.substringAfter('.').substringBefore('.').toInt()
+                simpleFileName.substringAfter('.').substringBefore('.').toInt()
             )
         }
     }
-}
-
-private fun Intent.prepareIntent(bookDesc: BookFile) {
-    val fileName = bookDesc.simpleFileName
-    val uri = Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT)
-        .authority(BuildConfig.APPLICATION_ID + ".fileprovider")
-        .encodedPath(fileName).appendQueryParameter("displayName", fileName).build()
-
-    instrumentationContext.grantUriPermission(
-        universe.constellation.orion.viewer.BuildConfig.APPLICATION_ID,
-        uri,
-        Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-    )
-    val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileName.fileExtension)
-    setDataAndType(uri, mimeType)
 }

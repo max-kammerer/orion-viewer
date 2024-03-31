@@ -248,9 +248,13 @@ open class FallbackDialogs {
 }
 
 private fun Context.tmpContentFolderForFile(fileInfo: FileInfo?): File {
-    val contentFolder = File(cacheDir, ContentResolver.SCHEME_CONTENT)
+    val contentFolder = cacheContentFolder()
     return if (fileInfo == null) contentFolder
     else File(contentFolder, fileInfo.uri.host + "/" + (fileInfo.id ?: ("_" + fileInfo.size)) + "/")
+}
+
+fun Context.cacheContentFolder(): File {
+    return File(cacheDir, ContentResolver.SCHEME_CONTENT)
 }
 
 private fun saveContentInTmpFile(
@@ -289,7 +293,7 @@ private fun saveContentInTmpFile(
 internal fun Context.createTmpFile(fileInfo: FileInfo?, extension: String): File {
     val fileFolder = tmpContentFolderForFile(fileInfo)
     fileFolder.mkdirs()
-    if (fileInfo?.canHaveTmpVersion() == true) {
+    if (fileInfo?.canHasTmpFileWithStablePath() == true) {
         return File(fileFolder, fileInfo.name!!)
     } else {
         val fileName = (fileInfo?.name ?: fileInfo?.path?.substringAfterLast("/") ?: "test_bool").substringBeforeLast(".")
@@ -319,12 +323,12 @@ private fun sendCreateFileRequest(activity: Activity, fileInfo: FileInfo?, readI
     activity.startActivityForResult(createFileIntent, OrionViewerActivity.SAVE_FILE_RESULT)
 }
 
-fun FileInfo.canHaveTmpVersion(): Boolean {
+fun FileInfo.canHasTmpFileWithStablePath(): Boolean {
     return !id.isNullOrBlank() && size != 0L && !name.isNullOrBlank() && uri.isContentUri
 }
 
-fun Context.getCacheFileIfExists(fileInfo: FileInfo): File? {
-    if (!fileInfo.canHaveTmpVersion()) return null
+fun Context.getStableTmpFileIfExists(fileInfo: FileInfo): File? {
+    if (!fileInfo.canHasTmpFileWithStablePath()) return null
     val file = File(tmpContentFolderForFile(fileInfo), fileInfo.name ?: return null)
     return file.takeIf { it.exists() }
 }
