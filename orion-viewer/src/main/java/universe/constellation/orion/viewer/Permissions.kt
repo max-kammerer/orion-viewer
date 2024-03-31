@@ -33,8 +33,8 @@ object Permissions {
     const val ASK_READ_PERMISSION_FOR_BOOK_OPEN = 112
     const val ASK_READ_PERMISSION_FOR_FILE_MANAGER = 113
 
-    fun hasReadStoragePermission(activity: Activity, code: Int = ASK_PERMISSION_COMMON): Boolean {
-        return activity.checkAndRequestStorageAccessPermissionOrReadOne(code, doRequest = false)
+    fun hasReadStoragePermission(activity: Activity): Boolean {
+        return activity.checkAndRequestStorageAccessPermissionOrReadOne(-1, doRequest = false)
     }
 
     @JvmStatic

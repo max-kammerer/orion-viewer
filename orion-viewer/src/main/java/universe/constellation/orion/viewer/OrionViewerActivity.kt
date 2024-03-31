@@ -17,7 +17,7 @@ import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.*
 import universe.constellation.orion.viewer.FallbackDialogs.Companion.saveFileByUri
 import universe.constellation.orion.viewer.Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN
-import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAccessPermissionOrReadOne
+import universe.constellation.orion.viewer.Permissions.hasReadStoragePermission
 import universe.constellation.orion.viewer.android.getFileInfo
 import universe.constellation.orion.viewer.android.isRestrictedAccessPath
 import universe.constellation.orion.viewer.device.Device
@@ -183,23 +183,14 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         log("Checking permissions for: $fileInfo")
         if (fileInfo.file.canRead()) return fileInfo
         myState = MyState.WAITING_ACTION
-        if (fileInfo.isRestrictedAccessPath()) {
+        if (fileInfo.isRestrictedAccessPath() || hasReadStoragePermission(this)) {
             FallbackDialogs().createPrivateResourceFallbackDialog(this, fileInfo, intent).show()
         } else {
-            checkAndRequestStorageAccessPermissionOrReadOne(
-                ASK_READ_PERMISSION_FOR_BOOK_OPEN,
-                doRequest = false
-            ).apply {
-                if (this) {
-                    FallbackDialogs().createPrivateResourceFallbackDialog(this@OrionViewerActivity, fileInfo, intent).show()
-                } else {
-                    FallbackDialogs().createGrantReadPermissionsDialog(
-                        this@OrionViewerActivity,
-                        fileInfo,
-                        intent
-                    ).show()
-                }
-            }
+            FallbackDialogs().createGrantReadPermissionsDialog(
+                this@OrionViewerActivity,
+                fileInfo,
+                intent
+            ).show()
         }
         return null
     }
@@ -228,7 +219,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                         FallbackDialogs().createBadIntentFallbackDialog(this, null, intent).show()
                         return
                     }
-                val filePath = info.canonicalPath
+                val filePath = info.path
 
                 if (controller != null && lastPageInfo != null) {
                     lastPageInfo?.apply {

@@ -25,6 +25,7 @@ import universe.constellation.orion.viewer.FallbackDialogs.Companion.saveFileByU
 import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAccessPermissionOrReadOne
 import universe.constellation.orion.viewer.Permissions.hasReadStoragePermission
 import universe.constellation.orion.viewer.android.isAtLeastKitkat
+import universe.constellation.orion.viewer.android.isContentScheme
 import universe.constellation.orion.viewer.filemanager.FileChooserAdapter
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
 import java.io.File
@@ -36,10 +37,6 @@ class ResourceIdAndString(val id: Int, val value: String) {
 }
 
 open class FallbackDialogs {
-
-    private fun Intent.isContentScheme(): Boolean {
-        return ContentResolver.SCHEME_CONTENT.equals(data?.scheme, ignoreCase = true)
-    }
 
     fun createBadIntentFallbackDialog(activity: OrionViewerActivity, fileInfo: FileInfo?, intent: Intent): Dialog {
         val isContentScheme = intent.isContentScheme()
