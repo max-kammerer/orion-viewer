@@ -16,24 +16,14 @@
     <string name="recent_book_not_found">Can\'t find book file!</string>
     <string name="tap_zones_header">Default Tap Zones</string>
 
-
     <string name="permission_directory_warning">Please provide read permission to access storage data</string>
     <string name="permission_grant">Grant…</string>
     <string name="permission_cancel">Cancel</string>
-
-    <string name="crash_on_book_opening_title">Error on file opening</string>
-    <string name="crash_on_intent_opening_title">Error on intent processing</string>
-    <string name="crash_on_book_opening_message_header">Error occurred during file \`%1$s\` opening. Please report an issue:</string>
 
     <string name="string_cancel">Cancel</string>
     <string name="string_apply">Apply</string>
 
     <string name="string_wrong_password">Wrong password</string>
     <string name="password_for_file">Password for file</string>
-
-    <string name="string_send">Send…</string>
-    <string name="send_report_header">[Please provide additional details]</string>
-
-
 
 </resources>

@@ -20,6 +20,7 @@
 package universe.constellation.orion.viewer
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
@@ -192,4 +193,8 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
         }
     }
 
+}
+
+fun Activity.showLongMessage(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 }

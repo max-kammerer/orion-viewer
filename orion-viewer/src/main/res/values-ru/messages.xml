@@ -21,15 +21,10 @@
     <string name="permission_grant">Предоставить…</string>
     <string name="permission_cancel">Отмена</string>
 
-    <string name="crash_on_book_opening_title">Ошибка при открытии файла</string>
-    <string name="crash_on_intent_opening_title">Ошибка при обработке интента</string>
-    <string name="crash_on_book_opening_message_header">Ошибка при открытии \`%1$s\` файла. Пожалуйста, отправьте сообщение об ошибке:</string>
-
     <string name="string_cancel">Отмена</string>
     <string name="string_apply">Применить</string>
-    <string name="string_send">Отправить…</string>
+
     <string name="string_wrong_password">Неверный пароль</string>
     <string name="password_for_file">Пароль для файла</string>
 
-    <string name="send_report_header">[Пожалуйста, укажите дополнительную информацию]</string>
 </resources>

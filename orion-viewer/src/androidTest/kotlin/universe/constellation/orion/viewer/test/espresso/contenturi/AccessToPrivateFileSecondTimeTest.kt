@@ -1,5 +1,6 @@
 package universe.constellation.orion.viewer.test.espresso.contenturi
 
+import android.os.Build
 import android.widget.Button
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.launchActivity
@@ -10,6 +11,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withSubstring
+import androidx.test.filters.SdkSuppress
 import org.hamcrest.core.AllOf
 import org.hamcrest.core.IsNot.not
 import org.junit.Assert
@@ -24,8 +26,8 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.attribute.BasicFileAttributes
 
-
-class AccessToPrivateFileSecondTimeTest() : BaseInstrumentationTest() {
+@SdkSuppress(minSdkVersion = Build.VERSION_CODES.KITKAT)
+class AccessToPrivateFileSecondTimeTest : BaseInstrumentationTest() {
 
     private val pageCount = 14
     private val fileName = "secondTime.$pageCount.pdf"

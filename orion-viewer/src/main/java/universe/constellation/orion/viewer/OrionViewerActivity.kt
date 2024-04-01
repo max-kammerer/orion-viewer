@@ -376,16 +376,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     private fun showAlertWithExceptionThrow(intent: Intent, e: Exception) {
-        val themedAlertBuilder = createThemedAlertBuilder().setMessage("Error while opening " + intent + ": " + e.message + " cause of " + e.cause)
-        themedAlertBuilder.setPositiveButton("OK") { _, _ ->
-            finish()
-            throw RuntimeException("Exception on processing $intent", e)
-        }
-        themedAlertBuilder.setOnCancelListener {
-            finish()
-            throw RuntimeException("Exception on processing $intent", e)
-        }
-        themedAlertBuilder.create().show()
+        showErrorReportDialog(
+            R.string.crash_on_intent_opening_title,
+            R.string.crash_on_intent_opening_title,
+            intent, e
+        )
     }
 
 
@@ -559,7 +554,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         val spinnerIndex: Int
         if (zoom in -3..0) {
             spinnerIndex = -zoom + 1
-            zoom = (10000 * controller!!.currentPageZoom).toInt() 
+            zoom = (10000 * controller!!.currentPageZoom).toInt()
         } else {
             spinnerIndex = 0
             textView.text = (zoom / 100f).toString()
@@ -958,7 +953,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             SAVE_FILE_RESULT -> {
                 if (resultCode == Activity.RESULT_OK) {
                     if (data?.data != null && intent.data != null) {
-                        saveFileByUri(intent.data?: return, data.data!!) {
+                        saveFileByUri(intent, intent.data ?: return, data.data!!) {
                             onNewIntent(data)
                         }
                         return
@@ -1132,14 +1127,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 }
 
 private fun OrionBaseActivity.showErrorReportDialog(file: String, e: Throwable, intent: Intent) {
-    val exceptionWriter = StringWriter()
-    val printWriter = PrintWriter(exceptionWriter)
-    e.printStackTrace(printWriter)
-    printWriter.flush()
-    val rawException = exceptionWriter.toString()
     showErrorReportDialog(
-            applicationContext.resources.getString(R.string.crash_on_book_opening_message_header, File(file).name),
-            applicationContext.getString(R.string.crash_on_book_opening_title), intent.toString() + "\n\n" + rawException
+            resources.getString(R.string.crash_on_book_opening_message_header, File(file).name),
+            getString(R.string.crash_on_book_opening_title), intent, e
     )
 }
 

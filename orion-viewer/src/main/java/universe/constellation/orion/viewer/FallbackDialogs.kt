@@ -215,15 +215,19 @@ open class FallbackDialogs {
 
 
         fun Activity.saveFileByUri(
+            intent: Intent?,
             originalContentUri: Uri,
             targetFileUri: Uri,
             callbackAction: () -> Unit
         ) {
             val handler = CoroutineExceptionHandler { _, exception ->
                 exception.printStackTrace()
-                AlertDialog.Builder(this).setMessage(exception.message)
-                    .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-                    .create().show()
+                showErrorReportDialog(
+                    R.string.error_on_file_saving_title,
+                    R.string.error_on_file_saving_title,
+                    "intent=" + intent?.toString() + "\ntargetFile=$targetFileUri",
+                    exception
+                )
             }
 
             GlobalScope.launch(Dispatchers.Main + handler) {
@@ -268,6 +272,7 @@ private fun saveContentInTmpFile(
     val extension = FallbackDialogs.getExtension(uri, intent.type, myActivity.contentResolver)
     if (extension == null) {
         dialog.dismiss()
+        //TODO proper message
         myActivity.showErrorReportDialog(
             myActivity.applicationContext.getString(R.string.crash_on_intent_opening_title),
             myActivity.applicationContext.getString(R.string.crash_on_intent_opening_title),
@@ -278,7 +283,7 @@ private fun saveContentInTmpFile(
 
     val toFile = activity.createTmpFile(fileInfo, extension)
 
-    myActivity.saveFileByUri(uri, toFile.toUri()) {
+    myActivity.saveFileByUri(intent, uri, toFile.toUri()) {
         dialog.dismiss()
         myActivity.onNewIntentInternal(
             Intent(Intent.ACTION_VIEW).apply {

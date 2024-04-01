@@ -1,5 +1,6 @@
 package universe.constellation.orion.viewer
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -7,12 +8,35 @@ import android.os.Build
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import java.io.PrintWriter
+import java.io.StringWriter
 
-internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: String, messageTitle: String, exceptionOrIntentData: String) {
+private fun Throwable.exceptionStackTrace(): String {
+    val exceptionWriter = StringWriter()
+    val printWriter = PrintWriter(exceptionWriter)
+    printStackTrace(printWriter)
+    printWriter.flush()
+    return exceptionWriter.toString()
+}
+
+internal fun Activity.showErrorReportDialog(dialogTitle: Int, messageTitle: Int, intent: Intent, exception: Throwable? = null) {
+    showErrorReportDialog(resources.getString(dialogTitle), resources.getString(messageTitle), intent, exception)
+}
+
+internal fun Activity.showErrorReportDialog(dialogTitle: Int, messageTitle: Int, info: String, exception: Throwable? = null) {
+    showErrorReportDialog(resources.getString(dialogTitle), resources.getString(messageTitle), info, exception)
+}
+
+internal fun Activity.showErrorReportDialog(dialogTitle: String, messageTitle: String, intent: Intent, exception: Throwable? = null) {
+    showErrorReportDialog(dialogTitle, messageTitle, intent.toString(), exception)
+}
+
+internal fun Activity.showErrorReportDialog(dialogTitle: String, messageTitle: String, info: String, exception: Throwable? = null) {
     val view = layoutInflater.inflate(R.layout.crash_dialog, null)
     val textView = view.findViewById<TextView>(R.id.crashTextView)
 
-    textView.text = exceptionOrIntentData
+    val fullMessage = info + (exception?.let { "\n\n" + it.exceptionStackTrace() } ?: "")
+    textView.text = fullMessage
 
     val header = view.findViewById<TextView>(R.id.crash_message_header)
     header.text = dialogTitle
@@ -20,7 +44,7 @@ internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: String, messag
     val dialog = AlertDialog.Builder(this).setView(view).setTitle(messageTitle).setPositiveButton(R.string.string_send) { dialog, _ ->
         val viaEmail = view.findViewById<RadioButton>(R.id.crash_send_email).isChecked
         try {
-            reportErrorVia(viaEmail, messageTitle, exceptionOrIntentData)
+            reportErrorVia(viaEmail, messageTitle, fullMessage)
         } catch (e: ActivityNotFoundException) {
             showLongMessage("No application can handle this request. Please install ${if (viaEmail) "a web browser" else "an e-mail client"}")
         }
@@ -43,7 +67,7 @@ internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: String, messag
     }
 }
 
-internal fun OrionBaseActivity.reportErrorVia(viaEmail: Boolean, messageTitle: String, intentOrException: String) {
+internal fun Activity.reportErrorVia(viaEmail: Boolean, messageTitle: String, intentOrException: String) {
     val bodyWithException =
         """
             ${applicationContext.getString(R.string.send_report_header)}
