@@ -11,7 +11,7 @@ class ColorStuff {
 
     val borderPaint = Paint().apply {
         color = Color.BLACK
-        strokeWidth = 4f
+        strokeWidth = 0f
         style = Paint.Style.STROKE
     }
 
