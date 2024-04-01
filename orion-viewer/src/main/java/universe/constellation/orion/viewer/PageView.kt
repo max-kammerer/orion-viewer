@@ -236,10 +236,19 @@ class PageView(
     }
 
     private fun draw(canvas: Canvas, bitmap: FlexibleBitmap, defaultPaint: Paint, scene: OrionDrawScene) {
+
         canvas.save()
         canvas.translate(layoutData.position.x, layoutData.position.y)
+        if (!scene.inScalingMode) {
+            //to show border of unrendered area
+            drawBorder(canvas, scene)
+        }
         bitmap.draw(canvas, layoutData.wholePageRect, defaultPaint)
-        drawBorder(canvas, scene)
+
+        if (scene.inScalingMode) {
+            drawBorder(canvas, scene)
+        }
+
         scene.runAdditionalTaskInPageCanvasAndCoord(canvas, pageNum)
         canvas.restore()
     }

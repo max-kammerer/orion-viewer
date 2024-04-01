@@ -48,7 +48,8 @@ class OrionDrawScene : View {
 
     internal var defaultPaint: Paint? = null
 
-    private var inScalingMode = false
+    internal var inScalingMode = false
+        private set
 
     private val tasks = ArrayList<DrawTask>()
 
@@ -142,11 +143,11 @@ class OrionDrawScene : View {
         this.enableMoveOnPinchZoom = enableMoveOnPinchZoom
     }
 
-    fun inScalingMode() {
+    fun enableScalingMode() {
         inScalingMode = true
     }
 
-    fun inNormalMode() {
+    fun disableScalingMode() {
         this.inScalingMode = false
     }
 

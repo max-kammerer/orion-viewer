@@ -56,14 +56,14 @@ class NewTouchProcessorWithScale(view: OrionDrawScene, activity: OrionViewerActi
         val newX = MoveUtil.calcOffset(startFocus.x, endFocus.x, curScale, enableTouchMoveOnPinchZoom)
         val newY = MoveUtil.calcOffset(startFocus.y, endFocus.y, curScale, enableTouchMoveOnPinchZoom)
         activity.controller!!.translateAndZoom(curScale, startFocus, endFocus, newX, newY)
-        view.inNormalMode()
+        view.disableScalingMode()
     }
 
     override fun onScale(detector: ScaleGestureDetector): Boolean {
         println("onScale")
         curScale *= detector.scaleFactor
         endFocus.set(detector.focusX, detector.focusY)
-        view.inScalingMode()
+        view.enableScalingMode()
         view.doScale(curScale, startFocus, endFocus, enableTouchMoveOnPinchZoom)
         view.invalidate()
         return true
