@@ -19,7 +19,11 @@ class LayoutData {
 
 
     fun contains(x: Float, y: Float): Boolean {
-        return wholePageRect.contains((x - position.x) .toInt(), (y-position.y).toInt())
+        return wholePageRect.contains((x - position.x).toInt(), (y - position.y).toInt())
+    }
+
+    fun containsY(y: Float): Boolean {
+        return wholePageRect.contains(wholePageRect.left, (y - position.y).toInt())
     }
 
     fun globalRect(target: Rect): Rect {

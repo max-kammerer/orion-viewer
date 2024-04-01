@@ -136,7 +136,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
 
         activePages.forEach {
             val layoutData = it.layoutData
-            if (layoutData.contains(xPos, yPos)) {
+            if (layoutData.containsY(yPos)) {
                 val leftDelta = layoutData.globalLeft - sceneRect.left
                 val righDelta = sceneRect.right - layoutData.globalRight
                 if (layoutData.wholePageRect.width() < sceneRect.width()) {
