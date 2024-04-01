@@ -1,4 +1,4 @@
-package universe.constellation.orion.viewer.test.espresso
+package universe.constellation.orion.viewer.test.espresso.contenturi
 
 import android.os.Build
 import android.os.Build.VERSION_CODES.KITKAT

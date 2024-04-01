@@ -1,4 +1,4 @@
-package universe.constellation.orion.viewer.test.espresso
+package universe.constellation.orion.viewer.test.espresso.contenturi
 
 import android.widget.Button
 import androidx.test.core.app.ActivityScenario
