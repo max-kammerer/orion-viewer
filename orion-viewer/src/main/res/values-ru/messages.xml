@@ -23,7 +23,7 @@
 
     <string name="crash_on_book_opening_title">Ошибка при открытии файла</string>
     <string name="crash_on_intent_opening_title">Ошибка при обработке интента</string>
-    <string name="crash_on_book_opening_message_header">Ошибка при открытии \`%1$s\` файла. Пожалуйста, отправьте сообщение об ошибке (с прикрепленным файлом, если это возможно):</string>
+    <string name="crash_on_book_opening_message_header">Ошибка при открытии \`%1$s\` файла. Пожалуйста, отправьте сообщение об ошибке:</string>
 
     <string name="string_cancel">Отмена</string>
     <string name="string_apply">Применить</string>

@@ -23,7 +23,7 @@
 
     <string name="crash_on_book_opening_title">Error on file opening</string>
     <string name="crash_on_intent_opening_title">Error on intent processing</string>
-    <string name="crash_on_book_opening_message_header">Error occurred during file \`%1$s\` opening. Please report an issue (with attached file if possible):</string>
+    <string name="crash_on_book_opening_message_header">Error occurred during file \`%1$s\` opening. Please report an issue:</string>
 
     <string name="string_cancel">Cancel</string>
     <string name="string_apply">Apply</string>
