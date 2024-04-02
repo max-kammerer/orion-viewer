@@ -18,11 +18,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import universe.constellation.orion.viewer.bitmap.FlexibleBitmap
 import universe.constellation.orion.viewer.document.Document
+import universe.constellation.orion.viewer.geometry.RectF
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
 import universe.constellation.orion.viewer.view.OrionDrawScene
 import universe.constellation.orion.viewer.view.PageLayoutManager
 import universe.constellation.orion.viewer.view.precache
+import kotlin.math.ceil
+import kotlin.math.floor
 
 enum class PageState(val interactWithUUI: Boolean) {
     STUB(false),
@@ -235,22 +238,51 @@ class PageView(
         }
     }
 
+    private val drawTmp  = Rect()
+    private val drawTmpF  = RectF()
+    private val sceneTmpF  = RectF()
+
     private fun draw(canvas: Canvas, bitmap: FlexibleBitmap, defaultPaint: Paint, scene: OrionDrawScene) {
-
         canvas.save()
-        canvas.translate(layoutData.position.x, layoutData.position.y)
-        if (!scene.inScalingMode) {
-            //to show border of unrendered area
-            drawBorder(canvas, scene)
-        }
-        bitmap.draw(canvas, layoutData.wholePageRect, defaultPaint)
+        try {
+            canvas.translate(layoutData.position.x, layoutData.position.y)
 
-        if (scene.inScalingMode) {
-            drawBorder(canvas, scene)
-        }
+            if (!scene.inScalingMode) {
+                //to show border of unrendered area
+                drawBorder(canvas, scene)
+            }
 
-        scene.runAdditionalTaskInPageCanvasAndCoord(canvas, pageNum)
-        canvas.restore()
+            bitmap.draw(canvas, calcDrawRect(scene) ?: return, defaultPaint)
+
+            if (scene.inScalingMode) {
+                drawBorder(canvas, scene)
+            }
+
+            scene.runAdditionalTaskInPageCanvasAndCoord(canvas, pageNum)
+        } finally {
+            canvas.restore()
+        }
+    }
+
+    private fun calcDrawRect(scene: OrionDrawScene): Rect? {
+        if (scene.inScalingMode && scene.scale < 1f)
+            return layoutData.wholePageRect
+        else {
+            sceneTmpF.set(pageLayoutManager.sceneRect)
+            sceneTmpF.offset(-layoutData.position.x, -layoutData.position.y)
+
+            drawTmpF.set(layoutData.wholePageRect)
+            if (drawTmpF.intersect(sceneTmpF)) {
+                drawTmp.set(
+                    floor(drawTmpF.left).toInt(),
+                    floor(drawTmpF.top).toInt(),
+                    ceil(drawTmpF.right).toInt(),
+                    ceil(drawTmpF.bottom).toInt()
+                )
+                return drawTmp
+            }
+        }
+        return null
     }
 
     private fun drawBorder(

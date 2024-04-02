@@ -79,7 +79,7 @@ data class PagePart(val absPartRect: Rect) {
 
     fun draw(canvas: Canvas, pageVisiblePart: Rect, defaultPaint: Paint) {
         if (!isActive) return
-        if (bitmap != null && Rect.intersects(localPartRect, pageVisiblePart)) {
+        if (bitmap != null && Rect.intersects(absPartRect, pageVisiblePart)) {
             canvas.drawBitmap(bitmap!!, localPartRect, absPartRect, defaultPaint)
         }
     }
