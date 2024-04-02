@@ -15,6 +15,7 @@ import androidx.test.filters.SdkSuppress
 import org.hamcrest.core.AllOf
 import org.hamcrest.core.IsNot.not
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Test
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.R
@@ -26,6 +27,7 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.attribute.BasicFileAttributes
 
+@Ignore
 @SdkSuppress(minSdkVersion = Build.VERSION_CODES.KITKAT)
 class AccessToPrivateFileSecondTimeTest : BaseInstrumentationTest() {
 

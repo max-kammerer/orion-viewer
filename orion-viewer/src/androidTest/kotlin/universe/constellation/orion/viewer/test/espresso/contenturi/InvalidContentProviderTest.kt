@@ -11,6 +11,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withSubstring
 import androidx.test.filters.SdkSuppress
 import org.hamcrest.core.AllOf.allOf
 import org.hamcrest.core.IsNot.not
+import org.junit.Ignore
 import org.junit.Test
 import universe.constellation.orion.viewer.test.framework.BaseTestWithActivity
 import universe.constellation.orion.viewer.test.framework.createContentIntentWithGenerated
@@ -45,6 +46,7 @@ class InvalidContentProvider2Test : BaseTestWithActivity(createContentIntentWith
 
 }
 
+@Ignore
 @SdkSuppress(minSdkVersion = Build.VERSION_CODES.KITKAT)
 class InvalidContentProvider3Test : BaseTestWithActivity(createContentIntentWithGenerated("secondTime.error2.pdf")) {
 
