@@ -35,7 +35,7 @@ fun BaseInstrumentationTest.doFail(message: String, namePrefix: String = name.me
 }
 
 fun BaseTestWithActivity.checkNotEquals(message: String, expected: Int, actual: Int, namePrefix: String = name.methodName) {
-    if (expected != actual) {
+    if (expected == actual) {
         screenshotRule.takeScreenshot(namePrefix)
         logError(message)
         Assert.assertNotEquals(message, expected, actual)
