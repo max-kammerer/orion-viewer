@@ -1,5 +1,6 @@
 package universe.constellation.orion.viewer.test.framework
 
+import androidx.test.espresso.Espresso
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
@@ -8,7 +9,14 @@ import org.junit.Rule
 import universe.constellation.orion.viewer.android.isAtLeastKitkat
 import universe.constellation.orion.viewer.test.espresso.ScreenshotTakingRule
 
-abstract class BaseInstrumentationTest() : BaseTest() {
+
+abstract class BaseInstrumentationTest : BaseTest() {
+
+    init {
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+        Espresso.setFailureHandler(EspressoFailureHandler(instrumentation))
+    }
+
 
     @JvmField
     @Rule
