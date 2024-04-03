@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00ffffff"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/menu_top_actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="top"
+        android:background="@color/orion_orange"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/exit_menu_item"
+            style="@style/Menu_Item"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/menu_exit_text"
+            android:src="@drawable/new_exit" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+        </TextView>
+
+        <ImageView
+            android:id="@+id/options_menu_item"
+            style="@style/Menu_Item"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/menu_options_text"
+            android:src="@drawable/new_settings" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/menu_middle_part"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_alignBottom="@id/menu_top_actions"
+        android:layout_alignTop="@id/menu_botton_actions1"/>
+
+    <LinearLayout
+        android:id="@+id/menu_botton_actions1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal"
+
+        android:background="@color/orion_orange"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:id="@+id/menu_botton_actions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+
+            <ImageView
+                android:id="@+id/add_bookmark_menu_item"
+                style="@style/Menu_Item"
+                android:contentDescription="@string/menu_add_bookmark_item"
+                android:src="@drawable/new_bookmark_add" />
+
+            <ImageView
+                android:id="@+id/bookmarks_menu_item"
+                style="@style/Menu_Item"
+                android:src="@drawable/new_bookmarks"
+                android:title="@string/menu_bookmarks_text" />
+
+            <ImageView
+                android:id="@+id/outline_menu_item"
+                style="@style/Menu_Item"
+                android:src="@drawable/new_outline"
+                android:title="@string/menu_outline_text" />
+
+            <ImageView
+                android:id="@+id/search_menu_item"
+                style="@style/Menu_Item"
+                android:contentDescription="@string/menu_search_item"
+                android:padding="5dp"
+                android:src="@drawable/new_search" />
+
+
+            <ImageView
+                android:id="@+id/select_text_menu_item"
+                style="@style/Menu_Item"
+                android:contentDescription="@string/menu_select_text"
+                android:src="@drawable/new_select" />
+
+
+            <ImageView
+                android:id="@+id/zoom_menu_item"
+                style="@style/Menu_Item"
+                android:contentDescription="@string/menu_zoom_text"
+                android:src="@drawable/new_zoom" />
+
+            <ImageView
+                android:id="@+id/crop_menu_item"
+                style="@style/Menu_Item"
+                android:contentDescription="@string/menu_crop_text"
+                android:src="@drawable/new_cut" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/orion_orange"></SeekBar>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
