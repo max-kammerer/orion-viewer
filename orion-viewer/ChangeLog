@@ -1,3 +1,7 @@
+===== 0.90.2 (Apr 03, 2024) =====
+* Stability fixes
+* Unified error dialogs
+
 ===== 0.90.1 (Mar 26, 2024) =====
 * Reworked file access and permission check logic
 
