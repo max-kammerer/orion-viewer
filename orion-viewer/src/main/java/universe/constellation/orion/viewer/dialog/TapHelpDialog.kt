@@ -1,67 +1,65 @@
-package universe.constellation.orion.viewer.dialog;
+package universe.constellation.orion.viewer.dialog
 
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.*;
-import universe.constellation.orion.viewer.Action;
-import universe.constellation.orion.viewer.OrionViewerActivity;
-import universe.constellation.orion.viewer.R;
-import universe.constellation.orion.viewer.prefs.GlobalOptions;
-import universe.constellation.orion.viewer.prefs.OrionTapActivity;
+import android.preference.PreferenceManager
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.TableLayout
+import android.widget.TableRow
+import android.widget.TextView
+import universe.constellation.orion.viewer.Action
+import universe.constellation.orion.viewer.OrionViewerActivity
+import universe.constellation.orion.viewer.R
+import universe.constellation.orion.viewer.prefs.GlobalOptions
+import universe.constellation.orion.viewer.prefs.OrionTapActivity.Companion.getDefaultAction
+import universe.constellation.orion.viewer.prefs.OrionTapActivity.Companion.getKey
 
-public class TapHelpDialog extends DialogOverView {
-
-    public TapHelpDialog(OrionViewerActivity activity) {
-        super(activity, R.layout.tap, android.R.style.Theme_Translucent);
-        dialog.setTitle(R.string.tap_zones_header);
-
-        TableLayout table = dialog.findViewById(R.id.tap_table);
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        for (int i = 0; i < table.getChildCount(); i++) {
-            TableRow row = (TableRow) table.getChildAt(i);
-            for (int j = 0; j < row.getChildCount(); j++) {
-                View layout = row.getChildAt(j);
-
-                TextView shortText = layout.findViewById(R.id.shortClick);
-                TextView longText = layout.findViewById(R.id.longClick);
-                longText.setVisibility(View.GONE);
-
-                int shortCode = prefs.getInt(OrionTapActivity.getKey(i, j, false), -1);
+class TapHelpDialog(activity: OrionViewerActivity) :
+    DialogOverView(activity, R.layout.tap, android.R.style.Theme_Translucent) {
+    init {
+        dialog.setTitle(R.string.tap_zones_header)
+        val table = dialog.findViewById<TableLayout>(R.id.tap_table)
+        val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
+        for (i in 0 until table.childCount) {
+            val row = table.getChildAt(i) as TableRow
+            for (j in 0 until row.childCount) {
+                val layout = row.getChildAt(j)
+                val shortText = layout.findViewById<TextView>(R.id.shortClick)
+                val longText = layout.findViewById<TextView>(R.id.longClick)
+                longText.visibility = View.GONE
+                var shortCode = prefs.getInt(getKey(i, j, false), -1)
                 if (shortCode == -1) {
-                    shortCode = OrionTapActivity.getDefaultAction(i, j, false);
+                    shortCode = getDefaultAction(i, j, false)
                 }
-                Action saction = Action.getAction(shortCode);
+                val saction = Action.getAction(shortCode)
                 //ffcc66
-                layout.setBackgroundColor(saction == Action.NEXT ? 0xFFddaa44 : (saction == Action.PREV ? 0xFFeebb55 : 0xFFffcc66));
-
-                shortText.setText(activity.getResources().getString(saction.getName()));
-
-                shortText.setTextSize(20);
+                layout.setBackgroundColor(if (saction === Action.NEXT) -0x2255bc else if (saction === Action.PREV) -0x1144ab else -0x339a)
+                shortText.text = activity.getResources().getString(saction.getName())
+                shortText.textSize = 20f
 
 
                 //if (!(i == 1 && j == 1)) {
-                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    layoutParams.addRule(i == 1 && j == 1 ? RelativeLayout.ALIGN_TOP : RelativeLayout.CENTER_IN_PARENT);
-                    shortText.setLayoutParams(layoutParams);
+                val layoutParams = RelativeLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                layoutParams.addRule(if (i == 1 && j == 1) RelativeLayout.ALIGN_TOP else RelativeLayout.CENTER_IN_PARENT)
+                shortText.setLayoutParams(layoutParams)
                 //}
             }
         }
-
-        ImageView view = dialog.findViewById(R.id.tap_help_close);
-        view.setVisibility(View.VISIBLE);
-        view.setClickable(true);
-        view.setOnClickListener(v -> {
-            dialog.dismiss();
-            activity.getGlobalOptions().saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false);
-        });
+        val view = dialog.findViewById<ImageView>(R.id.tap_help_close)
+        view.setVisibility(View.VISIBLE)
+        view.isClickable = true
+        view.setOnClickListener { v: View? ->
+            dialog.dismiss()
+            activity.globalOptions.saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false)
+        }
     }
 
-    public void showDialog() {
-        initDialogSize();
-        dialog.show();
+    fun showDialog() {
+        initDialogSize()
+        dialog.show()
     }
-
 }
