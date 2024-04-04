@@ -69,8 +69,6 @@ abstract class BaseViewerActivityTest(
             device.wait(Until.findObject(By.checkable(true)), LONG_TIMEOUT)
             Assert.assertTrue(device.findObject(By.checkable(true)).isChecked)
             device.pressBack()
-//            Espresso.onView(ViewMatchers.withId(R.id.view))
-//                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
             Assert.assertTrue(BookDescription.SICP.asFile().canRead())
         }
 
@@ -103,16 +101,34 @@ abstract class BaseViewerActivityTest(
     }
 
     protected fun applyGoTo() {
-        onView(ViewMatchers.withId(R.id.page_preview)).perform(ViewActions.click())
-        onView(ViewMatchers.withId(R.id.page_picker_close)).perform(ViewActions.click())
+        if (!globalOptions.isNewUI) {
+            onView(ViewMatchers.withId(R.id.page_preview)).perform(ViewActions.click())
+            onView(ViewMatchers.withId(R.id.page_picker_close)).perform(ViewActions.click())
+        } else {
+            onView(ViewMatchers.withId(R.id.view)).perform(ViewActions.click())
+        }
     }
 
     protected fun openZoom() {
-        openMenuAndSelect(R.string.menu_zoom_text)
+        openMenuAndSelect(R.id.zoom_menu_item, R.string.menu_zoom_text)
     }
 
     protected fun openGoTo() {
-        openMenuAndSelect(R.string.menu_goto_text)
+        openMenuAndSelect(-1, R.string.menu_goto_text)
+    }
+
+    private fun openMenuAndSelect(id: Int, resId: Int) {
+        val newUI = onActivity {
+            it.showMenu()
+            it.isNewUI
+        }
+        if (newUI) {
+            if (id != -1) {
+                onView(ViewMatchers.withId(id)).perform(ViewActions.click())
+            }
+        } else {
+            onView(ViewMatchers.withText(resId)).perform(ViewActions.click())
+        }
     }
 
     private fun openMenuAndSelect(textRes: Int) {

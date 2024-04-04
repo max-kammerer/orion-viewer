@@ -1,7 +1,6 @@
 package universe.constellation.orion.viewer.dialog;
 
 import static universe.constellation.orion.viewer.LoggerKt.log;
-import static universe.constellation.orion.viewer.OrionViewerActivityKt.NEW_MENU;
 import static universe.constellation.orion.viewer.UtilKt.toAbsoluteRect;
 
 import android.app.Dialog;
