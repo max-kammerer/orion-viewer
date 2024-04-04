@@ -1,31 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#00ffffff"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <LinearLayout
-        android:id="@+id/orion_full_scene"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="#FFE6E6E6">
+        android:background="#00ffffff"
+        android:orientation="vertical">
 
-        <include layout="@layout/main_statusbar" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-        <universe.constellation.orion.viewer.view.OrionDrawScene
-            android:id="@+id/view"
+
+        <LinearLayout
+            android:id="@+id/orion_full_scene"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#FFE6E6E6"
+            android:orientation="vertical">
 
-            android:textColor="#000000" />
+            <include layout="@layout/main_statusbar" />
+
+            <universe.constellation.orion.viewer.view.OrionDrawScene
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:textColor="#000000" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/main_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/new_menu" />
+    </LinearLayout>
+
+</FrameLayout>

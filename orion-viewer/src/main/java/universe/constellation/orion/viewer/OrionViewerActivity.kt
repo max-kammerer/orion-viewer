@@ -35,8 +35,6 @@ import universe.constellation.orion.viewer.view.FullScene
 import universe.constellation.orion.viewer.view.OrionDrawScene
 import universe.constellation.orion.viewer.view.OrionStatusBarHelper
 import java.io.File
-import java.io.PrintWriter
-import java.io.StringWriter
 import java.util.concurrent.Executors
 import kotlin.coroutines.resume
 
@@ -90,6 +88,10 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     @Volatile
     internal lateinit var openJob: Job
 
+    internal lateinit var mainMenu: MainMenu
+
+    val isNewUI = globalOptions.isNewUI
+
     val bookId: Long
         get() {
             log("Selecting book id...")
@@ -108,10 +110,15 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         log("Creating OrionViewerActivity...")
 
         orionContext.viewActivity = this
-        onOrionCreate(savedInstanceState, R.layout.main_view)
+        onOrionCreate(savedInstanceState, R.layout.main_view, !isNewUI)
 
         hasActionBar = globalOptions.isActionBarVisible
-        OptionActions.SHOW_ACTION_BAR.doAction(this, !hasActionBar, hasActionBar)
+        if (!isNewUI) {
+            OptionActions.SHOW_ACTION_BAR.doAction(this, !hasActionBar, hasActionBar)
+            findViewById<ViewGroup>(R.id.main_menu)?.visibility = View.GONE
+        } else {
+            findViewById<View>(R.id.toolbar).visibility = View.GONE
+        }
 
         val view = findViewById<OrionDrawScene>(R.id.view)
 
@@ -129,6 +136,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
         initStubController("Processing intent...", "Processing intent...")
         processIntentAndCheckPermission(intent)
+
+        mainMenu = MainMenu(findViewById<LinearLayout>(R.id.main_menu)!!, this)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -321,12 +330,20 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
                 lastPageInfo1.totalPages = newDocument.pageCount
                 orionContext.onNewBook(filePath)
-                invalidateOptionsMenu()
+                invalidateOrHideMenu()
                 doOnLayout(lastPageInfo1)
             } catch (e: Exception) {
                 log(e)
                 throw e
             }
+        }
+    }
+
+    private fun invalidateOrHideMenu() {
+        if (isNewUI) {
+            mainMenu.hideMenu()
+        } else {
+            invalidateOptionsMenu()
         }
     }
 
@@ -736,33 +753,41 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu, menu)
-        if (!hasActionBar) {
-            for (i in 0 until menu.size()) {
-                val item = menu.getItem(i)
-                item.setShowAsAction(SupportMenuItem.SHOW_AS_ACTION_NEVER)
+        if (!isNewUI) {
+            menuInflater.inflate(R.menu.menu, menu)
+            if (!hasActionBar) {
+                for (i in 0 until menu.size()) {
+                    val item = menu.getItem(i)
+                    item.setShowAsAction(SupportMenuItem.SHOW_AS_ACTION_NEVER)
+                }
             }
         }
-        return true
+        return !isNewUI
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        val onPrepareOptionsMenu = super.onPrepareOptionsMenu(menu)
-        val disable = controller?.document is StubDocument
-        if (menu != null) {
-            (0 until menu.size()).forEach {
-                val item = menu.getItem(it)
-                item.isEnabled = !disable || item.itemId !in BOOK_MENU_ITEMS
+        if (!isNewUI) {
+            val onPrepareOptionsMenu = super.onPrepareOptionsMenu(menu)
+            val disable = controller?.document is StubDocument
+            if (menu != null) {
+                (0 until menu.size()).forEach {
+                    val item = menu.getItem(it)
+                    item.isEnabled = !disable || item.itemId !in BOOK_MENU_ITEMS
+                }
             }
-        }
 
-        return onPrepareOptionsMenu
+            return onPrepareOptionsMenu
+        } else {
+            return false
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var action = Action.NONE //will open help
 
-        when (item.itemId) {
+        val itemId = item.itemId
+        getMenuAction(item.itemId)
+        when (itemId) {
             R.id.exit_menu_item -> {
                 finish()
                 return true
@@ -797,6 +822,34 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         return true
     }
 
+    internal fun getMenuAction(id: Int): Action {
+        var action = Action.NONE
+
+        when (id) {
+            R.id.exit_menu_item -> action = Action.CLOSE_ACTION
+            R.id.search_menu_item -> action = Action.SEARCH
+            R.id.crop_menu_item -> action = Action.CROP
+            R.id.zoom_menu_item -> action = Action.ZOOM
+            R.id.add_bookmark_menu_item -> action = Action.ADD_BOOKMARK
+            R.id.goto_menu_item -> action = Action.GOTO
+            R.id.select_text_menu_item -> action = Action.SELECT_TEXT
+            R.id.options_menu_item -> action = Action.OPTIONS
+            R.id.book_options_menu_item -> action = Action.BOOK_OPTIONS
+            R.id.outline_menu_item -> action = Action.SHOW_OUTLINE
+            R.id.open_menu_item -> action = Action.OPEN_BOOK
+            R.id.open_dictionary_menu_item -> action = Action.DICTIONARY
+
+            R.id.bookmarks_menu_item -> action = Action.OPEN_BOOKMARKS
+            R.id.help_menu_item, R.id.about_menu_item -> {
+                val intent = Intent()
+                intent.setClass(this, OrionHelpActivity::class.java)
+                intent.putExtra(OrionHelpActivity.OPEN_ABOUT_TAB, id == R.id.about_menu_item)
+                startActivity(intent)
+            }
+        }
+        return action
+    }
+
     private fun initOptionDialog() {
         dialog = AppCompatDialog(this)
         dialog!!.supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -812,7 +865,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
 
-    private fun doAction(action: Action) {
+    internal fun doAction(action: Action) {
         action.doAction(controller, this, null)
     }
 
@@ -1088,6 +1141,20 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             view.requestLayout()
         }
         openAsTempTestBook = intent.getBooleanExtra(GlobalOptions.OPEN_AS_TEMP_BOOK, false)
+    }
+
+    fun showMenu() {
+        if (isNewUI) {
+            mainMenu.showMenu()
+        } else {
+            toolbar.showOverflowMenu()
+        }
+    }
+
+    fun hideMenu() {
+        if (isNewUI) {
+            mainMenu.hideMenu()
+        }
     }
 
     companion object {

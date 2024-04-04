@@ -60,7 +60,7 @@ public enum Action {
     MENU (R.string.action_menu, R.integer.action_menu) {
         @Override
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            activity.getToolbar().showOverflowMenu();
+            activity.showMenu();
         }
     } ,
 

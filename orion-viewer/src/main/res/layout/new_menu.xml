@@ -44,11 +44,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_alignBottom="@id/menu_top_actions"
-        android:layout_alignTop="@id/menu_botton_actions1"/>
+        android:layout_below="@id/menu_top_actions"
+        android:layout_above="@id/menu_botton_actions_all"/>
 
     <LinearLayout
-        android:id="@+id/menu_botton_actions1"
+        android:id="@+id/menu_botton_actions_all"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -117,10 +117,39 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/cur_page"
+                android:layout_gravity="center_vertical"/>
+
+<!--            <com.google.android.material.divider.MaterialDivider-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                />-->
+
+            <ImageView
+                android:id="@+id/page_picker_minus"
+                style="@style/Menu_Item"
+                android:src="@drawable/new_back" />
+
             <SeekBar
-                android:layout_width="match_parent"
+                android:id="@+id/page_picker_seeker"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:background="@color/orion_orange"></SeekBar>
+                android:background="@color/orion_orange" />
+
+            <ImageView
+                style="@style/Menu_Item"
+                android:id="@+id/page_picker_plus"
+                android:src="@drawable/new_forward" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/page_count"
+                android:layout_gravity="center_vertical"/>
 
         </LinearLayout>
     </LinearLayout>

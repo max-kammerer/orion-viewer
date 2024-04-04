@@ -1,6 +1,7 @@
 package universe.constellation.orion.viewer.dialog;
 
 import static universe.constellation.orion.viewer.LoggerKt.log;
+import static universe.constellation.orion.viewer.OrionViewerActivityKt.NEW_MENU;
 import static universe.constellation.orion.viewer.UtilKt.toAbsoluteRect;
 
 import android.app.Dialog;
@@ -83,8 +84,8 @@ public class SearchDialog extends DialogFragment {
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.TOP;
         OrionViewerActivity orionViewerActivity = requireOrionActivity();
-        androidx.appcompat.widget.Toolbar toolbar = orionViewerActivity.getToolbar();
-        wlp.y = toolbar.getHeight() + 5;
+        int toolbarHeight = orionViewerActivity.isNewUI() ? 0 : orionViewerActivity.getToolbar().getHeight();
+        wlp.y = toolbarHeight + 5;
 
         window.setAttributes(wlp);
         window.setBackgroundDrawable(new ColorDrawable(ALPHA));

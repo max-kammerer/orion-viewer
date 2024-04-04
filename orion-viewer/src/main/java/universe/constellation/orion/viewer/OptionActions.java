@@ -14,6 +14,7 @@ public enum OptionActions {
 
     SHOW_ACTION_BAR("SHOW_ACTION_BAR") {
         public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
+            if (activity.isNewUI()) return;
             Toolbar toolbar = activity.getToolbar();
             ViewGroup.LayoutParams layoutParams = toolbar.getLayoutParams();
             if (newValue) {

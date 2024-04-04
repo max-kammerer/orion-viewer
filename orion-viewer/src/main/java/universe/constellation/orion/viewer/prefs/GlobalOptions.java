@@ -65,6 +65,8 @@ public class GlobalOptions implements Serializable, PageOptions {
 
     public final static String SHOW_STATUS_BAR = "SHOW_STATUS_BAR";
 
+    public final static String NEW_UI = "NEW_UI";
+
     public final static String SHOW_OFFSET_ON_STATUS_BAR = "SHOW_OFFSET_ON_STATUS_BAR";
 
     public final static String TAP_ZONE = "TAP_ZONE";
@@ -290,6 +292,10 @@ public class GlobalOptions implements Serializable, PageOptions {
 
     public boolean isStatusBarVisible() {
         return getBooleanProperty(SHOW_STATUS_BAR, true);
+    }
+
+    public boolean isNewUI() {
+        return getBooleanProperty(NEW_UI, false);
     }
 
     public boolean isShowOffsetOnStatusBar() {
