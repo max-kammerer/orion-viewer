@@ -2,23 +2,22 @@ package universe.constellation.orion.viewer.test.espresso
 
 import android.graphics.Rect
 import android.view.View
-import androidx.test.espresso.Espresso.*
-import androidx.test.espresso.action.ViewActions.*
+import androidx.fragment.app.DialogFragment
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import org.junit.Assert.assertArrayEquals
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.prefs.GlobalOptions
-import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.BaseTestWithActivity
+import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.createTestViewerIntent
-import java.util.concurrent.atomic.AtomicReference
+import universe.constellation.orion.viewer.test.framework.onActivity
 
 class NoBookNoStartTapScreen : BaseTestWithActivity(createTestViewerIntent {
     putExtra(GlobalOptions.SHOW_TAP_HELP, true)
@@ -48,35 +47,21 @@ class BookWithStartTapScreen :
     }
 
     private fun checkSizeAndPosition() {
-        val viewRect = AtomicReference<Rect>()
-        val displayRect = AtomicReference<Rect>()
-        val loc = AtomicReference<IntArray>()
-        activityScenarioRule.scenario.onActivity { it ->
-            val r = Rect()
-            (it.view as View).getLocalVisibleRect(r)
-            viewRect.set(r)
-            val l = IntArray(2)
-            (it.view as View).getLocationOnScreen(l)
-            loc.set(l)
+        onActivity { it ->
+            val findFragmentByTag = it.supportFragmentManager.findFragmentByTag("TAP_HELP")
+            val viewerRect = Rect()
+            val mainFrame = it.findViewById<View>(R.id.main_frame)
+            mainFrame.getGlobalVisibleRect(viewerRect)
 
             val displayMetrics = it.resources.displayMetrics
-            displayRect.set(Rect(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels))
-            //windowRect.set(it.windowManager.currentWindowMetrics.bounds)
-        }
+            val displayRect = Rect(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels)
 
-        onView(withId(R.id.tap_help_close)).check { view, noViewFoundException ->
             val dialogRect = Rect()
-            val rootView = view.rootView
-            rootView.getLocalVisibleRect(dialogRect)
-            val expectedRect = viewRect.get()
-            //assertEquals(expectedRect, dialogRect)
+            val tapHelpContent = (findFragmentByTag!! as DialogFragment).view!!
+            tapHelpContent.getGlobalVisibleRect(dialogRect)
 
-            val l = IntArray(2)
-            rootView.getLocationOnScreen(l)
-            //assertArrayEquals(loc.get(), l)
-
-            val screen = displayRect.get()
-            assert(expectedRect.width() * expectedRect.height() >= 0.8 * screen.width() * screen.height())
+            assert(dialogRect.width() * dialogRect.height() >= 0.9 * viewerRect.width() * viewerRect.height())
+            assert(dialogRect.width() * dialogRect.height() >= 0.9 * displayRect.width() * displayRect.height())
         }
     }
 }
