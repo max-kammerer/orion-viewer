@@ -89,7 +89,7 @@ class PageView(
         wholePageRect.set(pageLayoutManager.defaultSize())
     }
 
-    val layoutInfo: LayoutPosition = LayoutPosition()
+    val layoutInfo: LayoutPosition = LayoutPosition(pageNumber = pageNum)
 
     @Volatile
     lateinit var pageInfo: Deferred<PageInfo>
