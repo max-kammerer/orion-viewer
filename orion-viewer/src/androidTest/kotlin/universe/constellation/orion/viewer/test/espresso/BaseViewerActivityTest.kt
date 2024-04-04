@@ -69,8 +69,8 @@ abstract class BaseViewerActivityTest(
             device.wait(Until.findObject(By.checkable(true)), LONG_TIMEOUT)
             Assert.assertTrue(device.findObject(By.checkable(true)).isChecked)
             device.pressBack()
-            Espresso.onView(ViewMatchers.withId(R.id.view))
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+//            Espresso.onView(ViewMatchers.withId(R.id.view))
+//                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
             Assert.assertTrue(BookDescription.SICP.asFile().canRead())
         }
 

@@ -1057,7 +1057,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     private fun doOnLayout(lastPageInfo1: LastPageInfo) {
         (view as View).doOnLayout {
             if (globalOptions.isShowTapHelp) {
-                TapHelpDialog(this).showDialog()
+                TapHelpDialog().show(supportFragmentManager, "TAP_HELP")
+
+                globalOptions.saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false)
             }
             controller?.drawPage(lastPageInfo1.pageNumber, lastPageInfo1.newOffsetX, lastPageInfo1.newOffsetY, lastPageInfo1.isSinglePageMode)
             controller?.pageLayoutManager?.uploadNewPages()

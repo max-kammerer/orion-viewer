@@ -119,6 +119,9 @@ interface Document : ImagePostProcessor {
     fun authenticate(password: String): Boolean = true
 }
 
+val Document.lastPageNum0
+    get() = pageCount - 1
+
 inline fun <T> Document.withPage(pageNum: Int, body: Page.() -> T): T {
     val page = getOrCreatePageAdapter(pageNum)
     try {
