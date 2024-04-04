@@ -31,11 +31,17 @@ fun createContentIntentWithGenerated(fileName: String): Intent {
             .encodedPath(fileName).appendQueryParameter("displayName", fileName).build()
 
         instrumentationContext.grantUriPermission(
-            universe.constellation.orion.viewer.BuildConfig.APPLICATION_ID,
+            BuildConfig.APPLICATION_ID,
             uri,
             Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
         )
         val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileName.fileExtension)
         setDataAndType(uri, mimeType)
+    }
+}
+
+fun BookFile.toOpenIntentWithNewUI(): Intent {
+    return toOpenIntent {
+        putExtra(GlobalOptions.NEW_UI, true)
     }
 }

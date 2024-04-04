@@ -42,6 +42,14 @@ fun BaseTestWithActivity.checkNotEquals(message: String, expected: Int, actual: 
     }
 }
 
+fun BaseTestWithActivity.checkEquals(message: String, expected: Int, actual: Int, namePrefix: String = name.methodName) {
+    if (expected != actual) {
+        screenshotRule.takeScreenshot(namePrefix)
+        logError(message)
+        Assert.assertEquals(message, expected, actual)
+    }
+}
+
 fun BaseTestWithActivity.checkTrue(message: String, condition: Boolean, namePrefix: String = name.methodName) {
     if (!condition) {
         screenshotRule.takeScreenshot(namePrefix)
