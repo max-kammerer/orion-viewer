@@ -39,6 +39,7 @@ import universe.constellation.orion.viewer.bitmap.DeviceInfo
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.document.Page
+import universe.constellation.orion.viewer.document.lastPageNum0
 import universe.constellation.orion.viewer.layout.CropMargins
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.LayoutStrategy
@@ -358,3 +359,6 @@ class Controller(
         }
     }
 }
+
+val Controller.lastPageNum0
+    get() = document.lastPageNum0

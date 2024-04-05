@@ -44,7 +44,7 @@ fun log(m: String, e: Exception) {
 }
 
 inline fun errorInDebug(message: String) {
-    log("Error: $message")
+    logError(message)
     if (BuildConfig.DEBUG) {
         error(message)
     }
