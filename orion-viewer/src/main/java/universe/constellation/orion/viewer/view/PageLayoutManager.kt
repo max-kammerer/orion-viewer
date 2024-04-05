@@ -132,7 +132,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
     }
 
     private fun doScrollOnly(xPos: Float, yPos: Float, distanceX: Float, distanceY: Float, isTapNavigation: Boolean = false) {
-        val distanceY2 = clampLimits(distanceY)
+        val distanceY2 = if (isTapNavigation) distanceY else clampLimits(distanceY)
         if (distanceY2 == 0f && distanceX == 0f) return
 
         activePages.forEach {
