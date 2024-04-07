@@ -46,7 +46,7 @@ open class BitmapCache(val size: Int = DEFAULT_BITMAP_CACHE_SIZE) {
             log("BitmapCache: using cached bitmap $bitmap")
         }
         bitmap.eraseColor(Color.TRANSPARENT)
-        println("Cache size ${cachedBitmaps.size}")
+        log("Cache size ${cachedBitmaps.size}")
         return bitmap
     }
 

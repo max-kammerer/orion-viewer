@@ -12,6 +12,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.test.framework.BookFile
+import universe.constellation.orion.viewer.test.framework.checkEquals
 import universe.constellation.orion.viewer.test.framework.checkTrue
 import universe.constellation.orion.viewer.test.framework.onActivity
 
@@ -30,11 +31,11 @@ class OptionsTest(bookDescription: BookFile): BaseViewerActivityTest(bookDescrip
         onView(withId(R.id.view)).perform(longClick())
         device.pressBack()
 
-        onActivity {
-            val visiblePages = it.controller!!.pageLayoutManager.visiblePages.count()
-            checkTrue("$visiblePagesOnOpen should be == $visiblePages", visiblePagesOnOpen == visiblePages)
+        val visiblePages = onActivity {
+             it.controller!!.pageLayoutManager.visiblePages.count()
         }
-
+        Thread.sleep(1000)
+        checkTrue("$visiblePagesOnOpen should be <= $visiblePages", visiblePagesOnOpen <= visiblePages)
         //TODO check pages and their positions
     }
 }

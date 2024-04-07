@@ -23,6 +23,8 @@ import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.android.isAtLeastKitkat
+import universe.constellation.orion.viewer.document.lastPageNum0
+import universe.constellation.orion.viewer.lastPageNum0
 import universe.constellation.orion.viewer.test.framework.BaseTestWithActivity
 import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.BookFile
@@ -119,7 +121,7 @@ abstract class BaseViewerActivityTest(
 
     private fun openMenuAndSelect(id: Int, resId: Int) {
         val newUI = onActivity {
-            it.showMenu()
+            if (it.isNewUI) it.showMenu()
             it.isNewUI
         }
         if (newUI) {
@@ -127,18 +129,20 @@ abstract class BaseViewerActivityTest(
                 onView(ViewMatchers.withId(id)).perform(ViewActions.click())
             }
         } else {
+            openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
             onView(ViewMatchers.withText(resId)).perform(ViewActions.click())
         }
     }
 
-    private fun openMenuAndSelect(textRes: Int) {
-        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
-        val text = appContext.getString(textRes)
-        if (isAtLeastKitkat()) {
-            device.wait(Until.findObject(By.textContains(text)), 1000)
+    protected val currentPage0: Int
+        get() = onActivity {
+            it.controller!!.currentPage
         }
-        onView(ViewMatchers.withText(text)).perform(ViewActions.click())
-    }
+
+    val lastPageNumber0: Int
+        get() = onActivity {
+            it.controller!!.lastPageNum0
+        }
 }
 
 internal fun setSeekBarProgress(transform: (Int) -> Int): ViewAction {
