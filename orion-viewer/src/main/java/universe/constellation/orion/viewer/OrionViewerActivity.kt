@@ -90,7 +90,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     internal lateinit var mainMenu: MainMenu
 
-    val isNewUI = globalOptions.isNewUI
+    var isNewUI: Boolean = false
+        private set
 
     val bookId: Long
         get() {
@@ -108,7 +109,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     @SuppressLint("MissingSuperCall")
     public override fun onCreate(savedInstanceState: Bundle?) {
         log("Creating OrionViewerActivity...")
-
+        updateGlobalOptionsFromIntent(intent)
+        isNewUI = globalOptions.isNewUI
         orionContext.viewActivity = this
         onOrionCreate(savedInstanceState, R.layout.main_view, !isNewUI)
 
@@ -117,7 +119,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             OptionActions.SHOW_ACTION_BAR.doAction(this, !hasActionBar, hasActionBar)
             findViewById<ViewGroup>(R.id.main_menu)?.visibility = View.GONE
         } else {
-            findViewById<View>(R.id.toolbar).visibility = View.GONE
+            findViewById<View>(R.id.toolbar)?.visibility = View.GONE
         }
 
         val view = findViewById<OrionDrawScene>(R.id.view)
@@ -208,7 +210,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             //UGLY hack: otherwise Espresso can't recognize that it's test activity
             setIntent(intent)
         }
-        processAdditionalOptionsInIntent(intent)
         myState = MyState.PROCESSING_INTENT
 
         val uri = intent.data
@@ -1127,10 +1128,15 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         controller?.destroy()
     }
 
-    private fun processAdditionalOptionsInIntent(intent: Intent) {
+    private fun updateGlobalOptionsFromIntent(intent: Intent) {
         if (intent.hasExtra(GlobalOptions.SHOW_TAP_HELP)) {
             val showTapHelp = intent.getBooleanExtra(GlobalOptions.SHOW_TAP_HELP, false)
             globalOptions.saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, showTapHelp)
+        }
+
+        if (intent.hasExtra(GlobalOptions.NEW_UI)) {
+            val newUI = intent.getBooleanExtra(GlobalOptions.NEW_UI, false)
+            globalOptions.saveBooleanProperty(GlobalOptions.NEW_UI, newUI)
         }
 
         if (intent.hasExtra(GlobalOptions.TEST_SCREEN_WIDTH) && intent.hasExtra(GlobalOptions.TEST_SCREEN_HEIGHT)) {
