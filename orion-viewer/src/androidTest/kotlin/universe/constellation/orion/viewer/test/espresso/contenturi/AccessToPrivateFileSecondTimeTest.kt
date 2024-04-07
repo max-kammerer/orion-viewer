@@ -20,12 +20,9 @@ import org.junit.Test
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.test.framework.BaseInstrumentationTest
-import universe.constellation.orion.viewer.test.framework.awaitBookLoading
 import universe.constellation.orion.viewer.test.framework.createContentIntentWithGenerated
 import universe.constellation.orion.viewer.test.framework.onActivityRes
 import java.io.File
-import java.nio.file.Files
-import java.nio.file.attribute.BasicFileAttributes
 
 @Ignore
 @SdkSuppress(minSdkVersion = Build.VERSION_CODES.KITKAT)
@@ -61,7 +58,6 @@ class AccessToPrivateFileSecondTimeTest : BaseInstrumentationTest() {
 
     private fun ActivityScenario<OrionViewerActivity>.checkFileWasOpen() {
         onView(withId(R.id.view)).check(ViewAssertions.matches(isCompletelyDisplayed()))
-        awaitBookLoading()
         onActivity {
             Assert.assertNotNull(it.controller)
             Assert.assertEquals(

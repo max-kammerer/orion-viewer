@@ -29,6 +29,7 @@ import universe.constellation.orion.viewer.android.isContentScheme
 import universe.constellation.orion.viewer.android.isContentUri
 import universe.constellation.orion.viewer.filemanager.FileChooserAdapter
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
+import universe.constellation.orion.viewer.prefs.OrionApplication
 import java.io.File
 
 class ResourceIdAndString(val id: Int, val value: String) {
@@ -220,6 +221,8 @@ open class FallbackDialogs {
             targetFileUri: Uri,
             callbackAction: () -> Unit
         ) {
+            val res = (this as OrionBaseActivity).orionContext.idlingRes
+            res.busy()
             val handler = CoroutineExceptionHandler { _, exception ->
                 exception.printStackTrace()
                 showErrorReportDialog(
@@ -245,6 +248,7 @@ open class FallbackDialogs {
                     callbackAction()
                 } finally {
                     progressBar.dismiss()
+                    res.free()
                 }
             }
         }

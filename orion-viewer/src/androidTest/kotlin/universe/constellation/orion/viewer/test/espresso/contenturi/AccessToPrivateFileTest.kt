@@ -79,7 +79,6 @@ class AccessToPrivateFileTest(private val simpleFileName: String) :
 
     private fun checkFileWasOpen() {
         device.wait(Until.findObject(By.clazz(OrionDrawScene::class.java)), LONG_TIMEOUT)
-        awaitBookLoading()
         onActivity {
             Assert.assertNotNull(it.controller)
             Assert.assertEquals(

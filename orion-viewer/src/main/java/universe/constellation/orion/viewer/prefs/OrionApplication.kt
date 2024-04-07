@@ -27,6 +27,7 @@ import android.os.Build
 import android.os.Build.VERSION.CODENAME
 import android.os.Build.VERSION.RELEASE
 import android.preference.PreferenceManager
+import org.jetbrains.annotations.VisibleForTesting
 import universe.constellation.orion.viewer.AndroidLogger
 import universe.constellation.orion.viewer.BuildConfig.VERSION_NAME
 import universe.constellation.orion.viewer.LastPageInfo
@@ -40,15 +41,13 @@ import universe.constellation.orion.viewer.device.OnyxDevice
 import universe.constellation.orion.viewer.device.OnyxUtil
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.logger
+import universe.constellation.orion.viewer.test.IdlingResource
 import java.util.Locale
 import kotlin.properties.Delegates
 
-/**
- * User: mike
- * Date: 23.01.12
- * Time: 20:03
- */
 class OrionApplication : Application() {
+
+    internal var idlingRes = IdlingResource()
 
     val options: GlobalOptions by lazy {
         GlobalOptions(this, PreferenceManager.getDefaultSharedPreferences(this), true)
@@ -124,7 +123,8 @@ class OrionApplication : Application() {
             log("Updating locale to $langCode from ${defaultLocale.language}")
             val dm = res.displayMetrics
             val conf = res.configuration
-            conf.locale = if (langCode == null || "DEFAULT" == langCode) defaultLocale else Locale(langCode)
+            conf.locale =
+                if (langCode == null || "DEFAULT" == langCode) defaultLocale else Locale(langCode)
             res.updateConfiguration(conf, dm)
         } catch (e: Exception) {
             log("Error setting locale: " + langCode!!, e)
@@ -205,10 +205,13 @@ class OrionApplication : Application() {
 
         @JvmField
         val MANUFACTURER = getField("MANUFACTURER")
+
         @JvmField
         val MODEL = getField("MODEL")
+
         @JvmField
         val DEVICE = getField("DEVICE")
+
         @JvmField
         val HARDWARE = getField("HARDWARE")
 
@@ -216,15 +219,18 @@ class OrionApplication : Application() {
         val ONYX_DEVICE = "ONYX".equals(MANUFACTURER, ignoreCase = true) && OnyxUtil.isEinkDevice
 
         @JvmField
-        val RK30SDK = "rk30sdk".equals(MODEL, ignoreCase = true) && ("T62D".equals(DEVICE, ignoreCase = true) || DEVICE.lowercase(Locale.getDefault()).contains("onyx"))
+        val RK30SDK = "rk30sdk".equals(MODEL, ignoreCase = true) && ("T62D".equals(
+            DEVICE,
+            ignoreCase = true
+        ) || DEVICE.lowercase(Locale.getDefault()).contains("onyx"))
 
         private fun getField(name: String): String =
-                try {
-                    Build::class.java.getField(name).get(null) as String
-                } catch (e: Exception) {
-                    log("Exception on extracting Build property: $name")
-                    "!ERROR!"
-                }
+            try {
+                Build::class.java.getField(name).get(null) as String
+            } catch (e: Exception) {
+                log("Exception on extracting Build property: $name")
+                "!ERROR!"
+            }
 
 
         @JvmField

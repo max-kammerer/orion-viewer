@@ -31,6 +31,7 @@ import universe.constellation.orion.viewer.prefs.initalizer
 import universe.constellation.orion.viewer.selection.NewTouchProcessor
 import universe.constellation.orion.viewer.selection.NewTouchProcessorWithScale
 import universe.constellation.orion.viewer.selection.SelectionAutomata
+import universe.constellation.orion.viewer.test.IdlingResource
 import universe.constellation.orion.viewer.view.FullScene
 import universe.constellation.orion.viewer.view.OrionDrawScene
 import universe.constellation.orion.viewer.view.OrionStatusBarHelper
@@ -84,9 +85,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         get() = fullScene.statusBarHelper
 
     private var openAsTempTestBook = false
-
-    @Volatile
-    internal lateinit var openJob: Job
 
     internal lateinit var mainMenu: MainMenu
 
@@ -283,7 +281,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         val stubController = initStubController(filePath, "Loading...")
         val stubDocument = stubController.document as StubDocument
 
-        openJob = GlobalScope.launch(Dispatchers.Main) {
+        orionContext.idlingRes.busy()
+
+        GlobalScope.launch(Dispatchers.Main) {
             log("Trying to open file: $filePath")
             val rootJob = Job()
             val executor = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
@@ -298,6 +298,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 updateViewOnNewBook(stubDocument.title)
                 showErrorReportDialog(filePath, e, intent)
                 executor.close()
+                orionContext.idlingRes.free()
                 return@launch
             }
 
@@ -336,6 +337,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             } catch (e: Exception) {
                 log(e)
                 throw e
+            } finally {
+                orionContext.idlingRes.free()
             }
         }
     }

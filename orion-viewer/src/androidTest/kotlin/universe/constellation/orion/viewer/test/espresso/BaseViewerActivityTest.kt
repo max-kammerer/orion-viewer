@@ -10,7 +10,6 @@ import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
@@ -23,7 +22,6 @@ import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.android.isAtLeastKitkat
-import universe.constellation.orion.viewer.document.lastPageNum0
 import universe.constellation.orion.viewer.lastPageNum0
 import universe.constellation.orion.viewer.test.framework.BaseTestWithActivity
 import universe.constellation.orion.viewer.test.framework.BookDescription
@@ -78,7 +76,7 @@ abstract class BaseViewerActivityTest(
     }
 
     private fun checkStartInvariant() {
-        awaitBookLoading()
+        Espresso.onIdle()
         activityScenarioRule.scenario.onActivity {
             controller = it.controller!!
             Assert.assertEquals(it.controller!!.document.filePath, bookDescription.asPath())
@@ -121,7 +119,7 @@ abstract class BaseViewerActivityTest(
 
     private fun openMenuAndSelect(id: Int, resId: Int) {
         val newUI = onActivity {
-            if (it.isNewUI) it.showMenu()
+            it.showMenu()
             it.isNewUI
         }
         if (newUI) {
@@ -129,7 +127,10 @@ abstract class BaseViewerActivityTest(
                 onView(ViewMatchers.withId(id)).perform(ViewActions.click())
             }
         } else {
-            openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
+            val text = appContext.getString(resId)
+            if (isAtLeastKitkat()) {
+                device.wait(Until.findObject(By.textContains(text)), 1000)
+            }
             onView(ViewMatchers.withText(resId)).perform(ViewActions.click())
         }
     }

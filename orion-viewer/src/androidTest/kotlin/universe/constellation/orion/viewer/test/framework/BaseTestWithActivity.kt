@@ -3,12 +3,13 @@ package universe.constellation.orion.viewer.test.framework
 import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ActivityScenario
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.runBlocking
+import org.junit.After
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Rule
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.logError
@@ -23,9 +24,6 @@ abstract class BaseTestWithActivity(startIntent: Intent) : BaseInstrumentationTe
     @get:Rule
     val activityScenarioRule = activityScenarioRule<OrionViewerActivity>(startIntent)
 
-    protected fun awaitBookLoading() {
-        activityScenarioRule.scenario.awaitBookLoading()
-    }
 }
 
 fun BaseInstrumentationTest.doFail(message: String, namePrefix: String = name.methodName): Nothing {
@@ -78,15 +76,6 @@ fun <T: Any> ActivityScenario<OrionViewerActivity>.onActivityRes(body: (OrionVie
     return res
 }
 
-fun ActivityScenario<OrionViewerActivity>.awaitBookLoading() {
-    lateinit var job: Job
-    onActivity {
-        job = it.openJob
-    }
-    runBlocking {
-        job.join()
-    }
-}
 
 val instrumentationContext: Context
     get() = InstrumentationRegistry.getInstrumentation().context
