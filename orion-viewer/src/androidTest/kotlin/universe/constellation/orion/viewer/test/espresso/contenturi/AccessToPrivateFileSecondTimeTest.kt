@@ -1,19 +1,14 @@
 package universe.constellation.orion.viewer.test.espresso.contenturi
 
 import android.os.Build
-import android.widget.Button
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.launchActivity
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withSubstring
 import androidx.test.filters.SdkSuppress
-import org.hamcrest.core.AllOf
-import org.hamcrest.core.IsNot.not
 import org.junit.Assert
 import org.junit.Ignore
 import org.junit.Test
@@ -24,7 +19,6 @@ import universe.constellation.orion.viewer.test.framework.createContentIntentWit
 import universe.constellation.orion.viewer.test.framework.onActivityRes
 import java.io.File
 
-@Ignore
 @SdkSuppress(minSdkVersion = Build.VERSION_CODES.KITKAT)
 class AccessToPrivateFileSecondTimeTest : BaseInstrumentationTest() {
 
@@ -37,14 +31,14 @@ class AccessToPrivateFileSecondTimeTest : BaseInstrumentationTest() {
             launchActivity<OrionViewerActivity>(createContentIntentWithGenerated(fileName))
         var time = -1L
         firstAttempt.use {
-            onView(AllOf.allOf(withSubstring("temporary"), not(isAssignableFrom(Button::class.java)))).perform(ViewActions.click())
-            it.checkFileWasOpen()
+            onTextNotButtonView(R.string.fileopen_open_in_temporary_file).perform(ViewActions.click())
+            it.checkFileWasOpened()
             time = getFileModificationTime(it)
         }
 
         launchActivity<OrionViewerActivity>(createContentIntentWithGenerated(fileName)).use {
             onView(withId(R.id.view)).check(ViewAssertions.matches(isCompletelyDisplayed()))
-            it.checkFileWasOpen()
+            it.checkFileWasOpened()
             val newTime = getFileModificationTime(it)
             Assert.assertEquals(time, newTime)
         }
@@ -56,7 +50,7 @@ class AccessToPrivateFileSecondTimeTest : BaseInstrumentationTest() {
             file.lastModified()
         }
 
-    private fun ActivityScenario<OrionViewerActivity>.checkFileWasOpen() {
+    private fun ActivityScenario<OrionViewerActivity>.checkFileWasOpened() {
         onView(withId(R.id.view)).check(ViewAssertions.matches(isCompletelyDisplayed()))
         onActivity {
             Assert.assertNotNull(it.controller)
