@@ -37,9 +37,8 @@ class RotationTest : BaseViewerActivityTest(BookDescription.SICP) {
         device.waitForIdle()
 
         try {
-            var newOrientation: Int = Int.MAX_VALUE
-            onActivity {
-                newOrientation = it.resources!!.configuration.orientation
+            val newOrientation = onActivity {
+                it.resources!!.configuration.orientation
             }
 
             checkNotEquals("Orientation not changed: $orientation", orientation, newOrientation)
