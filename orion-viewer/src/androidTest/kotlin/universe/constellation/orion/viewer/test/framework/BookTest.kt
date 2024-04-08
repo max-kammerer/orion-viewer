@@ -53,9 +53,15 @@ open class BookFile(val simpleFileName: String) {
 
         private val EXTENDED_HARD_CODED_TEST = System.getenv("test.books.extended")?.toBoolean() ?: false
 
+        private val DEFAULT_BOOKS = listOf(
+            ALICE,
+            DJVU_SPEC,
+            SICP
+        )
+
         fun testEntriesWithCustoms(): List<BookFile> {
             val files = BaseTest.testDataFolder.listFiles()
-            if (files == null || files.isEmpty()) return hardCodedEntries()
+            if (files.isNullOrEmpty() || files.count { it.isFile } < DEFAULT_BOOKS.size) return hardCodedEntries()
             return files.mapNotNull {
                 if (it.isDirectory) {
                     null
@@ -79,11 +85,7 @@ open class BookFile(val simpleFileName: String) {
                 "quest.pdf",
                 SICP
             ) else {
-                listOf(
-                    ALICE,
-                    DJVU_SPEC,
-                    SICP
-                )
+                DEFAULT_BOOKS
             }).map {
                 BookFile(it)
             }
