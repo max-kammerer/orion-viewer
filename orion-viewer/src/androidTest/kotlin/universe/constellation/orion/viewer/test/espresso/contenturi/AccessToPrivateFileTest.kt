@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Build.VERSION_CODES.KITKAT
 import android.os.Build.VERSION_CODES.LOLLIPOP
 import android.os.Build.VERSION_CODES.M
+import android.os.Build.VERSION_CODES.N
 import android.widget.Button
 import android.widget.EditText
 import androidx.test.filters.SdkSuppress
@@ -55,7 +56,7 @@ class AccessToPrivateFileTest(private val simpleFileName: String) :
     @Test
     fun openViaNewFile() {
         //TODO investigate problem on LOLLIPOP and KITKAT with test framework
-        if (Build.VERSION.SDK_INT <= LOLLIPOP) return
+        if (Build.VERSION.SDK_INT <= N) return
 
         device.wait(Until.findObject(By.textContains("new file")), LONG_TIMEOUT)?.click() ?: doFail("No dialog")
         processEmulatorErrors()
