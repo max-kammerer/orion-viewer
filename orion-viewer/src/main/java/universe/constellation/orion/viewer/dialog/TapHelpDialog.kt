@@ -1,5 +1,6 @@
 package universe.constellation.orion.viewer.dialog
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.View
@@ -11,7 +12,9 @@ import android.widget.TableRow
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import universe.constellation.orion.viewer.Action
+import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.R
+import universe.constellation.orion.viewer.analytics.TAP_HELP_DIALOG
 import universe.constellation.orion.viewer.prefs.OrionTapActivity.Companion.getDefaultAction
 import universe.constellation.orion.viewer.prefs.OrionTapActivity.Companion.getKey
 
@@ -63,4 +66,8 @@ class TapHelpDialog : DialogFragment(R.layout.tap)  {
         }
     }
 
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        (activity as? OrionViewerActivity)?.analytics?.dialog(TAP_HELP_DIALOG, false)
+    }
 }

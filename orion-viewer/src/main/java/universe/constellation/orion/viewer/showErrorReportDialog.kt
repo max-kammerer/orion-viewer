@@ -8,10 +8,11 @@ import android.os.Build
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import universe.constellation.orion.viewer.analytics.SHOW_ERROR_DIALOG
 import java.io.PrintWriter
 import java.io.StringWriter
 
-private fun Throwable.exceptionStackTrace(): String {
+internal fun Throwable.exceptionStackTrace(): String {
     val exceptionWriter = StringWriter()
     val printWriter = PrintWriter(exceptionWriter)
     printStackTrace(printWriter)
@@ -19,19 +20,19 @@ private fun Throwable.exceptionStackTrace(): String {
     return exceptionWriter.toString()
 }
 
-internal fun Activity.showErrorReportDialog(dialogTitle: Int, messageTitle: Int, intent: Intent, exception: Throwable? = null) {
+internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: Int, messageTitle: Int, intent: Intent, exception: Throwable? = null) {
     showErrorReportDialog(resources.getString(dialogTitle), resources.getString(messageTitle), intent, exception)
 }
 
-internal fun Activity.showErrorReportDialog(dialogTitle: Int, messageTitle: Int, info: String, exception: Throwable? = null) {
+internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: Int, messageTitle: Int, info: String, exception: Throwable? = null) {
     showErrorReportDialog(resources.getString(dialogTitle), resources.getString(messageTitle), info, exception)
 }
 
-internal fun Activity.showErrorReportDialog(dialogTitle: String, messageTitle: String, intent: Intent, exception: Throwable? = null) {
+internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: String, messageTitle: String, intent: Intent, exception: Throwable? = null) {
     showErrorReportDialog(dialogTitle, messageTitle, intent.toString(), exception)
 }
 
-internal fun Activity.showErrorReportDialog(dialogTitle: String, messageTitle: String, info: String, exception: Throwable? = null) {
+internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: String, messageTitle: String, info: String, exception: Throwable? = null) {
     val view = layoutInflater.inflate(R.layout.crash_dialog, null)
     val textView = view.findViewById<TextView>(R.id.crashTextView)
 
@@ -41,6 +42,7 @@ internal fun Activity.showErrorReportDialog(dialogTitle: String, messageTitle: S
     val header = view.findViewById<TextView>(R.id.crash_message_header)
     header.text = dialogTitle
 
+    analytics.dialog(SHOW_ERROR_DIALOG, true)
     val dialog = AlertDialog.Builder(this).setView(view).setTitle(messageTitle).setPositiveButton(R.string.string_send) { dialog, _ ->
         val viaEmail = view.findViewById<RadioButton>(R.id.crash_send_email).isChecked
         try {
@@ -50,11 +52,12 @@ internal fun Activity.showErrorReportDialog(dialogTitle: String, messageTitle: S
         }
 
         dialog.dismiss()
-
     }.setNegativeButton(R.string.string_cancel) { dialog, _ ->
         dialog.dismiss()
-
+    }.setOnDismissListener {
+        analytics.dialog(SHOW_ERROR_DIALOG, false)
     }.create()
+
     dialog.show()
 
     dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false

@@ -1,6 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: '../project.gradle'
+if (enableAnalytics) {
+    apply plugin: 'com.google.gms.google-services'
+}
 
 project.ext {
     Properties properties = new Properties()
@@ -30,6 +33,10 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
     implementation project(":nativeLibs:djvuModule")
     implementation project(":nativeLibs:mupdfModule")
+    if (enableAnalytics) {
+        implementation 'com.google.firebase:firebase-analytics:19.0.2'
+        implementation 'com.google.firebase:firebase-analytics-ktx:19.0.2'
+    }
 
 
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -73,6 +80,9 @@ android {
         } else {
             archivesBaseName = "orion-viewer-$versionName" + (isAndroid40Build ? "-android40" : "")
         }
+
+        def analyticsPackage = "" + applicationId + ".analytics"
+        buildConfigField "${analyticsPackage}.Analytics", "ANALYTICS", enableAnalytics ? "new ${analyticsPackage}.FireBaseAnalytics()" : "new ${analyticsPackage}.Analytics()"
     }
 
     sourceSets {
@@ -82,6 +92,9 @@ android {
 
                 if (onyxSdkPath != null) {
                     srcDirs += onyxSdkPath + "/src/main/java/"
+                }
+                if (enableAnalytics) {
+                    srcDirs += "src/analytics/kotlin"
                 }
             }
 
@@ -143,6 +156,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+    }
+
+    buildFeatures {
+        buildConfig true
     }
 }
 

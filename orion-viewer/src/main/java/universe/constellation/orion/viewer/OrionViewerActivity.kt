@@ -18,6 +18,7 @@ import kotlinx.coroutines.*
 import universe.constellation.orion.viewer.FallbackDialogs.Companion.saveFileByUri
 import universe.constellation.orion.viewer.Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN
 import universe.constellation.orion.viewer.Permissions.hasReadStoragePermission
+import universe.constellation.orion.viewer.analytics.TAP_HELP_DIALOG
 import universe.constellation.orion.viewer.android.getFileInfo
 import universe.constellation.orion.viewer.android.isRestrictedAccessPath
 import universe.constellation.orion.viewer.device.Device
@@ -31,7 +32,6 @@ import universe.constellation.orion.viewer.prefs.initalizer
 import universe.constellation.orion.viewer.selection.NewTouchProcessor
 import universe.constellation.orion.viewer.selection.NewTouchProcessorWithScale
 import universe.constellation.orion.viewer.selection.SelectionAutomata
-import universe.constellation.orion.viewer.test.IdlingResource
 import universe.constellation.orion.viewer.view.FullScene
 import universe.constellation.orion.viewer.view.OrionDrawScene
 import universe.constellation.orion.viewer.view.OrionStatusBarHelper
@@ -135,7 +135,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             newTouchProcessor!!.onTouch(event)
         }
         initStubController("Processing intent...", "Processing intent...")
-        processIntentAndCheckPermission(intent)
+        processIntentAndCheckPermission(intent, true)
 
         mainMenu = MainMenu(findViewById<LinearLayout>(R.id.main_menu)!!, this)
     }
@@ -185,7 +185,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        processIntentAndCheckPermission(intent)
+        processIntentAndCheckPermission(intent, intent.getBooleanExtra(USER_INTENT, true))
     }
 
     private fun askReadPermissionOrOpenExisting(fileInfo: FileInfo, intent: Intent) {
@@ -202,8 +202,10 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
     }
 
-    internal fun processIntentAndCheckPermission(intent: Intent) {
+    internal fun processIntentAndCheckPermission(intent: Intent, isUserIntent: Boolean = false) {
         log("Trying to open document by $intent...")
+        analytics.onNewIntent(intent, isUserIntent)
+
         if (!openAsTempTestBook) {
             //UGLY hack: otherwise Espresso can't recognize that it's test activity
             setIntent(intent)
@@ -299,6 +301,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 showErrorReportDialog(filePath, e, intent)
                 executor.close()
                 orionContext.idlingRes.free()
+                analytics.errorDuringInitialFileOpen()
                 return@launch
             }
 
@@ -334,7 +337,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 orionContext.onNewBook(filePath)
                 invalidateOrHideMenu()
                 doOnLayout(lastPageInfo1)
+                analytics.fileOpenedSuccessfully()
             } catch (e: Exception) {
+                analytics.errorDuringInitialFileOpen()
                 log(e)
                 throw e
             } finally {
@@ -1117,6 +1122,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 TapHelpDialog().show(supportFragmentManager, "TAP_HELP")
 
                 globalOptions.saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false)
+                analytics.dialog(TAP_HELP_DIALOG, true)
             }
             controller?.drawPage(lastPageInfo1.pageNumber, lastPageInfo1.newOffsetX, lastPageInfo1.newOffsetY, lastPageInfo1.isSinglePageMode)
             controller?.pageLayoutManager?.uploadNewPages()
@@ -1201,6 +1207,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         const val CROP_RESTRICTION_MIN = -10
 
         const val CROP_RESTRICTION_MAX = 40
+
+        const val USER_INTENT = "USER_INTENT"
     }
 }
 

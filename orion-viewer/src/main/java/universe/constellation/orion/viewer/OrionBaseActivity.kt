@@ -52,6 +52,8 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
     val applicationDefaultOrientation: String
         get() = orionContext.options.getStringProperty(GlobalOptions.SCREEN_ORIENTATION, "DEFAULT")
 
+    val analytics  by lazy { orionContext.analytics }
+
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         onOrionCreate(savedInstanceState, -1)

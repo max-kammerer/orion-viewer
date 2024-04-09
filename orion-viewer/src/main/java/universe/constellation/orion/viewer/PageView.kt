@@ -40,15 +40,15 @@ class PageView(
     val rootJob: Job,
     val pageLayoutManager: PageLayoutManager
 ) {
+    private val analytics = pageLayoutManager.controller.activity.analytics
 
     init {
         if (pageNum < 0) errorInDebug("Invalid page number: $pageNum")
     }
 
     private val handler = CoroutineExceptionHandler { _, ex ->
-        logError("Processing error for page $pageNum")
-        ex.printStackTrace()
-        errorInDebug(ex.message ?: ex.toString())
+        errorInDebug("Processing error for page $pageNum", ex)
+        analytics.error(ex)
     }
 
     val layoutData: LayoutData = LayoutData().apply {

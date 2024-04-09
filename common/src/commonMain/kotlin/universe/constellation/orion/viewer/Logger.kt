@@ -25,9 +25,10 @@ interface Logger {
     fun log(m: String) = println(m)
 
     fun log(m: String?, e: Exception) {
-        println(m)
-        println(e.message)
-        //TODO: e.printStackTrace()
+        if (m != null) {
+            println(m)
+        }
+        e.printStackTrace()
     }
 }
 
@@ -43,8 +44,9 @@ fun log(m: String, e: Exception) {
     logger.log(m, e)
 }
 
-inline fun errorInDebug(message: String) {
+inline fun errorInDebug(message: String, ex: Throwable? = null) {
     logError(message)
+    ex?.printStackTrace()
     if (BuildConfig.DEBUG) {
         error(message)
     }

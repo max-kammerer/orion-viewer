@@ -20,7 +20,6 @@ import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.calcPageLayout
 import universe.constellation.orion.viewer.layout.reset
 import universe.constellation.orion.viewer.log
-import universe.constellation.orion.viewer.logError
 import universe.constellation.orion.viewer.selection.PageAndSelection
 import kotlin.math.abs
 import kotlin.math.max
@@ -29,10 +28,11 @@ private const val VISIBLE_PAGE_LIMIT = 5
 
 class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
 
+    private val analytics = controller.activity.analytics
+
     private val handler = CoroutineExceptionHandler { _, ex ->
-        logError("Processing error in PageLayoutManager")
-        ex.printStackTrace()
-        errorInDebug(ex.message ?: ex.toString())
+        errorInDebug("Processing error in PageLayoutManager", ex)
+        analytics.error(ex)
     }
 
     val bitmapManager: BitmapManager = BitmapManager(this)

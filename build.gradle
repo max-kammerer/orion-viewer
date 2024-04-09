@@ -10,6 +10,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:8.2.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.gms:google-services:4.4.1'
     }
 }
 
@@ -27,6 +28,7 @@ project.ext {
     orionTargetSdk = 33
     orionCompileSdk = 34
     orionBuildToolsVersion = "34.0.0"
+    enableAnalytics = file("orion-viewer/google-services.json").exists()
     if (isCIBuild) {
         orionNdkVersion = "23.2.8568313"
     }

@@ -29,10 +29,13 @@ import android.os.Build.VERSION.RELEASE
 import android.preference.PreferenceManager
 import org.jetbrains.annotations.VisibleForTesting
 import universe.constellation.orion.viewer.AndroidLogger
+import universe.constellation.orion.viewer.BuildConfig
+import universe.constellation.orion.viewer.BuildConfig.BUILD_TYPE
 import universe.constellation.orion.viewer.BuildConfig.VERSION_NAME
 import universe.constellation.orion.viewer.LastPageInfo
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.R
+import universe.constellation.orion.viewer.analytics.Analytics
 import universe.constellation.orion.viewer.bookmarks.BookmarkAccessor
 import universe.constellation.orion.viewer.device.AndroidDevice
 import universe.constellation.orion.viewer.device.EInkDeviceWithoutFastRefresh
@@ -56,6 +59,8 @@ class OrionApplication : Application() {
     val keyBinding: GlobalOptions by lazy {
         GlobalOptions(this, getSharedPreferences("key_binding", Context.MODE_PRIVATE), false)
     }
+
+    val analytics: Analytics by lazy  { Analytics.initialize(contentResolver, BuildConfig.ANALYTICS) }
 
     var tempOptions: TemporaryOptions? = null
         private set

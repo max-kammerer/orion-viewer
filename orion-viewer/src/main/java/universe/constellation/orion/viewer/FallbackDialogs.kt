@@ -24,12 +24,12 @@ import kotlinx.coroutines.withContext
 import universe.constellation.orion.viewer.FallbackDialogs.Companion.saveFileByUri
 import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAccessPermissionOrReadOne
 import universe.constellation.orion.viewer.Permissions.hasReadStoragePermission
+import universe.constellation.orion.viewer.analytics.FALLBACK_DIALOG
 import universe.constellation.orion.viewer.android.isAtLeastKitkat
 import universe.constellation.orion.viewer.android.isContentScheme
 import universe.constellation.orion.viewer.android.isContentUri
 import universe.constellation.orion.viewer.filemanager.FileChooserAdapter
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
-import universe.constellation.orion.viewer.prefs.OrionApplication
 import java.io.File
 
 class ResourceIdAndString(val id: Int, val value: String) {
@@ -99,6 +99,8 @@ open class FallbackDialogs {
 
      //content intent
      private fun createFallbackDialog(activity: OrionViewerActivity, fileInfo: FileInfo?, intent: Intent, title: Int, info: Int, defaultAction: Int?, list: List<Int>): Dialog {
+         activity.analytics.dialog(FALLBACK_DIALOG, true)
+
          val uri = intent.data!!
 
          val view = activity.layoutInflater.inflate(R.layout.intent_problem_dialog, null)
@@ -114,6 +116,12 @@ open class FallbackDialogs {
          if (defaultAction != null) {
              builder.setPositiveButton(defaultAction) { dialog, _ ->
                  processAction(defaultAction, activity, fileInfo, dialog, uri, intent)
+             }
+         }
+
+         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+             builder.setOnDismissListener { _ ->
+                 activity.analytics.dialog(FALLBACK_DIALOG, false)
              }
          }
 
@@ -294,6 +302,7 @@ private fun saveContentInTmpFile(
                 setClass(myActivity.applicationContext, OrionViewerActivity::class.java)
                 data = Uri.fromFile(toFile)
                 addCategory(Intent.CATEGORY_DEFAULT)
+                putExtra(OrionViewerActivity.USER_INTENT, false)
             }
         )
     }
