@@ -5,6 +5,8 @@ build/
 
 # signing params
 signing.gradle
+#analytics
+google-services.json
 
 # Local configuration file (sdk path, etc)
 local.properties
