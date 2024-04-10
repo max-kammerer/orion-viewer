@@ -16,6 +16,8 @@
     <string name="pref_appearance">Appearance</string>
     <string name="pref_behavior">Controls and Behavior</string>
     <string name="pref_fullScreen">Full screen</string>
+    <string name="pref_new_ui">Switch on new UI</string>
+    <string name="pref_new_ui_summary">Application restart is required</string>
     <string name="pref_renderOffPage">Draw off-page space</string>
     <string name="pref_showActionBar">Show Action Bar</string>
     <string name="pref_showActionBar_desc">Show Action Bar (restart needed)</string>

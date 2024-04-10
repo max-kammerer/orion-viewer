@@ -14,6 +14,12 @@
 
             <PreferenceCategory android:title="@string/pref_category_general">
 
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="NEW_UI"
+                    android:summary="@string/pref_new_ui_summary"
+                    android:title="@string/pref_new_ui" />
+
                 <ListPreference
                     android:defaultValue="DEFAULT"
                     android:dialogTitle="@string/pref_application_theme"

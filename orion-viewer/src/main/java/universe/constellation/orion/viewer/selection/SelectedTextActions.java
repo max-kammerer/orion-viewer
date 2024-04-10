@@ -32,7 +32,7 @@ public class SelectedTextActions {
         popup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
         popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
 
-        View view = activity.getLayoutInflater().inflate(R.layout.text_actions, null);
+        View view = activity.getLayoutInflater().inflate(activity.isNewUI() ? R.layout.text_actions_new : R.layout.text_actions, null);
 
         popup.setContentView(view);
 
