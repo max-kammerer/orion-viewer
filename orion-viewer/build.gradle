@@ -111,6 +111,8 @@ android {
             if (doSigning) {
                 signingConfig signingConfigs.release
             }
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
             def api = System.getenv("EMULATOR_API")
