@@ -23,7 +23,7 @@ class FireBaseAnalytics : Analytics() {
         return this
     }
 
-    override fun onNewIntent(intent: Intent, isUserIntent: Boolean) {
+    override fun onNewIntent(intent: Intent, isUserIntent: Boolean, isNewUI: Boolean) {
         lastTime = System.currentTimeMillis()
         if (isUserIntent) {
             intentId = lastTime
@@ -35,6 +35,7 @@ class FireBaseAnalytics : Analytics() {
             param("isUserIntent", isUserIntent.toString())
             param("version_name", BuildConfig.VERSION_NAME)
             param("version_code", BuildConfig.VERSION_CODE.toLong())
+            param("isNewUI", isNewUI.toString())
         }
     }
 

@@ -16,7 +16,7 @@ open class Analytics {
         return this
     }
 
-    open fun onNewIntent(intent: Intent, isUserIntent: Boolean) {
+    open fun onNewIntent(intent: Intent, isUserIntent: Boolean, isNewUI: Boolean) {
 
     }
 
