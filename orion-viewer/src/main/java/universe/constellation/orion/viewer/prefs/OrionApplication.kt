@@ -27,10 +27,10 @@ import android.os.Build
 import android.os.Build.VERSION.CODENAME
 import android.os.Build.VERSION.RELEASE
 import android.preference.PreferenceManager
-import org.jetbrains.annotations.VisibleForTesting
+import androidx.multidex.MultiDex
 import universe.constellation.orion.viewer.AndroidLogger
 import universe.constellation.orion.viewer.BuildConfig
-import universe.constellation.orion.viewer.BuildConfig.BUILD_TYPE
+import universe.constellation.orion.viewer.BuildConfig.DEBUG
 import universe.constellation.orion.viewer.BuildConfig.VERSION_NAME
 import universe.constellation.orion.viewer.LastPageInfo
 import universe.constellation.orion.viewer.OrionViewerActivity
@@ -178,6 +178,14 @@ class OrionApplication : Application() {
             }
         }
     }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        if (DEBUG) {
+            MultiDex.install(this)
+        }
+    }
+
 
     companion object {
         var instance: OrionApplication by Delegates.notNull()
