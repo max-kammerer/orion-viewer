@@ -22,7 +22,7 @@
             style="@style/Menu_Item"
             android:layout_height="wrap_content"
             android:contentDescription="@string/menu_exit_text"
-            android:src="@drawable/new_exit" />
+            app:srcCompat="@drawable/new_exit" />
 
         <TextView
             android:layout_width="0dp"
@@ -34,26 +34,26 @@
         <ImageView
             style="@style/Menu_Item"
             android:id="@+id/open_dictionary_menu_item"
-            android:src="@drawable/new_dictionary"
+            app:srcCompat="@drawable/new_dictionary"
             android:contentDescription="@string/menu_open_dictionary_text"  />
 
         <ImageView
             style="@style/Menu_Item"
             android:id="@+id/book_options_menu_item"
             android:contentDescription="@string/menu_book_preferences"
-            android:src="@drawable/new_book_settings" />
+            app:srcCompat="@drawable/new_book_settings" />
 
         <ImageView
             android:id="@+id/options_menu_item"
             style="@style/Menu_Item"
             android:layout_height="wrap_content"
             android:contentDescription="@string/menu_options_text"
-            android:src="@drawable/new_settings" />
+            app:srcCompat="@drawable/new_settings" />
 
         <ImageView
             style="@style/Menu_Item"
             android:id="@+id/about_menu_item"
-            android:src="@drawable/new_info"
+            app:srcCompat="@drawable/new_info"
             android:contentDescription="@string/menu_about_text" />
 
     </LinearLayout>
@@ -88,30 +88,30 @@
                 android:id="@+id/zoom_menu_item"
                 style="@style/Menu_Item"
                 android:contentDescription="@string/menu_zoom_text"
-                android:src="@drawable/new_zoom" />
+                app:srcCompat="@drawable/new_zoom" />
 
             <ImageView
                 android:id="@+id/crop_menu_item"
                 style="@style/Menu_Item"
                 android:contentDescription="@string/menu_crop_text"
-                android:src="@drawable/new_cut" />
+                app:srcCompat="@drawable/new_cut" />
 
             <ImageView
                 android:id="@+id/bookmarks_menu_item"
                 style="@style/Menu_Item"
-                android:src="@drawable/new_bookmarks"
+                app:srcCompat="@drawable/new_bookmarks"
                 android:contentDescription="@string/menu_bookmarks_text" />
 
             <ImageView
                 android:id="@+id/add_bookmark_menu_item"
                 style="@style/Menu_Item"
                 android:contentDescription="@string/menu_add_bookmark_item"
-                android:src="@drawable/new_bookmark_add" />
+                app:srcCompat="@drawable/new_bookmark_add" />
 
             <ImageView
                 android:id="@+id/outline_menu_item"
                 style="@style/Menu_Item"
-                android:src="@drawable/new_outline"
+                app:srcCompat="@drawable/new_outline"
                 android:contentDescription="@string/menu_outline_text" />
 
             <ImageView
@@ -119,14 +119,14 @@
                 style="@style/Menu_Item"
                 android:contentDescription="@string/menu_search_item"
                 android:padding="5dp"
-                android:src="@drawable/new_search" />
+                app:srcCompat="@drawable/new_search" />
 
 
             <ImageView
                 android:id="@+id/select_text_menu_item"
                 style="@style/Menu_Item"
                 android:contentDescription="@string/menu_select_text"
-                android:src="@drawable/new_select" />
+                app:srcCompat="@drawable/new_select" />
 
         </LinearLayout>
 
@@ -149,7 +149,7 @@
             <ImageView
                 android:id="@+id/page_picker_minus"
                 style="@style/Menu_Item"
-                android:src="@drawable/new_back" />
+                app:srcCompat="@drawable/new_back" />
 
             <SeekBar
                 android:id="@+id/page_picker_seeker"
@@ -161,7 +161,7 @@
             <ImageView
                 style="@style/Menu_Item"
                 android:id="@+id/page_picker_plus"
-                android:src="@drawable/new_forward" />
+                app:srcCompat="@drawable/new_forward" />
 
             <TextView
                 android:layout_width="wrap_content"
