@@ -1,6 +1,7 @@
 package universe.constellation.orion.viewer.analytics
 
 import android.content.Intent
+import android.webkit.MimeTypeMap
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.ParametersBuilder
 import com.google.firebase.analytics.ktx.analytics
@@ -31,12 +32,20 @@ class FireBaseAnalytics : Analytics() {
 
         logEvent("onNewIntent") {
             param("scheme", intent.scheme)
-            param("mime_type", intent.type)
+            param("mime_type", getMimeType(intent))
             param("isUserIntent", isUserIntent.toString())
             param("version_name", BuildConfig.VERSION_NAME)
             param("version_code", BuildConfig.VERSION_CODE.toLong())
             param("isNewUI", isNewUI.toString())
         }
+    }
+
+    private fun getMimeType(intent: Intent): String? {
+        val type = intent.type
+        if (type != null) return type
+        val ext =
+            MimeTypeMap.getFileExtensionFromUrl(intent.data?.toString() ?: return null).takeIf { !it.isNullOrBlank() } ?: return null
+        return MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext)
     }
 
     private fun ParametersBuilder.param(key: String, value: String?) {
