@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="file_manager_title">File Manager</string>
+    <string name="file_manager_select_tip">Please select a file to open in Orion Viewer</string>
+    <string name="file_manager_path">Path:</string>
+    <string name="file_manager_documents">Documents</string>
+    <string name="file_manager_downloads">Downloads</string>
+    <string name="file_manager_sdcard">SD Card</string>
+    <string name="file_manager_grant_read">Read Permissions</string>
+
+    <string-array name="file_manager_paths">
+        <item>Path</item>
+        <item>Downloads</item>
+        <item>Documents</item>
+    </string-array>
+    <string-array name="path_desc">
+        <item>@string/file_manager_path</item>
+        <item>@string/file_manager_documents</item>
+        <item>@string/file_manager_downloads</item>
+    </string-array>
+</resources>

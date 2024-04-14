@@ -102,7 +102,7 @@
         </activity>
 
         <activity android:name=".filemanager.OrionFileManagerActivity"
-                  android:label="@string/app_name"
+                  android:label="@string/file_manager_title"
                   android:theme="@style/Theme.AppCompat.NoActionBar"
                   android:launchMode="singleTask"
                   android:icon="@mipmap/ic_launcher"
@@ -117,12 +117,12 @@
         </activity>
 
         <activity android:name=".OrionSaveFileActivity"
-                  android:label="@string/app_name"
+                  android:label="@string/file_manager_title"
                   android:theme="@style/Theme.AppCompat.NoActionBar"
                   android:icon="@drawable/orion"/>
 
         <activity android:name=".OrionFileSelectorActivity"
-                  android:label="@string/app_name"
+                  android:label="@string/file_manager_title"
                   android:theme="@style/Theme.AppCompat.NoActionBar"
                   android:icon="@drawable/orion"/>
 

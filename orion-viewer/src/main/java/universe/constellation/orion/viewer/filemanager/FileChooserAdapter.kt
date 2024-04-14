@@ -30,9 +30,9 @@ import java.io.File
 import java.io.FilenameFilter
 import java.util.*
 
-class FileChooserAdapter constructor(
+class FileChooserAdapter(
     context: Context,
-    startFolder: String,
+    startFolder: File,
     private val filter: FilenameFilter
 ) : ArrayAdapter<File>(context, R.layout.file_entry, R.id.fileName) {
 
@@ -40,7 +40,7 @@ class FileChooserAdapter constructor(
 
     private val parentFile = File("..")
 
-    var currentFolder: File = File(startFolder)
+    var currentFolder: File = startFolder
         private set
 
     init {

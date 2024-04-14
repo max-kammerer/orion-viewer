@@ -10,6 +10,7 @@ import android.os.Environment
 import android.preference.PreferenceManager
 import android.view.*
 import android.widget.AdapterView
+import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
@@ -21,12 +22,16 @@ import androidx.fragment.app.ListFragment
 import com.google.android.material.tabs.TabLayout
 import universe.constellation.orion.viewer.*
 import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAccessPermissionOrReadOne
+import universe.constellation.orion.viewer.Permissions.hasReadStoragePermission
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity.Companion.LAST_OPENED_DIRECTORY
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import java.io.File
 import java.io.FilenameFilter
 
-open class OrionFileManagerActivity : OrionFileManagerActivityBase(true, true, FileChooserAdapter.DEFAULT_FILTER) {
+open class OrionFileManagerActivity : OrionFileManagerActivityBase(
+    true,
+    FileChooserAdapter.DEFAULT_FILTER
+) {
     companion object {
         const val OPEN_RECENTS_TAB = "OPEN_RECENTS_FILE"
         const val LAST_OPENED_DIRECTORY = "LAST_OPENED_DIR"
@@ -58,7 +63,6 @@ open class OrionFileManagerActivity : OrionFileManagerActivityBase(true, true, F
 
 abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
     private val showRecentsAndSavePath: Boolean = true,
-    private val addToolbar: Boolean = true,
     private val fileNameFilter: FilenameFilter = FileChooserAdapter.DEFAULT_FILTER
 ) : OrionBaseActivity() {
 
@@ -68,40 +72,46 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
 
     private var justCreated: Boolean = false
 
-    private val startFolder: String
+    private val startFolder: File
         @SuppressLint("SdCardPath")
         get() {
             val lastOpenedDir = globalOptions.lastOpenedDirectory
 
             if (lastOpenedDir != null && File(lastOpenedDir).exists()) {
-                return lastOpenedDir
+                return File(lastOpenedDir)
             }
 
-            val path = Environment.getExternalStorageDirectory().path + "/"
-            if (File(path).exists()) {
-                return path
+            val possibleStartFolders = listOf(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                Environment.getExternalStorageDirectory(),
+                File("/system/media/sdcard/")
+            )
+            val startFolder = possibleStartFolders.firstOrNull { it.exists() }
+            if (startFolder != null) {
+                return startFolder
             }
 
-            val path1 = "/system/media/sdcard/"
-            return if (File(path1).exists()) {
-                path1
-            } else Environment.getRootDirectory().absolutePath
-
+            return Environment.getRootDirectory()
         }
 
-    class FileManagerFragment : Fragment() {
-
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-            return inflater.inflate(R.layout.folder_view, container, false)
-
-        }
+    class FileManagerFragment : Fragment(R.layout.folder_view) {
 
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
             (activity as OrionFileManagerActivityBase).initializeFileView(
                 view.findViewById(R.id.listView),
-                view.findViewById(R.id.path)
+                view.findViewById(R.id.path),
+                view
             )
+        }
+
+        override fun onResume() {
+            super.onResume()
+            if (activity !is OrionFileManagerActivity) {
+                view?.findViewById<TextView>(R.id.file_manager_tip)?.visibility = View.GONE
+            }
+            view?.findViewById<TextView>(R.id.file_manager_grant)?.visibility = if (hasReadStoragePermission(requireActivity())) View.GONE else View.VISIBLE
         }
     }
 
@@ -132,7 +142,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        onOrionCreate(savedInstanceState, R.layout.file_manager, addToolbar)
+        onOrionCreate(savedInstanceState, R.layout.file_manager, true)
         log("Creating file manager")
 
         prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
@@ -164,7 +174,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
     }
 
     private fun showPermissionRequestDialog() {
-        if (!checkAndRequestStorageAccessPermissionOrReadOne(Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER, doRequest = false)) {
+        if (!hasReadStoragePermission(this)) {
             AlertDialog.Builder(this).setMessage(R.string.permission_directory_warning)
                 .setPositiveButton(R.string.permission_grant) { _, _ ->
                     checkAndRequestStorageAccessPermissionOrReadOne(Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER)
@@ -185,12 +195,11 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         }
     }
 
-    private fun initializeFileView(list: ListView, path: TextView) {
+    private fun initializeFileView(list: ListView, path: TextView, view: View) {
         list.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
             val file = parent.getItemAtPosition(position) as File
             if (file.isDirectory) {
-                val newFolder = (parent.adapter as FileChooserAdapter).changeFolder(file)
-                path.text = newFolder.absolutePath
+                changeFolder(parent, file, path)
             } else {
                 if (showRecentsAndSavePath) {
                     val absolutePath = file.parentFile?.absolutePath
@@ -200,8 +209,40 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
             }
         }
 
-        path.text = startFolder
+        path.text = startFolder.absolutePath
         list.adapter = FileChooserAdapter(this, startFolder, fileNameFilter)
+
+        if (!setupGotoButton(view, list, path, R.id.file_manager_goto_documents, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)) or
+            !setupGotoButton(view, list, path, R.id.file_manager_goto_downloads, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS))) {
+            setupGotoButton(view, list, path, R.id.file_manager_goto_sdcard, Environment.getExternalStorageDirectory())
+        }
+        val grant = findViewById<Button>(R.id.file_manager_grant)
+        grant.setOnClickListener {
+            checkAndRequestStorageAccessPermissionOrReadOne(Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER)
+        }
+    }
+
+    private fun setupGotoButton(root: View, list: ListView, path: TextView,  id: Int, file: File): Boolean {
+        val goto = root.findViewById<Button>(id)
+        if (file.exists()) {
+            goto.setOnClickListener {
+                changeFolder(list, file, path)
+            }
+            goto.visibility = View.VISIBLE
+            return true
+        } else {
+            goto.visibility = View.GONE
+            return false
+        }
+    }
+
+    private fun changeFolder(
+        parent: AdapterView<*>,
+        file: File,
+        path: TextView
+    ) {
+        val newFolder = (parent.adapter as FileChooserAdapter).changeFolder(file)
+        path.text = newFolder.absolutePath
     }
 
     protected open fun openFile(file: File) {

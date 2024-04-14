@@ -38,8 +38,7 @@ import java.io.FilenameFilter
 import java.util.Locale
 
 class OrionSaveFileActivity : OrionFileManagerActivityBase(
-    false,  false,
-    FilenameFilter { dir, filename ->
+    false, FilenameFilter { dir, filename ->
         File(dir, filename).isDirectory
     }) {
 
@@ -98,8 +97,7 @@ class OrionSaveFileActivity : OrionFileManagerActivityBase(
 }
 
 class OrionFileSelectorActivity : OrionFileManagerActivityBase(
-    false, false,
-    FilenameFilter { dir, filename ->
+    false, FilenameFilter { dir, filename ->
         File(dir, filename).isDirectory || filename.lowercase(Locale.getDefault()).endsWith(".xml")
     }
 ) {
