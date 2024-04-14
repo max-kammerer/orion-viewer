@@ -8,7 +8,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.preference.PreferenceManager
-import android.view.*
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.ListView
@@ -20,10 +22,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.ListFragment
 import com.google.android.material.tabs.TabLayout
-import universe.constellation.orion.viewer.*
+import universe.constellation.orion.viewer.OrionBaseActivity
+import universe.constellation.orion.viewer.OrionViewerActivity
+import universe.constellation.orion.viewer.Permissions
 import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAccessPermissionOrReadOne
 import universe.constellation.orion.viewer.Permissions.hasReadStoragePermission
+import universe.constellation.orion.viewer.R
+import universe.constellation.orion.viewer.R.id.file_manager_goto_documents
+import universe.constellation.orion.viewer.R.id.file_manager_goto_downloads
+import universe.constellation.orion.viewer.R.id.file_manager_goto_sdcard
+import universe.constellation.orion.viewer.android.isAtLeastKitkat
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity.Companion.LAST_OPENED_DIRECTORY
+import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import java.io.File
 import java.io.FilenameFilter
@@ -72,38 +82,94 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
 
     private var justCreated: Boolean = false
 
-    private val startFolder: File
-        @SuppressLint("SdCardPath")
-        get() {
-            val lastOpenedDir = globalOptions.lastOpenedDirectory
-
-            if (lastOpenedDir != null && File(lastOpenedDir).exists()) {
-                return File(lastOpenedDir)
-            }
-
-            val possibleStartFolders = listOf(
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                Environment.getExternalStorageDirectory(),
-                File("/system/media/sdcard/")
-            )
-            val startFolder = possibleStartFolders.firstOrNull { it.exists() }
-            if (startFolder != null) {
-                return startFolder
-            }
-
-            return Environment.getRootDirectory()
-        }
 
     class FileManagerFragment : Fragment(R.layout.folder_view) {
 
+        private val DIRECTORY_DOCUMENTS
+            get() = if (isAtLeastKitkat()) Environment.DIRECTORY_DOCUMENTS else "Documents"
+
+        private val startFolder: File
+            @SuppressLint("SdCardPath")
+            get() {
+                val lastOpenedDir =
+                    (activity as OrionFileManagerActivityBase).globalOptions.lastOpenedDirectory
+
+                if (lastOpenedDir != null && File(lastOpenedDir).exists()) {
+                    return File(lastOpenedDir)
+                }
+
+                val possibleStartFolders = listOf(
+                    Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS),
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                    Environment.getExternalStorageDirectory(),
+                    File("/system/media/sdcard/")
+                )
+                val startFolder = possibleStartFolders.firstOrNull { it.exists() }
+                if (startFolder != null) {
+                    return startFolder
+                }
+
+                return Environment.getRootDirectory()
+            }
+
+        private lateinit var listView: ListView
+        private lateinit var pathView: TextView
+
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
-            (activity as OrionFileManagerActivityBase).initializeFileView(
-                view.findViewById(R.id.listView),
-                view.findViewById(R.id.path),
-                view
-            )
+            listView = view.findViewById(R.id.listView)
+            pathView = view.findViewById(R.id.path)
+
+            val myActivity = requireActivity() as OrionFileManagerActivityBase
+
+            listView.onItemClickListener =
+                AdapterView.OnItemClickListener { parent, _, position, _ ->
+                    val file = parent.getItemAtPosition(position) as File
+                    if (file.isDirectory) {
+                        changeFolder(file)
+                    } else {
+                        if (myActivity.showRecentsAndSavePath) {
+                            val absolutePath = file.parentFile?.absolutePath
+                            myActivity.prefs!!.edit().putString(LAST_OPENED_DIRECTORY, absolutePath)
+                                .apply()
+                        }
+                        myActivity.openFile(file)
+                    }
+                }
+            pathView.text = startFolder.absolutePath
+            listView.adapter =
+                FileChooserAdapter(requireActivity(), startFolder, myActivity.fileNameFilter)
+
+            if (!setupGotoButton(file_manager_goto_documents, Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS)) or
+                !setupGotoButton(file_manager_goto_downloads, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS))
+            ) {
+                setupGotoButton(file_manager_goto_sdcard,Environment.getExternalStorageDirectory())
+            }
+            val grant = requireView().findViewById<Button>(R.id.file_manager_grant)
+            grant.setOnClickListener {
+                requireActivity().checkAndRequestStorageAccessPermissionOrReadOne(Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER)
+            }
+        }
+
+        private fun setupGotoButton(id: Int, file: File): Boolean {
+            val goto = requireView().findViewById<Button>(id)
+            if (file.exists()) {
+                goto.setOnClickListener {
+                    changeFolder(file)
+                }
+                goto.visibility = View.VISIBLE
+                return true
+            } else {
+                goto.visibility = View.GONE
+                return false
+            }
+        }
+
+        private fun changeFolder(
+            file: File
+        ) {
+            val newFolder = (listView.adapter as FileChooserAdapter).changeFolder(file)
+            pathView.text = newFolder.absolutePath
         }
 
         override fun onResume() {
@@ -111,7 +177,8 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
             if (activity !is OrionFileManagerActivity) {
                 view?.findViewById<TextView>(R.id.file_manager_tip)?.visibility = View.GONE
             }
-            view?.findViewById<TextView>(R.id.file_manager_grant)?.visibility = if (hasReadStoragePermission(requireActivity())) View.GONE else View.VISIBLE
+            view?.findViewById<TextView>(R.id.file_manager_grant)?.visibility =
+                if (hasReadStoragePermission(requireActivity())) View.GONE else View.VISIBLE
         }
     }
 
@@ -160,15 +227,27 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         if (Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER == requestCode) {
             log("Permission callback: " + permissions.joinToString() + " " + grantResults.joinToString())
             if (checkPermissionGranted(grantResults, permissions, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                val list = findViewById<ListView>(R.id.listView)
-                val adapter = list.adapter
-                if (adapter is FileChooserAdapter) {
-                    val currentFolder = adapter.currentFolder
-                    log("Refreshing view")
-                    adapter.changeFolder(File(currentFolder.absolutePath))
-                }
-            } else {
-                showPermissionRequestDialog()
+                refreshFolder()
+            }
+        }
+    }
+
+    private fun refreshFolder() {
+        val list = findViewById<ListView>(R.id.listView)
+        val adapter = list.adapter
+        if (adapter is FileChooserAdapter) {
+            val currentFolder = adapter.currentFolder
+            log("Refreshing view")
+            adapter.changeFolder(File(currentFolder.absolutePath))
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        log("FileManager: On activity result requestCode=$requestCode resultCode=$resultCode")
+        if (requestCode == Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER) {
+            if (hasReadStoragePermission(this)) {
+                refreshFolder()
             }
         }
     }
@@ -195,56 +274,6 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         }
     }
 
-    private fun initializeFileView(list: ListView, path: TextView, view: View) {
-        list.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-            val file = parent.getItemAtPosition(position) as File
-            if (file.isDirectory) {
-                changeFolder(parent, file, path)
-            } else {
-                if (showRecentsAndSavePath) {
-                    val absolutePath = file.parentFile?.absolutePath
-                    prefs!!.edit().putString(LAST_OPENED_DIRECTORY, absolutePath).apply()
-                }
-                openFile(file)
-            }
-        }
-
-        path.text = startFolder.absolutePath
-        list.adapter = FileChooserAdapter(this, startFolder, fileNameFilter)
-
-        if (!setupGotoButton(view, list, path, R.id.file_manager_goto_documents, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)) or
-            !setupGotoButton(view, list, path, R.id.file_manager_goto_downloads, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS))) {
-            setupGotoButton(view, list, path, R.id.file_manager_goto_sdcard, Environment.getExternalStorageDirectory())
-        }
-        val grant = findViewById<Button>(R.id.file_manager_grant)
-        grant.setOnClickListener {
-            checkAndRequestStorageAccessPermissionOrReadOne(Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER)
-        }
-    }
-
-    private fun setupGotoButton(root: View, list: ListView, path: TextView,  id: Int, file: File): Boolean {
-        val goto = root.findViewById<Button>(id)
-        if (file.exists()) {
-            goto.setOnClickListener {
-                changeFolder(list, file, path)
-            }
-            goto.visibility = View.VISIBLE
-            return true
-        } else {
-            goto.visibility = View.GONE
-            return false
-        }
-    }
-
-    private fun changeFolder(
-        parent: AdapterView<*>,
-        file: File,
-        path: TextView
-    ) {
-        val newFolder = (parent.adapter as FileChooserAdapter).changeFolder(file)
-        path.text = newFolder.absolutePath
-    }
-
     protected open fun openFile(file: File) {
         log("Opening new book: " + file.path)
 
@@ -256,7 +285,6 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
             }
         )
     }
-
 
     private fun initFileManager() {
         val pagerAdapter = SimplePagerAdapter(supportFragmentManager, if (showRecentsAndSavePath) 2 else 1)
