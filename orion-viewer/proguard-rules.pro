@@ -4,3 +4,4 @@
 -keep class universe.constellation.orion.viewer.prefs.OrionApplication { *; }
 
 -dontobfuscate
+-keepattributes SourceFile,LineNumberTable
