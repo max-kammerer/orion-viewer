@@ -6,10 +6,11 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.ParametersBuilder
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
 import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.currentTimeMillis
-import universe.constellation.orion.viewer.exceptionStackTrace
+import kotlin.math.min
 
 class FireBaseAnalytics : Analytics() {
 
@@ -22,6 +23,7 @@ class FireBaseAnalytics : Analytics() {
     override fun init(): Analytics {
         analytics = Firebase.analytics
         analytics.setAnalyticsCollectionEnabled(true)
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
         return this
     }
 
@@ -35,7 +37,6 @@ class FireBaseAnalytics : Analytics() {
             param("scheme", intent.scheme)
             param("mime_type", getMimeType(intent))
             param("isUserIntent", isUserIntent.toString())
-            param("version_name", BuildConfig.VERSION_NAME)
             param("version_code", BuildConfig.VERSION_CODE.toLong())
             param("isNewUI", isNewUI.toString())
         }
@@ -69,9 +70,7 @@ class FireBaseAnalytics : Analytics() {
     }
 
     override fun error(ex: Throwable) {
-        logEvent("Exception") {
-            param("stacktrace", ex.exceptionStackTrace())
-        }
+        FirebaseCrashlytics.getInstance().recordException(ex)
     }
 
     override fun dialog(name: String, opened: Boolean) {
