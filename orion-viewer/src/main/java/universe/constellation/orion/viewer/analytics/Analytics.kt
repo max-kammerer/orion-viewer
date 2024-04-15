@@ -36,6 +36,10 @@ open class Analytics {
 
     }
 
+    open fun onApplicationInit() {
+
+    }
+
     companion object {
 
         fun initialize(contentResolver: ContentResolver, analytics: Analytics): Analytics {

@@ -21,6 +21,7 @@ class FireBaseAnalytics : Analytics() {
 
     override fun init(): Analytics {
         analytics = Firebase.analytics
+        analytics.setAnalyticsCollectionEnabled(true)
         return this
     }
 
@@ -80,9 +81,13 @@ class FireBaseAnalytics : Analytics() {
         }
     }
 
+    override fun onApplicationInit() {
+        logEvent("onApplicationInit")
+    }
+
     private inline fun logEvent(
         event: String,
-        crossinline block: ParametersBuilder.() -> Unit
+        crossinline block: ParametersBuilder.() -> Unit = {}
     ) {
         analytics.logEvent(event) {
             block()

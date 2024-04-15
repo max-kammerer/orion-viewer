@@ -98,6 +98,7 @@ class OrionApplication : Application() {
         logger = AndroidLogger
         instance = this
         super.onCreate()
+        analytics.onApplicationInit()
         setLangCode(options.appLanguage)
         logOrionAndDeviceInfo()
         if (device is EInkDeviceWithoutFastRefresh) {
