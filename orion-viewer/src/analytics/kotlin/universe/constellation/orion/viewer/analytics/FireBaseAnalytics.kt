@@ -1,5 +1,6 @@
 package universe.constellation.orion.viewer.analytics
 
+import android.content.ContentResolver
 import android.content.Intent
 import android.webkit.MimeTypeMap
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -10,7 +11,9 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
 import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.currentTimeMillis
-import kotlin.math.min
+import universe.constellation.orion.viewer.filemanager.fileExtension
+import java.io.File
+
 
 class FireBaseAnalytics : Analytics() {
 
@@ -27,7 +30,7 @@ class FireBaseAnalytics : Analytics() {
         return this
     }
 
-    override fun onNewIntent(intent: Intent, isUserIntent: Boolean, isNewUI: Boolean) {
+    override fun onNewIntent(contentResolver: ContentResolver, intent: Intent, isUserIntent: Boolean, isNewUI: Boolean) {
         lastTime = System.currentTimeMillis()
         if (isUserIntent) {
             intentId = lastTime
@@ -35,19 +38,32 @@ class FireBaseAnalytics : Analytics() {
 
         logEvent("onNewIntent") {
             param("scheme", intent.scheme)
-            param("mime_type", getMimeType(intent))
+            param("mime_type", contentResolver.getMimeType(intent))
             param("isUserIntent", isUserIntent.toString())
             param("version_code", BuildConfig.VERSION_CODE.toLong())
             param("isNewUI", isNewUI.toString())
         }
     }
 
-    private fun getMimeType(intent: Intent): String? {
+    private fun ContentResolver.getMimeType(intent: Intent): String? {
         val type = intent.type
         if (type != null) return type
-        val ext =
-            MimeTypeMap.getFileExtensionFromUrl(intent.data?.toString() ?: return null).takeIf { !it.isNullOrBlank() } ?: return null
-        return MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext)
+        val uri = intent.data ?: return "<intent/null_data>"
+        when (val scheme = intent.scheme) {
+            ContentResolver.SCHEME_CONTENT -> {
+                return getType(uri) ?: MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                    MimeTypeMap.getFileExtensionFromUrl(uri.toString())
+                        ?: return "<content/no_extension>"
+                )
+            }
+            ContentResolver.SCHEME_FILE -> {
+                val file = File(uri.path ?: return  "<file/no_path>")
+                return MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.name.fileExtension.takeIf { it.isNotBlank() } ?: return "<file/no_extension>")
+            }
+            else -> {
+                return "<unknown_scheme/$scheme>"
+            }
+        }
     }
 
     private fun ParametersBuilder.param(key: String, value: String?) {
