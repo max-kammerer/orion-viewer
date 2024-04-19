@@ -23,6 +23,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.PointF
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
 import universe.constellation.orion.viewer.log
@@ -30,7 +31,11 @@ import universe.constellation.orion.viewer.util.MoveUtil
 
 class OrionDrawScene : View {
 
+    internal lateinit var loadingDrawable: Drawable
+        private set
+
     internal lateinit var orionStatusBarHelper: OrionStatusBarHelper
+        private set
 
     private var dimensionAware: ViewDimensionAware? = null
 
@@ -55,7 +60,7 @@ class OrionDrawScene : View {
 
     private var inited = false
 
-    private lateinit var stuff: ColorStuff
+    lateinit var stuff: ColorStuff
 
     constructor(context: Context) : super(context)
 
@@ -63,11 +68,12 @@ class OrionDrawScene : View {
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
-    fun init(colorStuff: ColorStuff, statusBarHelper: OrionStatusBarHelper) {
+    fun init(colorStuff: ColorStuff, statusBarHelper: OrionStatusBarHelper, loadingDrawable: Drawable) {
         this.stuff = colorStuff
         defaultPaint = colorStuff.backgroundPaint
         borderPaint = colorStuff.borderPaint
         this.orionStatusBarHelper = statusBarHelper
+        this.loadingDrawable = loadingDrawable
         inited = true
     }
 

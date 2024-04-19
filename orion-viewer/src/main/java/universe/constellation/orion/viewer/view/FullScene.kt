@@ -1,8 +1,14 @@
 package universe.constellation.orion.viewer.view
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.view.ViewGroup
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import universe.constellation.orion.viewer.OrionBookListener
+import universe.constellation.orion.viewer.R
 
 interface Scene  {
     fun setColorMatrix(colorMatrix: FloatArray?) {
@@ -12,6 +18,7 @@ interface Scene  {
     }
 }
 
+@SuppressLint("UseCompatLoadingForDrawables")
 class FullScene(private val scene: ViewGroup, val drawView: OrionDrawScene, statusBar: ViewGroup, val context: Context) : Scene, OrionBookListener {
 
     val statusBarHelper = OrionStatusBarHelper(statusBar)
@@ -19,7 +26,10 @@ class FullScene(private val scene: ViewGroup, val drawView: OrionDrawScene, stat
     val colorStuff = ColorStuff()
 
     init {
-        drawView.init(colorStuff, statusBarHelper)
+        val drawable = VectorDrawableCompat.create(context.resources, R.drawable.loading, null)
+            ?: ColorDrawable(context.resources.getColor(R.color.orion_orange))
+        DrawableCompat.setTint(drawable, context.resources.getColor(R.color.orion_orange))
+        drawView.init(colorStuff, statusBarHelper, drawable)
     }
 
     override fun onNewBook(title: String?, pageCount: Int) {

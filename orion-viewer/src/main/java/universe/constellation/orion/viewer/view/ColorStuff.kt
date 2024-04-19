@@ -19,6 +19,10 @@ class ColorStuff {
         color = Color.WHITE
     }
 
+    val pagePaint = Paint().apply {
+        color = Color.WHITE
+    }
+
     private var colorDrawable = ColorDrawable(backgroundPaint.color)
     private var renderOffPage: Boolean = false
     private var transformationArray: FloatArray? = null

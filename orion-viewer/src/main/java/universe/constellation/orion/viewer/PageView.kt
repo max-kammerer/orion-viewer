@@ -26,6 +26,8 @@ import universe.constellation.orion.viewer.view.PageLayoutManager
 import universe.constellation.orion.viewer.view.precache
 import kotlin.math.ceil
 import kotlin.math.floor
+import kotlin.math.min
+
 
 enum class PageState(val interactWithUUI: Boolean) {
     STUB(false),
@@ -246,22 +248,36 @@ class PageView(
         canvas.save()
         try {
             canvas.translate(layoutData.position.x, layoutData.position.y)
-
-            if (!scene.inScalingMode) {
-                //to show border of unrendered area
-                drawBorder(canvas, scene)
-            }
+            drawBlankLoadingPage(canvas, scene)
 
             bitmap.draw(canvas, calcDrawRect(scene) ?: return, defaultPaint)
 
-            if (scene.inScalingMode) {
-                drawBorder(canvas, scene)
-            }
+            drawBorder(canvas, scene)
 
             scene.runAdditionalTaskInPageCanvasAndCoord(canvas, pageNum)
         } finally {
             canvas.restore()
         }
+    }
+
+    private fun drawBlankLoadingPage(
+        canvas: Canvas,
+        scene: OrionDrawScene
+    ) {
+        val pageRect = layoutData.wholePageRect
+        canvas.drawRect(
+            pageRect,
+            scene.stuff.pagePaint
+        )
+        val size = min(pageRect.width(), pageRect.height()) / 10
+        scene.loadingDrawable.setBounds(
+            pageRect.centerX() - size / 2,
+            pageRect.centerY() - size / 2,
+            pageRect.centerX() + size / 2,
+            pageRect.centerY() + size / 2
+        )
+        scene.loadingDrawable.draw(canvas)
+        println("BBB" +scene.loadingDrawable.bounds)
     }
 
     private fun calcDrawRect(scene: OrionDrawScene): Rect? {
