@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import universe.constellation.orion.viewer.analytics.SHOW_ERROR_DIALOG
 import java.io.PrintWriter
 import java.io.StringWriter
+import java.lang.RuntimeException
 
 internal fun Throwable.exceptionStackTrace(): String {
     val exceptionWriter = StringWriter()
@@ -20,19 +21,21 @@ internal fun Throwable.exceptionStackTrace(): String {
     return exceptionWriter.toString()
 }
 
-internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: Int, messageTitle: Int, intent: Intent, exception: Throwable? = null) {
+internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: Int, messageTitle: Int, intent: Intent, exception: Throwable) {
     showErrorReportDialog(resources.getString(dialogTitle), resources.getString(messageTitle), intent, exception)
 }
 
-internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: Int, messageTitle: Int, info: String, exception: Throwable? = null) {
+internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: Int, messageTitle: Int, info: String, exception: Throwable) {
     showErrorReportDialog(resources.getString(dialogTitle), resources.getString(messageTitle), info, exception)
 }
 
-internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: String, messageTitle: String, intent: Intent, exception: Throwable? = null) {
+internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: String, messageTitle: String, intent: Intent, exception: Throwable) {
     showErrorReportDialog(dialogTitle, messageTitle, intent.toString(), exception)
 }
 
 internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: String, messageTitle: String, info: String, exception: Throwable? = null) {
+    this.analytics.error(exception ?: RuntimeException())
+
     val view = layoutInflater.inflate(R.layout.crash_dialog, null)
     val textView = view.findViewById<TextView>(R.id.crashTextView)
 
@@ -48,6 +51,7 @@ internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: String, messag
         try {
             reportErrorVia(viaEmail, messageTitle, fullMessage)
         } catch (e: ActivityNotFoundException) {
+            this.analytics.error(e)
             showLongMessage("No application can handle this request. Please install ${if (viaEmail) "a web browser" else "an e-mail client"}")
         }
 

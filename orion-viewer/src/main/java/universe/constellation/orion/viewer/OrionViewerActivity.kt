@@ -259,7 +259,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 myState = MyState.FINISHED
                 openFileAndDestroyOldController(filePathToOpen)
             } catch (e: Exception) {
-                showAlertWithExceptionThrow(intent, e)
+                showErrorReportDialog(
+                    R.string.crash_on_intent_opening_title,
+                    R.string.crash_on_intent_opening_title,
+                    intent, e
+                )
             }
 
         } else
@@ -298,7 +302,13 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 stubDocument.bodyText = e.message ?: e.toString()
                 stubDocument.title = e.message ?: e.toString()
                 updateViewOnNewBook(stubDocument.title)
-                showErrorReportDialog(filePath, e, intent)
+                showErrorReportDialog(
+                    resources.getString(
+                        R.string.crash_on_book_opening_message_header,
+                        File(filePath).name
+                    ),
+                    getString(R.string.crash_on_book_opening_title), intent, e
+                )
                 executor.close()
                 orionContext.idlingRes.free()
                 analytics.errorDuringInitialFileOpen()
@@ -400,15 +410,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         fullScene.onNewBook(title, controller!!.pageCount)
         supportActionBar?.title = title
     }
-
-    private fun showAlertWithExceptionThrow(intent: Intent, e: Exception) {
-        showErrorReportDialog(
-            R.string.crash_on_intent_opening_title,
-            R.string.crash_on_intent_opening_title,
-            intent, e
-        )
-    }
-
 
     public override fun onPause() {
         log("Orion: onPause")
@@ -1210,13 +1211,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
         const val USER_INTENT = "USER_INTENT"
     }
-}
-
-private fun OrionBaseActivity.showErrorReportDialog(file: String, e: Throwable, intent: Intent) {
-    showErrorReportDialog(
-            resources.getString(R.string.crash_on_book_opening_message_header, File(file).name),
-            getString(R.string.crash_on_book_opening_title), intent, e
-    )
 }
 
 
