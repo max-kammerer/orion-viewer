@@ -2,8 +2,6 @@ package universe.constellation.orion.viewer.prefs
 
 import universe.constellation.orion.viewer.log
 
-fun isVersionEquals(constVersion: String, checkingVersion: String) = constVersion == checkingVersion
-
 fun isVersionLess(constVersion: String, checkingVersion: String): Boolean {
     if (constVersion.isEmpty() || checkingVersion.isEmpty()) return false
 

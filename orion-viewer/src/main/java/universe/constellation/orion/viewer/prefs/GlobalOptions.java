@@ -121,6 +121,8 @@ public class GlobalOptions implements Serializable, PageOptions {
 
     public final static String VERSION = "VERSION";
 
+    public final static String DEFAULT_LANGUAGE = "DEFAULT";
+
     private LinkedList<RecentEntry> recentFiles;
 
     protected final SharedPreferences prefs;
@@ -159,7 +161,7 @@ public class GlobalOptions implements Serializable, PageOptions {
                 } else if (DEBUG.equals(name)) {
                     OptionActions.DEBUG.doAction(activity, false, getBooleanProperty(DEBUG, false));
                 } else if (APP_LANGUAGE.equals(name)) {
-                    context.setLangCode(getAppLanguage());
+                    context.updateLanguage(getAppLanguage());
                 } else if (DRAW_OFF_PAGE.equals(name)) {
                     activity.getFullScene().setDrawOffPage(isDrawOffPage());
                     //TODO ?
@@ -384,7 +386,7 @@ public class GlobalOptions implements Serializable, PageOptions {
     }
 
     public String getAppLanguage() {
-        return getStringProperty(APP_LANGUAGE, "DEFAULT");
+        return getStringProperty(APP_LANGUAGE, DEFAULT_LANGUAGE);
     }
 
     public String getWalkOrder() {
@@ -401,10 +403,6 @@ public class GlobalOptions implements Serializable, PageOptions {
 
     public int getScreenBacklightTimeout(int defaultValue) {
         return getIntFromStringProperty(SCREEN_BACKLIGHT_TIMEOUT, defaultValue);
-    }
-
-    public String getVersion() {
-        return getStringProperty(VERSION, "0.0.0");
     }
 
 

@@ -96,8 +96,10 @@ class FireBaseAnalytics : Analytics() {
         }
     }
 
-    override fun onApplicationInit() {
-        logEvent("onApplicationInit")
+    override fun onApplicationInit(isNewUser: Boolean) {
+        logEvent("onApplicationInit") {
+            param("isNewUser", isNewUser.toString())
+        }
     }
 
     private inline fun logEvent(

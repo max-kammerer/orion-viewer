@@ -36,7 +36,7 @@ open class Analytics {
 
     }
 
-    open fun onApplicationInit() {
+    open fun onApplicationInit(isNewUser: Boolean) {
 
     }
 

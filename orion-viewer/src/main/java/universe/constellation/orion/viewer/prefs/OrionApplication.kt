@@ -27,6 +27,8 @@ import android.os.Build
 import android.os.Build.VERSION.CODENAME
 import android.os.Build.VERSION.RELEASE
 import android.preference.PreferenceManager
+import androidx.core.os.ConfigurationCompat
+import androidx.core.os.LocaleListCompat
 import androidx.multidex.MultiDex
 import universe.constellation.orion.viewer.AndroidLogger
 import universe.constellation.orion.viewer.BuildConfig
@@ -38,12 +40,12 @@ import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.analytics.Analytics
 import universe.constellation.orion.viewer.bookmarks.BookmarkAccessor
 import universe.constellation.orion.viewer.device.AndroidDevice
-import universe.constellation.orion.viewer.device.EInkDeviceWithoutFastRefresh
 import universe.constellation.orion.viewer.device.MagicBookBoeyeDevice
 import universe.constellation.orion.viewer.device.OnyxDevice
 import universe.constellation.orion.viewer.device.OnyxUtil
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.logger
+import universe.constellation.orion.viewer.prefs.GlobalOptions.DEFAULT_LANGUAGE
 import universe.constellation.orion.viewer.test.IdlingResource
 import java.util.Locale
 import kotlin.properties.Delegates
@@ -60,7 +62,12 @@ class OrionApplication : Application() {
         GlobalOptions(this, getSharedPreferences("key_binding", Context.MODE_PRIVATE), false)
     }
 
-    val analytics: Analytics by lazy  { Analytics.initialize(contentResolver, BuildConfig.ANALYTICS) }
+    val analytics: Analytics by lazy {
+        Analytics.initialize(
+            contentResolver,
+            BuildConfig.ANALYTICS
+        )
+    }
 
     var tempOptions: TemporaryOptions? = null
         private set
@@ -73,7 +80,7 @@ class OrionApplication : Application() {
 
     val device = createDevice()
 
-    private var langCode: String? = null
+    private var currentLanguage: String = DEFAULT_LANGUAGE
 
     private val isLightTheme: Boolean
         get() {
@@ -98,42 +105,39 @@ class OrionApplication : Application() {
         logger = AndroidLogger
         instance = this
         super.onCreate()
-        analytics.onApplicationInit()
-        setLangCode(options.appLanguage)
+        analytics.onApplicationInit(options.isShowTapHelp)
+        updateLanguage(options.appLanguage)
         logOrionAndDeviceInfo()
-        if (device is EInkDeviceWithoutFastRefresh) {
-            val version = options.version
-            if (options.isShowTapHelp || isVersionEquals("0.0.0", version)) {
-                try {
-                    val prefs = options.prefs
-                    val edit = prefs.edit()
-                    edit.putBoolean(GlobalOptions.DRAW_OFF_PAGE, false)
-                    edit.putString(GlobalOptions.VERSION, VERSION_NAME)
-                    edit.commit()
-                } catch (e: Exception) {
-                    log(e)
-                }
-
-            }
-        }
     }
 
-    fun setLangCode(langCode: String) {
-        this.langCode = langCode
-        updateLanguage(resources)
+    fun updateLanguage(langCode: String) {
+        currentLanguage = langCode
     }
 
-    fun updateLanguage(res: Resources) {
+    fun updateLanguage(res: Resources, langCode: String) {
         try {
-            val defaultLocale = Locale.getDefault()
-            log("Updating locale to $langCode from ${defaultLocale.language}")
-            val dm = res.displayMetrics
-            val conf = res.configuration
-            conf.locale =
-                if (langCode == null || "DEFAULT" == langCode) defaultLocale else Locale(langCode)
-            res.updateConfiguration(conf, dm)
+            val currentLocales = ConfigurationCompat.getLocales(res.configuration)
+            val newLocale =
+                if (DEFAULT_LANGUAGE == langCode) Locale.getDefault() else Locale(langCode)
+            if (!currentLocales.isEmpty) {
+                if (newLocale.language == currentLocales[0]?.language) return
+            }
+            log("Updating locale to $langCode from ${currentLocales[0]?.language}")
+
+            if (Build.VERSION.SDK_INT >= 17) {
+                val prevLocales = Array(currentLocales.size()) { currentLocales.get(it) }
+                ConfigurationCompat.setLocales(
+                    res.configuration,
+                    LocaleListCompat.create(newLocale, *prevLocales)
+                )
+            } else {
+                res.configuration.locale = newLocale
+            }
+            res.updateConfiguration(res.configuration, res.displayMetrics)
+            currentLanguage = langCode
         } catch (e: Exception) {
-            log("Error setting locale: " + langCode!!, e)
+            log("Error setting locale: $langCode", e)
+            analytics.error(e)
         }
 
     }
