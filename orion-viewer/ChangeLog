@@ -1,3 +1,7 @@
+===== 0.91.3 (Apr 22, 2024) =====
+* Small improvements in UI
+* Fixed several problems during page navigation and search
+
 ===== 0.91.2 (Apr 15, 2024) =====
 * Fixed several crashes
 * Added Firebase Crashlytics
