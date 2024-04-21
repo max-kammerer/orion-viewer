@@ -293,6 +293,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             log("Trying to open file: $filePath")
             val rootJob = Job()
             val executor = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+            val file = File(filePath)
             val newDocument = try {
                 withContext(executor + rootJob) {
                     FileUtil.openFile(filePath)
@@ -305,7 +306,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 showErrorReportDialog(
                     resources.getString(
                         R.string.crash_on_book_opening_message_header,
-                        File(filePath).name
+                        file.name
                     ),
                     getString(R.string.crash_on_book_opening_title), intent, e
                 )
@@ -341,13 +342,13 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
                 subscriptionManager.sendDocOpenedNotification(controller1)
 
-                globalOptions.addRecentEntry(GlobalOptions.RecentEntry(File(filePath).absolutePath))
+                globalOptions.addRecentEntry(GlobalOptions.RecentEntry(file.absolutePath))
 
                 lastPageInfo1.totalPages = newDocument.pageCount
                 orionContext.onNewBook(filePath)
                 invalidateOrHideMenu()
                 doOnLayout(lastPageInfo1)
-                analytics.fileOpenedSuccessfully()
+                analytics.fileOpenedSuccessfully(file)
             } catch (e: Exception) {
                 analytics.errorDuringInitialFileOpen()
                 log(e)

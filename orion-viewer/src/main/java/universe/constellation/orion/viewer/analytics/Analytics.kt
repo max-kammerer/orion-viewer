@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.provider.Settings
 import universe.constellation.orion.viewer.BuildConfig
+import java.io.File
 
 const val TAP_HELP_DIALOG = "TAPHELPDialog"
 const val FALLBACK_DIALOG = "FALLBACK"
@@ -20,7 +21,7 @@ open class Analytics {
 
     }
 
-    open fun fileOpenedSuccessfully() {
+    open fun fileOpenedSuccessfully(file: File) {
 
     }
 

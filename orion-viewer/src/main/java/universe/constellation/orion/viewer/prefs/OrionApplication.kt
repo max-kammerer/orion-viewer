@@ -104,8 +104,8 @@ class OrionApplication : Application() {
     override fun onCreate() {
         logger = AndroidLogger
         instance = this
-        super.onCreate()
         analytics.onApplicationInit(options.isShowTapHelp)
+        super.onCreate()
         updateLanguage(options.appLanguage)
         logOrionAndDeviceInfo()
     }

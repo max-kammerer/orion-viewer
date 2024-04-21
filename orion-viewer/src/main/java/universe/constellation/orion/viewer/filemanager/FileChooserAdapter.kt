@@ -104,7 +104,7 @@ class FileChooserAdapter(
 
     companion object {
 
-        val supportedExtensions = setOf("cbz", "djvu", "djv", "pdf", "oxps", "tiff", "tif", "xps")
+        val supportedExtensions = setOf("cbz", "djvu", "djv", "pdf", "oxps", "xps", "tiff", "tif")
 
         @JvmField
         var DEFAULT_FILTER: FilenameFilter = FilenameFilter { dir, filename ->

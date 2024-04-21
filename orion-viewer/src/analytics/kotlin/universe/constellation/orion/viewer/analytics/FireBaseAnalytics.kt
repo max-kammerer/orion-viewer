@@ -11,6 +11,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
 import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.currentTimeMillis
+import universe.constellation.orion.viewer.filemanager.FileChooserAdapter
 import universe.constellation.orion.viewer.filemanager.fileExtension
 import java.io.File
 
@@ -18,8 +19,6 @@ import java.io.File
 class FireBaseAnalytics : Analytics() {
 
     private lateinit var analytics: FirebaseAnalytics
-
-    private var intentId = 0L
 
     private var lastTime = System.currentTimeMillis()
 
@@ -32,9 +31,6 @@ class FireBaseAnalytics : Analytics() {
 
     override fun onNewIntent(contentResolver: ContentResolver, intent: Intent, isUserIntent: Boolean, isNewUI: Boolean) {
         lastTime = System.currentTimeMillis()
-        if (isUserIntent) {
-            intentId = lastTime
-        }
 
         logEvent("onNewIntent") {
             param("scheme", intent.scheme)
@@ -70,18 +66,23 @@ class FireBaseAnalytics : Analytics() {
         param(key, value ?: "<null>")
     }
 
-    override fun fileOpenedSuccessfully() {
-        fileInfo(true)
+    override fun fileOpenedSuccessfully(file: File) {
+        fileInfo(true) {
+            val hash = (file.length().hashCode().toLong() shl 32) + file.name.hashCode()
+            param("book_id", hash)
+            param("book_ext", file.name.fileExtension.takeIf { FileChooserAdapter.supportedExtensions.contains(it) } ?: "<unknown extension>")
+        }
     }
 
     override fun errorDuringInitialFileOpen() {
         fileInfo(false)
     }
 
-    private fun fileInfo(successful: Boolean) {
+    private inline fun fileInfo(successful: Boolean, crossinline block: ParametersBuilder.() -> Unit = {}) {
         logEvent("fileOpened") {
             param("time", currentTimeMillis() - lastTime)
             param("state", successful.toString())
+            block()
         }
     }
 
@@ -108,7 +109,6 @@ class FireBaseAnalytics : Analytics() {
     ) {
         analytics.logEvent(event) {
             block()
-            param("id", intentId)
         }
     }
 }
