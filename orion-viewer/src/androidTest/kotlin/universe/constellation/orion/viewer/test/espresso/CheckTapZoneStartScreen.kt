@@ -24,7 +24,7 @@ class NoBookNoStartTapScreen : BaseTestWithActivity(createTestViewerIntent {
 }) {
     @Test
     fun testStartScreenAbsent() {
-        onView(withId(R.id.tap_help_close)).check(doesNotExist())
+        onView(withId(R.id.tap_table)).check(doesNotExist())
         assertTrue(globalOptions.isShowTapHelp)
     }
 }
@@ -38,11 +38,11 @@ class BookWithStartTapScreen :
 
     @Test
     fun testStartScreen() {
-        onView(withId(R.id.tap_help_close)).check(matches(isDisplayed()))
+        onView(withId(R.id.tap_table)).check(matches(isDisplayed()))
         checkSizeAndPosition()
 
-        onView(withId(R.id.tap_help_close)).perform(click())
-        onView(withId(R.id.tap_help_close)).check(doesNotExist())
+        onView(withId(R.id.tap_table)).perform(click())
+        onView(withId(R.id.tap_table)).check(doesNotExist())
         assertFalse(globalOptions.isShowTapHelp)
     }
 

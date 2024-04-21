@@ -14,7 +14,7 @@
     <string name="msg_specify_keyword_for_search">Specify keyword for search</string>
 
     <string name="recent_book_not_found">Can\'t find book file!</string>
-    <string name="tap_zones_header">Default Tap Zones</string>
+    <string name="tap_zones_header">Navigation via Tap Zones: default zone actions</string>
 
     <string name="permission_directory_warning">Please provide read permission to access storage data</string>
     <string name="permission_grant">Grant…</string>

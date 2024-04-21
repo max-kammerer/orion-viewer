@@ -7,4 +7,27 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
+
+    <style name="Tap_Dialog_Top" >
+        <item name="android:gravity">center</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Tap_Dialog_Bottom" parent="Tap_Dialog_Top" >
+        <item name="android:layout_alignParentTop">false</item>
+        <item name="android:layout_alignParentBottom">true</item>
+    </style>
+
+    <style name="Tap_Dialog_Cell" >
+        <item name="android:layout_width">0px</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_margin">1dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@color/orion_orange</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center</item>
+    </style>
 </resources>

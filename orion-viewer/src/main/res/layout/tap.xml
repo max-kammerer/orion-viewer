@@ -16,80 +16,38 @@
         android:layout_weight="1"
         android:weightSum="3">
 
-        <RelativeLayout
-            android:layout_width="0px"
-            android:layout_height="fill_parent"
-            android:layout_margin="1dip"
-            android:layout_weight="1"
-            android:background="#ffcc66"
-            android:orientation="vertical">
+        <RelativeLayout style="@style/Tap_Dialog_Cell">
 
             <TextView
                 android:id="@+id/shortClick"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:gravity="center"
-                android:textColor="@android:color/black" />
+                style="@style/Tap_Dialog_Top" />
 
             <TextView
                 android:id="@+id/longClick"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:gravity="center"
-                android:textColor="@android:color/black" />
+                style="@style/Tap_Dialog_Bottom" />
         </RelativeLayout>
 
 
-        <RelativeLayout
-            android:layout_width="0px"
-            android:layout_height="fill_parent"
-            android:layout_margin="1dip"
-            android:layout_weight="1"
-            android:background="#ffcc66"
-            android:orientation="vertical">
+        <RelativeLayout style="@style/Tap_Dialog_Cell">
 
             <TextView
                 android:id="@+id/shortClick"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:gravity="center"
-                android:textColor="@android:color/black" />
+                style="@style/Tap_Dialog_Top" />
 
             <TextView
                 android:id="@+id/longClick"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:gravity="center"
-                android:textColor="@android:color/black" />
+                style="@style/Tap_Dialog_Bottom" />
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="0px"
-            android:layout_height="fill_parent"
-            android:layout_margin="1dip"
-            android:layout_weight="1"
-            android:background="#ffcc66"
-            android:orientation="vertical">
+        <RelativeLayout style="@style/Tap_Dialog_Cell">
 
             <TextView
                 android:id="@+id/shortClick"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:gravity="center"
-                android:textColor="@android:color/black" />
+                style="@style/Tap_Dialog_Top" />
 
             <TextView
                 android:id="@+id/longClick"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:gravity="center"
-                android:textColor="@android:color/black" />
+                style="@style/Tap_Dialog_Bottom" />
         </RelativeLayout>
     </TableRow>
 
@@ -100,90 +58,37 @@
         android:layout_weight="1"
         android:weightSum="3">
 
-        <RelativeLayout
-            android:layout_width="0px"
-            android:layout_height="fill_parent"
-            android:layout_margin="1dip"
-            android:layout_weight="1"
-            android:background="#ffcc66"
-            android:orientation="vertical">
+        <RelativeLayout style="@style/Tap_Dialog_Cell">
 
             <TextView
                 android:id="@+id/shortClick"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:gravity="center"
-                android:singleLine="false"
-                android:textColor="@android:color/black" />
+                style="@style/Tap_Dialog_Top" />
 
             <TextView
                 android:id="@+id/longClick"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:gravity="center"
-                android:singleLine="false"
-                android:textColor="@android:color/black" />
+                style="@style/Tap_Dialog_Bottom" />
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="0px"
-            android:layout_height="fill_parent"
-            android:layout_margin="1dip"
-            android:layout_weight="1"
-            android:background="#ffcc66"
-            android:orientation="vertical">
+        <RelativeLayout style="@style/Tap_Dialog_Cell">
 
             <TextView
                 android:id="@+id/shortClick"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:gravity="center"
-                android:textColor="@android:color/black" />
-
-            <ImageView
-                android:id="@+id/tap_help_close"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_centerHorizontal="true"
-                android:src="@drawable/view"
-                android:visibility="gone" />
+                style="@style/Tap_Dialog_Top" />
 
             <TextView
                 android:id="@+id/longClick"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:gravity="center"
-                android:textColor="@android:color/black" />
+                style="@style/Tap_Dialog_Bottom" />
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="0px"
-            android:layout_height="fill_parent"
-            android:layout_margin="1dip"
-            android:layout_weight="1"
-            android:background="#ffcc66"
-            android:orientation="vertical">
+        <RelativeLayout style="@style/Tap_Dialog_Cell">
 
             <TextView
                 android:id="@+id/shortClick"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:gravity="center"
-                android:textColor="@android:color/black" />
+                style="@style/Tap_Dialog_Top" />
 
             <TextView
                 android:id="@+id/longClick"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:gravity="center"
-                android:textColor="@android:color/black" />
+                style="@style/Tap_Dialog_Bottom" />
         </RelativeLayout>
     </TableRow>
 
@@ -193,81 +98,37 @@
         android:layout_weight="1"
         android:weightSum="3">
 
-        <RelativeLayout
-            android:layout_width="0px"
-            android:layout_height="fill_parent"
-            android:layout_margin="1dip"
-            android:layout_weight="1"
-            android:background="#ffcc66"
-            android:orientation="vertical">
+        <RelativeLayout style="@style/Tap_Dialog_Cell">
 
             <TextView
                 android:id="@+id/shortClick"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:gravity="center"
-                android:singleLine="false"
-                android:textColor="@android:color/black" />
+                style="@style/Tap_Dialog_Top" />
 
             <TextView
                 android:id="@+id/longClick"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:gravity="center"
-                android:singleLine="false"
-                android:textColor="@android:color/black" />
+                style="@style/Tap_Dialog_Bottom" />
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="0px"
-            android:layout_height="fill_parent"
-            android:layout_margin="1dip"
-            android:layout_weight="1"
-            android:background="#ffcc66"
-            android:orientation="vertical">
+        <RelativeLayout style="@style/Tap_Dialog_Cell">
 
             <TextView
                 android:id="@+id/shortClick"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:gravity="center"
-                android:textColor="@android:color/black" />
+                style="@style/Tap_Dialog_Top" />
 
             <TextView
                 android:id="@+id/longClick"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:gravity="center"
-                android:textColor="@android:color/black" />
+                style="@style/Tap_Dialog_Bottom" />
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="0px"
-            android:layout_height="fill_parent"
-            android:layout_margin="1dip"
-            android:layout_weight="1"
-            android:background="#ffcc66"
-            android:orientation="vertical">
+        <RelativeLayout style="@style/Tap_Dialog_Cell">
 
             <TextView
                 android:id="@+id/shortClick"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:gravity="center"
-                android:textColor="@android:color/black" />
+                style="@style/Tap_Dialog_Top" />
 
             <TextView
                 android:id="@+id/longClick"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:gravity="center"
-                android:textColor="@android:color/black" />
+                style="@style/Tap_Dialog_Bottom" />
         </RelativeLayout>
     </TableRow>
 </TableLayout>

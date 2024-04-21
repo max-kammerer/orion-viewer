@@ -15,7 +15,7 @@
 
     <string name="recent_book_not_found">Не могу найти файл книги!</string>
 
-    <string name="tap_zones_header">Тап Зоны по-умолчанию</string>
+    <string name="tap_zones_header">Навигация с помощью касаний: действия по-умолчанию</string>
 
     <string name="permission_directory_warning">Пожалуйста, предоставте права на чтение данных диска</string>
     <string name="permission_grant">Предоставить…</string>
