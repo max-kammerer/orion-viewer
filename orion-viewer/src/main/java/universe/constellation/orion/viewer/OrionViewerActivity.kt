@@ -11,6 +11,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialog
 import androidx.core.internal.view.SupportMenuItem
+import androidx.core.math.MathUtils
 import androidx.core.view.doOnLayout
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
@@ -437,7 +438,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
 
         val pageNumberText = findMyViewById(R.id.page_picker_message) as TextView
-        //initial state
         pageNumberText.text = 1.toString()
 
         pageSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -451,10 +451,12 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
 
-        val closePagePeeker = findMyViewById(R.id.page_picker_close) as ImageButton
-
         val plus = findMyViewById(R.id.page_picker_plus) as ImageButton
-        plus.setOnClickListener { pageSeek.incrementProgressBy(1) }
+        plus.setOnClickListener {
+            if (pageSeek.progress != pageSeek.max) {
+                pageSeek.incrementProgressBy(1)
+            }
+        }
 
         val minus = findMyViewById(R.id.page_picker_minus) as ImageButton
         minus.setOnClickListener {
@@ -463,12 +465,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             }
         }
 
+        val closePagePeeker = findMyViewById(R.id.page_picker_close) as ImageButton
         closePagePeeker.setOnClickListener {
-            //controller.drawPage(Integer.valueOf(pageNumberText.getText().toString()) - 1);
-            //main menu
             onAnimatorCancel()
-            updatePageSeeker()
-            //animator.setDisplayedChild(MAIN_SCREEN);
         }
 
         val pagePreview = findMyViewById(R.id.page_preview) as ImageButton
@@ -476,12 +475,12 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             onApplyAction()
             if (pageNumberText.text.isNotEmpty()) {
                 try {
-                    val parsedInput = Integer.valueOf(pageNumberText.text.toString())
-                    controller!!.drawPage(parsedInput - 1)
+                    val userPage = Integer.valueOf(pageNumberText.text.toString())
+                    val newPage = MathUtils.clamp(userPage, 1, controller!!.pageCount)
+                    controller!!.drawPage(newPage - 1)
                 } catch (ex: NumberFormatException) {
                     showError(this, "Couldn't parse " + pageNumberText.text, ex)
                 }
-
             }
         }
     }
@@ -493,7 +492,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         view.text = (controller!!.currentPage + 1).toString()
         view.clearFocus()
         view.requestFocus()
-
     }
 
     private fun initZoomScreen() {
