@@ -99,11 +99,11 @@ public class SearchDialog extends DialogFragment {
 
         android.widget.ImageButton searchNext = dialog.findViewById(R.id.searchNext);
         searchNext.getBackground().setAlpha(ALPHA);
-        searchNext.setOnClickListener(v -> doSearch(controller.getCurrentPage(), +1, controller));
+        searchNext.setOnClickListener(v -> doSearch(searchField, controller.getCurrentPage(), +1, controller));
 
         android.widget.ImageButton searchPrev = dialog.findViewById(R.id.searchPrev);
         searchPrev.getBackground().setAlpha(ALPHA);
-        searchPrev.setOnClickListener(v -> doSearch(controller.getCurrentPage(), -1, controller));
+        searchPrev.setOnClickListener(v -> doSearch(searchField, controller.getCurrentPage(), -1, controller));
 
         OrionDrawScene view = orionViewerActivity.getView();
         view.addTask(lastSearchResultRenderer);
@@ -197,11 +197,9 @@ public class SearchDialog extends DialogFragment {
         }
     }
 
-    private void doSearch(int page, int direction, Controller controller) {
-        InputMethodManager inputManager = (InputMethodManager)
-        getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(getDialog().getCurrentFocus().getWindowToken(),
-        InputMethodManager.HIDE_NOT_ALWAYS);
+    private void doSearch(EditText searchField, int page, int direction, Controller controller) {
+        InputMethodManager inputManager = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(searchField.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
         boolean performRealSearch = false;
         String newSearch = searchField.getText().toString();
