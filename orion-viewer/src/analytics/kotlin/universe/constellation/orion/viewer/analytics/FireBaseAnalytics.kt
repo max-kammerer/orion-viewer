@@ -103,6 +103,13 @@ class FireBaseAnalytics : Analytics() {
         }
     }
 
+    override fun permissionEvent(screen: String, state: Boolean) {
+        logEvent("permissionResult") {
+            param("screen", screen)
+            param("state", state.toString())
+        }
+    }
+
     private inline fun logEvent(
         event: String,
         crossinline block: ParametersBuilder.() -> Unit = {}

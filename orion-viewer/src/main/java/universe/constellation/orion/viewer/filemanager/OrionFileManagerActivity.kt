@@ -222,16 +222,6 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         showPermissionRequestDialog()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER == requestCode) {
-            log("Permission callback: " + permissions.joinToString() + " " + grantResults.joinToString())
-            if (checkPermissionGranted(grantResults, permissions, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                refreshFolder()
-            }
-        }
-    }
-
     private fun refreshFolder() {
         val list = findViewById<ListView>(R.id.listView)
         val adapter = list.adapter
@@ -242,14 +232,28 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         }
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER == requestCode) {
+            log("Permission callback: " + permissions.joinToString() + " " + grantResults.joinToString())
+            actualizePermissions()
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         log("FileManager: On activity result requestCode=$requestCode resultCode=$resultCode")
         if (requestCode == Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER) {
-            if (hasReadStoragePermission(this)) {
-                refreshFolder()
-            }
+            actualizePermissions()
         }
+    }
+
+    private fun actualizePermissions() {
+        val hasReadStoragePermission = hasReadStoragePermission(this)
+        if (hasReadStoragePermission) {
+            refreshFolder()
+        }
+        analytics.permissionEvent(this.javaClass.name, hasReadStoragePermission)
     }
 
     private fun showPermissionRequestDialog() {

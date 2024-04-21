@@ -41,6 +41,10 @@ open class Analytics {
 
     }
 
+    open fun permissionEvent(screen: String, state: Boolean) {
+
+    }
+
     companion object {
 
         fun initialize(contentResolver: ContentResolver, analytics: Analytics): Analytics {
