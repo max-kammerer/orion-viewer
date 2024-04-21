@@ -161,7 +161,7 @@ public class GlobalOptions implements Serializable, PageOptions {
                 } else if (DEBUG.equals(name)) {
                     OptionActions.DEBUG.doAction(activity, false, getBooleanProperty(DEBUG, false));
                 } else if (APP_LANGUAGE.equals(name)) {
-                    context.updateLanguage(getAppLanguage());
+                    context.setLanguage(getAppLanguage());
                 } else if (DRAW_OFF_PAGE.equals(name)) {
                     activity.getFullScene().setDrawOffPage(isDrawOffPage());
                     //TODO ?

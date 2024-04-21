@@ -106,23 +106,25 @@ class OrionApplication : Application() {
         instance = this
         analytics.onApplicationInit(options.isShowTapHelp)
         super.onCreate()
-        updateLanguage(options.appLanguage)
+        setLanguage(options.appLanguage)
         logOrionAndDeviceInfo()
     }
 
-    fun updateLanguage(langCode: String) {
+    fun setLanguage(langCode: String) {
         currentLanguage = langCode
     }
 
-    fun updateLanguage(res: Resources, langCode: String) {
+    fun updateLanguage(res: Resources) {
         try {
             val currentLocales = ConfigurationCompat.getLocales(res.configuration)
             val newLocale =
-                if (DEFAULT_LANGUAGE == langCode) Locale.getDefault() else Locale(langCode)
+                if (DEFAULT_LANGUAGE == currentLanguage) Locale.getDefault() else Locale(
+                    currentLanguage
+                )
             if (!currentLocales.isEmpty) {
                 if (newLocale.language == currentLocales[0]?.language) return
             }
-            log("Updating locale to $langCode from ${currentLocales[0]?.language}")
+            log("Updating locale to $currentLanguage from ${currentLocales[0]?.language}")
 
             if (Build.VERSION.SDK_INT >= 17) {
                 val prevLocales = Array(currentLocales.size()) { currentLocales.get(it) }
@@ -134,9 +136,8 @@ class OrionApplication : Application() {
                 res.configuration.locale = newLocale
             }
             res.updateConfiguration(res.configuration, res.displayMetrics)
-            currentLanguage = langCode
         } catch (e: Exception) {
-            log("Error setting locale: $langCode", e)
+            log("Error setting locale: $currentLanguage", e)
             analytics.error(e)
         }
 

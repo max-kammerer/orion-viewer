@@ -62,7 +62,7 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
     @JvmOverloads
     protected fun onOrionCreate(savedInstanceState: Bundle?, layoutId: Int, addToolbar: Boolean = true) {
         orionContext.applyTheme(this)
-        orionContext.updateLanguage(resources, orionContext.options.appLanguage)
+        orionContext.updateLanguage(resources)
 
         if (this is OrionViewerActivity || this is OrionFileManagerActivityBase) {
             val screenOrientation = getScreenOrientation(applicationDefaultOrientation)
