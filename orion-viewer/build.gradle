@@ -247,3 +247,21 @@ afterEvaluate {
     connectedDebugAndroidTest.dependsOn 'uploadTestData'
     connectedDebugAndroidTest.finalizedBy fetchScreenshotsTask
 }
+
+task('prepareRelease', type: Copy) {
+    from('build/outputs/apk/release') {
+        include '*'
+    }
+    from('build/outputs/native-debug-symbols/release') {
+        include '*'
+    }
+    from('build/outputs/mapping/release') {
+        include '*'
+    }
+
+    into "../../releases/${project.ext.orionVersionName}/"
+
+    dependsOn {
+        assembleRelease
+    }
+}
