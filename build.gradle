@@ -29,12 +29,7 @@ project.ext {
     orionTargetSdk = 33
     orionCompileSdk = 34
     orionBuildToolsVersion = "34.0.0"
-    enableAnalytics = file("orion-viewer/google-services.json").exists()
-    if (isCIBuild) {
-        orionNdkVersion = "23.2.8568313"
-    }
-    else {
-        orionNdkVersion = !isAndroid40Build ? "23.2.8568313" : "17.2.4988734"
-    }
+    enableAnalytics = !isAndroid40Build && file("orion-viewer/google-services.json").exists()
+    orionNdkVersion = !isAndroid40Build ? "23.2.8568313" : "17.2.4988734"
     testFiles = ['http://www.djvu.org/docs/DjVu3Spec.djvu']
 }

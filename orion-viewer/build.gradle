@@ -138,6 +138,10 @@ android {
             universalApk false
             reset()
             include "x86", "x86_64", "armeabi-v7a", "arm64-v8a"
+            if (isAndroid40Build) {
+                include "armeabi"
+                exclude "x86_64"
+            }
         }
     }
     packagingOptions {

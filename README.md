@@ -70,11 +70,11 @@ To build `Orion Viewer` you will need:
 
  ```
  ./gradlew :nativeLibs:djvuModule:clean :nativeLibs:mupdfModule:clean
- ./gradlew :orion-viewer:assembleArm7Debug -Porion.build.android40=true
+ ./gradlew :orion-viewer:assembleDebug -Porion.build.android40=true
  ```
 
 Pre 0.80 versions are compatible with Android 2.1+ devices
 
 ###Troubleshooting
 
-In case of getting error about absent libtinfo.so.5, please install ncurses-compat-libs.
+In case of getting error about absent libtinfo.so.5, please install ncurses lib (libncurses5).
