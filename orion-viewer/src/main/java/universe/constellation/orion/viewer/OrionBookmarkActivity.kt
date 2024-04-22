@@ -157,7 +157,7 @@ class OrionBookmarkActivity : OrionBaseActivity(false) {
                     try {
                         showEmptyResult = !exporter.export(bookId)
                     } catch (e: IOException) {
-                        showError(this, e)
+                        showAndLogError(this, e)
                         return true
                     }
 
@@ -186,7 +186,7 @@ class OrionBookmarkActivity : OrionBaseActivity(false) {
                     try {
                         showEmptyResult = !exporter.export(bookId)
                     } catch (e: IOException) {
-                        showError(this, e)
+                        showAndLogError(this, e)
                         return true
                     }
 
@@ -341,11 +341,11 @@ class OrionBookmarkActivity : OrionBaseActivity(false) {
             }
             return bookNames
         } catch (e: FileNotFoundException) {
-            showError(this, "Couldn't open file", e)
+            showAndLogError(this, "Couldn't open file", e)
         } catch (e: XmlPullParserException) {
-            showError(this, "Couldn't parse book parameters", e)
+            showAndLogError(this, "Couldn't parse book parameters", e)
         } catch (e: IOException) {
-            showError(this, "Couldn't parse book parameters", e)
+            showAndLogError(this, "Couldn't parse book parameters", e)
         } finally {
             if (reader != null) {
                 try {

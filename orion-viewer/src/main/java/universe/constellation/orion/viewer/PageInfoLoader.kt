@@ -65,8 +65,9 @@ fun writeValue(serializer: XmlSerializer, name: String?, value: String?) {
 }
 
 
-fun LastPageInfo.save(activity: Activity) {
+fun LastPageInfo.save(activity: OrionBaseActivity) {
     var writer: OutputStreamWriter? = null
+    log("Saving book parameters in $fileData")
     try {
         val serializer = Xml.newSerializer()
         writer = OutputStreamWriter(activity.openFileOutput(fileData, Context.MODE_PRIVATE))
@@ -89,8 +90,8 @@ fun LastPageInfo.save(activity: Activity) {
         serializer.endTag(nameSpace, "bookParameters")
         serializer.endDocument()
     } catch (e: IOException) {
-        log(e)
-        showError(activity, "Couldn't save book preferences", e)
+        activity.analytics.error(e)
+        showAndLogError(activity, "Couldn't save book preferences", e)
     } finally {
         if (writer != null) {
             try {
@@ -151,9 +152,9 @@ private fun LastPageInfo.load(activity: Activity, filePath: String): Boolean {
     } catch (e: FileNotFoundException) {
         //do nothing
     } catch (e: XmlPullParserException) {
-        showError(activity, "Couldn't parse book parameters", e)
+        showAndLogError(activity, "Couldn't parse book parameters", e)
     } catch (e: IOException) {
-        showError(activity, "Couldn't parse book parameters", e)
+        showAndLogError(activity, "Couldn't parse book parameters", e)
     } finally {
         if (reader != null) {
             try {

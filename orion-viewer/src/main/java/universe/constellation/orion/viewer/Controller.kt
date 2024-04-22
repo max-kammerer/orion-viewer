@@ -212,7 +212,7 @@ class Controller(
         }
     }
 
-    fun serializeAndSave(info: LastPageInfo, activity: Activity) {
+    fun serializeAndSave(info: LastPageInfo, activity: OrionBaseActivity) {
         layoutStrategy.serialize(info)
         pageLayoutManager.serialize(info)
         info.newOffsetX = layoutInfo?.x?.offset ?: 0

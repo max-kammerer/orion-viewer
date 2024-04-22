@@ -479,7 +479,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     val newPage = MathUtils.clamp(userPage, 1, controller!!.pageCount)
                     controller!!.drawPage(newPage - 1)
                 } catch (ex: NumberFormatException) {
-                    showError(this, "Couldn't parse " + pageNumberText.text, ex)
+                    showAndLogError(this, "Couldn't parse " + pageNumberText.text, ex)
                 }
             }
         }
