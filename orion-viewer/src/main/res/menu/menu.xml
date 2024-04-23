@@ -5,25 +5,29 @@
 
     <item
         android:id="@+id/search_menu_item"
-        android:icon="@drawable/search"
+        android:icon="@drawable/new_search"
         android:title="@string/menu_search_item"
+        orion:iconTint="?attr/menuIconTint"
         orion:showAsAction="always" />
 
     <item
         android:id="@+id/add_bookmark_menu_item"
-        android:icon="@drawable/add_bookmark"
+        android:icon="@drawable/new_bookmark_add"
         android:title="@string/menu_add_bookmark_item"
+        orion:iconTint="?attr/menuIconTint"
         orion:showAsAction="always" />
 
     <item
         android:id="@+id/select_text_menu_item"
-        android:icon="@drawable/select_text"
+        android:icon="@drawable/new_select"
         android:title="@string/menu_select_text"
+        orion:iconTint="?attr/menuIconTint"
         orion:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/goto_menu_item"
-        android:icon="@drawable/next"
+        android:icon="@drawable/new_forward"
+        orion:iconTint="?attr/menuIconTint"
         android:title="@string/menu_goto_text"
         orion:showAsAction="ifRoom" />
 
@@ -72,22 +76,27 @@
         <menu>
             <item
                 android:id="@+id/open_menu_item"
-                android:icon="@drawable/fileopen"
+                android:icon="@drawable/new_folder_open"
+                orion:iconTint="?attr/menuIconTint"
                 android:title="@string/menu_open_text" />
 
             <item
                 android:id="@+id/help_menu_item"
-                android:icon="@drawable/help"
+                android:icon="@drawable/new_help"
+                orion:iconTint="?attr/menuIconTint"
+                orion:icon="?attr/menuIconTint"
                 android:title="@string/menu_help_text" />
 
             <item
                 android:id="@+id/about_menu_item"
-                android:icon="@drawable/info"
+                android:icon="@drawable/new_info"
+                orion:iconTint="?attr/menuIconTint"
                 android:title="@string/menu_about_text" />
 
             <item
                 android:id="@+id/exit_menu_item"
-                android:icon="@drawable/close"
+                android:icon="@drawable/new_exit"
+                orion:iconTint="?attr/menuIconTint"
                 android:title="@string/menu_exit_text" />
         </menu>
     </item>

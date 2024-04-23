@@ -33,8 +33,7 @@ class MainMenuFragment : Fragment(R.layout.new_menu) {
     private fun doClick(id: Int) {
         hide()
         val orionViewerActivity = requireActivity() as OrionViewerActivity
-        val menuAction = orionViewerActivity.getMenuAction(id)
-        orionViewerActivity.doAction(menuAction)
+        orionViewerActivity.doMenuAction(id)
     }
 
     private fun hide() {

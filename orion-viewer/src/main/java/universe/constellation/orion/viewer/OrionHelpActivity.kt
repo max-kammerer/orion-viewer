@@ -22,7 +22,10 @@ package universe.constellation.orion.viewer
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -62,7 +65,8 @@ class OrionHelpActivity : OrionBaseActivity(false) {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        onOrionCreate(savedInstanceState, R.layout.file_manager)
+        onOrionCreate(savedInstanceState, R.layout.help_activity)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         initHelpScreen()
         chooseTab(intent)
     }
@@ -90,14 +94,9 @@ class OrionHelpActivity : OrionBaseActivity(false) {
         findViewById<ViewPager>(R.id.viewpager).setCurrentItem(index, false)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.file_manager_menu, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.exit_menu_item -> {
+            android.R.id.home -> {
                 finish()
                 return true
             }

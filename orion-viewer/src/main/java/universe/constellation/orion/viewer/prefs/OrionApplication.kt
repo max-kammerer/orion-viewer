@@ -94,9 +94,9 @@ class OrionApplication : Application() {
 
     private val themeId: Int
         get() = if (!isLightTheme)
-            R.style.Theme_AppCompat_NoActionBar
+            R.style.Theme_Orion_Dark_NoActionBar
         else
-            R.style.Theme_AppCompat_Light_NoActionBar
+            R.style.Theme_Orion_Light_NoActionBar
 
     val sdkVersion: Int
         get() = Build.VERSION.SDK_INT
@@ -149,10 +149,8 @@ class OrionApplication : Application() {
 
 
     fun applyTheme(activity: Activity) {
-        val themeId = themeId
-
-        if (themeId != -1) {
-            activity.setTheme(themeId)
+        if (this.themeId != -1) {
+            activity.setTheme(this.themeId)
         }
     }
 

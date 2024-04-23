@@ -304,14 +304,15 @@ public enum Action {
 
     OPTIONS (R.string.action_options_page, R.integer.action_options_page) {
         @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+        public void doAction(OrionBaseActivity activity) {
             Intent intent = new Intent(activity, OrionPreferenceActivity.class);
             activity.startActivity(intent);
         }
     },
 
     CLOSE_ACTION (R.string.action_close, R.integer.action_close) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+        @Override
+        public void doAction(OrionBaseActivity activity) {
             activity.finish();
         }
     },
@@ -464,6 +465,10 @@ public enum Action {
     }
 
     public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+        doAction(activity);
+    }
+
+    public void doAction(OrionBaseActivity activity) {
 
     }
 

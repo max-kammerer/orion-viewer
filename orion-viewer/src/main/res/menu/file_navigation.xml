@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/nav_locations"
+        android:title="@string/file_manager_nav_locations">
+        <menu>
+
+        </menu>
+    </item>
+
+    <item android:title="@string/file_manager_nav_settings">
+        <menu>
+            <item
+                android:id="@+id/nav_permissions"
+                android:icon="@drawable/new_lock_open"
+                android:title="@string/file_manager_grant_read_permissions"/>
+
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/new_settings"
+                android:title="@string/file_manager_nav_settings"/>
+        </menu>
+    </item>
+
+    <item android:title="@string/file_manager_nav_other">
+        <menu>
+            <item
+                android:id="@+id/nav_system"
+                android:icon="@drawable/new_folder_open"
+                android:title="@string/file_manager_nav_system_choose" />
+            <item
+                android:id="@+id/help_menu_item"
+                android:icon="@drawable/new_help"
+                android:title="@string/menu_help_text" />
+            <item
+                android:id="@+id/about_menu_item"
+                android:icon="@drawable/new_info"
+                android:title="@string/menu_about_text"
+                />
+
+            <item
+                android:id="@+id/nav_exit"
+                android:icon="@drawable/new_exit"
+                android:title="@string/file_manager_nav_exit" />
+        </menu>
+    </item>
+</menu>

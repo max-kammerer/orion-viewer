@@ -792,71 +792,37 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        var action = Action.NONE //will open help
-
-        val itemId = item.itemId
-        getMenuAction(item.itemId)
-        when (itemId) {
-            R.id.exit_menu_item -> {
-                finish()
-                return true
-            }
-
-            R.id.search_menu_item -> action = Action.SEARCH
-            R.id.crop_menu_item -> action = Action.CROP
-            R.id.zoom_menu_item -> action = Action.ZOOM
-            R.id.add_bookmark_menu_item -> action = Action.ADD_BOOKMARK
-            R.id.goto_menu_item -> action = Action.GOTO
-            R.id.select_text_menu_item -> action = Action.SELECT_TEXT
-            R.id.options_menu_item -> action = Action.OPTIONS
-            R.id.book_options_menu_item -> action = Action.BOOK_OPTIONS
-            R.id.outline_menu_item -> action = Action.SHOW_OUTLINE
-            R.id.open_menu_item -> action = Action.OPEN_BOOK
-            R.id.open_dictionary_menu_item -> action = Action.DICTIONARY
-
-            R.id.bookmarks_menu_item -> action = Action.OPEN_BOOKMARKS
-            R.id.help_menu_item, R.id.about_menu_item -> {
-                val intent = Intent()
-                intent.setClass(this, OrionHelpActivity::class.java)
-                intent.putExtra(OrionHelpActivity.OPEN_ABOUT_TAB, item.itemId == R.id.about_menu_item)
-                startActivity(intent)
-            }
+        if (doMenuAction(item.itemId)) {
+            return true
         }
 
-        if (Action.NONE !== action) {
-            doAction(action)
-        } else {
-            return super.onOptionsItemSelected(item)
-        }
-        return true
+        return super.onOptionsItemSelected(item)
     }
 
-    internal fun getMenuAction(id: Int): Action {
-        var action = Action.NONE
+    internal fun doMenuAction(id: Int): Boolean {
+        val action = when (id) {
+            R.id.exit_menu_item ->  Action.CLOSE_ACTION
+            R.id.search_menu_item ->  Action.SEARCH
+            R.id.crop_menu_item ->  Action.CROP
+            R.id.zoom_menu_item ->  Action.ZOOM
+            R.id.add_bookmark_menu_item ->  Action.ADD_BOOKMARK
+            R.id.goto_menu_item ->  Action.GOTO
+            R.id.select_text_menu_item ->  Action.SELECT_TEXT
+            R.id.options_menu_item ->  Action.OPTIONS
+            R.id.book_options_menu_item ->  Action.BOOK_OPTIONS
+            R.id.outline_menu_item ->  Action.SHOW_OUTLINE
+            R.id.open_menu_item ->  Action.OPEN_BOOK
+            R.id.open_dictionary_menu_item ->  Action.DICTIONARY
 
-        when (id) {
-            R.id.exit_menu_item -> action = Action.CLOSE_ACTION
-            R.id.search_menu_item -> action = Action.SEARCH
-            R.id.crop_menu_item -> action = Action.CROP
-            R.id.zoom_menu_item -> action = Action.ZOOM
-            R.id.add_bookmark_menu_item -> action = Action.ADD_BOOKMARK
-            R.id.goto_menu_item -> action = Action.GOTO
-            R.id.select_text_menu_item -> action = Action.SELECT_TEXT
-            R.id.options_menu_item -> action = Action.OPTIONS
-            R.id.book_options_menu_item -> action = Action.BOOK_OPTIONS
-            R.id.outline_menu_item -> action = Action.SHOW_OUTLINE
-            R.id.open_menu_item -> action = Action.OPEN_BOOK
-            R.id.open_dictionary_menu_item -> action = Action.DICTIONARY
-
-            R.id.bookmarks_menu_item -> action = Action.OPEN_BOOKMARKS
+            R.id.bookmarks_menu_item ->  Action.OPEN_BOOKMARKS
             R.id.help_menu_item, R.id.about_menu_item -> {
-                val intent = Intent()
-                intent.setClass(this, OrionHelpActivity::class.java)
-                intent.putExtra(OrionHelpActivity.OPEN_ABOUT_TAB, id == R.id.about_menu_item)
-                startActivity(intent)
+                openHelpActivity(id)
+                return true
             }
+            else -> return false
         }
-        return action
+        doAction(action)
+        return true
     }
 
     private fun initOptionDialog() {
@@ -867,10 +833,10 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         dialog!!.setCanceledOnTouchOutside(true)
     }
 
-    fun doAction(code: Int) {
-        val action = Action.getAction(code)
+    fun doAction(actionCode: Int) {
+        val action = Action.getAction(actionCode)
         doAction(action)
-        log("Code action $code")
+        log("Code action $actionCode")
     }
 
 

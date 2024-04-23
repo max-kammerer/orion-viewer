@@ -26,7 +26,7 @@ class FullScene(private val scene: ViewGroup, val drawView: OrionDrawScene, stat
     val colorStuff = ColorStuff()
 
     init {
-        val drawable = VectorDrawableCompat.create(context.resources, R.drawable.loading, null)
+        val drawable = VectorDrawableCompat.create(context.resources, R.drawable.loading, context.theme)
             ?: ColorDrawable(context.resources.getColor(R.color.orion_orange))
         DrawableCompat.setTint(drawable, context.resources.getColor(R.color.orion_orange))
         drawView.init(colorStuff, statusBarHelper, drawable)

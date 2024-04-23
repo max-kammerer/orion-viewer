@@ -6,5 +6,12 @@
     <string name="file_manager_documents">Документы</string>
     <string name="file_manager_downloads">Загрузки</string>
     <string name="file_manager_sdcard">SD Card</string>
-    <string name="file_manager_grant_read">Права на чтения</string>
+    <string name="file_manager_grant_read_permissions">Дать права на чтение</string>
+
+    <string name="file_manager_nav_locations">Места</string>
+    <string name="file_manager_nav_settings">Настройки</string>
+    <string name="file_manager_nav_other">Прочее</string>
+    <string name="file_manager_nav_system_choose">Выбрать файл в системе</string>
+    <string name="file_manager_nav_exit">Выход</string>
+
 </resources>

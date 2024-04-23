@@ -9,14 +9,14 @@
         android:layout_height="wrap_content"
         android:text="@string/file_manager_select_tip"
         android:id="@+id/file_manager_tip"
-        android:visibility="visible"
+        android:visibility="gone"
         android:textStyle="bold"/>
 
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
@@ -44,7 +44,7 @@
             android:id="@+id/file_manager_grant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/file_manager_grant_read"
+            android:text="@string/file_manager_grant_read_permissions"
             android:visibility="gone" />
     </LinearLayout>
     </HorizontalScrollView>
@@ -74,6 +74,6 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listView"
+        android:id="@+id/folderList"
         android:layout_gravity="center_horizontal" />
 </LinearLayout>

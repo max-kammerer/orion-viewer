@@ -53,7 +53,7 @@ class OrionSaveFileActivity : OrionFileManagerActivityBase(
         findViewById<Button>(R.id.saveFile).setOnClickListener {
             if (checkWritePermission(this)) {
                 val fileName = findViewById<TextView>(R.id.fileName).text.toString()
-                val currentFolder = (findViewById<ListView>(R.id.listView).adapter as FileChooserAdapter).currentFolder
+                val currentFolder = (findViewById<ListView>(R.id.folderList).adapter as FileChooserAdapter).currentFolder
                 val targetFile = File(currentFolder, fileName)
                 if (targetFile.exists()) {
                     if (targetFile.isDirectory) {

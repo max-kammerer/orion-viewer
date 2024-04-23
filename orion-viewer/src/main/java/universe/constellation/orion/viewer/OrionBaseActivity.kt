@@ -21,9 +21,12 @@ package universe.constellation.orion.viewer
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
@@ -31,6 +34,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import universe.constellation.orion.viewer.device.AndroidDevice
 import universe.constellation.orion.viewer.device.Device
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivityBase
@@ -196,8 +201,20 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
         }
     }
 
+    internal fun openHelpActivity(itemId: Int) {
+        val intent = Intent()
+        intent.setClass(this, OrionHelpActivity::class.java)
+        intent.putExtra(OrionHelpActivity.OPEN_ABOUT_TAB, itemId == R.id.about_menu_item)
+        startActivity(intent)
+    }
 }
 
-fun Activity.showLongMessage(message: String) {
-    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+fun Activity.getVectorDrawable(id: Int, color: Int = 0): Drawable {
+    val drawable = VectorDrawableCompat.create(resources, id, this.theme)
+        ?: ColorDrawable(resources.getColor(R.color.orion_orange))
+//    if (color != 0) {
+//        DrawableCompat.setTint(drawable, resources.getColor(R.color.orion_orange))
+//        DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_IN);
+//    }
+    return drawable
 }

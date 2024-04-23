@@ -6,16 +6,13 @@
     <string name="file_manager_documents">Documents</string>
     <string name="file_manager_downloads">Downloads</string>
     <string name="file_manager_sdcard">SD Card</string>
-    <string name="file_manager_grant_read">Read Permissions</string>
+    <string name="file_manager_grant_read_permissions">Grant read permissions</string>
 
-    <string-array name="file_manager_paths">
-        <item>Path</item>
-        <item>Downloads</item>
-        <item>Documents</item>
-    </string-array>
-    <string-array name="path_desc">
-        <item>@string/file_manager_path</item>
-        <item>@string/file_manager_documents</item>
-        <item>@string/file_manager_downloads</item>
-    </string-array>
+    <string name="file_manager_nav_locations">Locations</string>
+    <string name="file_manager_nav_settings">Settings</string>
+    <string name="file_manager_nav_other">Other</string>
+    <string name="file_manager_nav_system_choose">Choose file in system</string>
+    <string name="file_manager_nav_exit">Exit</string>
+
+
 </resources>

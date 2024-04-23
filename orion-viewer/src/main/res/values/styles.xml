@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <attr name="appIconTint" format="color|reference"/>
+    <attr name="navIconTint" format="color|reference"/>
+    <attr name="menuIconTint" format="color|reference"/>
+
     <style name="Menu_Item" >
         <item name="android:padding">3dp</item>
         <item name="android:background">@color/orion_orange</item>
         <item name="android:layout_margin">2dp</item>
+        <item name="android:width">32dp</item>
+        <item name="android:height">32dp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:tint">@color/white</item>
     </style>
 
     <style name="Tap_Dialog_Top" >
@@ -29,5 +37,17 @@
         <item name="android:background">@color/orion_orange</item>
         <item name="android:orientation">vertical</item>
         <item name="android:gravity">center</item>
+    </style>
+
+    <style name="Theme.Orion.Dark.NoActionBar" parent="Theme.AppCompat.NoActionBar">
+        <item name="navIconTint">@color/toolbar_icon_tint_ligth</item>
+        <item name="appIconTint">?attr/navIconTint</item>
+        <item name="menuIconTint">?attr/navIconTint</item>
+    </style>
+
+    <style name="Theme.Orion.Light.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="navIconTint">@color/toolbar_icon_tint</item>
+        <item name="appIconTint">?attr/navIconTint</item>
+        <item name="menuIconTint">?attr/navIconTint</item>
     </style>
 </resources>

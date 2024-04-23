@@ -64,8 +64,7 @@ class MainMenu(val mainMenu: View, val orionViewerActivity: OrionViewerActivity)
 
     private fun processClick(viewId: Int) {
         hideMenu()
-        val menuAction = orionViewerActivity.getMenuAction(viewId)
-        orionViewerActivity.doAction(menuAction)
+        orionViewerActivity.doMenuAction(viewId)
     }
 
     fun hideMenu() {

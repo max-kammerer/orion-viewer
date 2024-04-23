@@ -1,6 +1,5 @@
 package universe.constellation.orion.viewer.filemanager
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
@@ -18,9 +17,15 @@ import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.ListFragment
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.color.MaterialColors
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import universe.constellation.orion.viewer.OrionBaseActivity
 import universe.constellation.orion.viewer.OrionViewerActivity
@@ -33,6 +38,7 @@ import universe.constellation.orion.viewer.R.id.file_manager_goto_downloads
 import universe.constellation.orion.viewer.R.id.file_manager_goto_sdcard
 import universe.constellation.orion.viewer.android.isAtLeastKitkat
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity.Companion.LAST_OPENED_DIRECTORY
+import universe.constellation.orion.viewer.getVectorDrawable
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import java.io.File
@@ -52,7 +58,7 @@ open class OrionFileManagerActivity : OrionFileManagerActivityBase(
         log("OrionFileManager: On new intent $intent")
 
         if (intent.getBooleanExtra(OPEN_RECENTS_TAB, false)) {
-            findViewById<androidx.viewpager.widget.ViewPager>(R.id.viewpager).setCurrentItem(1, false)
+            findViewById<ViewPager>(R.id.viewpager).setCurrentItem(1, false)
             return
         }
 
@@ -71,10 +77,22 @@ open class OrionFileManagerActivity : OrionFileManagerActivityBase(
     }
 }
 
+private val DIRECTORY_DOCUMENTS = if (isAtLeastKitkat()) Environment.DIRECTORY_DOCUMENTS else "Documents"
+
+private val possibleStartFolders = listOf(
+    Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS) to R.string.file_manager_documents,
+    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) to R.string.file_manager_downloads,
+    Environment.getExternalStorageDirectory() to R.string.file_manager_sdcard
+)
+
 abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
     private val showRecentsAndSavePath: Boolean = true,
     private val fileNameFilter: FilenameFilter = FileChooserAdapter.DEFAULT_FILTER
-) : OrionBaseActivity() {
+) : OrionBaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    private lateinit var drawerLayout: DrawerLayout
+
+    private lateinit var drawerLayoutListener: ActionBarDrawerToggle
 
     private var prefs: SharedPreferences? = null
 
@@ -82,11 +100,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
 
     private var justCreated: Boolean = false
 
-
     class FileManagerFragment : Fragment(R.layout.folder_view) {
-
-        private val DIRECTORY_DOCUMENTS
-            get() = if (isAtLeastKitkat()) Environment.DIRECTORY_DOCUMENTS else "Documents"
 
         private val startFolder: File
             @SuppressLint("SdCardPath")
@@ -98,13 +112,8 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
                     return File(lastOpenedDir)
                 }
 
-                val possibleStartFolders = listOf(
-                    Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS),
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                    Environment.getExternalStorageDirectory(),
-                    File("/system/media/sdcard/")
-                )
-                val startFolder = possibleStartFolders.firstOrNull { it.exists() }
+                val startFolder =
+                    (possibleStartFolders.map { it.first } + File("/system/media/sdcard/")).firstOrNull { it.exists() }
                 if (startFolder != null) {
                     return startFolder
                 }
@@ -117,7 +126,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
 
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
-            listView = view.findViewById(R.id.listView)
+            listView = view.findViewById(R.id.folderList)
             pathView = view.findViewById(R.id.path)
 
             val myActivity = requireActivity() as OrionFileManagerActivityBase
@@ -165,7 +174,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
             }
         }
 
-        private fun changeFolder(
+        internal fun changeFolder(
             file: File
         ) {
             val newFolder = (listView.adapter as FileChooserAdapter).changeFolder(file)
@@ -219,11 +228,48 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
 
         justCreated = true
 
+        initDrawer()
+
         showPermissionRequestDialog()
     }
 
+    private fun initDrawer() {
+        supportActionBar?.setHomeButtonEnabled(true)
+
+        drawerLayout = findViewById(R.id.drawer_layout)
+        drawerLayoutListener = ActionBarDrawerToggle(this, drawerLayout, toolbar)
+        drawerLayoutListener.drawerArrowDrawable.color = MaterialColors.getColor(drawerLayout, R.attr.appIconTint)
+        drawerLayout.addDrawerListener(drawerLayoutListener)
+        drawerLayoutListener.isDrawerIndicatorEnabled = true
+        val navView = findViewById<NavigationView>(R.id.nav_view)
+        navView.setNavigationItemSelectedListener(this)
+
+        val menu = navView.menu
+        val locations = menu.findItem(R.id.nav_locations)
+        for (v in possibleStartFolders) {
+            val folder = v.first
+            if (folder.exists() && folder.isDirectory) {
+                val item = locations.subMenu?.add(1, R.id.nav_locations, Menu.NONE, v.second)
+                item?.setIcon(getVectorDrawable(R.drawable.new_folder_24))
+                val viewPager = findViewById<ViewPager>(R.id.viewpager)
+                item?.setOnMenuItemClickListener {
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                    if (viewPager.currentItem != 0) {
+                        viewPager.setCurrentItem(0, false)
+                    }
+                    ((viewPager.adapter as? SimplePagerAdapter)?.getItem(0) as? FileManagerFragment)
+                        ?.changeFolder(folder)?.run { true } ?: false
+                }
+            }
+        }
+        menu.findItem(R.id.nav_system)?.setVisible(isAtLeastKitkat())
+        menu.findItem(R.id.nav_permissions)?.setVisible(!hasReadStoragePermission(this))
+
+        drawerLayoutListener.syncState()
+    }
+
     private fun refreshFolder() {
-        val list = findViewById<ListView>(R.id.listView)
+        val list = findViewById<ListView>(R.id.folderList)
         val adapter = list.adapter
         if (adapter is FileChooserAdapter) {
             val currentFolder = adapter.currentFolder
@@ -260,14 +306,27 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         if (!hasReadStoragePermission(this)) {
             AlertDialog.Builder(this).setMessage(R.string.permission_directory_warning)
                 .setPositiveButton(R.string.permission_grant) { _, _ ->
-                    checkAndRequestStorageAccessPermissionOrReadOne(Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER)
+                    requestPermissions()
                 }.setNegativeButton(R.string.permission_cancel) { d, _ -> d.dismiss() }.show()
         }
+    }
+
+    internal fun requestPermissions() {
+        checkAndRequestStorageAccessPermissionOrReadOne(Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         justCreated = false
+    }
+
+    override fun onBackPressed() {
+        if (drawerLayout.isDrawerOpen(findViewById(R.id.nav_view))) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
+
     }
 
     override fun onResume() {
@@ -291,34 +350,27 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
     }
 
     private fun initFileManager() {
-        val pagerAdapter = SimplePagerAdapter(supportFragmentManager, if (showRecentsAndSavePath) 2 else 1)
-        val viewPager = findViewById<androidx.viewpager.widget.ViewPager>(R.id.viewpager)
+        val pagerAdapter = SimplePagerAdapter(supportFragmentManager).apply {
+            if (showRecentsAndSavePath) {
+                addFragment(RecentListFragment())
+            }
+        }
+        val viewPager = findViewById<ViewPager>(R.id.viewpager)
         viewPager.adapter = pagerAdapter
         val tabLayout = findViewById<TabLayout>(R.id.sliding_tabs)
         tabLayout.setupWithViewPager(viewPager)
-
         val folderTab = tabLayout.getTabAt(0)
-        folderTab?.setIcon(R.drawable.folder)
+        folderTab?.setIcon(getVectorDrawable(R.drawable.new_folder_24))
         if (showRecentsAndSavePath) {
             val recentTab = tabLayout.getTabAt(1)
-            recentTab?.setIcon(R.drawable.recent)
+            recentTab?.setIcon(getVectorDrawable(R.drawable.new_history))
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val result = super.onCreateOptionsMenu(menu)
-        if (result) {
-            menuInflater.inflate(R.menu.file_manager_menu, menu)
-        }
-        return result
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.exit_menu_item -> {
-                finish()
-                return true
-            }
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        if (drawerLayoutListener.onOptionsItemSelected(item)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+            return true
         }
         return false
     }
@@ -329,17 +381,20 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
 }
 
 
-internal class SimplePagerAdapter(fm: androidx.fragment.app.FragmentManager, private val pageCount: Int) : FragmentStatePagerAdapter(fm) {
+internal class SimplePagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
+
+    private val fragments: MutableList<Fragment> = arrayListOf(OrionFileManagerActivityBase.FileManagerFragment())
+
+    fun addFragment(fragment: Fragment) {
+        fragments.add(fragment)
+    }
 
     override fun getItem(i: Int): Fragment {
-        return if (i == 0)
-            OrionFileManagerActivityBase.FileManagerFragment()
-        else
-            OrionFileManagerActivityBase.RecentListFragment()
+        return fragments[i]
     }
 
     override fun getCount(): Int {
-        return pageCount
+        return fragments.size
     }
 
 }

@@ -50,7 +50,7 @@
 
         <activity android:name=".OrionViewerActivity"
                   android:label="@string/app_name"
-                  android:theme="@style/Theme.AppCompat"
+                  android:theme="@style/Theme.Orion.Dark.NoActionBar"
                   android:launchMode="singleTask"
                   android:icon="@drawable/orion" android:configChanges="orientation|locale|screenSize|keyboardHidden"
                   android:screenOrientation="behind" android:windowSoftInputMode="adjustPan"
@@ -105,7 +105,7 @@
 
         <activity android:name=".filemanager.OrionFileManagerActivity"
                   android:label="@string/file_manager_title"
-                  android:theme="@style/Theme.AppCompat.NoActionBar"
+                  android:theme="@style/Theme.Orion.Dark.NoActionBar"
                   android:launchMode="singleTask"
                   android:icon="@mipmap/ic_launcher"
                   android:configChanges="orientation|locale|screenSize"
@@ -120,12 +120,12 @@
 
         <activity android:name=".OrionSaveFileActivity"
                   android:label="@string/file_manager_title"
-                  android:theme="@style/Theme.AppCompat.NoActionBar"
+                  android:theme="@style/Theme.Orion.Dark.NoActionBar"
                   android:icon="@drawable/orion"/>
 
         <activity android:name=".OrionFileSelectorActivity"
                   android:label="@string/file_manager_title"
-                  android:theme="@style/Theme.AppCompat.NoActionBar"
+                  android:theme="@style/Theme.Orion.Dark.NoActionBar"
                   android:icon="@drawable/orion"/>
 
         <activity android:name=".prefs.OrionKeyBinderActivity" android:screenOrientation="behind"
