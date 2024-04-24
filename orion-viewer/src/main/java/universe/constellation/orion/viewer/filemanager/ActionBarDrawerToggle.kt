@@ -7,6 +7,22 @@ import androidx.drawerlayout.widget.DrawerLayout
 import universe.constellation.orion.viewer.Action
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.android.isAtLeastKitkat
+import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivityBase.Companion.EXTERNAL_FILE_PATH
+
+val supportedMimeTypes = arrayOf("image/vnd.djvu",
+"image/x-djvu",
+"image/djvu",
+"application/djvu",
+"application/vnd.djvu",
+"application/pdf",
+"application/vnd.ms-xpsdocument",
+"application/oxps",
+"application/xps",
+"application/vnd.comicbook+zip" ,
+"application/x-cbz",
+"image/tiff",
+"image/x-tiff",
+)
 
 class ActionBarDrawerToggle(
     private val activity: OrionFileManagerActivityBase,
@@ -28,12 +44,8 @@ class ActionBarDrawerToggle(
                 Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                     addCategory(Intent.CATEGORY_OPENABLE)
                     type = "*/*"
-                    putExtra(
-                        Intent.EXTRA_MIME_TYPES, arrayOf(
-                            "text/html", // .html
-                            "text/plain" // .txt
-                        )
-                    )
+                    putExtra(Intent.EXTRA_MIME_TYPES, supportedMimeTypes)
+                    activity.startActivityForResult(this, EXTERNAL_FILE_PATH)
                 }
                 return true
             }

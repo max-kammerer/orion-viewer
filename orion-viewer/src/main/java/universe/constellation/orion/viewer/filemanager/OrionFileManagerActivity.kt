@@ -94,6 +94,8 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
 
     private lateinit var drawerLayoutListener: ActionBarDrawerToggle
 
+    private lateinit var navView: NavigationView
+
     private var prefs: SharedPreferences? = null
 
     protected lateinit var globalOptions: GlobalOptions
@@ -241,7 +243,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         drawerLayoutListener.drawerArrowDrawable.color = MaterialColors.getColor(drawerLayout, R.attr.appIconTint)
         drawerLayout.addDrawerListener(drawerLayoutListener)
         drawerLayoutListener.isDrawerIndicatorEnabled = true
-        val navView = findViewById<NavigationView>(R.id.nav_view)
+        navView = findViewById(R.id.nav_view)
         navView.setNavigationItemSelectedListener(this)
 
         val menu = navView.menu
@@ -289,8 +291,13 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         log("FileManager: On activity result requestCode=$requestCode resultCode=$resultCode")
-        if (requestCode == Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER) {
-            actualizePermissions()
+        when (requestCode) {
+            Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER -> {
+                actualizePermissions()
+            }
+            EXTERNAL_FILE_PATH -> {
+                //openFile()
+            }
         }
     }
 
@@ -299,6 +306,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         if (hasReadStoragePermission) {
             refreshFolder()
         }
+        navView.menu.findItem(R.id.nav_permissions)?.setVisible(!hasReadStoragePermission(this))
         analytics.permissionEvent(this.javaClass.name, hasReadStoragePermission)
     }
 
@@ -377,6 +385,8 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
 
     companion object {
         const val DONT_OPEN_RECENT_FILE = "DONT_OPEN_RECENT_FILE"
+
+        const val EXTERNAL_FILE_PATH = 1000
     }
 }
 
