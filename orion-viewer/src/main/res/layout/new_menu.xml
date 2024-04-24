@@ -19,7 +19,7 @@
 
         <ImageView
             android:id="@+id/exit_menu_item"
-            style="@style/Menu_Item"
+            style="@style/New_Viewer_Menu_Item"
             android:layout_height="wrap_content"
             android:contentDescription="@string/menu_exit_text"
             app:srcCompat="@drawable/new_exit" />
@@ -32,29 +32,29 @@
         </TextView>
 
         <ImageView
-            style="@style/Menu_Item"
             android:id="@+id/open_dictionary_menu_item"
-            app:srcCompat="@drawable/new_dictionary"
-            android:contentDescription="@string/menu_open_dictionary_text"  />
+            style="@style/New_Viewer_Menu_Item"
+            android:contentDescription="@string/menu_open_dictionary_text"
+            app:srcCompat="@drawable/new_dictionary" />
 
         <ImageView
-            style="@style/Menu_Item"
             android:id="@+id/book_options_menu_item"
+            style="@style/New_Viewer_Menu_Item"
             android:contentDescription="@string/menu_book_preferences"
             app:srcCompat="@drawable/new_book_settings" />
 
         <ImageView
             android:id="@+id/options_menu_item"
-            style="@style/Menu_Item"
+            style="@style/New_Viewer_Menu_Item"
             android:layout_height="wrap_content"
             android:contentDescription="@string/menu_options_text"
             app:srcCompat="@drawable/new_settings" />
 
         <ImageView
-            style="@style/Menu_Item"
             android:id="@+id/about_menu_item"
-            app:srcCompat="@drawable/new_info"
-            android:contentDescription="@string/menu_about_text" />
+            style="@style/New_Viewer_Menu_Item"
+            android:contentDescription="@string/menu_about_text"
+            app:srcCompat="@drawable/new_info" />
 
     </LinearLayout>
 
@@ -62,9 +62,9 @@
         android:id="@+id/menu_middle_part"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_above="@id/menu_botton_actions_all"
         android:layout_below="@id/menu_top_actions"
-        android:layout_above="@id/menu_botton_actions_all"/>
+        android:orientation="vertical" />
 
     <LinearLayout
         android:id="@+id/menu_botton_actions_all"
@@ -86,37 +86,37 @@
 
             <ImageView
                 android:id="@+id/zoom_menu_item"
-                style="@style/Menu_Item"
+                style="@style/New_Viewer_Menu_Item"
                 android:contentDescription="@string/menu_zoom_text"
                 app:srcCompat="@drawable/new_zoom" />
 
             <ImageView
                 android:id="@+id/crop_menu_item"
-                style="@style/Menu_Item"
+                style="@style/New_Viewer_Menu_Item"
                 android:contentDescription="@string/menu_crop_text"
                 app:srcCompat="@drawable/new_cut" />
 
             <ImageView
                 android:id="@+id/bookmarks_menu_item"
-                style="@style/Menu_Item"
-                app:srcCompat="@drawable/new_bookmarks"
-                android:contentDescription="@string/menu_bookmarks_text" />
+                style="@style/New_Viewer_Menu_Item"
+                android:contentDescription="@string/menu_bookmarks_text"
+                app:srcCompat="@drawable/new_bookmarks" />
 
             <ImageView
                 android:id="@+id/add_bookmark_menu_item"
-                style="@style/Menu_Item"
+                style="@style/New_Viewer_Menu_Item"
                 android:contentDescription="@string/menu_add_bookmark_item"
                 app:srcCompat="@drawable/new_bookmark_add" />
 
             <ImageView
                 android:id="@+id/outline_menu_item"
-                style="@style/Menu_Item"
-                app:srcCompat="@drawable/new_outline"
-                android:contentDescription="@string/menu_outline_text" />
+                style="@style/New_Viewer_Menu_Item"
+                android:contentDescription="@string/menu_outline_text"
+                app:srcCompat="@drawable/new_outline" />
 
             <ImageView
                 android:id="@+id/search_menu_item"
-                style="@style/Menu_Item"
+                style="@style/New_Viewer_Menu_Item"
                 android:contentDescription="@string/menu_search_item"
                 android:padding="5dp"
                 app:srcCompat="@drawable/new_search" />
@@ -124,7 +124,7 @@
 
             <ImageView
                 android:id="@+id/select_text_menu_item"
-                style="@style/Menu_Item"
+                style="@style/New_Viewer_Menu_Item"
                 android:contentDescription="@string/menu_select_text"
                 app:srcCompat="@drawable/new_select" />
 
@@ -136,38 +136,38 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/cur_page"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/cur_page"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical" />
 
-<!--            <com.google.android.material.divider.MaterialDivider-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                />-->
+            <!--            <com.google.android.material.divider.MaterialDivider-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                />-->
 
             <ImageView
                 android:id="@+id/page_picker_minus"
-                style="@style/Menu_Item"
+                style="@style/New_Viewer_Menu_Item"
                 app:srcCompat="@drawable/new_back" />
 
             <SeekBar
                 android:id="@+id/page_picker_seeker"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:background="@color/orion_orange" />
 
             <ImageView
-                style="@style/Menu_Item"
                 android:id="@+id/page_picker_plus"
+                style="@style/New_Viewer_Menu_Item"
                 app:srcCompat="@drawable/new_forward" />
 
             <TextView
+                android:id="@+id/page_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/page_count"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical" />
 
         </LinearLayout>
     </LinearLayout>

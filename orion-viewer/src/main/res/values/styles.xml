@@ -5,7 +5,17 @@
     <attr name="navIconTint" format="color|reference"/>
     <attr name="menuIconTint" format="color|reference"/>
 
-    <style name="Menu_Item" >
+    <style name="General_Help_TextView" >
+
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:tint">?attr/menuIconTint</item>
+        <item name="drawableTint">?attr/navIconTint</item>
+    </style>
+
+    <style name="New_Viewer_Menu_Item" >
         <item name="android:padding">3dp</item>
         <item name="android:background">@color/orion_orange</item>
         <item name="android:layout_margin">2dp</item>

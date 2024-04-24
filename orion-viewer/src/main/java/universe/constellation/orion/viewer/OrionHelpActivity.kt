@@ -35,53 +35,29 @@ import com.google.android.material.tabs.TabLayout
 
 class OrionHelpActivity : OrionBaseActivity(false) {
 
-    class InfoFragment : Fragment() {
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-            return inflater.inflate(R.layout.general_help, container, false)
-        }
+    class InfoFragment : Fragment(R.layout.general_help)
 
-        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-            super.onViewCreated(view, savedInstanceState)
-            val btn = view.findViewById<View>(R.id.help_close) as ImageButton
-            btn.setOnClickListener { requireActivity().finish() }
-        }
-    }
-
-
-    class AboutFragment : Fragment() {
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-            val view = inflater.inflate(R.layout.about, container, false)
-            val viewById = view.findViewById<View>(R.id.about_version_name) as TextView
-            viewById.text = BuildConfig.VERSION_NAME
-            return view
-        }
-
-        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-            super.onViewCreated(view, savedInstanceState)
-            val btn = view.findViewById<View>(R.id.info_close) as ImageButton
-            btn.setOnClickListener { requireActivity().finish() }
-        }
-    }
+    class AboutFragment : Fragment(R.layout.app_about_fragment)
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        onOrionCreate(savedInstanceState, R.layout.help_activity)
+        onOrionCreate(savedInstanceState, R.layout.app_help_activity)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         initHelpScreen()
         chooseTab(intent)
     }
 
     private fun initHelpScreen() {
-        val pagerAdapter = HelpSimplePagerAdapter(supportFragmentManager, 2)
+        val pagerAdapter = HelpSimplePagerAdapter(supportFragmentManager)
         val viewPager = findViewById<ViewPager>(R.id.viewpager)
         viewPager.adapter = pagerAdapter
         val tabLayout = findViewById<View>(R.id.sliding_tabs) as TabLayout
         tabLayout.setupWithViewPager(viewPager)
 
         val help = tabLayout.getTabAt(0)
-        help?.setIcon(R.drawable.help)
+        help?.setIcon(R.drawable.new_help)
         val about = tabLayout.getTabAt(1)
-        about?.setIcon(R.drawable.info)
+        about?.setIcon(R.drawable.new_info)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -110,18 +86,15 @@ class OrionHelpActivity : OrionBaseActivity(false) {
 
 }
 
+internal class HelpSimplePagerAdapter(fm: androidx.fragment.app.FragmentManager) : FragmentStatePagerAdapter(fm) {
 
-internal class HelpSimplePagerAdapter(fm: androidx.fragment.app.FragmentManager, private val pageCount: Int) : FragmentStatePagerAdapter(fm) {
+    private val fragments: MutableList<Fragment> = arrayListOf(OrionHelpActivity.InfoFragment(), OrionHelpActivity.AboutFragment())
 
     override fun getItem(i: Int): Fragment {
-        return if (i == 0)
-            OrionHelpActivity.InfoFragment()
-        else
-            OrionHelpActivity.AboutFragment()
+        return fragments[i]
     }
 
     override fun getCount(): Int {
-        return pageCount
+        return fragments.size
     }
-
 }

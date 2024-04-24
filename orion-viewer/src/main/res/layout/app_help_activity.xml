@@ -14,7 +14,8 @@
             android:id="@+id/sliding_tabs"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|enterAlways" />
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:tabIconTint="?attr/navIconTint"/>
     </androidx.appcompat.widget.Toolbar>
 
 

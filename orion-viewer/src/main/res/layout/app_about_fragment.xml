@@ -38,6 +38,7 @@
                         android:id="@+id/about_version_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="@string/versionName"
                         android:layout_marginRight="10dp"
                         android:textSize="20sp" />
                 </LinearLayout>
@@ -491,10 +492,6 @@ the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version."
             android:textSize="18sp" />
 
-
-        <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                     android:src="@drawable/revert"
-                     android:id="@+id/info_close" android:layout_gravity="right"/>
 
     </LinearLayout>
 

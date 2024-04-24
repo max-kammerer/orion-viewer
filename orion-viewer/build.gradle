@@ -71,6 +71,8 @@ android {
         versionCode = orionVersionCode
         versionName = orionVersionName
 
+        resValue "string", "versionName", versionName
+
         minSdkVersion orionMinSdk
         if (isAndroid40Build) {
             maxSdkVersion = 15
