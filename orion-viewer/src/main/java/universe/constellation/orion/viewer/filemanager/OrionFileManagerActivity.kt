@@ -8,7 +8,8 @@ import java.io.File
 
 open class OrionFileManagerActivity : OrionFileManagerActivityBase(
     true,
-    FileChooserAdapter.DEFAULT_FILTER
+    FileChooserAdapter.DEFAULT_FILTER,
+    true
 ) {
     companion object {
         const val OPEN_RECENTS_TAB = "OPEN_RECENTS_FILE"

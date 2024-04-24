@@ -11,7 +11,7 @@
     <string name="file_manager_nav_locations">Места</string>
     <string name="file_manager_nav_settings">Настройки</string>
     <string name="file_manager_nav_other">Прочее</string>
-    <string name="file_manager_nav_system_choose">Выбрать файл в системе</string>
+    <string name="file_manager_nav_system_select">Выбрать файл в системе</string>
     <string name="file_manager_nav_exit">Выход</string>
 
 </resources>

@@ -26,9 +26,9 @@
     <item android:title="@string/file_manager_nav_other">
         <menu>
             <item
-                android:id="@+id/nav_system"
+                android:id="@+id/nav_system_select"
                 android:icon="@drawable/new_folder_open"
-                android:title="@string/file_manager_nav_system_choose" />
+                android:title="@string/file_manager_nav_system_select" />
             <item
                 android:id="@+id/help_menu_item"
                 android:icon="@drawable/new_help"

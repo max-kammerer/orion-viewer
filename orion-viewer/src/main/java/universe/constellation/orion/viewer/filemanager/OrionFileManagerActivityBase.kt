@@ -10,6 +10,7 @@ import android.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ListView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -40,7 +41,8 @@ internal val possibleStartFolders = listOf(
 
 abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
     val showRecentsAndSavePath: Boolean = true,
-    val fileNameFilter: FilenameFilter = FileChooserAdapter.DEFAULT_FILTER
+    val fileNameFilter: FilenameFilter = FileChooserAdapter.DEFAULT_FILTER,
+    private val enableSystemOptionAction: Boolean = false
 ) : OrionBaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var drawerLayout: DrawerLayout
@@ -55,6 +57,15 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
     lateinit var globalOptions: GlobalOptions
 
     private var justCreated: Boolean = false
+
+    val selectDocumentInSystem = if (isAtLeastKitkat()) registerForActivityResult(
+        ActivityResultContracts.OpenDocument()
+        ) { result ->
+            if (result != null) {
+                openFile(result)
+            }
+        }
+    else null
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,7 +113,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
                 }
             }
         }
-        menu.findItem(R.id.nav_system)?.setVisible(isAtLeastKitkat())
+        menu.findItem(R.id.nav_system_select)?.setVisible(enableSystemOptionAction && isAtLeastKitkat())
         menu.findItem(R.id.nav_permissions)?.setVisible(!hasReadStoragePermission(this))
 
         drawerLayoutListener.syncState()
@@ -132,9 +143,6 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         when (requestCode) {
             Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER -> {
                 actualizePermissions()
-            }
-            EXTERNAL_FILE_PATH -> {
-                //openFile()
             }
         }
     }
@@ -183,16 +191,20 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         }
     }
 
-    open fun openFile(file: File) {
-        log("Opening new book: " + file.path)
+    fun openFile(uri: Uri) {
+        log("Opening new book: $uri")
 
         startActivity(
             Intent(Intent.ACTION_VIEW).apply {
                 setClass(applicationContext, OrionViewerActivity::class.java)
-                data = Uri.fromFile(file)
+                data = uri
                 addCategory(Intent.CATEGORY_DEFAULT)
             }
         )
+    }
+
+    open fun openFile(file: File) {
+        openFile(Uri.fromFile(file))
     }
 
     private fun initFileManager() {
@@ -223,8 +235,6 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
 
     companion object {
         const val DONT_OPEN_RECENT_FILE = "DONT_OPEN_RECENT_FILE"
-
-        const val EXTERNAL_FILE_PATH = 1000
     }
 }
 

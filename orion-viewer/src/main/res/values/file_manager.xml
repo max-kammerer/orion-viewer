@@ -11,7 +11,7 @@
     <string name="file_manager_nav_locations">Locations</string>
     <string name="file_manager_nav_settings">Settings</string>
     <string name="file_manager_nav_other">Other</string>
-    <string name="file_manager_nav_system_choose">Choose file in system</string>
+    <string name="file_manager_nav_system_select">Select file in system</string>
     <string name="file_manager_nav_exit">Exit</string>
 
 
