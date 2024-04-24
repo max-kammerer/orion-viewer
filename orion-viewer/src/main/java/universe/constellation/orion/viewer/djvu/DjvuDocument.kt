@@ -40,13 +40,13 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
         override fun readPageSize(): PageSize? {
             if (docPointer == 0L) return errorInDebugOr("Document for $pageNum is null") { null }
             if (destroyed) return errorInDebugOr("Page $pageNum already destroyed") { null }
-            return getPageDimension(docPointer, pageNum, PageSize())
+            return getPageDimension(contextPointer, docPointer, pageNum, PageSize())
         }
 
         override fun readPageDataForRendering() {
             if (destroyed) return errorInDebug("Page $pageNum already destroyed")
             if (pagePointer == 0L && docPointer != 0L) {
-                pagePointer = gotoPageInternal(docPointer, pageNum)
+                pagePointer = getPageInternal(contextPointer, docPointer, pageNum)
             }
         }
 
@@ -70,6 +70,7 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
                 }, ${leftOffset + right}, ${topOffset + bottom}"
             ) {
                 drawPage(
+                    contextPointer,
                     docPointer,
                     pagePointer,
                     bitmap,
@@ -123,7 +124,7 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
         contextPointer = initContext()
         docInfo.fileName = filePath
         if (contextPointer == 0L) throw RuntimeException("Can't create djvu contextPointer").also { destroy() }
-        docPointer = openFile(filePath, docInfo, contextPointer)
+        docPointer = openFile(filePath, contextPointer, docInfo)
         if (docPointer == 0L) throw RuntimeException("Can't open file $filePath").also { destroy() }
     }
 
@@ -137,7 +138,7 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
     @Synchronized
     override fun destroy() {
         destroyPages()
-        destroy(docPointer, contextPointer)
+        destroy(contextPointer, docPointer)
         docPointer = 0
         contextPointer = 0
     }
@@ -157,7 +158,7 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
         val strings = ArrayList<String>(500)
         val positions = ArrayList<RectF>(500)
 
-        getPageText(docPointer, pageNum, strings, positions)
+        getPageText(contextPointer, docPointer, pageNum, strings, positions)
 
         var prevIndex = 0
         val indexes = ArrayList<Int>(500)
@@ -196,7 +197,7 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
     }
 
     fun getText(pageNum: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean) =
-            getText(docPointer, pageNum, absoluteX, absoluteY, width, height)
+            getText(contextPointer, docPointer, pageNum, absoluteX, absoluteY, width, height)
 
     companion object {
 
@@ -208,30 +209,31 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
         external fun initContext(): Long
 
         @JvmStatic @Synchronized
-        external fun openFile(filename: String, info: DocInfo, context: Long): Long
+        external fun openFile(filename: String, context: Long, info: DocInfo): Long
 
         @JvmStatic @Synchronized
-        external fun gotoPageInternal(doc: Long, pageNum: Int): Long
+        external fun getPageInternal(context: Long, doc: Long, pageNum: Int): Long
 
         @JvmStatic @Synchronized
-        external fun getPageDimension(doc: Long, pageNum: Int, info: PageSize): PageSize?
+        external fun getPageDimension(context: Long, doc: Long, pageNum: Int, info: PageSize): PageSize?
 
         @JvmStatic @Synchronized
-        external fun drawPage(doc: Long, page: Long, bitmap: Bitmap, zoom: Float, bitmapWidth: Int, bitmapHeight: Int,
+        external fun drawPage(context: Long, doc: Long, page: Long, bitmap: Bitmap, zoom: Float, bitmapWidth: Int, bitmapHeight: Int,
                               patchX: Int, patchY: Int,
                               patchW: Int, patchH: Int,
                               originX: Int, originY: Int): Boolean
 
         @JvmStatic @Synchronized
-        external fun destroy(doc: Long, context: Long)
+        external fun destroy(context: Long, doc: Long)
 
         @JvmStatic @Synchronized
-        external fun getPageText(doc: Long, pageNumber: Int, stringBuilder: ArrayList<*>, positions: ArrayList<*>): Boolean
+        external fun getPageText(context: Long, doc: Long, pageNumber: Int, stringBuilder: ArrayList<*>, positions: ArrayList<*>): Boolean
 
         @JvmStatic @Synchronized
         external fun getOutline(doc: Long): Array<OutlineItem>
+
         @JvmStatic @Synchronized
-        external fun getText(doc: Long, pageNumber: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int): String
+        external fun getText(context: Long, doc: Long, pageNumber: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int): String
 
         @JvmStatic @Synchronized
         external fun releasePage(page: Long)

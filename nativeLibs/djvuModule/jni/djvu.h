@@ -12,9 +12,9 @@
 extern JNIEXPORT jlong JNICALL JNI_FN(DjvuDocument_initContext)(JNIEnv *env, jclass type);
 
 extern JNIEXPORT jlong JNICALL
-JNI_FN(DjvuDocument_openFile)(JNIEnv *env, jclass type, jstring jfileName, DocInfo docInfo, jlong contextl);
+JNI_FN(DjvuDocument_openFile)(JNIEnv *env, jclass type, jstring jfileName, jlong contextl, DocInfo docInfo);
 
-extern JNIEXPORT void JNICALL JNI_FN(DjvuDocument_destroy)(JNIEnv *env, jclass type, jlong doc, jlong context);
+extern JNIEXPORT void JNICALL JNI_FN(DjvuDocument_destroy)(JNIEnv *env, jclass type, jlong context, jlong doc);
 
 extern JNIEXPORT PageSize JNICALL
 JNI_FN(DjvuDocument_getPageInfo)(JNIEnv *env, jclass type, jlong docl, jint pageNum, PageSize info);
