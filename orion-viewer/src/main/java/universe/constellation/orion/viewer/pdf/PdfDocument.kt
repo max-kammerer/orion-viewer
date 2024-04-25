@@ -50,7 +50,14 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
             if (page == null) {
                 synchronized(core) {
                     if (page == null) {
-                        page = core.doc.loadPage(pageNum)
+                        try {
+                            page = core.doc.loadPage(pageNum)
+                        } catch (e: IllegalArgumentException) {
+                            if (e.message == "page number out of range") {
+                                throw IllegalArgumentException("page number out of range: $pageNum of ${this@PdfDocument.pageCount}")
+                            }
+                            throw e;
+                        }
                     }
                 }
             }
