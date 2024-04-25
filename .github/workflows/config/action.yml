@@ -37,5 +37,5 @@ runs:
 
     - name: Prepare thirdparty
       shell: bash
-      run: bash ./gradlew -b thirdparty_build.gradle downloadAndPatchDjvu downloadAndMakeMupdf
+      run: bash ./gradlew -b thirdparty_build.gradle downloadDjvu downloadAndMakeMupdf
       if: steps.restore-nativeLibs.outputs.cache-hit != 'true'

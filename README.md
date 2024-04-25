@@ -44,15 +44,15 @@ Take a look into
 
 To build `Orion Viewer` you will need:
 
- * Android Studio 2022.3+
+ * Android Studio 2023.1+ (for development)
  * android-sdk 33+
- * android-ndk 20+
+ * android-ndk 23.2.8568313
  * make and python3 for mupdf
  * git
 
  * downloaded native libs (mupdf, djvu):
 
-    `./gradlew -b  thirdparty_build.gradle downloadAndPatchDjvu downloadAndMakeMupdf`
+    `./gradlew -b  thirdparty_build.gradle downloadDjvu downloadAndMakeMupdf`
 
     Build scripts for them are defined in `externalNativeBuild` section in gradle build files
     (for details see `djvuModule/build.gradle` and `mupdfModule/build.gradle`).

@@ -35,17 +35,8 @@ task downloadDjvu {
     }
 }
 
-task patchDjvu  {
-    doLast {
-//        exec {
-//            workingDir file(djvu)
-//            commandLine = ['git', 'apply', '../../djvu.patch']
-//        }
-        println "Task is obsolete"
-    }
-}
-
-task downloadAndPatchDjvu(dependsOn: [downloadDjvu, patchDjvu])
+//Keep until migration
+task downloadAndPatchDjvu(dependsOn: [downloadDjvu])
 
 task buildDjvu() {
     doLast {
@@ -56,10 +47,9 @@ task buildDjvu() {
     }
 }
 
-task djvuChain(dependsOn: [downloadAndPatchDjvu, buildDjvu])
+task djvuChain(dependsOn: [buildDjvu])
 
-patchDjvu.mustRunAfter downloadDjvu
-buildDjvu.mustRunAfter patchDjvu
+buildDjvu.mustRunAfter downloadDjvu
 
 
 /*MUPDF CHAIN*/
