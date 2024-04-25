@@ -181,6 +181,15 @@ class PageView(
         }
     }
 
+    internal fun precacheData() {
+        GlobalScope.async(controller.context + pageJobs + handler) {
+            page.getPageSize()
+            if (isActive) {
+                page.readPageDataForRendering()
+            }
+        }
+    }
+
     fun visibleRect(): Rect? {
         return layoutData.visibleOnScreenPart(pageLayoutManager.sceneRect)
     }

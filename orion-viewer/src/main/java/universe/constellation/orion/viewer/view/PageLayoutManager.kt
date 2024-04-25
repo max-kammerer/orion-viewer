@@ -276,7 +276,6 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         if (nextPageNum >= controller.pageCount) return null
         val existingPage = activePages.firstOrNull { it.pageNum == nextPageNum }
         if (existingPage != null) {
-            //updateStateAndRenderVisible(existingPage)
             return existingPage
         }
 

@@ -1,7 +1,6 @@
 package universe.constellation.orion.viewer.view
 
 import android.graphics.Rect
-import android.graphics.Region
 import universe.constellation.orion.viewer.PageState
 import universe.constellation.orion.viewer.PageView
 
@@ -26,8 +25,19 @@ suspend fun PageView.precache() {
     val r = Rect(right, top, right + deltaX, bottom)
     renderInvisible(r)
 
-    this.pageLayoutManager.uploadNextPage(this, true)
-    this.pageLayoutManager.uploadPrevPage(this, true)
+    val next = this.pageLayoutManager.uploadNextPage(this, addIfAbsent = true)
+    val prev = this.pageLayoutManager.uploadPrevPage(this, addIfAbsent = true)
+    val tmp = Rect()
+
+    if (layoutData.globalRect(tmp).bottom < sceneInfo.bottom + 1.5 * deltaY) {
+        //TODO add global walk
+        next?.precacheData()
+    }
+
+    if (layoutData.globalRect(tmp).top >= -2 * deltaY) {
+        this.layoutData.globalRect(tmp).bottom
+        prev?.precacheData()
+    }
 }
 
 fun Rect.screenForPrecache(pageLayoutManager: PageLayoutManager) {
