@@ -97,16 +97,18 @@ class FireBaseAnalytics : Analytics() {
         }
     }
 
-    override fun onApplicationInit(isNewUser: Boolean) {
-        logEvent("onApplicationInit") {
+    override fun onStartStop(activity: String, isStart: Boolean, isNewUser: Boolean) {
+        logEvent("onStartStop") {
             param("isNewUser", isNewUser.toString())
+            param("isStart", isStart.toString())
         }
     }
 
-    override fun permissionEvent(screen: String, state: Boolean) {
+    override fun permissionEvent(screen: String, state: Boolean, isNewUser: Boolean) {
         logEvent("permissionResult") {
             param("screen", screen)
             param("state", state.toString())
+            param("isNewUser", isNewUser.toString())
         }
     }
 

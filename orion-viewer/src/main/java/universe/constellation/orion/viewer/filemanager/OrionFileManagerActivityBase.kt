@@ -153,7 +153,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
             refreshFolder()
         }
         navView.menu.findItem(R.id.nav_permissions)?.setVisible(!hasReadStoragePermission(this))
-        analytics.permissionEvent(this.javaClass.name, hasReadStoragePermission)
+        analytics.permissionEvent(this.javaClass.name, hasReadStoragePermission, globalOptions.isNewUI)
     }
 
     private fun showPermissionRequestDialog() {
@@ -161,7 +161,10 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
             AlertDialog.Builder(this).setMessage(R.string.permission_directory_warning)
                 .setPositiveButton(R.string.permission_grant) { _, _ ->
                     requestPermissions()
-                }.setNegativeButton(R.string.permission_cancel) { d, _ -> d.dismiss() }.show()
+                }.setNegativeButton(R.string.permission_cancel) { d, _ ->
+                    d.dismiss()
+                    analytics.permissionEvent(this.javaClass.name, false, globalOptions.isNewUI)
+                }.show()
         }
     }
 

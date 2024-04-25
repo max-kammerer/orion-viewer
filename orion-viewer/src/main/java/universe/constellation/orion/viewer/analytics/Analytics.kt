@@ -37,11 +37,11 @@ open class Analytics {
 
     }
 
-    open fun onApplicationInit(isNewUser: Boolean) {
+    open fun onStartStop(activity: String, start: Boolean, isNewUser: Boolean) {
 
     }
 
-    open fun permissionEvent(screen: String, state: Boolean) {
+    open fun permissionEvent(screen: String, state: Boolean, isNewUser: Boolean) {
 
     }
 
