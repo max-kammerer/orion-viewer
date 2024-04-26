@@ -14,6 +14,7 @@
 #include "base_geometry.c"
 #include "djvu.h"
 #include "jni.h"
+#include <unistd.h>
 
 extern void orion_updateContrast(unsigned char *, int);
 
@@ -21,15 +22,14 @@ static inline jlong jlong_cast(void *p) {
     return (jlong) (intptr_t) p;
 }
 
-int record_jni_error(JNIEnv* env, const char* msg)
+void record_jni_error(JNIEnv* env, const char* msg)
 {
     jclass exceptionClass = (*env)->FindClass(env, "java/lang/RuntimeException");
     if (!exceptionClass)
-        return 1;
+        return;
     if (!msg)
         (*env)->ThrowNew(env, exceptionClass, "Djvu decoding error!");
     else (*env)->ThrowNew(env, exceptionClass, msg);
-    return 1;
 }
 
 void record_error_from_message(JNIEnv* env, const ddjvu_message_t* msg)
@@ -52,10 +52,10 @@ int handle_ddjvu_messages_or_record_error(JNIEnv *env, ddjvu_context_t *ctx, int
         {
             case DDJVU_ERROR:
                 LOGE("error: %s", msg->m_error.message);
-                if (throw && !failed) {
+                if (throw && !(*env)->ExceptionCheck(env)) {
                     record_error_from_message(env, msg);
-                    failed = 1;
                 }
+                failed = 1;
                 break;
             default:
                 break;
@@ -65,13 +65,43 @@ int handle_ddjvu_messages_or_record_error(JNIEnv *env, ddjvu_context_t *ctx, int
     return failed;
 }
 
-int handle_ddjvu_messages_and_wait(JNIEnv *env, ddjvu_context_t *ctx) {
-    return handle_ddjvu_messages_or_record_error(env, ctx, TRUE, TRUE);
-}
-
 int handle_error_if_present(JNIEnv *env, ddjvu_context_t *ctx) {
     return handle_ddjvu_messages_or_record_error(env, ctx, FALSE, TRUE);
 }
+
+int exceptionStatus(JNIEnv *env) {
+    return (*env)->ExceptionCheck(env);
+}
+
+void resolveErrorIfPossibleStub(JNIEnv *env, ddjvu_context_t *ctx, ddjvu_status_t status) {
+
+}
+
+void resolveErrorIfPossible(JNIEnv *env, ddjvu_context_t *ctx, ddjvu_status_t status) {
+    int ex = exceptionStatus(env);
+    if (status == DDJVU_JOB_OK || status == DDJVU_JOB_STOPPED) {
+        if (ex) {
+            (*env)->ExceptionClear(env);
+        }
+    } else if (status == DDJVU_JOB_FAILED || status == DDJVU_JOB_NOTSTARTED) {
+        if (!ex) {
+            for (int i = 0; i < 5; i++) {
+                //Don't call blocking function as error can be absent
+                if (handle_error_if_present(env, ctx)) break;
+                usleep(1);
+            }
+        }
+    }
+}
+
+void handle_ddjvu_messages_and_wait_stub(JNIEnv *env, ddjvu_context_t *ctx) {
+    handle_ddjvu_messages_or_record_error(env, ctx, TRUE, FALSE);
+}
+
+void handle_ddjvu_messages_and_wait(JNIEnv *env, ddjvu_context_t *ctx) {
+    handle_ddjvu_messages_or_record_error(env, ctx, TRUE, TRUE);
+}
+
 
 JNIEXPORT jlong JNICALL JNI_FN(DjvuDocument_initContext)(JNIEnv *env, jclass type) {
     LOGI("Creating context");
@@ -92,13 +122,15 @@ JNI_FN(DjvuDocument_openFile)(JNIEnv *env, jclass type, jstring jfileName, jlong
     ddjvu_document_t *doc = ddjvu_document_create_by_filename_utf8(context, fileName, 0);
     LOGI("Start decoding document: %p", doc);
 
-    ddjvu_status_t r;
-    int failed = 0;
-    while (doc && (r = ddjvu_document_decoding_status(doc)) < DDJVU_JOB_OK) {
-        failed = handle_ddjvu_messages_and_wait(env, context);
+    ddjvu_status_t status = DDJVU_JOB_NOTSTARTED;
+    if (doc) {
+        while ((status = ddjvu_document_decoding_status(doc)) < DDJVU_JOB_OK) {
+            handle_ddjvu_messages_and_wait(env, context);
+        }
     }
 
-    if (!failed && r == DDJVU_JOB_OK) {
+    resolveErrorIfPossible(env, context, status);
+    if (status == DDJVU_JOB_OK) {
         int pageNum = ddjvu_document_get_pagenum(doc);
         LOGI("Doc opened successfully: %p, pagecount = %i", doc, pageNum);
 
@@ -110,10 +142,7 @@ JNI_FN(DjvuDocument_openFile)(JNIEnv *env, jclass type, jstring jfileName, jlong
         *docInfo = pageNum;
 #endif
     } else {
-        if (!failed && (doc == NULL || r == DDJVU_JOB_FAILED)) {
-            failed = handle_ddjvu_messages_and_wait(env, context);
-        }
-        LOGE("Error during document opening: %p, status=%d, failed=%d", doc, r, failed);
+        LOGE("Error during document opening: %p, status=%d, failed=%d", doc, status, exceptionStatus(env));
         ddjvu_document_release(doc);
         doc = NULL;
     }
@@ -127,18 +156,23 @@ JNI_FN(DjvuDocument_getPageInternal)(JNIEnv *env, jclass type, jlong contextl, j
     ddjvu_context_t *context = (ddjvu_context_t *) contextl;
     ddjvu_document_t *doc = (ddjvu_document_t *) docl;
     LOGI("Opening page: %d", pageNum);
-    int failed = 0;
+
     ddjvu_page_t *page = ddjvu_page_create_by_pageno(doc, pageNum);
-    if (!page) {
-        failed = handle_error_if_present(env, context) ||
-                record_jni_error(env, "Can't decode page");
+    ddjvu_status_t status = DDJVU_JOB_NOTSTARTED;
+    if (page) {
+        LOGI("Start decoding page: %p", page);
+        while ((status = ddjvu_page_decoding_status(page)) < DDJVU_JOB_OK) {
+            handle_ddjvu_messages_and_wait_stub(env, context);
+        }
+        LOGI("End decoding page: %p", page);
     }
 
-    LOGI("Start decoding page: %p", page);
-    while (!failed && !ddjvu_page_decoding_done(page)) {
-        failed = handle_ddjvu_messages_and_wait(env, context);
+    resolveErrorIfPossibleStub(env, context, status);
+    if (status != DDJVU_JOB_OK) {
+        LOGE("Error during page extraction: %p, status=%d, failed=%d", page, status, exceptionStatus(env));
+        ddjvu_page_release(page);
+        page = NULL;
     }
-    LOGI("End decoding page: %p", page);
 
     return jlong_cast(page);
 }
@@ -156,17 +190,15 @@ JNI_FN(DjvuDocument_getPageDimension)(JNIEnv *env, jclass type, jlong contextl, 
 
     ddjvu_page_release(mypage);
     */
-    int failed = 0;
-    ddjvu_status_t r;
+    ddjvu_status_t status;
     ddjvu_pageinfo_t dinfo;
-    while (!failed && (r = ddjvu_document_get_pageinfo(doc, pageNum, &dinfo)) < DDJVU_JOB_OK) {
-        failed = handle_ddjvu_messages_and_wait(env, context);
+    while ((status = ddjvu_document_get_pageinfo(doc, pageNum, &dinfo)) < DDJVU_JOB_OK) {
+        handle_ddjvu_messages_and_wait_stub(env, context);
     }
 
-
-    if (failed || r >= DDJVU_JOB_FAILED) {
-        LOGI("Page info get fail %i!", r);
-        //signal_error();
+    resolveErrorIfPossibleStub(env, context, status);
+    if (status != DDJVU_JOB_OK) {
+        LOGE("Error during document PageDimension calculation: %d, status=%d, failed=%d", pageNum, status, exceptionStatus(env));
         return NULL;
     }
 
@@ -522,22 +554,25 @@ JNIEXPORT jstring JNICALL JNI_FN(DjvuDocument_getText)(JNIEnv *env, jclass clazz
     ddjvu_context_t *context = (ddjvu_context_t *) contextl;
     ddjvu_document_t *doc = (ddjvu_document_t *) docl;
 
-    int failed = 0;
     miniexp_t pagetext;
-    while (!failed && (pagetext = ddjvu_document_get_pagetext(doc, pageNumber, 0)) == miniexp_dummy) {
-        failed = handle_ddjvu_messages_and_wait(env, context);
+    while ((pagetext = ddjvu_document_get_pagetext(doc, pageNumber, 0)) == miniexp_dummy) {
+        handle_ddjvu_messages_and_wait_stub(env, context);
     }
 
-    if (failed || miniexp_nil == pagetext) {
+    if (miniexp_nil == pagetext) {
         return NULL;
     }
-//
+
+    ddjvu_status_t status;
     ddjvu_pageinfo_t info;
-    while (!failed && (ddjvu_document_get_pageinfo(doc, pageNumber, &info)) < DDJVU_JOB_OK) {
-        failed = handle_ddjvu_messages_and_wait(env, context);
+    while ((status = ddjvu_document_get_pageinfo(doc, pageNumber, &info)) < DDJVU_JOB_OK) {
+        handle_ddjvu_messages_and_wait_stub(env, context);
     }
 
-    if(failed) return NULL;
+    resolveErrorIfPossibleStub(env, context, status);
+    if (status != DDJVU_JOB_OK) {
+        return NULL;
+    }
 
     LOGI("Extraction rectangle=[%d,%d,%d,%d]", startX, startY, width, height);
 
@@ -696,13 +731,12 @@ JNI_FN(DjvuDocument_getPageText)(JNIEnv *env, jclass type, jlong contextl, jlong
     ddjvu_context_t *context = (ddjvu_context_t *) contextl;
     ddjvu_document_t *doc = (ddjvu_document_t *) docl;
 
-    int failed = 0;
     miniexp_t pagetext;
-    while (!failed && (pagetext = ddjvu_document_get_pagetext(doc, pageNumber, "word")) == miniexp_dummy) {
-        failed = handle_ddjvu_messages_and_wait(env, context);
+    while ((pagetext = ddjvu_document_get_pagetext(doc, pageNumber, "word")) == miniexp_dummy) {
+        handle_ddjvu_messages_and_wait_stub(env, context);
     }
 
-    if (pagetext == NULL || failed) {
+    if (pagetext == NULL) {
         LOGI("no text on page %i", pageNumber);
         return 0;
     }
@@ -725,16 +759,21 @@ JNI_FN(DjvuDocument_getPageText)(JNIEnv *env, jclass type, jlong contextl, jlong
     ctor = (*env)->GetMethodID(env, rectFClass, "<init>", "(FFFF)V");
     if (ctor == NULL) return 0;
 
+    ddjvu_status_t status;
     ddjvu_pageinfo_t dinfo;
-    while (!failed && (ddjvu_document_get_pageinfo(doc, pageNumber, &dinfo)) < DDJVU_JOB_OK) {
-        failed = handle_ddjvu_messages_and_wait(env, context);
+    while ((status = ddjvu_document_get_pageinfo(doc, pageNumber, &dinfo)) < DDJVU_JOB_OK) {
+        handle_ddjvu_messages_and_wait_stub(env, context);
     }
 
-    if (failed) return 0;
-
-    int state = -1;
-    return miniexp_get_text(env, pagetext, stringBuilder, positionList, &state, rectFClass, ctor,
-                            addToList, dinfo.height);
+    resolveErrorIfPossibleStub(env, context, status);
+    if (status == DDJVU_JOB_OK) {
+        int state = -1;
+        return miniexp_get_text(env, pagetext, stringBuilder, positionList, &state, rectFClass,
+                                ctor,
+                                addToList, dinfo.height);
+    } else {
+        return 0;
+    }
 }
 
 #endif
