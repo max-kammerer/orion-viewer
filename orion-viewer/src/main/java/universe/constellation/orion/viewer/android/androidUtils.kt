@@ -7,6 +7,8 @@ import android.os.Build
 
 fun isAtLeastKitkat() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
 
+fun isAtLeastLollipop() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+
 fun Intent.isContentScheme(): Boolean {
     return ContentResolver.SCHEME_CONTENT == scheme
 }

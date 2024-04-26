@@ -1,9 +1,11 @@
 package universe.constellation.orion.viewer.test.engine.exceptions
 
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Ignore
 import org.junit.Test
+import universe.constellation.orion.viewer.android.isAtLeastLollipop
 import universe.constellation.orion.viewer.djvu.DjvuDocument
 import universe.constellation.orion.viewer.test.framework.BaseTest
 import universe.constellation.orion.viewer.test.framework.BookDescription
@@ -32,7 +34,12 @@ class DjvuExceptionTest : BaseTest() {
             DjvuDocument(tmpFIle.absolutePath)
         } catch (e: Exception) {
             e.printStackTrace()
-            assertTrue(e.message, e.message!!.contains("EOF"))
+            if (isAtLeastLollipop()) {
+                assertEquals(e.message, "Unexpected End Of File.")
+            }
+            else {
+                assertTrue(e.message, e.message!!.contains("EOF"))
+            }
             return
         }
         fail("Expecting exception to be thrown above")

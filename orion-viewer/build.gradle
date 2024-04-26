@@ -105,12 +105,12 @@ android {
                     srcDirs += "src/analytics/kotlin"
                 }
             }
-
+            assets.srcDirs += '../nativeLibs/djvu/share/djvu'
         }
 
         androidTest {
             java.srcDirs += 'src/androidTest/kotlin'
-            resources.srcDirs += 'src/androidTest/assets'
+            assets.srcDirs += 'src/androidTest/assets'
         }
     }
 

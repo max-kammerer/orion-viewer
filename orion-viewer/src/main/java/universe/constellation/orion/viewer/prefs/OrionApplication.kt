@@ -27,9 +27,15 @@ import android.os.Build
 import android.os.Build.VERSION.CODENAME
 import android.os.Build.VERSION.RELEASE
 import android.preference.PreferenceManager
+import android.system.Os
 import androidx.core.os.ConfigurationCompat
 import androidx.core.os.LocaleListCompat
 import androidx.multidex.MultiDex
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import universe.constellation.orion.viewer.AndroidLogger
 import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.BuildConfig.DEBUG
@@ -47,6 +53,7 @@ import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.logger
 import universe.constellation.orion.viewer.prefs.GlobalOptions.DEFAULT_LANGUAGE
 import universe.constellation.orion.viewer.test.IdlingResource
+import java.io.File
 import java.util.Locale
 import kotlin.properties.Delegates
 
@@ -107,6 +114,14 @@ class OrionApplication : Application() {
         super.onCreate()
         setLanguage(options.appLanguage)
         logOrionAndDeviceInfo()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val fileToCopy = File(filesDir, "djvuConf")
+            val envPath = File(fileToCopy, "osi").absolutePath
+            CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
+                copyResIfNotExists(assets, "osi", fileToCopy)
+            }
+            Os.setenv("DJVU_CONFIG_DIR", envPath, true)
+        }
     }
 
     fun setLanguage(langCode: String) {
