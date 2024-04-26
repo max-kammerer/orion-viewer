@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageButton
         android:id="@+id/searchPrev"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/prev" />
+        style="@style/Viewer_Dialog_Icon"
+        app:srcCompat="@drawable/new_back" />
 
     <EditText
         android:id="@+id/searchText"
@@ -18,7 +18,6 @@
 
     <ImageButton
         android:id="@+id/searchNext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/next" />
+        style="@style/Viewer_Dialog_Icon"
+        app:srcCompat="@drawable/new_forward" />
 </merge>

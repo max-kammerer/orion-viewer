@@ -63,49 +63,50 @@
         <TextView
             style="@style/General_Help_TextView"
             android:text="@string/zoom"
-            app:drawableStartCompat="@drawable/new_zoom" />
+            app:drawableLeftCompat="@drawable/new_zoom" />
 
         <TextView
             style="@style/General_Help_TextView"
             android:text="@string/crop"
-            app:drawableStartCompat="@drawable/new_cut" />
+            app:drawableLeftCompat="@drawable/new_cut" />
 
 
         <TextView
             style="@style/General_Help_TextView"
             android:text="@string/navigation_help"
-            app:drawableStartCompat="@drawable/new_navigation" />
+            app:drawableLeftCompat="@drawable/new_navigation" />
 
         <TextView
             style="@style/General_Help_TextView"
             android:text="@string/dictionary_help"
-            app:drawableStartCompat="@drawable/new_dictionary" />
+            app:drawableLeftCompat="@drawable/new_dictionary" />
 
         <TextView
             style="@style/General_Help_TextView"
             android:text="@string/option_help"
-            app:drawableStartCompat="@drawable/new_settings" />
+            app:drawableLeftCompat="@drawable/new_settings" />
 
         <TextView
             style="@style/General_Help_TextView"
             android:text="@string/tap_help"
-            app:drawableStartCompat="@drawable/new_tap_zones" />
+            app:drawableLeftCompat="@drawable/new_tap_zones" />
 
         <TextView
             style="@style/General_Help_TextView"
             android:text="@string/bookmarks_export_help"
-            app:drawableStartCompat="@drawable/new_export_notes" />
+            app:drawableLeftCompat="@drawable/new_export_notes" />
 
         <TextView
             style="@style/General_Help_TextView"
             android:text="@string/apply"
-            app:drawableStartCompat="@drawable/new_apply" />
+            app:drawableLeftCompat="@drawable/new_apply" />
 
 
         <TextView
             style="@style/General_Help_TextView"
             android:text="@string/escape"
-            app:drawableStartCompat="@drawable/new_revert" />
+            app:drawableLeftCompat="@drawable/new_revert"
+            />
 
     </LinearLayout>
     </LinearLayout>

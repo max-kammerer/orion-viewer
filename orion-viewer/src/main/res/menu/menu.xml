@@ -45,7 +45,7 @@
 
     <item
         android:id="@+id/crop_menu_item"
-        android:icon="@drawable/crop"
+        android:icon="@drawable/new_cut"
         android:title="@string/menu_crop_text"
         orion:showAsAction="ifRoom" />
 

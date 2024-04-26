@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:orion="http://schemas.android.com/apk/res-auto"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:orientation="vertical" android:gravity="center"
-            android:scrollbars="vertical" android:fillViewport="true">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:scrollbars="vertical"
+    android:fillViewport="true">
 
 
     <LinearLayout android:layout_height="wrap_content" android:orientation="vertical"
@@ -26,7 +29,7 @@
                     <ImageButton android:id="@+id/ilayout1"
                                  android:layout_width="wrap_content" android:layout_height="wrap_content"
                                  android:clickable="false"
-                                 android:src="@drawable/navigation1" android:layout_gravity="center"/>
+                                 app:srcCompat="@drawable/navigation1" android:layout_gravity="center"/>
 
                     <RadioButton android:id="@+id/layout2"
                                  android:layout_width="wrap_content"
@@ -35,7 +38,7 @@
                     <ImageButton android:id="@+id/ilayout2"
                                  android:layout_width="wrap_content" android:layout_height="wrap_content"
                                  android:clickable="false"
-                                 android:src="@drawable/navigation2"/>
+                                 app:srcCompat="@drawable/navigation2"/>
 
                     <RadioButton android:id="@+id/layout3"
                                  android:layout_width="wrap_content"
@@ -44,7 +47,7 @@
                     <ImageButton android:id="@+id/ilayout3"
                                  android:layout_width="wrap_content" android:layout_height="wrap_content"
                                  android:clickable="false"
-                                 android:src="@drawable/navigation3"/>
+                                 app:srcCompat="@drawable/navigation3"/>
                 </RadioGroup>
 
 
@@ -64,14 +67,14 @@
 
                             <universe.constellation.orion.viewer.android.RadioButton android:id="@+id/walkOrder_ABCD"
                                          android:layout_width="wrap_content"
-                                         android:layout_height="wrap_content" orion:walkOrder="@string/ABCD"/>
+                                         android:layout_height="wrap_content" app:walkOrder="@string/ABCD"/>
 
                             <TextView android:layout_width="wrap_content"
                                   android:layout_height="wrap_content" android:text="ABCD"/>
 
                             <universe.constellation.orion.viewer.android.RadioButton android:id="@+id/walkOrder_ACBD"
                                          android:layout_width="wrap_content"
-                                         android:layout_height="wrap_content" orion:walkOrder="@string/ACBD"/>
+                                         android:layout_height="wrap_content" app:walkOrder="@string/ACBD"/>
 
                             <TextView android:layout_width="wrap_content"
                                   android:layout_height="wrap_content" android:text="ACBD"/>
@@ -79,14 +82,14 @@
 
                             <universe.constellation.orion.viewer.android.RadioButton android:id="@+id/walkOrder_BADC"
                                          android:layout_width="wrap_content"
-                                         android:layout_height="wrap_content" orion:walkOrder="@string/BADC"/>
+                                         android:layout_height="wrap_content" app:walkOrder="@string/BADC"/>
 
                             <TextView android:layout_width="wrap_content"
                                   android:layout_height="wrap_content" android:text="BADC"/>
 
                             <universe.constellation.orion.viewer.android.RadioButton android:id="@+id/walkOrder_BDAC"
                                          android:layout_width="wrap_content"
-                                         android:layout_height="wrap_content" orion:walkOrder="@string/BDAC"/>
+                                         android:layout_height="wrap_content" app:walkOrder="@string/BDAC"/>
 
                             <TextView android:layout_width="wrap_content"
                                   android:layout_height="wrap_content" android:text="BDAC"/>
@@ -102,10 +105,10 @@
         <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal"
                       android:layout_width="fill_parent" android:gravity="right">
             <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                         android:src="@drawable/view" android:id="@+id/options_apply"
+                         app:srcCompat="@drawable/new_apply" android:id="@+id/options_apply"
                          android:layout_gravity="right"/>
             <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                         android:src="@drawable/revert" android:id="@+id/options_close"
+                         app:srcCompat="@drawable/new_revert" android:id="@+id/options_close"
                          android:layout_gravity="right"/>
         </LinearLayout>
 

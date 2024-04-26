@@ -36,9 +36,7 @@ class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : A
 
         val viewAnimator = findViewById<View>(R.id.viewanim) as ViewAnimator
         val tabLayout = findViewById<View>(R.id.sliding_tabs) as TabLayout
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.crop))
-        /*tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.crop))
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.crop))*/
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.new_cut))
 
         tabLayout.addTab(tabLayout.newTab().setText("%2"))
         tabLayout.addTab(tabLayout.newTab().setText("Auto"))

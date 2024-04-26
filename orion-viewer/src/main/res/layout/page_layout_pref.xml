@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <universe.constellation.orion.viewer.android.CheckableLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:textAppearance="?android:attr/textAppearanceLarge"
-              android:gravity="center_vertical"
-              android:checkMark="?android:attr/listChoiceIndicatorSingle"
-              android:paddingLeft="6dip"
-              android:paddingRight="6dip" >
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:textAppearance="?android:attr/textAppearanceLarge"
+    android:gravity="center_vertical"
+    android:checkMark="?android:attr/listChoiceIndicatorSingle"
+    android:paddingLeft="6dip"
+    android:paddingRight="6dip">
 
     <ImageView android:id="@+id/ibutton"
              android:layout_width="wrap_content" android:layout_height="wrap_content"
              android:clickable="true" android:background="#ddd"
-             android:src="@drawable/crop" android:layout_gravity="center" android:layout_weight="0"/>
+             app:srcCompat="@drawable/new_cut" android:layout_gravity="center" android:layout_weight="0"/>
 
     <CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@android:id/text1"

@@ -1,133 +1,217 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ViewAnimator xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:id="@+id/viewanim">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/viewanim"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
-    <LinearLayout android:layout_height="fill_parent" android:orientation="vertical"
-                  android:layout_width="fill_parent" android:gravity="center">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <ListView android:layout_width="fill_parent"
-                    android:layout_height="0px" android:id="@+id/rotationList" android:isScrollContainer="true" android:layout_weight="1"/>
+        <ListView
+            android:id="@+id/rotationList"
+            android:layout_width="fill_parent"
+            android:layout_height="0px"
+            android:layout_weight="1"
+            android:isScrollContainer="true" />
 
-        <RadioGroup android:id="@+id/rotationGroup" android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_gravity="center" android:gravity="left">
+        <RadioGroup
+            android:id="@+id/rotationGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="left"
+            android:orientation="vertical">
 
-            <RadioButton android:id="@+id/rotate0"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content" android:text="@string/rotate_0"/>
+            <RadioButton
+                android:id="@+id/rotate0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rotate_0" />
 
-            <RadioButton android:id="@+id/rotate90"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content" android:text="@string/rotate_90"/>
+            <RadioButton
+                android:id="@+id/rotate90"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rotate_90" />
 
-            <RadioButton android:id="@+id/rotate270"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content" android:text="@string/rotate_270"/>
+            <RadioButton
+                android:id="@+id/rotate270"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rotate_270" />
         </RadioGroup>
 
-        <LinearLayout android:layout_height="wrap_content" android:orientation="horizontal" android:layout_below="@id/rotationGroup"
-                      android:layout_width="fill_parent" android:layout_gravity="center" android:gravity="right" android:layout_margin="10dp">
-            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                         android:src="@drawable/view" android:id="@+id/rotation_apply"
-                         android:layout_gravity="right"/>
-            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                         android:src="@drawable/revert" android:id="@+id/rotation_close"
-                         android:layout_gravity="right"/>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rotationGroup"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/rotation_apply"
+                style="@style/Viewer_Dialog_Icon"
+                android:layout_gravity="right"
+                app:srcCompat="@drawable/new_apply" />
+
+            <ImageButton
+                android:id="@+id/rotation_close"
+                style="@style/Viewer_Dialog_Icon"
+                android:layout_gravity="right"
+                app:srcCompat="@drawable/new_revert" />
         </LinearLayout>
     </LinearLayout>
 
 
     <!--page chooser screen-->
-    <LinearLayout android:id="@+id/page_menu"
-                  android:layout_height="fill_parent" android:orientation="vertical"
-                  android:layout_width="fill_parent" android:gravity="center">
+    <LinearLayout
+        android:id="@+id/page_menu"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
-            <LinearLayout android:orientation="horizontal"
-                          android:layout_width="fill_parent" android:layout_height="wrap_content"
-                          android:gravity="center">
-                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                             android:src="@drawable/minus" android:id="@+id/page_picker_minus"/>
-                <EditText android:layout_width="wrap_content"
-                          android:layout_height="wrap_content" android:id="@+id/page_picker_message"
-                          android:textSize="20sp" android:maxLength="5" android:inputType="number"
-                          android:selectAllOnFocus="true"/>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                             android:src="@drawable/plus" android:id="@+id/page_picker_plus"/>
+            <ImageButton
+                android:id="@+id/page_picker_minus"
+                style="@style/Viewer_Dialog_Icon"
+                app:srcCompat="@drawable/new_minus" />
 
-            </LinearLayout>
+            <EditText
+                android:id="@+id/page_picker_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="5"
+                android:selectAllOnFocus="true"
+                android:textSize="20sp" />
+
+            <ImageButton
+                android:id="@+id/page_picker_plus"
+                style="@style/Viewer_Dialog_Icon"
+                app:srcCompat="@drawable/new_plus" />
+
+        </LinearLayout>
 
         <SeekBar
             android:id="@+id/page_picker_seeker"
-            android:minWidth="100dp"
-            android:layout_height="wrap_content"
             android:layout_width="fill_parent"
-            android:layout_margin="5dp" />
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:minWidth="100dp" />
 
-            <LinearLayout android:orientation="horizontal"
-              android:layout_width="fill_parent" android:layout_height="wrap_content"
-              android:gravity="right" android:layout_margin="10dp">
-                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                             android:src="@drawable/view" android:id="@+id/page_preview"/>
-                <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                             android:src="@drawable/revert" android:id="@+id/page_picker_close"/>
-            </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/page_preview"
+                style="@style/Viewer_Dialog_Icon"
+                app:srcCompat="@drawable/new_apply" />
+
+            <ImageButton
+                android:id="@+id/page_picker_close"
+                style="@style/Viewer_Dialog_Icon"
+                app:srcCompat="@drawable/new_revert" />
+        </LinearLayout>
     </LinearLayout>
 
     <!--zoom chooser screen-->
-    <LinearLayout android:id="@+id/zoom_menu"
-                  android:layout_height="fill_parent" android:orientation="vertical"
-                  android:layout_width="fill_parent" android:gravity="center">
+    <LinearLayout
+        android:id="@+id/zoom_menu"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
 
         <!--<HorizontalScrollView android:layout_width="fill_parent" android:layout_height="wrap_content" android:gravity="center">-->
-        <LinearLayout android:orientation="horizontal"
-                      android:layout_width="fill_parent" android:layout_height="wrap_content"
-                      android:gravity="center">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                         android:src="@drawable/minus" android:id="@+id/zoom_picker_minus"/>
-            <EditText android:layout_width="wrap_content"
-                      android:layout_height="wrap_content" android:id="@+id/zoom_picker_message" android:inputType="numberDecimal"
-                      android:textSize="20sp"/>
+            <ImageButton
+                android:id="@+id/zoom_picker_minus"
+                style="@style/Viewer_Dialog_Icon"
+                app:srcCompat="@drawable/new_minus" />
 
-            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                         android:src="@drawable/plus" android:id="@+id/zoom_picker_plus"/>
+            <EditText
+                android:id="@+id/zoom_picker_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:textSize="20sp" />
 
-            <Spinner android:id="@+id/zoom_spinner" android:entries="@array/fits"
-                                               android:layout_width="wrap_content"
-                                               android:layout_height="fill_parent" android:textSize="20sp" />
+            <ImageButton
+                android:id="@+id/zoom_picker_plus"
+                style="@style/Viewer_Dialog_Icon"
+                app:srcCompat="@drawable/new_plus" />
+
+            <Spinner
+                android:id="@+id/zoom_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:entries="@array/fits"
+                android:textSize="20sp" />
 
         </LinearLayout>
         <!--</HorizontalScrollView>-->
 
-        <SeekBar android:id="@+id/zoom_picker_seeker"
-                 android:minWidth="100dp" android:layout_height="wrap_content"
-                 android:layout_width="fill_parent" android:layout_margin="5dp"/>
+        <SeekBar
+            android:id="@+id/zoom_picker_seeker"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:minWidth="100dp" />
 
-        <LinearLayout android:orientation="horizontal"
-                      android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="10dp"
-                      android:gravity="right">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="right"
+            android:orientation="horizontal">
 
-            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                         android:src="@drawable/view" android:id="@+id/zoom_preview"/>
-            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                         android:src="@drawable/revert" android:id="@+id/zoom_picker_close"/>
+            <ImageButton
+                android:id="@+id/zoom_preview"
+                style="@style/Viewer_Dialog_Icon"
+                app:srcCompat="@drawable/new_apply" />
+
+            <ImageButton
+                android:id="@+id/zoom_picker_close"
+                style="@style/Viewer_Dialog_Icon"
+                app:srcCompat="@drawable/new_revert" />
         </LinearLayout>
     </LinearLayout>
 
     <!--border crop screen-->
-    <LinearLayout android:layout_height="wrap_content" android:orientation="vertical"
-                  android:layout_width="fill_parent" android:gravity="center" android:layout_gravity="center">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
 
     </LinearLayout>
 
-    <include layout="@layout/page_layout"/>
+    <include layout="@layout/page_layout" />
 
-    <include layout="@layout/add_bookmark"/>
+    <include layout="@layout/add_bookmark" />
 
 </ViewAnimator>

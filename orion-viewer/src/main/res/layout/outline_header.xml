@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="fill_parent"
-    android:layout_height="fill_parent" android:layout_weight="0" android:gravity="center">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_weight="0"
+    android:gravity="center">
 
     <TextView
         android:text="@string/menu_outline_text"
@@ -17,7 +21,7 @@
         android:id="@+id/outline_action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/collapsed"
+        app:srcCompat="@drawable/collapsed"
         android:layout_weight="0"
         android:layout_gravity="center"
         android:paddingRight="4dp"/>

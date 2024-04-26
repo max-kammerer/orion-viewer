@@ -59,15 +59,13 @@
 
                 <ImageButton
                     android:id="@+id/crop_preview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/view" />
+                    style="@style/Viewer_Dialog_Icon"
+                    app:srcCompat="@drawable/new_apply" />
 
                 <ImageButton
                     android:id="@+id/crop_close"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/revert" />
+                    style="@style/Viewer_Dialog_Icon"
+                    app:srcCompat="@drawable/new_revert" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
