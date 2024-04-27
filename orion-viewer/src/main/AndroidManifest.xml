@@ -103,8 +103,8 @@
             </intent-filter>
         </activity>
 
+        <!--Important: use app label-->
         <activity android:name=".filemanager.OrionFileManagerActivity"
-                  android:label="@string/file_manager_title"
                   android:theme="@style/Theme.Orion.Dark.NoActionBar"
                   android:launchMode="singleTask"
                   android:icon="@mipmap/ic_launcher"

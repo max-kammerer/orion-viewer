@@ -1,6 +1,7 @@
 package universe.constellation.orion.viewer.filemanager
 
 import android.content.Intent
+import android.os.Bundle
 import androidx.viewpager.widget.ViewPager
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.log
@@ -14,6 +15,11 @@ open class OrionFileManagerActivity : OrionFileManagerActivityBase(
     companion object {
         const val OPEN_RECENTS_TAB = "OPEN_RECENTS_FILE"
         const val LAST_OPENED_DIRECTORY = "LAST_OPENED_DIR"
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        supportActionBar?.setTitle(R.string.file_manager_title)
     }
 
     override fun onNewIntent(intent: Intent) {
