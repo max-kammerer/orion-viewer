@@ -23,7 +23,7 @@ object FileUtil {
                 PdfDocument(absolutePath)
             }
         } catch (e: Exception) {
-            throw RuntimeException("Error on open file `$absolutePath`, " + e.message, e)
+            throw RuntimeException("Error during file opening `$absolutePath`: " + e.message, e)
         }
     }
 

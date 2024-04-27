@@ -286,7 +286,6 @@ class PageView(
             pageRect.centerY() + size / 2
         )
         scene.loadingDrawable.draw(canvas)
-        println("BBB" +scene.loadingDrawable.bounds)
     }
 
     private fun calcDrawRect(scene: OrionDrawScene): Rect? {
