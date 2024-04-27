@@ -18,7 +18,8 @@
         app:layout_scrollFlags="scroll|enterAlways"
         app:tabGravity="fill"
         app:tabMode="fixed"
-        />
+        app:tabIconTint="?attr/navIconTint"
+        app:tabTextColor="?attr/navIconTint"/>
     <!--</android.support.v7.widget.Toolbar>-->
 
     <ScrollView
