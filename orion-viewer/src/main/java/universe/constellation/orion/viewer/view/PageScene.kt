@@ -7,7 +7,6 @@ import android.graphics.PointF
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
-import universe.constellation.orion.viewer.PageView
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.util.MoveUtil
 

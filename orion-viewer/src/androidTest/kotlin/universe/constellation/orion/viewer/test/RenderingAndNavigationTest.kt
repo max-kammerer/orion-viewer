@@ -19,6 +19,7 @@ import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.MANUAL_DEBUG
 import universe.constellation.orion.viewer.test.framework.compareBitmaps
 import universe.constellation.orion.viewer.test.framework.dumpBitmap
+import universe.constellation.orion.viewer.view.PageView
 import java.nio.IntBuffer
 
 

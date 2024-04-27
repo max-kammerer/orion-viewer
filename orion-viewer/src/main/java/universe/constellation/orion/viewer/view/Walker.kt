@@ -1,8 +1,6 @@
 package universe.constellation.orion.viewer.view
 
 import android.graphics.Rect
-import universe.constellation.orion.viewer.PageState
-import universe.constellation.orion.viewer.PageView
 
 suspend fun PageView.precache() {
     if (this.state != PageState.SIZE_AND_BITMAP_CREATED) return

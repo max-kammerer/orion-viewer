@@ -1,7 +1,7 @@
 package universe.constellation.orion.viewer.bitmap
 
 import android.graphics.Rect
-import universe.constellation.orion.viewer.PageView
+import universe.constellation.orion.viewer.view.PageView
 import universe.constellation.orion.viewer.view.PageLayoutManager
 import universe.constellation.orion.viewer.view.screenForPrecache
 

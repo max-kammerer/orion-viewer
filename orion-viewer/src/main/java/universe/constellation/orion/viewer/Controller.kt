@@ -19,7 +19,6 @@
 
 package universe.constellation.orion.viewer
 
-import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context.ACTIVITY_SERVICE
 import android.graphics.Point
@@ -45,6 +44,7 @@ import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.LayoutStrategy
 import universe.constellation.orion.viewer.util.ColorUtil
 import universe.constellation.orion.viewer.view.PageLayoutManager
+import universe.constellation.orion.viewer.view.PageView
 import universe.constellation.orion.viewer.view.ViewDimensionAware
 
 class Controller(

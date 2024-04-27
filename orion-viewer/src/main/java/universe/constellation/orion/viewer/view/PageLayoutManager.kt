@@ -13,7 +13,6 @@ import kotlinx.coroutines.launch
 import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.LastPageInfo
-import universe.constellation.orion.viewer.PageView
 import universe.constellation.orion.viewer.bitmap.BitmapManager
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.layout.LayoutPosition
