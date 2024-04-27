@@ -22,15 +22,13 @@ package universe.constellation.orion.viewer
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.TextView
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.tabs.TabLayout
 
 class OrionHelpActivity : OrionBaseActivity(false) {
@@ -43,6 +41,10 @@ class OrionHelpActivity : OrionBaseActivity(false) {
     override fun onCreate(savedInstanceState: Bundle?) {
         onOrionCreate(savedInstanceState, R.layout.app_help_activity)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.navigationIcon?.apply {
+            val tintColor = MaterialColors.getColor(toolbar, R.attr.navIconTint)
+            DrawableCompat.setTint(this, tintColor)
+        }
         initHelpScreen()
         chooseTab(intent)
     }

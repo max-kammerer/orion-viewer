@@ -36,6 +36,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
+import com.google.android.material.color.MaterialColors
 import universe.constellation.orion.viewer.device.AndroidDevice
 import universe.constellation.orion.viewer.device.Device
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivityBase
@@ -83,6 +84,13 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
             if (addToolbar) {
                 toolbar = findViewById<View>(R.id.toolbar) as Toolbar
                 setSupportActionBar(toolbar)
+                val tintColor = MaterialColors.getColor(toolbar, R.attr.navIconTint)
+                toolbar.getOverflowIcon()?.apply {
+                    DrawableCompat.setTint(this, tintColor)
+                }
+                toolbar.navigationIcon?.apply {
+                    DrawableCompat.setTint(this, tintColor)
+                }
             }
         }
     }
