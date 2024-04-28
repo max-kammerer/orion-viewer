@@ -53,8 +53,11 @@ class OrionHelpActivity : OrionBaseActivity(false) {
 
         val help = tabLayout.getTabAt(0)
         help?.setIcon(R.drawable.new_help)
+        help?.setContentDescription(R.string.menu_help_text)
+
         val about = tabLayout.getTabAt(1)
         about?.setIcon(R.drawable.new_info)
+        about?.setContentDescription(R.string.menu_about_text)
     }
 
     override fun onNewIntent(intent: Intent) {

@@ -211,17 +211,20 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
     }
 
     private fun initFileManager() {
-        val pagerAdapter = SimplePagerAdapter(supportFragmentManager).apply {
+        val viewPager = findViewById<ViewPager>(R.id.viewpager)
+        viewPager.adapter = SimplePagerAdapter(supportFragmentManager).apply {
             if (showRecentsAndSavePath) {
                 addFragment(RecentListFragment())
             }
         }
-        val viewPager = findViewById<ViewPager>(R.id.viewpager)
-        viewPager.adapter = pagerAdapter
+
         val tabLayout = findViewById<TabLayout>(R.id.sliding_tabs)
         tabLayout.setupWithViewPager(viewPager)
+
         val folderTab = tabLayout.getTabAt(0)
         folderTab?.setIcon(getVectorDrawable(R.drawable.new_folder_24))
+        folderTab?.setContentDescription(R.string.file_manager_title)
+
         if (showRecentsAndSavePath) {
             val recentTab = tabLayout.getTabAt(1)
             recentTab?.setIcon(getVectorDrawable(R.drawable.new_history))
