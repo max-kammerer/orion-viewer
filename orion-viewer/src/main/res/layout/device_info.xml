@@ -2,78 +2,113 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:isScrollContainer="true"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:scrollbarStyle="outsideInset"
-            android:scrollbars="vertical"
-            android:orientation="vertical" android:layout_weight="0.4" >
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:isScrollContainer="true"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
+
+    android:scrollbarStyle="outsideInset"
+    android:scrollbars="vertical">
 
 
-        <TableLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
-                     android:shrinkColumns="1" android:gravity="center">
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:shrinkColumns="1">
 
-            <TableRow android:gravity="center">
-                <TextView android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:textSize="22sp" android:gravity="left|center_vertical" android:text="MANUFACTURER"/>
+        <TableRow android:gravity="center">
 
-
-                <TextView android:layout_width="wrap_content"
-                          android:layout_height="wrap_content" android:id="@+id/MANUFACTURER"
-                          android:textSize="22sp" android:gravity="center" />
-
-            </TableRow>
-
-            <TableRow android:gravity="center">
-                <TextView android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:textSize="22sp" android:gravity="left|center_vertical" android:text="MODEL"/>
+            <TextView
+                style="@style/General_TextView"
+                android:gravity="left|center_vertical"
+                android:text="MANUFACTURER" />
 
 
-                <TextView android:layout_width="wrap_content"
-                          android:layout_height="wrap_content" android:id="@+id/MODEL"
-                          android:textSize="22sp" android:gravity="center"/>
+            <TextView
+                android:id="@+id/MANUFACTURER"
+                style="@style/General_TextView"
+                android:gravity="center" />
 
-            </TableRow>
+        </TableRow>
 
-            <TableRow android:gravity="center">
-                <TextView android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:textSize="22sp" android:gravity="left|center_vertical" android:text="DEVICE"/>
+        <TableRow android:gravity="center">
 
-
-                <TextView android:layout_width="wrap_content"
-                          android:layout_height="wrap_content" android:id="@+id/DEVICE"
-                          android:textSize="22sp" android:gravity="center"/>
-
-            </TableRow>
-
-            <TableRow android:gravity="center">
-                <TextView android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="22sp" android:gravity="left|center_vertical" android:text="HARDWARE"/>
+            <TextView
+                style="@style/General_TextView"
+                android:gravity="left|center_vertical"
+                android:text="MODEL" />
 
 
-                <TextView android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:id="@+id/HARDWARE"
-                    android:textSize="22sp" android:gravity="center"/>
+            <TextView
+                android:id="@+id/MODEL"
+                style="@style/General_TextView"
+                android:gravity="center" />
 
-            </TableRow>
+        </TableRow>
 
-            <TableRow android:gravity="center">
-                <TextView android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:textSize="22sp" android:gravity="left|center_vertical" android:text="MEMORY"/>
+        <TableRow android:gravity="center">
+
+            <TextView
+                style="@style/General_TextView"
+                android:gravity="left|center_vertical"
+                android:text="DEVICE" />
 
 
-                <TextView android:layout_width="wrap_content"
-                          android:layout_height="wrap_content" android:id="@+id/MEMORY"
-                          android:textSize="22sp" android:gravity="center"/>
+            <TextView
+                android:id="@+id/DEVICE"
+                style="@style/General_TextView"
+                android:gravity="center" />
 
-            </TableRow>
+        </TableRow>
 
-        </TableLayout>
+        <TableRow android:gravity="center">
+
+            <TextView
+                style="@style/General_TextView"
+                android:gravity="left|center_vertical"
+                android:text="HARDWARE" />
+
+
+            <TextView
+                android:id="@+id/HARDWARE"
+                style="@style/General_TextView"
+                android:gravity="center" />
+
+        </TableRow>
+
+        <TableRow android:gravity="center">
+
+            <TextView
+                style="@style/General_TextView"
+                android:gravity="left|center_vertical"
+                android:text="MEMORY" />
+
+
+            <TextView
+                android:id="@+id/MEMORY"
+                style="@style/General_TextView"
+                android:gravity="center" />
+
+        </TableRow>
+
+        <TableRow android:gravity="center">
+
+            <TextView
+                style="@style/General_TextView"
+                android:gravity="left|center_vertical"
+                android:text="MAX_APP_MEMORY" />
+
+
+            <TextView
+                android:id="@+id/MAX_APP_MEMORY"
+                style="@style/General_TextView"
+                android:gravity="center" />
+
+        </TableRow>
+
+    </TableLayout>
 
 </ScrollView>

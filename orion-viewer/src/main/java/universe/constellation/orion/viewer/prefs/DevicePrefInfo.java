@@ -19,6 +19,7 @@
 
 package universe.constellation.orion.viewer.prefs;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
@@ -27,11 +28,6 @@ import android.widget.TextView;
 
 import universe.constellation.orion.viewer.R;
 
-/**
- * User: mike
- * Date: 24.03.12
- * Time: 13:39
- */
 public class DevicePrefInfo extends DialogPreference {
     public DevicePrefInfo(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -49,22 +45,23 @@ public class DevicePrefInfo extends DialogPreference {
     protected void onBindDialogView(View view) {
         super.onBindDialogView(view);
 
-        TextView tv = view.findViewById(R.id.MANUFACTURER);
+        TextView tv = (TextView) view.findViewById(R.id.MANUFACTURER);
         tv.setText(OrionApplication.MANUFACTURER);
-        tv = view.findViewById(R.id.MODEL);
+        tv = (TextView) view.findViewById(R.id.MODEL);
         tv.setText(OrionApplication.MODEL);
-        tv = view.findViewById(R.id.DEVICE);
+        tv = (TextView) view.findViewById(R.id.DEVICE);
         tv.setText(OrionApplication.DEVICE);
-        tv = view.findViewById(R.id.HARDWARE);
+        tv = (TextView) view.findViewById(R.id.HARDWARE);
         tv.setText(OrionApplication.HARDWARE);
 
-//        tv = (TextView) view.findViewById(R.id.MEMORY);
-//
-//        ActivityManager activityManager = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
-//        ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
-//        activityManager.getMemoryInfo(memoryInfo);
-//
-//
-//        tv.setText("" + memoryInfo.availMem / 1024 / 1024 + " Mb");
+        ActivityManager activityManager = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+        activityManager.getMemoryInfo(memoryInfo);
+
+        tv = (TextView) view.findViewById(R.id.MEMORY);
+        tv.setText("" + memoryInfo.availMem / 1024 / 1024 + " Mb");
+
+        tv = (TextView) view.findViewById(R.id.MAX_APP_MEMORY);
+        tv.setText("" + activityManager.getMemoryClass() + " Mb");
     }
 }
