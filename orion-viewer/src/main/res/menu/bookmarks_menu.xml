@@ -18,9 +18,4 @@
                   android:title="@string/import_all_bookmarks_menu_item"
                   android:icon="@drawable/import_bookmarks"/>
 
-    <item android:id="@+id/close_bookmarks_menu_item"
-          android:title="@string/menu_exit_text"
-          android:icon="@drawable/close"
-          orion:showAsAction="always"/>
-
 </menu>

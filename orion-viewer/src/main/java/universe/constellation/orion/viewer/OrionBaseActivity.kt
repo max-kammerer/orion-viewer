@@ -29,6 +29,7 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -66,7 +67,7 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
     }
 
     @JvmOverloads
-    protected fun onOrionCreate(savedInstanceState: Bundle?, layoutId: Int, addToolbar: Boolean = true) {
+    protected fun onOrionCreate(savedInstanceState: Bundle?, layoutId: Int, addToolbar: Boolean = true, displayHomeAsUpEnabled: Boolean = false) {
         orionContext.applyTheme(this)
         orionContext.updateLanguage(resources)
 
@@ -84,6 +85,9 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
             if (addToolbar) {
                 toolbar = findViewById<View>(R.id.toolbar) as Toolbar
                 setSupportActionBar(toolbar)
+                if (displayHomeAsUpEnabled) {
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                }
                 val tintColor = MaterialColors.getColor(toolbar, R.attr.navIconTint)
                 toolbar.getOverflowIcon()?.apply {
                     DrawableCompat.setTint(this, tintColor)
@@ -93,6 +97,16 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
                 }
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroy() {

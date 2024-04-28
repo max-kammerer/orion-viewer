@@ -39,12 +39,7 @@ class OrionHelpActivity : OrionBaseActivity(false) {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        onOrionCreate(savedInstanceState, R.layout.app_help_activity)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar.navigationIcon?.apply {
-            val tintColor = MaterialColors.getColor(toolbar, R.attr.navIconTint)
-            DrawableCompat.setTint(this, tintColor)
-        }
+        onOrionCreate(savedInstanceState, R.layout.app_help_activity, displayHomeAsUpEnabled = true)
         initHelpScreen()
         chooseTab(intent)
     }
@@ -70,16 +65,6 @@ class OrionHelpActivity : OrionBaseActivity(false) {
     private fun chooseTab(intent: Intent?) {
         val index = if (intent?.getBooleanExtra(OPEN_ABOUT_TAB, false) == true) 1 else 0
         findViewById<ViewPager>(R.id.viewpager).setCurrentItem(index, false)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
-        return false
     }
 
     companion object {

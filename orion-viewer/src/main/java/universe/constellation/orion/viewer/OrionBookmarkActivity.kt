@@ -46,7 +46,9 @@ class OrionBookmarkActivity : OrionBaseActivity(false) {
 
     @SuppressLint("MissingSuperCall")
     public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onOrionCreate(savedInstanceState, R.layout.bookmarks, true)
+        onOrionCreate(savedInstanceState, R.layout.bookmarks,
+            displayHomeAsUpEnabled = true
+        )
 
         onNewIntent(intent)
 
@@ -131,11 +133,6 @@ class OrionBookmarkActivity : OrionBaseActivity(false) {
         var showEmptyResult = false
 
         when (item.itemId) {
-
-            R.id.close_bookmarks_menu_item -> {
-                finish()
-                return true
-            }
 
             R.id.export_bookmarks_menu_item -> {
                 //should be granted automatically
