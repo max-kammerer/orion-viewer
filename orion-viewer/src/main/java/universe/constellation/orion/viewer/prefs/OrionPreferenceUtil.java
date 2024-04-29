@@ -57,10 +57,14 @@ public class OrionPreferenceUtil {
 
     public static int getPersistedInt(Preference pref, int defaultReturnValue) {
         OrionApplication appContext = (OrionApplication) pref.getContext().getApplicationContext();
+        return getPersistedInt(pref.getKey(), defaultReturnValue, appContext);
+    }
+
+    public static int getPersistedInt(String key, int defaultReturnValue, OrionApplication appContext) {
         LastPageInfo info = appContext.getCurrentBookParameters();
         if (info != null) {
             try {
-                Field f = info.getClass().getDeclaredField(pref.getKey());
+                Field f = info.getClass().getDeclaredField(key);
                 return (Integer) f.get(info);
             } catch (Exception e) {
                 log("Error on read value", e);
@@ -70,10 +74,15 @@ public class OrionPreferenceUtil {
     }
 
     public static String getPersistedString(Preference pref, String defaultReturnValue) {
-        LastPageInfo info = ((OrionApplication) pref.getContext().getApplicationContext()).getCurrentBookParameters();
+        OrionApplication applicationContext = (OrionApplication) pref.getContext().getApplicationContext();
+        return getPersistedString(pref.getKey(), defaultReturnValue, applicationContext);
+    }
+
+    public static String getPersistedString(String key, String defaultReturnValue, OrionApplication applicationContext) {
+        LastPageInfo info = applicationContext.getCurrentBookParameters();
         if (info != null) {
             try {
-                Field f = info.getClass().getDeclaredField(pref.getKey());
+                Field f = info.getClass().getDeclaredField(key);
                 return f.get(info).toString();
             } catch (Exception e) {
                 log("Error on read value", e);

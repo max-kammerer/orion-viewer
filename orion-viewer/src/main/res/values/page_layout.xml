@@ -1,0 +1,12 @@
+<resources>
+    <array name="page_layout_drawable">
+        <item>@drawable/navigation1</item>
+        <item>@drawable/navigation2</item>
+        <item>@drawable/navigation3</item>
+    </array>
+    <string-array name="page_layout_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+</resources>

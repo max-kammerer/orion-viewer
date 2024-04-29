@@ -59,7 +59,7 @@
 
     <!--book preferences-->
     <string name="pref_book_contrast">Kontrast</string>
-    <string name="pref_book_contrast_desc">Kontrast (varsayılan 100)</string>
+    <string name="pref_book_contrast_desc">Kontrast (varsayılan 100) - %s</string>
 
     <string name="pref_book_threshold">Filigran eşiği</string>
     <string name="pref_book_threshold_desc">Filigranı kaldırma eşiği (varsayılan 255)</string>
@@ -69,6 +69,8 @@
     <string name="pref_debug_desc">Dosya izlerini yaz &lt;opened book name&gt; + .trace</string>
 
     <string name="pref_walk_order">Sayfa geçişi</string>
+    <string name="pref_walk_order_desc">Sayfa geçişi - %s</string>
+
     <string name="pref_page_layout">Sayfa düzeni</string>
 
 

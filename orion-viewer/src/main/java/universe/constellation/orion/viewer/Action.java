@@ -19,9 +19,13 @@
 
 package universe.constellation.orion.viewer;
 
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+import static universe.constellation.orion.viewer.LoggerKt.log;
+import static universe.constellation.orion.viewer.outline.ShowOutlineKt.showOutline;
+
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-
 import android.widget.Toast;
 
 import java.util.HashMap;
@@ -31,17 +35,12 @@ import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity;
 import universe.constellation.orion.viewer.layout.CropMargins;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionApplication;
-import universe.constellation.orion.viewer.prefs.OrionBookPreferences;
-import universe.constellation.orion.viewer.prefs.OrionPreferenceActivity;
+import universe.constellation.orion.viewer.prefs.OrionBookPreferencesActivityX;
+import universe.constellation.orion.viewer.prefs.OrionPreferenceActivityX;
 import universe.constellation.orion.viewer.prefs.TemporaryOptions;
 import universe.constellation.orion.viewer.util.ColorUtil;
 import universe.constellation.orion.viewer.view.FullScene;
 import universe.constellation.orion.viewer.view.OrionDrawScene;
-
-import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
-import static universe.constellation.orion.viewer.LoggerKt.log;
-import static universe.constellation.orion.viewer.outline.ShowOutlineKt.showOutline;
 
 /**
  * User: mike
@@ -203,7 +202,7 @@ public enum Action {
     BOOK_OPTIONS (R.string.action_book_options, R.integer.action_book_options) {
         @Override
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            Intent intent = new Intent(activity, OrionBookPreferences.class);
+            Intent intent = new Intent(activity, OrionBookPreferencesActivityX.class);
             activity.startActivity(intent);
         }
     },
@@ -305,7 +304,7 @@ public enum Action {
     OPTIONS (R.string.action_options_page, R.integer.action_options_page) {
         @Override
         public void doAction(OrionBaseActivity activity) {
-            Intent intent = new Intent(activity, OrionPreferenceActivity.class);
+            Intent intent = new Intent(activity, OrionPreferenceActivityX.class);
             activity.startActivity(intent);
         }
     },

@@ -29,6 +29,7 @@
     <string name="pref_screen_orientation">Screen orientation</string>
     <string name="pref_rotate_screen">Default screen orientation: restart application to apply</string>
     <string name="pref_book_screen_orientation">Screen orientation for current book</string>
+    <string name="pref_book_screen_orientation_desc">Screen orientation for current book - %s</string>
     <string name="pref_close_dialog_on_apply">Close dialog on apply button click</string>
     <string name="pref_close_page_option_dialog_on_apply">Close page option dialog on apply button click</string>
     <string name="pref_swap_prev_next_keys">Swap prev/next keys</string>
@@ -59,7 +60,7 @@
 
     <!--book preferences-->
     <string name="pref_book_contrast">Contrast</string>
-    <string name="pref_book_contrast_desc">Contrast (default 100)</string>
+    <string name="pref_book_contrast_desc">Contrast (default 100) - %s</string>
 
     <string name="pref_book_threshold">Watermark threshold</string>
     <string name="pref_book_threshold_desc">Threshold for watermark removal (default 255)</string>
@@ -69,6 +70,8 @@
     <string name="pref_debug_desc">Write traces to file &lt;opened book name&gt; + .trace</string>
 
     <string name="pref_walk_order">Page traversal</string>
+    <string name="pref_walk_order_desc">Page traversal - %s</string>
+
     <string name="pref_page_layout">Page layout</string>
 
 
@@ -95,5 +98,6 @@
     <string name="pref_enable_move_on_pinch_zoom">Allow translation during pinch zoom</string>
 
     <string name="pref_color_mode">Color Mode</string>
+    <string name="pref_color_mode_desc">%s</string>
 
 </resources>
