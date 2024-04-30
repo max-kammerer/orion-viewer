@@ -12,6 +12,7 @@ import com.google.firebase.ktx.Firebase
 import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.currentTimeMillis
 import universe.constellation.orion.viewer.filemanager.FileChooserAdapter
+import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivityBase
 import universe.constellation.orion.viewer.filemanager.fileExtension
 import java.io.File
 
@@ -38,6 +39,7 @@ class FireBaseAnalytics : Analytics() {
             param("isUserIntent", isUserIntent.toString())
             param("version_code", BuildConfig.VERSION_CODE.toLong())
             param("isNewUI", isNewUI.toString())
+            param("isSystemFM", intent.getBooleanExtra(OrionFileManagerActivityBase.SYSTEM_FILE_MANAGER, false).toString())
         }
     }
 

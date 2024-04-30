@@ -62,7 +62,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         ActivityResultContracts.OpenDocument()
         ) { result ->
             if (result != null) {
-                openFile(result)
+                openFile(result, true)
             }
         }
     else null
@@ -194,7 +194,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         }
     }
 
-    fun openFile(uri: Uri) {
+    fun openFile(uri: Uri, isFromSystemFM: Boolean = false) {
         log("Opening new book: $uri")
 
         startActivity(
@@ -202,6 +202,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
                 setClass(applicationContext, OrionViewerActivity::class.java)
                 data = uri
                 addCategory(Intent.CATEGORY_DEFAULT)
+                putExtra(SYSTEM_FILE_MANAGER, isFromSystemFM)
             }
         )
     }
@@ -241,6 +242,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
 
     companion object {
         const val DONT_OPEN_RECENT_FILE = "DONT_OPEN_RECENT_FILE"
+        const val SYSTEM_FILE_MANAGER = "SYSTEM_FILE_MANAGER"
     }
 }
 
