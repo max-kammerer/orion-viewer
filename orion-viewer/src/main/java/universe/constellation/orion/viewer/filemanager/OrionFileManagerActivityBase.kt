@@ -108,7 +108,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
                     if (viewPager.currentItem != 0) {
                         viewPager.setCurrentItem(0, false)
                     }
-                    ((viewPager.adapter as? SimplePagerAdapter)?.getItem(0) as? FileManagerFragment)
+                    (supportFragmentManager.fragments.getOrNull(viewPager.currentItem) as? FileManagerFragment)
                         ?.changeFolder(folder)?.run { true } ?: false
                 }
             }
