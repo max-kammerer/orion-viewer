@@ -13,6 +13,12 @@
                 android:key="APPEARANCE">
 
             <PreferenceCategory android:title="@string/pref_category_general">
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="FULL_SCREEN"
+                    android:summary="@string/pref_fullScreen"
+                    android:title="@string/pref_fullScreen" />
+
 
                 <CheckBoxPreference
                     android:defaultValue="false"

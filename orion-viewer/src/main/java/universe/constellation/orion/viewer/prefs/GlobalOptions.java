@@ -148,7 +148,9 @@ public class GlobalOptions implements Serializable, PageOptions {
 
             OrionViewerActivity activity = context.getViewActivity();
             if (activity != null) {
-                if (SHOW_ACTION_BAR.equals(name)) {
+                if (FULL_SCREEN.equals(name)) {
+                    OptionActions.FULL_SCREEN.doAction(activity, false, isFullScreen());
+                } else if (SHOW_ACTION_BAR.equals(name)) {
                     OptionActions.SHOW_ACTION_BAR.doAction(activity, false, isActionBarVisible());
                 } else if (SHOW_STATUS_BAR.equals(name)) {
                     OptionActions.SHOW_STATUS_BAR.doAction(activity, false, isStatusBarVisible());

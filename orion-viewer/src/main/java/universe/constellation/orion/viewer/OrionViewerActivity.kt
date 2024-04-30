@@ -10,12 +10,10 @@ import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialog
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.internal.view.SupportMenuItem
 import androidx.core.math.MathUtils
 import androidx.core.view.doOnLayout
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.color.MaterialColors
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.*
 import universe.constellation.orion.viewer.FallbackDialogs.Companion.saveFileByUri
@@ -113,6 +111,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         updateGlobalOptionsFromIntent(intent)
         isNewUI = globalOptions.isNewUI
         orionContext.viewActivity = this
+        OptionActions.FULL_SCREEN.doAction(this, !globalOptions.isFullScreen, globalOptions.isFullScreen)
         onOrionCreate(savedInstanceState, R.layout.main_view, !isNewUI)
 
         hasActionBar = globalOptions.isActionBarVisible

@@ -3,6 +3,7 @@ package universe.constellation.orion.viewer;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.internal.view.SupportMenuItem;
@@ -11,6 +12,13 @@ import androidx.core.internal.view.SupportMenuItem;
 public enum OptionActions {
 
     NONE("NONE"),
+
+    FULL_SCREEN("FULL_SCREEN") {
+        public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
+            activity.getWindow().setFlags(newValue ? WindowManager.LayoutParams.FLAG_FULLSCREEN : 0, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            activity.getDevice().fullScreen(newValue, activity);
+        }
+    },
 
     SHOW_ACTION_BAR("SHOW_ACTION_BAR") {
         public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
