@@ -87,9 +87,14 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
             if (displayList == null) return
             val dev: Device =
                 AndroidDrawDevice(bitmap, leftOffset, topOffset, left, top, right, bottom)
-            val zoom1 = zoom.toFloat()
-            displayList!!.run(dev, Matrix(zoom1, zoom1), null)
-            updateContrast(bitmap, bitmap.width * bitmap.height * 4)
+            try {
+                val zoom1 = zoom.toFloat()
+                displayList!!.run(dev, Matrix(zoom1, zoom1), null)
+                updateContrast(bitmap, bitmap.width * bitmap.height * 4)
+                dev.close()
+            } finally {
+                dev.destroy()
+            }
         }
 
         private fun getOrCreateDisplayList() {
