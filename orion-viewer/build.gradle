@@ -267,7 +267,7 @@ task('prepareRelease', type: Copy) {
         include '*'
     }
 
-    into "../../releases/${project.ext.orionVersionName}/"
+    into "../../releases/${project.ext.orionVersionName}${if (isAndroid40Build) "_4" else ""}"
 
     dependsOn {
         assembleRelease
