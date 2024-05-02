@@ -52,10 +52,10 @@ fun getIconByNameExtension(name: String): Int {
     return when (name.fileExtension.lowercase(Locale.getDefault())) {
         "pdf" -> R.drawable.pdf
         "djvu", "djv" -> R.drawable.djvu
-        "cbz", "tif", "tiff" -> R.drawable.cbz
         "xps", "oxps" -> R.drawable.xps
         "xml" -> R.drawable.xml
-        else -> R.drawable.djvu
+        "cbz", "tif", "tiff" -> R.drawable.cbz
+        else -> R.drawable.cbz
     }
 }
 
