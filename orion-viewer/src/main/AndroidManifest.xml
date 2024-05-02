@@ -146,11 +146,11 @@
                   android:launchMode="standard"
                   android:icon="@drawable/orion"/>
 
-        <activity android:name=".prefs.OrionPreferenceActivityX" android:screenOrientation="behind"
+        <activity android:name=".prefs.OrionPreferenceActivity" android:screenOrientation="behind"
             android:theme="@style/Theme.AppCompat"
             android:label="Application Preferences"/>
 
-        <activity android:name=".prefs.OrionBookPreferencesActivityX" android:screenOrientation="behind"
+        <activity android:name=".prefs.OrionBookPreferences" android:screenOrientation="behind"
                   android:theme="@style/Theme.AppCompat"
                   android:label="Current Book Preferences"/>
 

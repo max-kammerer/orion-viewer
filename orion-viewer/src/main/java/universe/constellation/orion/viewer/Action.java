@@ -35,7 +35,9 @@ import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity;
 import universe.constellation.orion.viewer.layout.CropMargins;
 import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.prefs.OrionApplication;
+import universe.constellation.orion.viewer.prefs.OrionBookPreferences;
 import universe.constellation.orion.viewer.prefs.OrionBookPreferencesActivityX;
+import universe.constellation.orion.viewer.prefs.OrionPreferenceActivity;
 import universe.constellation.orion.viewer.prefs.OrionPreferenceActivityX;
 import universe.constellation.orion.viewer.prefs.TemporaryOptions;
 import universe.constellation.orion.viewer.util.ColorUtil;
@@ -202,7 +204,7 @@ public enum Action {
     BOOK_OPTIONS (R.string.action_book_options, R.integer.action_book_options) {
         @Override
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            Intent intent = new Intent(activity, OrionBookPreferencesActivityX.class);
+            Intent intent = new Intent(activity, OrionBookPreferences.class);
             activity.startActivity(intent);
         }
     },
@@ -304,7 +306,7 @@ public enum Action {
     OPTIONS (R.string.action_options_page, R.integer.action_options_page) {
         @Override
         public void doAction(OrionBaseActivity activity) {
-            Intent intent = new Intent(activity, OrionPreferenceActivityX.class);
+            Intent intent = new Intent(activity, OrionPreferenceActivity.class);
             activity.startActivity(intent);
         }
     },
