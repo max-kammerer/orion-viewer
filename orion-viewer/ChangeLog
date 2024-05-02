@@ -1,3 +1,7 @@
+===== 0.92.1 (May 03, 2024) =====
+* Stability fixes
+* Enabled support of png and jpeg formats
+
 ===== 0.92.0 (Apr 28, 2024) =====
 * Updated icons and UI
 * Improvements in djvu file processing
