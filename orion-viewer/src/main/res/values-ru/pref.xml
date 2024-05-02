@@ -21,18 +21,24 @@
     <string name="pref_showStatusBar">Показывать строку состояния</string>
     <string name="pref_showOffsetOnStatusBar">Показывать смещение на странице</string>
     <string name="pref_bookDefaultOrientation">Ориентация книги по умолчанию</string>
+
     <string name="pref_bookDefaultZoom">Масштаб</string>
+    <string name="pref_bookDefaultZoom_desc">Масштаб: %s</string>
+
     <string name="pref_rotate_new_book_on_opening">Поворачивать книгу при первом открытии</string>
     <string name="pref_screen_orientation">Ориентация экрана</string>
-    <string name="pref_rotate_screen">Ориентация экрана по умолчанию: необходим перезапуск приложения</string>
-    <string name="pref_book_screen_orientation">Ориентация экрана для текущей книги</string>
+    <string name="pref_screen_orientation_desc">Ориентация экрана по умолчанию: необходим перезапуск приложения</string>
+
+    <string name="pref_book_screen_orientation">Ориентация экрана</string>
+    <string name="pref_book_screen_orientation_desc">Ориентация экрана для текущей книги: %s</string>
+
     <string name="pref_close_dialog_on_apply">Закрывать диалог при применении настроеек</string>
     <string name="pref_close_page_option_dialog_on_apply">Закрывать диалог параметров страницы при применении настроек</string>
     <string name="pref_swap_prev_next_keys">Обменять клавиши местами</string>
     <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Обменять действия клавиш вперед/назад в портретном режиме</string>
 
     <string name="pref_dictionary">Словарь</string>
-    <string name="pref_dictionary_desc">Словарь - %s</string>
+    <string name="pref_dictionary_desc">Словарь: %s</string>
 
     <string name="pref_e_ink_optimization">E-ink</string>
     <string name="pref_e_ink_fast_refresh">Быстрое обновление e-ink</string>
@@ -53,13 +59,13 @@
     <string name="pref_brightness_desc">Яркость (1–100%)</string>
 
     <string name="pref_application_theme">Тема приложения</string>
-    <string name="pref_application_theme_desc">Тема - %s. (При изменении необходимо перезапустить приложение)</string>
+    <string name="pref_application_theme_desc">Тема: %s. (При изменении необходимо перезапустить приложение)</string>
 
     <string name="pref_open_recent_book">Открывать последнюю книгу при старте</string>
 
     <!--book preferences-->
     <string name="pref_book_contrast">Контрастность</string>
-    <string name="pref_book_contrast_desc">Контрастность (по умолчанию 100) - %s</string>
+    <string name="pref_book_contrast_desc">Контрастность (по умолчанию 100): %s</string>
 
     <!--<string name="pref_book_threshold">Threshold</string>-->
     <!--<string name="pref_book_threshold_desc">Threshold for watermark removal</string>-->
@@ -69,7 +75,7 @@
     <string name="pref_debug_desc">Запись отладочной информации в файл &lt;имя открытой файла&gt; + .trace</string>
 
     <string name="pref_walk_order">@string/navigation</string>
-    <string name="pref_walk_order_desc">Порядок переходов - %s</string>
+    <string name="pref_walk_order_desc">Порядок переходов: %s</string>
 
     <string name="pref_page_layout">@string/menu_navigation_text</string>
 
@@ -79,16 +85,16 @@
     <string name="application_settings_title">Настройки приложения</string>
 
     <string name="pref_screen_backlight_timeout">Подсветка экрана</string>
-    <string name="pref_screen_backlight_timeout_desc">Длительность подсветки экрана - %s</string>
+    <string name="pref_screen_backlight_timeout_desc">Длительность подсветки экрана: %s</string>
 
     <string name="pref_app_language">Язык приложения</string>
-    <string name="pref_app_language_desc">Язык приложения: %S. (Необходим перезапуск при изменении)</string>
+    <string name="pref_app_language_desc">Язык приложения: %s. (Необходим перезапуск при изменении)</string>
 
     <string name="pref_tap_zones_desc">Привязка операции к зонам экрана</string>
     <string name="pref_key_binder_desc">Привязка операции к клавишам</string>
 
     <string name="pref_book_threshold">Порог для водяных знаков</string>
-    <string name="pref_book_threshold_desc">Порог удаления водяных знаков (по умолчанию 255)</string>
+    <string name="pref_book_threshold_desc">Порог удаления водяных знаков (по умолчанию 255): %s</string>
 
     <string name="pref_color_mode">Цветовой режим</string>
 

@@ -5,9 +5,10 @@
     <string name="pref_fullScreen">מסך מלא</string>
     <string name="pref_bookDefaultOrientation">כיוון הספר ברירת מחדל</string>
     <string name="pref_bookDefaultZoom">הגדלה</string>
+    <string name="pref_bookDefaultZoom_desc">הגדלה: %s</string>
     <string name="pref_rotate_new_book_on_opening">סובב ספר חדש בפתיחה</string>
     <string name="pref_screen_orientation">כיוון מסך</string>
-    <string name="pref_rotate_screen">כיוון מסך ברירת מחדל : הפעל מחדש את תוכנה על מנת ליישם</string>
+    <string name="pref_screen_orientation_desc">כיוון מסך ברירת מחדל : הפעל מחדש את תוכנה על מנת ליישם</string>
     <string name="pref_book_screen_orientation">כיוון מסך לספר נוכחי</string>
     <string name="pref_close_dialog_on_apply">סגור חלון מיד עם הקשה על וי</string>
     <string name="pref_close_page_option_dialog_on_apply">סגור אפשרויות עמוד מיד עם הקשה על וי</string>
@@ -30,9 +31,9 @@
     <string name="pref_application_theme_desc">הפעל מחדש את תוכנה על מנת ליישם</string>
     <string name="pref_open_recent_book">פתח ספר האחרון בהפעלת תוכנה</string>
     <string name="pref_book_contrast">ניגודיות</string>
-    <string name="pref_book_contrast_desc">ניגודיות (ברירת מחדל 100) - %s</string>
+    <string name="pref_book_contrast_desc">ניגודיות (ברירת מחדל 100): %s</string>
     <string name="pref_book_threshold">גבולות</string>
-    <string name="pref_book_threshold_desc">גבולות להסרת סימן מים</string>
+    <string name="pref_book_threshold_desc">גבולות להסרת סימן מים: %s</string>
     <string name="pref_debug">תיקון באגים</string>
     <string name="pref_debug_desc">כתוב עקבות לקובץ בשם &lt;opened book name> + .trace</string>
     <string name="pref_walk_order">סדר דפדוף</string>

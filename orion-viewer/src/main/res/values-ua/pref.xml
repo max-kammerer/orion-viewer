@@ -12,10 +12,13 @@
     <!--General Prefs-->
     <string name="pref_fullScreen">Повноекранний режим</string>
     <string name="pref_bookDefaultOrientation">Орієнтація книги за замовчуванням</string>
+
     <string name="pref_bookDefaultZoom">Масштаб</string>
+    <string name="pref_bookDefaultZoom_desc">Масштаб: %s</string>
+
     <string name="pref_rotate_new_book_on_opening">Повертати книгу при першому відкритті</string>
     <string name="pref_screen_orientation">Орієнтація екрану</string>
-    <string name="pref_rotate_screen">Орієнтація екрану за замовчанням: необхідний перезапуск програми</string>
+    <string name="pref_screen_orientation_desc">Орієнтація екрану за замовчанням: необхідний перезапуск програми</string>
     <string name="pref_book_screen_orientation">Орієнтація екрану для поточної книжки</string>
     <string name="pref_close_dialog_on_apply">Закривати діалог при застосуванні налаштувань</string>
     <string name="pref_close_page_option_dialog_on_apply">Закривати діалог параметрів сторінки при застосуванні налаштувань</string>
@@ -23,7 +26,7 @@
     <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Обміняти дії клавіш вперед / назад в портретному режимі</string>
 
     <string name="pref_dictionary">Словник</string>
-    <string name="pref_dictionary_desc">Словник - %s</string>
+    <string name="pref_dictionary_desc">Словник: %s</string>
 
     <string name="pref_e_ink_optimization">E-ink</string>
     <string name="pref_e_ink_fast_refresh">Швидке оновлення e-ink</string>
@@ -50,7 +53,7 @@
 
     <!--book preferences-->
     <string name="pref_book_contrast">Контраст</string>
-    <string name="pref_book_contrast_desc">Контраст (за замовчуванням 100) - %s</string>
+    <string name="pref_book_contrast_desc">Контраст (за замовчуванням 100): %s</string>
 
     <!--<string name="pref_book_threshold">Threshold</string>-->
     <!--<string name="pref_book_threshold_desc">Threshold for watermark removal</string>-->
@@ -64,13 +67,13 @@
     <string name="application_settings_title">Налаштування програми</string>
 
     <string name="pref_screen_backlight_timeout">Підсвітка екрану</string>
-    <string name="pref_screen_backlight_timeout_desc">Тривалість підсвічування екрану - %s</string>
+    <string name="pref_screen_backlight_timeout_desc">Тривалість підсвічування екрану: %s</string>
 
     <string name="pref_app_language">Мова програми</string>
-    <string name="pref_app_language_desc">Мова програми - %s. Необхідний перезапуск програми!</string>
+    <string name="pref_app_language_desc">Мова програми: %s. Необхідний перезапуск програми!</string>
 
     <string name="pref_tap_zones_desc">Тап зони: прив\'язка операції до зон екрану</string>
 
     <string name="pref_book_threshold">Поріг для водяних знаків</string>
-    <string name="pref_book_threshold_desc">Поріг видалення водяних знаків (за замовчуванням 255)</string>
+    <string name="pref_book_threshold_desc">Поріг видалення водяних знаків (за замовчуванням 255): %s</string>
 </resources>

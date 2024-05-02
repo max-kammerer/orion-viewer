@@ -50,7 +50,7 @@ class OrionBookPreferences : DSLPreferenceActivity() {
                     isCurrentBookOption = !isGeneral
                     orionKey = SCREEN_ORIENTATION
                     title = pref_screen_orientation.stringRes
-                    summary = pref_book_screen_orientation.stringRes
+                    summary = if (!isGeneral) pref_book_screen_orientation_desc.stringRes else pref_screen_orientation_desc.stringRes
                     dialogTitle = pref_screen_orientation.stringRes
                     setDefaultValue("DEFAULT")
 
@@ -68,7 +68,7 @@ class OrionBookPreferences : DSLPreferenceActivity() {
                         isCurrentBookOption = !isGeneral
                         orionKey = ZOOM
                         title = pref_bookDefaultZoom.stringRes
-                        summary = pref_bookDefaultZoom.stringRes
+                        summary = pref_bookDefaultZoom_desc.stringRes
                         dialogTitle = pref_bookDefaultZoom.stringRes
                         setDefaultValue("0")
 
@@ -90,7 +90,7 @@ class OrionBookPreferences : DSLPreferenceActivity() {
                     isCurrentBookOption = !isGeneral
                     orionKey = WALK_ORDER
                     title = pref_walk_order.stringRes
-                    summary = pref_walk_order.stringRes
+                    summary = pref_walk_order_desc.stringRes
                     dialogTitle = pref_walk_order.stringRes
                     setDefaultValue(ABCD.stringRes)
                     setDialogIcon(R.drawable.walk_order)
@@ -103,7 +103,7 @@ class OrionBookPreferences : DSLPreferenceActivity() {
                     isCurrentBookOption = !isGeneral
                     orionKey = COLOR_MODE
                     title = pref_color_mode.stringRes
-                    summary = pref_color_mode.stringRes
+                    summary = pref_color_mode_desc.stringRes
                     dialogTitle = pref_color_mode.stringRes
                     setDefaultValue("CM_NORMAL")
 

@@ -12,10 +12,12 @@
     <!--General Prefs-->
     <string name="pref_fullScreen">Pantalla completa</string>
     <string name="pref_bookDefaultOrientation">Orientación por defecto</string>
+
     <string name="pref_bookDefaultZoom">Zoom</string>
+
     <string name="pref_rotate_new_book_on_opening">Rotar nuevo libro al abrir</string>
     <string name="pref_screen_orientation">Orientación de pantalla</string>
-    <string name="pref_rotate_screen">Orientación de pantalla por defecto: reinicie la aplicación tras aplicar cambios</string>
+    <string name="pref_screen_orientation_desc">Orientación de pantalla por defecto: reinicie la aplicación tras aplicar cambios</string>
     <string name="pref_book_screen_orientation">Orientación de pantallla para el libro actual</string>
     <string name="pref_close_dialog_on_apply">Cierra ventana tras aplicar los cambios</string>
     <string name="pref_close_page_option_dialog_on_apply">Cierra ventana de opciones de página tras aplicar los cambios</string>
@@ -23,7 +25,7 @@
     <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Invierte teclas anterior/siguiente en modo apaisado</string>
 
     <string name="pref_dictionary">Diccionario</string>
-    <string name="pref_dictionary_desc">Diccionario - %s</string>
+    <string name="pref_dictionary_desc">Diccionario: %s</string>
 
     <string name="pref_e_ink_optimization">E-ink</string>
     <string name="pref_e_ink_fast_refresh">E-ink refresco rápido</string>
@@ -43,23 +45,23 @@
     <string name="pref_brightness_desc">Brillo (1–100%)</string>
 
     <string name="pref_application_theme">Tema de la aplicación</string>
-    <string name="pref_application_theme_desc">Tema - %s. (Reinicie para aplicar los cambios)</string>
+    <string name="pref_application_theme_desc">Tema: %s. (Reinicie para aplicar los cambios)</string>
 
     <string name="pref_open_recent_book">Abre documento reciente al inicio</string>
 
     <!--book preferences-->
     <string name="pref_book_contrast">Contraste</string>
-    <string name="pref_book_contrast_desc">Contraste (default 100) - %s</string>
+    <string name="pref_book_contrast_desc">Contraste (default 100): %s</string>
 
     <string name="pref_book_threshold">Umbral de marca de agua</string>
-    <string name="pref_book_threshold_desc">Umbral para eliminar la marca de agua (por defecto 255)</string>
+    <string name="pref_book_threshold_desc">Umbral para eliminar la marca de agua (por defecto 255): %s</string>
 
     <string name="pref_device_info">Información del dispositivo</string>
     <string name="pref_debug">Depuración</string>
     <string name="pref_debug_desc">Escribe informe de errores al archivo &lt;nombre de libro abierto &gt; + .trace</string>
 
     <string name="pref_walk_order">Selección de dirección de lectura</string>
-    <string name="pref_walk_order_desc">Selección de dirección de lectura - %s</string>
+    <string name="pref_walk_order_desc">Selección de dirección de lectura: %s</string>
 
     <string name="pref_page_layout">Formato de página</string>
 
@@ -70,10 +72,10 @@
     <string name="book_pref_title">Opciones del libro actual</string>
 
     <string name="pref_screen_backlight_timeout">Intervalo de retroiluminación</string>
-    <string name="pref_screen_backlight_timeout_desc">Intervalo de retroiluminación - %s</string>
+    <string name="pref_screen_backlight_timeout_desc">Intervalo de retroiluminación: %s</string>
 
     <string name="pref_app_language">Idioma de la aplicación</string>
-    <string name="pref_app_language_desc">Idioma - %S (¡reinicie para aplicar los cambios!)</string>
+    <string name="pref_app_language_desc">Idioma: %s (¡reinicie para aplicar los cambios!)</string>
 
     <string name="pref_tap_zones_desc">Zonas de pulsación: asocie acciones a las áreas de la pantalla</string>
 

@@ -15,7 +15,7 @@
     <string name="pref_bookDefaultZoom">Zoom</string>
     <string name="pref_rotate_new_book_on_opening">Ruota nuovo libro aperto</string>
     <string name="pref_screen_orientation">Orientazione schermo</string>
-    <string name="pref_rotate_screen">Orientazione schermo: richiede il riavvio</string>
+    <string name="pref_screen_orientation_desc">Orientazione schermo: richiede il riavvio</string>
     <string name="pref_book_screen_orientation">Orientazione schermo libro corrente</string>
     <string name="pref_close_dialog_on_apply">Chiudi la finestra quando confermi</string>
     <string name="pref_close_page_option_dialog_on_apply">Chiudi le opzioni quando confermi</string>
@@ -23,7 +23,7 @@
     <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Inverti tasti precedente/successivo in modalità orizzontale</string>
 
     <string name="pref_dictionary">Dizionario</string>
-    <string name="pref_dictionary_desc">Dizionario - %s</string>
+    <string name="pref_dictionary_desc">Dizionario: %s</string>
 
     <string name="pref_e_ink_optimization">E-ink</string>
     <string name="pref_e_ink_fast_refresh">E-ink aggiornamento rapido</string>
@@ -43,23 +43,23 @@
     <string name="pref_brightness_desc">Luminosità (1–100%)</string>
 
     <string name="pref_application_theme">Tema applicazione</string>
-    <string name="pref_application_theme_desc">Tema - %s. (Riavvia per applicare le modifiche)</string>
+    <string name="pref_application_theme_desc">Tema: %s. (Riavvia per applicare le modifiche)</string>
 
     <string name="pref_open_recent_book">All\'avvio apri l\'ultimo libro letto</string>
 
     <!--book preferences-->
     <string name="pref_book_contrast">Contrasto</string>
-    <string name="pref_book_contrast_desc">Contrasto (default 100) - %s</string>
+    <string name="pref_book_contrast_desc">Contrasto (default 100): %s</string>
 
     <string name="pref_book_threshold">Soglia filigrana</string>
-    <string name="pref_book_threshold_desc">Soglia filigrana (default 255)</string>
+    <string name="pref_book_threshold_desc">Soglia filigrana (default 255): %s</string>
 
     <string name="pref_device_info">Informazioni dispositivo</string>
     <string name="pref_debug">Debug</string>
     <string name="pref_debug_desc">Scrivi log su &lt;file libro&gt; + .trace</string>
 
     <string name="pref_walk_order">Schema scorrimento pagine</string>
-    <string name="pref_walk_order_desc">Schema scorrimento pagine - %s</string>
+    <string name="pref_walk_order_desc">Schema scorrimento pagine: %s</string>
 
     <string name="pref_page_layout">Layout pagina</string>
 
@@ -70,7 +70,7 @@
     <string name="book_pref_title">Impostazioni libro corrente</string>
 
     <string name="pref_screen_backlight_timeout">Intervallo retroilluminazione</string>
-    <string name="pref_screen_backlight_timeout_desc">Intervallo retroilluminazione - %s</string>
+    <string name="pref_screen_backlight_timeout_desc">Intervallo retroilluminazione: %s</string>
 
     <string name="pref_app_language">Lingua</string>
     <string name="pref_app_language_desc">Lingua: %s (riavvia per applicare le modifiche)</string>

@@ -22,10 +22,13 @@
     <string name="pref_showStatusBar">Durum çubuğunu göster</string>
     <string name="pref_showOffsetOnStatusBar">Durum çubuğundaki sayfadaki uzaklığı göster</string>
     <string name="pref_bookDefaultOrientation">Kitap varsayılan yönü</string>
+
     <string name="pref_bookDefaultZoom">Yakınlaştırma</string>
+    <string name="pref_bookDefaultZoom_desc">Yakınlaştırma - %s</string>
+
     <string name="pref_rotate_new_book_on_opening">Yeni kitabı açılışta döndürün</string>
     <string name="pref_screen_orientation">Ekran yönü</string>
-    <string name="pref_rotate_screen">Varsayılan ekran yönü: uygulamak için uygulamayı yeniden başlatın</string>
+    <string name="pref_screen_orientation_desc">Varsayılan ekran yönü: uygulamak için uygulamayı yeniden başlatın</string>
     <string name="pref_book_screen_orientation">Mevcut kitabın ekran yönü</string>
     <string name="pref_close_dialog_on_apply">Uygula düğmesine tıklandığında iletişim kutusunu kapat</string>
     <string name="pref_close_page_option_dialog_on_apply">Uygula düğmesine tıklandığında sayfa seçeneği iletişim kutusunu kapat</string>
@@ -33,7 +36,7 @@
     <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Yatay modda önceki/sonraki tuşlarını değiştirin</string>
 
     <string name="pref_dictionary">Sözlük</string>
-    <string name="pref_dictionary_desc">Sözlük - %s</string>
+    <string name="pref_dictionary_desc">Sözlük: %s</string>
 
     <string name="pref_e_ink_optimization">E-mürekkep</string>
     <string name="pref_e_ink_fast_refresh">E-mürekkep hızlı yenileme</string>
@@ -53,23 +56,23 @@
     <string name="pref_brightness_desc">Parlaklık (%1–100)</string>
 
     <string name="pref_application_theme">Uygulama teması</string>
-    <string name="pref_application_theme_desc">Tema - %s. (Uygulamak için uygulamayı yeniden başlatın)</string>
+    <string name="pref_application_theme_desc">Tema: %s. (Uygulamak için uygulamayı yeniden başlatın)</string>
 
     <string name="pref_open_recent_book">Başlangıçta son kitabı aç</string>
 
     <!--book preferences-->
     <string name="pref_book_contrast">Kontrast</string>
-    <string name="pref_book_contrast_desc">Kontrast (varsayılan 100) - %s</string>
+    <string name="pref_book_contrast_desc">Kontrast (varsayılan 100): %s</string>
 
     <string name="pref_book_threshold">Filigran eşiği</string>
-    <string name="pref_book_threshold_desc">Filigranı kaldırma eşiği (varsayılan 255)</string>
+    <string name="pref_book_threshold_desc">Filigranı kaldırma eşiği (varsayılan 255): %s</string>
 
     <string name="pref_device_info">Cihaz bilgisi</string>
     <string name="pref_debug">Debug</string>
     <string name="pref_debug_desc">Dosya izlerini yaz &lt;opened book name&gt; + .trace</string>
 
     <string name="pref_walk_order">Sayfa geçişi</string>
-    <string name="pref_walk_order_desc">Sayfa geçişi - %s</string>
+    <string name="pref_walk_order_desc">Sayfa geçişi: %s</string>
 
     <string name="pref_page_layout">Sayfa düzeni</string>
 
@@ -81,10 +84,10 @@
     <string name="book_pref_title">Mevcut kitap seçenekleri</string>
 
     <string name="pref_screen_backlight_timeout">Ekran ışığı zaman aşımı</string>
-    <string name="pref_screen_backlight_timeout_desc">Ekran ışığı zaman aşımı - %s</string>
+    <string name="pref_screen_backlight_timeout_desc">Ekran ışığı zaman aşımı: %s</string>
 
     <string name="pref_app_language">Uygulama dili</string>
-    <string name="pref_app_language_desc">Uygulama dili - %s (uygulamak için uygulamayı yeniden başlatın!)</string>
+    <string name="pref_app_language_desc">Uygulama dili: %s (uygulamak için uygulamayı yeniden başlatın!)</string>
 
     <string name="pref_tap_zones_desc">Eylemleri ekran bölgelerine bağlayın</string>
 

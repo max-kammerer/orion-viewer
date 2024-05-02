@@ -47,7 +47,7 @@ class OrionBookPreferencesFragment : DSLPreferenceFragment() {
                 list {
                     key = SCREEN_ORIENTATION.prefKey
                     title = pref_screen_orientation.stringRes
-                    summary = pref_book_screen_orientation_desc.stringRes
+                    summary = if (!isGeneral) pref_book_screen_orientation_desc.stringRes else pref_screen_orientation_desc.stringRes
                     dialogTitle = pref_screen_orientation.stringRes
                     setDefaultValue("DEFAULT")
 
@@ -65,7 +65,7 @@ class OrionBookPreferencesFragment : DSLPreferenceFragment() {
                     list {
                         key = ZOOM.prefKey
                         title = pref_bookDefaultZoom.stringRes
-                        summary = pref_bookDefaultZoom.stringRes
+                        summary = pref_bookDefaultZoom_desc.stringRes
                         dialogTitle = pref_bookDefaultZoom.stringRes
                         setDefaultValue("0")
 

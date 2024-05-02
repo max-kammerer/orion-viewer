@@ -18,7 +18,7 @@
     <string name="pref_showStatusBar">Statusleiste</string>
     <string name="pref_showOffsetOnStatusBar">Aktuelle Seitenposition in der Statusleiste anzeigen</string>
     <string name="pref_application_theme">Theme</string>
-    <string name="pref_application_theme_desc">Erscheinungsbild - %s (erfordert Neustart der Anwendung)</string>
+    <string name="pref_application_theme_desc">Erscheinungsbild: %s (erfordert Neustart der Anwendung)</string>
     <string name="pref_behavior">Anwendungsverhalten</string>
     <string name="pref_open_recent_book">Beim Start das letzte Dokument öffnen</string>
     <string name="pref_close_dialog_on_apply">Dialoge automatisch schließen</string>
@@ -28,21 +28,24 @@
     <string name="pref_default_book_setting">Standardeinstellungen</string>
 
     <string name="pref_walk_order">Anzeigemodus</string>
-    <string name="pref_walk_order_desc">Anzeigemodus - %s</string>
+    <string name="pref_walk_order_desc">Anzeigemodus: %s</string>
 
     <string name="pref_page_layout">Seitenaufteilung</string>
+
     <string name="pref_bookDefaultZoom">Zoomen</string>
+    <string name="pref_bookDefaultZoom_desc">Zoomen: %s</string>
+
     <string name="pref_book_contrast">Kontrast</string>
-    <string name="pref_book_contrast_desc">Kontrastwert (Voreinstellung: 100) - %s</string>
+    <string name="pref_book_contrast_desc">Kontrastwert (Voreinstellung: 100): %s</string>
     <string name="pref_tap_zones_desc">Bildschirmbereiche mit bestimmten Aktionen verknüpfen</string>
     <string name="pref_screen_orientation">Bildschirmausrichtung</string>
-    <string name="pref_rotate_screen">Standardausrichtung (erfordert Neustart der Anwendung)</string>
+    <string name="pref_screen_orientation_desc">Standardausrichtung (erfordert Neustart der Anwendung)</string>
     <string name="pref_app_language">Sprache der Benutzeroberfläche</string>
-    <string name="pref_app_language_desc">Sprache - %s. (Erfordert Neustart der Anwendung)</string>
+    <string name="pref_app_language_desc">Sprache: %s. (Erfordert Neustart der Anwendung)</string>
 
     <!--Device Prefs-->
     <string name="pref_screen_backlight_timeout">Hintergrundbeleuchtung</string>
-    <string name="pref_screen_backlight_timeout_desc">Abschaltzeit der Hintergrundbeleuchtung - %s</string>
+    <string name="pref_screen_backlight_timeout_desc">Abschaltzeit der Hintergrundbeleuchtung: %s</string>
     <string name="pref_custom_brightness">Helligkeit anpassen</string>
     <string name="pref_brightness">Helligkeit</string>
     <string name="pref_brightness_desc">Helligkeitswert (1–100%)</string>
@@ -57,7 +60,7 @@
 
     <!--Dictionary Prefs-->
     <string name="pref_dictionary">Wörterbuch</string>
-    <string name="pref_dictionary_desc">Wörterbuch - %s</string>
+    <string name="pref_dictionary_desc">Wörterbuch: %s</string>
 
     <!--Other Prefs-->
     <string name="pref_long_crop_value">Großer Zuschnitt</string>
@@ -76,7 +79,7 @@
     <string name="pref_book_screen_orientation">Bildschirmausrichtung für aktuelles Dokument</string>
     <string name="pref_color_mode">Farbmodus</string>
     <string name="pref_book_threshold">Wasserzeichen</string>
-    <string name="pref_book_threshold_desc">Schwellwert zur Entfernung von Wasserzeichen (Voreinstellung: 255)</string>
+    <string name="pref_book_threshold_desc">Schwellwert zur Entfernung von Wasserzeichen (Voreinstellung: 255): %s</string>
 
     <string name="application_settings_title">Anwendungs-Einstellungen</string>
 </resources>

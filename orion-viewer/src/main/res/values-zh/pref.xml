@@ -5,10 +5,13 @@
 <resources>
     <string name="pref_fullScreen">全屏阅读</string>
     <string name="pref_bookDefaultOrientation">书籍默认旋转方向</string>
+
     <string name="pref_bookDefaultZoom">缩放</string>
+    <string name="pref_bookDefaultZoom_desc">缩放: %s</string>
+
     <string name="pref_rotate_new_book_on_opening">打开新书籍时旋转</string>
     <string name="pref_screen_orientation">屏幕方向</string>
-    <string name="pref_rotate_screen">默认屏幕方向(重启使设定生效)</string>
+    <string name="pref_screen_orientation_desc">默认屏幕方向(重启使设定生效)</string>
     <string name="pref_book_screen_orientation">当前书籍屏幕方向</string>
     <string name="pref_close_dialog_on_apply">应用生效时关闭对话框</string>
     <string name="pref_close_page_option_dialog_on_apply">生效时关闭页面选项对话框</string>
@@ -39,16 +42,16 @@
 
     <!--book preferences-->
     <string name="pref_book_contrast">对比度</string>
-    <string name="pref_book_contrast_desc">对比度 (默认 100) - %s</string>
+    <string name="pref_book_contrast_desc">对比度 (默认 100): %s</string>
 
     <string name="pref_book_threshold">阈值</string>
-    <string name="pref_book_threshold_desc">去除水印阈值 (default 255)</string>
+    <string name="pref_book_threshold_desc">去除水印阈值 (default 255): %s</string>
 
     <string name="pref_debug">调试</string>
     <string name="pref_debug_desc">打印调试信息到 &lt;书籍名&gt; + .trace</string>
 
     <string name="pref_walk_order">浏览顺序</string>
-    <string name="pref_walk_order_desc">浏览顺序 - %s</string>
+    <string name="pref_walk_order_desc">浏览顺序: %s</string>
 
     <string name="pref_page_layout">页面布局</string>
 
@@ -58,6 +61,6 @@
     <string name="book_pref_title">当前书籍设定</string>
 
     <string name="pref_screen_backlight_timeout">屏幕背光时间</string>
-    <string name="pref_screen_backlight_timeout_desc">多少秒后关闭屏幕背光 - %s</string>
+    <string name="pref_screen_backlight_timeout_desc">多少秒后关闭屏幕背光: %s</string>
 
 </resources>
