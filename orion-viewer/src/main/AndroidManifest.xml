@@ -89,6 +89,7 @@
                 <data android:scheme="file"/>
                 <data android:scheme="content"/>
                 <data android:pathPattern=".*\\.djvu"/>
+                <data android:pathPattern=".*\\.djv"/>
                 <data android:pathPattern=".*\\.pdf"/>
                 <data android:pathPattern=".*\\.xps"/>
                 <data android:pathPattern=".*\\.oxps"/>

@@ -10,7 +10,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import android.webkit.MimeTypeMap
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
@@ -28,8 +27,8 @@ import universe.constellation.orion.viewer.analytics.FALLBACK_DIALOG
 import universe.constellation.orion.viewer.android.isAtLeastKitkat
 import universe.constellation.orion.viewer.android.isContentScheme
 import universe.constellation.orion.viewer.android.isContentUri
-import universe.constellation.orion.viewer.filemanager.FileChooserAdapter
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
+import universe.constellation.orion.viewer.formats.FileFormats.Companion.getFileExtension
 import java.io.File
 
 class ResourceIdAndString(val id: Int, val value: String) {
@@ -201,28 +200,6 @@ open class FallbackDialogs {
 
         const val URI = "URI"
 
-        fun getExtension(uri: Uri, mimeType: String?, contentResolver: ContentResolver): String? {
-            return uri.path?.substringAfterLast("/")?.substringAfterLast('.').takeIf {
-                FileChooserAdapter.supportedExtensions.contains(it)
-            } ?: mimeType?.findExtensionForMimeType() ?: uri.extractMimeTypeFromUri(contentResolver)?.run {
-                findExtensionForMimeType() ?:
-                MimeTypeMap.getSingleton().getExtensionFromMimeType(this).takeIf {  FileChooserAdapter.supportedExtensions.contains(it) }
-            }
-        }
-
-        private fun Uri.extractMimeTypeFromUri(contentResolver: ContentResolver): String? {
-            return contentResolver.getType(this)
-
-        }
-
-        private fun String?.findExtensionForMimeType(): String? {
-            if (this  == null) return null
-            return FileChooserAdapter.supportedExtensions.firstOrNull {
-                it.contains(this)
-            }
-        }
-
-
         fun Activity.saveFileByUri(
             intent: Intent?,
             originalContentUri: Uri,
@@ -281,7 +258,7 @@ private fun saveContentInTmpFile(
     activity: Activity,
     fileInfo: FileInfo?
 ) {
-    val extension = FallbackDialogs.getExtension(uri, intent.type, myActivity.contentResolver)
+    val extension = myActivity.contentResolver.getFileExtension(intent)
     if (extension == null) {
         dialog.dismiss()
         //TODO proper message

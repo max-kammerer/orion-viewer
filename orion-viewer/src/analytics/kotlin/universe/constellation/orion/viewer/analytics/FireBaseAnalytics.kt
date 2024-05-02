@@ -2,7 +2,6 @@ package universe.constellation.orion.viewer.analytics
 
 import android.content.ContentResolver
 import android.content.Intent
-import android.webkit.MimeTypeMap
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.ParametersBuilder
 import com.google.firebase.analytics.ktx.analytics
@@ -11,9 +10,11 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
 import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.currentTimeMillis
-import universe.constellation.orion.viewer.filemanager.FileChooserAdapter
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivityBase
 import universe.constellation.orion.viewer.filemanager.fileExtension
+import universe.constellation.orion.viewer.formats.FileFormats.Companion.getFileExtFromPath
+import universe.constellation.orion.viewer.formats.FileFormats.Companion.getMimeType
+import universe.constellation.orion.viewer.formats.FileFormats.Companion.isSupportedMimeType
 import java.io.File
 
 
@@ -37,33 +38,13 @@ class FireBaseAnalytics : Analytics() {
             param("scheme", intent.scheme)
             val mimeType = contentResolver.getMimeType(intent)
             param("mime_type", mimeType)
+            param("book_ext", intent.getFileExtFromPath())
             param("isUserIntent", isUserIntent.toString())
             param("version_code", BuildConfig.VERSION_CODE.toLong())
             param("isNewUI", isNewUI.toString())
             param("isSystemFM", intent.getBooleanExtra(OrionFileManagerActivityBase.SYSTEM_FILE_MANAGER, false).toString())
-            if (mimeType.isNullOrBlank() || mimeType.contains("*")) {
+            if (!mimeType.isSupportedMimeType) {
                 param("host", intent.data?.host)
-            }
-        }
-    }
-
-    private fun ContentResolver.getMimeType(intent: Intent): String? {
-        val type = intent.type
-        if (type != null) return type
-        val uri = intent.data ?: return "<intent/null_data>"
-        when (val scheme = intent.scheme) {
-            ContentResolver.SCHEME_CONTENT -> {
-                return getType(uri) ?: MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-                    MimeTypeMap.getFileExtensionFromUrl(uri.toString())
-                        ?: return "<content/no_extension>"
-                )
-            }
-            ContentResolver.SCHEME_FILE -> {
-                val file = File(uri.path ?: return  "<file/no_path>")
-                return MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.name.fileExtension.takeIf { it.isNotBlank() } ?: return "<file/no_extension>")
-            }
-            else -> {
-                return "<unknown_scheme/$scheme>"
             }
         }
     }
@@ -76,7 +57,7 @@ class FireBaseAnalytics : Analytics() {
         fileInfo(true) {
             val hash = (file.length().hashCode().toLong() shl 32) + file.name.hashCode()
             param("book_id", hash)
-            param("book_ext", file.name.fileExtension.takeIf { FileChooserAdapter.supportedExtensions.contains(it) } ?: "<unknown extension>")
+            param("book_ext", file.name.fileExtension)
         }
     }
 

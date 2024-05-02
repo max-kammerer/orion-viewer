@@ -26,9 +26,10 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import universe.constellation.orion.viewer.R
+import universe.constellation.orion.viewer.formats.FileFormats.Companion.isSupportedFileExt
 import java.io.File
 import java.io.FilenameFilter
-import java.util.*
+import java.util.Locale
 
 class FileChooserAdapter(
     context: Context,
@@ -104,8 +105,6 @@ class FileChooserAdapter(
 
     companion object {
 
-        val supportedExtensions = setOf("cbz", "djvu", "djv", "pdf", "oxps", "xps", "tiff", "tif")
-
         @JvmField
         var DEFAULT_FILTER: FilenameFilter = FilenameFilter { dir, filename ->
             if (File(dir, filename).isDirectory) {
@@ -115,7 +114,7 @@ class FileChooserAdapter(
                 return@FilenameFilter false
             }
 
-            supportedExtensions.contains(filename.fileExtension.lowercase(Locale.getDefault()))
+            filename.fileExtension.lowercase(Locale.getDefault()).isSupportedFileExt
         }
     }
 }
