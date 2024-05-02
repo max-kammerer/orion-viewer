@@ -35,11 +35,15 @@ class FireBaseAnalytics : Analytics() {
 
         logEvent("onNewIntent") {
             param("scheme", intent.scheme)
-            param("mime_type", contentResolver.getMimeType(intent))
+            val mimeType = contentResolver.getMimeType(intent)
+            param("mime_type", mimeType)
             param("isUserIntent", isUserIntent.toString())
             param("version_code", BuildConfig.VERSION_CODE.toLong())
             param("isNewUI", isNewUI.toString())
             param("isSystemFM", intent.getBooleanExtra(OrionFileManagerActivityBase.SYSTEM_FILE_MANAGER, false).toString())
+            if (mimeType.isNullOrBlank() || mimeType.contains("*")) {
+                param("host", intent.data?.host)
+            }
         }
     }
 
