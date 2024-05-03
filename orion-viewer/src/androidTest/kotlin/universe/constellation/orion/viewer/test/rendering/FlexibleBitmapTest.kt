@@ -81,6 +81,7 @@ class FlexibleBitmapTest(bookDescription: BookDescription) : BookTest(bookDescri
 
     private fun render(adaptiveBitmap: FlexibleBitmap, rendering: Rect, pos: LayoutPosition, page: Page): Pair<Bitmap, IntArray> {
         adaptiveBitmap.resize(pos.x.pageDimension, pos.y.pageDimension, BITMAP_CACHE)
+        adaptiveBitmap.enableAll(BITMAP_CACHE)
         runBlocking {
             adaptiveBitmap.render(rendering, pos, page)
         }
