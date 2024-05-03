@@ -80,7 +80,7 @@ data class PagePart(val absPartRect: Rect) {
     fun draw(canvas: Canvas, pageVisiblePart: Rect, defaultPaint: Paint) {
         if (!isActive) return
         if (bitmap != null && Rect.intersects(absPartRect, pageVisiblePart)) {
-            canvas.drawBitmap(bitmap!!, localPartRect, absPartRect, defaultPaint)
+            canvas.drawBitmap(bitmap!!, localPartRect, absPartRect, null/*pass null, otherwise some line artifacts are shown between bitmap images*/)
         }
     }
 
@@ -241,7 +241,7 @@ fun Int.countCells(cellSize: Int): Int {
 }
 
 private fun renderInner(bound: Rect, zoom: Double, offsetX: Int, offsetY: Int, page: Page, bitmap: Bitmap): Bitmap {
-    log("Rendering $page: $bound $offsetX $offsetY")
+    log("Rendering $page: $bound\n $offsetX $offsetY\nbm=${bitmap.width}x${bitmap.height}\ndim${bound.width()} ${bound.height()}")
     page.renderPage(
         bitmap,
         zoom,
