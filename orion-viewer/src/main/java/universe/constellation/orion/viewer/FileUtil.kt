@@ -2,22 +2,22 @@ package universe.constellation.orion.viewer
 
 import universe.constellation.orion.viewer.djvu.DjvuDocument
 import universe.constellation.orion.viewer.document.Document
+import universe.constellation.orion.viewer.filemanager.fileExtensionLC
+import universe.constellation.orion.viewer.formats.FileFormats
 import universe.constellation.orion.viewer.pdf.PdfDocument
 import java.io.File
-import java.lang.RuntimeException
-import java.util.Locale
 
 object FileUtil {
 
-    private fun isDjvuFile(filePathLowCase: String): Boolean {
-        return filePathLowCase.endsWith("djvu") || filePathLowCase.endsWith("djv")
+    private fun isDjvuFile(filePath: String): Boolean {
+        return filePath.fileExtensionLC in FileFormats.DJVU.extensions
     }
 
     @JvmStatic
     @Throws(Exception::class)
     fun openFile(absolutePath: String): Document {
         try {
-            return if (isDjvuFile(absolutePath.lowercase(Locale.getDefault()))) {
+            return if (isDjvuFile(absolutePath)) {
                 DjvuDocument(absolutePath)
             } else {
                 PdfDocument(absolutePath)

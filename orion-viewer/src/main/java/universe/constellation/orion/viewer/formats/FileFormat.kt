@@ -4,7 +4,9 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.webkit.MimeTypeMap
 import universe.constellation.orion.viewer.filemanager.fileExtension
+import universe.constellation.orion.viewer.filemanager.fileExtensionLC
 import java.io.File
+import java.util.Locale
 
 
 enum class FileFormats(val extensions: List<String>, vararg val mimeTypes: String) {
@@ -66,7 +68,7 @@ enum class FileFormats(val extensions: List<String>, vararg val mimeTypes: Strin
                 }
                 ContentResolver.SCHEME_FILE -> {
                     val file = File(uri.path ?: return  "<file/no_path>")
-                    return getMimeTypeFromExtension(file.name.fileExtension.takeIf { it.isNotBlank() } ?: return "<file/no_extension>")
+                    return getMimeTypeFromExtension(file.name.fileExtensionLC.takeIf { it.isNotBlank() } ?: return "<file/no_extension>")
                 }
                 else -> {
                     return "<unknown_scheme/$scheme>"
@@ -94,13 +96,14 @@ enum class FileFormats(val extensions: List<String>, vararg val mimeTypes: Strin
         fun String?.isExplicit() = !this.isNullOrBlank() && !contains('*')
 
         fun getMimeTypeFromExtension(ext: String): String? {
-            return FileFormats.extToMimeType[ext] ?: MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext)
+            val extLC = ext.lowercase(Locale.getDefault())
+            return FileFormats.extToMimeType[extLC] ?: MimeTypeMap.getSingleton().getMimeTypeFromExtension(extLC)
         }
 
         val String?.isSupportedFileExt: Boolean
             get() {
                 if (this == null) return false
-                return supportedExtensions.contains(this)
+                return supportedExtensions.contains(this.lowercase(Locale.getDefault()))
             }
 
         val String?.isSupportedMimeType: Boolean
