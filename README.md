@@ -75,6 +75,6 @@ To build `Orion Viewer` you will need:
 
 Pre 0.80 versions are compatible with Android 2.1+ devices
 
-###Troubleshooting
+### Troubleshooting
 
 In case of getting error about absent libtinfo.so.5, please install ncurses lib (libncurses5).
