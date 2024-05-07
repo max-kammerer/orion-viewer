@@ -93,6 +93,8 @@ public class GlobalOptions implements Serializable, PageOptions {
 
     public final static String APPLICATION_THEME = "APPLICATION_THEME";
 
+    public final static String APPLICATION_THEME_DEFAULT = "DEFAULT";
+
     public final static String APP_LANGUAGE = "LANGUAGE";
 
     public final static String OPEN_RECENT_BOOK = "OPEN_RECENT_BOOK";
@@ -384,7 +386,7 @@ public class GlobalOptions implements Serializable, PageOptions {
 
 
     public String getApplicationTheme() {
-        return getStringProperty(APPLICATION_THEME, "DEFAULT");
+        return getStringProperty(APPLICATION_THEME, APPLICATION_THEME_DEFAULT);
     }
 
     public String getAppLanguage() {

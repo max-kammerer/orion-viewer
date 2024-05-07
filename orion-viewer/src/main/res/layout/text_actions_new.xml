@@ -4,38 +4,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/orion_orange">
+    android:background="?attr/newMenuBackground">
 
-    <ImageButton
+    <ImageView
         android:id="@+id/stext_open_dictionary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#ffcc66"
-        android:padding="10dp"
+        style="@style/New_Viewer_Menu_Item"
         app:srcCompat="@drawable/new_dictionary" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/stext_add_bookmark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#ffcc66"
-        android:padding="10dp"
+        style="@style/New_Viewer_Menu_Item"
         app:srcCompat="@drawable/new_bookmark_add" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/stext_copy_to_clipboard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#ffcc66"
-        android:padding="10dp"
+        style="@style/New_Viewer_Menu_Item"
         app:srcCompat="@drawable/new_copy" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/stext_send_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#ffcc66"
-        android:padding="10dp"
+        style="@style/New_Viewer_Menu_Item"
         app:srcCompat="@drawable/new_share" />
 
 </LinearLayout>

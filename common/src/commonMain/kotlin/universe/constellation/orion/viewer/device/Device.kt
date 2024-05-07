@@ -20,7 +20,6 @@
 package universe.constellation.orion.viewer.device
 
 import universe.constellation.orion.viewer.OperationHolder
-import universe.constellation.orion.viewer.document.Document
 
 interface Device {
 
@@ -38,7 +37,7 @@ interface Device {
 
     fun flushBitmap() {}
 
-    val isDefaultDarkTheme: Boolean
+    val defaultTheme: String
 
     companion object {
 

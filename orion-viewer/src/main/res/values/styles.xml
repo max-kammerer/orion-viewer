@@ -4,6 +4,8 @@
     <attr name="appIconTint" format="color|reference"/>
     <attr name="navIconTint" format="color|reference"/>
     <attr name="menuIconTint" format="color|reference"/>
+    <attr name="newMenuBackground" format="color|reference"/>
+    <attr name="newMenuTint" format="color|reference"/>
 
     <style name="Viewer_Dialog_Icon" >
         <item name="android:drawablePadding">2dp</item>
@@ -30,14 +32,16 @@
     </style>
 
     <style name="New_Viewer_Menu_Item" >
-        <item name="android:padding">3dp</item>
-        <item name="android:background">@color/orion_orange</item>
-        <item name="android:layout_margin">2dp</item>
+<!--        <item name="android:padding">3dp</item>-->
+<!--        <item name="android:background">?attr/newMenuBackground</item>-->
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingRight">5dp</item>
         <item name="android:width">32dp</item>
         <item name="android:height">32dp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:tint">@color/white</item>
+        <item name="android:tint">?attr/newMenuTint</item>
     </style>
 
     <style name="Tap_Dialog_Top" >
@@ -63,15 +67,59 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="OrionActionBar" parent="@style/Widget.AppCompat.Toolbar">
+        <item name="android:background">@color/orion_blue</item>
+    </style>
+
+    <style name="OrionNavigation" parent="@style/Widget.Design.NavigationView">
+        <item name="android:background">@color/orion_blue</item>
+    </style>
+
+    <style name="Theme.Orion.Default.NoActionBar" parent="Theme.AppCompat.NoActionBar">
+        <item name="navIconTint">@color/white</item>
+        <item name="appIconTint">?attr/navIconTint</item>
+        <item name="menuIconTint">?attr/navIconTint</item>
+
+        <item name="colorPrimaryDark">#54759e</item>
+        <item name="actionMenuTextColor">@color/orion_blue</item>
+        <item name="newMenuTint">@color/white</item>
+        <item name="newMenuBackground">@color/orion_blue</item>
+        <item name="actionBarStyle">@style/OrionActionBar</item>
+        <item name="android:actionBarStyle">@style/OrionActionBar</item>
+        <item name="toolbarStyle">@style/OrionActionBar</item>
+        <item name="panelBackground">@style/OrionActionBar</item>
+        <item name="navigationViewStyle">@style/OrionNavigation</item>
+    </style>
+
     <style name="Theme.Orion.Dark.NoActionBar" parent="Theme.AppCompat.NoActionBar">
         <item name="navIconTint">@color/toolbar_icon_tint_ligth</item>
         <item name="appIconTint">?attr/navIconTint</item>
         <item name="menuIconTint">?attr/navIconTint</item>
+
+        <item name="newMenuTint">@color/white</item>
+        <item name="newMenuBackground">@color/orion_blue</item>
     </style>
 
     <style name="Theme.Orion.Light.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="navIconTint">@color/toolbar_icon_tint</item>
         <item name="appIconTint">?attr/navIconTint</item>
         <item name="menuIconTint">?attr/navIconTint</item>
+
+        <item name="newMenuTint">?attr/navIconTint</item>
+        <item name="newMenuBackground">?attr/colorPrimary</item>
+    </style>
+
+    <style name="Theme.Orion.Android.Dark.NoActionBar" parent="Theme.Orion.Dark.NoActionBar">
+        <item name="navIconTint">?attr/colorControlNormal</item>
+
+        <item name="newMenuTint">?attr/navIconTint</item>
+        <item name="newMenuBackground">?attr/colorPrimary</item>
+    </style>
+
+    <style name="Theme.Orion.Android.Light.NoActionBar" parent="Theme.Orion.Light.NoActionBar">
+        <item name="navIconTint">?attr/colorControlNormal</item>
+
+        <item name="newMenuTint">?attr/navIconTint</item>
+        <item name="newMenuBackground">?attr/colorPrimary</item>
     </style>
 </resources>

@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 
 import universe.constellation.orion.viewer.Action;
@@ -32,11 +33,11 @@ public class SelectedTextActions {
         popup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
         popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
 
-        View view = activity.getLayoutInflater().inflate(activity.isNewUI() ? R.layout.text_actions_new : R.layout.text_actions, null);
+        View view = activity.getLayoutInflater().inflate(R.layout.text_actions_new, null);
 
         popup.setContentView(view);
 
-        ImageButton copy_to_Clipboard = view.findViewById(R.id.stext_copy_to_clipboard);
+        ImageView copy_to_Clipboard = view.findViewById(R.id.stext_copy_to_clipboard);
         copy_to_Clipboard.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 popup.dismiss();
@@ -47,7 +48,7 @@ public class SelectedTextActions {
             }
         });
 
-        ImageButton add_bookmark = view.findViewById(R.id.stext_add_bookmark);
+        ImageView add_bookmark = view.findViewById(R.id.stext_add_bookmark);
         add_bookmark.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 popup.dismiss();
@@ -55,7 +56,7 @@ public class SelectedTextActions {
             }
         });
 
-        ImageButton open_dictionary = view.findViewById(R.id.stext_open_dictionary);
+        ImageView open_dictionary = view.findViewById(R.id.stext_open_dictionary);
         open_dictionary.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 popup.dismiss();
@@ -63,7 +64,7 @@ public class SelectedTextActions {
             }
         });
 
-        ImageButton external_actions = view.findViewById(R.id.stext_send_text);
+        ImageView external_actions = view.findViewById(R.id.stext_send_text);
         external_actions.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 popup.dismiss();

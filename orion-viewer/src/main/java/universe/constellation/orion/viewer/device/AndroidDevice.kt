@@ -50,8 +50,8 @@ open class AndroidDevice @JvmOverloads constructor(
     private val keyBinding: GlobalOptions
         get() = orionContext.keyBinding
 
-    override val isDefaultDarkTheme: Boolean
-        get() = true
+    override val defaultTheme: String
+        get() = GlobalOptions.APPLICATION_THEME
 
     override fun onKeyUp(keyCode: Int, isLongPress: Boolean, operation: OperationHolder): Boolean {
         //check mapped keys

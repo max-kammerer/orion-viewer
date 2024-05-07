@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#00ffffff"
     android:orientation="vertical">
 
     <LinearLayout
@@ -13,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_gravity="top"
-        android:background="@color/orion_orange"
+        android:background="?attr/newMenuBackground"
         android:orientation="horizontal"
         android:padding="5dp">
 
@@ -73,7 +72,7 @@
         android:layout_alignParentBottom="true"
         android:layout_gravity="center_horizontal"
 
-        android:background="@color/orion_orange"
+        android:background="?attr/newMenuBackground"
         android:orientation="vertical"
         android:padding="10dp">
 
@@ -118,7 +117,6 @@
                 android:id="@+id/search_menu_item"
                 style="@style/New_Viewer_Menu_Item"
                 android:contentDescription="@string/menu_search_item"
-                android:padding="5dp"
                 app:srcCompat="@drawable/new_search" />
 
 
@@ -155,8 +153,7 @@
                 android:id="@+id/page_picker_seeker"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/orion_orange" />
+                android:layout_weight="1"/>
 
             <ImageView
                 android:id="@+id/page_picker_plus"

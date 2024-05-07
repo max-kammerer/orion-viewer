@@ -33,7 +33,6 @@ import androidx.core.os.LocaleListCompat
 import androidx.multidex.MultiDex
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import universe.constellation.orion.viewer.AndroidLogger
@@ -51,6 +50,7 @@ import universe.constellation.orion.viewer.device.OnyxDevice
 import universe.constellation.orion.viewer.device.OnyxUtil
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.logger
+import universe.constellation.orion.viewer.prefs.GlobalOptions.APPLICATION_THEME_DEFAULT
 import universe.constellation.orion.viewer.prefs.GlobalOptions.DEFAULT_LANGUAGE
 import universe.constellation.orion.viewer.test.IdlingResource
 import java.io.File
@@ -89,21 +89,20 @@ class OrionApplication : Application() {
 
     private var currentLanguage: String = DEFAULT_LANGUAGE
 
-    private val isLightTheme: Boolean
+    private val appTheme: String
         get() {
             val theme = options.applicationTheme
-            val isDefault = !("DARK" == theme || "LIGHT" == theme)
-            val useDarkTheme = if (isDefault) device.isDefaultDarkTheme else false
-
-            return !(useDarkTheme || "DARK" == theme)
-
+            return if ("DEFAULT" == theme) device.defaultTheme else theme
         }
 
     private val themeId: Int
-        get() = if (!isLightTheme)
-            R.style.Theme_Orion_Dark_NoActionBar
-        else
-            R.style.Theme_Orion_Light_NoActionBar
+        get() = when(appTheme) {
+            "DARK" -> R.style.Theme_Orion_Dark_NoActionBar
+            "LIGHT" -> R.style.Theme_Orion_Light_NoActionBar
+            "ANDROID_LIGHT" ->  R.style.Theme_Orion_Android_Light_NoActionBar
+            "ANDROID_DARK" ->  R.style.Theme_Orion_Android_Dark_NoActionBar
+            else -> R.style.Theme_Orion_Dark_NoActionBar
+        }
 
     val sdkVersion: Int
         get() = Build.VERSION.SDK_INT

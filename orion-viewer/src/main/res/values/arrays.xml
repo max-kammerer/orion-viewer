@@ -79,12 +79,16 @@
         <item>DEFAULT</item>
         <item>DARK</item>
         <item>LIGHT</item>
+        <item>ANDROID_DARK</item>
+        <item>ANDROID_LIGHT</item>
   </string-array>
 
     <string-array name="application_theme_desc">
-        <item>DEFAULT</item>
-        <item>DARK</item>
-        <item>LIGHT</item>
+        <item>Default</item>
+        <item>Orion Dark</item>
+        <item>Orion Light</item>
+        <item>Android Dark</item>
+        <item>Android Light</item>
     </string-array>
 
     <string-array name="screen_backligth_timeout">
