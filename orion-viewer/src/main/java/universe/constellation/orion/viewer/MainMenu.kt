@@ -41,11 +41,13 @@ class MainMenu(val mainMenu: View, val orionViewerActivity: OrionViewerActivity)
         mainMenu.findViewById<ImageView>(R.id.page_picker_minus).setOnClickListener {
             if (pageSeeker.progress - 1 >= 0) {
                 pageSeeker.progress -=1
+                orionViewerActivity.controller?.drawPage(pageSeeker.progress)
             }
         }
         mainMenu.findViewById<ImageView>(R.id.page_picker_plus).setOnClickListener {
             if (pageSeeker.progress + 1 <= pageSeeker.max) {
                 pageSeeker.progress +=1
+                orionViewerActivity.controller?.drawPage(pageSeeker.progress)
             }
         }
     }

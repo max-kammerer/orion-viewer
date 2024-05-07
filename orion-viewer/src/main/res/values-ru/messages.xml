@@ -22,6 +22,7 @@
     <string name="permission_cancel">Отмена</string>
 
     <string name="string_cancel">Отмена</string>
+    <string name="string_close">Закрыть</string>
     <string name="string_apply">Применить</string>
 
     <string name="string_wrong_password">Неверный пароль</string>

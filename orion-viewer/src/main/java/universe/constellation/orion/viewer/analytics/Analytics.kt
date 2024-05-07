@@ -9,6 +9,7 @@ import java.io.File
 const val TAP_HELP_DIALOG = "TAPHELPDialog"
 const val FALLBACK_DIALOG = "FALLBACK"
 const val SHOW_ERROR_DIALOG = "SHOW_ERROR"
+const val SHOW_ERROR_PANEL_DIALOG = "SHOW_ERROR_PANEL"
 
 open class Analytics {
 

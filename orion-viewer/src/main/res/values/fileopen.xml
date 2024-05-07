@@ -15,9 +15,13 @@
     <string name="fileopen_report_error_by_github_and_return">Report issue on github and return to dialog…</string>
     <string name="fileopen_report_error_by_email_and_return">Report error by email and return to dialog…</string>
 
-    <string name="crash_on_book_opening_title">Error on file opening</string>
-    <string name="crash_on_intent_opening_title">Error on intent processing</string>
-    <string name="crash_on_book_opening_message_header">Error occurred during file \`%1$s\` opening. Please report an issue:</string>
+    <string name="string_exception">Exception</string>
+    <string name="string_intent">Intent</string>
+    <string name="string_cause">Cause</string>
+    <string name="crash_on_book_opening_title">Error during file opening</string>
+    <string name="crash_on_intent_opening_title">Error during intent processing</string>
+    <string name="crash_on_book_opening_message_header">Error during file \`%1$s\` opening. Please report an issue:</string>
+    <string name="crash_on_book_opening_message_header_panel">Error during file \`%1$s\` opening:</string>
 
     <string name="string_send">Send…</string>
     <string name="send_report_header">[Please provide additional details]</string>

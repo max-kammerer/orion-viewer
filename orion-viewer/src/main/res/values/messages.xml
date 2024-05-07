@@ -21,6 +21,7 @@
     <string name="permission_cancel">Cancel</string>
 
     <string name="string_cancel">Cancel</string>
+    <string name="string_close">Close</string>
     <string name="string_apply">Apply</string>
 
     <string name="string_wrong_password">Wrong password</string>

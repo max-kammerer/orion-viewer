@@ -202,7 +202,7 @@ open class FallbackDialogs {
         const val URI = "URI"
 
         fun Activity.saveFileByUri(
-            intent: Intent?,
+            intent: Intent,
             originalContentUri: Uri,
             targetFileUri: Uri,
             callbackAction: () -> Unit
@@ -214,7 +214,8 @@ open class FallbackDialogs {
                 showErrorReportDialog(
                     R.string.error_on_file_saving_title,
                     R.string.error_on_file_saving_title,
-                    "intent=" + intent?.toString() + "\ntargetFile=$targetFileUri",
+                    intent,
+                    "targetFile=$targetFileUri",
                     exception
                 )
             }
@@ -266,7 +267,7 @@ private fun saveContentInTmpFile(
         myActivity.showErrorReportDialog(
             myActivity.applicationContext.getString(R.string.crash_on_intent_opening_title),
             myActivity.applicationContext.getString(R.string.crash_on_intent_opening_title),
-            intent.toString()
+            intent
         )
         return
     }

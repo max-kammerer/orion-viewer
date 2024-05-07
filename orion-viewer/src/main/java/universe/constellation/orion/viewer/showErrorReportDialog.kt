@@ -21,25 +21,18 @@ internal fun Throwable.exceptionStackTrace(): String {
     return exceptionWriter.toString()
 }
 
-internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: Int, messageTitle: Int, intent: Intent, exception: Throwable) {
-    showErrorReportDialog(resources.getString(dialogTitle), resources.getString(messageTitle), intent, exception)
+internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: Int, messageTitle: Int, intent: Intent, info: String, exception: Throwable) {
+    showErrorReportDialog(resources.getString(dialogTitle), resources.getString(messageTitle), intent, info, exception)
 }
 
-internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: Int, messageTitle: Int, info: String, exception: Throwable) {
-    showErrorReportDialog(resources.getString(dialogTitle), resources.getString(messageTitle), info, exception)
-}
-
-internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: String, messageTitle: String, intent: Intent, exception: Throwable) {
-    showErrorReportDialog(dialogTitle, messageTitle, intent.toString(), exception)
-}
-
-internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: String, messageTitle: String, info: String, exception: Throwable? = null) {
+internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: String, messageTitle: String, intent: Intent, info: String? = null, exception: Throwable? = null) {
     this.analytics.error(exception ?: RuntimeException())
 
     val view = layoutInflater.inflate(R.layout.crash_dialog, null)
     val textView = view.findViewById<TextView>(R.id.crashTextView)
 
-    val fullMessage = info + (exception?.let { "\n\n" + it.exceptionStackTrace() } ?: "")
+    val fullMessage = prepareFullErrorMessage(intent, info, exception)
+
     textView.text = fullMessage
 
     val header = view.findViewById<TextView>(R.id.crash_message_header)
@@ -72,6 +65,19 @@ internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: String, messag
     view.findViewById<RadioButton>(R.id.crash_send_github).setOnClickListener {
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
     }
+}
+
+internal fun prepareFullErrorMessage(
+    intent: Intent,
+    info: String?,
+    exception: Throwable?,
+    addIntent: Boolean = true,
+    addStackTrace: Boolean = true
+): String {
+    return (("Cause: ${exception?.message}\n\n".takeIf { exception?.message != null } ?: "") +
+            (("Additional info: $info\n\n").takeIf { info != null } ?: "") +
+            (if (addIntent) "Intent info: $intent" else "") +
+            if (addStackTrace) (exception?.let { "\n\n" + it.exceptionStackTrace() } ?: "") else "").trim()
 }
 
 internal fun Activity.reportErrorVia(viaEmail: Boolean, messageTitle: String, intentOrException: String) {

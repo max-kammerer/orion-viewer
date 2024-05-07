@@ -19,6 +19,7 @@ import kotlinx.coroutines.*
 import universe.constellation.orion.viewer.FallbackDialogs.Companion.saveFileByUri
 import universe.constellation.orion.viewer.Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN
 import universe.constellation.orion.viewer.Permissions.hasReadStoragePermission
+import universe.constellation.orion.viewer.analytics.SHOW_ERROR_PANEL_DIALOG
 import universe.constellation.orion.viewer.analytics.TAP_HELP_DIALOG
 import universe.constellation.orion.viewer.android.getFileInfo
 import universe.constellation.orion.viewer.android.isRestrictedAccessPath
@@ -26,7 +27,6 @@ import universe.constellation.orion.viewer.device.Device
 import universe.constellation.orion.viewer.dialog.SearchDialog
 import universe.constellation.orion.viewer.dialog.TapHelpDialog
 import universe.constellation.orion.viewer.dialog.create
-import universe.constellation.orion.viewer.document.StubDocument
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import universe.constellation.orion.viewer.prefs.initalizer
@@ -136,7 +136,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         view.setOnTouchListener{ _, event ->
             newTouchProcessor!!.onTouch(event)
         }
-        initStubController("Processing intent...", "Processing intent...")
         processIntentAndCheckPermission(intent, true)
 
         mainMenu = MainMenu(findViewById<LinearLayout>(R.id.main_menu)!!, this)
@@ -207,6 +206,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     internal fun processIntentAndCheckPermission(intent: Intent, isUserIntent: Boolean = false) {
         log("Trying to open document by $intent...")
         analytics.onNewIntent(contentResolver, intent, isUserIntent, isNewUI)
+        showErrorPanel(false)
 
         if (!openAsTempTestBook) {
             //UGLY hack: otherwise Espresso can't recognize that it's test activity
@@ -222,12 +222,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 val filePath = fileInfo?.path
 
                 if (fileInfo == null || filePath.isNullOrBlank()) {
-                    if (controller == null) { //TODO init stub controller with error
-                        initStubController(
-                            "Can't extract file path from URI",
-                            "Can't extract file path from URI"
-                        )
-                    }
                     FallbackDialogs().createBadIntentFallbackDialog(this, null, intent).show()
                     return
                 }
@@ -258,10 +252,10 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     fileInfo.file
                 }
 
-                myState = MyState.FINISHED
                 openFileAndDestroyOldController(fileToOpen)
+                myState = MyState.FINISHED
             } catch (e: Exception) {
-                showErrorReportDialog(
+                showErrorAndErrorPanel(
                     R.string.crash_on_intent_opening_title,
                     R.string.crash_on_intent_opening_title,
                     intent, e
@@ -286,9 +280,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     @Throws(Exception::class)
     private fun openFile(file: File) {
-        val stubController = initStubController(file.absolutePath, "Loading...")
-        val stubDocument = stubController.document as StubDocument
-
         orionContext.idlingRes.busy()
 
         GlobalScope.launch(Dispatchers.Main) {
@@ -301,15 +292,13 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 }
             } catch (e: Exception) {
                 log(e)
-                stubDocument.bodyText = e.message ?: e.toString()
-                stubDocument.title = e.message ?: e.toString()
-                updateViewOnNewBook(stubDocument.title)
-                showErrorReportDialog(
+                showErrorAndErrorPanel(
+                    getString(R.string.crash_on_book_opening_title),
                     resources.getString(
-                        R.string.crash_on_book_opening_message_header,
+                        R.string.crash_on_book_opening_message_header_panel,
                         file.name
                     ),
-                    getString(R.string.crash_on_book_opening_title), intent, e
+                    intent, e
                 )
                 executor.close()
                 orionContext.idlingRes.free()
@@ -333,7 +322,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
                 controller = controller1
                 bind(view, controller1)
-                stubController.destroy()
                 controller1.changeOrinatation(lastPageInfo1.screenOrientation)
 
                 updateViewOnNewBook((newDocument.title?.takeIf { it.isNotBlank() } ?: file.name.substringBeforeLast(".")))
@@ -387,20 +375,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 initalizer(globalOptions)
             )
         }
-    }
-
-    private fun initStubController(title: String, bodyText: String): Controller {
-        val stubDocument = StubDocument(title, bodyText)
-        val stubController = Controller(this, stubDocument, SimpleLayoutStrategy.create(), context = Dispatchers.Default)
-        val drawView = fullScene.drawView
-        val stubInfo = createDefaultLastPageInfo(initalizer(globalOptions))
-        stubController.changeOrinatation(stubInfo.screenOrientation)
-        stubController.init(stubInfo, drawView.sceneWidth, drawView.sceneHeight)
-        bind(view, stubController)
-        stubController.drawPage(0, 0, 0)
-        updateViewOnNewBook(stubDocument.title)
-        invalidateOptionsMenu()
-        return stubController
     }
 
     private fun bind(view: OrionDrawScene, controller: Controller) {
@@ -651,17 +625,13 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         _isResumed = true
         super.onResume()
         updateBrightness()
-
         log("onResume")
-        val intent = intent
 
         if (controller != null) {
+            analytics.action("onResumeOpenedBook")
             controller!!.processPendingEvents()
             //controller!!.drawPage(lastPageInfo!!.pageNumber, lastPageInfo!!.newOffsetX, lastPageInfo!!.newOffsetY)
-        } else if (myState == MyState.FINISHED) {
-            errorInDebugOr("Wrong state") { onNewIntent(intent) }
         }
-
     }
 
     override fun onDestroy() {
@@ -763,7 +733,12 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         if (!isNewUI) {
-            menuInflater.inflate(R.menu.menu, menu)
+            val disable = controller == null
+            if (!disable) {
+                menuInflater.inflate(R.menu.menu, menu)
+            } else {
+                menuInflater.inflate(R.menu.menu_disabled, menu)
+            }
             if (!hasActionBar) {
                 for (i in 0 until menu.size()) {
                     val item = menu.getItem(i)
@@ -772,23 +747,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             }
         }
         return !isNewUI
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        if (!isNewUI) {
-            val onPrepareOptionsMenu = super.onPrepareOptionsMenu(menu)
-            val disable = controller?.document is StubDocument
-            if (menu != null) {
-                (0 until menu.size()).forEach {
-                    val item = menu.getItem(it)
-                    item.isEnabled = !disable || item.itemId !in BOOK_MENU_ITEMS
-                }
-            }
-
-            return onPrepareOptionsMenu
-        } else {
-            return false
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -1136,6 +1094,60 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     fun hideMenu() {
         if (isNewUI) {
             mainMenu.hideMenu()
+        }
+    }
+
+    private fun showErrorAndErrorPanel(dialogTitle: Int, messageTitle: Int, intent: Intent, exception: Throwable) {
+        showErrorAndErrorPanel(resources.getString(dialogTitle), resources.getString(messageTitle), intent, exception)
+    }
+
+    private fun showErrorAndErrorPanel(
+        dialogTitle: String,
+        messageTitle: String,
+        intent: Intent,
+        exception: Throwable
+    ) {
+        val dialog = createThemedAlertBuilder()
+            .setPositiveButton(R.string.string_close) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setOnDismissListener {
+                analytics.dialog(SHOW_ERROR_PANEL_DIALOG, false)
+            }
+            .setTitle(dialogTitle)
+            .setMessage(messageTitle + "\n\n" + exception.message).create()
+        dialog.show()
+
+        analytics.error(exception)
+
+        val problemView = findViewById<View>(R.id.problem_view)
+        problemView.findViewById<TextView>(R.id.crash_message_header).text = messageTitle
+        problemView.findViewById<TextView>(R.id.crash_intent_message).text = intent.toString()
+        problemView.findViewById<TextView>(R.id.crash_cause_message).text = prepareFullErrorMessage(
+            intent,
+            null,
+            exception,
+            false,
+            false
+        ).takeIf { it.isNotBlank() } ?: "<Absent>"
+        problemView.findViewById<TextView>(R.id.crash_exception_message).text = exception.stackTraceToString()
+
+        showErrorPanel(true)
+
+        problemView.findViewById<ImageView>(R.id.crash_close).setOnClickListener {
+            Action.CLOSE_ACTION.doAction(this)
+        }
+        problemView.findViewById<ImageView>(R.id.crash_open_book).setOnClickListener {
+            Action.OPEN_BOOK.doAction(this)
+        }
+    }
+
+    private fun showErrorPanel(show: Boolean) {
+        invalidateOptionsMenu()
+        findViewById<View>(R.id.orion_full_scene)!!.visibility = if (!show) View.VISIBLE else View.INVISIBLE
+        findViewById<View>(R.id.problem_view)!!.visibility = if (show) View.VISIBLE else View.GONE
+        if (show) {
+            view.pageLayoutManager = null
         }
     }
 

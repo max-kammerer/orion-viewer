@@ -26,7 +26,7 @@ object FileUtil {
         } catch (e: Exception) {
             throw RuntimeException(
                 "Error during file opening `${file.name}`: " + e.message + "\n" +
-                        "(File size: ${file.beautifiedFileSize()} ,full file path: ${absolutePath})", e
+                        "(File size: ${file.beautifiedFileSize()}, file path: ${absolutePath})", e
             )
         }
     }

@@ -15,9 +15,13 @@
     <string name="fileopen_report_error_by_github_and_return">Создать ошибку на github и вернуться к диалогу…</string>
     <string name="fileopen_report_error_by_email_and_return">Отправить ошибку по e-mail и вернуться к диалогу…</string>
 
+    <string name="string_intent">Интент</string>
+    <string name="string_exception">Ошибка</string>
+    <string name="string_cause">Причина</string>
     <string name="crash_on_book_opening_title">Ошибка при открытии файла</string>
     <string name="crash_on_intent_opening_title">Ошибка при обработке интента</string>
     <string name="crash_on_book_opening_message_header">Ошибка при открытии \`%1$s\` файла. Пожалуйста, отправьте сообщение об ошибке:</string>
+    <string name="crash_on_book_opening_message_header_panel">Ошибка при открытии \`%1$s\` файла:</string>
 
     <string name="string_send">Отправить…</string>
     <string name="send_report_header">[Пожалуйста, укажите дополнительную информацию]</string>

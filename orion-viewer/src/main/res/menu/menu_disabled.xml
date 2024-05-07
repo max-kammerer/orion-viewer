@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:orion="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/open_menu_item"
+        android:icon="@drawable/new_folder_open"
+        android:title="@string/menu_open_text"
+        orion:iconTint="?attr/menuIconTint"
+        orion:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/help_menu_item"
+        android:icon="@drawable/new_help"
+        android:title="@string/menu_help_text"
+        orion:icon="?attr/menuIconTint"
+        orion:iconTint="?attr/menuIconTint"
+        orion:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/about_menu_item"
+        android:icon="@drawable/new_info"
+        android:title="@string/menu_about_text"
+        orion:iconTint="?attr/menuIconTint"
+        orion:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/exit_menu_item"
+        android:icon="@drawable/new_exit"
+        android:title="@string/menu_exit_text"
+        orion:iconTint="?attr/menuIconTint"
+        orion:showAsAction="ifRoom"/>
+</menu>

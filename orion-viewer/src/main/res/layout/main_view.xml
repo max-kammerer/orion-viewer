@@ -2,16 +2,15 @@
 
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#00ffffff"
     android:orientation="vertical">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#00ffffff"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
@@ -19,23 +18,139 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-
-        <LinearLayout
-            android:id="@+id/orion_full_scene"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#FFE6E6E6"
             android:orientation="vertical">
 
-            <include layout="@layout/main_statusbar" />
-
-            <universe.constellation.orion.viewer.view.OrionDrawScene
-                android:id="@+id/view"
+            <LinearLayout
+                android:id="@+id/orion_full_scene"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="#FFE6E6E6"
+                android:orientation="vertical">
 
-                android:textColor="#000000" />
-        </LinearLayout>
+                <include layout="@layout/main_statusbar" />
+
+                <universe.constellation.orion.viewer.view.OrionDrawScene
+                    android:id="@+id/view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    android:textColor="#000000" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/problem_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/crash_open_book"
+                        style="@style/Viewer_Dialog_Icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        app:srcCompat="@drawable/new_exit" />
+
+                    <ImageView
+                        android:id="@+id/crash_close"
+                        style="@style/Viewer_Dialog_Icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        app:srcCompat="@drawable/new_folder_open" />
+                </RelativeLayout>
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/crash_message_header"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:text="@string/crash_on_book_opening_message_header_panel"
+                            android:textAppearance="@android:style/TextAppearance.Medium" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="20dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/string_cause"
+                                android:textAppearance="@android:style/TextAppearance.Medium" />
+
+                            <TextView
+                                android:id="@+id/crash_cause_message"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/string_cause" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="20dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/string_intent"
+                                android:textAppearance="@android:style/TextAppearance.Medium" />
+
+                            <TextView
+                                android:id="@+id/crash_intent_message"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/string_exception"
+                                android:textAppearance="@android:style/TextAppearance.Medium" />
+
+                            <HorizontalScrollView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/crash_exception_message"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/string_exception" />
+                            </HorizontalScrollView>
+                        </LinearLayout>
+                    </LinearLayout>
+                </ScrollView>
+            </LinearLayout>
+
+
+        </FrameLayout>
     </LinearLayout>
 
     <LinearLayout

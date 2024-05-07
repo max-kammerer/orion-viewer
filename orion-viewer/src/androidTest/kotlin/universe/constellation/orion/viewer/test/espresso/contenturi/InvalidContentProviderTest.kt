@@ -5,8 +5,11 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withParentIndex
 import androidx.test.espresso.matcher.ViewMatchers.withSubstring
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.filters.SdkSuppress
+import org.hamcrest.CoreMatchers.allOf
 import org.junit.Ignore
 import org.junit.Test
 import universe.constellation.orion.viewer.R
@@ -18,9 +21,10 @@ class InvalidContentProviderTest : BaseTestWithActivity(createContentIntentWithG
 
     @Test
     fun openViaTemporaryFile() {
-        //onView(withSubstring("Error on intent processing")).check(ViewAssertions.matches(isDisplayed()))
-        onView(withSubstring("GitHub")).check(ViewAssertions.matches(isDisplayed()))
-        onView(withSubstring("E-Mail")).check(ViewAssertions.matches(isDisplayed()))
+        onView(withSubstring("FileNotFoundException")).check(ViewAssertions.matches(isDisplayed()))
+        onView(withSubstring("Close")).perform(click())
+        onView(withText("Cause")).check(ViewAssertions.matches(isDisplayed()))
+        onView(allOf(withSubstring("FileNotFoundException"), withParentIndex(1))).check(ViewAssertions.matches(isDisplayed()))
     }
 
 }
@@ -33,8 +37,12 @@ class InvalidContentProvider2Test : BaseTestWithActivity(createContentIntentWith
     fun openViaTemporaryFile() {
         onTextNotButtonView(R.string.fileopen_save_to_file).perform(click())
 
-        onView(withSubstring("targetFile")).check(ViewAssertions.matches(isDisplayed()))
-        onView(withSubstring("GitHub")).check(ViewAssertions.matches(isDisplayed()))
-        onView(withSubstring("E-Mail")).check(ViewAssertions.matches(isDisplayed()))
+        onView(withSubstring("FileNotFoundException")).check(ViewAssertions.matches(isDisplayed()))
+        onView(withSubstring("Close")).perform(click())
+        onView(withText("Cause")).check(ViewAssertions.matches(isDisplayed()))
+
+//        onView(withSubstring("targetFile")).check(ViewAssertions.matches(isDisplayed()))
+//        onView(withSubstring("GitHub")).check(ViewAssertions.matches(isDisplayed()))
+//        onView(withSubstring("E-Mail")).check(ViewAssertions.matches(isDisplayed()))
     }
 }
