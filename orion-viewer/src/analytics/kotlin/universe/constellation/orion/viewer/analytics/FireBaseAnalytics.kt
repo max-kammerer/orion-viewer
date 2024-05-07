@@ -99,6 +99,12 @@ class FireBaseAnalytics : Analytics() {
         }
     }
 
+    override fun action(name: String) {
+        logEvent("action") {
+            param("name", name)
+        }
+    }
+
     private inline fun logEvent(
         event: String,
         crossinline block: ParametersBuilder.() -> Unit = {}

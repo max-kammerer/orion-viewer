@@ -243,7 +243,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 }
 
 
-                val filePathToOpen = if (!fileInfo.file.canRead()) {
+                val fileToOpen = if (!fileInfo.file.canRead()) {
                     val cacheFileIfExists =
                         getStableTmpFileIfExists(fileInfo)?.takeIf { it.length() == fileInfo.size }
 
@@ -252,14 +252,14 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                         log("Waiting for read permissions for $intent")
                         return
                     } else {
-                        cacheFileIfExists.absolutePath
+                        cacheFileIfExists
                     }
                 } else {
-                    filePath
+                    fileInfo.file
                 }
 
                 myState = MyState.FINISHED
-                openFileAndDestroyOldController(filePathToOpen)
+                openFileAndDestroyOldController(fileToOpen)
             } catch (e: Exception) {
                 showErrorReportDialog(
                     R.string.crash_on_intent_opening_title,
@@ -275,30 +275,29 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     @Throws(Exception::class)
-    fun openFileAndDestroyOldController(filePath: String) {
+    fun openFileAndDestroyOldController(file: File) {
         log("Runtime.getRuntime().totalMemory(): ${Runtime.getRuntime().totalMemory()}")
         log("Debug.getNativeHeapSize(): ${Debug.getNativeHeapSize()}")
         log("openFileAndDestroyOldController")
         destroyController(controller).also { controller = null }
         AndroidLogger.stopLogger()
-        openFile(filePath)
+        openFile(file)
     }
 
     @Throws(Exception::class)
-    private fun openFile(filePath: String) {
-        val stubController = initStubController(filePath, "Loading...")
+    private fun openFile(file: File) {
+        val stubController = initStubController(file.absolutePath, "Loading...")
         val stubDocument = stubController.document as StubDocument
 
         orionContext.idlingRes.busy()
 
         GlobalScope.launch(Dispatchers.Main) {
-            log("Trying to open file: $filePath")
+            log("Trying to open file: $file")
             val rootJob = Job()
             val executor = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
-            val file = File(filePath)
             val newDocument = try {
                 withContext(executor + rootJob) {
-                    FileUtil.openFile(filePath)
+                    FileUtil.openFile(file)
                 }
             } catch (e: Exception) {
                 log(e)
@@ -326,7 +325,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     return@launch
                 }
 
-                val lastPageInfo1 = loadBookParameters(rootJob, filePath)
+                val lastPageInfo1 = loadBookParameters(rootJob, file)
                 log("Read LastPageInfo for page ${lastPageInfo1.pageNumber}")
                 lastPageInfo = lastPageInfo1
                 orionContext.currentBookParameters = lastPageInfo1
@@ -337,7 +336,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 stubController.destroy()
                 controller1.changeOrinatation(lastPageInfo1.screenOrientation)
 
-                updateViewOnNewBook((newDocument.title?.takeIf { it.isNotBlank() } ?: filePath.substringAfterLast('/').substringBeforeLast(".")))
+                updateViewOnNewBook((newDocument.title?.takeIf { it.isNotBlank() } ?: file.name.substringBeforeLast(".")))
 
                 val drawView = fullScene.drawView
                 controller1.init(lastPageInfo1, drawView.sceneWidth, drawView.sceneHeight)
@@ -347,7 +346,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 globalOptions.addRecentEntry(GlobalOptions.RecentEntry(file.absolutePath))
 
                 lastPageInfo1.totalPages = newDocument.pageCount
-                orionContext.onNewBook(filePath)
+                orionContext.onNewBook(file.name)
                 invalidateOrHideMenu()
                 doOnLayout(lastPageInfo1)
                 analytics.fileOpenedSuccessfully(file)
@@ -371,7 +370,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private suspend fun loadBookParameters(
         rootJob: CompletableJob,
-        filePath: String
+        bookFile: File
     ): LastPageInfo {
         if (openAsTempTestBook) {
             return loadBookParameters(
@@ -384,7 +383,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         return withContext(Dispatchers.Default + rootJob) {
             loadBookParameters(
                 this@OrionViewerActivity,
-                filePath,
+                bookFile.absolutePath,
                 initalizer(globalOptions)
             )
         }
@@ -982,6 +981,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             SAVE_FILE_RESULT -> {
                 if (resultCode == Activity.RESULT_OK) {
                     if (data?.data != null && intent.data != null) {
+                        analytics.action("saveAs")
                         saveFileByUri(intent, intent.data ?: return, data.data!!) {
                             onNewIntent(data)
                         }

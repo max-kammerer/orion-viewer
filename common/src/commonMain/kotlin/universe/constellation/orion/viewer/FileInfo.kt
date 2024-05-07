@@ -11,8 +11,7 @@ data class FileInfo(
     val uri: Uri
 ) {
 
-    val file: File
-        get() = File(path)
+    val file: File by lazy { File(path) }
 
     val scheme
         get() = uri.scheme!!

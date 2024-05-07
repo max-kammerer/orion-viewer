@@ -30,6 +30,7 @@ import universe.constellation.orion.viewer.android.isContentUri
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
 import universe.constellation.orion.viewer.formats.FileFormats.Companion.getFileExtension
 import java.io.File
+import java.util.Locale
 
 class ResourceIdAndString(val id: Int, val value: String) {
     override fun toString(): String {
@@ -291,9 +292,15 @@ internal fun Context.createTmpFile(fileInfo: FileInfo?, extension: String): File
     if (fileInfo?.canHasTmpFileWithStablePath() == true) {
         return File(fileFolder, fileInfo.name!!)
     } else {
-        val fileName = (fileInfo?.name ?: fileInfo?.path?.substringAfterLast("/") ?: "test_bool").substringBeforeLast(".")
+        val fullName = (fileInfo?.name ?: fileInfo?.file?.name ?: "test_book")
+        val noExtName = if (fullName.lowercase(Locale.getDefault()).endsWith(".$extension")) {
+            fullName.substringBeforeLast(".$extension")
+        } else {
+            fullName
+        }
+
         return File.createTempFile(
-            if (fileName.length < 3) "tmp$fileName" else fileName,
+            if (noExtName.length < 3) "tmp$noExtName" else noExtName,
             ".$extension",
             fileFolder
         )

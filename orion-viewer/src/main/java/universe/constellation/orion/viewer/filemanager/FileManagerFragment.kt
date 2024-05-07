@@ -88,6 +88,7 @@ class FileManagerFragment : Fragment(R.layout.folder_view) {
         val goto = requireView().findViewById<Button>(id)
         if (file.exists()) {
             goto.setOnClickListener {
+                (requireActivity() as? OrionFileManagerActivityBase)?.analytics?.action("folderNavButton")
                 changeFolder(file)
             }
             goto.visibility = View.VISIBLE

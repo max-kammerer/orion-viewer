@@ -45,6 +45,10 @@ open class Analytics {
 
     }
 
+    open fun action(name: String) {
+
+    }
+
     companion object {
 
         fun initialize(contentResolver: ContentResolver, analytics: Analytics): Analytics {

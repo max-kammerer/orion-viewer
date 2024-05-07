@@ -104,6 +104,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
                 item?.setIcon(getVectorDrawable(R.drawable.new_folder_24))
                 val viewPager = findViewById<ViewPager>(R.id.viewpager)
                 item?.setOnMenuItemClickListener {
+                    analytics.action("folderNavMenu")
                     drawerLayout.closeDrawer(GravityCompat.START)
                     if (viewPager.currentItem != 0) {
                         viewPager.setCurrentItem(0, false)

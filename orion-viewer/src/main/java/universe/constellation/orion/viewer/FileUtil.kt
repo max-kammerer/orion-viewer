@@ -15,22 +15,44 @@ object FileUtil {
 
     @JvmStatic
     @Throws(Exception::class)
-    fun openFile(absolutePath: String): Document {
+    fun openFile(file: File): Document {
+        val absolutePath = file.absolutePath
         try {
-            return if (isDjvuFile(absolutePath)) {
+            return if (isDjvuFile(file.name)) {
                 DjvuDocument(absolutePath)
             } else {
                 PdfDocument(absolutePath)
             }
         } catch (e: Exception) {
-            throw RuntimeException("Error during file opening `$absolutePath`: " + e.message, e)
+            throw RuntimeException(
+                "Error during file opening `${file.name}`: " + e.message + "\n" +
+                        "(File size: ${file.beautifiedFileSize()} ,full file path: ${absolutePath})", e
+            )
         }
     }
 
+    private fun File.beautifiedFileSize(): String {
+        return length().beautifyFileSize()
+    }
+
     @JvmStatic
-    @Throws(Exception::class)
-    fun openFile(file: File): Document {
-        return openFile(file.absolutePath)
+    fun Long.beautifyFileSize(): String {
+        if (this < 1024) {
+            return "$this bytes"
+        }
+
+        var size = this / 1024.0
+        if (size < 1024) {
+            return String.format("%.2f KB", size)
+        }
+
+        size = this / 1024.0
+        if (size < 1024) {
+            return String.format("%.2f MB", size)
+        }
+
+        size = this / 1024.0
+        return String.format("%.2f GB", size)
     }
 
 }
