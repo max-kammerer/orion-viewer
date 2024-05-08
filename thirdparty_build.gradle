@@ -30,7 +30,7 @@ task downloadDjvu {
 
         exec {
             workingDir file(djvu)
-            commandLine = ['git', 'checkout', '2ad2b702d864d1974f0c569a7594b27e67c64a40']
+            commandLine = ['git', 'checkout', 'a8ae572254a6cf5c0f036e655daf3517a0452e07']
         }
     }
 }
