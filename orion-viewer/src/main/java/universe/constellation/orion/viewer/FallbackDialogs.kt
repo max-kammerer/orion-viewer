@@ -99,6 +99,9 @@ open class FallbackDialogs {
 
      //content intent
      private fun createFallbackDialog(activity: OrionViewerActivity, fileInfo: FileInfo?, intent: Intent, title: Int, info: Int, defaultAction: Int?, list: List<Int>): Dialog {
+         val dialogTitle = activity.getString(title)
+         activity.showErrorOrFallbackPanel(dialogTitle, intent, cause = dialogTitle)
+
          activity.analytics.dialog(FALLBACK_DIALOG, true)
 
          val uri = intent.data!!
@@ -108,7 +111,8 @@ open class FallbackDialogs {
          infoText.setText(info)
 
          val builder = AlertDialog.Builder(activity)
-         builder.setTitle(activity.getString(title)).setView(view)
+
+         builder.setTitle(dialogTitle).setView(view)
              .setNegativeButton(R.string.string_cancel) { dialog, _ ->
                  dialog.cancel()
              }
@@ -201,24 +205,24 @@ open class FallbackDialogs {
 
         const val URI = "URI"
 
-        fun Activity.saveFileByUri(
+        fun OrionBaseActivity.saveFileByUri(
             intent: Intent,
             originalContentUri: Uri,
             targetFileUri: Uri,
-            callbackAction: () -> Unit
-        ) {
-            val res = (this as OrionBaseActivity).orionContext.idlingRes
-            res.busy()
-            val handler = CoroutineExceptionHandler { _, exception ->
+            handler: CoroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
                 exception.printStackTrace()
-                showErrorReportDialog(
+                this@saveFileByUri.showErrorReportDialog(
                     R.string.error_on_file_saving_title,
                     R.string.error_on_file_saving_title,
                     intent,
                     "targetFile=$targetFileUri",
                     exception
                 )
-            }
+            },
+            callbackAction: () -> Unit
+        ) {
+            val res = this.orionContext.idlingRes
+            res.busy()
 
             GlobalScope.launch(Dispatchers.Main + handler) {
                 val progressBar = ProgressDialog(this@saveFileByUri)

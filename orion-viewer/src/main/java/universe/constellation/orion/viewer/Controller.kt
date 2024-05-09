@@ -155,6 +155,8 @@ class Controller(
 
     fun destroy() {
         activity.subscriptionManager.unSubscribe(listener)
+        activity.view.pageLayoutManager = null
+
         if (::pageLayoutManager.isInitialized)
             pageLayoutManager.destroy()
         GlobalScope.launch(Dispatchers.Default) {

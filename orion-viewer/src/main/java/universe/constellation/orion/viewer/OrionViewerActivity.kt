@@ -223,6 +223,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
                 if (fileInfo == null || filePath.isNullOrBlank()) {
                     FallbackDialogs().createBadIntentFallbackDialog(this, null, intent).show()
+                    destroyController()
                     return
                 }
 
@@ -235,7 +236,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                         }
                     }
                 }
-
+                destroyController()
 
                 val fileToOpen = if (!fileInfo.file.canRead()) {
                     val cacheFileIfExists =
@@ -252,7 +253,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     fileInfo.file
                 }
 
-                openFileAndDestroyOldController(fileToOpen)
+                openFile(fileToOpen)
                 myState = MyState.FINISHED
             } catch (e: Exception) {
                 showErrorAndErrorPanel(
@@ -269,17 +270,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     @Throws(Exception::class)
-    fun openFileAndDestroyOldController(file: File) {
+    private fun openFile(file: File) {
         log("Runtime.getRuntime().totalMemory(): ${Runtime.getRuntime().totalMemory()}")
         log("Debug.getNativeHeapSize(): ${Debug.getNativeHeapSize()}")
         log("openFileAndDestroyOldController")
-        destroyController(controller).also { controller = null }
-        AndroidLogger.stopLogger()
-        openFile(file)
-    }
 
-    @Throws(Exception::class)
-    private fun openFile(file: File) {
         orionContext.idlingRes.busy()
 
         GlobalScope.launch(Dispatchers.Main) {
@@ -637,9 +632,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     override fun onDestroy() {
         super.onDestroy()
         log("onDestroy")
-        AndroidLogger.stopLogger()
-
-        destroyController(controller).also { controller = null }
+        destroyController()
 
         if (dialog != null) {
             dialog!!.dismiss()
@@ -938,9 +931,20 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             }
             SAVE_FILE_RESULT -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    if (data?.data != null && intent.data != null) {
+                    val inputFileIntentData = intent.data
+                    if (data?.data != null && inputFileIntentData != null) {
                         analytics.action("saveAs")
-                        saveFileByUri(intent, intent.data ?: return, data.data!!) {
+                        saveFileByUri(intent,
+                            inputFileIntentData,
+                            data.data!!,
+                            CoroutineExceptionHandler { _, exception ->
+                                showErrorAndErrorPanel(
+                                    R.string.error_on_file_saving_title,
+                                    R.string.error_on_file_saving_title,
+                                    intent,
+                                    exception
+                                )
+                            }) {
                             onNewIntent(data)
                         }
                         return
@@ -1058,8 +1062,10 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         SearchDialog.newInstance().show(supportFragmentManager, "search")
     }
 
-    private fun destroyController(controller: Controller?) {
+    private fun destroyController() {
+        AndroidLogger.stopLogger()
         controller?.destroy()
+        controller = null
     }
 
     private fun updateGlobalOptionsFromIntent(intent: Intent) {
@@ -1097,15 +1103,26 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
     }
 
-    private fun showErrorAndErrorPanel(dialogTitle: Int, messageTitle: Int, intent: Intent, exception: Throwable) {
-        showErrorAndErrorPanel(resources.getString(dialogTitle), resources.getString(messageTitle), intent, exception)
+    internal fun showErrorAndErrorPanel(
+        dialogTitle: Int,
+        messageTitle: Int,
+        intent: Intent,
+        exception: Throwable
+    ) {
+        showErrorAndErrorPanel(
+            resources.getString(dialogTitle),
+            resources.getString(messageTitle),
+            intent,
+            exception
+        )
     }
 
     private fun showErrorAndErrorPanel(
         dialogTitle: String,
-        messageTitle: String,
+        message: String,
         intent: Intent,
-        exception: Throwable
+        exception: Throwable,
+        info: String? = null
     ) {
         val dialog = createThemedAlertBuilder()
             .setPositiveButton(R.string.string_close) { dialog, _ ->
@@ -1115,22 +1132,35 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 analytics.dialog(SHOW_ERROR_PANEL_DIALOG, false)
             }
             .setTitle(dialogTitle)
-            .setMessage(messageTitle + "\n\n" + exception.message).create()
+            .setMessage(message + "\n\n" + exception.message).create()
         dialog.show()
 
-        analytics.error(exception)
+        analytics.error(exception, "$message $intent")
 
+        showErrorOrFallbackPanel(message, intent, info, exception = exception)
+    }
+
+    fun showErrorOrFallbackPanel(
+        message: String,
+        intent: Intent,
+        info: String? = null,
+        cause: String? = null,
+        exception: Throwable? = null
+    ) {
         val problemView = findViewById<View>(R.id.problem_view)
-        problemView.findViewById<TextView>(R.id.crash_message_header).text = messageTitle
+        problemView.findViewById<TextView>(R.id.crash_message_header).text = message
         problemView.findViewById<TextView>(R.id.crash_intent_message).text = intent.toString()
-        problemView.findViewById<TextView>(R.id.crash_cause_message).text = prepareFullErrorMessage(
-            intent,
-            null,
-            exception,
-            false,
-            false
-        ).takeIf { it.isNotBlank() } ?: "<Absent>"
-        problemView.findViewById<TextView>(R.id.crash_exception_message).text = exception.stackTraceToString()
+        problemView.findViewById<TextView>(R.id.crash_cause_message).text =
+            cause ?: prepareFullErrorMessage(
+                intent,
+                info,
+                exception,
+                false,
+                false
+            ).takeIf { it.isNotBlank() } ?: "<Absent>"
+
+        problemView.findViewById<TextView>(R.id.crash_exception_message).text =
+            exception?.stackTraceToString() ?: "<Absent>"
 
         showErrorPanel(true)
 
