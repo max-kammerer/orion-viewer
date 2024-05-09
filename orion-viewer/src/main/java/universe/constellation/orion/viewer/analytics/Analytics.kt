@@ -30,7 +30,7 @@ open class Analytics {
 
     }
 
-    open fun error(ex: Throwable) {
+    open fun error(ex: Throwable, info: String? = null) {
 
     }
 

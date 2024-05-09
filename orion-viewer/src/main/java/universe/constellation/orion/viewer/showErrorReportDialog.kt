@@ -26,7 +26,7 @@ internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: Int, messageTi
 }
 
 internal fun OrionBaseActivity.showErrorReportDialog(dialogTitle: String, messageTitle: String, intent: Intent, info: String? = null, exception: Throwable? = null) {
-    this.analytics.error(exception ?: RuntimeException())
+    this.analytics.error(exception ?: RuntimeException(), intent.toString())
 
     val view = layoutInflater.inflate(R.layout.crash_dialog, null)
     val textView = view.findViewById<TextView>(R.id.crashTextView)

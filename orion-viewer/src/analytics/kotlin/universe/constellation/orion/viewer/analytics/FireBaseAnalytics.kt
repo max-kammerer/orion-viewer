@@ -73,8 +73,10 @@ class FireBaseAnalytics : Analytics() {
         }
     }
 
-    override fun error(ex: Throwable) {
-        FirebaseCrashlytics.getInstance().recordException(ex)
+    override fun error(ex: Throwable, info: String?) {
+        val instance = FirebaseCrashlytics.getInstance()
+        instance.recordException(ex)
+        info?.let { instance.log(it) }
     }
 
     override fun dialog(name: String, opened: Boolean) {
