@@ -5,7 +5,7 @@
     <string name="fileopen_private_resource_access">Access to private file</string>
     <string name="fileopen_private_resource_access_info">Can\'t read file directly, please select one of options below:</string>
 
-    <string name="fileopen_permission_dialog">Please provide read permission</string>
+    <string name="fileopen_permission_dialog">Can\'t access file directly</string>
     <string name="fileopen_permission_dialog_info">Please grant read file permissions to access it directly or choose option below:</string>
 
     <string name="fileopen_permissions_grant_read">Grant storage read permission…</string>

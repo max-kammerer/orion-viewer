@@ -5,7 +5,7 @@
     <string name="fileopen_private_resource_access">Доступ к приватному файлу</string>
     <string name="fileopen_private_resource_access_info">Не возможно получить доступ к файлу напрямую, пожалуйста, выберите одну из опций:</string>
 
-    <string name="fileopen_permission_dialog">Пожалуйста, предоставте права на чтение</string>
+    <string name="fileopen_permission_dialog">Нет прямого доступа к файлу</string>
     <string name="fileopen_permission_dialog_info">Пожалуйста, предоставте права на чтение файла напрямую или выберите опцию ниже:</string>
 
     <string name="fileopen_permissions_grant_read">Предоставить права на чтение диска…</string>
