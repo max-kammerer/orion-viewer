@@ -1,3 +1,8 @@
+===== 0.92.2 (May 10, 2024) =====
+* Stability fixes
+* Reworked exception, file extension and mime types processing
+* Added new themes
+
 ===== 0.92.1 (May 03, 2024) =====
 * Stability fixes
 * Enabled support of png and jpeg formats
