@@ -9,4 +9,6 @@
     <color name="toolbar_icon_tint_ligth">#89b5ac</color>
     <color name="toolbar_icon_tint">#2B4678</color>
     <color name="orion_blue">#54759e</color>
+    <dimen name="root_padding">5dp</dimen>
+    <dimen name="min_entry_height">48dp</dimen>
 </resources>

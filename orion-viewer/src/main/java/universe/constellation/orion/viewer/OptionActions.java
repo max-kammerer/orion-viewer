@@ -88,7 +88,10 @@ public enum OptionActions {
     DEBUG("DEBUG") {
         public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
             if (newValue) {
-                AndroidLogger.startLogger(activity.getOrionContext().getCurrentBookParameters().openingFileName + ".trace");
+                LastPageInfo currentBookParameters = activity.getOrionContext().getCurrentBookParameters();
+                if (currentBookParameters != null) {
+                    AndroidLogger.startLogger(currentBookParameters.openingFileName + ".trace");
+                }
             } else {
                 AndroidLogger.stopLogger();
             }
