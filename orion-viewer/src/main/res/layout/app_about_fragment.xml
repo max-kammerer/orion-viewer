@@ -307,7 +307,7 @@
                 android:autoLink="all"
                 android:gravity="center"
                 android:linksClickable="true"
-                android:text="Android Icons - https://github.com/KDE/oxygen-icons"
+                android:text="KDE Oxygen Icons - https://github.com/KDE/oxygen-icons"
                 android:textSize="18sp" />
 
             <LinearLayout
