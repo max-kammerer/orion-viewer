@@ -56,7 +56,6 @@ fun createDataStore(context: Context): PreferenceDataStore {
         }
 
         override fun getString(key: String, defValue: String?): String? {
-            println("key $key = $defValue")
             return get(key, defValue)
         }
 

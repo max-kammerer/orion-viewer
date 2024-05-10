@@ -1,265 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-                  xmlns:orion="http://schemas.android.com/apk/res-auto"
-                  android:title="@string/application_settings_title">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:title="@string/application_settings_title"
+    app:iconSpaceReserved="false">
 
     <PreferenceCategory
-            android:title="@string/pref_category_general" android:key="GENERAL">
+        android:key="GENERAL"
+        android:title="@string/pref_category_general"
+        app:iconSpaceReserved="false">
 
-        <PreferenceScreen
-                android:title="@string/pref_appearance" android:persistent="false"
-                android:summary="@string/pref_appearance"
-                android:key="APPEARANCE">
+        <Preference
+            android:key="APPEARANCE"
+            android:persistent="false"
+            android:summary="@string/pref_appearance"
+            android:title="@string/pref_appearance"
+            app:fragment="universe.constellation.orion.viewer.prefs.AppearancePreferenceFragment"
+            app:iconSpaceReserved="false" />
 
-            <PreferenceCategory android:title="@string/pref_category_general">
-                <CheckBoxPreference
-                    android:defaultValue="false"
-                    android:key="FULL_SCREEN"
-                    android:summary="@string/pref_fullScreen"
-                    android:title="@string/pref_fullScreen" />
-
-
-                <CheckBoxPreference
-                    android:defaultValue="false"
-                    android:key="NEW_UI"
-                    android:summary="@string/pref_new_ui_summary"
-                    android:title="@string/pref_new_ui" />
-
-                <ListPreference
-                    android:defaultValue="DEFAULT"
-                    android:dialogTitle="@string/pref_application_theme"
-                    android:entries="@array/application_theme_desc"
-                    android:entryValues="@array/application_theme"
-                    android:key="APPLICATION_THEME"
-                    android:summary="@string/pref_application_theme_desc"
-                    android:title="@string/pref_application_theme" />
-
-                <CheckBoxPreference
-                    android:defaultValue="true"
-                    android:key="DRAW_OFF_PAGE"
-                    android:summary="@string/pref_renderOffPage"
-                    android:title="@string/pref_renderOffPage" />
-            </PreferenceCategory>
-
-            <PreferenceCategory android:title="@string/pref_category_bars">
-
-                <CheckBoxPreference
-                    android:defaultValue="true"
-                    android:key="SHOW_ACTION_BAR"
-                    android:summary="@string/pref_showActionBar_desc"
-                    android:title="@string/pref_showActionBar" />
-
-                <CheckBoxPreference
-                    android:defaultValue="true"
-                    android:key="SHOW_STATUS_BAR"
-                    android:summary="@string/pref_showStatusBar"
-                    android:title="@string/pref_showStatusBar" />
-
-                <CheckBoxPreference
-                    android:defaultValue="true"
-                    android:dependency="SHOW_STATUS_BAR"
-                    android:key="SHOW_OFFSET_ON_STATUS_BAR"
-                    android:summary="@string/pref_showOffsetOnStatusBar"
-                    android:title="@string/pref_showOffsetOnStatusBar"/>
-            </PreferenceCategory>
-
-
-        </PreferenceScreen>
-
-        <PreferenceScreen
-            android:title="@string/pref_behavior" android:persistent="false"
+        <Preference
+            android:key="BEHAVIOR"
+            android:persistent="false"
             android:summary="@string/pref_behavior"
-            android:key="BEHAVIOR">
+            android:title="@string/pref_behavior"
+            app:fragment="universe.constellation.orion.viewer.prefs.BehaviourPreferenceFragment"
+            app:iconSpaceReserved="false" />
 
-            <PreferenceCategory android:title="@string/pref_category_quick_actions">
+        <Preference
+            android:key="BOOK_DEFAULT"
+            android:persistent="false"
+            android:summary="@string/pref_default_book_setting_desc"
+            android:title="@string/pref_default_book_setting"
+            app:fragment="universe.constellation.orion.viewer.prefs.OrionBookPreferencesFragment"
+            app:iconSpaceReserved="false" />
 
-                <PreferenceScreen
-                    android:key="TAP_ZONES"
-                    android:persistent="false"
-                    android:summary="@string/pref_tap_zones_desc"
-                    android:title="@string/menu_tap_text">
-                    <intent android:action="universe.constellation.orion.viewer.TAP_ZONES" />
-                </PreferenceScreen>
-
-                <!--<PreferenceScreen
-                    android:key="DOUBLE_TAP_ACTION"
-                    android:persistent="false"
-                    android:summary="@string/pref_tap_zones_desc"
-                    android:title="@string/menu_tap_text">
-                    <intent android:action="universe.constellation.orion.viewer.DOUBLE_TAP" />
-                </PreferenceScreen>-->
-
-                <Preference
-                    android:persistent="false"
-                    android:summary="@string/pref_key_binder_desc"
-                    android:title="@string/menu_key_binder_text">
-                    <intent android:action="universe.constellation.orion.viewer.KEY_MANAGER" />
-                </Preference>
-
-            </PreferenceCategory>
-
-
-            <PreferenceCategory android:title="@string/pref_category_behavior">
-
-                <CheckBoxPreference
-                    android:defaultValue="false"
-                    android:key="OPEN_RECENT_BOOK"
-                    android:summary="@string/pref_open_recent_book"
-                    android:title="@string/pref_open_recent_book" />
-
-                <CheckBoxPreference
-                    android:defaultValue="false"
-                    android:key="APPLY_AND_CLOSE"
-                    android:summary="@string/pref_close_page_option_dialog_on_apply"
-                    android:title="@string/pref_close_dialog_on_apply" />
-
-                <CheckBoxPreference
-                    android:defaultValue="false"
-                    android:key="SWAP_KEYS"
-                    android:summary="@string/pref_swap_prev_next_keys_on_90_degree_rotation"
-                    android:title="@string/pref_swap_prev_next_keys" />
-            </PreferenceCategory>
-
-            <PreferenceCategory
-                android:title="@string/pref_category_move">
-
-                <CheckBoxPreference
-                    android:key="ENABLE_TOUCH_MOVE"
-                    android:title="@string/pref_enable_touch_move"
-                    android:summary="@string/pref_enable_touch_move"
-                    android:defaultValue="true"/>
-
-                <CheckBoxPreference
-                    android:key="ENABLE_MOVE_ON_PINCH_ZOOM"
-                    android:title="@string/pref_enable_move_on_pinch_zoom"
-                    android:summary="@string/pref_enable_move_on_pinch_zoom"
-                    android:defaultValue="false"/>
-                </PreferenceCategory>
-
-        </PreferenceScreen>
-
-        <PreferenceScreen android:title="@string/pref_default_book_setting"
-                          android:summary="@string/pref_default_book_setting_desc"
-                          android:key="BOOK_DEFAULT">
-
-        </PreferenceScreen>
 
         <ListPreference
-                android:key="LANGUAGE"
-                android:title="@string/pref_app_language"
-                android:summary="@string/pref_app_language_desc"
-                android:entries="@array/pref_languages_desc"
-                android:entryValues="@array/pref_languages"
-                android:dialogTitle="@string/pref_app_language"
-                android:defaultValue="DEFAULT"/>
+            android:defaultValue="DEFAULT"
+            android:dialogTitle="@string/pref_app_language"
+            android:entries="@array/pref_languages_desc"
+            android:entryValues="@array/pref_languages"
+            android:key="LANGUAGE"
+            android:summary="@string/pref_app_language_desc"
+            android:title="@string/pref_app_language"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
-            android:title="@string/pref_category_device_parameters">
+        android:title="@string/pref_category_device_parameters"
+        app:iconSpaceReserved="false">
 
         <ListPreference
-                android:key="SCREEN_BACKLIGHT_TIMEOUT"
-                android:title="@string/pref_screen_backlight_timeout"
-                android:summary="@string/pref_screen_backlight_timeout_desc"
-                android:entries="@array/screen_backligth_timeout_desc"
-                android:entryValues="@array/screen_backligth_timeout"
-                android:dialogTitle="@string/pref_screen_backlight_timeout"
-                android:defaultValue="10"/>
-
+            android:defaultValue="10"
+            android:dialogTitle="@string/pref_screen_backlight_timeout"
+            android:entries="@array/screen_backligth_timeout_desc"
+            android:entryValues="@array/screen_backligth_timeout"
+            android:key="SCREEN_BACKLIGHT_TIMEOUT"
+            android:summary="@string/pref_screen_backlight_timeout_desc"
+            android:title="@string/pref_screen_backlight_timeout"
+            app:iconSpaceReserved="false" />
 
         <CheckBoxPreference
-                android:summary="@string/pref_custom_brightness"
-                android:defaultValue="false"
-                android:title="@string/pref_custom_brightness"
-                android:key="CUSTOM_BRIGHTNESS"/>
+            android:defaultValue="false"
+            android:key="CUSTOM_BRIGHTNESS"
+            android:summary="@string/pref_custom_brightness"
+            android:title="@string/pref_custom_brightness"
+            app:iconSpaceReserved="false" />
 
-        <universe.constellation.orion.viewer.prefs.OrionEditPreference
-                android:summary="@string/pref_brightness_desc"
-                android:dependency="CUSTOM_BRIGHTNESS"
-                android:defaultValue="100"
-                android:title="@string/pref_brightness"
-                android:key="BRIGHTNESS"
-                android:numeric="integer"
-                orion:pattern="[1-9]|[1-9][0-9]|100"/>
+        <universe.constellation.orion.viewer.prefs.OrionEditTextPreference
+            android:defaultValue="100"
+            android:dependency="CUSTOM_BRIGHTNESS"
+            android:key="BRIGHTNESS"
+            android:inputType="number"
+            android:summary="@string/pref_brightness_desc"
+            android:title="@string/pref_brightness"
+            app:iconSpaceReserved="false"
+            app:maxValue="100"
+            app:minValue="1"
+            app:showSeekBarValue="true" />
 
-        <universe.constellation.orion.viewer.prefs.DevicePrefInfo android:persistent="false"
-                                                                  android:title="@string/pref_device_info"/>
+        <!--        <universe.constellation.orion.viewer.prefs.DevicePrefInfo android:persistent="false"-->
+        <!--                                                                  android:title="@string/pref_device_info"/>-->
 
     </PreferenceCategory>
 
 
-
     <PreferenceCategory
-            android:title="@string/pref_dictionary">
+        android:title="@string/pref_dictionary"
+        app:iconSpaceReserved="false">
         <ListPreference
-                android:key="DICTIONARY"
-                android:title="@string/pref_dictionary"
-                android:summary="@string/pref_dictionary_desc"
-                android:entries="@array/dictionaries_desc"
-                android:entryValues="@array/dictionaries"
-                android:dialogTitle="@string/pref_dictionary"
-                android:defaultValue="FORA"/>
+            android:defaultValue="FORA"
+            android:dialogTitle="@string/pref_dictionary"
+            android:entries="@array/dictionaries_desc"
+            android:entryValues="@array/dictionaries"
+            android:key="DICTIONARY"
+            android:summary="@string/pref_dictionary_desc"
+            android:title="@string/pref_dictionary"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory
-            android:title="@string/pref_e_ink_optimization" android:key="NOOK2_EINK">
+        android:key="NOOK2_EINK"
+        android:title="@string/pref_e_ink_optimization"
+        app:iconSpaceReserved="false">
         <CheckBoxPreference
-                android:key="EINK_OPTIMIZATION"
-                android:title="@string/pref_e_ink_fast_refresh"
-                android:summary="@string/pref_e_ink_fast_refresh"
-                android:defaultValue="false"/>
+            android:defaultValue="false"
+            android:key="EINK_OPTIMIZATION"
+            android:summary="@string/pref_e_ink_fast_refresh"
+            android:title="@string/pref_e_ink_fast_refresh"
+            app:iconSpaceReserved="false" />
 
-        <universe.constellation.orion.viewer.prefs.OrionEditPreference
-                android:dependency="EINK_OPTIMIZATION"
-                android:summary="@string/pref_total_refresh_after"
-                android:defaultValue="10"
-                android:title="@string/pref_total_refresh_after"
-                android:key="EINK_TOTAL_AFTER"
-                android:numeric="integer"
-                orion:pattern="[0-9]+"/>
+        <universe.constellation.orion.viewer.prefs.OrionEditTextPreference
+            android:defaultValue="10"
+            android:dependency="EINK_OPTIMIZATION"
+            android:key="EINK_TOTAL_AFTER"
+            android:summary="@string/pref_total_refresh_after"
+            android:inputType="number"
+            android:title="@string/pref_total_refresh_after"
+            app:iconSpaceReserved="false"
+            app:maxValue="50"
+            app:minValue="0"
+            app:showSeekBarValue="true" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-            android:title="@string/pref_category_add_parameters">
+        android:title="@string/pref_category_add_parameters"
+        app:iconSpaceReserved="false">
 
-        <universe.constellation.orion.viewer.prefs.OrionEditPreference
-                android:summary="@string/pref_long_crop_value_desc"
-                android:defaultValue="10"
-                android:title="@string/pref_long_crop_value"
-                android:key="LONG_CROP_VALUE"
-                android:numeric="integer"
-                orion:pattern="[0-3]?[0-9]|40"/>
+        <universe.constellation.orion.viewer.prefs.OrionEditTextPreference
+            android:defaultValue="10"
+            android:key="LONG_CROP_VALUE"
+            android:summary="@string/pref_long_crop_value_desc"
+            android:title="@string/pref_long_crop_value"
+            app:iconSpaceReserved="false"
+            app:maxValue="40"
+            app:minValue="0"
+            android:inputType="number"
+            app:showSeekBarValue="true" />
 
-        <universe.constellation.orion.viewer.prefs.OrionEditPreference
-                android:summary="@string/pref_screen_overlapping_horizontal_desc"
-                android:defaultValue="3"
-                android:title="@string/pref_screen_overlapping_horizontal"
-                android:key="SCREEN_OVERLAPPING_HORIZONTAL"
-                android:numeric="integer"
-                orion:pattern="[0-8]?[0-9]|90"/>
+        <universe.constellation.orion.viewer.prefs.OrionEditTextPreference
+            android:defaultValue="3"
+            android:key="SCREEN_OVERLAPPING_HORIZONTAL"
+            android:summary="@string/pref_screen_overlapping_horizontal_desc"
+            android:title="@string/pref_screen_overlapping_horizontal"
+            app:iconSpaceReserved="false"
+            app:maxValue="90"
+            app:minValue="0"
+            android:inputType="number"
+            app:showSeekBarValue="true" />
 
-        <universe.constellation.orion.viewer.prefs.OrionEditPreference
-                android:summary="@string/pref_screen_overlapping_vertical_desc"
-                android:defaultValue="3"
-                android:title="@string/pref_screen_overlapping_vertical"
-                android:key="SCREEN_OVERLAPPING_VERTICAL"
-                android:numeric="integer"
-                orion:pattern="[0-8]?[0-9]|90"/>
-
+        <universe.constellation.orion.viewer.prefs.OrionEditTextPreference
+            android:defaultValue="3"
+            android:key="SCREEN_OVERLAPPING_VERTICAL"
+            android:summary="@string/pref_screen_overlapping_vertical_desc"
+            android:title="@string/pref_screen_overlapping_vertical"
+            app:iconSpaceReserved="false"
+            app:maxValue="90"
+            app:minValue="0"
+            android:inputType="number"
+            app:showSeekBarValue="true" />
 
     </PreferenceCategory>
 
 
     <PreferenceCategory
-            android:title="@string/pref_category_system" android:key="SYSTEM">
+        android:key="SYSTEM"
+        android:title="@string/pref_category_system"
+        app:iconSpaceReserved="false">
 
         <CheckBoxPreference
-                android:key="DEBUG"
-                android:title="@string/pref_debug"
-                android:summary="@string/pref_debug_desc"
-                android:defaultValue="false"/>
+            android:defaultValue="false"
+            android:key="DEBUG"
+            android:summary="@string/pref_debug_desc"
+            android:title="@string/pref_debug"
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 </PreferenceScreen>

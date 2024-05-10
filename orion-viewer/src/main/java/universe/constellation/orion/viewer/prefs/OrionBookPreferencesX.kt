@@ -1,6 +1,8 @@
 package universe.constellation.orion.viewer.prefs
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import androidx.preference.PreferenceScreen
 import universe.constellation.orion.viewer.OrionBaseActivity
@@ -14,24 +16,58 @@ import universe.constellation.orion.viewer.prefs.BookPreferenceKeyX.*
 class OrionBookPreferencesActivityX : OrionBaseActivity(createDevice = false) {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        onOrionCreate(savedInstanceState, R.layout.activity_with_fragment, false)
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.settings_container, OrionBookPreferencesFragment())
-            .commit()
-
+        onOrionCreate(savedInstanceState, R.layout.activity_with_fragment, true, true)
+        if (savedInstanceState == null) {
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.settings_container, OrionBookPreferencesFragment())
+                .commit()
+        }
     }
 }
 
 class OrionBookPreferencesFragment : DSLPreferenceFragment() {
 
+    private val onSharedPreferenceChangeListener: OnSharedPreferenceChangeListener =
+        OnSharedPreferenceChangeListener { preference, key ->
+            val context = context ?: return@OnSharedPreferenceChangeListener
+            if (preference == null) return@OnSharedPreferenceChangeListener
+            if (BookPreferenceKeyX.key2Operation[key] != null) {
+                val dataStore = createDataStore(context)
+                if (key == THRESHOLD.prefKey || key == PAGE_LAYOUT.prefKey) {
+                    dataStore.putInt(key, preference.getInt(key, 0))
+                } else {
+                    dataStore.putString(key, preference.getString(key, null))
+                }
+            }
+        }
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        if (requireActivity() is OrionBookPreferencesActivityX) {
+        val isGeneral = requireActivity() is OrionPreferenceActivityX
+
+        if (!isGeneral) {
             preferenceManager.preferenceDataStore = createDataStore(requireContext())
         }
+
         rootScreen(requireContext()) {
             this.isIconSpaceReserved = false
-            bookPreferences(this, false)
+            bookPreferences(this, isGeneral)
+        }
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        val isGeneral = requireActivity() is OrionPreferenceActivityX
+        if (isGeneral) {
+            preferenceManager.sharedPreferences?.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        val isGeneral = requireActivity() is OrionPreferenceActivityX
+        if (isGeneral) {
+            preferenceManager.sharedPreferences?.unregisterOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener)
         }
     }
 
@@ -74,7 +110,7 @@ class OrionBookPreferencesFragment : DSLPreferenceFragment() {
                     }
                 }
 
-                intListWithIcons{
+                intListWithIcons {
                     key = PAGE_LAYOUT.prefKey
                     title = pref_page_layout.stringRes
                     summary = pref_page_layout.stringRes

@@ -35,7 +35,7 @@
         <attr name="actionId"/>
     </declare-styleable>
 
-    <declare-styleable name="universe.constellation.orion.viewer.prefs.OrionEditPreference">
+    <declare-styleable name="universe.constellation.orion.viewer.prefs.OrionEditTextPreference">
         <attr name="minValue"/>
         <attr name="maxValue"/>
         <attr name="notEmpty"/>

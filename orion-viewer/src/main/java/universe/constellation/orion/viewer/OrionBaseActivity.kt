@@ -36,6 +36,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.navigation.NavController
+import androidx.navigation.navOptions
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.google.android.material.color.MaterialColors
 import universe.constellation.orion.viewer.device.AndroidDevice
@@ -102,7 +104,7 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                finish()
+                super.onBackPressed()
                 return true
             }
         }

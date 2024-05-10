@@ -21,17 +21,19 @@ package universe.constellation.orion.viewer.prefs
 
 import android.content.Context
 import android.content.res.TypedArray
-import android.preference.EditTextPreference
-import android.preference.Preference
+import android.text.InputType
 import android.util.AttributeSet
 import android.widget.Toast
+import androidx.core.widget.doAfterTextChanged
+import androidx.preference.EditTextPreference
+import androidx.preference.Preference.OnPreferenceChangeListener
 import universe.constellation.orion.viewer.R
-
 import java.util.regex.Pattern
 
-open class OrionEditPreference @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-        EditTextPreference(context, attrs), Preference.OnPreferenceChangeListener, OrionBookPreference {
-    override val orionState: State = State()
+open class OrionEditTextPreference @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet?
+) : EditTextPreference(context, attrs) {
 
     private var minValue: Int? = null
     private var maxValue: Int? = null
@@ -44,45 +46,65 @@ open class OrionEditPreference @JvmOverloads constructor(context: Context, attrs
         attrs?.let { init(it) }
     }
 
-    override fun onPreferenceChange(preference: Preference, newValue: Any?): Boolean {
+    fun onPreferenceChange(
+        newValue: String?
+    ): String? {
         if (minValue != null || maxValue != null) {
             if (newValue == null || "" == newValue) {
-                Toast.makeText(context, "Value couldn't be empty!", Toast.LENGTH_SHORT).show()
-                return false
+                return "Value couldn't be empty!"
+            }
+
+            val value = newValue.toIntOrNull() ?: return "Invalid number: $newValue"
+
+            if (minValue != null && minValue!! > value) {
+                return "New value should be greater or equal than " + minValue!!
+            }
+
+            if (maxValue != null && maxValue!! < value) {
+                return "New value should be less or equal than " + maxValue!!
             }
         }
 
-        if (minValue != null && minValue!! > (newValue as String).toInt()) {
-            Toast.makeText(context, "New value should be greater or equal than " + minValue!!, Toast.LENGTH_SHORT).show()
-            return false
+        if (pattern != null && !Pattern.compile(pattern!!).matcher(newValue!!)
+                .matches()
+        ) {
+            return "Couldn't set value: wrong interval!"
         }
 
-        if (maxValue != null && maxValue!! < (newValue as String).toInt()) {
-            Toast.makeText(context, "New value should be less or equal than " + maxValue!!, Toast.LENGTH_SHORT).show()
-            return false
-        }
-
-        if (pattern != null && !Pattern.compile(pattern!!).matcher((newValue as String?)!!).matches()) {
-            Toast.makeText(context, "Couldn't set value: wrong interval!", Toast.LENGTH_SHORT).show()
-            return false
-        }
-
-        summary = originalSummary.toString() + ": " + newValue
-
-        return true
+        return null
     }
 
 
     private fun init(attrs: AttributeSet) {
         originalSummary = summary
-        val a = context.obtainStyledAttributes(attrs, R.styleable.universe_constellation_orion_viewer_prefs_OrionEditPreference)
-        pattern = a.getString(R.styleable.universe_constellation_orion_viewer_prefs_OrionEditPreference_pattern)
-        minValue = getIntegerOrNull(a, R.styleable.universe_constellation_orion_viewer_prefs_OrionEditPreference_minValue)
-        maxValue = getIntegerOrNull(a, R.styleable.universe_constellation_orion_viewer_prefs_OrionEditPreference_maxValue)
-        isCurrentBookOption = a.getBoolean(R.styleable.universe_constellation_orion_viewer_prefs_OrionEditPreference_isBook, false)
-        a.recycle()
+        context.obtainStyledAttributes(
+            attrs,
+            R.styleable.universe_constellation_orion_viewer_prefs_OrionEditTextPreference
+        ).let {
+            pattern =
+                it.getString(R.styleable.universe_constellation_orion_viewer_prefs_OrionEditTextPreference_pattern)
+            minValue = getIntegerOrNull(
+                it,
+                R.styleable.universe_constellation_orion_viewer_prefs_OrionEditTextPreference_minValue
+            )
+            maxValue = getIntegerOrNull(
+                it,
+                R.styleable.universe_constellation_orion_viewer_prefs_OrionEditTextPreference_maxValue
+            )
+            it.close()
+        }
+
         if (pattern != null || minValue != null || maxValue != null) {
-            onPreferenceChangeListener = this
+            setOnBindEditTextListener { editText ->
+                if (minValue != null || maxValue != null) {
+                    editText.inputType = InputType.TYPE_CLASS_NUMBER
+                }
+                editText.doAfterTextChanged { editable ->
+                    onPreferenceChange(editable?.toString() ?: return@doAfterTextChanged)?.let {
+                        editText.error = it
+                    }
+                }
+            }
         }
     }
 
@@ -95,46 +117,5 @@ open class OrionEditPreference @JvmOverloads constructor(context: Context, attrs
             value
         }
     }
-}
 
-
-class OrionBookEditPreference @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-        OrionEditPreference(context, attrs), OrionBookPreference {
-
-    override val orionState: State = State()
-
-    override fun onSetInitialValue(restoreValue: Boolean, defaultValue: Any?) {
-        orionState.onSetInitialValue = true
-        try {
-            super.onSetInitialValue(if (isCurrentBookOption) true else restoreValue, defaultValue)
-        } finally {
-            orionState.onSetInitialValue = false
-        }
-    }
-
-    override fun persistString(value: String): Boolean {
-        persistValue(value)
-        return isCurrentBookOption || super.persistString(value)
-    }
-
-    override fun persistInt(value: Int): Boolean {
-        persistValue(value.toString())
-        return isCurrentBookOption || super.persistInt(value)
-    }
-
-    override fun getPersistedInt(defaultReturnValue: Int): Int {
-        return if (isCurrentBookOption) {
-            OrionPreferenceUtil.getPersistedInt(this, defaultReturnValue)
-        } else {
-            super.getPersistedInt(defaultReturnValue)
-        }
-    }
-
-    override fun getPersistedString(defaultReturnValue: String?): String? {
-        return if (isCurrentBookOption) {
-            OrionPreferenceUtil.getPersistedString(this, defaultReturnValue)
-        } else {
-            super.getPersistedString(defaultReturnValue)
-        }
-    }
 }

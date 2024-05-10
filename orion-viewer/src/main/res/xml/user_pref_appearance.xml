@@ -1,0 +1,69 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:iconSpaceReserved="false">
+
+
+    <PreferenceCategory
+        android:title="@string/pref_category_general"
+        app:iconSpaceReserved="false">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="FULL_SCREEN"
+            android:summary="@string/pref_fullScreen"
+            android:title="@string/pref_fullScreen"
+            app:iconSpaceReserved="false" />
+
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="NEW_UI"
+            android:summary="@string/pref_new_ui_summary"
+            android:title="@string/pref_new_ui"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
+            android:defaultValue="DEFAULT"
+            android:dialogTitle="@string/pref_application_theme"
+            android:entries="@array/application_theme_desc"
+            android:entryValues="@array/application_theme"
+            android:key="APPLICATION_THEME"
+            android:summary="@string/pref_application_theme_desc"
+            android:title="@string/pref_application_theme"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="DRAW_OFF_PAGE"
+            android:summary="@string/pref_renderOffPage"
+            android:title="@string/pref_renderOffPage"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_category_bars"
+        app:iconSpaceReserved="false">
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="SHOW_ACTION_BAR"
+            android:summary="@string/pref_showActionBar_desc"
+            android:title="@string/pref_showActionBar"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="SHOW_STATUS_BAR"
+            android:summary="@string/pref_showStatusBar"
+            android:title="@string/pref_showStatusBar"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="SHOW_STATUS_BAR"
+            android:key="SHOW_OFFSET_ON_STATUS_BAR"
+            android:summary="@string/pref_showOffsetOnStatusBar"
+            android:title="@string/pref_showOffsetOnStatusBar"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
