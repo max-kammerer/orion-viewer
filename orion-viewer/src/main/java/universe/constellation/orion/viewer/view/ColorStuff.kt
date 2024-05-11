@@ -1,6 +1,7 @@
 package universe.constellation.orion.viewer.view
 
 import android.graphics.*
+import android.graphics.Paint.FILTER_BITMAP_FLAG
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.view.View
@@ -15,11 +16,11 @@ class ColorStuff {
         style = Paint.Style.STROKE
     }
 
-    val backgroundPaint = Paint().apply {
+    val backgroundPaint = Paint(FILTER_BITMAP_FLAG).apply {
         color = Color.WHITE
     }
 
-    val pagePaint = Paint().apply {
+    val pagePaint = Paint(FILTER_BITMAP_FLAG).apply {
         color = Color.WHITE
     }
 
@@ -33,6 +34,7 @@ class ColorStuff {
         backgroundPaint.colorFilter = filter
         colorDrawable.colorFilter = filter
         borderPaint.colorFilter = filter
+        pagePaint.colorFilter = filter
         renderOffPage(view, renderOffPage)
     }
 

@@ -80,7 +80,7 @@ data class PagePart(val absPartRect: Rect) {
     fun draw(canvas: Canvas, pageVisiblePart: Rect, defaultPaint: Paint) {
         if (!isActive) return
         if (bitmap != null && Rect.intersects(absPartRect, pageVisiblePart)) {
-            canvas.drawBitmap(bitmap!!, localPartRect, absPartRect, null/*pass null, otherwise some line artifacts are shown between bitmap images*/)
+            canvas.drawBitmap(bitmap!!, localPartRect, absPartRect, defaultPaint)
         }
     }
 
