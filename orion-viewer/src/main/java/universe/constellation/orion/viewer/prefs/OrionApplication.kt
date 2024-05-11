@@ -61,7 +61,7 @@ class OrionApplication : Application() {
     internal var idlingRes = IdlingResource()
 
     val options: GlobalOptions by lazy {
-        GlobalOptions(this, PreferenceManager.getDefaultSharedPreferences(this), true)
+        GlobalOptions(this, androidx.preference.PreferenceManager.getDefaultSharedPreferences(this), true)
     }
 
     val keyBinding: GlobalOptions by lazy {
@@ -173,7 +173,13 @@ class OrionApplication : Application() {
         return bookmarkAccessor!!
     }
 
-    fun destroyDb() {
+    fun destroyMainActivity() {
+        destroyDb()
+        viewActivity = null
+        currentBookParameters = null
+    }
+
+    private fun destroyDb() {
         if (bookmarkAccessor != null) {
             bookmarkAccessor!!.close()
             bookmarkAccessor = null

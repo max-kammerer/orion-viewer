@@ -129,6 +129,12 @@ public class GlobalOptions implements Serializable, PageOptions {
 
     protected final SharedPreferences prefs;
 
+
+    /* Caution: The preference manager does not currently store a strong reference to the listener.
+    You must store a strong reference to the listener, or it will be susceptible to garbage collection.
+    We recommend you keep a reference to the listener in the instance data of an object that will exist as long as you need the listener. */
+    private final SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener;
+
     GlobalOptions(final OrionApplication context, SharedPreferences preferences, boolean loadRecents) {
         prefs = preferences;
 
@@ -145,7 +151,7 @@ public class GlobalOptions implements Serializable, PageOptions {
         }
 
         //TODO ?
-        SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener = (preferences1, name) -> {
+        onSharedPreferenceChangeListener = (preferences1, name) -> {
             log("onSharedPreferenceChanged " + name);
 
             OrionViewerActivity activity = context.getViewActivity();

@@ -153,7 +153,7 @@
 
         <activity android:name=".prefs.OrionBookPreferences" android:screenOrientation="behind"
                   android:theme="@style/Theme.AppCompat"
-                  android:label="Current Book Preferences"/>
+                  android:label="Current Book Options"/>
 
         <activity android:name=".prefs.OrionTapActivity" android:screenOrientation="behind"
                   android:theme="@style/Theme.AppCompat"

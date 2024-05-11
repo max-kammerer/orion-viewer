@@ -637,7 +637,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         if (dialog != null) {
             dialog!!.dismiss()
         }
-        orionContext.destroyDb()
+        orionContext.destroyMainActivity()
     }
 
     private fun saveBookPositionAndRecentFiles() {
@@ -1065,8 +1065,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     private fun destroyController() {
         AndroidLogger.stopLogger()
         controller?.destroy()
-        orionContext.currentBookParameters = null
         controller = null
+        orionContext.currentBookParameters = null
     }
 
     private fun updateGlobalOptionsFromIntent(intent: Intent) {

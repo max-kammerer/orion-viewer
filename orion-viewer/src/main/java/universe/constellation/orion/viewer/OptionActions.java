@@ -57,13 +57,19 @@ public enum OptionActions {
 
     SCREEN_OVERLAPPING_HORIZONTAL("SCREEN_OVERLAPPING_HORIZONTAL") {
         public void doAction(OrionViewerActivity activity, int hor, int ver) {
-            activity.getController().changeOverlap(hor, ver);
+            Controller controller = activity.getController();
+            if (controller != null) {
+                controller.changeOverlap(hor, ver);
+            }
         }
     },
 
     SCREEN_OVERLAPPING_VERTICAL("SCREEN_OVERLAPPING_VERTICAL") {
         public void doAction(OrionViewerActivity activity, int hor, int ver) {
-            activity.getController().changeOverlap(hor, ver);
+            Controller controller = activity.getController();
+            if (controller != null) {
+                controller.changeOverlap(hor, ver);
+            }
         }
     },
 
