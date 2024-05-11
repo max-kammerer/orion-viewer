@@ -1,3 +1,7 @@
+===== 0.92.3 (May 14, 2024) =====
+* Updated preferences
+* Fixed color modes
+
 ===== 0.92.2 (May 10, 2024) =====
 * Stability fixes
 * Reworked exception, file extension and mime types processing
