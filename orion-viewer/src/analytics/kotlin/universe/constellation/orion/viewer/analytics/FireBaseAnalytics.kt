@@ -38,12 +38,12 @@ class FireBaseAnalytics : Analytics() {
             param("scheme", intent.scheme)
             val mimeType = contentResolver.getMimeType(intent)
             param("mime_type", mimeType)
-            param("book_ext", intent.getFileExtFromPath())
             param("isUserIntent", isUserIntent.toString())
             param("version_code", BuildConfig.VERSION_CODE.toLong())
             param("isNewUI", isNewUI.toString())
             param("isSystemFM", intent.getBooleanExtra(OrionFileManagerActivityBase.SYSTEM_FILE_MANAGER, false).toString())
             if (!mimeType.isSupportedMimeType) {
+                param("book_ext", intent.getFileExtFromPath())
                 param("host", intent.data?.host)
             }
         }
@@ -55,8 +55,8 @@ class FireBaseAnalytics : Analytics() {
 
     override fun fileOpenedSuccessfully(file: File) {
         fileInfo(true) {
-            val hash = (file.length().hashCode().toLong() shl 32) + file.name.hashCode()
-            param("book_id", hash)
+            val hash = file.length().hashCode() + file.name.hashCode()
+            param("book_id", hash.toLong())
             param("book_ext", file.name.fileExtension)
         }
     }
