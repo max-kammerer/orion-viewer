@@ -9,6 +9,12 @@ fun isAtLeastKitkat() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
 
 fun isAtLeastLollipop() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
 
+fun isAtLeastAndroidM() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+
+fun isAtLeastAndroidN() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+
+fun isAtLeastAndroidR() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+
 fun Intent.isContentScheme(): Boolean {
     return ContentResolver.SCHEME_CONTENT == scheme
 }

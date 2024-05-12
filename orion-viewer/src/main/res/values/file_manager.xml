@@ -14,5 +14,6 @@
     <string name="file_manager_nav_system_select">Select file in system</string>
     <string name="file_manager_nav_exit">Exit</string>
 
-
+    <string name="file_manager_internal_storage">Internal storage</string>
+    <string name="file_manager_primary_storage">Primary storage</string>
 </resources>

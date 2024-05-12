@@ -9,6 +9,7 @@ import android.os.Environment
 import android.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuItem
+import android.view.SubMenu
 import android.widget.ListView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -32,12 +33,6 @@ import java.io.File
 import java.io.FilenameFilter
 
 internal val DIRECTORY_DOCUMENTS = if (isAtLeastKitkat()) Environment.DIRECTORY_DOCUMENTS else "Documents"
-
-internal val possibleStartFolders = listOf(
-    Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS) to R.string.file_manager_documents,
-    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) to R.string.file_manager_downloads,
-    Environment.getExternalStorageDirectory() to R.string.file_manager_sdcard
-)
 
 abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
     val showRecentsAndSavePath: Boolean = true,
@@ -97,27 +92,56 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
 
         val menu = navView.menu
         val locations = menu.findItem(R.id.nav_locations)
-        for (v in possibleStartFolders) {
-            val folder = v.first
-            if (folder.exists() && folder.isDirectory) {
-                val item = locations.subMenu?.add(1, R.id.nav_locations, Menu.NONE, v.second)
-                item?.setIcon(getVectorDrawable(R.drawable.new_folder_24))
-                val viewPager = findViewById<ViewPager>(R.id.viewpager)
-                item?.setOnMenuItemClickListener {
-                    analytics.action("folderNavMenu")
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                    if (viewPager.currentItem != 0) {
-                        viewPager.setCurrentItem(0, false)
-                    }
-                    (supportFragmentManager.fragments.getOrNull(viewPager.currentItem) as? FileManagerFragment)
-                        ?.changeFolder(folder)?.run { true } ?: false
-                }
+        val viewPager = findViewById<ViewPager>(R.id.viewpager)
+
+
+
+        for (storage in this.describeStorages()) {
+            val folder = storage.file
+            val subMenu = locations.subMenu!!//.addSubMenu(storage.description)
+            val parentItem = addFodlerItem(
+                subMenu,
+                storage.description,
+                viewPager,
+                folder,
+                R.drawable.sd_card
+            )
+            for (subFolder in storage.folders) {
+                if (!subFolder.file.exists()) continue
+                addFodlerItem(
+                    subMenu,
+                    subFolder.description,
+                    viewPager,
+                    subFolder.file,
+                    R.drawable.new_folder
+                )
             }
         }
         menu.findItem(R.id.nav_system_select)?.setVisible(enableSystemOptionAction && isAtLeastKitkat())
         menu.findItem(R.id.nav_permissions)?.setVisible(!hasReadStoragePermission(this))
 
         drawerLayoutListener.syncState()
+    }
+
+    private fun addFodlerItem(
+        menu: SubMenu,
+        name: String,
+        viewPager: ViewPager,
+        folder: File,
+        icon: Int
+    ): MenuItem {
+        val item = menu.add(0, R.id.nav_locations, Menu.NONE, name)
+        item.setIcon(getVectorDrawable(icon))
+        item.setOnMenuItemClickListener {
+            analytics.action("folderNavMenu")
+            drawerLayout.closeDrawer(GravityCompat.START)
+            if (viewPager.currentItem != 0) {
+                viewPager.setCurrentItem(0, false)
+            }
+            (supportFragmentManager.fragments.getOrNull(viewPager.currentItem) as? FolderManagerFragment)
+                ?.changeFolder(folder)?.run { true } ?: false
+        }
+        return item
     }
 
     private fun refreshFolder() {
@@ -224,7 +248,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         tabLayout.setupWithViewPager(viewPager)
 
         val folderTab = tabLayout.getTabAt(0)
-        folderTab?.setIcon(getVectorDrawable(R.drawable.new_folder_24))
+        folderTab?.setIcon(getVectorDrawable(R.drawable.new_folder))
         folderTab?.setContentDescription(R.string.file_manager_title)
 
         if (showRecentsAndSavePath) {
