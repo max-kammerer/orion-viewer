@@ -46,12 +46,12 @@ object FileUtil {
             return String.format("%.2f KB", size)
         }
 
-        size = this / 1024.0
+        size /= 1024.0
         if (size < 1024) {
             return String.format("%.2f MB", size)
         }
 
-        size = this / 1024.0
+        size /= 1024.0
         return String.format("%.2f GB", size)
     }
 

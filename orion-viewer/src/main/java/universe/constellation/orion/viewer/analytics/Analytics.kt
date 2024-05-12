@@ -50,6 +50,10 @@ open class Analytics {
 
     }
 
+    open fun logWarning(text: String) {
+
+    }
+
     companion object {
 
         fun initialize(contentResolver: ContentResolver, analytics: Analytics): Analytics {

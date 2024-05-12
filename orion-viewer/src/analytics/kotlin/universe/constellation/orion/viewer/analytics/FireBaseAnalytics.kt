@@ -21,13 +21,15 @@ import java.io.File
 class FireBaseAnalytics : Analytics() {
 
     private lateinit var analytics: FirebaseAnalytics
+    private lateinit var crashlytics: FirebaseCrashlytics
 
     private var lastTime = System.currentTimeMillis()
 
     override fun init(): Analytics {
         analytics = Firebase.analytics
         analytics.setAnalyticsCollectionEnabled(true)
-        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+        crashlytics = FirebaseCrashlytics.getInstance()
+        crashlytics.setCrashlyticsCollectionEnabled(true)
         return this
     }
 
@@ -74,9 +76,12 @@ class FireBaseAnalytics : Analytics() {
     }
 
     override fun error(ex: Throwable, info: String?) {
-        val instance = FirebaseCrashlytics.getInstance()
-        instance.recordException(ex)
-        info?.let { instance.log(it) }
+        crashlytics.recordException(ex)
+        info?.let { crashlytics.log(it) }
+    }
+
+    override fun logWarning(text: String) {
+        crashlytics.log(text)
     }
 
     override fun dialog(name: String, opened: Boolean) {
