@@ -149,11 +149,11 @@
 
         <activity android:name=".prefs.OrionPreferenceActivityX"
             android:theme="@style/Theme.AppCompat"
-            android:label="Application Preferences"/>
+            android:label="@string/application_settings_title"/>
 
         <activity android:name=".prefs.OrionBookPreferencesActivityX"
                   android:theme="@style/Theme.AppCompat"
-                  android:label="Current Book Options"/>
+                  android:label="@string/book_pref_title"/>
 
         <activity android:name=".prefs.OrionTapActivity" android:screenOrientation="behind"
                   android:theme="@style/Theme.AppCompat"
@@ -171,7 +171,7 @@
 
         <activity android:name=".OrionBookmarkActivity" android:screenOrientation="behind"
                   android:theme="@style/Theme.AppCompat.NoActionBar"
-                  android:label="Bookmarks"/>
+                  android:label="@string/menu_bookmarks_text"/>
 
         <activity android:name=".outline.OutlineActivity" android:screenOrientation="behind"
                   android:theme="@style/Theme.AppCompat"

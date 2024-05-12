@@ -9,11 +9,13 @@ import androidx.preference.PreferenceGroup
 import androidx.preference.PreferenceScreen
 import androidx.preference.SeekBarPreference
 import universe.constellation.orion.viewer.BuildConfig
+import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.prefs.IntListPreferenceWithIcons
 import universe.constellation.orion.viewer.prefs.ListPreferenceWithIcons
 import universe.constellation.orion.viewer.prefs.ListPreferenceWithIconsLayoutDialog
+import universe.constellation.orion.viewer.prefs.SwitchHeaderPreferenceFragment
 
-abstract class DSLPreferenceFragment : PreferenceFragmentCompat(), PreferenceFragmentCompat.OnPreferenceDisplayDialogCallback {
+abstract class DSLPreferenceFragment : SwitchHeaderPreferenceFragment(), PreferenceFragmentCompat.OnPreferenceDisplayDialogCallback {
 
     private val DIALOG_FRAGMENT_TAG = "orion.preference"
 
@@ -42,6 +44,10 @@ abstract class DSLPreferenceFragment : PreferenceFragmentCompat(), PreferenceFra
         return preferenceManager.createPreferenceScreen(context).also {
             it.nested(isGeneral, init)
             preferenceScreen = it
+            it.setTitle((if (!isGeneral) R.string.book_pref_title else R.string.pref_default_book_setting))
+            if (isGeneral) {
+                it.setSummary(R.string.pref_default_book_setting_desc)
+            }
         }
     }
 

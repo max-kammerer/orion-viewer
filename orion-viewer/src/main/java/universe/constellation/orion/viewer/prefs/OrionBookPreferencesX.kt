@@ -49,7 +49,7 @@ class OrionBookPreferencesFragment : DSLPreferenceFragment() {
             preferenceManager.preferenceDataStore = createDataStore(requireContext())
         }
 
-        rootScreen(requireContext()) {
+        rootScreen(requireContext(), isGeneral) {
             this.isIconSpaceReserved = false
             bookPreferences(this, isGeneral)
         }
@@ -75,8 +75,6 @@ class OrionBookPreferencesFragment : DSLPreferenceFragment() {
         fun DSLPreferenceFragment.bookPreferences(preferenceScreen: PreferenceScreen, isGeneral: Boolean) {
 
             preferenceScreen.category {
-                title = (if (!isGeneral) book_pref_title else pref_default_book_setting).stringRes
-
                 isIconSpaceReserved = false //TODO
 
                 //preference<OrionListPreference> {

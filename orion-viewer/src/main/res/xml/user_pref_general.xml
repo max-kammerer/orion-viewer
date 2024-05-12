@@ -1,5 +1,8 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:summary="@string/pref_behavior"
+    android:title="@string/pref_behavior"
+    >
 
     <PreferenceCategory
         android:title="@string/pref_category_quick_actions"
