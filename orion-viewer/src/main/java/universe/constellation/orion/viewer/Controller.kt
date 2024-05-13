@@ -55,7 +55,7 @@ class Controller(
     val context: CoroutineDispatcher = Dispatchers.Default
 ) : ViewDimensionAware {
 
-    private val scope = CoroutineScope(context + rootJob)
+    val scope = CoroutineScope(context + rootJob)
 
     internal var bitmapCache: BitmapCache = BitmapCache()
 
@@ -159,6 +159,7 @@ class Controller(
 
         if (::pageLayoutManager.isInitialized)
             pageLayoutManager.destroy()
+
         GlobalScope.launch(Dispatchers.Default) {
             log("Destroying controller for $document...")
             rootJob.cancelAndJoin()

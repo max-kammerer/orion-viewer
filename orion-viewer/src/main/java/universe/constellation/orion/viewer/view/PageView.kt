@@ -128,7 +128,7 @@ class PageView(
         pageJobs.cancel()
         bitmap?.disableAll(controller.bitmapCache)
         bitmap = null
-        GlobalScope.launch(controller.context) {
+        controller.scope.launch {
             pageJobs.cancelAndJoin()
             freePagePointer()
         }
