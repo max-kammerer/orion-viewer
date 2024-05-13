@@ -25,8 +25,8 @@ class Storage(desc: String, path: File, val isPrimary: Boolean) : Folder(desc, p
 
 fun Context.describeStorages(
     folders: List<Pair<String, String>> = listOf(
-        DIRECTORY_DOCUMENTS to resources.getString(R.string.file_manager_documents),
-        DIRECTORY_DOWNLOADS to resources.getString(R.string.file_manager_downloads)
+        DIRECTORY_DOWNLOADS to resources.getString(R.string.file_manager_downloads),
+        DIRECTORY_DOCUMENTS to resources.getString(R.string.file_manager_documents)
     )
 ): List<Storage> {
     var storages = if (isAtLeastAndroidN()) {
