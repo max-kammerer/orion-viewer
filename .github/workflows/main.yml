@@ -53,7 +53,7 @@ jobs:
   test:
     strategy:
       matrix:
-        arch: [[15, x86, ubuntu-latest], [16, x86, ubuntu-latest], [19, x86, ubuntu-latest], [21, x86, ubuntu-latest], [24, x86, ubuntu-latest], [28, x86, ubuntu-latest], [30, x86_64, ubuntu-latest], [31, x86_64, ubuntu-latest], [32, x86_64, ubuntu-latest], [33, x86_64, ubuntu-latest], [34, x86_64, ubuntu-latest]]
+        arch: [[15, x86, ubuntu-latest], [16, x86, ubuntu-latest], [19, x86, ubuntu-latest], [21, x86, ubuntu-latest], [23, x86, ubuntu-latest], [28, x86, ubuntu-latest], [30, x86_64, ubuntu-latest], [31, x86_64, ubuntu-latest], [32, x86_64, ubuntu-latest], [33, x86_64, ubuntu-latest], [34, x86_64, ubuntu-latest]]
     env:
       ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 170
       EMULATOR_API: ${{ matrix.arch[0] }}
