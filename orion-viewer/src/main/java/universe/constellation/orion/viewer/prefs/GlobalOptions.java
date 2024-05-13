@@ -168,8 +168,6 @@ public class GlobalOptions implements Serializable, PageOptions {
                     OptionActions.SCREEN_OVERLAPPING_HORIZONTAL.doAction(activity, getHorizontalOverlapping(), getVerticalOverlapping());
                 } else if (SCREEN_OVERLAPPING_VERTICAL.equals(name)) {
                     OptionActions.SCREEN_OVERLAPPING_VERTICAL.doAction(activity, getHorizontalOverlapping(), getVerticalOverlapping());
-                } else if (DEBUG.equals(name)) {
-                    OptionActions.DEBUG.doAction(activity, false, getBooleanProperty(DEBUG, false));
                 } else if (APP_LANGUAGE.equals(name)) {
                     context.setLanguage(getAppLanguage());
                 } else if (DRAW_OFF_PAGE.equals(name)) {
@@ -177,7 +175,10 @@ public class GlobalOptions implements Serializable, PageOptions {
                     //TODO ?
                     activity.getView().invalidate();
                 }
+            }
 
+            if (DEBUG.equals(name)) {
+                context.startOrStopDebugLogger(getBooleanProperty(DEBUG, false));
             }
 
         };

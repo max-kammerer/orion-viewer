@@ -20,6 +20,7 @@
 package universe.constellation.orion.viewer
 
 import android.util.Log
+import java.io.File
 
 import java.io.FileWriter
 import java.io.PrintWriter
@@ -31,46 +32,49 @@ object AndroidLogger : Logger {
     private var writer: PrintWriter? = null
 
     @JvmStatic
-    fun startLogger(file: String) {
+    fun startLogger(file: File) {
         if (writer != null) {
             stopLogger()
         }
+
         try {
             writer = PrintWriter(FileWriter(file))
         } catch (e: Exception) {
-            e.printStackTrace()
             if (writer != null) {
                 writer!!.close()
+                writer = null
             }
+            log(e)
         }
     }
 
     @JvmStatic
     fun stopLogger() {
-        if (writer != null) {
-            writer!!.close()
-            writer = null
+        writer?.apply {
+            flush()
+            close()
         }
+        writer = null
     }
 
     override fun log(m: String?, e: Throwable) {
-        m?.run { log(m) }
+        m?.let { log(it) }
         log(e)
     }
 
     override fun log(m: String) {
         Log.d(LOGTAG, m)
-        if (writer != null) {
-            writer!!.write(m)
-            writer!!.write("\n")
+        writer?.apply {
+            write(m)
+            write("\n")
         }
     }
 
-    private fun log(e: Exception) {
-        Log.d(LOGTAG, e.message, e)
-        if (writer != null) {
-            e.printStackTrace(writer)
-            writer!!.write("\n")
+    private fun log(e: Throwable) {
+        Log.e(LOGTAG, e.message, e)
+        writer?.apply {
+            e.printStackTrace(this)
+            write("\n")
         }
     }
 

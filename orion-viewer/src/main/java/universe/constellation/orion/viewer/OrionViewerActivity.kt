@@ -325,7 +325,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 log("Read LastPageInfo for page ${lastPageInfo1.pageNumber}")
                 lastPageInfo = lastPageInfo1
                 orionContext.currentBookParameters = lastPageInfo1
-                OptionActions.DEBUG.doAction(this@OrionViewerActivity, false, globalOptions.getBooleanProperty("DEBUG", false))
 
                 controller = controller1
                 bind(view, controller1)

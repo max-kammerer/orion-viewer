@@ -26,16 +26,20 @@ import android.content.res.Resources
 import android.os.Build
 import android.os.Build.VERSION.CODENAME
 import android.os.Build.VERSION.RELEASE
-import android.preference.PreferenceManager
+import android.os.Environment
 import android.system.Os
 import androidx.core.os.ConfigurationCompat
 import androidx.core.os.LocaleListCompat
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.multidex.MultiDex
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import universe.constellation.orion.viewer.AndroidLogger
+import universe.constellation.orion.viewer.AndroidLogger.startLogger
+import universe.constellation.orion.viewer.AndroidLogger.stopLogger
 import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.BuildConfig.DEBUG
 import universe.constellation.orion.viewer.BuildConfig.VERSION_NAME
@@ -53,10 +57,12 @@ import universe.constellation.orion.viewer.logger
 import universe.constellation.orion.viewer.prefs.GlobalOptions.DEFAULT_LANGUAGE
 import universe.constellation.orion.viewer.test.IdlingResource
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 import kotlin.properties.Delegates
 
-class OrionApplication : Application() {
+class OrionApplication : Application(), DefaultLifecycleObserver {
 
     internal var idlingRes = IdlingResource()
 
@@ -108,8 +114,9 @@ class OrionApplication : Application() {
 
     override fun onCreate() {
         logger = AndroidLogger
+        startOrStopDebugLogger(options.getBooleanProperty("DEBUG", false))
         instance = this
-        super.onCreate()
+        super<Application>.onCreate()
         setLanguage(options.appLanguage)
         logOrionAndDeviceInfo()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -208,6 +215,32 @@ class OrionApplication : Application() {
         }
     }
 
+    fun startOrStopDebugLogger(start: Boolean) {
+        if (start) {
+            try {
+                val download = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+                if (download != null && download.canRead()) {
+                    val logFolder = File(download, "OrionViewer")
+                    logFolder.mkdirs()
+                    val filePrefix = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_").format(Date())
+                    val file = File.createTempFile(filePrefix, ".trace.txt", logFolder)
+                    log("Starting Logger in $file")
+                    startLogger(file)
+                } else {
+                    log("Can't start logger")
+                }
+            } catch (e: Throwable) {
+                log(e)
+            }
+        } else {
+            log("Stopping logger")
+            stopLogger()
+        }
+    }
+
+    override fun onDestroy(owner: LifecycleOwner) {
+        startOrStopDebugLogger(false)
+    }
 
     companion object {
         var instance: OrionApplication by Delegates.notNull()

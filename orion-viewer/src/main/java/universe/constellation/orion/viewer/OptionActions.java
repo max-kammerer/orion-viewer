@@ -89,21 +89,7 @@ public enum OptionActions {
                 controller.changeThreshhold(newValue);
             }
         }
-    },
-
-    DEBUG("DEBUG") {
-        public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
-            if (newValue) {
-                LastPageInfo currentBookParameters = activity.getOrionContext().getCurrentBookParameters();
-                if (currentBookParameters != null) {
-                    AndroidLogger.startLogger(currentBookParameters.openingFileName + ".trace");
-                }
-            } else {
-                AndroidLogger.stopLogger();
-            }
-        }
     };
-
 
     private final String key;
 
