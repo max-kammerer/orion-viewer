@@ -72,8 +72,8 @@
     <string name="pref_book_threshold_desc">Threshold for watermark removal (default 255): %s</string>
 
     <string name="pref_device_info">Device Info</string>
-    <string name="pref_debug">Debug</string>
-    <string name="pref_debug_desc">Write traces to file &lt;opened book name&gt; + .trace</string>
+    <string name="pref_debug">Debug &amp; Logs</string>
+    <string name="pref_debug_desc">Write debug information into file</string>
 
     <string name="pref_walk_order">Page traversal</string>
     <string name="pref_walk_order_desc">Page traversal: %s</string>

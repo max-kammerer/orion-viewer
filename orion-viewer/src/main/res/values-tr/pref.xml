@@ -69,7 +69,6 @@
 
     <string name="pref_device_info">Cihaz bilgisi</string>
     <string name="pref_debug">Debug</string>
-    <string name="pref_debug_desc">Dosya izlerini yaz &lt;opened book name&gt; + .trace</string>
 
     <string name="pref_walk_order">Sayfa geçişi</string>
     <string name="pref_walk_order_desc">Sayfa geçişi: %s</string>

@@ -63,7 +63,6 @@
 
     <string name="pref_device_info">Informations sur le dispositif</string>
     <string name="pref_debug">Déboguer</string>
-    <string name="pref_debug_desc">Ecrit des traces sur le fichier &lt;nom du livre ouvert&gt;+.trace</string>
 
     <string name="pref_walk_order">Sélection de direction de lecture</string>
     <string name="pref_walk_order_desc">Sélection de direction de lecture: %s</string>

@@ -48,7 +48,6 @@
     <string name="pref_book_threshold_desc">去除水印阈值 (default 255): %s</string>
 
     <string name="pref_debug">调试</string>
-    <string name="pref_debug_desc">打印调试信息到 &lt;书籍名&gt; + .trace</string>
 
     <string name="pref_walk_order">浏览顺序</string>
     <string name="pref_walk_order_desc">浏览顺序: %s</string>

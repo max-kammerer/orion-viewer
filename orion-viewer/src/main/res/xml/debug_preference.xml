@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:title="@string/pref_debug"
+    app:iconSpaceReserved="false">
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="DEBUG"
+        android:summary="@string/pref_debug_desc"
+        android:title="@string/pref_debug"
+        app:iconSpaceReserved="false" />
+
+    <PreferenceCategory
+        android:key="LOGS"
+        android:title="Logs"
+        android:summary="No active logs"
+        app:iconSpaceReserved="false">
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
+

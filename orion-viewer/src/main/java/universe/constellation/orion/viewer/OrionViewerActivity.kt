@@ -1074,7 +1074,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     private fun destroyController() {
-        AndroidLogger.stopLogger()
         controller?.destroy()
         controller = null
         orionContext.currentBookParameters = null

@@ -215,17 +215,21 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
         }
     }
 
+    fun debugLogFolder(): File? {
+        val download = getExternalFilesDir(null) ?: return null
+        return File(download, "debug/logs")
+    }
+
     fun startOrStopDebugLogger(start: Boolean) {
         if (start) {
             try {
-                val download = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-                if (download != null && download.canRead()) {
-                    val logFolder = File(download, "OrionViewer")
+                val logFolder = debugLogFolder()
+                if (logFolder != null) {
                     logFolder.mkdirs()
                     val filePrefix = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_").format(Date())
                     val file = File.createTempFile(filePrefix, ".trace.txt", logFolder)
-                    log("Starting Logger in $file")
                     startLogger(file)
+                    log("Starting Logger in $file")
                 } else {
                     log("Can't start logger")
                 }

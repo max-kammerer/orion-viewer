@@ -56,7 +56,6 @@
 
     <string name="pref_device_info">Informazioni dispositivo</string>
     <string name="pref_debug">Debug</string>
-    <string name="pref_debug_desc">Scrivi log su &lt;file libro&gt; + .trace</string>
 
     <string name="pref_walk_order">Schema scorrimento pagine</string>
     <string name="pref_walk_order_desc">Schema scorrimento pagine: %s</string>

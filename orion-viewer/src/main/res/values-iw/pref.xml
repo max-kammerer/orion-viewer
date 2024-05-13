@@ -35,7 +35,6 @@
     <string name="pref_book_threshold">גבולות</string>
     <string name="pref_book_threshold_desc">גבולות להסרת סימן מים: %s</string>
     <string name="pref_debug">תיקון באגים</string>
-    <string name="pref_debug_desc">כתוב עקבות לקובץ בשם &lt;opened book name> + .trace</string>
     <string name="pref_walk_order">סדר דפדוף</string>
     <string name="pref_page_layout">פריסת דף</string>
     <string name="application_settings_title">הגדרות יישום</string>

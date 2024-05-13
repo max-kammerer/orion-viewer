@@ -58,7 +58,6 @@
 
     <string name="pref_device_info">Información del dispositivo</string>
     <string name="pref_debug">Depuración</string>
-    <string name="pref_debug_desc">Escribe informe de errores al archivo &lt;nombre de libro abierto &gt; + .trace</string>
 
     <string name="pref_walk_order">Selección de dirección de lectura</string>
     <string name="pref_walk_order_desc">Selección de dirección de lectura: %s</string>

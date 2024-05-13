@@ -60,7 +60,6 @@
 
     <string name="pref_device_info">Про пристрій</string>
     <string name="pref_debug">Налагодження</string>
-    <string name="pref_debug_desc">Запис налагоджувальної інформації в файл &lt;ім\'я відкритої файлу&gt; + .trace</string>
 
     <string name="pref_default_book_setting">Параметри за замовчуванням для книжок</string>
     <string name="book_pref_title">Налаштування для відкритої книги</string>

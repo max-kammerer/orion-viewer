@@ -71,8 +71,8 @@
     <!--<string name="pref_book_threshold_desc">Threshold for watermark removal</string>-->
 
     <string name="pref_device_info">Устройство</string>
-    <string name="pref_debug">Отладка</string>
-    <string name="pref_debug_desc">Запись отладочной информации в файл &lt;имя открытой файла&gt; + .trace</string>
+    <string name="pref_debug">Отладка и логи</string>
+    <string name="pref_debug_desc">Запись отладочной информации в лог-файл</string>
 
     <string name="pref_walk_order">@string/navigation</string>
     <string name="pref_walk_order_desc">Порядок переходов: %s</string>
