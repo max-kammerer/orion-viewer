@@ -215,7 +215,7 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
         get() {
             fun collectItems(list: MutableList<OutlineItem>, items: Array<Outline>, level: Int) {
                 items.forEach {
-                    list.add(OutlineItem(level, it.title, core.pageNumberFromOutline(it)))
+                    list.add(OutlineItem(level, it.title ?: "<Empty>", core.pageNumberFromOutline(it)))
                     if (it.down != null) {
                         collectItems(list, it.down, level + 1)
                     }
