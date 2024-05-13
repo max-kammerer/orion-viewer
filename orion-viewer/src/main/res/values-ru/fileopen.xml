@@ -27,4 +27,7 @@
     <string name="send_report_header">[Пожалуйста, укажите дополнительную информацию]</string>
 
     <string name="error_on_file_saving_title">Ошибка при cохранинии файла</string>
+
+    <string name="fileopen_cant_open">Невозможно открыть файл: %s.</string>
+    <string name="fileopen_file_is_emppty">файл пустой</string>
 </resources>

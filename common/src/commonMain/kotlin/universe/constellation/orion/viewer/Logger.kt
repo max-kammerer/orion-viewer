@@ -24,7 +24,7 @@ import universe.constellation.orion.common.BuildConfig
 interface Logger {
     fun log(m: String) = println(m)
 
-    fun log(m: String?, e: Exception) {
+    fun log(m: String?, e: Throwable) {
         if (m != null) {
             println(m)
         }
@@ -38,7 +38,7 @@ fun log(m: String) = logger.log(m)
 
 fun logError(m: String) = logger.log("Error: $m")
 
-fun log(e: Exception) = logger.log(e.message, e)
+fun log(e: Throwable) = logger.log(e.message, e)
 
 fun log(m: String, e: Exception) {
     logger.log(m, e)

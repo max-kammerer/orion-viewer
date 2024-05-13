@@ -230,7 +230,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 if (controller != null && lastPageInfo != null) {
                     lastPageInfo?.apply {
                         if (openingFileName == filePath) {
-                            println("Fast processing")
+                            log("Fast processing")
                             controller!!.drawPage(pageNumber, newOffsetX, newOffsetY)
                             return
                         }
@@ -251,6 +251,19 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     }
                 } else {
                     fileInfo.file
+                }
+
+
+                if (fileToOpen.length() == 0L) {
+                    showErrorAndErrorPanel(
+                        getString(R.string.crash_on_book_opening_title),
+                        resources.getString(
+                            R.string.fileopen_cant_open,
+                            getString(R.string.fileopen_file_is_emppty)
+                        ),
+                        intent, null
+                    )
+                    return
                 }
 
                 openFile(fileToOpen)
@@ -286,7 +299,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     FileUtil.openFile(file)
                 }
             } catch (e: Exception) {
-                log(e)
                 showErrorAndErrorPanel(
                     getString(R.string.crash_on_book_opening_title),
                     resources.getString(
@@ -1108,7 +1120,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         dialogTitle: Int,
         messageTitle: Int,
         intent: Intent,
-        exception: Throwable
+        exception: Throwable? = null
     ) {
         showErrorAndErrorPanel(
             resources.getString(dialogTitle),
@@ -1122,7 +1134,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         dialogTitle: String,
         message: String,
         intent: Intent,
-        exception: Throwable,
+        exception: Throwable? = null,
         info: String? = null
     ) {
         val dialog = createThemedAlertBuilder()
@@ -1133,10 +1145,17 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 analytics.dialog(SHOW_ERROR_PANEL_DIALOG, false)
             }
             .setTitle(dialogTitle)
-            .setMessage(message + "\n\n" + exception.message).create()
+            .setMessage(message + if (exception != null) "\n\n" + exception.message else "")
+            .create()
         dialog.show()
 
-        analytics.error(exception, "$message $intent")
+        if (exception != null) {
+            log(exception)
+            analytics.error(exception, "$message $intent")
+        } else {
+            logError("$message $intent")
+            analytics.logWarning("$message $intent")
+        }
 
         showErrorOrFallbackPanel(message, intent, info, exception = exception)
     }

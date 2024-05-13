@@ -53,7 +53,7 @@ object AndroidLogger : Logger {
         }
     }
 
-    override fun log(m: String?, e: Exception) {
+    override fun log(m: String?, e: Throwable) {
         m?.run { log(m) }
         log(e)
     }

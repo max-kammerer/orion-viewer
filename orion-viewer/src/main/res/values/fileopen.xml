@@ -18,6 +18,7 @@
     <string name="string_exception">Exception</string>
     <string name="string_intent">Intent</string>
     <string name="string_cause">Cause</string>
+
     <string name="crash_on_book_opening_title">Error during file opening</string>
     <string name="crash_on_intent_opening_title">Error during intent processing</string>
     <string name="crash_on_book_opening_message_header">Error during file \`%1$s\` opening. Please report an issue:</string>
@@ -27,4 +28,7 @@
     <string name="send_report_header">[Please provide additional details]</string>
 
     <string name="error_on_file_saving_title">Error during file saving</string>
+
+    <string name="fileopen_cant_open">Can\'t open file: %s.</string>
+    <string name="fileopen_file_is_emppty">file is empty</string>
 </resources>
