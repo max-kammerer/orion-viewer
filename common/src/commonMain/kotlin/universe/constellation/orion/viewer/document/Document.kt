@@ -87,7 +87,7 @@ abstract class AbstractDocument(override val filePath: String) : Document {
         val usages = (page as PageWithAutoCrop).decreaseUsages()
         if (usages == 0) {
             val removed = pages.remove(page.pageNum)
-            if (page != removed) errorInDebug("Pages doesn't match ${page.pageNum} ${removed?.pageNum}")
+            if (page != removed) errorInDebug("Pages doesn't match ${page.pageNum} vs ${removed?.pageNum}")
             log("Destroying ${page.pageNum} in $this")
             page.destroyInternal()
         }

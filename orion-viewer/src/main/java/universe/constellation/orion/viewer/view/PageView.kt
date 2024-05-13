@@ -122,7 +122,7 @@ class PageView(
     }
 
     fun destroy() {
-        log("Destroy $pageNum")
+        log("Page view $pageNum: destroying")
         toInvisible()
         state = PageState.DESTROYED
         pageJobs.cancel()
