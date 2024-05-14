@@ -53,7 +53,7 @@
                   android:theme="@style/Theme.Orion.Dark.NoActionBar"
                   android:launchMode="singleTask"
                   android:icon="@drawable/orion" android:configChanges="orientation|locale|screenSize|keyboardHidden"
-                  android:screenOrientation="behind" android:windowSoftInputMode="adjustPan"
+                  android:windowSoftInputMode="adjustPan"
             android:exported="true">
 
             <intent-filter>

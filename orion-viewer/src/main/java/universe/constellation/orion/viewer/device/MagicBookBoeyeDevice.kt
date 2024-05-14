@@ -27,7 +27,6 @@ class MagicBookBoeyeDevice : EInkDevice() {
         return super.onKeyUp(keyCode, isLongPress, operation)
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     override fun fullScreen(on: Boolean, activity: Activity) {
         activity.window.decorView.systemUiVisibility = if (on) View.GONE else View.VISIBLE
     }

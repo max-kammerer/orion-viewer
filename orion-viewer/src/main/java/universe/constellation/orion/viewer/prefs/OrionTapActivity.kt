@@ -86,7 +86,7 @@ class OrionTapActivity : OrionBaseActivity(false) {
         return true
     }
 
-
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
@@ -103,7 +103,7 @@ class OrionTapActivity : OrionBaseActivity(false) {
                 val pref = PreferenceManager.getDefaultSharedPreferences(this)
                 val ed = pref.edit()
                 ed.putInt(getKey(i, j, isLong), action.code)
-                ed.commit()
+                ed.apply()
             }
         }
     }

@@ -15,7 +15,7 @@
              android:clickable="true" android:background="#ddd"
              app:srcCompat="@drawable/new_cut" android:layout_gravity="center" android:layout_weight="0"/>
 
-    <CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    <CheckedTextView
         android:id="@android:id/text1"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
