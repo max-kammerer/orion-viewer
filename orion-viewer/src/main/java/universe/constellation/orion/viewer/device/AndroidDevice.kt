@@ -23,12 +23,11 @@ import android.app.Activity
 import android.content.Context
 import android.os.PowerManager
 import android.view.KeyEvent
+import android.view.View
 import universe.constellation.orion.viewer.OperationHolder
 import universe.constellation.orion.viewer.OrionBaseActivity
-import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import universe.constellation.orion.viewer.prefs.OrionApplication
-import universe.constellation.orion.viewer.view.OrionDrawScene
 
 open class AndroidDevice @JvmOverloads constructor(
         private val wakeLockType: Int = PowerManager.SCREEN_BRIGHT_WAKE_LOCK
@@ -37,9 +36,6 @@ open class AndroidDevice @JvmOverloads constructor(
     private var screenLock: PowerManager.WakeLock? = null
 
     protected lateinit var activity: OrionBaseActivity
-
-    protected val view: OrionDrawScene?
-        get() = (activity as? OrionViewerActivity)?.view
 
     protected lateinit var orionContext: OrionApplication
 
@@ -94,8 +90,8 @@ open class AndroidDevice @JvmOverloads constructor(
         screenLock?.acquire(delay.toLong())
     }
 
-    override fun flushBitmap() {
-        view?.invalidate()
+    override fun flushBitmap(view: View) {
+        view.invalidate()
     }
 
     open fun fullScreen(on: Boolean, activity: Activity) {

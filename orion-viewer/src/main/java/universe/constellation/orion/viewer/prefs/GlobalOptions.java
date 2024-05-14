@@ -34,7 +34,7 @@ import universe.constellation.orion.viewer.OptionActions;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.PageOptions;
 import universe.constellation.orion.viewer.PageWalker;
-import universe.constellation.orion.viewer.device.EInkDeviceWithoutFastRefresh;
+import universe.constellation.orion.viewer.device.EInkDevice;
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity;
 
 public class GlobalOptions implements Serializable, PageOptions {
@@ -292,7 +292,7 @@ public class GlobalOptions implements Serializable, PageOptions {
     }
 
     public boolean isDrawOffPage() {
-        return getBooleanProperty(DRAW_OFF_PAGE, !(OrionApplication.Companion.getInstance().getDevice() instanceof EInkDeviceWithoutFastRefresh));
+        return getBooleanProperty(DRAW_OFF_PAGE, !(OrionApplication.Companion.getInstance().getDevice() instanceof EInkDevice));
     }
 
     public boolean isActionBarVisible() {

@@ -4,17 +4,15 @@ import android.view.View
 
 import universe.constellation.orion.viewer.OrionViewerActivity
 
-abstract class EInkDevice : EInkDeviceWithoutFastRefresh() {
+abstract class EInkDevice : AndroidDevice() {
 
     private var counter: Int = 0
 
-    open val isLightingSupported: Boolean
-        get() = false
+    private val einkOptimization: Boolean
+        get() = options.isEinkOptimization
 
-    override fun flushBitmap() {
-        val options = (activity as OrionViewerActivity).globalOptions
-        val view = view!!.toView()
-        if (options.isEinkOptimization) {
+    override fun flushBitmap(view: View) {
+        if (einkOptimization) {
             if (counter < options.einkRefreshAfter) {
                 doPartialUpdate(view)
                 counter++
@@ -29,15 +27,15 @@ abstract class EInkDevice : EInkDeviceWithoutFastRefresh() {
     }
 
     open fun doPartialUpdate(view: View) {
-        super.flushBitmap()
+        super.flushBitmap(view)
     }
 
     open fun doFullUpdate(view: View) {
-        super.flushBitmap()
+        super.flushBitmap(view)
     }
 
     open fun doDefaultUpdate(view: View) {
-        super.flushBitmap()
+        super.flushBitmap(view)
     }
 
     @Throws(Exception::class)

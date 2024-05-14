@@ -19,6 +19,7 @@
 
 package universe.constellation.orion.viewer.device
 
+import android.view.View
 import universe.constellation.orion.viewer.OperationHolder
 
 interface Device {
@@ -35,7 +36,7 @@ interface Device {
 
     fun onUserInteraction()
 
-    fun flushBitmap() {}
+    fun flushBitmap(view: View) {}
 
     val defaultTheme: String
 
