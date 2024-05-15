@@ -106,8 +106,7 @@ class PageView(
     fun toInvisible() {
         //TODO optimize canceling state
         if (isVisibleState) {
-            log("PV: toInvisible $pageNum")
-            //state = PageState.CAN_BE_DELETED
+            log("toInvisible ${this.pageNum}: ${this.layoutData.position}")
             //pageJobs.cancelChildren()
             isVisibleState = false
         }
@@ -206,20 +205,20 @@ class PageView(
         coroutineScope {
             launch (Dispatchers.Main + pageJobs + handler) {
                 layoutData.visibleOnScreenPart(pageLayoutManager.sceneRect)?.let {
-                    render(it, true)
+                    render(it, true, "Render visible")
                 }
             }/*.join()*/
         }
     }
 
-    internal suspend fun renderInvisible(rect: Rect) {
+    internal suspend fun renderInvisible(rect: Rect, tag: String) {
         //TODO yield
         if (Rect.intersects(rect, wholePageRect)) {
-            render(rect, false)
+            render(rect, false, "Render invisible $tag")
         }
     }
 
-    private suspend fun render(rect: Rect, fromUI: Boolean) {
+    private suspend fun render(rect: Rect, fromUI: Boolean, tag: String) {
         val layoutStrategy = controller.layoutStrategy
         if (!(layoutStrategy.viewWidth > 0 &&  layoutStrategy.viewHeight > 0)) return
 

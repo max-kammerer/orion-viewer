@@ -183,7 +183,9 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
             } else {
                 head = false
             }
-            log("Cache update: ${f.pageNum} newState=${f.state} oldState=$oldState")
+            if (f.state != oldState) {
+                log("Cache update: ${f.pageNum} newState=${f.state} oldState=$oldState")
+            }
         }
 
         head = true
@@ -197,7 +199,9 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
             } else {
                 head = false
             }
-            log("Cache update: ${f.pageNum} newState=${f.state} oldState=$oldState")
+            if (f.state != oldState) {
+                log("Cache update: ${f.pageNum} newState=${f.state} oldState=$oldState")
+            }
         }
         activePages.removeAll(toDestroy)
         toDestroy.clear()
@@ -309,7 +313,6 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         bitmapManager.actualizeActive(this)
         val visible = this.isOnScreen
         if (!visible) {
-            log("toInvisible ${this.pageNum}: ${this.layoutData.globalRect(tmpRect)} $sceneRect")
             this.toInvisible()
         } else {
             this.toVisible()

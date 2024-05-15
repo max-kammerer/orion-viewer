@@ -10,18 +10,19 @@ suspend fun PageView.precache() {
     val bottom = visibleRect.bottom
     val left = visibleRect.left
     val right = visibleRect.right
+    println("Precaching $pageNum: $visibleRect")
     val sceneInfo = pageLayoutManager.sceneRect
 
     val deltaX = sceneInfo.width().upperHalf / 2
     val deltaY = sceneInfo.height().upperHalf / 2
     val t = Rect(left - deltaX, top - deltaY, right + deltaX, top)
-    renderInvisible(t)
+    renderInvisible(t, "top")
     val b = Rect(left - deltaX, bottom, right + deltaX, bottom + deltaY)
-    renderInvisible(b)
+    renderInvisible(b, "bottom")
     val l = Rect(left - deltaX, top, left, bottom)
-    renderInvisible(l)
+    renderInvisible(l, "left")
     val r = Rect(right, top, right + deltaX, bottom)
-    renderInvisible(r)
+    renderInvisible(r, "right")
 
     val next = this.pageLayoutManager.uploadNextPage(this, addIfAbsent = true)
     val prev = this.pageLayoutManager.uploadPrevPage(this, addIfAbsent = true)
