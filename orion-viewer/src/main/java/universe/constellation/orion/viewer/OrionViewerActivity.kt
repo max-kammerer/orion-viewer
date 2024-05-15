@@ -231,7 +231,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     lastPageInfo?.apply {
                         if (openingFileName == filePath) {
                             log("Fast processing")
-                            controller!!.drawPage(pageNumber, newOffsetX, newOffsetY)
+                            controller!!.drawPage(pageNumber, newOffsetX, newOffsetY, controller!!.pageLayoutManager.isSinglePageMode)
                             return
                         }
                     }
@@ -660,7 +660,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         if (controller != null) {
             analytics.action("onResumeOpenedBook")
             controller!!.processPendingEvents()
-            //controller!!.drawPage(lastPageInfo!!.pageNumber, lastPageInfo!!.newOffsetX, lastPageInfo!!.newOffsetY)
         }
     }
 

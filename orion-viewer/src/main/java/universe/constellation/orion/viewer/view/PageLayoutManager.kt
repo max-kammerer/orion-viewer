@@ -15,6 +15,7 @@ import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.LastPageInfo
 import universe.constellation.orion.viewer.bitmap.BitmapManager
 import universe.constellation.orion.viewer.errorInDebug
+import universe.constellation.orion.viewer.errorInDebugOr
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.calcPageLayout
 import universe.constellation.orion.viewer.layout.reset
@@ -42,6 +43,8 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         get() = activePages.filter { it.isOnScreen && it.isVisibleState }
 
     var isSinglePageMode = false
+
+    private var activePage = -1
 
     val sceneRect = Rect(0, 0, scene.width, scene.height)
 
@@ -114,17 +117,27 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
     }
 
     fun currentPageLayout(): LayoutPosition? {
-        //TODO
-        val page = activePages.firstOrNull { it.isOnScreen } ?: return null
-        val layoutInfo = page.layoutInfo
+        val page = if (isSinglePageMode) {
+            activePages.firstOrNull { it.pageNum == activePage && it.isOnScreen }
+                //?: errorInDebugOr("No page in isSinglePageMode") { null }
+        } else {
+            activePages.firstOrNull { it.isOnScreen } //?: errorInDebugOr("No page in general mode") { null }
+        }
+
+        val layoutInfo = page?.layoutInfo ?: return null
         val position = page.layoutData.position
         layoutInfo.x.offset = -position.x.toInt()
         layoutInfo.y.offset = -position.y.toInt()
         return layoutInfo
     }
 
+    private fun  setSinglePageMode(enable: Boolean, page: Int) {
+        isSinglePageMode = enable
+        activePage = if (isSinglePageMode) page else -1
+    }
+
     fun doScroll(xPos: Float, yPos: Float, distanceX: Float, distanceY: Float) {
-        isSinglePageMode = false
+        setSinglePageMode(false, -1)
         doScrollOnly(xPos, yPos, distanceX, distanceY)
         uploadNewPages()
         scene.postInvalidate()
@@ -339,17 +352,38 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
     }
 
     fun renderVisiblePages(canvas: Canvas, scene: OrionDrawScene) {
+        if (isSinglePageMode) {
+            val active = activePages.firstOrNull { it.pageNum == activePage }
+            if (active != null && active.isOnScreen) {
+                renderPage(active, canvas, scene, true)
+                return
+            }
+            errorInDebug("No active page: $activePage")
+        }
+
         var first = true
         activePages.forEach {
             if (it.isOnScreen) {
-                it.draw(canvas, scene)
-                if (first) {
-                    val visibleRect = it.visibleRect()
-                    scene.orionStatusBarHelper.onPageUpdate(it.pageNum, visibleRect?.left ?: 0, visibleRect?.top ?: 0)
-                    first = false
-                }
-                if (isSinglePageMode) return
+                renderPage(it, canvas, scene, first)
+                first = false
             }
+        }
+    }
+
+    private fun renderPage(
+        it: PageView,
+        canvas: Canvas,
+        scene: OrionDrawScene,
+        isFirst: Boolean
+    ) {
+        it.draw(canvas, scene)
+        if (isFirst) {
+            val visibleRect = it.visibleRect()
+            scene.orionStatusBarHelper.onPageUpdate(
+                it.pageNum,
+                visibleRect?.left ?: 0,
+                visibleRect?.top ?: 0
+            )
         }
     }
 
@@ -373,7 +407,9 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
                             layoutStrategy.reset(pos, page.page, next)
                             val oldPosition = page.layoutData.position
                             val x = -pos.x.offset
+                            //val y = getCenteredYInSinglePageMode(-pos.y.offset, page.height)
                             val y = -pos.y.offset
+
                             doScrollOnly(
                                 oldPosition.x,
                                 oldPosition.y,
@@ -391,6 +427,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
                             layoutStrategy.reset(pos, page.page, next)
                             val oldPosition = page.layoutData.position
                             val x = -pos.x.offset
+                            //val y = getCenteredYInSinglePageMode(-pos.y.offset, page.height)
                             val y = -pos.y.offset
                             doScrollOnly(oldPosition.x, oldPosition.y, x - oldPosition.x, y - oldPosition.y, isTapNavigation)
                         }
@@ -402,12 +439,34 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         return null
     }
 
-    fun renderPageAt(pageNum: Int, x: Int, y: Int, isTapNavigation: Boolean = false, doScroll: (PageView) -> Unit = {page ->
-        val newPosition = page.layoutData.position
-        doScrollOnly(newPosition.x, newPosition.y, x - newPosition.x, y - newPosition.y, isTapNavigation)
-    }): Pair<PageView, Job> {
+    private fun getCenteredYInSinglePageMode(y: Int, pageHeight: Int): Float {
+        if (isSinglePageMode) {
+            if (pageHeight < sceneHeight) {
+                return (sceneHeight - pageHeight) / 2.0f
+            }
+        }
+        return y.toFloat()
+    }
+
+    fun renderPageAt(
+        pageNum: Int,
+        x: Int,
+        y: Int,
+        isTapNavigation: Boolean = false,
+        doScroll: (PageView) -> Unit = { page ->
+            val newPosition = page.layoutData.position
+            doScrollOnly(
+                newPosition.x,
+                newPosition.y,
+                x - newPosition.x,
+                y - newPosition.y,
+                isTapNavigation
+            )
+        }
+    ): Pair<PageView, Job> {
         println("RenderPageAt $pageNum $x $y")
-        isSinglePageMode = isTapNavigation
+        setSinglePageMode(isTapNavigation, pageNum)
+
         val index = activePages.binarySearch { it.pageNum.compareTo(pageNum) }
 
         val page = if (index >= 0) {
@@ -494,7 +553,8 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         val delta = updatedView.wholePageRect.height() - oldArea.height()
 
         var found = false
-        if (updatedView.layoutData.position.y < 0) {
+        val position = updatedView.layoutData.position
+        if (position.y < 0) {
             for (page in activePages) {
                 page.layoutData.position.y -= delta
                 page.updateState()
@@ -514,8 +574,9 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         val pageWidth = updatedView.wholePageRect.width()
         val sceneWidth = sceneRect.width()
         if (pageWidth < sceneWidth) {
-            updatedView.layoutData.position.x = (sceneWidth - pageWidth) / 2.0f
+            position.x = (sceneWidth - pageWidth) / 2.0f
         }
+
         updateStateAndRenderVisible(updatedView)
         updateCache()
 
