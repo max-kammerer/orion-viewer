@@ -76,8 +76,8 @@ class FireBaseAnalytics : Analytics() {
     }
 
     override fun error(ex: Throwable, info: String?) {
-        crashlytics.recordException(ex)
         info?.let { crashlytics.log(it) }
+        crashlytics.recordException(ex)
     }
 
     override fun logWarning(text: String) {

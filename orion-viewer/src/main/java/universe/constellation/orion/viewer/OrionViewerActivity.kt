@@ -261,7 +261,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                             R.string.fileopen_cant_open,
                             getString(R.string.fileopen_file_is_emppty)
                         ),
-                        intent, null
+                        intent,
+                        sendException = RuntimeException("Warning: empty file, host=" + fileInfo.uri.host)
                     )
                     return
                 }
@@ -1133,7 +1134,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         message: String,
         intent: Intent,
         exception: Throwable? = null,
-        info: String? = null
+        sendException: Throwable? = exception
     ) {
         val dialog = createThemedAlertBuilder()
             .setPositiveButton(R.string.string_close) { dialog, _ ->
@@ -1147,15 +1148,15 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             .create()
         dialog.show()
 
-        if (exception != null) {
-            log(exception)
-            analytics.error(exception, "$message $intent")
+        if (sendException != null) {
+            log(sendException)
+            analytics.error(sendException, "$message $intent")
         } else {
             logError("$message $intent")
             analytics.logWarning("$message $intent")
         }
 
-        showErrorOrFallbackPanel(message, intent, info, exception = exception)
+        showErrorOrFallbackPanel(message, intent, null, exception = exception)
     }
 
     fun showErrorOrFallbackPanel(
