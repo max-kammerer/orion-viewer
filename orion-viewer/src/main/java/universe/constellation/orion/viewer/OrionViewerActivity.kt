@@ -315,6 +315,20 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             }
 
             try {
+                if (newDocument.pageCount == 0) {
+                    showErrorAndErrorPanel(
+                        getString(R.string.crash_on_book_opening_title),
+                        resources.getString(
+                            R.string.fileopen_cant_open,
+                            getString(R.string.fileopen_no_pages)
+                        ),
+                        intent,
+                        sendException = RuntimeException("Warning: no page in doc, host=" + intent.data?.host)
+                    )
+                    newDocument.destroy()
+                    return@launch
+                }
+
                 val layoutStrategy = SimpleLayoutStrategy.create()
                 val controller1 = Controller(this@OrionViewerActivity, newDocument, layoutStrategy, rootJob, context = executor)
 
@@ -346,9 +360,14 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 doOnLayout(lastPageInfo1)
                 analytics.fileOpenedSuccessfully(file)
             } catch (e: Exception) {
+                newDocument.destroy()
                 analytics.errorDuringInitialFileOpen()
-                log(e)
-                throw e
+                showErrorAndErrorPanel(
+                    R.string.crash_on_book_opening_title,
+                    R.string.crash_on_book_opening_title,
+                    intent,
+                    e
+                )
             } finally {
                 orionContext.idlingRes.free()
             }

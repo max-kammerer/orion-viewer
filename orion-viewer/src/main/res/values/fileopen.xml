@@ -25,10 +25,11 @@
     <string name="crash_on_book_opening_message_header_panel">Error during file \`%1$s\` opening:</string>
 
     <string name="string_send">Send…</string>
-    <string name="send_report_header">[Please provide additional details]</string>
+    <string name="send_report_header">[Please provide additional details (steps to reproduce issue)]</string>
 
     <string name="error_on_file_saving_title">Error during file saving</string>
 
-    <string name="fileopen_cant_open">Can\'t open file: %s.</string>
+    <string name="fileopen_cant_open">Can\'t open the document: %s.</string>
     <string name="fileopen_file_is_emppty">file is empty</string>
+    <string name="fileopen_no_pages">document has no pages</string>
 </resources>

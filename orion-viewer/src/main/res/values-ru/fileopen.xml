@@ -24,10 +24,11 @@
     <string name="crash_on_book_opening_message_header_panel">Ошибка при открытии \`%1$s\` файла:</string>
 
     <string name="string_send">Отправить…</string>
-    <string name="send_report_header">[Пожалуйста, укажите дополнительную информацию]</string>
+    <string name="send_report_header">[Пожалуйста, укажите дополнительную информацию (как воспроизвести проблему)]</string>
 
     <string name="error_on_file_saving_title">Ошибка при cохранинии файла</string>
 
-    <string name="fileopen_cant_open">Невозможно открыть файл: %s.</string>
-    <string name="fileopen_file_is_emppty">файл пустой</string>
+    <string name="fileopen_cant_open">Невозможно открыть документ: %s.</string>
+    <string name="fileopen_file_is_emppty">пустой файл</string>
+    <string name="fileopen_no_pages">в документе нет страниц</string>
 </resources>
