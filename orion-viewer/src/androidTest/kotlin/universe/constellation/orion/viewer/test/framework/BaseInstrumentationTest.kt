@@ -46,4 +46,8 @@ abstract class BaseInstrumentationTest : BaseTest() {
             }
         }
     }
+
+    fun getStringRes(resId: Int): String {
+        return InstrumentationRegistry.getInstrumentation().targetContext.resources.getString(resId)
+    }
 }

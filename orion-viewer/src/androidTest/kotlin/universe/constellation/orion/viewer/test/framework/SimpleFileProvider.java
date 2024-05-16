@@ -104,6 +104,7 @@ public class SimpleFileProvider extends ContentProvider {
         } finally {
             document.close();
         }
+        System.out.println("Created new file: " + document + " size " + file.length());
 
         try {
             return ParcelFileDescriptor.open(file, MODE_READ_ONLY);
