@@ -63,6 +63,8 @@ interface Page {
 
 abstract class AbstractDocument(override val filePath: String) : Document {
 
+    private val shortName = filePath.substringAfterLast("/")
+
     private val pages = HashMap<Int, PageWithAutoCrop>()
 
     @Synchronized
@@ -90,11 +92,13 @@ abstract class AbstractDocument(override val filePath: String) : Document {
             if (page != removed) errorInDebug("Pages doesn't match ${page.pageNum} vs ${removed?.pageNum}")
             log("Destroying ${page.pageNum} in $this")
             page.destroyInternal()
+        } else if (usages < 0) {
+            errorInDebug("Wrong state: $usages")
         }
     }
 
     override fun toString(): String {
-        return filePath
+        return shortName
     }
 }
 

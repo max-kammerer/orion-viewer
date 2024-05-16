@@ -43,7 +43,7 @@ open class BitmapCache(val size: Int = DEFAULT_BITMAP_CACHE_SIZE) {
             log("BitmapCache(${cachedBitmaps.size}): new bitmap $width x $height created")
             cachedBitmaps.add(CacheInfo(bitmap))
         } else {
-            log("BitmapCache(${cachedBitmaps.size}): using cached bitmap $bitmap")
+            log("BitmapCache(${cachedBitmaps.size}): using cached bitmap ${System.identityHashCode(bitmap)}")
         }
         bitmap.eraseColor(Color.TRANSPARENT)
         return bitmap
