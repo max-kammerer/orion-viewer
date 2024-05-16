@@ -13,8 +13,8 @@ suspend fun PageView.precache() {
     println("Precaching $pageNum: $visibleRect")
     val sceneInfo = pageLayoutManager.sceneRect
 
-    val deltaX = sceneInfo.width().upperHalf / 2
-    val deltaY = sceneInfo.height().upperHalf / 2
+    val deltaX = sceneInfo.width().upperHalf
+    val deltaY = sceneInfo.height().upperHalf
     val t = Rect(left - deltaX, top - deltaY, right + deltaX, top)
     renderInvisible(t, "top")
     val b = Rect(left - deltaX, bottom, right + deltaX, bottom + deltaY)
