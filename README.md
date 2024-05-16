@@ -28,13 +28,18 @@ libraries
      alt="Get it on Google Play"
      height="80">](https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer)
 
-## Contibution
+## App usage analytics
+
+From version `0.91.0` Orion Viewer automatically collects app crashes and app usage statistics to improve application quality.
+Orion Viewer doesn't collect any personal information (and doesn't pass it to any third parties).
+
+## Contribution
 
 Whatever you want! Project is open to any ideas and discussions
 
 ### Translations
 
-Project is fully or partially translated into Chinese, English, French, German, Hebrew, Italian, Russian, Spanish and Ukrainian languages.
+Project is fully or partially translated into Chinese, English, French, German, Hebrew, Italian, Russian, Spanish, Turkish and Ukrainian languages.
 It would be highly desirable to eliminate gaps and errors in existing translations and to translate project into new languages.
 
 Take a look into
