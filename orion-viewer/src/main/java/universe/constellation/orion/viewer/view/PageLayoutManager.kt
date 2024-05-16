@@ -5,17 +5,15 @@ import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.RectF
 import androidx.core.math.MathUtils
+import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.LastPageInfo
 import universe.constellation.orion.viewer.bitmap.BitmapManager
 import universe.constellation.orion.viewer.errorInDebug
-import universe.constellation.orion.viewer.errorInDebugOr
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.calcPageLayout
 import universe.constellation.orion.viewer.layout.reset
@@ -27,6 +25,8 @@ import kotlin.math.max
 private const val VISIBLE_PAGE_LIMIT = 5
 
 class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
+
+    class Callback(val page: Int, val job: CompletableJob, val body: () -> Unit)
 
     private val analytics = controller.activity.analytics
 
@@ -41,6 +41,9 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
 
     val visiblePages: List<PageView>
         get() = activePages.filter { it.isOnScreen && it.isVisibleState }
+
+
+    private var onPageSizeCalculatedCallback: Callback? = null
 
     var isSinglePageMode = false
 
@@ -316,9 +319,10 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         updateStateAndRenderVisible(view)
     }
 
-    private fun updateStateAndRenderVisible(view: PageView) {
+    private fun updateStateAndRenderVisible(view: PageView, wait: CompletableJob? = null) {
         if (view.updateState()) {
-            view.renderVisibleAsync()
+            view.cancelChildJobs()
+            view.renderVisibleAsync(wait)
         }
     }
 
@@ -502,15 +506,19 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
             newPage
         }
 
-        return page to GlobalScope.launch(Dispatchers.Main + page.pageJobs +  handler) {
-            page.pageInfo.await()
-            //if (page.state != PageState.DESTROYED) {
-                //if (isVisible(page)) {
-                    doScroll(page)
-                    page.updateState()
-                    page.renderVisible()
-                //}
-            //}
+        onPageSizeCalculatedCallback?.job?.cancel()
+        if (page.state == PageState.SIZE_AND_BITMAP_CREATED) {
+            onPageSizeCalculatedCallback = null
+            doScroll(page)
+            page.updateState()
+            return page to page.launchJobInRenderingScope(Dispatchers.Main) {
+                page.renderVisible()
+            }
+        } else {
+            onPageSizeCalculatedCallback = Callback(pageNum, Job(controller.rootJob)) {
+                doScroll(page)
+            }
+            return page to onPageSizeCalculatedCallback!!.job
         }
     }
 
@@ -577,7 +585,17 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
             position.x = (sceneWidth - pageWidth) / 2.0f
         }
 
-        updateStateAndRenderVisible(updatedView)
+        val callback = onPageSizeCalculatedCallback
+        val job = if (callback?.page == updatedView.pageNum) {
+            onPageSizeCalculatedCallback = null
+            val job = callback.job
+            callback.body()
+            callback.job
+        } else {
+            null
+        }
+
+        updateStateAndRenderVisible(updatedView, job)
         updateCache()
 
         scene.invalidate()

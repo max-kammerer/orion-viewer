@@ -51,7 +51,7 @@ class Controller(
     val activity: OrionViewerActivity,
     val document: Document,
     val layoutStrategy: LayoutStrategy,
-    private val rootJob: Job = Job(),
+    val rootJob: Job = Job(),
     val context: CoroutineDispatcher = Dispatchers.Default
 ) : ViewDimensionAware {
 

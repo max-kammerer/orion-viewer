@@ -3,7 +3,10 @@ package universe.constellation.orion.viewer.view
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
+import kotlinx.coroutines.CompletableJob
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -12,7 +15,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -79,7 +81,13 @@ class PageView(
     @Volatile
     var isVisibleState = false
 
-    internal var pageJobs = SupervisorJob(rootJob)
+    val renderingPageJobs = SupervisorJob(rootJob)
+
+    private val dataPageJobs = SupervisorJob(rootJob)
+
+    private val renderingScope = CoroutineScope(controller.context + renderingPageJobs + handler)
+
+    private val dataPageScope = CoroutineScope(controller.context + dataPageJobs + handler)
 
     @Volatile
     var bitmap: FlexibleBitmap? = null
@@ -124,12 +132,26 @@ class PageView(
         log("Page view $pageNum: destroying")
         toInvisible()
         state = PageState.DESTROYED
-        pageJobs.cancel()
+        cancelChildJobs(allJobs = true)
         bitmap?.disableAll(controller.bitmapCache)
         bitmap = null
         controller.scope.launch {
-            pageJobs.cancelAndJoin()
+            waitJobsCancellation(allJobs = true)
             freePagePointer()
+        }
+    }
+
+    internal fun cancelChildJobs(allJobs: Boolean = false) {
+        renderingPageJobs.cancelChildren()
+        if (allJobs) {
+            dataPageJobs.cancelChildren()
+        }
+    }
+
+    private suspend fun waitJobsCancellation(allJobs: Boolean = false) {
+        renderingPageJobs.cancelAndJoin()
+        if (allJobs) {
+            dataPageJobs.cancelAndJoin()
         }
     }
 
@@ -140,16 +162,15 @@ class PageView(
     fun reinit(marker: String = "reinit") {
         if (state == PageState.SIZE_AND_BITMAP_CREATED) return
         log("Page $pageNum $marker $state $document" )
-        pageJobs.cancelChildren()
-        pageInfo = GlobalScope.async(controller.context + pageJobs + handler) {
+        cancelChildJobs()
+        if (::pageInfo.isInitialized) {
+            pageInfo.cancel()
+        }
+        pageInfo = dataPageScope.async {
             val info = page.getPageInfo(controller.layoutStrategy as SimpleLayoutStrategy)
-            if (isActive) {
-                withContext(Dispatchers.Main) {
-                    if (isActive) {
-                        controller.layoutStrategy.reset(layoutInfo, info)
-                        initBitmap(layoutInfo)
-                    }
-                }
+            withContext(Dispatchers.Main) {
+                controller.layoutStrategy.reset(layoutInfo, info)
+                initBitmap(layoutInfo)
             }
             info
         }
@@ -177,14 +198,15 @@ class PageView(
         }
     }
 
-    internal fun renderVisibleAsync() {
-        GlobalScope.launch (Dispatchers.Main + pageJobs + handler) {
+    internal fun renderVisibleAsync(wait: CompletableJob? = null) {
+        renderingScope.launch {
             renderVisible()
+            wait?.complete()
         }
     }
 
     internal fun precacheData() {
-        GlobalScope.async(controller.context + pageJobs + handler) {
+        dataPageScope.launch {
             page.getPageSize()
             if (isActive) {
                 page.readPageDataForRendering()
@@ -202,12 +224,16 @@ class PageView(
             return
         }
 
-        coroutineScope {
-            launch (Dispatchers.Main + pageJobs + handler) {
-                layoutData.visibleOnScreenPart(pageLayoutManager.sceneRect)?.let {
-                    render(it, true, "Render visible")
-                }
-            }/*.join()*/
+        renderingScope.launch {
+            layoutData.visibleOnScreenPart(pageLayoutManager.sceneRect)?.let {
+                render(it, true, "Render visible")
+            }
+        }
+    }
+
+    fun launchJobInRenderingScope(dispatcher: CoroutineDispatcher, body: suspend () -> Unit): Job {
+        return renderingScope.launch(dispatcher) {
+            body()
         }
     }
 
@@ -229,26 +255,25 @@ class PageView(
         val bound = Rect(rect)
         val bitmap = bitmap!!
 
-        coroutineScope {
-            launch(controller.context + pageJobs + handler) {
-                timing("Rendering $pageNum page in rendering engine: $bound") {
-                    bitmap.render(bound, layoutInfo, page)
-                }
-                if (isActive) {
-                    withContext(Dispatchers.Main) {
-                        if (kotlin.coroutines.coroutineContext.isActive) {
-                            log("PageView.render invalidate: $pageNum $layoutData ${scene != null}")
+        renderingScope.launch {
+            timing("$tag $pageNum page in rendering engine: $bound") {
+                bitmap.render(bound, layoutInfo, page)
+            }
+            if (isActive) {
+                withContext(Dispatchers.Main) {
+                    if (kotlin.coroutines.coroutineContext.isActive) {
+                        if (fromUI) {
+                            log("PageView ($tag) invalidate: $pageNum $layoutData ${scene != null}")
                             scene?.invalidate()
-                            if (fromUI) {
-                                precache()
-                            }
+                            precache()
                         }
                     }
-                } else {
-                    log("PageView.render $pageNum $layoutData: canceled")
                 }
-            }/*.join()*/
-        }
+            } else {
+                log("PageView.render $pageNum $layoutData: canceled")
+            }
+        }/*.join()*/
+
     }
 
     private val drawTmp  = Rect()
@@ -328,6 +353,6 @@ class PageView(
 
     fun invalidateAndMoveToStub() {
         state = PageState.STUB
-        pageJobs.cancelChildren()
+        cancelChildJobs()
     }
 }
