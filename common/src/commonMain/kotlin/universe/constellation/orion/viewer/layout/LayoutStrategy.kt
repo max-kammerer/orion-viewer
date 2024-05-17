@@ -71,10 +71,6 @@ interface LayoutStrategy {
     val viewHeight: Int
 }
 
-//TODO: move getPageInfo into background thread
-fun LayoutStrategy.reset(pos: LayoutPosition, page: PageWithAutoCrop, next: Boolean) {
-    reset(pos, page.getPageInfo(this as SimpleLayoutStrategy), next)
-}
 
 fun LayoutStrategy.calcPageLayout(layoutInfo: LayoutPosition, nextNotPrev: Boolean): Int {
     return  if (nextNotPrev)

@@ -8,7 +8,6 @@ import android.widget.TextView
 import universe.constellation.orion.viewer.OrionBookListener
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.android.isAtJellyBean
-import universe.constellation.orion.viewer.document.abs
 
 class OrionStatusBarHelper(val view: ViewGroup) : OrionBookListener {
 

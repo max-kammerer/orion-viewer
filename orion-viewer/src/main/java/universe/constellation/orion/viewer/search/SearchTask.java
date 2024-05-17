@@ -13,6 +13,7 @@ import universe.constellation.orion.viewer.document.Document;
 import universe.constellation.orion.viewer.R;
 import universe.constellation.orion.viewer.document.PageWithAutoCrop;
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy;
+import universe.constellation.orion.viewer.view.AutoCropKt;
 
 import static universe.constellation.orion.viewer.LoggerKt.log;
 
@@ -85,7 +86,7 @@ public abstract class SearchTask {
 
                     RectF searchHits[] = page.searchText(text);
                     if (searchHits != null && searchHits.length > 0) {
-                        return new SearchTaskResult(text, index, searchHits, page.getPageInfo(layoutStrategy), page);
+                        return new SearchTaskResult(text, index, searchHits, AutoCropKt.getPageInfo(page, layoutStrategy), page);
                     }
                     page.destroy();
                     index += increment;

@@ -11,16 +11,16 @@ import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.BitmapCache
 import universe.constellation.orion.viewer.bitmap.FlexibleBitmap
 import universe.constellation.orion.viewer.document.Page
-import universe.constellation.orion.viewer.document.min
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
-import universe.constellation.orion.viewer.layout.reset
 import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.BookTest
 import universe.constellation.orion.viewer.test.framework.DEFAULT_COLOR_DELTA
 import universe.constellation.orion.viewer.test.framework.compareBitmaps
 import universe.constellation.orion.viewer.view.ColorStuff
+import universe.constellation.orion.viewer.view.reset
 import java.nio.IntBuffer
+import kotlin.math.min
 
 class FlexibleBitmapTest(bookDescription: BookDescription) : BookTest(bookDescription) {
 
