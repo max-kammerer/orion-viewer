@@ -360,7 +360,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 doOnLayout(lastPageInfo1)
                 analytics.fileOpenedSuccessfully(file)
             } catch (e: Exception) {
-                newDocument.destroy()
+                if (controller != null) {
+                    destroyController()
+                } else {
+                    newDocument.destroy()
+                }
                 analytics.errorDuringInitialFileOpen()
                 showErrorAndErrorPanel(
                     R.string.crash_on_book_opening_title,
