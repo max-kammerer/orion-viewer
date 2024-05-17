@@ -76,84 +76,85 @@ abstract class PageWithAutoCrop(override val pageNum: Int) : Page {
 
     private fun dimensionForCorruptedPage() = PageSize(300, 400)
 
-    open fun getPageInfo(layoutStrategy: SimpleLayoutStrategy): PageInfo {
-        val info = getPageSize()
-        val pageInfo = PageInfo(pageNum, info.width, info.height)
-        val cropMode = layoutStrategy.margins.cropMode
-
-        if (cropMode != 0 && (pageInfo.autoCrop == null)) {
-            timing("Full auto crop") {
-                fillAutoCropInfo(layoutStrategy, pageInfo, cropMode)
-            }
-        }
-
-        return pageInfo
-    }
-
-    private fun fillAutoCropInfo(strategy: SimpleLayoutStrategy, page: PageInfo, cropMode: Int) {
-        if (page.width == 0 || page.height == 0) {
-            page.autoCrop = AutoCropMargins(0, 0, 0, 0)
-            return
-        }
-
-
-        val curPos = LayoutPosition()
-
-        //Crop manual/no mode margins to calc new width and height
-        val firstCropMode = if (cropMode.toMode.isManualFirst()) CropMode.MANUAL else CropMode.NO_MODE
-        log("Calculating first reset with page = $page with cropMode = $firstCropMode")
-        strategy.reset(curPos, true, page, firstCropMode.cropMode, 10000, false)
-
-        val pageWidth1R = curPos.x.pageDimension
-        val pageHeight1R = curPos.y.pageDimension
-        log("Cur pos 1R = $curPos")
-        log("New dimension: $pageWidth1R x $pageHeight1R")
-
-        if (pageWidth1R == 0 || pageHeight1R == 0) {
-            page.autoCrop = null
-            return
-        }
-
-        //zoom page to fit crop screen
-        val zoomInDouble = floor(sqrt(1.0 * WIDTH * HEIGHT / (pageWidth1R * pageHeight1R)) * 10000) / 10000
-        strategy.reset(curPos, true, page, firstCropMode.cropMode, (zoomInDouble * 10000).toInt(), false)
-        val newWidth = curPos.x.pageDimension
-        val newHeight = curPos.y.pageDimension
-
-        log("Cur pos for crop screen: $newWidth x $newHeight $zoomInDouble")
-
-        timing("Render page for auto crop processing") {
-            val leftTopCorner = strategy.convertToPoint(curPos)
-            //TODO:
-            renderPage(bitmap, curPos.docZoom, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + newWidth, leftTopCorner.y + newHeight, 0, 0)
-        }
-
-        timing("Extract pixels from bitmap") {
-            bitmap.getPixels(bitmapArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight())
-        }
-
-        val margins = timing("Calculate margins") {
-            findMargins(ArrayImage(newWidth, newHeight, bitmapArray))
-        }
-
-        val marginsWithPadding = pad(margins, newWidth, newHeight)
-
-        page.autoCrop = AutoCropMargins(
-                (marginsWithPadding.left / zoomInDouble).toInt(),
-                (marginsWithPadding.top / zoomInDouble).toInt(),
-                (marginsWithPadding.right / zoomInDouble).toInt(),
-                (marginsWithPadding.bottom / zoomInDouble).toInt()
-
-        )
-        log("Zoomed result: ${page.pageNum0}: $margins $zoomInDouble")
-        log("Unzoomed result: ${page.pageNum0}: ${page.autoCrop}")
-    }
-
     override fun toString(): String {
         return "Page $pageNum"
     }
 
     abstract fun destroyInternal()
+}
+
+
+fun Page.getPageInfo(layoutStrategy: SimpleLayoutStrategy): PageInfo {
+    val info = getPageSize()
+    val pageInfo = PageInfo(pageNum, info.width, info.height)
+    val cropMode = layoutStrategy.margins.cropMode
+
+    if (cropMode != 0 && (pageInfo.autoCrop == null)) {
+        timing("Full auto crop") {
+            fillAutoCropInfo(layoutStrategy, pageInfo, cropMode)
+        }
+    }
+
+    return pageInfo
+}
+
+private fun Page.fillAutoCropInfo(strategy: SimpleLayoutStrategy, page: PageInfo, cropMode: Int) {
+    if (page.width == 0 || page.height == 0) {
+        page.autoCrop = AutoCropMargins(0, 0, 0, 0)
+        return
+    }
+
+
+    val curPos = LayoutPosition()
+
+    //Crop manual/no mode margins to calc new width and height
+    val firstCropMode = if (cropMode.toMode.isManualFirst()) CropMode.MANUAL else CropMode.NO_MODE
+    log("Calculating first reset with page = $page with cropMode = $firstCropMode")
+    strategy.reset(curPos, true, page, firstCropMode.cropMode, 10000, false)
+
+    val pageWidth1R = curPos.x.pageDimension
+    val pageHeight1R = curPos.y.pageDimension
+    log("Cur pos 1R = $curPos")
+    log("New dimension: $pageWidth1R x $pageHeight1R")
+
+    if (pageWidth1R == 0 || pageHeight1R == 0) {
+        page.autoCrop = null
+        return
+    }
+
+    //zoom page to fit crop screen
+    val zoomInDouble = floor(sqrt(1.0 * WIDTH * HEIGHT / (pageWidth1R * pageHeight1R)) * 10000) / 10000
+    strategy.reset(curPos, true, page, firstCropMode.cropMode, (zoomInDouble * 10000).toInt(), false)
+    val newWidth = curPos.x.pageDimension
+    val newHeight = curPos.y.pageDimension
+
+    log("Cur pos for crop screen: $newWidth x $newHeight $zoomInDouble")
+
+    timing("Render page for auto crop processing") {
+        val leftTopCorner = strategy.convertToPoint(curPos)
+        //TODO:
+        renderPage(bitmap, curPos.docZoom, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + newWidth, leftTopCorner.y + newHeight, 0, 0)
+    }
+
+    timing("Extract pixels from bitmap") {
+        bitmap.getPixels(bitmapArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight())
+    }
+
+    val margins = timing("Calculate margins") {
+        findMargins(ArrayImage(newWidth, newHeight, bitmapArray))
+    }
+
+    val marginsWithPadding = pad(margins, newWidth, newHeight)
+
+    page.autoCrop = AutoCropMargins(
+        (marginsWithPadding.left / zoomInDouble).toInt(),
+        (marginsWithPadding.top / zoomInDouble).toInt(),
+        (marginsWithPadding.right / zoomInDouble).toInt(),
+        (marginsWithPadding.bottom / zoomInDouble).toInt()
+
+    )
+    log("Zoomed result: ${page.pageNum0}: $margins $zoomInDouble")
+    log("Unzoomed result: ${page.pageNum0}: ${page.autoCrop}")
 }
 
 abstract class Image(val width: Int, val height: Int) {
