@@ -8,6 +8,7 @@ ext {
 
     thirparty_build_root = rootDir.canonicalPath + "/" + thirparty_folder
     mupdf = thirparty_build_root + "/mupdf/"
+    libarchive = thirparty_build_root + "/libarchive/"
     mupdfModule = thirparty_build_root + "/mupdfModule/"
     mupdf_libs = mupdfModule + "/libs"
     mupdfAndroid = thirparty_build_root + "/mupdf-android-viewer-old/"

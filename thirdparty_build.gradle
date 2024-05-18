@@ -53,6 +53,33 @@ buildDjvu.mustRunAfter downloadDjvu
 
 
 /*MUPDF CHAIN*/
+task downloadLibArchive {
+    def version = "v3.7.4"
+
+    doLast {
+        def folder = new File(libarchive)
+        if (folder.exists()) {
+            exec {
+                commandLine = ['git', '-C', mupdf, 'checkout', '-f', 'master']
+            }
+            // Fetch
+            exec {
+                commandLine = ['git', '-C', mupdf, 'fetch', 'origin']
+            }
+        }
+        else {
+            exec {
+                commandLine = ['git', 'clone', 'https://github.com/libarchive/libarchive.git', libarchive]
+            }
+        }
+
+        exec {
+            workingDir file(folder)
+            commandLine = ['git', 'checkout', version]
+        }
+    }
+}
+
 task downloadMupdf {
     def version = "1.24.2"
 
@@ -91,7 +118,7 @@ task downloadMupdf {
     }
 }
 
-task downloadAndMakeMupdf(dependsOn: downloadMupdf)  {
+task downloadAndMakeMupdf(dependsOn: [downloadMupdf, downloadLibArchive])  {
     doLast {
         /*For more details see mupdf/platform/android/viewer/ReadMe.txt*/
         exec {

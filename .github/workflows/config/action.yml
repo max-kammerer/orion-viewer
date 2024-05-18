@@ -29,11 +29,12 @@ runs:
         path: |
           nativeLibs/djvu
           nativeLibs/mupdf
+          nativeLibs/libarchive
           nativeLibs/mupdfModule/build
           nativeLibs/mupdfModule/.cxx
           nativeLibs/djvuModule/build
           nativeLibs/djvuModule/.cxx
-        key: ${{ runner.os }}-native-libs-${{ hashFiles('thirdparty_build.gradle') }}
+        key: ${{ runner.os }}-native-libs-${{ hashFiles('thirdparty_build.gradle') }}2
 
     - name: Prepare thirdparty
       shell: bash
