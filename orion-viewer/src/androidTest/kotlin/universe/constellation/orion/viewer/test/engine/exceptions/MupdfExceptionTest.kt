@@ -33,7 +33,7 @@ class MupdfExceptionTest : BaseTest() {
             PdfDocument(tmpFIle.absolutePath)
         } catch (e: Exception) {
             e.printStackTrace()
-            assertTrue(e.message, e.message!!.contains("cannot tell in file"))
+            assertTrue(e.message, e.message!!.contains("no objects found"))
             return
         }
         fail("Expecting exception to be thrown above")

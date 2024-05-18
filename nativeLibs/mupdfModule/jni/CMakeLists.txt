@@ -20,7 +20,7 @@ add_library(mupdf_core
 )
 
 include_directories(
-${MUPDF_PATH}/include
+${MUPDF_PATH}/include.mupdf
 ${MUPDF_PATH}/scripts/freetype
 ${MUPDF_PATH}/scripts/libjpeg
 ${MUPDF_PATH}/thirdparty/freetype/include
