@@ -60,6 +60,7 @@
                 <action android:name="com.bravo.intent.action.VIEW"/>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
+
                 <data android:scheme="file"/>
                 <data android:scheme="content"/>
                 <data android:mimeType="image/vnd.djvu"/>
@@ -73,6 +74,10 @@
                 <data android:mimeType="application/xps"/>
                 <data android:mimeType="application/vnd.comicbook+zip" />
                 <data android:mimeType="application/x-cbz"/>
+                <data android:mimeType="application/vnd.comicbook-rar"/>
+                <data android:mimeType="application/x-cbr"/>
+                <data android:mimeType="application/x-cbt"/>
+<!--                <data android:mimeType="application/x-cb7"/>-->
 
                 <!--images-->
                 <data android:mimeType="image/tiff"/>
@@ -94,6 +99,9 @@
                 <data android:pathPattern=".*\\.xps"/>
                 <data android:pathPattern=".*\\.oxps"/>
                 <data android:pathPattern=".*\\.cbz"/>
+                <data android:pathPattern=".*\\.cbr"/>
+                <data android:pathPattern=".*\\.cbt"/>
+<!--                <data android:pathPattern=".*\\.cb7"/>-->
 
                 <!--images-->
                 <data android:pathPattern=".*\\.tiff" />

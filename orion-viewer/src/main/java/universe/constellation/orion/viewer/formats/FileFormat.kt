@@ -29,6 +29,10 @@ enum class FileFormats(val extensions: List<String>, vararg val mimeTypes: Strin
 
     TIFF(listOf("tiff", "tif"), "image/tiff", "image/x-tiff"),
     CBZ(listOf("cbz"), "application/vnd.comicbook+zip", "application/x-cbz"),
+    CBR(listOf("cbr"), "application/vnd.comicbook-rar", "application/x-cbr"),
+    //CB7(listOf("cb7"), "application/x-cb7"),
+    CBT(listOf("cbt"),  "application/x-cbt"),
+
     PNG(listOf("png"), "image/png"),
     JPEG(listOf("jpg", "jpeg"), "image/jpeg", "image/pjpeg");
 
