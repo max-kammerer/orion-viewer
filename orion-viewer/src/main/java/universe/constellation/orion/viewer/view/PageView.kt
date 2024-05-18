@@ -78,9 +78,6 @@ class PageView(
 
     internal var scene: OrionDrawScene? = null
 
-    @Volatile
-    var isVisibleState = false
-
     val renderingPageJobs = SupervisorJob(rootJob)
 
     private val dataPageJobs = SupervisorJob(rootJob)
@@ -111,26 +108,8 @@ class PageView(
        reinit("init")
     }
 
-    fun toInvisible() {
-        //TODO optimize canceling state
-        if (isVisibleState) {
-            log("toInvisible ${this.pageNum}: ${this.layoutData.position}")
-            //pageJobs.cancelChildren()
-            isVisibleState = false
-        }
-    }
-
-    fun toVisible() {
-        //TODO optimize canceling state
-        if (!isVisibleState) {
-            log("PV: to visible $pageNum")
-            isVisibleState = true
-        }
-    }
-
     fun destroy() {
         log("Page view $pageNum: destroying")
-        toInvisible()
         state = PageState.DESTROYED
         cancelChildJobs(allJobs = true)
         bitmap?.disableAll(controller.bitmapCache)

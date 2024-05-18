@@ -40,8 +40,13 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
     val activePages: MutableList<PageView> = arrayListOf()
 
     val visiblePages: List<PageView>
-        get() = activePages.filter { it.isOnScreen && it.isVisibleState }
+        get() = activePages.filter { it.isActivePage }
 
+    private val PageView.isActivePage: Boolean
+        get() = isOnScreen && (!isSinglePageMode || pageNum == activePage)
+
+    private val PageView.isActiveOrOnScreen: Boolean
+        get() = isOnScreen || pageNum == activePage
 
     private var onPageSizeCalculatedCallback: Callback? = null
 
@@ -92,7 +97,6 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
 
     fun destroy() {
         activePages.forEach {
-            it.toInvisible()
             it.destroy()
         }
         activePages.clear()
@@ -192,31 +196,31 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         var head = true
         activePages.zipWithNext { f, s ->
             val oldState = f.state
-            if (head && !s.isVisibleState && !f.isVisibleState) {
+            if (head && !s.isActiveOrOnScreen && !f.isActiveOrOnScreen) {
                 toDestroy.add(f)
                 f.destroy()
-                log("Destroyed ${f.pageNum}")
+                log("updateCache: ${f.pageNum} destroyed")
             } else {
                 head = false
             }
             if (f.state != oldState) {
-                log("Cache update: ${f.pageNum} newState=${f.state} oldState=$oldState")
+                log("updateCache: ${f.pageNum} newState=${f.state} oldState=$oldState")
             }
         }
 
         head = true
         activePages.asReversed().zipWithNext { f, s ->
             val oldState = f.state
-            if (head && !s.isVisibleState && !f.isVisibleState) {
+            if (head && !s.isActiveOrOnScreen && !f.isActiveOrOnScreen) {
                 if (toDestroy.add(f)) {
                     f.destroy()
-                    log("Destroyed ${f.pageNum}")
+                    log("updateCache: ${f.pageNum} destroyed")
                 }
             } else {
                 head = false
             }
             if (f.state != oldState) {
-                log("Cache update: ${f.pageNum} newState=${f.state} oldState=$oldState")
+                log("updateCache: ${f.pageNum} newState=${f.state} oldState=$oldState")
             }
         }
         activePages.removeAll(toDestroy)
@@ -328,13 +332,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
 
     private fun PageView.updateState(): Boolean {
         bitmapManager.actualizeActive(this)
-        val visible = this.isOnScreen
-        if (!visible) {
-            this.toInvisible()
-        } else {
-            this.toVisible()
-        }
-        return visible
+        return isOnScreen //TODO: && (!isSinglePageMode || pageNum == activePage)z
     }
 
     fun findPageAndPageRect(screenRect: Rect): List<PageAndSelection> {
@@ -358,7 +356,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
     fun renderVisiblePages(canvas: Canvas, scene: OrionDrawScene) {
         if (isSinglePageMode) {
             val active = activePages.firstOrNull { it.pageNum == activePage }
-            if (active != null && active.isOnScreen) {
+            if (active != null) {
                 renderPage(active, canvas, scene, true)
                 return
             }
@@ -527,7 +525,6 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         val iterator = activePages.iterator()
         for (page in iterator) {
             //TODO optimize
-            page.toInvisible()
             page.destroy()
             iterator.remove()
         }
@@ -589,7 +586,6 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         val callback = onPageSizeCalculatedCallback
         val job = if (callback?.page == updatedView.pageNum) {
             onPageSizeCalculatedCallback = null
-            val job = callback.job
             callback.body()
             callback.job
         } else {
