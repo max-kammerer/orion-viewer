@@ -1,6 +1,7 @@
 package universe.constellation.orion.viewer.view
 
 import android.graphics.Rect
+import universe.constellation.orion.viewer.log
 
 suspend fun PageView.precache() {
     if (this.state != PageState.SIZE_AND_BITMAP_CREATED) return
@@ -10,7 +11,7 @@ suspend fun PageView.precache() {
     val bottom = visibleRect.bottom
     val left = visibleRect.left
     val right = visibleRect.right
-    println("Precaching $pageNum: $visibleRect")
+    log("Precaching $pageNum: $visibleRect")
     val sceneInfo = pageLayoutManager.sceneRect
 
     val deltaX = sceneInfo.width().upperHalf

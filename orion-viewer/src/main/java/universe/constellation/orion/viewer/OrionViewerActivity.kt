@@ -1097,6 +1097,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     private fun destroyController() {
+        log("Controller: destroy")
         controller?.destroy()
         controller = null
         orionContext.currentBookParameters = null

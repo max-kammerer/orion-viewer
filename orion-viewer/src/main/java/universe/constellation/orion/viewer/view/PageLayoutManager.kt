@@ -362,7 +362,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
                 renderPage(active, canvas, scene, true)
                 return
             }
-            errorInDebug("No active page: $activePage")
+            errorInDebug("No active page $activePage, $active")
         }
 
         var first = true
@@ -468,7 +468,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
             )
         }
     ): Pair<PageView, Job> {
-        println("RenderPageAt $pageNum $x $y")
+        log("RenderPageAt $pageNum $x $y $isTapNavigation")
         setSinglePageMode(isTapNavigation, pageNum)
 
         val index = activePages.binarySearch { it.pageNum.compareTo(pageNum) }
@@ -523,6 +523,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
     }
 
     private fun destroyPages() {
+        log("Descroying pages")
         val iterator = activePages.iterator()
         for (page in iterator) {
             //TODO optimize
