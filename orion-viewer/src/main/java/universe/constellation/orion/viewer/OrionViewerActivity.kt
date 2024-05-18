@@ -1108,9 +1108,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             globalOptions.saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, showTapHelp)
         }
 
-        if (intent.hasExtra(GlobalOptions.NEW_UI)) {
-            val newUI = intent.getBooleanExtra(GlobalOptions.NEW_UI, false)
-            globalOptions.saveBooleanProperty(GlobalOptions.NEW_UI, newUI)
+        if (intent.hasExtra(GlobalOptions.OLD_UI)) {
+            val oldUI = intent.getBooleanExtra(GlobalOptions.OLD_UI, false)
+            globalOptions.saveBooleanProperty(GlobalOptions.OLD_UI, oldUI)
         }
 
         if (intent.hasExtra(GlobalOptions.TEST_SCREEN_WIDTH) && intent.hasExtra(GlobalOptions.TEST_SCREEN_HEIGHT)) {

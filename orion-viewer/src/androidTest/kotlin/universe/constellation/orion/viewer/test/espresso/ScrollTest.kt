@@ -13,7 +13,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.R
-import universe.constellation.orion.viewer.document.lastPageNum0
 import universe.constellation.orion.viewer.lastPageNum0
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import universe.constellation.orion.viewer.test.framework.BookFile
@@ -21,7 +20,7 @@ import universe.constellation.orion.viewer.test.framework.onActivity
 
 @RunWith(Parameterized::class)
 class ScrollTest(newUI: Boolean, bookDescription: BookFile): BaseViewerActivityTest(bookDescription, bookDescription.toOpenIntent {
-    this.putExtra(GlobalOptions.NEW_UI, newUI)
+    this.putExtra(GlobalOptions.OLD_UI, !newUI)
 }) {
 
     companion object {

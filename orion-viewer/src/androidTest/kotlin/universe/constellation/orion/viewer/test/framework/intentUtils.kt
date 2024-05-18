@@ -42,6 +42,6 @@ fun createContentIntentWithGenerated(fileName: String): Intent {
 
 fun BookFile.toOpenIntentWithNewUI(): Intent {
     return toOpenIntent {
-        putExtra(GlobalOptions.NEW_UI, true)
+        //putExtra(GlobalOptions.OLD_UI, true)
     }
 }
