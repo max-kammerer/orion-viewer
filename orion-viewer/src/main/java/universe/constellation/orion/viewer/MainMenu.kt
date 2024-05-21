@@ -13,6 +13,7 @@ class MainMenu(private val mainMenu: View, val orionViewerActivity: OrionViewerA
 
     private val pageSeeker = mainMenu.findViewById<SeekBar>(R.id.page_picker_seeker)!!
     private val pageCount = mainMenu.findViewById<TextView>(R.id.page_count)!!
+    private val curPage = mainMenu.findViewById<TextView>(R.id.cur_page)!!
     private val topExtraPanel = mainMenu.findViewById<ViewGroup>(R.id.menu_top_extra)!!
 
     init {
@@ -31,7 +32,7 @@ class MainMenu(private val mainMenu: View, val orionViewerActivity: OrionViewerA
                     if (fromUser) {
                         controller.drawPage(progress)
                     }
-                    //curPage.text = (progress + 1).toString()
+                    curPage.text = (progress + 1).toString()
                 }
             }
 
@@ -44,13 +45,13 @@ class MainMenu(private val mainMenu: View, val orionViewerActivity: OrionViewerA
         mainMenu.findViewById<View>(R.id.menu_botton_actions_all).setOnClickListener {}
         mainMenu.findViewById<ImageView>(R.id.page_picker_minus).setOnClickListener {
             if (pageSeeker.progress - 1 >= 0) {
-                pageSeeker.progress -=1
+                pageSeeker.progress -= 1
                 orionViewerActivity.controller?.drawPage(pageSeeker.progress)
             }
         }
         mainMenu.findViewById<ImageView>(R.id.page_picker_plus).setOnClickListener {
             if (pageSeeker.progress + 1 <= pageSeeker.max) {
-                pageSeeker.progress +=1
+                pageSeeker.progress += 1
                 orionViewerActivity.controller?.drawPage(pageSeeker.progress)
             }
         }
@@ -95,7 +96,7 @@ class MainMenu(private val mainMenu: View, val orionViewerActivity: OrionViewerA
         val controller = orionViewerActivity.controller
         if (controller != null) {
             pageSeeker.max = controller.pageCount - 1
-            pageSeeker.progress = controller.currentPage + 1
+            pageSeeker.progress = controller.currentPage
             pageCount.text = controller.pageCount.toString()
         } else {
             pageSeeker.max = 1

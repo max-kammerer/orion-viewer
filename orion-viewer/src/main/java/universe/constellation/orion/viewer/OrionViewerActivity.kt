@@ -517,12 +517,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
 
-        subscriptionManager.addDocListeners(object : DocumentViewAdapter() {
-            override fun documentOpened(controller: Controller) {
-                actualizeZoomOptions()
-            }
-        })
-
         val zoomPlus = findMyViewById(R.id.zoom_picker_plus) as ImageButton
         zoomPlus.setOnClickListener { zoomSeek.incrementProgressBy(1) }
 

@@ -164,20 +164,43 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/cur_page"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:textStyle="bold"
+                />
 
-            <!--            <com.google.android.material.divider.MaterialDivider-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                />-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="/"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                />
+
+            <TextView
+                android:id="@+id/page_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textStyle="bold"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <ImageView
+                android:layout_margin="0dp"
                 android:id="@+id/page_picker_minus"
                 style="@style/New_Viewer_Menu_Item"
                 app:srcCompat="@drawable/new_back" />
@@ -189,15 +212,10 @@
                 android:layout_weight="1"/>
 
             <ImageView
+                android:layout_margin="0dp"
                 android:id="@+id/page_picker_plus"
                 style="@style/New_Viewer_Menu_Item"
                 app:srcCompat="@drawable/new_forward" />
-
-            <TextView
-                android:id="@+id/page_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical" />
 
         </LinearLayout>
     </LinearLayout>
