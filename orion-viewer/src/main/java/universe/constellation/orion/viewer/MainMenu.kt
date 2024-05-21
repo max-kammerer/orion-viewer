@@ -1,19 +1,23 @@
 package universe.constellation.orion.viewer
 
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
 
-class MainMenu(val mainMenu: View, val orionViewerActivity: OrionViewerActivity) {
+class MainMenu(private val mainMenu: View, val orionViewerActivity: OrionViewerActivity) {
 
     private val pageSeeker = mainMenu.findViewById<SeekBar>(R.id.page_picker_seeker)!!
     private val pageCount = mainMenu.findViewById<TextView>(R.id.page_count)!!
-    private val curPage = mainMenu.findViewById<TextView>(R.id.cur_page)!!
+    private val topExtraPanel = mainMenu.findViewById<ViewGroup>(R.id.menu_top_extra)!!
 
     init {
         initImageViewActions(mainMenu, R.id.menu_top_actions)
+        initImageViewActions(topExtraPanel)
         initImageViewActions(mainMenu, R.id.menu_botton_actions)
 
         mainMenu.findViewById<LinearLayout>(R.id.menu_middle_part).setOnClickListener {
@@ -53,7 +57,11 @@ class MainMenu(val mainMenu: View, val orionViewerActivity: OrionViewerActivity)
     }
 
     private fun initImageViewActions(view: View, id: Int) {
-        val panel = view.findViewById<LinearLayout>(id)
+        val panel = view.findViewById<ViewGroup>(id)
+        initImageViewActions(panel)
+    }
+
+    private fun initImageViewActions(panel: ViewGroup) {
         for (i in 0 until panel.childCount) {
             val child = panel.getChildAt(i)
             if (child is ImageView) {
@@ -65,8 +73,17 @@ class MainMenu(val mainMenu: View, val orionViewerActivity: OrionViewerActivity)
     }
 
     private fun processClick(viewId: Int) {
-        hideMenu()
-        orionViewerActivity.doMenuAction(viewId)
+        if (viewId == R.id.more_menu_item) {
+            val newVisibility =
+                when(topExtraPanel.visibility) {
+                    VISIBLE -> INVISIBLE
+                    else -> VISIBLE
+                }
+            topExtraPanel.visibility = newVisibility
+        } else {
+            hideMenu()
+            orionViewerActivity.doMenuAction(viewId)
+        }
     }
 
     fun hideMenu() {

@@ -50,6 +50,39 @@
             app:srcCompat="@drawable/new_settings" />
 
         <ImageView
+            android:id="@+id/more_menu_item"
+            style="@style/New_Viewer_Menu_Item"
+            app:srcCompat="@drawable/more" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/menu_top_extra"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:background="?attr/newMenuBackground"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/menu_top_actions"
+        android:visibility="invisible"
+        >
+
+
+        <ImageView
+            android:id="@+id/open_menu_item"
+            style="@style/New_Viewer_Menu_Item"
+            android:contentDescription="@string/menu_about_text"
+            app:srcCompat="@drawable/new_folder_open" />
+
+        <ImageView
+            android:id="@+id/help_menu_item"
+            style="@style/New_Viewer_Menu_Item"
+            android:contentDescription="@string/menu_about_text"
+            app:srcCompat="@drawable/new_help" />
+
+        <ImageView
             android:id="@+id/about_menu_item"
             style="@style/New_Viewer_Menu_Item"
             android:contentDescription="@string/menu_about_text"
@@ -62,7 +95,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/menu_botton_actions_all"
-        android:layout_below="@id/menu_top_actions"
+        android:layout_below="@id/menu_top_extra"
         android:orientation="vertical" />
 
     <LinearLayout
