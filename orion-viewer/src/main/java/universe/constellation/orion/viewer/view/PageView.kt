@@ -113,7 +113,7 @@ class PageView(
         state = PageState.DESTROYED
         cancelChildJobs(allJobs = true)
         bitmap?.disableAll(controller.bitmapCache)
-        bitmap = null
+
         controller.scope.launch {
             waitJobsCancellation(allJobs = true)
             freePagePointer()
@@ -167,7 +167,7 @@ class PageView(
     }
 
     fun draw(canvas: Canvas, scene: OrionDrawScene) {
-        if (state != PageState.STUB && bitmap!= null) {
+        if (state != PageState.STUB && bitmap != null) {
             //draw bitmap
             log("Draw page $pageNum in state $state ${bitmap?.width} ${bitmap?.height} ")
             draw(canvas, bitmap!!, scene.defaultPaint!!, scene)
