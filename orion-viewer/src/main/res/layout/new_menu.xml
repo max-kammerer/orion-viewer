@@ -107,7 +107,8 @@
 
         android:background="?attr/newMenuBackground"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" >
 
         <LinearLayout
             android:id="@+id/menu_botton_actions"
