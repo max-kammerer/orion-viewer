@@ -20,6 +20,7 @@
     <string name="pref_showActionBar_desc">Показывать панель действий (необходим перезапуск)</string>
     <string name="pref_showStatusBar">Показывать строку состояния</string>
     <string name="pref_showOffsetOnStatusBar">Показывать смещение на странице</string>
+    <string name="pref_showTimeOnStatusBar">Показывать время</string>
     <string name="pref_bookDefaultOrientation">Ориентация книги по умолчанию</string>
 
     <string name="pref_bookDefaultZoom">Масштаб</string>

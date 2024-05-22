@@ -128,6 +128,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
         OptionActions.SHOW_STATUS_BAR.doAction(this, !globalOptions.isStatusBarVisible, globalOptions.isStatusBarVisible)
         OptionActions.SHOW_OFFSET_ON_STATUS_BAR.doAction(this, !globalOptions.isShowOffsetOnStatusBar, globalOptions.isShowOffsetOnStatusBar)
+        OptionActions.SHOW_TIME_ON_STATUS_BAR.doAction(this, !globalOptions.isShowClockOnStatusBar, globalOptions.isShowClockOnStatusBar)
         fullScene.setDrawOffPage(globalOptions.isDrawOffPage)
 
         initDialogs()

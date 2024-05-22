@@ -5,7 +5,9 @@ import android.graphics.ColorMatrixColorFilter
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import universe.constellation.orion.viewer.*
+import universe.constellation.orion.viewer.OrionBookListener
+import universe.constellation.orion.viewer.R
+import universe.constellation.orion.viewer.android.isAtJellyBean
 import universe.constellation.orion.viewer.document.abs
 
 class OrionStatusBarHelper(val view: ViewGroup) : OrionBookListener {
@@ -13,6 +15,7 @@ class OrionStatusBarHelper(val view: ViewGroup) : OrionBookListener {
     private val panel = view.findViewById<View>(R.id.orion_status_bar) as ViewGroup
     private val title = view.findViewById<View>(R.id.title) as TextView
     private val offset = view.findViewById<View>(R.id.offset) as TextView
+    private val clock = view.findViewById<View>(R.id.clock) as TextView
     private val page = view.findViewById<View>(R.id.page) as TextView
     private val totalPages = view.findViewById<View>(R.id.totalPages) as TextView
 
@@ -41,6 +44,12 @@ class OrionStatusBarHelper(val view: ViewGroup) : OrionBookListener {
 
     fun setShowOffset(showOffset: Boolean) {
         offset.visibility = if (showOffset) View.VISIBLE else View.GONE
+    }
+
+    fun setShowClock(showOffset: Boolean) {
+        if (isAtJellyBean()) {
+            clock.visibility = if (showOffset) View.VISIBLE else View.GONE
+        }
     }
 
     fun setShowStatusBar(showStatusBar: Boolean) {

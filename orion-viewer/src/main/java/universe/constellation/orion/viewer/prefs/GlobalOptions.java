@@ -69,6 +69,8 @@ public class GlobalOptions implements Serializable, PageOptions {
 
     public final static String SHOW_OFFSET_ON_STATUS_BAR = "SHOW_OFFSET_ON_STATUS_BAR";
 
+    public final static String SHOW_TIME_ON_STATUS_BAR = "SHOW_TIME_ON_STATUS_BAR";
+
     public final static String TAP_ZONE = "TAP_ZONE";
 
     public final static String SCREEN_ORIENTATION = "SCREEN_ORIENTATION";
@@ -174,6 +176,8 @@ public class GlobalOptions implements Serializable, PageOptions {
                     activity.getFullScene().setDrawOffPage(isDrawOffPage());
                     //TODO ?
                     activity.getView().invalidate();
+                } else if (OptionActions.SHOW_TIME_ON_STATUS_BAR.getKey().equals(name)) {
+                    OptionActions.SHOW_TIME_ON_STATUS_BAR.doAction(activity, !isShowClockOnStatusBar(), isShowClockOnStatusBar());
                 }
             }
 
@@ -313,6 +317,10 @@ public class GlobalOptions implements Serializable, PageOptions {
 
     public boolean isShowOffsetOnStatusBar() {
         return getBooleanProperty(SHOW_OFFSET_ON_STATUS_BAR, true);
+    }
+
+    public boolean isShowClockOnStatusBar() {
+        return getBooleanProperty(SHOW_TIME_ON_STATUS_BAR, true);
     }
 
     public int getActionCode(int i, int j, boolean isLong) {

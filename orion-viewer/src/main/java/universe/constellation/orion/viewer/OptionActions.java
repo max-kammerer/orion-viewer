@@ -55,6 +55,12 @@ public enum OptionActions {
         }
     },
 
+    SHOW_TIME_ON_STATUS_BAR("SHOW_TIME_ON_STATUS_BAR") {
+        public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
+            activity.getStatusBarHelper().setShowClock(newValue);
+        }
+    },
+
     SCREEN_OVERLAPPING_HORIZONTAL("SCREEN_OVERLAPPING_HORIZONTAL") {
         public void doAction(OrionViewerActivity activity, int hor, int ver) {
             Controller controller = activity.getController();

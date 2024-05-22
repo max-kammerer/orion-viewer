@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/orion_status_bar"
     android:layout_width="match_parent"
@@ -38,14 +36,15 @@
         style="@style/StatusBar"
         android:gravity="end" />
 
-    <TextView
+    <TextClock
         android:id="@+id/clock"
         style="@style/StatusBar"
         android:layout_gravity="end"
         android:paddingLeft="7dp"
+        android:format24Hour="H:mm"
+        android:format12Hour="H:mm"
         android:typeface="monospace"
-        android:fontFamily="monospace"
-        android:visibility="gone"/>
+        android:fontFamily="monospace" />
 </LinearLayout>
 
         
