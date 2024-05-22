@@ -19,7 +19,7 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="NEW_UI"
+            android:key="OLD_UI"
             android:summary="@string/pref_new_ui_summary"
             android:title="@string/pref_old_ui"
             app:iconSpaceReserved="false" />
