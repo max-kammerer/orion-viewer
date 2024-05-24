@@ -97,7 +97,7 @@ class Controller(
     }
 
     @JvmOverloads
-    fun drawPage(pageNum: Int, pageXOffset: Int = 0, pageYOffset: Int = 0, isTapNavigation: Boolean = false): Pair<PageView, Job> {
+    fun drawPage(pageNum: Int, pageXOffset: Int = 0, pageYOffset: Int = 0, isTapNavigation: Boolean = false): PageView? {
         log("Controller drawPage $document $pageNum: $pageXOffset $pageYOffset")
         return pageLayoutManager.renderPageAt(pageNum, -pageXOffset, -pageYOffset, isTapNavigation)
     }
@@ -120,11 +120,11 @@ class Controller(
         }
     }
 
-    fun drawNext(): Pair<PageView, Job>? {
+    fun drawNext(): PageView? {
         return pageLayoutManager.renderNextOrPrev(true, isTapNavigation = true)
     }
 
-    fun drawPrev(): Pair<PageView, Job>? {
+    fun drawPrev(): PageView? {
         return pageLayoutManager.renderNextOrPrev(false, isTapNavigation = true)
     }
 
@@ -331,7 +331,7 @@ class Controller(
     }
 
     @JvmOverloads
-    fun drawPage(lp: LayoutPosition, isTapNavigation: Boolean = false): Pair<PageView, Job> {
+    fun drawPage(lp: LayoutPosition, isTapNavigation: Boolean = false): PageView? {
         return drawPage(lp.pageNumber, lp.x.offset, lp.y.offset, isTapNavigation)
     }
 

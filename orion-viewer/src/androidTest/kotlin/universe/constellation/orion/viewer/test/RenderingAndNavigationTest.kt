@@ -70,15 +70,15 @@ class RenderingAndNavigationTest(private val book: BookDescription) :
         val nextPageList = arrayListOf<IntArray>()
         val nextPageRects = arrayListOf<Rect>()
         repeat(SCREENS) {
-            lateinit var pageView: Pair<PageView, Job>
+            lateinit var pageView: PageView
             activityScenarioRule.scenario.onActivity {
                 pageView = controller.drawNext() ?: error("null page on ${controller.pageLayoutManager.currentPageLayout()}")
             }
             runBlocking {
-                pageView.second.join()
+                //TODO: pageView.second.join()
                 nextPageRects.add(
-                    pageView.first.layoutData.pagePartOnScreen(
-                        pageView.first.pageLayoutManager.sceneRect,
+                    pageView.layoutData.pagePartOnScreen(
+                        pageView.pageLayoutManager.sceneRect,
                         Rect()
                     )!!
                 )
@@ -89,15 +89,15 @@ class RenderingAndNavigationTest(private val book: BookDescription) :
         val prevPageList = arrayListOf<IntArray>()
         val prevPageRects = arrayListOf<Rect>()
         repeat(SCREENS) {
-            lateinit var pageView: Pair<PageView, Job>
+            lateinit var pageView: PageView
             activityScenarioRule.scenario.onActivity {
                 pageView = controller.drawPrev() ?: error("null page on ${controller.pageLayoutManager.currentPageLayout()}")
             }
             runBlocking {
-                pageView.second.join()
+                //pageView.second.join() TODO
                 prevPageRects.add(
-                    pageView.first.layoutData.pagePartOnScreen(
-                        pageView.first.pageLayoutManager.sceneRect,
+                    pageView.layoutData.pagePartOnScreen(
+                        pageView.pageLayoutManager.sceneRect,
                         Rect()
                     ) ?: error("invisible")
                 )

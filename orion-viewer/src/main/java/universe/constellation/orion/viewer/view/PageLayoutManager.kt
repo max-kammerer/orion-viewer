@@ -396,7 +396,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         }
     }
 
-    fun renderNextOrPrev(next: Boolean, isTapNavigation: Boolean = false): Pair<PageView, Job>? {
+    fun renderNextOrPrev(next: Boolean, isTapNavigation: Boolean = false): PageView? {
         currentPageLayout()?.let {
             val copy = it.copy()
             val layoutStrategy = controller.layoutStrategy
@@ -411,7 +411,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
 
                 1 ->
                     if (currentPageNum + 1 < controller.document.pageCount) {
-                        return renderPageAt(currentPageNum + 1, 0, 0, isTapNavigation) { page, info ->
+                        renderPageAt(currentPageNum + 1, 0, 0, isTapNavigation) { page, info ->
                             val pos = page.layoutInfo.copy()
                             layoutStrategy.reset(pos, info, next)
                             val oldPosition = page.layoutData.position
@@ -478,7 +478,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
                 isTapNavigation
             )
         }
-    ): Pair<PageView, Job> {
+    ): PageView? {
         log("RenderPageAt $pageNum $x $y $isTapNavigation")
         setSinglePageMode(isTapNavigation, pageNum)
 
@@ -523,9 +523,6 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
             onPageSizeCalculatedCallback = null
             val completed = page.pageInfo!!
             doScroll(page, completed) //TODO process errors
-            return page to page.launchJobInRenderingScope {
-                page.renderVisible()
-            }
         } else {
             if (page.state == PageState.SIZE_AND_BITMAP_CREATED) {
                 dump()
@@ -536,8 +533,8 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
                 println("onPageSizeCalculatedCallback: call")
                 doScroll(page, it)
             }
-            return page to onPageSizeCalculatedCallback!!.job
         }
+        return page
     }
 
     private fun destroyPages() {
