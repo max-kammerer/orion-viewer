@@ -108,7 +108,7 @@ public class SearchDialog extends DialogFragment {
         OrionDrawScene view = orionViewerActivity.getView();
         view.addTask(lastSearchResultRenderer);
 
-        myTask = new SearchTask(getActivity(), controller.getDocument()) {
+        myTask = new SearchTask(getActivity(), controller) {
             @Override
             protected void onResult(boolean isSuccessful, SearchTaskResult result) {
                 boolean forward = lastDirectionOnSearch == +1;

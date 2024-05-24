@@ -1,5 +1,7 @@
 package universe.constellation.orion.viewer.search;
 
+import static universe.constellation.orion.viewer.LoggerKt.log;
+
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -7,15 +9,16 @@ import android.content.DialogInterface;
 import android.graphics.RectF;
 import android.os.AsyncTask;
 import android.os.Handler;
+
 import com.artifex.mupdfdemo.SearchTaskResult;
 
-import universe.constellation.orion.viewer.document.Document;
+import universe.constellation.orion.viewer.Controller;
 import universe.constellation.orion.viewer.R;
+import universe.constellation.orion.viewer.document.Document;
 import universe.constellation.orion.viewer.document.PageWithAutoCrop;
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy;
 import universe.constellation.orion.viewer.view.AutoCropKt;
-
-import static universe.constellation.orion.viewer.LoggerKt.log;
+import universe.constellation.orion.viewer.view.CorePageView;
 
 public abstract class SearchTask {
 
@@ -39,14 +42,14 @@ public abstract class SearchTask {
 
     private static final int SEARCH_PROGRESS_DELAY = 200;
     private final Context mContext;
-    private final Document document;
+    private final Controller controller;
     private final Handler mHandler;
     private final AlertDialog.Builder mAlertBuilder;
     private AsyncTask<Void, Integer, SearchTaskResult> mSearchTask;
 
-    protected SearchTask(Context context, Document document) {
+    protected SearchTask(Context context, Controller controller) {
         mContext = context;
-        this.document = document;
+        this.controller = controller;
         mHandler = new Handler();
         mAlertBuilder = new AlertDialog.Builder(context);
     }
@@ -62,9 +65,10 @@ public abstract class SearchTask {
     }
 
     public void go(final String text, int direction, int displayPage, int searchPage, SimpleLayoutStrategy layoutStrategy) {
-        if (document == null)
+        if (controller == null)
             return;
         stop();
+        Document document = controller.getDocument();
 
         final int increment = direction;
         final int startIndex = searchPage == -1 ? displayPage : searchPage + increment;
@@ -86,7 +90,9 @@ public abstract class SearchTask {
 
                     RectF searchHits[] = page.searchText(text);
                     if (searchHits != null && searchHits.length > 0) {
-                        //return new SearchTaskResult(text, index, searchHits, page, page);
+                        page.readPageDataForRendering();
+                        CorePageView pageView = new CorePageView(index, document, controller, controller.getRootJob(), page);
+                        return new SearchTaskResult(text, index, searchHits, AutoCropKt.getPageInfoFromSearch(pageView, layoutStrategy), page);
                     }
                     page.destroy();
                     index += increment;

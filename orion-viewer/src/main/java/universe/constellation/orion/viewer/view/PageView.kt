@@ -40,18 +40,13 @@ enum class PageState(val interactWithUUI: Boolean) {
 }
 
 class PageView(
-    val pageNum: Int,
-    val document: Document,
-    val controller: Controller,
-    val rootJob: Job,
+    pageNum: Int,
+    document: Document,
+    controller: Controller,
+    rootJob: Job,
     val pageLayoutManager: PageLayoutManager
-) {
+): CorePageView(pageNum, document, controller, rootJob) {
     private val analytics = pageLayoutManager.controller.activity.analytics
-
-    private val handler = CoroutineExceptionHandler { _, ex ->
-        errorInDebug("Processing error for page $pageNum", ex)
-        analytics.error(ex)
-    }
 
     val layoutData: LayoutData = LayoutData().apply {
         wholePageRect.set(pageLayoutManager.defaultSize())
@@ -59,16 +54,6 @@ class PageView(
 
     internal var scene: OrionDrawScene? = null
 
-    private val renderingPageJobs = SupervisorJob(rootJob)
-
-    private val dataPageJobs = SupervisorJob(rootJob)
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private val renderingScope = CoroutineScope(
-        controller.renderingDispatcher.limitedParallelism(2) + renderingPageJobs + handler
-    )
-
-    private val dataPageScope = CoroutineScope(controller.context + dataPageJobs + handler)
 
     @Volatile
     var bitmap: FlexibleBitmap? = null
@@ -80,8 +65,6 @@ class PageView(
     @Volatile
     var pageInfo: PageInfo? = null
 
-    internal val page = document.getOrCreatePageAdapter(pageNum)
-
     init {
         wholePageRect.set(pageLayoutManager.defaultSize())
     }
@@ -92,28 +75,8 @@ class PageView(
     lateinit var pageInfoJob: Job
         private set
 
-    @Volatile
-    private var rawSize: Deferred<PageSize>? = null
-
-    @Volatile
-    private var pageData: Deferred<Unit>? = null
-
     fun init() {
        reinit("init")
-    }
-
-    fun readPageDataFromUI(): Deferred<Unit> {
-        if (pageData == null) {
-            pageData = dataPageScope.async { page.readPageDataForRendering() }
-        }
-        return pageData!!
-    }
-
-    fun readRawSizeFromUI(): Deferred<PageSize> {
-        if (rawSize == null) {
-            rawSize = dataPageScope.async { page.getPageSize() }
-        }
-        return rawSize!!
     }
 
     fun destroy() {
@@ -125,20 +88,6 @@ class PageView(
         controller.scope.launch {
             waitJobsCancellation(allJobs = true)
             freePagePointer()
-        }
-    }
-
-    internal fun cancelChildJobs(allJobs: Boolean = false) {
-        renderingPageJobs.cancelChildren()
-        if (allJobs) {
-            dataPageJobs.cancelChildren()
-        }
-    }
-
-    private suspend fun waitJobsCancellation(allJobs: Boolean = false) {
-        renderingPageJobs.cancelAndJoin()
-        if (allJobs) {
-            dataPageJobs.cancelAndJoin()
         }
     }
 
@@ -220,12 +169,6 @@ class PageView(
             renderingScope.launch {
                 render(rect, false, "Render invisible $tag")
             }
-        }
-    }
-
-    suspend fun <T> renderForCrop(body: suspend () -> T): T {
-        return withContext(controller.renderingDispatcher) {
-            body()
         }
     }
 

@@ -1,6 +1,7 @@
 @file:Suppress("NOTHING_TO_INLINE")
 package universe.constellation.orion.viewer.view
 
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import universe.constellation.orion.viewer.Bitmap
 import universe.constellation.orion.viewer.PageInfo
@@ -36,7 +37,13 @@ private val bitmapArray: IntArray by lazy {
     IntArray(WIDTH * HEIGHT)
 }
 
-suspend fun PageView.getPageInfo(layoutStrategy: SimpleLayoutStrategy): PageInfo {
+fun CorePageView.getPageInfoFromSearch(layoutStrategy: SimpleLayoutStrategy): PageInfo {
+    return runBlocking {
+        getPageInfo(layoutStrategy)
+    }
+}
+
+suspend fun CorePageView.getPageInfo(layoutStrategy: SimpleLayoutStrategy): PageInfo {
     val info = readRawSizeFromUI().await()
     val pageInfo = pageInfoNoAutoCrop(pageNum, info)
     val cropMode = layoutStrategy.margins.cropMode
@@ -52,7 +59,7 @@ suspend fun PageView.getPageInfo(layoutStrategy: SimpleLayoutStrategy): PageInfo
     return pageInfo
 }
 
-private suspend fun PageView.fillAutoCropInfo(strategy: SimpleLayoutStrategy, page: PageInfo, cropMode: Int) {
+private suspend fun CorePageView.fillAutoCropInfo(strategy: SimpleLayoutStrategy, page: PageInfo, cropMode: Int) {
     if (page.width == 0 || page.height == 0) {
         page.autoCrop = AutoCropMargins(0, 0, 0, 0)
         return
