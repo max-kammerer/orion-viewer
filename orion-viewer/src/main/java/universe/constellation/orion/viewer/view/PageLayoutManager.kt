@@ -84,7 +84,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
     private fun updateRenderingParameters() {
         //zoom
         isSinglePageMode = false
-        uploadNewPages()
+        updateCacheAndRender()
     }
 
     fun forcePageUpdate() {
@@ -137,19 +137,24 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         return layoutInfo
     }
 
-    private fun  setSinglePageMode(enable: Boolean, page: Int) {
+    private fun setSinglePageMode(enable: Boolean, page: Int) {
         isSinglePageMode = enable
         activePage = if (isSinglePageMode) page else -1
     }
 
     fun doScroll(xPos: Float, yPos: Float, distanceX: Float, distanceY: Float) {
         setSinglePageMode(false, -1)
-        doScrollOnly(xPos, yPos, distanceX, distanceY)
-        uploadNewPages()
+        doScrollAndDoRendering(xPos, yPos, distanceX, distanceY)
         scene.postInvalidate()
     }
 
-    private fun doScrollOnly(xPos: Float, yPos: Float, distanceX: Float, distanceY: Float, isTapNavigation: Boolean = false) {
+    private fun doScrollAndDoRendering(
+        xPos: Float,
+        yPos: Float,
+        distanceX: Float,
+        distanceY: Float,
+        isTapNavigation: Boolean = false
+    ) {
         val distanceY2 = if (isTapNavigation) distanceY else clampLimits(distanceY)
         if (distanceY2 == 0f && distanceX == 0f) return
 
@@ -177,7 +182,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
 
             doYScrollAndUpdateState(distanceY2, it)
         }
-        updateCache()
+        updateCacheAndRender()
         dump()
     }
 
@@ -186,10 +191,44 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         it: PageView
     ) {
         it.layoutData.position.y += distanceY
-        updateStateAndRenderVisible(it)
+        it.updateState()
     }
 
     private val toDestroy = hashSetOf<PageView>()
+
+    fun updateCacheAndRender() {
+        updateCache()
+
+        //stop rendering
+        for (page in activePages) {
+            page.cancelChildJobs()
+        }
+
+        //First of all: render single active page and precache data around
+        if (isSinglePageMode) {
+            val mainPage = activePages.firstOrNull { it.isActivePage }
+            println("Render... ${mainPage?.pageNum}")
+            //if (mainPage?.state != PageState.SIZE_AND_BITMAP_CREATED) return
+            mainPage?.renderVisible()
+            mainPage?.precache()
+        }
+
+        //Second of all: render active or hidden on screen pages
+        for (page in activePages) {
+            if (isSinglePageMode && page.isActivePage) continue
+            page.renderVisible()
+        }
+
+        //Third do precaching for all
+        for (page in activePages) {
+            if (isSinglePageMode && page.isActivePage) continue
+            page.precache()
+        }
+
+        activePages.firstOrNull()?.takeIf { it.isOnScreen }?.precacheNeighbours(false)
+
+        activePages.lastOrNull()?.takeIf { it.isOnScreen }?.precacheNeighbours(true)
+    }
 
     private fun updateCache() {
         var head = true
@@ -245,31 +284,6 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         return distanceY
     }
 
-    fun uploadNewPages() {        //zoom
-        if (isSinglePageMode) return
-        if (activePages.size >= VISIBLE_PAGE_LIMIT) {
-            if (activePages.size == VISIBLE_PAGE_LIMIT && activePages.first().layoutData.position.y < 0) {
-                //upload additional page
-            } else {
-                //don't add new pages
-                return
-            }
-        }
-        log("Before uploadNewPages")
-        dump()
-        if (activePages.isEmpty()) {
-            val nextPageNum = 0
-            val view = controller.createPageView(nextPageNum)
-            addPageInPosition(view, pageYPos = 0f)
-        } else {
-            uploadNextPage(activePages.last())
-
-            uploadPrevPage(activePages.first())
-        }
-        log("After uploadNewPages")
-        dump()
-    }
-
     internal fun uploadPrevPage(page: PageView, addIfAbsent: Boolean = false): PageView? {
         if (page.pageNum <= 0) return null
         val prevPageNum = page.pageNum - 1
@@ -319,14 +333,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         view.layoutData.position.x = pageXPos
         activePages.add(index, view)
         view.scene = scene
-        updateStateAndRenderVisible(view)
-    }
-
-    private fun updateStateAndRenderVisible(view: PageView, wait: CompletableJob? = null) {
-        if (view.updateState()) {
-            view.cancelChildJobs()
-            view.renderVisibleAsync(wait)
-        }
+        view.updateState()
     }
 
     private fun PageView.updateState(): Boolean {
@@ -411,7 +418,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
                             //val y = getCenteredYInSinglePageMode(-pos.y.offset, page.height)
                             val y = -pos.y.offset
 
-                            doScrollOnly(
+                            doScrollAndDoRendering(
                                 oldPosition.x,
                                 oldPosition.y,
                                 x - oldPosition.x,
@@ -430,7 +437,13 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
                             val x = -pos.x.offset
                             //val y = getCenteredYInSinglePageMode(-pos.y.offset, page.height)
                             val y = -pos.y.offset
-                            doScrollOnly(oldPosition.x, oldPosition.y, x - oldPosition.x, y - oldPosition.y, isTapNavigation)
+                            doScrollAndDoRendering(
+                                oldPosition.x,
+                                oldPosition.y,
+                                x - oldPosition.x,
+                                y - oldPosition.y,
+                                isTapNavigation
+                            )
                         }
                     }
 
@@ -456,7 +469,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         isTapNavigation: Boolean = false,
         doScroll: (PageView) -> Unit = { page ->
             val newPosition = page.layoutData.position
-            doScrollOnly(
+            doScrollAndDoRendering(
                 newPosition.x,
                 newPosition.y,
                 x - newPosition.x,
@@ -591,8 +604,8 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
             null
         }
 
-        updateStateAndRenderVisible(updatedView, job)
-        updateCache()
+        updatedView.updateState()
+        updateCacheAndRender()
 
         scene.invalidate()
         dump()

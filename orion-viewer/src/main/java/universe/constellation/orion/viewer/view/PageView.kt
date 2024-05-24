@@ -177,13 +177,6 @@ class PageView(
         }
     }
 
-    internal fun renderVisibleAsync(wait: CompletableJob? = null) {
-        renderingScope.launch {
-            renderVisible()
-            wait?.complete()
-        }
-    }
-
     internal fun precacheData() {
         dataPageScope.launch {
             page.getPageSize()
@@ -197,7 +190,7 @@ class PageView(
         return layoutData.visibleOnScreenPart(pageLayoutManager.sceneRect)
     }
 
-    internal suspend fun renderVisible() {
+    internal fun renderVisible() {
         if (!isOnScreen) {
             log("Non visible $pageNum");
             return
@@ -216,19 +209,19 @@ class PageView(
         }
     }
 
-    internal suspend fun renderInvisible(rect: Rect, tag: String) {
+    internal fun renderInvisible(rect: Rect, tag: String) {
         //TODO yield
         if (Rect.intersects(rect, wholePageRect)) {
             render(rect, false, "Render invisible $tag")
         }
     }
 
-    private suspend fun render(rect: Rect, fromUI: Boolean, tag: String) {
+    private fun render(rect: Rect, fromUI: Boolean, tag: String) {
         val layoutStrategy = controller.layoutStrategy
         if (!(layoutStrategy.viewWidth > 0 &&  layoutStrategy.viewHeight > 0)) return
 
         if (state != PageState.SIZE_AND_BITMAP_CREATED) {
-            pageInfo.await()
+            return
         }
         //val bound = tempRegion.bounds
         val bound = Rect(rect)
@@ -243,8 +236,9 @@ class PageView(
                     if (kotlin.coroutines.coroutineContext.isActive) {
                         if (fromUI) {
                             log("PageView ($tag) invalidate: $pageNum $layoutData ${scene != null}")
-                            scene?.invalidate()
-                            precache()
+                            if (this@PageView.isOnScreen) {//TODO active
+                                scene?.invalidate()
+                            }
                         }
                     }
                 }

@@ -29,7 +29,7 @@ class PageScene : View {
             println("PageView.triggerPaint " + pageView?.pageNum + ": " + visibleRect)
         }
         if (getLocalVisibleRect(visibleRect)) {
-            pageView?.renderVisibleAsync()
+            pageView?.renderVisible()
         }
     }
 

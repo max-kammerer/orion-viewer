@@ -3,48 +3,69 @@ package universe.constellation.orion.viewer.view
 import android.graphics.Rect
 import universe.constellation.orion.viewer.log
 
-suspend fun PageView.precache() {
+fun PageView.precache() {
+    log("Precaching $pageNum: $state")
     if (this.state != PageState.SIZE_AND_BITMAP_CREATED) return
 
-    val visibleRect = this.visibleRect() ?: return
-    val top = visibleRect.top
-    val bottom = visibleRect.bottom
-    val left = visibleRect.left
-    val right = visibleRect.right
-    log("Precaching $pageNum: $visibleRect")
+    val globalPageRect = this.layoutData.globalRect(Rect())
+    log("Precaching $pageNum: $globalPageRect")
+
     val sceneInfo = pageLayoutManager.sceneRect
 
-    val deltaX = sceneInfo.width().upperHalf
-    val deltaY = sceneInfo.height().upperHalf
-    val t = Rect(left - deltaX, top - deltaY, right + deltaX, top)
-    renderInvisible(t, "top")
-    val b = Rect(left - deltaX, bottom, right + deltaX, bottom + deltaY)
-    renderInvisible(b, "bottom")
-    val l = Rect(left - deltaX, top, left, bottom)
-    renderInvisible(l, "left")
-    val r = Rect(right, top, right + deltaX, bottom)
-    renderInvisible(r, "right")
+    val topY = sceneInfo.top
+    val bottomY = sceneInfo.bottom
+    val leftX = sceneInfo.left
+    val rightX = sceneInfo.right
+    val deltaX = deltaX(sceneInfo)
+    val deltaY = getDeltaY(sceneInfo)
 
-    val next = this.pageLayoutManager.uploadNextPage(this, addIfAbsent = true)
-    val prev = this.pageLayoutManager.uploadPrevPage(this, addIfAbsent = true)
-    val tmp = Rect()
+    val top = Rect(leftX - deltaX, topY - deltaY, rightX + deltaX, topY)
+    precacheSide(top, globalPageRect, "top")
+    val bottom = Rect(leftX - deltaX, bottomY, rightX + deltaX, bottomY + deltaY)
+    precacheSide(bottom, globalPageRect, "bottom")
+    val left = Rect(leftX - deltaX, topY, leftX, bottomY)
+    precacheSide(left, globalPageRect, "left")
+    val right = Rect(rightX, topY, rightX + deltaX, bottomY)
+    precacheSide(right, globalPageRect, "right")
+}
 
-    if (layoutData.globalRect(tmp).bottom < sceneInfo.bottom + 1.5 * deltaY) {
-        //TODO add global walk
-        next?.precacheData()
+fun PageView.precacheNeighbours(next: Boolean) {
+    if (this.state != PageState.SIZE_AND_BITMAP_CREATED) return
+    log("Precaching Neighbours $pageNum")
+    val sceneInfo = pageLayoutManager.sceneRect
+
+    val tmp = this.layoutData.globalRect(Rect())
+
+    val deltaY = getDeltaY(sceneInfo)
+
+    if (next && layoutData.globalRect(tmp).bottom < sceneInfo.bottom + deltaY) {
+        pageLayoutManager.uploadNextPage(this, addIfAbsent = true)?.precacheData()
     }
 
-    if (layoutData.globalRect(tmp).top >= -2 * deltaY) {
+    if (!next && layoutData.globalRect(tmp).top >= -deltaY) {
         this.layoutData.globalRect(tmp).bottom
-        prev?.precacheData()
+        pageLayoutManager.uploadPrevPage(this, addIfAbsent = true)?.precacheData()
+    }
+
+}
+
+fun PageView.precacheSide(rectOnScreen: Rect, pageGlobal: Rect, side: String) {
+    val intersect = rectOnScreen.intersect(pageGlobal)
+    if (intersect && !rectOnScreen.isEmpty) {
+        println("precache $pageNum: $side")
+        renderInvisible(layoutData.toLocalCoord(rectOnScreen), side)
     }
 }
 
-fun Rect.screenForPrecache(pageLayoutManager: PageLayoutManager) {
+fun Rect.activeScreenArea(pageLayoutManager: PageLayoutManager) {
     val sceneInfo = pageLayoutManager.sceneRect
     set(pageLayoutManager.sceneRect)
-    inset(-sceneInfo.width().upperHalf / 2, -sceneInfo.height().upperHalf / 2)
+    inset(-deltaX(sceneInfo) / 2, -getDeltaY(sceneInfo) / 2)
 }
+
+private fun getDeltaY(sceneInfo: Rect) = sceneInfo.height().upperHalf
+
+private fun deltaX(sceneInfo: Rect) = sceneInfo.width().upperHalf
 
 internal val Int.upperHalf
     get(): Int {

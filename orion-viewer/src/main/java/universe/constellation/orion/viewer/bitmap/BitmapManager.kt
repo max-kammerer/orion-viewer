@@ -3,7 +3,7 @@ package universe.constellation.orion.viewer.bitmap
 import android.graphics.Rect
 import universe.constellation.orion.viewer.view.PageView
 import universe.constellation.orion.viewer.view.PageLayoutManager
-import universe.constellation.orion.viewer.view.screenForPrecache
+import universe.constellation.orion.viewer.view.activeScreenArea
 
 class BitmapManager(val pageLayoutManager: PageLayoutManager) {
 
@@ -23,7 +23,7 @@ class BitmapManager(val pageLayoutManager: PageLayoutManager) {
     private val precacheScreeen = Rect()
 
     fun actualizeActive(pageView: PageView) {
-        precacheScreeen.screenForPrecache(pageLayoutManager)
+        precacheScreeen.activeScreenArea(pageLayoutManager)
         val bitmap = pageView.bitmap ?: return
 
         actualizeActive(

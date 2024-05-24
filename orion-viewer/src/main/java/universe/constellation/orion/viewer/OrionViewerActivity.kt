@@ -1083,7 +1083,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 analytics.dialog(TAP_HELP_DIALOG, true)
             }
             controller?.drawPage(lastPageInfo1.pageNumber, lastPageInfo1.newOffsetX, lastPageInfo1.newOffsetY, lastPageInfo1.isSinglePageMode)
-            controller?.pageLayoutManager?.uploadNewPages()
+            controller?.pageLayoutManager?.updateCacheAndRender()
         }
     }
 

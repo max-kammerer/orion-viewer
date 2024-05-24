@@ -53,6 +53,11 @@ class LayoutData {
         return occupiedScreenPart
     }
 
+    fun toLocalCoord(screenRect: Rect): Rect {
+        screenRect.offset(-position.x.toInt(), -position.y.toInt())
+        return screenRect
+    }
+
     override fun toString(): String {
         return "LayoutData(position=$position, viewDimension=$wholePageRect)"
     }
