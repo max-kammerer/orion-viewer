@@ -5,7 +5,12 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Region
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
 import org.jetbrains.annotations.TestOnly
 import universe.constellation.orion.viewer.BitmapCache
 import universe.constellation.orion.viewer.document.Page
@@ -31,6 +36,7 @@ data class PagePart(val absPartRect: Rect) {
     @Volatile
     private var nonRenderedPart = Region(absPartRect)
     private var nonRenderedPartTmp = Region(absPartRect)
+    private var mutex = Mutex()
 
     @Volatile
     private var opMarker = 1
@@ -43,37 +49,41 @@ data class PagePart(val absPartRect: Rect) {
         page: Page
     ) {
         if (!isActive) return
+        mutex.lock()
+        try {
+            val bitmap: Bitmap
+            val marker = synchronized(this) {
+                if (nonRenderedPart.isEmpty || !coroutineContext.isActive) return
+                //TODO add busy flag
+                bitmap = this.bitmap ?: return
+                opMarker
+            }
 
-        val bitmap: Bitmap
-        val marker = synchronized(this) {
-            if (nonRenderedPart.isEmpty || !coroutineContext.isActive) return
-            //TODO add busy flag
-            bitmap = this.bitmap ?: return
-            opMarker
-        }
-
-        //TODO: join bitmap
-        rendTmp.set(absPartRect)
-        if (rendTmp.intersect(requestedArea)) {
-            nonRenderedPartTmp.set(nonRenderedPart)
-            if (nonRenderedPartTmp.op(rendTmp, Region.Op.INTERSECT)) {
-                rendTmp.set(nonRenderedPartTmp.bounds)
-                rendTmp.offset(-absPartRect.left, -absPartRect.top)
-                renderInner(
-                    rendTmp,
-                    zoom,
-                    absPartRect.left + cropLeft,
-                    absPartRect.top + cropTop,
-                    page,
-                    bitmap
-                )
-                synchronized(this) {
-                    if (opMarker == marker) {
-                        rendTmp.offset(absPartRect.left, absPartRect.top)
-                        nonRenderedPart.op(rendTmp, Region.Op.DIFFERENCE)
+            //TODO: join bitmap
+            rendTmp.set(absPartRect)
+            if (rendTmp.intersect(requestedArea)) {
+                nonRenderedPartTmp.set(nonRenderedPart)
+                if (nonRenderedPartTmp.op(rendTmp, Region.Op.INTERSECT)) {
+                    rendTmp.set(nonRenderedPartTmp.bounds)
+                    rendTmp.offset(-absPartRect.left, -absPartRect.top)
+                    renderInner(
+                        rendTmp,
+                        zoom,
+                        absPartRect.left + cropLeft,
+                        absPartRect.top + cropTop,
+                        page,
+                        bitmap
+                    )
+                    synchronized(this) {
+                        if (opMarker == marker) {
+                            rendTmp.offset(absPartRect.left, absPartRect.top)
+                            nonRenderedPart.op(rendTmp, Region.Op.DIFFERENCE)
+                        }
                     }
                 }
             }
+        } finally {
+            mutex.unlock()
         }
     }
 
@@ -185,27 +195,35 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
 
     @TestOnly
     suspend fun renderFull(zoom: Double, page: Page) {
-        forEach {
-            render(
-                renderingArea,
-                zoom,
-                0,
-                0,
-                page,
-            )
+        coroutineScope {
+            forEach {
+                launch {
+                    render(
+                        renderingArea,
+                        zoom,
+                        0,
+                        0,
+                        page,
+                    )
+                }
+            }
         }
     }
 
     suspend fun render(renderingArea: Rect, curPos: LayoutPosition, page: Page) {
         log("FB rendering $page $renderingArea")
-        forEach {
-            render(
-                renderingArea,
-                curPos.docZoom,
-                curPos.x.marginLeft,
-                curPos.y.marginLeft,
-                page,
-            )
+        coroutineScope {
+            forEach {
+                launch {
+                    render(
+                        renderingArea,
+                        curPos.docZoom,
+                        curPos.x.marginLeft,
+                        curPos.y.marginLeft,
+                        page,
+                    )
+                }
+            }
         }
     }
 

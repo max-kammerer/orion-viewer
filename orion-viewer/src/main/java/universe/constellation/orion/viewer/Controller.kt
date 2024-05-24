@@ -29,6 +29,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExecutorCoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
@@ -56,6 +57,11 @@ class Controller(
 ) : ViewDimensionAware {
 
     val scope = CoroutineScope(context + rootJob)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val renderingDispatcher = Dispatchers.Default.limitedParallelism(
+        (Runtime.getRuntime().availableProcessors() - 1).coerceAtLeast(1)
+    )
 
     internal var bitmapCache: BitmapCache = BitmapCache()
 

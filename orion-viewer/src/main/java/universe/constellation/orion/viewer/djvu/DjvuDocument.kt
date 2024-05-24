@@ -217,7 +217,7 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
         @JvmStatic @Synchronized
         external fun getPageDimension(context: Long, doc: Long, pageNum: Int, info: PageSize): PageSize?
 
-        @JvmStatic @Synchronized
+        @JvmStatic
         external fun drawPage(context: Long, doc: Long, page: Long, bitmap: Bitmap, zoom: Float, bitmapWidth: Int, bitmapHeight: Int,
                               patchX: Int, patchY: Int,
                               patchW: Int, patchH: Int,

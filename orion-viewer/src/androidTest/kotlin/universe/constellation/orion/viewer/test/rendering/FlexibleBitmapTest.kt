@@ -18,7 +18,7 @@ import universe.constellation.orion.viewer.test.framework.BookTest
 import universe.constellation.orion.viewer.test.framework.DEFAULT_COLOR_DELTA
 import universe.constellation.orion.viewer.test.framework.compareBitmaps
 import universe.constellation.orion.viewer.view.ColorStuff
-import universe.constellation.orion.viewer.view.reset
+import universe.constellation.orion.viewer.view.resetNoAutoCrop
 import java.nio.IntBuffer
 import kotlin.math.min
 
@@ -63,7 +63,7 @@ class FlexibleBitmapTest(bookDescription: BookDescription) : BookTest(bookDescri
         val simpleLayoutStrategy = SimpleLayoutStrategy.create()
         simpleLayoutStrategy.setViewSceneDimension(screenRect.width(), screenRect.height())
         val pos = LayoutPosition()
-        simpleLayoutStrategy.reset(pos, page, true)
+        simpleLayoutStrategy.resetNoAutoCrop(pos, page.pageNum, page.getPageSize(), true)
         val rendering = Rect(0, 0, pos.x.pageDimension, pos.y.pageDimension)
 
         val (part, partData) = render(flexibleBitmapPart, rendering, pos, page)

@@ -2,6 +2,9 @@ package universe.constellation.orion.viewer.test.perf
 
 import android.graphics.Color
 import com.artifex.mupdf.fitz.Context
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -95,7 +98,7 @@ class BenchmarkTest : BaseTest() {
 
                 bigPartRendering.add(
                     time(bitmapFull) {
-                        runBlocking {
+                        runBlocking(Dispatchers.Default) {
                             bitmapFull.renderFull(zoom, page)
                         }
                     }
@@ -103,7 +106,7 @@ class BenchmarkTest : BaseTest() {
 
                 partRendering.add(
                     time(bitmap4Parts) {
-                        runBlocking {
+                        runBlocking(Dispatchers.Default) {
                             bitmap4Parts.renderFull(zoom, page)
                         }
                     }

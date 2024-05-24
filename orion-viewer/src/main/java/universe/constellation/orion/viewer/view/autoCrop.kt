@@ -1,21 +1,34 @@
 @file:Suppress("NOTHING_TO_INLINE")
 package universe.constellation.orion.viewer.view
 
-import universe.constellation.orion.viewer.*
-import universe.constellation.orion.viewer.document.Page
-import universe.constellation.orion.viewer.document.PageWithAutoCrop
+import kotlinx.coroutines.sync.Mutex
+import universe.constellation.orion.viewer.Bitmap
+import universe.constellation.orion.viewer.PageInfo
+import universe.constellation.orion.viewer.PageSize
+import universe.constellation.orion.viewer.createBitmap
 import universe.constellation.orion.viewer.geometry.Rect
-import universe.constellation.orion.viewer.layout.*
+import universe.constellation.orion.viewer.layout.AutoCropMargins
+import universe.constellation.orion.viewer.layout.CropMode
+import universe.constellation.orion.viewer.layout.LayoutPosition
+import universe.constellation.orion.viewer.layout.LayoutStrategy
+import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
+import universe.constellation.orion.viewer.layout.isManualFirst
+import universe.constellation.orion.viewer.layout.toMode
+import universe.constellation.orion.viewer.log
+import universe.constellation.orion.viewer.timing
 import kotlin.math.floor
 import kotlin.math.sqrt
 
+//TODO move to PageManager
 private const val WIDTH = 600
 private const val HEIGHT = 800
 
 private const val THRESHOLD = 255 - 10
 private const val VOTE_THRESHOLD = 3
 
-private val bitmap: Bitmap by lazy {
+val mutex = Mutex()
+
+private val cropBitmap: Bitmap by lazy {
     createBitmap(WIDTH, HEIGHT)
 }
 
@@ -23,22 +36,23 @@ private val bitmapArray: IntArray by lazy {
     IntArray(WIDTH * HEIGHT)
 }
 
-
-fun Page.getPageInfo(layoutStrategy: SimpleLayoutStrategy): PageInfo {
-    val info = getPageSize()
-    val pageInfo = PageInfo(pageNum, info.width, info.height)
+suspend fun PageView.getPageInfo(layoutStrategy: SimpleLayoutStrategy): PageInfo {
+    val info = readRawSizeFromUI().await()
+    val pageInfo = pageInfoNoAutoCrop(pageNum, info)
     val cropMode = layoutStrategy.margins.cropMode
 
     if (cropMode != 0 && (pageInfo.autoCrop == null)) {
         timing("Full auto crop") {
+            this.readPageDataFromUI().await()
             fillAutoCropInfo(layoutStrategy, pageInfo, cropMode)
         }
     }
 
+    //TODO cache cropped value
     return pageInfo
 }
 
-private fun Page.fillAutoCropInfo(strategy: SimpleLayoutStrategy, page: PageInfo, cropMode: Int) {
+private suspend fun PageView.fillAutoCropInfo(strategy: SimpleLayoutStrategy, page: PageInfo, cropMode: Int) {
     if (page.width == 0 || page.height == 0) {
         page.autoCrop = AutoCropMargins(0, 0, 0, 0)
         return
@@ -70,18 +84,43 @@ private fun Page.fillAutoCropInfo(strategy: SimpleLayoutStrategy, page: PageInfo
 
     log("Cur pos for crop screen: $newWidth x $newHeight $zoomInDouble")
 
-    timing("Render page for auto crop processing") {
-        val leftTopCorner = strategy.convertToPoint(curPos)
-        //TODO:
-        renderPage(bitmap, curPos.docZoom, leftTopCorner.x, leftTopCorner.y, leftTopCorner.x + newWidth, leftTopCorner.y + newHeight, 0, 0)
-    }
+    val leftTopCorner = strategy.convertToPoint(curPos)
 
-    timing("Extract pixels from bitmap") {
-        bitmap.getPixels(bitmapArray, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight())
-    }
+    mutex.lock()
+    val margins = try {
+        this.renderForCrop {
+            timing("Render page for auto crop processing") {
+                //TODO
+                this.page.renderPage(
+                    cropBitmap,
+                    curPos.docZoom,
+                    leftTopCorner.x,
+                    leftTopCorner.y,
+                    leftTopCorner.x + newWidth,
+                    leftTopCorner.y + newHeight,
+                    0,
+                    0
+                )
+            }
+        }
 
-    val margins = timing("Calculate margins") {
-        findMargins(ArrayImage(newWidth, newHeight, bitmapArray))
+        timing("Extract pixels from bitmap") {
+            cropBitmap.getPixels(
+                bitmapArray,
+                0,
+                cropBitmap.getWidth(),
+                0,
+                0,
+                cropBitmap.getWidth(),
+                cropBitmap.getHeight()
+            )
+        }
+
+        timing("Calculate margins") {
+            findMargins(ArrayImage(newWidth, newHeight, bitmapArray))
+        }
+    } finally {
+        mutex.unlock()
     }
 
     val marginsWithPadding = pad(margins, newWidth, newHeight)
@@ -285,7 +324,15 @@ inline fun min(i1: Int, i2: Int): Int = if (i1 < i2) i1 else i2
 
 inline fun abs(i: Int): Int = if (i >= 0) i else -i
 
-//TODO: move getPageInfo into background thread
-fun LayoutStrategy.reset(pos: LayoutPosition, page: PageWithAutoCrop, next: Boolean) {
-    reset(pos, page.getPageInfo(this as SimpleLayoutStrategy), next)
+
+fun LayoutStrategy.reset(pos: LayoutPosition, pageInfo: PageInfo, next: Boolean) {
+    reset(pos, pageInfo, next)
+}
+
+fun LayoutStrategy.resetNoAutoCrop(pos: LayoutPosition, pageNum: Int, info: PageSize, next: Boolean) {
+    reset(pos, pageInfoNoAutoCrop(pageNum, info), next)
+}
+
+fun pageInfoNoAutoCrop(pageNum: Int, info: PageSize): PageInfo {
+    return PageInfo(pageNum, info.width, info.height)
 }

@@ -3,13 +3,11 @@ package universe.constellation.orion.viewer.view
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
-import kotlinx.coroutines.CompletableJob
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
@@ -21,6 +19,7 @@ import kotlinx.coroutines.withContext
 import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.LayoutData
 import universe.constellation.orion.viewer.PageInfo
+import universe.constellation.orion.viewer.PageSize
 import universe.constellation.orion.viewer.bitmap.FlexibleBitmap
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.errorInDebug
@@ -49,10 +48,6 @@ class PageView(
 ) {
     private val analytics = pageLayoutManager.controller.activity.analytics
 
-    init {
-        if (pageNum < 0) errorInDebug("Invalid page number: $pageNum")
-    }
-
     private val handler = CoroutineExceptionHandler { _, ex ->
         errorInDebug("Processing error for page $pageNum", ex)
         analytics.error(ex)
@@ -62,27 +57,16 @@ class PageView(
         wholePageRect.set(pageLayoutManager.defaultSize())
     }
 
-    val pageEndY: Float
-        get() = layoutData.position.y + wholePageRect.height()
-
-    val wholePageRect
-        get() = layoutData.wholePageRect
-
-    val isOnScreen
-        get() = pageLayoutManager.isVisible(this)
-
-    val width: Int
-        get() = wholePageRect.width()
-    val height: Int
-        get() = wholePageRect.height()
-
     internal var scene: OrionDrawScene? = null
 
-    val renderingPageJobs = SupervisorJob(rootJob)
+    private val renderingPageJobs = SupervisorJob(rootJob)
 
     private val dataPageJobs = SupervisorJob(rootJob)
 
-    private val renderingScope = CoroutineScope(controller.context + renderingPageJobs + handler)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val renderingScope = CoroutineScope(
+        controller.renderingDispatcher.limitedParallelism(2) + renderingPageJobs + handler
+    )
 
     private val dataPageScope = CoroutineScope(controller.context + dataPageJobs + handler)
 
@@ -93,6 +77,9 @@ class PageView(
     @Volatile
     var state: PageState = PageState.STUB
 
+    @Volatile
+    var pageInfo: PageInfo? = null
+
     internal val page = document.getOrCreatePageAdapter(pageNum)
 
     init {
@@ -102,10 +89,31 @@ class PageView(
     val layoutInfo: LayoutPosition = LayoutPosition(pageNumber = pageNum)
 
     @Volatile
-    lateinit var pageInfo: Deferred<PageInfo>
+    lateinit var pageInfoJob: Job
+        private set
+
+    @Volatile
+    private var rawSize: Deferred<PageSize>? = null
+
+    @Volatile
+    private var pageData: Deferred<Unit>? = null
 
     fun init() {
        reinit("init")
+    }
+
+    fun readPageDataFromUI(): Deferred<Unit> {
+        if (pageData == null) {
+            pageData = dataPageScope.async { page.readPageDataForRendering() }
+        }
+        return pageData!!
+    }
+
+    fun readRawSizeFromUI(): Deferred<PageSize> {
+        if (rawSize == null) {
+            rawSize = dataPageScope.async { page.getPageSize() }
+        }
+        return rawSize!!
     }
 
     fun destroy() {
@@ -142,28 +150,29 @@ class PageView(
         if (state == PageState.SIZE_AND_BITMAP_CREATED) return
         log("Page $pageNum $marker $state $document" )
         cancelChildJobs()
-        if (::pageInfo.isInitialized) {
-            pageInfo.cancel()
+        if (::pageInfoJob.isInitialized) {
+            pageInfoJob.cancel()
         }
-        pageInfo = dataPageScope.async {
-            val info = page.getPageInfo(controller.layoutStrategy as SimpleLayoutStrategy)
+        pageInfo = null
+        pageInfoJob = dataPageScope.async {
+            val info = getPageInfo(controller.layoutStrategy as SimpleLayoutStrategy)
             withContext(Dispatchers.Main) {
                 controller.layoutStrategy.reset(layoutInfo, info)
-                initBitmap(layoutInfo)
+                initBitmap(layoutInfo, info)
             }
-            info
         }
     }
 
-    private fun initBitmap(layoutInfo: LayoutPosition) {
+    private fun initBitmap(layoutInfo: LayoutPosition, info: PageInfo) {
         if (state == PageState.SIZE_AND_BITMAP_CREATED) return
         val oldSize = Rect(wholePageRect)
         wholePageRect.set(0, 0, layoutInfo.x.pageDimension, layoutInfo.y.pageDimension)
         bitmap = bitmap?.resize(wholePageRect.width(), wholePageRect.height(), controller.bitmapCache)
             ?: pageLayoutManager.bitmapManager.createDefaultBitmap(wholePageRect.width(), wholePageRect.height(), pageNum)
         log("PageView.initBitmap $pageNum ${controller.document} $wholePageRect")
+        pageInfo = info
         state = PageState.SIZE_AND_BITMAP_CREATED
-        pageLayoutManager.onPageSizeCalculated(this, oldSize)
+        pageLayoutManager.onPageSizeCalculated(this, oldSize, info)
     }
 
     fun draw(canvas: Canvas, scene: OrionDrawScene) {
@@ -178,12 +187,8 @@ class PageView(
     }
 
     internal fun precacheData() {
-        dataPageScope.launch {
-            page.getPageSize()
-            if (isActive) {
-                page.readPageDataForRendering()
-            }
-        }
+        readRawSizeFromUI()
+        readPageDataFromUI()
     }
 
     fun visibleRect(): Rect? {
@@ -203,20 +208,30 @@ class PageView(
         }
     }
 
-    fun launchJobInRenderingScope(dispatcher: CoroutineDispatcher, body: suspend () -> Unit): Job {
-        return renderingScope.launch(dispatcher) {
+    fun launchJobInRenderingScope(body: suspend () -> Unit): Job {
+        return renderingScope.launch {
             body()
         }
     }
 
-    internal fun renderInvisible(rect: Rect, tag: String) {
+    fun renderInvisible(rect: Rect, tag: String) {
         //TODO yield
         if (Rect.intersects(rect, wholePageRect)) {
-            render(rect, false, "Render invisible $tag")
+            renderingScope.launch {
+                render(rect, false, "Render invisible $tag")
+            }
         }
     }
 
-    private fun render(rect: Rect, fromUI: Boolean, tag: String) {
+    suspend fun <T> renderForCrop(body: suspend () -> T): T {
+        return withContext(controller.renderingDispatcher) {
+            body()
+        }
+    }
+
+    private suspend fun render(rect: Rect, fromUI: Boolean, tag: String) {
+        readPageDataFromUI().await()
+
         val layoutStrategy = controller.layoutStrategy
         if (!(layoutStrategy.viewWidth > 0 &&  layoutStrategy.viewHeight > 0)) return
 
@@ -329,3 +344,18 @@ class PageView(
         cancelChildJobs()
     }
 }
+
+val PageView.isOnScreen
+    get() = pageLayoutManager.isVisible(this)
+
+val PageView.height: Int
+    get() = wholePageRect.height()
+
+val PageView.width: Int
+    get() = wholePageRect.width()
+
+val PageView.wholePageRect
+    get() = layoutData.wholePageRect
+
+val PageView.pageEndY: Float
+    get() = layoutData.position.y + wholePageRect.height()

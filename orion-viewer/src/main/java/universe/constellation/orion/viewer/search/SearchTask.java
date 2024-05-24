@@ -86,7 +86,7 @@ public abstract class SearchTask {
 
                     RectF searchHits[] = page.searchText(text);
                     if (searchHits != null && searchHits.length > 0) {
-                        return new SearchTaskResult(text, index, searchHits, AutoCropKt.getPageInfo(page, layoutStrategy), page);
+                        //return new SearchTaskResult(text, index, searchHits, page, page);
                     }
                     page.destroy();
                     index += increment;

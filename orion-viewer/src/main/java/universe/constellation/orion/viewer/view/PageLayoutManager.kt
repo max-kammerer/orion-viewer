@@ -7,13 +7,15 @@ import android.graphics.RectF
 import androidx.core.math.MathUtils
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.LastPageInfo
+import universe.constellation.orion.viewer.PageInfo
 import universe.constellation.orion.viewer.bitmap.BitmapManager
 import universe.constellation.orion.viewer.errorInDebug
+import universe.constellation.orion.viewer.errorInDebugOr
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.calcPageLayout
 import universe.constellation.orion.viewer.log
@@ -25,7 +27,7 @@ private const val VISIBLE_PAGE_LIMIT = 5
 
 class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
 
-    class Callback(val page: Int, val job: CompletableJob, val body: () -> Unit)
+    class Callback(val page: Int, val job: CompletableJob, val body: (PageInfo) -> Unit)
 
     private val analytics = controller.activity.analytics
 
@@ -336,9 +338,8 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         view.updateState()
     }
 
-    private fun PageView.updateState(): Boolean {
+    private fun PageView.updateState() {
         bitmapManager.actualizeActive(this)
-        return isOnScreen //TODO: && (!isSinglePageMode || pageNum == activePage)z
     }
 
     fun findPageAndPageRect(screenRect: Rect): List<PageAndSelection> {
@@ -410,9 +411,9 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
 
                 1 ->
                     if (currentPageNum + 1 < controller.document.pageCount) {
-                        return renderPageAt(currentPageNum + 1, 0, 0, isTapNavigation) { page ->
+                        return renderPageAt(currentPageNum + 1, 0, 0, isTapNavigation) { page, info ->
                             val pos = page.layoutInfo.copy()
-                            layoutStrategy.reset(pos, page.page, next)
+                            layoutStrategy.reset(pos, info, next)
                             val oldPosition = page.layoutData.position
                             val x = -pos.x.offset
                             //val y = getCenteredYInSinglePageMode(-pos.y.offset, page.height)
@@ -430,9 +431,9 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
 
                 -1 ->
                     if (currentPageNum > 0) {
-                        return renderPageAt(currentPageNum - 1, 0, 0, isTapNavigation) { page ->
+                        return renderPageAt(currentPageNum - 1, 0, 0, isTapNavigation) { page, info ->
                             val pos = page.layoutInfo.copy()
-                            layoutStrategy.reset(pos, page.page, next)
+                            layoutStrategy.reset(pos, info, next)
                             val oldPosition = page.layoutData.position
                             val x = -pos.x.offset
                             //val y = getCenteredYInSinglePageMode(-pos.y.offset, page.height)
@@ -467,7 +468,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         x: Int,
         y: Int,
         isTapNavigation: Boolean = false,
-        doScroll: (PageView) -> Unit = { page ->
+        doScroll: (PageView, PageInfo) -> Unit = { page, _ ->
             val newPosition = page.layoutData.position
             doScrollAndDoRendering(
                 newPosition.x,
@@ -518,15 +519,22 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
 
         onPageSizeCalculatedCallback?.job?.cancel()
         if (page.state == PageState.SIZE_AND_BITMAP_CREATED) {
+            println("onPageSizeCalculatedCallback: inplace")
             onPageSizeCalculatedCallback = null
-            doScroll(page)
-            page.updateState()
-            return page to page.launchJobInRenderingScope(Dispatchers.Main) {
+            val completed = page.pageInfo!!
+            doScroll(page, completed) //TODO process errors
+            return page to page.launchJobInRenderingScope {
                 page.renderVisible()
             }
         } else {
+            if (page.state == PageState.SIZE_AND_BITMAP_CREATED) {
+                dump()
+                errorInDebug("Unexpected state ${page.pageNum} + ${page.pageInfoJob.isCompleted}")
+            }
+            println("onPageSizeCalculatedCallback: lazy")
             onPageSizeCalculatedCallback = Callback(pageNum, Job(controller.rootJob)) {
-                doScroll(page)
+                println("onPageSizeCalculatedCallback: call")
+                doScroll(page, it)
             }
             return page to onPageSizeCalculatedCallback!!.job
         }
@@ -566,7 +574,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         return view.layoutData.pagePartOnScreen(sceneRect, tmpRect) != null
     }
 
-    fun onPageSizeCalculated(updatedView: PageView, oldArea: Rect) {
+    fun onPageSizeCalculated(updatedView: PageView, oldArea: Rect, info: PageInfo) {
         log("onSizeCalculated ${updatedView.pageNum}: ${updatedView.layoutData} old=$oldArea")
         val delta = updatedView.wholePageRect.height() - oldArea.height()
 
@@ -598,7 +606,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         val callback = onPageSizeCalculatedCallback
         val job = if (callback?.page == updatedView.pageNum) {
             onPageSizeCalculatedCallback = null
-            callback.body()
+            callback.body(info)
             callback.job
         } else {
             null
@@ -607,7 +615,9 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         updatedView.updateState()
         updateCacheAndRender()
 
-        scene.invalidate()
+        if (updatedView.isActivePage) {
+            scene.invalidate()
+        }
         dump()
     }
 
