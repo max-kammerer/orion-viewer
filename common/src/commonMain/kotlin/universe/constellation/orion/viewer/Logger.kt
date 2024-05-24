@@ -22,7 +22,11 @@ package universe.constellation.orion.viewer
 import universe.constellation.orion.common.BuildConfig
 
 interface Logger {
-    fun log(m: String) = println(m)
+    fun log(m: String) {
+        if (BuildConfig.DEBUG) {
+            println(m)
+        }
+    }
 
     fun log(m: String?, e: Throwable) {
         if (m != null) {

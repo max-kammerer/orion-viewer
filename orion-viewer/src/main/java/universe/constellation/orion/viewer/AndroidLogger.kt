@@ -63,7 +63,7 @@ object AndroidLogger : Logger {
     }
 
     override fun log(m: String) {
-        Log.d(LOGTAG, m)
+        super.log(m)
         writer?.apply {
             write(m)
             write("\n")
@@ -71,7 +71,7 @@ object AndroidLogger : Logger {
     }
 
     private fun log(e: Throwable) {
-        Log.e(LOGTAG, e.message, e)
+        super.log(null, e)
         writer?.apply {
             e.printStackTrace(this)
             write("\n")
