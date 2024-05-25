@@ -347,7 +347,26 @@ ${LIBARCH}/libarchive/
 #-Dhb_realloc_impl=fz_hb_realloc \
 #-Dhb_free_impl=fz_hb_free \
 
-target_compile_definitions(mupdf_thirdparty PRIVATE -DFT2_BUILD_LIBRARY -DDARWIN_NO_CARBON -DFT_CONFIG_MODULES_H="slimftmodules.h" -DFT_CONFIG_OPTIONS_H="slimftoptions.h" -DHAVE_STDINT_H -DOPJ_STATIC -DOPJ_HAVE_INTTYPES_H -DOPJ_HAVE_STDINT_H -DHAVE_FALLBACK=1 -DHAVE_OT -DHAVE_UCDN -DHAVE_FREETYPE -DHB_NO_MT -Dhb_malloc_impl=fz_hb_malloc -Dhb_calloc_impl=fz_hb_calloc -Dhb_realloc_impl=fz_hb_realloc -Dhb_free_impl=fz_hb_free)
+target_compile_definitions(mupdf_thirdparty PRIVATE
+        -DFT2_BUILD_LIBRARY
+        -DDARWIN_NO_CARBON
+        -DFT_CONFIG_MODULES_H="slimftmodules.h"
+        -DFT_CONFIG_OPTIONS_H="slimftoptions.h"
+        -DHAVE_STDINT_H
+        -DOPJ_STATIC
+        -DOPJ_HAVE_INTTYPES_H
+        -DOPJ_HAVE_STDINT_H
+        -DHAVE_FALLBACK=1
+        -DHAVE_OT
+        -DHAVE_UCDN
+        -DHAVE_FREETYPE
+        -DHB_NO_MT
+        -Dhb_malloc_impl=fz_hb_malloc
+        -Dhb_calloc_impl=fz_hb_calloc
+        -Dhb_realloc_impl=fz_hb_realloc
+        -Dhb_free_impl=fz_hb_free
+)
+
 target_compile_options(mupdf_thirdparty PRIVATE -ffunction-sections -fdata-sections -fno-rtti -fno-exceptions -fvisibility-inlines-hidden)
 
 
