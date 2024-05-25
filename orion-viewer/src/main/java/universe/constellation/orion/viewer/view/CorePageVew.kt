@@ -69,6 +69,9 @@ open class CorePageView(val pageNum: Int,
     }
 
     protected suspend fun waitJobsCancellation(allJobs: Boolean = false) {
+        if (allJobs) {
+            dataPageJobs.cancel()
+        }
         renderingPageJobs.cancelAndJoin()
         if (allJobs) {
             dataPageJobs.cancelAndJoin()
