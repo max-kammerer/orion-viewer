@@ -64,14 +64,17 @@ private suspend fun CorePageView.fillAutoCropInfo(strategy: SimpleLayoutStrategy
         page.autoCrop = AutoCropMargins(0, 0, 0, 0)
         return
     }
-
+    val strategy = SimpleLayoutStrategy.create()
+    strategy.changeCropMargins(strategy.margins)
+    strategy.setViewSceneDimension(cropBitmap.width, cropBitmap.height)
+    strategy.changeZoom(-2)
 
     val curPos = LayoutPosition()
 
     //Crop manual/no mode margins to calc new width and height
     val firstCropMode = if (cropMode.toMode.isManualFirst()) CropMode.MANUAL else CropMode.NO_MODE
     log("Calculating first reset with page = $page with cropMode = $firstCropMode")
-    strategy.reset(curPos, true, page, firstCropMode.cropMode, 10000, false)
+    strategy.reset(curPos, true, page, firstCropMode.cropMode, -2, false)
 
     val pageWidth1R = curPos.x.pageDimension
     val pageHeight1R = curPos.y.pageDimension
@@ -83,13 +86,15 @@ private suspend fun CorePageView.fillAutoCropInfo(strategy: SimpleLayoutStrategy
         return
     }
 
-    //zoom page to fit crop screen
-    val zoomInDouble = floor(sqrt(1.0 * WIDTH * HEIGHT / (pageWidth1R * pageHeight1R)) * 10000) / 10000
-    strategy.reset(curPos, true, page, firstCropMode.cropMode, (zoomInDouble * 10000).toInt(), false)
+    //zoom page to fit crop screen//TODO
+    var zoomInDouble = floor(sqrt(1.0 * WIDTH * HEIGHT / (pageWidth1R * pageHeight1R)) * 10000) / 10000
+//    strategy.reset(curPos, true, page, firstCropMode.cropMode, (zoomInDouble * 10000).toInt(), false)
     val newWidth = curPos.x.pageDimension
     val newHeight = curPos.y.pageDimension
 
-    log("Cur pos for crop screen: $newWidth x $newHeight $zoomInDouble")
+
+    log("Cur pos for crop screen: $newWidth x $newHeight $zoomInDouble ${curPos.docZoom}")
+    zoomInDouble = curPos.docZoom
 
     val leftTopCorner = strategy.convertToPoint(curPos)
 
@@ -109,28 +114,28 @@ private suspend fun CorePageView.fillAutoCropInfo(strategy: SimpleLayoutStrategy
                     0
                 )
             }
-        }
 
-        timing("Extract pixels from bitmap") {
-            cropBitmap.getPixels(
-                bitmapArray,
-                0,
-                cropBitmap.getWidth(),
-                0,
-                0,
-                cropBitmap.getWidth(),
-                cropBitmap.getHeight()
-            )
-        }
+            timing("Extract pixels from bitmap") {
+                cropBitmap.getPixels(
+                    bitmapArray,
+                    0,
+                    newWidth,
+                    0,
+                    0,
+                    newWidth,
+                    newHeight
+                )
+            }
 
-        timing("Calculate margins") {
-            findMargins(ArrayImage(newWidth, newHeight, bitmapArray))
+            timing("Calculate margins") {
+                findMargins(ArrayImage(newWidth, newHeight, bitmapArray))
+            }
         }
     } finally {
         mutex.unlock()
     }
 
-    val marginsWithPadding = pad(margins, newWidth, newHeight)
+    val marginsWithPadding = pad(margins, newWidth, newHeight, controller.cropPadding)
 
     page.autoCrop = AutoCropMargins(
         (marginsWithPadding.left / zoomInDouble).toInt(),
@@ -139,8 +144,8 @@ private suspend fun CorePageView.fillAutoCropInfo(strategy: SimpleLayoutStrategy
         (marginsWithPadding.bottom / zoomInDouble).toInt()
 
     )
-    log("Zoomed result: ${page.pageNum0}: $margins $zoomInDouble")
-    log("Unzoomed result: ${page.pageNum0}: ${page.autoCrop}")
+    log("Zoomed result ${page.pageNum0}: $margins $zoomInDouble")
+    log("Unzoomed result ${page.pageNum0}: ${page.autoCrop}")
 }
 
 abstract class Image(val width: Int, val height: Int) {
@@ -160,10 +165,10 @@ class ArrayImage(width: Int, height: Int, val source: IntArray): Image(width, he
 }
 
 //TODO replace 5 with dp  
-fun pad(margins: AutoCropMargins, newWidth: Int, newHeight: Int): AutoCropMargins {
+fun pad(margins: AutoCropMargins, newWidth: Int, newHeight: Int, cropPadding: Int): AutoCropMargins {
     return with(margins) {
-        val widthPadding = max((newWidth - left - right) / 100, 5)
-        val heightPadding = max((newHeight - top - bottom) / 100, 5)
+        val widthPadding = max((newWidth - left - right) / 100, cropPadding)
+        val heightPadding = max((newHeight - top - bottom) / 100, cropPadding)
 
         val left = max(0, left - widthPadding)
         val right = max(0, right - widthPadding)
