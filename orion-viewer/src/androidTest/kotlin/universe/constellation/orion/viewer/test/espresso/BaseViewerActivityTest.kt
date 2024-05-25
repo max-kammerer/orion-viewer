@@ -117,6 +117,15 @@ abstract class BaseViewerActivityTest(
         openMenuAndSelect(-1, R.string.menu_goto_text)
     }
 
+    protected fun openCropDialog() {
+        openMenuAndSelect(R.id.crop_menu_item, R.string.menu_crop_text )
+    }
+
+    protected fun applyCrop() {
+        onView(ViewMatchers.withId(R.id.crop_preview)).perform(ViewActions.click())
+        onView(ViewMatchers.withId(R.id.crop_close)).perform(ViewActions.click())
+    }
+
     private fun openMenuAndSelect(id: Int, resId: Int) {
         val newUI = onActivity {
             it.showMenu()

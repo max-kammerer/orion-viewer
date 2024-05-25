@@ -23,7 +23,7 @@ import universe.constellation.orion.viewer.test.framework.checkTrue
 import universe.constellation.orion.viewer.test.framework.toOpenIntentWithNewUI
 
 @RunWith(Parameterized::class)
-class PageSeekerTest(bookDescription: BookFile): BaseViewerActivityTest(bookDescription, bookDescription.toOpenIntentWithNewUI()) {
+open class PageSeekerTest(bookDescription: BookFile): BaseViewerActivityTest(bookDescription, bookDescription.toOpenIntentWithNewUI()) {
 
     @Test
     fun testSlowSwipe() {
@@ -35,7 +35,12 @@ class PageSeekerTest(bookDescription: BookFile): BaseViewerActivityTest(bookDesc
         testGotoSwipe(Swipe.FAST)
     }
 
+    open fun configure() {
+
+    }
+
     private fun testGotoSwipe(swipe: Swipe) {
+        configure()
         openGoTo()
         val lastPageNumber = lastPageNumber0
 
