@@ -36,6 +36,7 @@ import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.document.PageWithAutoCrop
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.errorInDebugOr
+import universe.constellation.orion.viewer.timing
 import java.lang.RuntimeException
 
 class PdfDocument @Throws(Exception::class) constructor(filePath: String) : AbstractDocument(filePath) {
@@ -51,7 +52,9 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
                 synchronized(core) {
                     if (page == null) {
                         try {
-                            page = core.doc.loadPage(pageNum)
+                            timing("Page extraction: $pageNum") {
+                                page = core.doc.loadPage(pageNum)
+                            }
                         } catch (e: IllegalArgumentException) {
                             if (e.message == "page number out of range") {
                                 throw IllegalArgumentException("page number out of range: $pageNum of ${this@PdfDocument.pageCount}")
