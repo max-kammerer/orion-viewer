@@ -3,26 +3,16 @@ package universe.constellation.orion.viewer.view
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.async
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.LayoutData
 import universe.constellation.orion.viewer.PageInfo
-import universe.constellation.orion.viewer.PageSize
 import universe.constellation.orion.viewer.bitmap.FlexibleBitmap
 import universe.constellation.orion.viewer.document.Document
-import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.geometry.RectF
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
@@ -103,7 +93,7 @@ class PageView(
             pageInfoJob.cancel()
         }
         pageInfo = null
-        pageInfoJob = dataPageScope.async {
+        pageInfoJob = dataPageScope.launch {
             val info = getPageInfo(controller.layoutStrategy as SimpleLayoutStrategy)
             withContext(Dispatchers.Main) {
                 controller.layoutStrategy.reset(layoutInfo, info)
@@ -125,13 +115,20 @@ class PageView(
     }
 
     fun draw(canvas: Canvas, scene: OrionDrawScene) {
-        if (state != PageState.STUB && bitmap != null) {
-            //draw bitmap
-            log("Draw page $pageNum in state $state ${bitmap?.width} ${bitmap?.height} ")
-            draw(canvas, bitmap!!, scene.defaultPaint!!, scene)
-        } else {
-            log("Draw border $pageNum in state $state")
-            drawBorder(canvas, scene)
+        canvas.save()
+        try {
+            canvas.translate(layoutData.position.x, layoutData.position.y)
+            if (state != PageState.STUB && bitmap != null) {
+                //draw bitmap
+                log("Draw page $pageNum in state $state ${bitmap?.width} ${bitmap?.height} ")
+                draw(canvas, bitmap!!, scene.defaultPaint!!, scene)
+            } else {
+                log("Draw border $pageNum in state $state")
+                drawBlankLoadingPage(canvas, scene)
+                drawBorder(canvas, scene)
+            }
+        } finally {
+            canvas.restore()
         }
     }
 
@@ -212,19 +209,10 @@ class PageView(
     private val sceneTmpF  = RectF()
 
     private fun draw(canvas: Canvas, bitmap: FlexibleBitmap, defaultPaint: Paint, scene: OrionDrawScene) {
-        canvas.save()
-        try {
-            canvas.translate(layoutData.position.x, layoutData.position.y)
-            drawBlankLoadingPage(canvas, scene)
-
-            bitmap.draw(canvas, calcDrawRect(scene) ?: return, defaultPaint)
-
-            drawBorder(canvas, scene)
-
-            scene.runAdditionalTaskInPageCanvasAndCoord(canvas, pageNum)
-        } finally {
-            canvas.restore()
-        }
+        drawBlankLoadingPage(canvas, scene)
+        bitmap.draw(canvas, calcDrawRect(scene) ?: return, defaultPaint)
+        drawBorder(canvas, scene)
+        scene.runAdditionalTaskInPageCanvasAndCoord(canvas, pageNum)
     }
 
     private fun drawBlankLoadingPage(
