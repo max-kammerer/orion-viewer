@@ -43,7 +43,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
     val visiblePages: List<PageView>
         get() = activePages.filter { it.isActivePage }
 
-    private val PageView.isActivePage: Boolean
+    val PageView.isActivePage: Boolean
         get() = isOnScreen && (!isSinglePageMode || pageNum == activePage)
 
     private val PageView.isActiveOrOnScreen: Boolean

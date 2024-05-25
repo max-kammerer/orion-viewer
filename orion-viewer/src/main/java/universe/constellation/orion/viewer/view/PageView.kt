@@ -191,8 +191,10 @@ class PageView(
                     if (kotlin.coroutines.coroutineContext.isActive) {
                         if (fromUI) {
                             log("PageView ($tag) invalidate: $pageNum $layoutData ${scene != null}")
-                            if (this@PageView.isOnScreen) {//TODO active
-                                scene?.invalidate()
+                            with(pageLayoutManager) {
+                                if (this@PageView.isActivePage) {
+                                    scene.invalidate()
+                                }
                             }
                         }
                     }
