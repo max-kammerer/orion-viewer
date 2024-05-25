@@ -2,6 +2,7 @@ package universe.constellation.orion.viewer
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import kotlinx.coroutines.sync.Mutex
 import java.util.concurrent.ConcurrentLinkedQueue
 
 private const val DEFAULT_BITMAP_CACHE_SIZE = 32
@@ -11,14 +12,15 @@ open class BitmapCache(val size: Int = DEFAULT_BITMAP_CACHE_SIZE) {
 
     private val cachedBitmaps = ConcurrentLinkedQueue<CacheInfo>()
 
-    protected class CacheInfo(val bitmap: Bitmap) {
+    class CacheInfo(val bitmap: Bitmap, val mutex: Mutex) {
         var owned = true
-        @Volatile
-        var isBusy = false
+
+        val isBusy
+            get() = mutex.isLocked
     }
 
-    fun createBitmap(width: Int, height: Int): Bitmap {
-        var bitmap: Bitmap? = null
+    fun createBitmap(width: Int, height: Int): CacheInfo {
+        var resultInfo: CacheInfo? = null
         if (cachedBitmaps.size >= size / 2) {
             //TODO: add checks
             val nonValids = cachedBitmaps.asSequence().filter { !it.owned && !it.isBusy }
@@ -26,8 +28,7 @@ open class BitmapCache(val size: Int = DEFAULT_BITMAP_CACHE_SIZE) {
                 nonValids.firstOrNull { info -> width <= info.bitmap.width && height <= info.bitmap.height }
 
             if (cacheInfo != null) {
-                bitmap = cacheInfo.bitmap
-                cacheInfo.owned = true
+                resultInfo = cacheInfo
             } else {
                 val info = nonValids.firstOrNull()
                 if (info == null) {
@@ -38,24 +39,19 @@ open class BitmapCache(val size: Int = DEFAULT_BITMAP_CACHE_SIZE) {
             }
         }
 
-        if (bitmap == null) {
-            bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-            log("BitmapCache(${cachedBitmaps.size}): new bitmap $width x $height created")
-            cachedBitmaps.add(CacheInfo(bitmap))
+        if (resultInfo == null) {
+            resultInfo = CacheInfo(Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888), Mutex())
+            cachedBitmaps.add(resultInfo)
         } else {
-            log("BitmapCache(${cachedBitmaps.size}): using cached bitmap ${System.identityHashCode(bitmap)}")
+            log("BitmapCache(${cachedBitmaps.size}): using cached bitmap ${System.identityHashCode(resultInfo.bitmap)}")
         }
-        bitmap.eraseColor(Color.TRANSPARENT)
-        return bitmap
+        resultInfo.bitmap.eraseColor(Color.TRANSPARENT)
+        resultInfo.owned = true
+        return resultInfo
     }
 
-    fun markFree(info: Bitmap) {
-        for (next in cachedBitmaps) {
-            if (next.bitmap === info) {
-                next.owned = false
-                break
-            }
-        }
+    fun free(info: CacheInfo) {
+        info.owned = false
     }
 
     fun cleanIfNeeded() {

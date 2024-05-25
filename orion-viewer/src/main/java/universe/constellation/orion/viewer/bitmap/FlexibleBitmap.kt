@@ -5,12 +5,9 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Region
-import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.isActive
-import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
 import org.jetbrains.annotations.TestOnly
 import universe.constellation.orion.viewer.BitmapCache
 import universe.constellation.orion.viewer.document.Page
@@ -22,7 +19,7 @@ import kotlin.math.min
 data class PagePart(val absPartRect: Rect) {
 
     @Volatile
-    var bitmap: Bitmap? = null
+    var bitmapInfo: BitmapCache.CacheInfo? = null
 
     @Volatile
     internal var isActive: Boolean = false
@@ -36,7 +33,6 @@ data class PagePart(val absPartRect: Rect) {
     @Volatile
     private var nonRenderedPart = Region(absPartRect)
     private var nonRenderedPartTmp = Region(absPartRect)
-    private var mutex = Mutex()
 
     @Volatile
     private var opMarker = 1
@@ -49,16 +45,17 @@ data class PagePart(val absPartRect: Rect) {
         page: Page
     ) {
         if (!isActive) return
-        mutex.lock()
-        try {
-            val bitmap: Bitmap
-            val marker = synchronized(this) {
-                if (nonRenderedPart.isEmpty || !coroutineContext.isActive) return
-                //TODO add busy flag
-                bitmap = this.bitmap ?: return
-                opMarker
-            }
 
+        val info: BitmapCache.CacheInfo
+        val marker = synchronized(this) {
+            if (nonRenderedPart.isEmpty || !coroutineContext.isActive) return
+            //TODO add busy flag
+            info = this.bitmapInfo ?: return
+            opMarker
+        }
+
+        info.mutex.lock()
+        try {
             //TODO: join bitmap
             rendTmp.set(absPartRect)
             if (rendTmp.intersect(requestedArea)) {
@@ -72,7 +69,7 @@ data class PagePart(val absPartRect: Rect) {
                         absPartRect.left + cropLeft,
                         absPartRect.top + cropTop,
                         page,
-                        bitmap
+                        info.bitmap
                     )
                     synchronized(this) {
                         if (opMarker == marker) {
@@ -83,14 +80,14 @@ data class PagePart(val absPartRect: Rect) {
                 }
             }
         } finally {
-            mutex.unlock()
+            info.mutex.unlock()
         }
     }
 
     fun draw(canvas: Canvas, pageVisiblePart: Rect, defaultPaint: Paint) {
-        if (!isActive) return
-        if (bitmap != null && Rect.intersects(absPartRect, pageVisiblePart)) {
-            canvas.drawBitmap(bitmap!!, localPartRect, absPartRect, defaultPaint)
+        if (!isActive || bitmapInfo == null) return
+        if (Rect.intersects(absPartRect, pageVisiblePart)) {
+            canvas.drawBitmap(bitmapInfo!!.bitmap, localPartRect, absPartRect, defaultPaint)
         }
     }
 
@@ -99,7 +96,7 @@ data class PagePart(val absPartRect: Rect) {
         synchronized(this) {
             isActive = true
             opMarker++
-            bitmap = bitmapCache.createBitmap(partWidth, partHeight)
+            bitmapInfo = bitmapCache.createBitmap(partWidth, partHeight)
             nonRenderedPart.set(absPartRect)
         }
     }
@@ -108,10 +105,8 @@ data class PagePart(val absPartRect: Rect) {
         synchronized(this) {
             isActive = false
             opMarker++
-            bitmap?.let {
-                bitmapCache.markFree(it)
-            }
-            bitmap = null
+            bitmapCache.free(bitmapInfo ?: return)
+            bitmapInfo = null
         }
     }
 }
@@ -248,7 +243,7 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
     @TestOnly
     fun bitmaps(): List<Bitmap> {
         val res = mutableListOf<Bitmap>()
-        forEach { bitmap?.let { res.add(it) } }
+        forEach { bitmapInfo?.bitmap?.let { res.add(it) } }
         return res
     }
 }
