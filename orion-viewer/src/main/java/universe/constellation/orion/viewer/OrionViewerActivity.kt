@@ -278,9 +278,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 )
             }
 
-        } else
-        /*if (intent.getAction().endsWith("MAIN"))*/ {
-            //TODO error
+        } else {
+            analytics.error(RuntimeException("Unexpected state $intent"))
         }
     }
 
