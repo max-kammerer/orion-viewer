@@ -10,7 +10,7 @@ import universe.constellation.orion.viewer.test.framework.onActivity
 
 
 @RunWith(Parameterized::class)
-class RenderFastTest(bookDescription: BookFile): BaseViewerActivityTest(bookDescription) {
+class RenderFastTest(bookDescription: BookFile, config: Configuration): BaseViewerActivityTestWithConfig(bookDescription, config = config) {
 
     @Test
     fun renderForward() {

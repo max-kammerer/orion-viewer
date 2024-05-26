@@ -24,9 +24,7 @@ import universe.constellation.orion.viewer.test.framework.toOpenIntentWithNewUI
 import kotlin.math.min
 
 @RunWith(Parameterized::class)
-open class PageNavigationTest(bookDescription: BookFile): BaseViewerActivityTest(bookDescription, bookDescription.toOpenIntentWithNewUI()) {
-
-    open fun configure() {}
+open class PageNavigationTest(bookDescription: BookFile, config: Configuration): BaseViewerActivityTestWithConfig(bookDescription, bookDescription.toOpenIntentWithNewUI(), config) {
 
     @Test
     fun testSlowSwipe() {
@@ -39,7 +37,6 @@ open class PageNavigationTest(bookDescription: BookFile): BaseViewerActivityTest
     }
 
     private fun testGotoSwipe(swipe: Swipe) {
-        configure()
         openGoTo()
         val lastPageNumber = lastPageNumber0
 
@@ -85,7 +82,6 @@ open class PageNavigationTest(bookDescription: BookFile): BaseViewerActivityTest
 
     @Test
     fun testStepByStep() {
-        configure()
         openGoTo()
 
         onView(withId(R.id.page_picker_seeker)).perform(GeneralClickAction(Tap.SINGLE, GeneralLocation.CENTER_LEFT, Press.PINPOINT, InputDevice.SOURCE_TOUCHSCREEN,

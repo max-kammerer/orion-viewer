@@ -6,12 +6,10 @@ import android.view.View
 import android.widget.SeekBar
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
 import org.hamcrest.Matcher
@@ -35,6 +33,7 @@ import universe.constellation.orion.viewer.test.framework.onActivity
 abstract class BaseViewerActivityTest(
     val bookDescription: BookFile,
     startIntent: Intent = bookDescription.toOpenIntent(),
+    private val config: Configuration = DefaultConfig
 ) : BaseTestWithActivity(startIntent) {
 
     companion object {
@@ -50,8 +49,6 @@ abstract class BaseViewerActivityTest(
     @Before
     fun grantPermissionsAndProcessErrors() {
         processEmulatorErrors()
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !BookDescription.SICP.asFile().canRead()) {
             val grant =
@@ -73,6 +70,10 @@ abstract class BaseViewerActivityTest(
         }
 
         checkStartInvariant()
+
+        with(config) {
+            body()
+        }
     }
 
     private fun checkStartInvariant() {
@@ -117,11 +118,11 @@ abstract class BaseViewerActivityTest(
         openMenuAndSelect(-1, R.string.menu_goto_text)
     }
 
-    protected fun openCropDialog() {
-        openMenuAndSelect(R.id.crop_menu_item, R.string.menu_crop_text )
+    fun openCropDialog() {
+        openMenuAndSelect(R.id.crop_menu_item, R.string.menu_crop_text)
     }
 
-    protected fun applyCrop() {
+    fun applyCrop() {
         onView(ViewMatchers.withId(R.id.crop_preview)).perform(ViewActions.click())
         onView(ViewMatchers.withId(R.id.crop_close)).perform(ViewActions.click())
     }

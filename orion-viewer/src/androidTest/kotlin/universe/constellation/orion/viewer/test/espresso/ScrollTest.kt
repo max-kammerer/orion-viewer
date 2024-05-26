@@ -19,18 +19,15 @@ import universe.constellation.orion.viewer.test.framework.BookFile
 import universe.constellation.orion.viewer.test.framework.onActivity
 
 @RunWith(Parameterized::class)
-class ScrollTest(newUI: Boolean, bookDescription: BookFile): BaseViewerActivityTest(bookDescription, bookDescription.toOpenIntent {
+class ScrollTest(bookDescription: BookFile, newUI: Boolean, configuration: Configuration): BaseViewerActivityTestWithConfig(bookDescription, bookDescription.toOpenIntent {
     this.putExtra(GlobalOptions.OLD_UI, !newUI)
-}) {
+}, configuration) {
 
     companion object {
         @JvmStatic
-        @Parameterized.Parameters(name = "Test for {1} book with newUI={0}")
+        @Parameterized.Parameters(name = "Test for {0} book with newUI={1} and config={2}")
         fun testData2(): Collection<Array<Any>> {
-            return BookFile.testEntriesWithCustoms()
-                .map { arrayOf(true, it) } + BookFile.testEntriesWithCustoms()
-                .map { arrayOf(false, it) }
-
+            return decartMult(BookFile.testEntriesWithCustoms(), listOf(true, false), allConfigs())
         }
     }
 
