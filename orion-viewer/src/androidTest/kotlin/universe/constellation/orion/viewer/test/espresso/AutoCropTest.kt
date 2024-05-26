@@ -10,7 +10,6 @@ import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.test.framework.BookFile
 
-@SdkSuppress(minSdkVersion = Build.VERSION_CODES.KITKAT)
 @RunWith(Parameterized::class)
 class AutoCropTest(bookDescription: BookFile) : PageNavigationTest(bookDescription){
 
