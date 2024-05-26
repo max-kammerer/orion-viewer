@@ -1,15 +1,18 @@
 package universe.constellation.orion.viewer.test.espresso
 
+import android.os.Build
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.filters.SdkSuppress
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.test.framework.BookFile
 
+@SdkSuppress(minSdkVersion = Build.VERSION_CODES.KITKAT)
 @RunWith(Parameterized::class)
-class AutoCropTest(bookDescription: BookFile) : PageSeekerTest(bookDescription){
+class AutoCropTest(bookDescription: BookFile) : PageNavigationTest(bookDescription){
 
     override fun configure() {
         openCropDialog()

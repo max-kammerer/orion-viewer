@@ -10,8 +10,8 @@ import androidx.test.espresso.action.GeneralSwipeAction
 import androidx.test.espresso.action.Press
 import androidx.test.espresso.action.Swipe
 import androidx.test.espresso.action.Tap
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.filters.SdkSuppress
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -21,9 +21,12 @@ import universe.constellation.orion.viewer.test.framework.BookFile
 import universe.constellation.orion.viewer.test.framework.checkEquals
 import universe.constellation.orion.viewer.test.framework.checkTrue
 import universe.constellation.orion.viewer.test.framework.toOpenIntentWithNewUI
+import kotlin.math.min
 
 @RunWith(Parameterized::class)
-open class PageSeekerTest(bookDescription: BookFile): BaseViewerActivityTest(bookDescription, bookDescription.toOpenIntentWithNewUI()) {
+open class PageNavigationTest(bookDescription: BookFile): BaseViewerActivityTest(bookDescription, bookDescription.toOpenIntentWithNewUI()) {
+
+    open fun configure() {}
 
     @Test
     fun testSlowSwipe() {
@@ -35,10 +38,6 @@ open class PageSeekerTest(bookDescription: BookFile): BaseViewerActivityTest(boo
         testGotoSwipe(Swipe.FAST)
     }
 
-    open fun configure() {
-
-    }
-
     private fun testGotoSwipe(swipe: Swipe) {
         configure()
         openGoTo()
@@ -46,6 +45,7 @@ open class PageSeekerTest(bookDescription: BookFile): BaseViewerActivityTest(boo
 
         onView(withId(R.id.page_picker_seeker)).perform(GeneralClickAction(Tap.SINGLE, GeneralLocation.CENTER_LEFT, Press.PINPOINT, InputDevice.SOURCE_TOUCHSCREEN,
             MotionEvent.BUTTON_PRIMARY))
+
         onView(withId(R.id.page_picker_seeker)).perform(GeneralSwipeAction(
             swipe, GeneralLocation.CENTER_LEFT,
             GeneralLocation.CENTER_RIGHT, Press.PINPOINT
@@ -62,7 +62,6 @@ open class PageSeekerTest(bookDescription: BookFile): BaseViewerActivityTest(boo
         checkPages(lastPageNumber, false)
 
         assertEquals(0, currentPage0)
-
     }
 
     private fun checkPages(lastPageNumber: Int, last: Boolean) {
@@ -83,4 +82,38 @@ open class PageSeekerTest(bookDescription: BookFile): BaseViewerActivityTest(boo
             )
         }
     }
+
+    @Test
+    fun testStepByStep() {
+        configure()
+        openGoTo()
+
+        onView(withId(R.id.page_picker_seeker)).perform(GeneralClickAction(Tap.SINGLE, GeneralLocation.CENTER_LEFT, Press.PINPOINT, InputDevice.SOURCE_TOUCHSCREEN,
+            MotionEvent.BUTTON_PRIMARY))
+
+        checkEquals(
+            "Wrong page",
+            0, currentPage0
+        )
+
+        val lastPageNum = lastPageNumber0
+        val iterations = min(10, lastPageNum)
+        for (i in 1..iterations) {
+            onView(withId(R.id.page_picker_plus)).perform(ViewActions.click())
+            if (i == lastPageNum) continue //TODO show only one page
+            checkEquals(
+                "Wrong page forward",
+                i, currentPage0
+            )
+        }
+
+        for (i in (iterations - 1) downTo 0) {
+            onView(withId(R.id.page_picker_minus)).perform(ViewActions.click())
+            checkEquals(
+                "Wrong page backward",
+                i, currentPage0
+            )
+        }
+    }
+
 }
