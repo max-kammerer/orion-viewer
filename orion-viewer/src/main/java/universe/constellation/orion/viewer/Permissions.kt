@@ -27,8 +27,12 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.Settings
+import universe.constellation.orion.viewer.android.isAtLeastAndroidM
+import universe.constellation.orion.viewer.android.isAtLeastAndroidR
+import universe.constellation.orion.viewer.android.isAtLeastTiramisu
 
 object Permissions {
+
     const val ASK_PERMISSION_COMMON = 111
     const val ASK_READ_PERMISSION_FOR_BOOK_OPEN = 112
     const val ASK_READ_PERMISSION_FOR_FILE_MANAGER = 113
@@ -39,7 +43,7 @@ object Permissions {
 
     @JvmStatic
     fun Activity.checkAndRequestStorageAccessPermissionOrReadOne(code: Int, doRequest: Boolean = true): Boolean {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (isAtLeastAndroidR() && (isAtLeastTiramisu() || !packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK))) {
             if (!Environment.isExternalStorageManager()) {
                 if (doRequest) {
                     val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
@@ -50,7 +54,7 @@ object Permissions {
             } else {
                 return true
             }
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        } else if (isAtLeastAndroidM()) {
             return checkPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, code, doRequest)
         } else {
             return true

@@ -17,6 +17,8 @@ fun isAtLeastAndroidN() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
 
 fun isAtLeastAndroidR() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
 
+fun isAtLeastTiramisu() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+
 fun Intent.isContentScheme(): Boolean {
     return ContentResolver.SCHEME_CONTENT == scheme
 }
