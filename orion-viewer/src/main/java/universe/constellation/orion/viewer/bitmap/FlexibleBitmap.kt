@@ -56,6 +56,8 @@ data class PagePart(val absPartRect: Rect) {
 
         info.mutex.lock()
         try {
+            if (marker != opMarker || !coroutineContext.isActive) return
+
             //TODO: join bitmap
             rendTmp.set(absPartRect)
             if (rendTmp.intersect(requestedArea)) {
