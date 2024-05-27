@@ -9,12 +9,13 @@ import android.provider.MediaStore
 import android.system.Os
 import androidx.core.database.getStringOrNull
 import universe.constellation.orion.viewer.FileInfo
+import universe.constellation.orion.viewer.analytics.Analytics
 import universe.constellation.orion.viewer.errorInDebugOr
 import universe.constellation.orion.viewer.log
 import java.io.File
 import java.io.IOException
 
-fun getFileInfo(context: Context, uri: Uri): FileInfo? {
+fun getFileInfo(context: Context, uri: Uri, analytics: Analytics): FileInfo? {
     val authority = uri.authority
     val id = uri.lastPathSegment
     val host = uri.host
@@ -42,14 +43,15 @@ fun getFileInfo(context: Context, uri: Uri): FileInfo? {
 
     if (ContentResolver.SCHEME_CONTENT != scheme) return null
 
-    val displayName = getKeyFromCursor(MediaStore.MediaColumns.DISPLAY_NAME, context, uri)
-    val sizeOrZero = getKeyFromCursor(MediaStore.MediaColumns.SIZE, context, uri)?.toLongOrNull() ?: 0
+    val displayName = getKeyFromCursor(MediaStore.MediaColumns.DISPLAY_NAME, context, uri, analytics = analytics)
+    val sizeOrZero = getKeyFromCursor(MediaStore.MediaColumns.SIZE, context, uri, analytics = analytics)?.toLongOrNull() ?: 0
 
     val dataPath = getDataColumn(
         context,
         uri,
         null,
-        null
+        null,
+        analytics
     )
 
     dataPath?.let {
@@ -81,10 +83,11 @@ fun getFileInfo(context: Context, uri: Uri): FileInfo? {
 
 private fun getDataColumn(
     context: Context, uri: Uri, selection: String?,
-    selectionArgs: Array<String>?
+    selectionArgs: Array<String>?,
+    analytics: Analytics
 ): String? {
     val column = MediaStore.Files.FileColumns.DATA
-    return getKeyFromCursor(column, context, uri, selection, selectionArgs)
+    return getKeyFromCursor(column, context, uri, selection, selectionArgs, analytics)
 }
 
 private fun getKeyFromCursor(
@@ -92,18 +95,24 @@ private fun getKeyFromCursor(
     context: Context,
     uri: Uri,
     selection: String? = null,
-    selectionArgs: Array<String>? = null
+    selectionArgs: Array<String>? = null,
+    analytics: Analytics
 ): String? {
     val projection = arrayOf(column)
 
-    return context.contentResolver.query(
-        uri, projection, selection, selectionArgs,
-        null
-    )?.use {
-        if (!it.moveToFirst()) return null
-        val columnIndex = it.getColumnIndex(column)
-        if (columnIndex < 0) return null
-        return it.getStringOrNull(columnIndex)
+    try {
+        return context.contentResolver.query(
+            uri, projection, selection, selectionArgs,
+            null
+        )?.use {
+            if (!it.moveToFirst()) return null
+            val columnIndex = it.getColumnIndex(column)
+            if (columnIndex < 0) return null
+            return it.getStringOrNull(columnIndex)
+        }
+    } catch (e: SecurityException) {
+        analytics.logWarning("SecurityException: ${e.message}")
+        return null
     }
 }
 

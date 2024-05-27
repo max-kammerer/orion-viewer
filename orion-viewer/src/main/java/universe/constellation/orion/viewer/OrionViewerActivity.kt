@@ -219,7 +219,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         if (uri != null) {
             log("Try to open file by $uri")
             try {
-                val fileInfo = getFileInfo(this, uri)
+                val fileInfo = getFileInfo(this, uri, analytics)
                 val filePath = fileInfo?.path
 
                 if (fileInfo == null || filePath.isNullOrBlank()) {

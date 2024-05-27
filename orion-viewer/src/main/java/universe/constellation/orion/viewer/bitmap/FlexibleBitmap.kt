@@ -211,14 +211,16 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
         log("FB rendering $page $renderingArea")
         coroutineScope {
             forEach {
-                launch {
-                    render(
-                        renderingArea,
-                        curPos.docZoom,
-                        curPos.x.marginLeft,
-                        curPos.y.marginLeft,
-                        page,
-                    )
+                if (isActive) {
+                    launch {
+                        render(
+                            renderingArea,
+                            curPos.docZoom,
+                            curPos.x.marginLeft,
+                            curPos.y.marginLeft,
+                            page,
+                        )
+                    }
                 }
             }
         }

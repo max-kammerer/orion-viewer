@@ -93,9 +93,9 @@ class PageView(
             pageInfoJob.cancel()
         }
         pageInfo = null
-        pageInfoJob = dataPageScope.launch {
+        pageInfoJob = dataPageScope.launch(Dispatchers.Main) {
             val info = getPageInfo(controller.layoutStrategy as SimpleLayoutStrategy)
-            withContext(Dispatchers.Main) {
+            if (isActive) {
                 controller.layoutStrategy.reset(layoutInfo, info)
                 initBitmap(layoutInfo, info)
             }
