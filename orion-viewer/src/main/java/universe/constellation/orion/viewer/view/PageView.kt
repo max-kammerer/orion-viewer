@@ -36,7 +36,6 @@ class PageView(
     rootJob: Job,
     val pageLayoutManager: PageLayoutManager
 ): CorePageView(pageNum, document, controller, rootJob) {
-    private val analytics = pageLayoutManager.controller.activity.analytics
 
     val layoutData: LayoutData = LayoutData().apply {
         wholePageRect.set(pageLayoutManager.defaultSize())

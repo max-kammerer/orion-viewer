@@ -16,11 +16,13 @@ import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.Page
 import universe.constellation.orion.viewer.errorInDebug
 
-open class CorePageView(val pageNum: Int,
-                   val document: Document,
-                   val controller: Controller,
-                   rootJob: Job,
-                    val page: Page = document.getOrCreatePageAdapter(pageNum)) {
+open class CorePageView(
+    val pageNum: Int,
+    val document: Document,
+    val controller: Controller,
+    rootJob: Job,
+    val page: Page = document.getOrCreatePageAdapter(pageNum)
+) {
     private val analytics = controller.activity.analytics
 
     private val handler = CoroutineExceptionHandler { _, ex ->
@@ -39,7 +41,7 @@ open class CorePageView(val pageNum: Int,
     private var pageData: Deferred<Unit>? = null
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    protected  val renderingScope = CoroutineScope(
+    protected val renderingScope = CoroutineScope(
         controller.renderingDispatcher.limitedParallelism(2) + renderingPageJobs + handler
     )
 
