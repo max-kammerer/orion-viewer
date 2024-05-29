@@ -452,7 +452,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         return null
     }
 
-    private fun getCenteredYInSinglePageMode(y: Float, pageHeight: Int): Float {
+    fun getCenteredYInSinglePageMode(y: Float, pageHeight: Int): Float {
         if (isSinglePageMode) {
             if (pageHeight <= sceneHeight) {
                 return (sceneHeight - pageHeight) / 2.0f

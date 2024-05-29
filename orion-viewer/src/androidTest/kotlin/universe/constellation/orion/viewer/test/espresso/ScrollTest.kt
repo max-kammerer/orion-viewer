@@ -17,6 +17,7 @@ import universe.constellation.orion.viewer.lastPageNum0
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import universe.constellation.orion.viewer.test.framework.BookFile
 import universe.constellation.orion.viewer.test.framework.onActivity
+import universe.constellation.orion.viewer.view.height
 
 @RunWith(Parameterized::class)
 class ScrollTest(bookDescription: BookFile, newUI: Boolean, configuration: Configuration): BaseViewerActivityTestWithConfig(bookDescription, bookDescription.toOpenIntent {
@@ -58,9 +59,14 @@ class ScrollTest(bookDescription: BookFile, newUI: Boolean, configuration: Confi
         onView(withId(R.id.view)).perform(swipeDown())
         activityScenarioRule.scenario.onActivity {
             assertEquals(it.controller!!.document.filePath, bookDescription.asPath())
-            val first = it.controller!!.pageLayoutManager.activePages.first()
+            val pageLayoutManager = it.controller!!.pageLayoutManager
+            val first = pageLayoutManager.activePages.first()
+            val yPos = pageLayoutManager.getCenteredYInSinglePageMode(
+                first.layoutData.position.y,
+                first.height
+            )
             assertEquals(0, first.pageNum)
-            assertEquals(0f, first.layoutData.position.y, 0.0f)
+            assertEquals(yPos, first.layoutData.position.y, 0.0f)
         }
     }
 

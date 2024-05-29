@@ -26,6 +26,7 @@ import android.graphics.PointF
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
+import android.widget.Scroller
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.util.MoveUtil
 
@@ -61,6 +62,8 @@ class OrionDrawScene : View {
     private var inited = false
 
     lateinit var stuff: ColorStuff
+
+    val scroller = Scroller(context)
 
     constructor(context: Context) : super(context)
 
