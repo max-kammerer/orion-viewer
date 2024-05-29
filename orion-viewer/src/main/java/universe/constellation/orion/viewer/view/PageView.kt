@@ -109,6 +109,7 @@ class PageView(
             ?: pageLayoutManager.bitmapManager.createDefaultBitmap(wholePageRect.width(), wholePageRect.height(), pageNum)
         log("PageView.initBitmap $pageNum ${controller.document} $wholePageRect")
         pageInfo = info
+        setInitialLayoutAndXPosition(operation)
         state = PageState.SIZE_AND_BITMAP_CREATED
         pageLayoutManager.onPageSizeCalculated(this, oldSize, info, operation)
     }
@@ -138,6 +139,19 @@ class PageView(
 
     fun visibleRect(): Rect? {
         return layoutData.visibleOnScreenPart(pageLayoutManager.sceneRect)
+    }
+
+    private fun setInitialLayoutAndXPosition(operation: Operation) {
+        val pageWidth = wholePageRect.width()
+        val sceneWidth = pageLayoutManager.sceneRect.width()
+
+        if (pageWidth <= sceneWidth) {
+            layoutData.position.x = (sceneWidth - pageWidth) / 2.0f
+        } else {
+            if (operation != Operation.PINCH_ZOOM) {
+                layoutData.position.x = -layoutInfo.x.offset.toFloat()
+            }
+        }
     }
 
     internal fun renderVisible() {
