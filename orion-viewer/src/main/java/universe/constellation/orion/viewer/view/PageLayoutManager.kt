@@ -7,7 +7,6 @@ import android.graphics.RectF
 import androidx.core.math.MathUtils
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.Controller
@@ -15,7 +14,6 @@ import universe.constellation.orion.viewer.LastPageInfo
 import universe.constellation.orion.viewer.PageInfo
 import universe.constellation.orion.viewer.bitmap.BitmapManager
 import universe.constellation.orion.viewer.errorInDebug
-import universe.constellation.orion.viewer.errorInDebugOr
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.calcPageLayout
 import universe.constellation.orion.viewer.log
@@ -416,8 +414,8 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
                             layoutStrategy.reset(pos, info, next)
                             val oldPosition = page.layoutData.position
                             val x = -pos.x.offset
-                            //val y = getCenteredYInSinglePageMode(-pos.y.offset, page.height)
-                            val y = -pos.y.offset
+                            val y = getCenteredYInSinglePageMode(-pos.y.offset.toFloat(), page.height)
+                            //val y = -pos.y.offset
 
                             doScrollAndDoRendering(
                                 oldPosition.x,
@@ -436,8 +434,8 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
                             layoutStrategy.reset(pos, info, next)
                             val oldPosition = page.layoutData.position
                             val x = -pos.x.offset
-                            //val y = getCenteredYInSinglePageMode(-pos.y.offset, page.height)
-                            val y = -pos.y.offset
+                            val y = getCenteredYInSinglePageMode(-pos.y.offset.toFloat(), page.height)
+                            //val y = -pos.y.offset
                             doScrollAndDoRendering(
                                 oldPosition.x,
                                 oldPosition.y,
@@ -454,13 +452,13 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         return null
     }
 
-    private fun getCenteredYInSinglePageMode(y: Int, pageHeight: Int): Float {
+    private fun getCenteredYInSinglePageMode(y: Float, pageHeight: Int): Float {
         if (isSinglePageMode) {
-            if (pageHeight < sceneHeight) {
+            if (pageHeight <= sceneHeight) {
                 return (sceneHeight - pageHeight) / 2.0f
             }
         }
-        return y.toFloat()
+        return y
     }
 
     fun renderPageAt(
@@ -469,12 +467,13 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         y: Int,
         isTapNavigation: Boolean = false,
         doScroll: (PageView, PageInfo) -> Unit = { page, _ ->
-            val newPosition = page.layoutData.position
+            val oldPosition = page.layoutData.position
+            val newY = getCenteredYInSinglePageMode(y.toFloat(), page.height)
             doScrollAndDoRendering(
-                newPosition.x,
-                newPosition.y,
-                x - newPosition.x,
-                y - newPosition.y,
+                oldPosition.x,
+                oldPosition.y,
+                x - oldPosition.x,
+                newY - oldPosition.y,
                 isTapNavigation
             )
         }
@@ -519,7 +518,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
 
         onPageSizeCalculatedCallback?.job?.cancel()
         if (page.state == PageState.SIZE_AND_BITMAP_CREATED) {
-            println("onPageSizeCalculatedCallback: inplace")
+            log("onPageSizeCalculatedCallback: inplace")
             onPageSizeCalculatedCallback = null
             val completed = page.pageInfo!!
             doScroll(page, completed) //TODO process errors
@@ -528,9 +527,8 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
                 dump()
                 errorInDebug("Unexpected state ${page.pageNum} + ${page.pageInfoJob.isCompleted}")
             }
-            println("onPageSizeCalculatedCallback: lazy")
             onPageSizeCalculatedCallback = Callback(pageNum, Job(controller.rootJob)) {
-                println("onPageSizeCalculatedCallback: call")
+                log("onPageSizeCalculatedCallback: call")
                 doScroll(page, it)
             }
         }
@@ -538,7 +536,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
     }
 
     private fun destroyPages() {
-        log("Descroying pages")
+        log("Destroying pages")
         val iterator = activePages.iterator()
         for (page in iterator) {
             //TODO optimize
