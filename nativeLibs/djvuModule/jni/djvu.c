@@ -221,7 +221,6 @@ JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong context, jlong doc
     ddjvu_document_t *doc = (ddjvu_document_t *) docl;
     ddjvu_page_t *page = (ddjvu_page_t *) pagel;
 
-    LOGI("==================Start Rendering==============");
     int ret;
     void *pixels;
 
@@ -230,9 +229,7 @@ JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong context, jlong doc
     AndroidBitmapInfo info;
     LOGI("Rendering page=%dx%d patch=[%d,%d,%d,%d]",
          bitmapWidth, bitmapHeight, patchX, patchY, patchW, patchH);
-    LOGI("page: %p", page);
 
-    LOGI("In native method\n");
     if ((ret = AndroidBitmap_getInfo(env, bitmap, &info)) < 0) {
         LOGE("AndroidBitmap_getInfo() failed ! error=%d", ret);
         return 0;
@@ -244,7 +241,6 @@ JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong context, jlong doc
         //return 0;
     }
 
-    LOGI("locking pixels\n");
     if ((ret = AndroidBitmap_lockPixels(env, bitmap, &pixels)) < 0) {
         LOGE("AndroidBitmap_lockPixels() failed ! error=%d", ret);
         return 0;
@@ -294,13 +290,11 @@ JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong context, jlong doc
     }
     //memset(pixels, 255, num_pixels * 4);
 
-    LOGI("Rendering page=%dx%d patch=[%d,%d,%d,%d], shift=%d",
-         patchW, patchH, targetRect.x, targetRect.y, targetRect.w, targetRect.h, shift);
+    LOGI("Rendering page=%dx%d patch=[%d,%d,%d,%d], shift=%d zoom=%f",
+         patchW, patchH, targetRect.x, targetRect.y, targetRect.w, targetRect.h, shift, zoom);
 
     unsigned int masks[4] = {0xff, 0xff00, 0xff0000, 0xff000000};
     ddjvu_format_t *pixelFormat = ddjvu_format_create(DDJVU_FORMAT_RGBMASK32, 4, masks);
-
-    LOGI("zoom=%f ", zoom);
 
     ddjvu_format_set_row_order(pixelFormat, TRUE);
 
@@ -318,9 +312,6 @@ JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong context, jlong doc
 #ifdef ORION_FOR_ANDROID
     AndroidBitmap_unlockPixels(env, bitmap);
 #endif
-
-
-    LOGI("...Rendered");
 
     return 1;
 }

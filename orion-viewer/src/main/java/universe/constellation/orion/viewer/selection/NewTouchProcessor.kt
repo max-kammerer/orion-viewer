@@ -133,6 +133,7 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
         if (yDist < minFlingDistance) return false
 
         flingAnim.cancel()
+        property.prevValue = 0f
         flingAnim.setStartVelocity(velocityY)
         flingAnim.start()
         return true
