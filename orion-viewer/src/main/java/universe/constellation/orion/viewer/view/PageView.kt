@@ -66,7 +66,7 @@ class PageView(
         private set
 
     fun init() {
-       reinit("init")
+       reinit("init", Operation.DEFAULT)
     }
 
     fun destroy() {
@@ -85,7 +85,7 @@ class PageView(
         page.destroy()
     }
 
-    fun reinit(marker: String = "reinit") {
+    fun reinit(marker: String = "reinit", operation: Operation = Operation.DEFAULT) {
         if (state == PageState.SIZE_AND_BITMAP_CREATED) return
         log("Page $pageNum $marker $state $document" )
         cancelChildJobs()
@@ -97,12 +97,12 @@ class PageView(
             val info = getPageInfo(controller.layoutStrategy as SimpleLayoutStrategy)
             if (isActive) {
                 controller.layoutStrategy.reset(layoutInfo, info)
-                initBitmap(layoutInfo, info)
+                initBitmap(layoutInfo, info, operation)
             }
         }
     }
 
-    private fun initBitmap(layoutInfo: LayoutPosition, info: PageInfo) {
+    private fun initBitmap(layoutInfo: LayoutPosition, info: PageInfo, operation: Operation) {
         if (state == PageState.SIZE_AND_BITMAP_CREATED) return
         val oldSize = Rect(wholePageRect)
         wholePageRect.set(0, 0, layoutInfo.x.pageDimension, layoutInfo.y.pageDimension)
@@ -111,7 +111,7 @@ class PageView(
         log("PageView.initBitmap $pageNum ${controller.document} $wholePageRect")
         pageInfo = info
         state = PageState.SIZE_AND_BITMAP_CREATED
-        pageLayoutManager.onPageSizeCalculated(this, oldSize, info)
+        pageLayoutManager.onPageSizeCalculated(this, oldSize, info, operation)
     }
 
     fun draw(canvas: Canvas, scene: OrionDrawScene) {
@@ -269,7 +269,7 @@ class PageView(
 
     fun invalidateAndUpdate() {
         invalidateAndMoveToStub()
-        reinit()
+        reinit(operation = Operation.DEFAULT)
     }
 
     fun invalidateAndMoveToStub() {

@@ -118,7 +118,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
 
         //TODO delete pages
         activePages.forEach {
-            it.reinit()
+            it.reinit(operation = Operation.TOUCH_ZOOM)
         }
     }
 
@@ -569,7 +569,12 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         return view.layoutData.pagePartOnScreen(sceneRect, tmpRect) != null
     }
 
-    fun onPageSizeCalculated(updatedView: PageView, oldArea: Rect, info: PageInfo) {
+    fun onPageSizeCalculated(
+        updatedView: PageView,
+        oldArea: Rect,
+        info: PageInfo,
+        operation: Operation
+    ) {
         log("onSizeCalculated ${updatedView.pageNum}: ${updatedView.layoutData} old=$oldArea")
         val delta = updatedView.wholePageRect.height() - oldArea.height()
 
@@ -610,7 +615,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         updatedView.updateState()
         updateCacheAndRender()
 
-        if (updatedView.isActivePage) {
+        if (operation != Operation.TOUCH_ZOOM && updatedView.isActivePage) {
             scene.invalidate()
         }
         dump()
