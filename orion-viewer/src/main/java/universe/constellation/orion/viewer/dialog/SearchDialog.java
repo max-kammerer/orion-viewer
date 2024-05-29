@@ -260,7 +260,7 @@ public class SearchDialog extends DialogFragment {
         log("Rect " + toAbsoluteRect(subBatch.lp));
 
         lastSearchResultRenderer.setBatch(subBatch);
-        controller.drawPage(subBatch.lp);
+        controller.drawPage(subBatch.lp, true);
     }
 
     @Override

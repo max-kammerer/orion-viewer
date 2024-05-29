@@ -31,13 +31,10 @@ class MainMenu(private val mainMenu: View, val orionViewerActivity: OrionViewerA
 
         pageSeeker.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                orionViewerActivity.controller?.let {
-                    controller ->
-                    if (fromUser) {
-                        controller.drawPage(progress)
-                    }
-                    curPage.setGotoSpannable((progress + 1).toString())
+                if (fromUser) {
+                    openPage(progress)
                 }
+                curPage.setGotoSpannable((progress + 1).toString())
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -50,15 +47,19 @@ class MainMenu(private val mainMenu: View, val orionViewerActivity: OrionViewerA
         mainMenu.findViewById<ImageView>(R.id.page_picker_minus).setOnClickListener {
             if (pageSeeker.progress - 1 >= 0) {
                 pageSeeker.progress -= 1
-                orionViewerActivity.controller?.drawPage(pageSeeker.progress)
+                openPage(pageSeeker.progress)
             }
         }
         mainMenu.findViewById<ImageView>(R.id.page_picker_plus).setOnClickListener {
             if (pageSeeker.progress + 1 <= pageSeeker.max) {
                 pageSeeker.progress += 1
-                orionViewerActivity.controller?.drawPage(pageSeeker.progress)
+                openPage(pageSeeker.progress)
             }
         }
+    }
+
+    private fun openPage(pageNum: Int) {
+        orionViewerActivity.controller?.drawPage(pageNum, isTapNavigation = true)
     }
 
     private fun initImageViewActions(view: View, id: Int) {
