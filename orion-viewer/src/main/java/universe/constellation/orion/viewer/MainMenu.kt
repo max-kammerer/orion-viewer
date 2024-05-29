@@ -1,5 +1,9 @@
 package universe.constellation.orion.viewer
 
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -32,7 +36,7 @@ class MainMenu(private val mainMenu: View, val orionViewerActivity: OrionViewerA
                     if (fromUser) {
                         controller.drawPage(progress)
                     }
-                    curPage.text = (progress + 1).toString()
+                    curPage.setGotoSpannable((progress + 1).toString())
                 }
             }
 
@@ -97,12 +101,25 @@ class MainMenu(private val mainMenu: View, val orionViewerActivity: OrionViewerA
         if (controller != null) {
             pageSeeker.max = controller.pageCount - 1
             pageSeeker.progress = controller.currentPage
-            pageCount.text = controller.pageCount.toString()
+            pageCount.setGotoSpannable(controller.pageCount.toString())
         } else {
             pageSeeker.max = 1
             pageSeeker.progress = 1
             pageCount.text = "1"
         }
         mainMenu.visibility = View.VISIBLE
+    }
+
+    private fun TextView.setGotoSpannable(text: String) {
+        val spannable = SpannableStringBuilder(text)
+        val onClick = object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                hideMenu()
+                orionViewerActivity.doMenuAction(R.id.goto_menu_item)
+            }
+        }
+        spannable.setSpan(onClick, 0, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        this.text = spannable
+        this.movementMethod = LinkMovementMethod.getInstance();
     }
 }

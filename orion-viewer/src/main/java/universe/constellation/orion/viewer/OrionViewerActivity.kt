@@ -805,11 +805,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     private fun initOptionDialog() {
-        dialog = AppCompatDialog(this)
-        dialog!!.supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog!!.setContentView(R.layout.options_dialog)
-        animator = dialog!!.findViewById<View>(R.id.viewanim) as ViewAnimator?
-        dialog!!.setCanceledOnTouchOutside(true)
+        val dialog = AppCompatDialog(this).also { this.dialog = it }
+        dialog.supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.options_dialog)
+        animator = dialog.findViewById<View>(R.id.viewanim) as ViewAnimator?
+        dialog.setCanceledOnTouchOutside(true)
     }
 
     fun doAction(actionCode: Int) {
