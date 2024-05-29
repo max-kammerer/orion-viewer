@@ -68,7 +68,9 @@ class FileChooserAdapter(
 
         currentList.sortWith (
             Comparator { f1, f2 ->
-                if (f1.isDirectory && !f2.isDirectory || !f1.isDirectory && f2.isDirectory) {
+                if (f1 == parentFile) return@Comparator -1
+                if (f2 == parentFile) return@Comparator 1
+                if (f1.isDirectory != f2.isDirectory) {
                     return@Comparator if (f1.isDirectory) -1 else 1
                 }
                 f1.name.compareTo(f2.name)
