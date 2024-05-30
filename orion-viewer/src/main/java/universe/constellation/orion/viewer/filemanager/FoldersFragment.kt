@@ -15,7 +15,7 @@ import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAcc
 import universe.constellation.orion.viewer.R
 import java.io.File
 
-class FolderManagerFragment : Fragment(R.layout.folder_view) {
+class FoldersFragment : Fragment(R.layout.folder_view) {
 
     private fun getStartFolder(storages: List<Storage>): File {
         val lastOpenedDir =

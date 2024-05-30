@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 
 internal class SimplePagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
-    private val fragments: MutableList<Fragment> = arrayListOf(FolderManagerFragment())
+    private val fragments: MutableList<Fragment> = arrayListOf(FoldersFragment())
 
     fun addFragment(fragment: Fragment) {
         fragments.add(fragment)
