@@ -1,3 +1,9 @@
+===== 0.93.3 (May 31, 2024) =====
+* Added fling gesture support
+* Fixed issue with page reflow after zoom change
+* Added vertical page centering
+* Added ability to open page navigation dialog by clicking on page numbers in menu
+
 ===== 0.93.2 (May 28, 2024) =====
 * Performance optimizations
 * Fixed auto cropping
