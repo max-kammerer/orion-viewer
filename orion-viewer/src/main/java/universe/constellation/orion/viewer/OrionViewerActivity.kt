@@ -59,10 +59,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     var controller: Controller? = null
         private set
 
-    val globalOptions: GlobalOptions by lazy {
-        orionContext.options
-    }
-
     private var myState: MyState = MyState.PROCESSING_INTENT
 
     @JvmField

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="file_manager_title">File Manager</string>
+    <string name="file_manager_fodlers">Folders</string>
+    <string name="file_manager_history">History</string>
+
     <string name="file_manager_select_tip">Please select a file to open in Orion Viewer</string>
     <string name="file_manager_path">Path:</string>
     <string name="file_manager_documents">Documents</string>

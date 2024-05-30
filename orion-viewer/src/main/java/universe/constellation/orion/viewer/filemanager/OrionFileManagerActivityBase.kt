@@ -6,7 +6,6 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.SubMenu
@@ -28,7 +27,6 @@ import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.android.isAtLeastKitkat
 import universe.constellation.orion.viewer.getVectorDrawable
 import universe.constellation.orion.viewer.log
-import universe.constellation.orion.viewer.prefs.GlobalOptions
 import java.io.File
 import java.io.FilenameFilter
 
@@ -49,10 +47,6 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
     var prefs: SharedPreferences? = null
         private set
 
-    lateinit var globalOptions: GlobalOptions
-
-    private var justCreated: Boolean = false
-
     val selectDocumentInSystem = if (isAtLeastKitkat()) registerForActivityResult(
         ActivityResultContracts.OpenDocument()
         ) { result ->
@@ -67,16 +61,13 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         onOrionCreate(savedInstanceState, R.layout.file_manager, true)
         log("Creating file manager")
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-        globalOptions = orionContext.options
+        prefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
         initFileManager()
-
-        justCreated = true
-
         initDrawer()
-
         showPermissionRequestDialog()
+
+        onNewIntent(intent)
     }
 
     private fun initDrawer() {
@@ -99,7 +90,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         for (storage in this.describeStorages()) {
             val folder = storage.file
             val subMenu = locations.subMenu!!//.addSubMenu(storage.description)
-            val parentItem = addFodlerItem(
+            addFodlerItem(
                 subMenu,
                 storage.description,
                 viewPager,
@@ -162,6 +153,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         log("FileManager: On activity result requestCode=$requestCode resultCode=$resultCode")
@@ -197,25 +189,12 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         checkAndRequestStorageAccessPermissionOrReadOne(Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        justCreated = false
-    }
-
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(findViewById(R.id.nav_view))) {
             drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
-        }
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (justCreated) {
-            justCreated = false
-            onNewIntent(intent)
         }
     }
 
@@ -249,7 +228,6 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
 
         val folderTab = tabLayout.getTabAt(0)
         folderTab?.setIcon(getVectorDrawable(R.drawable.new_folder))
-        folderTab?.setContentDescription(R.string.file_manager_title)
 
         if (showRecentsAndSavePath) {
             val recentTab = tabLayout.getTabAt(1)

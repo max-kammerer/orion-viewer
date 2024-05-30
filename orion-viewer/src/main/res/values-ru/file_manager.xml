@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="file_manager_title">Менеджер файлов</string>
+    <string name="file_manager_fodlers">Папки</string>
+    <string name="file_manager_history">История</string>
+
     <string name="file_manager_select_tip">Выберите файл для открытия в Orion Viewer</string>
     <string name="file_manager_path">Путь:</string>
     <string name="file_manager_documents">Документы</string>
