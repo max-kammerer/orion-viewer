@@ -25,6 +25,7 @@ import kotlin.math.min
 
 enum class PageState(val interactWithUUI: Boolean) {
     STUB(false),
+    CALC_GEOMETRY(false),
     SIZE_AND_BITMAP_CREATED(true),
     DESTROYED(false)
 }
@@ -109,7 +110,7 @@ class PageView(
             ?: pageLayoutManager.bitmapManager.createDefaultBitmap(wholePageRect.width(), wholePageRect.height(), pageNum)
         log("PageView.initBitmap $pageNum ${controller.document} $wholePageRect")
         pageInfo = info
-        setInitialLayoutAndXPosition(operation)
+        setInitialLayoutAndXPosition(operation, state)
         state = PageState.SIZE_AND_BITMAP_CREATED
         pageLayoutManager.onPageSizeCalculated(this, oldSize, info, operation)
     }
@@ -118,7 +119,7 @@ class PageView(
         canvas.save()
         try {
             canvas.translate(layoutData.position.x, layoutData.position.y)
-            if (state != PageState.STUB && bitmap != null) {
+            if (state == PageState.SIZE_AND_BITMAP_CREATED && bitmap != null) {
                 //draw bitmap
                 log("Draw page $pageNum in state $state ${bitmap?.width} ${bitmap?.height} ")
                 draw(canvas, bitmap!!, scene.defaultPaint!!, scene)
@@ -141,14 +142,14 @@ class PageView(
         return layoutData.visibleOnScreenPart(pageLayoutManager.sceneRect)
     }
 
-    private fun setInitialLayoutAndXPosition(operation: Operation) {
+    private fun setInitialLayoutAndXPosition(operation: Operation, oldState: PageState) {
         val pageWidth = wholePageRect.width()
         val sceneWidth = pageLayoutManager.sceneRect.width()
 
         if (pageWidth <= sceneWidth) {
             layoutData.position.x = (sceneWidth - pageWidth) / 2.0f
         } else {
-            if (operation != Operation.PINCH_ZOOM) {
+            if (operation != Operation.PINCH_ZOOM || oldState == PageState.STUB) {
                 layoutData.position.x = -layoutInfo.x.offset.toFloat()
             }
         }
@@ -281,12 +282,14 @@ class PageView(
     }
 
     fun invalidateAndUpdate() {
-        invalidateAndMoveToStub()
+        invalidateAndDecreaseToCalcGeom()
         reinit(operation = Operation.DEFAULT)
     }
 
-    fun invalidateAndMoveToStub() {
-        state = PageState.STUB
+    fun invalidateAndDecreaseToCalcGeom() {
+        if (state != PageState.STUB) {
+            state = PageState.CALC_GEOMETRY
+        }
         cancelChildJobs()
     }
 }

@@ -103,7 +103,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
 
     fun performTouchZoom(zoom: Float, startFocus: PointF, endFocus: PointF) {
         activePages.forEach {
-            it.invalidateAndMoveToStub()
+            it.invalidateAndDecreaseToCalcGeom()
         }
 
         val tmp = PointF()
