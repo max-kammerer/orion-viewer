@@ -224,12 +224,16 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         val tabLayout = findViewById<TabLayout>(R.id.sliding_tabs)
         tabLayout.setupWithViewPager(viewPager)
 
-        val folderTab = tabLayout.getTabAt(0)
-        folderTab?.setIcon(getVectorDrawable(R.drawable.new_folder))
+        tabLayout.getTabAt(0)?.apply {
+            icon = getVectorDrawable(R.drawable.new_folder)
+            setText(R.string.file_manager_fodlers)
+        }
 
         if (showRecentsAndSavePath) {
-            val recentTab = tabLayout.getTabAt(1)
-            recentTab?.setIcon(getVectorDrawable(R.drawable.new_history))
+            tabLayout.getTabAt(1)?.apply {
+                icon = getVectorDrawable(R.drawable.new_history)
+                setText(R.string.file_manager_history)
+            }
         }
     }
 

@@ -16,14 +16,17 @@
             android:id="@+id/toolbar"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways">
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:contentInsetStartWithNavigation="5dp" >
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/sliding_tabs"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:layout_scrollFlags="scroll|enterAlways"
-                app:tabIconTint="?attr/navIconTint"/>
+                app:tabMode="auto"
+                app:tabIconTint="?attr/navIconTint"
+                app:tabInlineLabel="true"/>
         </androidx.appcompat.widget.Toolbar>
 
 

@@ -19,7 +19,7 @@ open class OrionFileManagerActivity : OrionFileManagerActivityBase(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportActionBar?.setTitle(R.string.file_manager_title)
+        supportActionBar?.title = null
     }
 
     override fun onNewIntent(intent: Intent) {
