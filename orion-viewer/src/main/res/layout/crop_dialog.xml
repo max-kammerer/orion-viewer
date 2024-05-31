@@ -50,24 +50,8 @@
             </ViewAnimator>
 
 
-            <LinearLayout
-                android:id="@+id/crop_buttons"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:gravity="right"
-                android:orientation="horizontal">
+            <include layout="@layout/option_dialog_bottom_panel" />
 
-                <ImageButton
-                    android:id="@+id/crop_preview"
-                    style="@style/Viewer_Dialog_Icon"
-                    app:srcCompat="@drawable/new_apply" />
-
-                <ImageButton
-                    android:id="@+id/crop_close"
-                    style="@style/Viewer_Dialog_Icon"
-                    app:srcCompat="@drawable/new_revert" />
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

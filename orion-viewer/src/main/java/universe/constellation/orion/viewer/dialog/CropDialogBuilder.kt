@@ -16,7 +16,7 @@ fun CropMargins.toDialogMargins() = intArrayOf(left, right, top, bottom, evenLef
 fun IntArray.toMargins(evenCrop: Boolean, cropMode: Int) =
         CropMargins(this[0], this[1], this[2], this[3], this[4], this[5], evenCrop, cropMode)
 
-class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : AppCompatDialog(context) {
+class CropDialog(cropMargins: CropMargins, val activity: OrionViewerActivity) : AppCompatDialog(activity) {
 
     private val cropMargins = cropMargins.toDialogMargins()
     private val evenCrop = cropMargins.evenCrop
@@ -94,18 +94,21 @@ class CropDialog(cropMargins: CropMargins, val context: OrionViewerActivity) : A
             }
         }
 
-        val preview = findViewById<View>(R.id.crop_preview) as ImageButton
+        val preview = findViewById<View>(R.id.option_dialog_bottom_apply) as ImageButton
         val radioGroup = findViewById<View>(R.id.crop_mode) as RadioGroup
 
         preview.setOnClickListener {
-            context.onAnimatorCancel()
+            with(activity) {
+                this@CropDialog.onApplyAction()
+            }
+
             val radioButtonId = radioGroup.checkedRadioButtonId
             val radioButton = radioGroup.findViewById<View>(radioButtonId)
             val mode = radioGroup.indexOfChild(radioButton)
-            context.controller?.changeCropMargins(cropMargins.toMargins(checkBox.isChecked, mode))
+            activity.controller?.changeCropMargins(cropMargins.toMargins(checkBox.isChecked, mode))
         }
 
-        val close = findViewById<View>(R.id.crop_close) as ImageButton
+        val close = findViewById<View>(R.id.option_dialog_bottom_close) as ImageButton
         close.setOnClickListener {
             dismiss()
         }

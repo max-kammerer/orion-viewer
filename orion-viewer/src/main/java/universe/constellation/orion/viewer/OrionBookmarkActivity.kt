@@ -52,7 +52,7 @@ class OrionBookmarkActivity : OrionBaseActivity(false) {
 
         onNewIntent(intent)
 
-        val view = findMyViewById(R.id.bookmarks) as ListView
+        val view = findViewById<ListView>(R.id.bookmarks)
         view.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
             val bookmark = parent.getItemAtPosition(position) as Bookmark
             val result = Intent()
@@ -72,7 +72,7 @@ class OrionBookmarkActivity : OrionBaseActivity(false) {
     private fun updateView(bookId: Long) {
         val accessor = orionContext.getBookmarkAccessor()
         val bookmarks = accessor.selectBookmarks(bookId)
-        val view = findMyViewById(R.id.bookmarks) as ListView
+        val view = findViewById<ListView>(R.id.bookmarks)
         view.adapter = object : ArrayAdapter<Bookmark>(this, R.layout.bookmark_entry, R.id.bookmark_entry, bookmarks) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 var convertView = convertView

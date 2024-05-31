@@ -132,18 +132,6 @@ abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: I
         device?.onUserInteraction()
     }
 
-    protected open fun findMyViewById(id: Int): View {
-        return findViewById(id)
-    }
-
-    protected open fun onAnimatorCancel() {
-
-    }
-
-    protected open fun onApplyAction() {
-
-    }
-
     fun showWarning(warning: String) {
         Toast.makeText(this, warning, Toast.LENGTH_SHORT).show()
     }

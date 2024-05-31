@@ -62,9 +62,9 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
             adapter.clear();
         });
 
-        statusText = (TextView) findMyViewById(R.id.key_binder_message);
+        statusText = findViewById(R.id.key_binder_message);
         defaultColor = statusText.getTextColors().getDefaultColor();
-        bindedKeys = (ListView) findMyViewById(R.id.binded_keys);
+        bindedKeys = findViewById(R.id.binded_keys);
         Map<String, Integer> props = (Map<String, Integer>) getOrionContext().getKeyBinding().getAllProperties();
         adapter = new KeyListAdapter(this, props);
         bindedKeys.setAdapter(adapter);

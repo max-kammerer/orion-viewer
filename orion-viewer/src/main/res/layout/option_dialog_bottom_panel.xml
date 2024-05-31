@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="0"
+    android:gravity="right"
+    android:orientation="horizontal"
+    tools:showIn="@layout/add_bookmark_dialog">
+
+    <ImageButton
+        android:id="@+id/option_dialog_bottom_close"
+        style="@style/Viewer_Dialog_Icon"
+        android:layout_gravity="right"
+        app:srcCompat="@drawable/new_revert"
+        android:layout_marginRight="10dp" />
+
+    <ImageButton
+        android:id="@+id/option_dialog_bottom_apply"
+        style="@style/Viewer_Dialog_Icon"
+        android:layout_gravity="right"
+        app:srcCompat="@drawable/new_apply" />
+
+</LinearLayout>

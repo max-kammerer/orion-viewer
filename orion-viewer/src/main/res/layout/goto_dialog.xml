@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/page_menu"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/root_padding">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/page_picker_minus"
+            style="@style/Viewer_Dialog_Icon"
+            app:srcCompat="@drawable/new_minus" />
+
+        <EditText
+            android:id="@+id/page_picker_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxLength="5"
+            android:selectAllOnFocus="true"
+            android:textSize="20sp" />
+
+        <ImageButton
+            android:id="@+id/page_picker_plus"
+            style="@style/Viewer_Dialog_Icon"
+            app:srcCompat="@drawable/new_plus" />
+
+    </LinearLayout>
+
+    <SeekBar
+        android:id="@+id/page_picker_seeker"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:minWidth="100dp" />
+
+    <include layout="@layout/option_dialog_bottom_panel" />
+</LinearLayout>
+
+    

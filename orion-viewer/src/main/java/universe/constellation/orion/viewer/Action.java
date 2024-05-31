@@ -201,7 +201,7 @@ public enum Action {
 
     BOOK_OPTIONS (R.string.action_book_options, R.integer.action_book_options) {
         @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+        public void doAction(OrionBaseActivity activity) {
             Intent intent = new Intent(activity, OrionBookPreferencesActivityX.class);
             activity.startActivity(intent);
         }
@@ -215,9 +215,9 @@ public enum Action {
     },
 
     PAGE_LAYOUT (R.string.action_layout_page, R.integer.action_page_layout) {
-            @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            activity.showOrionDialog(OrionViewerActivity.PAGE_LAYOUT_SCREEN, null, null);
+        @Override
+        public void doAction(OrionBaseActivity activity) {
+            BOOK_OPTIONS.doAction(activity);
         }
     },
 
@@ -237,9 +237,9 @@ public enum Action {
     },
 
     ROTATION (R.string.action_rotation_page, R.integer.action_rotation_page)  {
-            @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            activity.showOrionDialog(OrionViewerActivity.ROTATION_SCREEN, null, null);
+        @Override
+        public void doAction(OrionBaseActivity activity) {
+            BOOK_OPTIONS.doAction(activity);
         }
     },
 

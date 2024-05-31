@@ -48,11 +48,7 @@ enum class MyState {
 
 class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVITY) {
 
-    private var dialog: AppCompatDialog? = null
-
     internal val subscriptionManager = SubscriptionManager()
-
-    private var animator: ViewAnimator? = null
 
     private var lastPageInfo: LastPageInfo? = null
 
@@ -127,8 +123,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         OptionActions.SHOW_TIME_ON_STATUS_BAR.doAction(this, !globalOptions.isShowClockOnStatusBar, globalOptions.isShowClockOnStatusBar)
         fullScene.setDrawOffPage(globalOptions.isDrawOffPage)
 
-        initDialogs()
-
         newTouchProcessor = NewTouchProcessorWithScale(view, this)
         view.setOnTouchListener{ _, event ->
             newTouchProcessor!!.onTouch(event)
@@ -143,35 +137,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         if (ASK_READ_PERMISSION_FOR_BOOK_OPEN == requestCode) {
             println("Permission callback $requestCode...")
             processIntentAndCheckPermission(intent ?: return)
-        }
-    }
-
-    private fun initDialogs() {
-        initOptionDialog()
-
-        initGoToPageScreen()
-
-        initZoomScreen()
-
-        initPageLayoutScreen()
-
-        initAddBookmarkScreen()
-    }
-
-    fun updatePageLayout() {
-        val walkOrder = controller!!.direction
-        val lid = controller!!.layout
-        (findMyViewById(R.id.layoutGroup) as RadioGroup).check(if (lid == 0) R.id.layout1 else if (lid == 1) R.id.layout2 else R.id.layout3)
-        //((RadioGroup) findMyViewById(R.id.directionGroup)).check(did == 0 ? R.id.direction1 : did == 1 ? R.id.direction2 : R.id.direction3);
-
-        val group = findMyViewById(R.id.directionGroup) as RadioGroup
-        for (i in 0 until group.childCount) {
-            val child = group.getChildAt(i)
-            if (child is universe.constellation.orion.viewer.android.RadioButton) {
-                if (walkOrder == child.walkOrder) {
-                    group.check(child.id)
-                }
-            }
         }
     }
 
@@ -421,78 +386,40 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
     }
 
-    private fun initGoToPageScreen() {
-        val pageSeek = findMyViewById(R.id.page_picker_seeker) as SeekBar
-
-        subscriptionManager.addDocListeners(object : DocumentViewAdapter() {
-            override fun documentOpened(controller: Controller) {
-                pageSeek.max = controller.pageCount - 1
-            }
-
-            override fun pageChanged(newPage: Int, pageCount: Int) {
-                pageSeek.progress = newPage
-            }
-        })
-
-
+    private fun AppCompatDialog.initGoToPageScreen() {
+        val pageSeeker = findMyViewById(R.id.page_picker_seeker) as SeekBar
         val pageNumberText = findMyViewById(R.id.page_picker_message) as TextView
-        pageNumberText.text = 1.toString()
-
-        pageSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            @SuppressLint("SetTextI18n")
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                pageNumberText.text = (progress + 1).toString()
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {}
-
-            override fun onStopTrackingTouch(seekBar: SeekBar) {}
-        })
-
         val plus = findMyViewById(R.id.page_picker_plus) as ImageButton
-        plus.setOnClickListener {
-            if (pageSeek.progress != pageSeek.max) {
-                pageSeek.incrementProgressBy(1)
-            }
-        }
-
         val minus = findMyViewById(R.id.page_picker_minus) as ImageButton
-        minus.setOnClickListener {
-            if (pageSeek.progress != 0) {
-                pageSeek.incrementProgressBy(-1)
-            }
-        }
+        initPageNavControls(this@OrionViewerActivity, pageSeeker, minus, plus, pageNumberText)
+        initPageNavigationValues(controller, pageSeeker, pageNumberText)
+        pageNumberText.text = ((controller?.currentPage ?: 0) + 1).toString()
 
-        val closePagePeeker = findMyViewById(R.id.page_picker_close) as ImageButton
+        val closePagePeeker = findMyViewById(R.id.option_dialog_bottom_close) as ImageButton
         closePagePeeker.setOnClickListener {
-            onAnimatorCancel()
+            dismiss()
         }
 
-        val pagePreview = findMyViewById(R.id.page_preview) as ImageButton
+        val pagePreview = findMyViewById(R.id.option_dialog_bottom_apply) as ImageButton
         pagePreview.setOnClickListener {
-            onApplyAction()
             if (pageNumberText.text.isNotEmpty()) {
                 try {
                     val userPage = Integer.valueOf(pageNumberText.text.toString())
                     val newPage = MathUtils.clamp(userPage, 1, controller!!.pageCount)
-                    controller!!.drawPage(newPage - 1)
+                    if (newPage != controller?.currentPage) {
+                        controller?.drawPage(newPage - 1, isTapNavigation = true)
+                        pageSeeker.progress = newPage - 1
+                    }
+                    dismiss()
                 } catch (ex: NumberFormatException) {
-                    showAndLogError(this, "Couldn't parse " + pageNumberText.text, ex)
+                    showAndLogError(this@OrionViewerActivity, "Couldn't parse " + pageNumberText.text, ex)
                 }
             }
         }
+        pageNumberText.requestFocus()
     }
 
-    private fun updatePageSeeker() {
-        val pageSeek = findMyViewById(R.id.page_picker_seeker) as SeekBar
-        pageSeek.progress = controller!!.currentPage
-        val view = findMyViewById(R.id.page_picker_message) as TextView
-        view.text = (controller!!.currentPage + 1).toString()
-        view.clearFocus()
-        view.requestFocus()
-    }
-
-    private fun initZoomScreen() {
+    private fun AppCompatDialog.initZoomScreen() {
         //zoom screen
         val spinner = findMyViewById(R.id.zoom_spinner) as Spinner
         val zoomValueAsText = findMyViewById(R.id.zoom_picker_message) as EditText
@@ -521,12 +448,12 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             }
         }
 
-        val closeZoomPicker = findMyViewById(R.id.zoom_picker_close) as ImageButton
+        val closeZoomPicker = findMyViewById(R.id.option_dialog_bottom_close) as ImageButton
         closeZoomPicker.setOnClickListener {
-            onAnimatorCancel()
+            dismiss()
         }
 
-        val zoomPreview = findMyViewById(R.id.zoom_preview) as ImageButton
+        val zoomPreview = findMyViewById(R.id.option_dialog_bottom_apply) as ImageButton
         zoomPreview.setOnClickListener {
             onApplyAction()
             val index = spinner.selectedItemPosition
@@ -561,9 +488,10 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
         //by width
         spinner.setSelection(1)
+        actualizeZoomOptions()
     }
 
-    private fun actualizeZoomOptions() {
+    private fun AppCompatDialog.actualizeZoomOptions() {
         val zoomSeek = findMyViewById(R.id.zoom_picker_seeker) as SeekBar
         val textView = findMyViewById(R.id.zoom_picker_message) as TextView
         val spinner = findMyViewById(R.id.zoom_spinner) as Spinner
@@ -581,57 +509,30 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         spinner.setSelection(spinnerIndex)
     }
 
-
-    private fun initPageLayoutScreen() {
-        val close = findMyViewById(R.id.options_close) as ImageButton
-        close.setOnClickListener {
-            onAnimatorCancel()
-            updatePageLayout()
-        }
-
-
-        val view = findMyViewById(R.id.options_apply) as ImageButton
-        view.setOnClickListener {
-            onApplyAction()
-            val group = findMyViewById(R.id.directionGroup) as RadioGroup
-            val walkOrderButtonId = group.checkedRadioButtonId
-            val button = group.findViewById<View>(walkOrderButtonId) as universe.constellation.orion.viewer.android.RadioButton
-            val lid = (findMyViewById(R.id.layoutGroup) as RadioGroup).checkedRadioButtonId
-            controller!!.setDirectionAndLayout(button.walkOrder, if (lid == R.id.layout1) 0 else if (lid == R.id.layout2) 1 else 2)
-        }
-
-        subscriptionManager.addDocListeners(object : DocumentViewAdapter() {
-            override fun documentOpened(controller: Controller) {
-                updatePageLayout()
-            }
-        })
-    }
-
-
-    private fun initAddBookmarkScreen() {
-        val close = findMyViewById(R.id.add_bookmark_close) as ImageButton
+    private fun AppCompatDialog.initAddBookmarkScreen() {
+        val close = findMyViewById(R.id.option_dialog_bottom_close) as ImageButton
         close.setOnClickListener {
             //main menu
-            onAnimatorCancel()
+            dismiss()
         }
 
 
-        val view = findMyViewById(R.id.add_bookmark_apply) as ImageButton
+        val view = findMyViewById(R.id.option_dialog_bottom_apply) as ImageButton
         view.setOnClickListener {
             val text = findMyViewById(R.id.add_bookmark_text) as EditText
             try {
                 insertBookmark(controller!!.currentPage, text.text.toString())
-                onApplyAction(true)
+                dismiss()
             } catch (e: Exception) {
                 e.printStackTrace()
-                val activity = this@OrionViewerActivity
-                val buider = createThemedAlertBuilder()
-                buider.setTitle(activity.resources.getString(R.string.ex_msg_operation_failed))
+                analytics.error(e)
 
-                val input = EditText(activity)
+                //TODO show common error dialog
+                val buider = createThemedAlertBuilder()
+                buider.setTitle(resources.getString(R.string.ex_msg_operation_failed))
+                val input = EditText(this@OrionViewerActivity)
                 input.setText(e.message)
                 buider.setView(input)
-
                 buider.setNeutralButton("OK") { dialog, _ -> dialog.dismiss() }
                 buider.create().show()
             }
@@ -655,10 +556,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         super.onDestroy()
         log("onDestroy")
         destroyController()
-
-        if (dialog != null) {
-            dialog!!.dismiss()
-        }
         orionContext.destroyMainActivity()
     }
 
@@ -798,12 +695,41 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         return true
     }
 
-    private fun initOptionDialog() {
-        val dialog = AppCompatDialog(this).also { this.dialog = it }
-        dialog.supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.options_dialog)
-        animator = dialog.findViewById<View>(R.id.viewanim) as ViewAnimator?
-        dialog.setCanceledOnTouchOutside(true)
+    private fun createOptionDialog(screenId: Int): AppCompatDialog {
+        val dialog = if (CROP_SCREEN == screenId) {
+            create(this, controller!!.margins)
+        } else {
+            val dialog = AppCompatDialog(this)
+            dialog.supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.setCanceledOnTouchOutside(true)
+
+            when (screenId) {
+                PAGE_SCREEN -> {
+                    dialog.setContentView(R.layout.goto_dialog)
+                    dialog.initGoToPageScreen()
+                }
+
+                ZOOM_SCREEN -> {
+                    dialog.setContentView(R.layout.zoom_dialog)
+                    dialog.initZoomScreen()
+                }
+
+                ADD_BOOKMARK_SCREEN -> {
+                    dialog.setContentView(R.layout.add_bookmark_dialog)
+                    dialog.initAddBookmarkScreen()
+                }
+
+                else -> errorInDebugOr("Unknown id = $screenId") { return dialog }
+            }
+
+            dialog.window?.setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT
+            )
+            dialog
+        }
+
+        return dialog
     }
 
     fun doAction(actionCode: Int) {
@@ -817,22 +743,13 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         action.doAction(controller, this, null)
     }
 
-
-    override fun findMyViewById(id: Int): View {
-        return dialog!!.findViewById<View>(id) as View
+    fun AppCompatDialog.findMyViewById(id: Int): View {
+        return findViewById<View>(id) as View
     }
 
-    public override fun onAnimatorCancel() {
-        dialog!!.cancel()
-    }
-
-    override fun onApplyAction() {
-        onApplyAction(false)
-    }
-
-    private fun onApplyAction(close: Boolean) {
-        if (close || globalOptions.isApplyAndClose) {
-            onAnimatorCancel()
+    fun AppCompatDialog.onApplyAction() {
+        if (globalOptions.isApplyAndClose) {
+            dismiss()
         }
     }
 
@@ -854,7 +771,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         val info = lastPageInfo!!
         var bookId: Long? = orionContext.tempOptions!!.bookId
         if (bookId == null || bookId == -1L) {
-            bookId = orionContext.getBookmarkAccessor().insertOrUpdate(info.simpleFileName, info.fileSize)
+            bookId = orionContext.getBookmarkAccessor()
+                .insertOrUpdate(info.simpleFileName, info.fileSize)
             orionContext.tempOptions!!.bookId = bookId
         }
         return bookId.toInt().toLong()
@@ -863,7 +781,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     private fun insertBookmark(page: Int, text: String): Boolean {
         val id = insertOrGetBookId()
         if (id != -1L) {
-            val bokmarkId = orionContext.getBookmarkAccessor().insertOrUpdateBookmark(id, page, text)
+            val bokmarkId =
+                orionContext.getBookmarkAccessor().insertOrUpdateBookmark(id, page, text)
             return bokmarkId != -1L
         }
         return false
@@ -871,15 +790,15 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     fun doubleClickAction(x: Int, y: Int) {
         SelectionAutomata.selectText(
-                this, true, true, selectionAutomata.dialog,
-                SelectionAutomata.getSelectionRectangle(
-                    x,
-                    y,
-                    0,
-                    0,
-                    true,
-                    controller!!.pageLayoutManager
-                )
+            this, true, true, selectionAutomata.dialog,
+            SelectionAutomata.getSelectionRectangle(
+                x,
+                y,
+                0,
+                0,
+                true,
+                controller!!.pageLayoutManager
+            )
         )
     }
 
@@ -899,6 +818,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     }
                 }
             }
+
             SAVE_FILE_RESULT -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val inputFileIntentData = intent.data
@@ -922,41 +842,31 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 }
                 processIntentAndCheckPermission(intent ?: return)
             }
+
             PERMISSION_READ_RESULT ->
                 processIntentAndCheckPermission(intent ?: return)
         }
     }
 
     fun showOrionDialog(screenId: Int, action: Action?, parameter: Any?) {
-        if (screenId == CROP_SCREEN) {
-            val cropDialog = create(this, controller!!.margins)
-            cropDialog.show()
-            return
-        }
         if (screenId != -1) {
-            when (screenId) {
-                PAGE_LAYOUT_SCREEN -> {
-                    updatePageLayout()
-                    updatePageSeeker()
-                }
-                PAGE_SCREEN -> updatePageSeeker()
-                ZOOM_SCREEN -> actualizeZoomOptions()
-            }
+            val dialog = createOptionDialog(screenId)
 
             if (action === Action.ADD_BOOKMARK) {
                 val parameterText = parameter as String?
 
                 val page = controller!!.currentPage
-                val newText = orionContext.getBookmarkAccessor().selectExistingBookmark(bookId, page, parameterText)
+                val newText = orionContext.getBookmarkAccessor()
+                    .selectExistingBookmark(bookId, page, parameterText)
 
                 val notOverride = parameterText == null || parameterText == newText
-                findMyViewById(R.id.warn_text_override).visibility = if (notOverride) View.GONE else View.VISIBLE
+                dialog.findMyViewById(R.id.warn_text_override).visibility =
+                    if (notOverride) View.GONE else View.VISIBLE
 
-                (findMyViewById(R.id.add_bookmark_text) as EditText).setText(if (notOverride) newText else parameterText)
+                (dialog.findMyViewById(R.id.add_bookmark_text) as EditText).setText(if (notOverride) newText else parameterText)
             }
 
-            animator!!.displayedChild = screenId - 1
-            dialog!!.show()
+            dialog.show()
         }
     }
 
@@ -966,12 +876,16 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     private class MyArrayAdapter(context: Context) :
-            ArrayAdapter<CharSequence>(context, R.layout.support_simple_spinner_dropdown_item, context.resources.getTextArray(R.array.fits)), SpinnerAdapter {
+        ArrayAdapter<CharSequence>(
+            context,
+            R.layout.support_simple_spinner_dropdown_item,
+            context.resources.getTextArray(R.array.fits)
+        ), SpinnerAdapter {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View =
-                convertView ?: TextView(parent.context).apply {
-                    text = " % "
-                }
+            convertView ?: TextView(parent.context).apply {
+                text = " % "
+            }
     }
 
     private suspend fun askPassword(controller: Controller): Boolean {
@@ -1022,7 +936,12 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 globalOptions.saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false)
                 analytics.dialog(TAP_HELP_DIALOG, true)
             }
-            controller?.drawPage(lastPageInfo1.pageNumber, lastPageInfo1.newOffsetX, lastPageInfo1.newOffsetY, lastPageInfo1.isSinglePageMode)
+            controller?.drawPage(
+                lastPageInfo1.pageNumber,
+                lastPageInfo1.newOffsetX,
+                lastPageInfo1.newOffsetY,
+                lastPageInfo1.isSinglePageMode
+            )
             controller?.pageLayoutManager?.updateCacheAndRender()
         }
     }
@@ -1050,8 +969,10 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
 
         if (intent.hasExtra(GlobalOptions.TEST_SCREEN_WIDTH) && intent.hasExtra(GlobalOptions.TEST_SCREEN_HEIGHT)) {
-            val newWidth = intent.getIntExtra(GlobalOptions.TEST_SCREEN_WIDTH, view.layoutParams.width)
-            val newHeigth = intent.getIntExtra(GlobalOptions.TEST_SCREEN_HEIGHT, view.layoutParams.height)
+            val newWidth =
+                intent.getIntExtra(GlobalOptions.TEST_SCREEN_WIDTH, view.layoutParams.width)
+            val newHeigth =
+                intent.getIntExtra(GlobalOptions.TEST_SCREEN_HEIGHT, view.layoutParams.height)
             view.layoutParams.width = newWidth
             view.layoutParams.height = newHeigth
             view.requestLayout()
@@ -1151,7 +1072,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private fun showErrorPanel(show: Boolean) {
         invalidateOptionsMenu()
-        findViewById<View>(R.id.orion_full_scene)!!.visibility = if (!show) View.VISIBLE else View.INVISIBLE
+        findViewById<View>(R.id.orion_full_scene)!!.visibility =
+            if (!show) View.VISIBLE else View.INVISIBLE
         findViewById<View>(R.id.problem_view)!!.visibility = if (show) View.VISIBLE else View.GONE
         if (show) {
             view.pageLayoutManager = null
@@ -1160,16 +1082,17 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     companion object {
 
-        val BOOK_MENU_ITEMS = setOf(R.id.search_menu_item,
-                R.id.crop_menu_item,
-                R.id.zoom_menu_item,
-                R.id.add_bookmark_menu_item,
-                R.id.goto_menu_item,
-                R.id.select_text_menu_item,
-                R.id.book_options_menu_item,
-                R.id.outline_menu_item,
-                R.id.bookmarks_menu_item,
-                R.id.open_dictionary_menu_item
+        val BOOK_MENU_ITEMS = setOf(
+            R.id.search_menu_item,
+            R.id.crop_menu_item,
+            R.id.zoom_menu_item,
+            R.id.add_bookmark_menu_item,
+            R.id.goto_menu_item,
+            R.id.select_text_menu_item,
+            R.id.book_options_menu_item,
+            R.id.outline_menu_item,
+            R.id.bookmarks_menu_item,
+            R.id.open_dictionary_menu_item
         )
 
         const val OPEN_BOOKMARK_ACTIVITY_RESULT = 1
@@ -1178,17 +1101,13 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
         const val PERMISSION_READ_RESULT = Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN
 
-        const val ROTATION_SCREEN = 0
+        const val PAGE_SCREEN = 0
 
-        const val PAGE_SCREEN = 1
+        const val ZOOM_SCREEN = 1
 
-        const val ZOOM_SCREEN = 2
+        const val CROP_SCREEN = 2
 
-        const val CROP_SCREEN = 3
-
-        const val PAGE_LAYOUT_SCREEN = 4
-
-        const val ADD_BOOKMARK_SCREEN = 5
+        const val ADD_BOOKMARK_SCREEN = 3
 
         const val CROP_RESTRICTION_MIN = -10
 

@@ -13,7 +13,7 @@ import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
 
-class MainMenu(private val mainMenu: View, val orionViewerActivity: OrionViewerActivity) {
+class MainMenu(private val mainMenu: View, val activity: OrionViewerActivity) {
 
     private val pageSeeker = mainMenu.findViewById<SeekBar>(R.id.page_picker_seeker)!!
     private val pageCount = mainMenu.findViewById<TextView>(R.id.page_count)!!
@@ -29,37 +29,14 @@ class MainMenu(private val mainMenu: View, val orionViewerActivity: OrionViewerA
             hideMenu()
         }
 
-        pageSeeker.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser) {
-                    openPage(progress)
-                }
-                curPage.setGotoSpannable((progress + 1).toString())
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
         mainMenu.findViewById<View>(R.id.menu_top_actions).setOnClickListener {}
         mainMenu.findViewById<View>(R.id.menu_botton_actions_all).setOnClickListener {}
-        mainMenu.findViewById<ImageView>(R.id.page_picker_minus).setOnClickListener {
-            if (pageSeeker.progress - 1 >= 0) {
-                pageSeeker.progress -= 1
-                openPage(pageSeeker.progress)
-            }
-        }
-        mainMenu.findViewById<ImageView>(R.id.page_picker_plus).setOnClickListener {
-            if (pageSeeker.progress + 1 <= pageSeeker.max) {
-                pageSeeker.progress += 1
-                openPage(pageSeeker.progress)
-            }
-        }
-    }
 
-    private fun openPage(pageNum: Int) {
-        orionViewerActivity.controller?.drawPage(pageNum, isTapNavigation = true)
+        val minus = mainMenu.findViewById<ImageView>(R.id.page_picker_minus)
+        val plus = mainMenu.findViewById<ImageView>(R.id.page_picker_plus)
+        initPageNavControls(activity, pageSeeker, minus, plus, curPage) {
+            setGotoSpannable(it.toString())
+        }
     }
 
     private fun initImageViewActions(view: View, id: Int) {
@@ -88,7 +65,7 @@ class MainMenu(private val mainMenu: View, val orionViewerActivity: OrionViewerA
             topExtraPanel.visibility = newVisibility
         } else {
             hideMenu()
-            orionViewerActivity.doMenuAction(viewId)
+            activity.doMenuAction(viewId)
         }
     }
 
@@ -98,17 +75,11 @@ class MainMenu(private val mainMenu: View, val orionViewerActivity: OrionViewerA
 
 
     fun showMenu() {
-        val controller = orionViewerActivity.controller
-        if (controller != null) {
-            pageSeeker.max = controller.pageCount - 1
-            pageSeeker.progress = controller.currentPage
-            pageCount.setGotoSpannable(controller.pageCount.toString())
-        } else {
-            pageSeeker.max = 1
-            pageSeeker.progress = 1
-            pageCount.text = "1"
+        val controller = activity.controller
+        initPageNavigationValues(controller, pageSeeker, pageCount) {
+            setGotoSpannable(controller!!.pageCount.toString())
         }
-        mainMenu.visibility = View.VISIBLE
+        mainMenu.visibility = VISIBLE
     }
 
     private fun TextView.setGotoSpannable(text: String) {
@@ -116,11 +87,71 @@ class MainMenu(private val mainMenu: View, val orionViewerActivity: OrionViewerA
         val onClick = object : ClickableSpan() {
             override fun onClick(widget: View) {
                 hideMenu()
-                orionViewerActivity.doMenuAction(R.id.goto_menu_item)
+                activity.doMenuAction(R.id.goto_menu_item)
             }
         }
         spannable.setSpan(onClick, 0, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         this.text = spannable
         this.movementMethod = LinkMovementMethod.getInstance();
     }
+}
+
+fun initPageNavigationValues(
+    controller: Controller?,
+    pageSeeker: SeekBar,
+    pageCount: TextView,
+    setTextAction: TextView.(page: Int) -> Unit = { text = it.toString() }
+) {
+    if (controller != null) {
+        pageSeeker.max = controller.pageCount - 1
+        pageSeeker.progress = controller.currentPage
+        pageCount.setTextAction(controller.pageCount)
+    } else {
+        pageSeeker.max = 1
+        pageSeeker.progress = 1
+        pageCount.text = "1"
+    }
+}
+
+fun initPageNavControls(
+    activity: OrionViewerActivity,
+    pageSeeker: SeekBar,
+    minus: View,
+    plus: View,
+    curPage: TextView,
+    setTextAction: TextView.(page: Int) -> Unit = {
+        text = it.toString()
+    }
+) {
+    pageSeeker.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+            if (fromUser) {
+                openPage(activity.controller, progress)
+            }
+            curPage.setTextAction(progress + 1)
+        }
+
+        override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+        override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+    })
+
+
+    minus.setOnClickListener {
+        if (pageSeeker.progress - 1 >= 0) {
+            pageSeeker.progress -= 1
+            openPage(activity.controller, pageSeeker.progress)
+        }
+    }
+
+    plus.setOnClickListener {
+        if (pageSeeker.progress + 1 <= pageSeeker.max) {
+            pageSeeker.progress += 1
+            openPage(activity.controller, pageSeeker.progress)
+        }
+    }
+}
+
+private fun openPage(controller: Controller?, pageNum: Int) {
+    controller?.drawPage(pageNum, isTapNavigation = true)
 }

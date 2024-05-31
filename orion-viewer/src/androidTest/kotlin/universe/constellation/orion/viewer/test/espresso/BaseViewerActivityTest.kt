@@ -97,14 +97,14 @@ abstract class BaseViewerActivityTest(
 
 
     protected fun applyZoom() {
-        onView(ViewMatchers.withId(R.id.zoom_preview)).perform(ViewActions.click())
-        onView(ViewMatchers.withId(R.id.zoom_picker_close)).perform(ViewActions.click())
+        onView(ViewMatchers.withId(R.id.option_dialog_bottom_apply)).perform(ViewActions.click())
+        onView(ViewMatchers.withId(R.id.option_dialog_bottom_close)).perform(ViewActions.click())
     }
 
     protected fun applyGoTo() {
         if (!globalOptions.isNewUI) {
-            onView(ViewMatchers.withId(R.id.page_preview)).perform(ViewActions.click())
-            onView(ViewMatchers.withId(R.id.page_picker_close)).perform(ViewActions.click())
+            onView(ViewMatchers.withId(R.id.option_dialog_bottom_apply)).perform(ViewActions.click())
+            onView(ViewMatchers.withId(R.id.option_dialog_bottom_close)).perform(ViewActions.click())
         } else {
             onView(ViewMatchers.withId(R.id.view)).perform(ViewActions.click())
         }
@@ -123,8 +123,8 @@ abstract class BaseViewerActivityTest(
     }
 
     fun applyCrop() {
-        onView(ViewMatchers.withId(R.id.crop_preview)).perform(ViewActions.click())
-        onView(ViewMatchers.withId(R.id.crop_close)).perform(ViewActions.click())
+        onView(ViewMatchers.withId(R.id.option_dialog_bottom_apply)).perform(ViewActions.click())
+        onView(ViewMatchers.withId(R.id.option_dialog_bottom_close)).perform(ViewActions.click())
     }
 
     private fun openMenuAndSelect(id: Int, resId: Int) {
