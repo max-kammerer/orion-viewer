@@ -30,7 +30,7 @@ fun PageView.precache() {
 }
 
 fun PageView.precacheNeighbours(next: Boolean) {
-    if (this.state != PageState.SIZE_AND_BITMAP_CREATED) return
+    val isCurrentPageInitialized = this.state != PageState.SIZE_AND_BITMAP_CREATED
     log("Precaching Neighbours $pageNum")
     val sceneInfo = pageLayoutManager.sceneRect
 
@@ -39,14 +39,13 @@ fun PageView.precacheNeighbours(next: Boolean) {
     val deltaY = getDeltaY(sceneInfo)
 
     if (next && layoutData.globalRect(tmp).bottom < sceneInfo.bottom + deltaY) {
-        pageLayoutManager.uploadNextPage(this, addIfAbsent = true)?.precacheData()
+        pageLayoutManager.uploadNextPage(this, addIfAbsent = true)?.takeIf { isCurrentPageInitialized }?.precacheData()
     }
 
     if (!next && layoutData.globalRect(tmp).top >= -deltaY) {
         this.layoutData.globalRect(tmp).bottom
-        pageLayoutManager.uploadPrevPage(this, addIfAbsent = true)?.precacheData()
+        pageLayoutManager.uploadPrevPage(this, addIfAbsent = true)?.takeIf { isCurrentPageInitialized }?.precacheData()
     }
-
 }
 
 fun PageView.precacheSide(rectOnScreen: Rect, pageGlobal: Rect, side: String) {
