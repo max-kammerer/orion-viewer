@@ -85,8 +85,6 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         val locations = menu.findItem(R.id.nav_locations)
         val viewPager = findViewById<ViewPager>(R.id.viewpager)
 
-
-
         for (storage in this.describeStorages()) {
             val folder = storage.file
             val subMenu = locations.subMenu!!//.addSubMenu(storage.description)
