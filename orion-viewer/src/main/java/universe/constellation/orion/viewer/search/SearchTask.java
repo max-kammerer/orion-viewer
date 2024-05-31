@@ -15,7 +15,7 @@ import com.artifex.mupdfdemo.SearchTaskResult;
 import universe.constellation.orion.viewer.Controller;
 import universe.constellation.orion.viewer.R;
 import universe.constellation.orion.viewer.document.Document;
-import universe.constellation.orion.viewer.document.PageWithAutoCrop;
+import universe.constellation.orion.viewer.document.AbstractPage;
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy;
 import universe.constellation.orion.viewer.view.AutoCropKt;
 import universe.constellation.orion.viewer.view.CorePageView;
@@ -86,7 +86,7 @@ public abstract class SearchTask {
 
                 while (0 <= index && index < document.getPageCount() && !isCancelled()) {
                     publishProgress(index);
-                    PageWithAutoCrop page = document.getOrCreatePageAdapter(index);
+                    AbstractPage page = document.getOrCreatePageAdapter(index);
 
                     RectF searchHits[] = page.searchText(text);
                     if (searchHits != null && searchHits.length > 0) {

@@ -23,7 +23,6 @@ import universe.constellation.orion.viewer.LastPageInfo
 import universe.constellation.orion.viewer.PageInfo
 import universe.constellation.orion.viewer.PageOptions
 import universe.constellation.orion.viewer.PageWalker
-import universe.constellation.orion.viewer.document.PageWithAutoCrop
 import universe.constellation.orion.viewer.geometry.Point
 
 interface LayoutStrategy {

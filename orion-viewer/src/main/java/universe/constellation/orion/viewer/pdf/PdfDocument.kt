@@ -33,15 +33,14 @@ import universe.constellation.orion.viewer.Bitmap
 import universe.constellation.orion.viewer.PageSize
 import universe.constellation.orion.viewer.document.AbstractDocument
 import universe.constellation.orion.viewer.document.OutlineItem
-import universe.constellation.orion.viewer.document.PageWithAutoCrop
+import universe.constellation.orion.viewer.document.AbstractPage
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.errorInDebugOr
 import universe.constellation.orion.viewer.timing
-import java.lang.RuntimeException
 
 class PdfDocument @Throws(Exception::class) constructor(filePath: String) : AbstractDocument(filePath) {
 
-    inner class PdfPage(pageNum: Int) : PageWithAutoCrop(pageNum) {
+    inner class PdfPage(pageNum: Int) : AbstractPage(pageNum) {
         @Volatile
         private var page: Page? = null
         private var displayList: DisplayList? = null
@@ -149,7 +148,7 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
     override val pageCount: Int
         get() = core.countPages()
 
-    override fun createPage(pageNum: Int): PageWithAutoCrop {
+    override fun createPage(pageNum: Int): AbstractPage {
         return PdfPage(pageNum)
     }
 

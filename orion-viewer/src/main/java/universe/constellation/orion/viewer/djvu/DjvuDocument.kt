@@ -1,29 +1,10 @@
-/*
- * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
- *
- * Copyright (C) 2011-2013  Michael Bogdanov & Co
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package universe.constellation.orion.viewer.djvu
 
 import universe.constellation.orion.viewer.Bitmap
 import universe.constellation.orion.viewer.PageSize
 import universe.constellation.orion.viewer.document.AbstractDocument
 import universe.constellation.orion.viewer.document.OutlineItem
-import universe.constellation.orion.viewer.document.PageWithAutoCrop
+import universe.constellation.orion.viewer.document.AbstractPage
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.errorInDebugOr
 import universe.constellation.orion.viewer.geometry.RectF
@@ -33,7 +14,7 @@ import java.util.Locale
 
 class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
 
-    inner class DjvuPage(pageNum: Int) : PageWithAutoCrop(pageNum) {
+    inner class DjvuPage(pageNum: Int) : AbstractPage(pageNum) {
         @Volatile
         private var pagePointer: Long = 0
 
@@ -133,7 +114,7 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
     override val pageCount: Int
         get() = docInfo.pageCount
 
-    override fun createPage(pageNum: Int): PageWithAutoCrop {
+    override fun createPage(pageNum: Int): AbstractPage {
         return DjvuPage(pageNum)
     }
 

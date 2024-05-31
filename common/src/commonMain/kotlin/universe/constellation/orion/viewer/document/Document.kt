@@ -65,16 +65,16 @@ abstract class AbstractDocument(override val filePath: String) : Document {
 
     private val shortName = filePath.substringAfterLast("/")
 
-    private val pages = HashMap<Int, PageWithAutoCrop>()
+    private val pages = HashMap<Int, AbstractPage>()
 
     @Synchronized
-    final override fun getOrCreatePageAdapter(pageNum: Int): PageWithAutoCrop {
+    final override fun getOrCreatePageAdapter(pageNum: Int): AbstractPage {
         val page = pages.getOrPut(pageNum) { createPage(pageNum) }
         page.increaseUsages()
         return page
     }
 
-    abstract fun createPage(pageNum: Int): PageWithAutoCrop
+    abstract fun createPage(pageNum: Int): AbstractPage
 
     @Synchronized
     fun destroyPages() {
@@ -86,7 +86,7 @@ abstract class AbstractDocument(override val filePath: String) : Document {
 
     @Synchronized
     override fun destroyPage(page: Page) {
-        val usages = (page as PageWithAutoCrop).decreaseUsages()
+        val usages = (page as AbstractPage).decreaseUsages()
         if (usages == 0) {
             val removed = pages.remove(page.pageNum)
             if (page != removed) errorInDebug("Pages doesn't match ${page.pageNum} vs ${removed?.pageNum}")
@@ -112,7 +112,7 @@ interface Document : ImagePostProcessor {
 
     val outline: Array<OutlineItem>?
 
-    fun getOrCreatePageAdapter(pageNum: Int): PageWithAutoCrop
+    fun getOrCreatePageAdapter(pageNum: Int): AbstractPage
 
     fun destroy()
 
