@@ -148,9 +148,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private fun initDialogs() {
         initOptionDialog()
-        initRotationScreen()
 
-        //page chooser
         initGoToPageScreen()
 
         initZoomScreen()
@@ -838,58 +836,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
     }
 
-    private fun initRotationScreen() {
-        val rotationGroup = findMyViewById(R.id.rotationGroup) as RadioGroup
-        rotationGroup.visibility = View.GONE
-
-        val list = findMyViewById(R.id.rotationList) as ListView
-
-        //set choices and replace 0 one with Application Default
-        val isLevel9 = orionContext.sdkVersion >= 9
-        val values = resources.getTextArray(if (isLevel9) R.array.screen_orientation_full_desc else R.array.screen_orientation_desc)
-        val newValues = arrayOfNulls<CharSequence>(values.size)
-        System.arraycopy(values, 0, newValues, 0, values.size)
-        newValues[0] = resources.getString(R.string.orientation_default_rotation)
-
-        list.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, newValues)
-
-        list.choiceMode = ListView.CHOICE_MODE_SINGLE
-        list.setItemChecked(0, true)
-
-        list.onItemClickListener = AdapterView.OnItemClickListener { _, view, _, _ ->
-            val check = view as CheckedTextView
-            check.isChecked = !check.isChecked
-        }
-
-        val orientationArray = resources.getTextArray(R.array.screen_orientation_full)
-
-        list.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            onApplyAction(true)
-            val orientation = orientationArray[position].toString()
-            controller!!.changeOrinatation(orientation)
-        }
-
-
-        val apply = findMyViewById(R.id.rotation_apply) as ImageButton
-        apply.visibility = View.GONE
-
-        val cancel = findMyViewById(R.id.rotation_close) as ImageButton
-        cancel.setOnClickListener {
-            onAnimatorCancel()
-            updateRotation()
-        }
-    }
-
-    private fun updateRotation() {
-        val rotationGroup = findMyViewById(R.id.rotationGroup) as? RadioGroup
-        rotationGroup?.check(if (controller!!.rotation == 0) R.id.rotate0 else if (controller!!.rotation == -1) R.id.rotate90 else R.id.rotate270)
-
-        val list = findMyViewById(R.id.rotationList) as? ListView ?: return
-        val index = getScreenOrientationItemPos(controller!!.screenOrientation)
-        list.setItemChecked(index, true)
-        list.setSelection(index)
-    }
-
     private fun updateBrightness() {
         val params = window.attributes
         val oldBrightness = params.screenBrightness
@@ -989,7 +935,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
         if (screenId != -1) {
             when (screenId) {
-                ROTATION_SCREEN -> updateRotation()
                 PAGE_LAYOUT_SCREEN -> {
                     updatePageLayout()
                     updatePageSeeker()
@@ -1010,7 +955,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 (findMyViewById(R.id.add_bookmark_text) as EditText).setText(if (notOverride) newText else parameterText)
             }
 
-            animator!!.displayedChild = screenId
+            animator!!.displayedChild = screenId - 1
             dialog!!.show()
         }
     }

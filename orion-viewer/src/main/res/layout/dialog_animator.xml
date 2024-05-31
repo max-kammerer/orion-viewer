@@ -6,69 +6,6 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <ListView
-            android:id="@+id/rotationList"
-            android:layout_width="fill_parent"
-            android:layout_height="0px"
-            android:layout_weight="1"
-            android:isScrollContainer="true" />
-
-        <RadioGroup
-            android:id="@+id/rotationGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="left"
-            android:orientation="vertical">
-
-            <RadioButton
-                android:id="@+id/rotate0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/rotate_0" />
-
-            <RadioButton
-                android:id="@+id/rotate90"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/rotate_90" />
-
-            <RadioButton
-                android:id="@+id/rotate270"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/rotate_270" />
-        </RadioGroup>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:gravity="right"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/rotation_apply"
-                style="@style/Viewer_Dialog_Icon"
-                android:layout_gravity="right"
-                app:srcCompat="@drawable/new_apply" />
-
-            <ImageButton
-                android:id="@+id/rotation_close"
-                style="@style/Viewer_Dialog_Icon"
-                android:layout_gravity="right"
-                app:srcCompat="@drawable/new_revert" />
-        </LinearLayout>
-    </LinearLayout>
-
-
     <!--page chooser screen-->
     <LinearLayout
         android:id="@+id/page_menu"
