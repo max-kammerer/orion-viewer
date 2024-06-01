@@ -21,21 +21,59 @@ package universe.constellation.orion.viewer
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.view.MenuItem
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.view.View
-import androidx.core.graphics.drawable.DrawableCompat
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
-import com.google.android.material.color.MaterialColors
 import com.google.android.material.tabs.TabLayout
+import java.util.Date
 
 class OrionHelpActivity : OrionBaseActivity(false) {
 
     class InfoFragment : Fragment(R.layout.general_help)
 
     class AboutFragment : Fragment(R.layout.app_about_fragment)
+
+    class ContributionFragment : Fragment(R.layout.app_contribution_fragment) {
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
+            val conent = view.findViewById<ViewGroup>(R.id.content)
+            conent.forEach { view ->
+                if (view is TextView) {
+                    view.movementMethod = LinkMovementMethod.getInstance()
+                }
+            }
+
+            if (Date().before(Date(2024 - 1900, 6, 10))) {
+                val survey = view.findViewById<TextView>(R.id.survey)
+                val key = resources.getString(R.string.survey_key)
+                val fullPath = "https://docs.google.com/forms/d/e/$key/viewform?usp=sf_link"
+
+                val spannable = SpannableStringBuilder(survey.text)
+                val onClick = object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        val uri = Uri.parse(fullPath)
+                        val intent = Intent(Intent.ACTION_VIEW, uri)
+                        startActivity(intent)
+                        startActivity(intent)
+                    }
+                }
+                spannable.setSpan(onClick, 0, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                survey.text = spannable
+                survey.movementMethod = LinkMovementMethod.getInstance();
+                survey.visibility = View.VISIBLE
+            }
+        }
+    }
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +96,11 @@ class OrionHelpActivity : OrionBaseActivity(false) {
         val about = tabLayout.getTabAt(1)
         about?.setIcon(R.drawable.new_info)
         about?.setContentDescription(R.string.menu_about_text)
+
+        tabLayout.getTabAt(2)?.apply {
+            setIcon(R.drawable.contribution)
+            setContentDescription(R.string.menu_about_text)
+        }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -78,7 +121,7 @@ class OrionHelpActivity : OrionBaseActivity(false) {
 
 internal class HelpSimplePagerAdapter(fm: androidx.fragment.app.FragmentManager) : FragmentStatePagerAdapter(fm) {
 
-    private val fragments: MutableList<Fragment> = arrayListOf(OrionHelpActivity.InfoFragment(), OrionHelpActivity.AboutFragment())
+    private val fragments: MutableList<Fragment> = arrayListOf(OrionHelpActivity.InfoFragment(), OrionHelpActivity.AboutFragment(), OrionHelpActivity.ContributionFragment())
 
     override fun getItem(i: Int): Fragment {
         return fragments[i]

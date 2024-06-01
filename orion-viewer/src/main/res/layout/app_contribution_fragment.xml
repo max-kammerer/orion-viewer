@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/general_help"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:isScrollContainer="true"
+    android:orientation="vertical"
+    android:padding="@dimen/root_padding"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
+    android:scrollbarStyle="outsideInset"
+    android:scrollbars="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/intro"
+            style="@style/General_Contribution_TextView"
+            android:layout_marginBottom="5dp"
+            android:text="@string/contribution_intro" />
+
+        <TextView
+            style="@style/General_Contribution_TextView"
+            android:layout_marginBottom="5dp"
+            android:text="@string/contribution_ways" />
+
+        <TextView
+            style="@style/General_Contribution_TextView"
+            android:paddingStart="20dp"
+            android:paddingLeft="20dp"
+            android:text="@string/contribution_report_bug" />
+
+        <TextView
+            style="@style/General_Contribution_TextView"
+            android:paddingStart="20dp"
+            android:paddingLeft="20dp"
+            android:text="@string/contribution_do_translation" />
+
+        <TextView
+            style="@style/General_Contribution_TextView"
+            android:paddingStart="20dp"
+            android:paddingLeft="20dp"
+            android:text="@string/contribution_code" />
+
+        <TextView
+            style="@style/General_Contribution_TextView"
+            android:paddingStart="20dp"
+            android:paddingLeft="20dp"
+            android:text="@string/contribution_design" />
+
+        <TextView
+            style="@style/General_Contribution_TextView"
+            android:paddingStart="20dp"
+            android:paddingLeft="20dp"
+            android:text="@string/contribution_review" />
+
+        <TextView
+            android:id="@+id/survey"
+            style="@style/General_Contribution_TextView"
+            android:textSize="@dimen/text_size_large"
+            android:paddingTop="20dp"
+            android:text="@string/contribution_survey"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+</ScrollView>

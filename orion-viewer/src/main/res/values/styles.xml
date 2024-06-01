@@ -47,6 +47,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:tint">?attr/menuIconTint</item>
         <item name="drawableTint">?attr/navIconTint</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
     </style>
 
     <style name="New_Viewer_Menu_Item" >

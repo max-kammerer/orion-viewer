@@ -19,6 +19,7 @@ import com.google.android.material.color.MaterialColors
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import universe.constellation.orion.viewer.OrionBaseActivity
+import universe.constellation.orion.viewer.OrionHelpActivity
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.Permissions
 import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAccessPermissionOrReadOne
@@ -215,9 +216,14 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
 
     private fun initFileManager() {
         val viewPager = findViewById<ViewPager>(R.id.viewpager)
+        val addSupportTab = this@OrionFileManagerActivityBase is OrionFileManagerActivity
         viewPager.adapter = SimplePagerAdapter(supportFragmentManager).apply {
             if (showRecentsAndSavePath) {
                 addFragment(RecentListFragment())
+            }
+
+            if (addSupportTab) {
+                addFragment(OrionHelpActivity.ContributionFragment())
             }
         }
 
@@ -233,6 +239,13 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
             tabLayout.getTabAt(1)?.apply {
                 icon = getVectorDrawable(R.drawable.new_history)
                 setText(R.string.file_manager_history)
+            }
+        }
+
+        if (addSupportTab) {
+            tabLayout.getTabAt(2)?.apply {
+                icon = getVectorDrawable(R.drawable.contribution)
+                setText(R.string.file_manager_contribution)
             }
         }
     }

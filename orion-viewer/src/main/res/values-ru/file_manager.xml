@@ -3,6 +3,7 @@
     <string name="file_manager_title">Менеджер файлов</string>
     <string name="file_manager_fodlers">Папки</string>
     <string name="file_manager_history">История</string>
+    <string name="file_manager_contribution">Участие</string>
 
     <string name="file_manager_select_tip">Выберите файл для открытия в Orion Viewer</string>
     <string name="file_manager_path">Путь:</string>
