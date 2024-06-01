@@ -104,7 +104,7 @@ abstract class BaseViewerActivityTest(
     protected fun applyGoTo() {
         if (!globalOptions.isNewUI) {
             onView(ViewMatchers.withId(R.id.option_dialog_bottom_apply)).perform(ViewActions.click())
-            onView(ViewMatchers.withId(R.id.option_dialog_bottom_close)).perform(ViewActions.click())
+            //onView(ViewMatchers.withId(R.id.option_dialog_bottom_close)).perform(ViewActions.click())
         } else {
             onView(ViewMatchers.withId(R.id.view)).perform(ViewActions.click())
         }
