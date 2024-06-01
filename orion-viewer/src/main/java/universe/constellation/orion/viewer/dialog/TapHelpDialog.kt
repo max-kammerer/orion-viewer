@@ -2,7 +2,6 @@ package universe.constellation.orion.viewer.dialog
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
@@ -16,6 +15,7 @@ import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.analytics.TAP_HELP_DIALOG
 import universe.constellation.orion.viewer.prefs.OrionTapActivity.Companion.getDefaultAction
+import universe.constellation.orion.viewer.dpToPixels
 
 class TapHelpDialog : DialogFragment(R.layout.tap)  {
 
@@ -32,11 +32,7 @@ class TapHelpDialog : DialogFragment(R.layout.tap)  {
         val color = typedValue.getColor(0, 0xFF000000u.toInt())
         typedValue.recycle()
 
-        val size = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            24f,
-            requireContext().resources.displayMetrics
-        ).toInt()
+        val size = requireContext().dpToPixels(24f)
 
         val table = view.findViewById<TableLayout>(R.id.tap_table)
         for (i in 0 until table.childCount) {

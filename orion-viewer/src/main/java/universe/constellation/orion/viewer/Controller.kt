@@ -25,7 +25,6 @@ import android.graphics.Point
 import android.graphics.PointF
 import android.os.Build
 import android.util.DisplayMetrics
-import android.util.TypedValue
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -98,11 +97,7 @@ class Controller(
             }
         }
 
-        cropPadding = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            5f,
-            activity.resources.displayMetrics
-        ).toInt()
+        cropPadding = activity.dpToPixels(5f)
     }
 
     @JvmOverloads

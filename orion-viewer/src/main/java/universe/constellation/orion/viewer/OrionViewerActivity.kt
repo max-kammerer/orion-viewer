@@ -722,8 +722,16 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 else -> errorInDebugOr("Unknown id = $screenId") { return dialog }
             }
 
+            val displayWidth = resources.displayMetrics.widthPixels
+            val limitWidth = dpToPixels(750f)
+            val width = if (displayWidth > limitWidth) {
+                dpToPixels(700f)
+            } else {
+                WindowManager.LayoutParams.MATCH_PARENT
+            }
+
             dialog.window?.setLayout(
-                WindowManager.LayoutParams.MATCH_PARENT,
+                width,
                 WindowManager.LayoutParams.WRAP_CONTENT
             )
             dialog

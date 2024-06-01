@@ -21,6 +21,7 @@ package universe.constellation.orion.viewer
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
@@ -28,6 +29,7 @@ import android.content.pm.PackageManager
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
@@ -229,4 +231,12 @@ fun Activity.getVectorDrawable(id: Int, color: Int = 0): Drawable {
 //        DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_IN);
 //    }
     return drawable
+}
+
+fun Context.dpToPixels(value: Float): Int {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        value,
+        resources.displayMetrics
+    ).toInt()
 }

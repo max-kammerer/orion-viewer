@@ -1,7 +1,6 @@
 package universe.constellation.orion.viewer.selection
 
 import android.graphics.Point
-import android.util.TypedValue
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -11,6 +10,7 @@ import androidx.dynamicanimation.animation.FloatPropertyCompat
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.view.OrionDrawScene
+import universe.constellation.orion.viewer.dpToPixels
 import kotlin.math.abs
 
 enum class State {
@@ -22,11 +22,7 @@ enum class State {
 
 open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewerActivity) : GestureDetector.SimpleOnGestureListener() {
 
-    private val minFlingDistance = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP,
-        32f,
-        activity.resources.displayMetrics
-    ).toInt()
+    private val minFlingDistance = activity.dpToPixels(32f)
 
     private val property = object : FloatPropertyCompat<View>("doScroll") {
         var prevValue = 0f
