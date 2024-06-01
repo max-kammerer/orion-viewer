@@ -26,6 +26,7 @@
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:tabMode="auto"
                 app:tabIconTint="?attr/navIconTint"
+                app:tabTextAppearance="@style/TabNoAllCaps"
                 app:tabInlineLabel="true"/>
         </androidx.appcompat.widget.Toolbar>
 

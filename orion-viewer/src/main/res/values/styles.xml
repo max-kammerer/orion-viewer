@@ -7,6 +7,15 @@
     <attr name="newMenuBackground" format="color|reference"/>
     <attr name="newMenuTint" format="color|reference"/>
 
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
+    <dimen name="text_size_large">18sp</dimen>
+
+    <style name="TabNoAllCaps" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
     <style name="Viewer_Dialog_Icon" >
         <item name="android:drawablePadding">2dp</item>
         <item name="android:layout_width">wrap_content</item>
@@ -24,7 +33,16 @@
 
     <style name="General_Help_TextView" >
         <item name="android:drawablePadding">5dp</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:tint">?attr/menuIconTint</item>
+        <item name="drawableTint">?attr/navIconTint</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="General_Contribution_TextView" >
+        <item name="android:drawablePadding">5dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:tint">?attr/menuIconTint</item>
@@ -123,4 +141,5 @@
         <item name="newMenuTint">?attr/navIconTint</item>
         <item name="newMenuBackground">?attr/colorPrimary</item>
     </style>
+
 </resources>

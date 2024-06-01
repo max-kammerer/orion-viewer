@@ -30,7 +30,7 @@
                               android:gravity="left">
 
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                              android:textSize="20sp"
+                              android:textSize="@dimen/text_size_large"
                               android:text="Orion Viewer v. "/>
 
                     <TextView
@@ -39,11 +39,11 @@
                         android:layout_height="wrap_content"
                         android:text="@string/versionName"
                         android:layout_marginRight="10dp"
-                        android:textSize="20sp" />
+                        android:textSize="@dimen/text_size_medium" />
                 </LinearLayout>
 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                          android:textSize="20sp"
+                          android:textSize="@dimen/text_size_large"
                           android:text="Authors: Michael Bogdanov &amp; Co"
                           android:gravity="left"/>
             </LinearLayout>
@@ -51,22 +51,22 @@
 
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_1" android:layout_marginTop="20dp"
-            android:text="Project site: https://github.com/max-kammerer/orion-viewer" android:textSize="18sp"
+            android:text="Project site: https://github.com/max-kammerer/orion-viewer" android:textSize="@dimen/text_size_medium"
             android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:text="E-mail: mikhael.bogdanov+orion@gmail.com" android:textSize="18sp"
+            android:text="E-mail: mikhael.bogdanov+orion@gmail.com" android:textSize="@dimen/text_size_medium"
             android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
 
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_2" android:textSize="18sp"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_2" android:textSize="@dimen/text_size_medium"
             android:text="Bug reporting: https://github.com/max-kammerer/orion-viewer/issues"
             android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
 
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_3" android:textSize="18sp"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_3" android:textSize="@dimen/text_size_medium"
             android:text="Discussion group: https://groups.google.com/group/orionviewer"
             android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
 
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_4" android:textSize="18sp"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_4" android:textSize="@dimen/text_size_medium"
             android:text="Donation: https://sourceforge.net/p/orion-viewer/wiki/Donation/"
             android:gravity="center" android:linksClickable="true" android:autoLink="all"/>
 
@@ -74,103 +74,103 @@
 
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:textSize="20sp"
+                  android:textSize="@dimen/text_size_medium"
                   android:text="Contributors:"
                   android:gravity="center" android:layout_marginTop="20dp"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:textSize="20sp"
+                  android:textSize="@dimen/text_size_medium"
                   android:text="Alberto Pettarin - Italian translation"
                   android:gravity="center"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                          android:textSize="20sp"
+                          android:textSize="@dimen/text_size_medium"
                           android:text="Alexander Goldberg - Hebrew translation"
                           android:gravity="center"/>
 
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                          android:textSize="20sp"
+                          android:textSize="@dimen/text_size_medium"
                           android:text="Bruce Li - Chinese translation &amp; code"
                           android:gravity="center"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                          android:textSize="20sp"
+                          android:textSize="@dimen/text_size_medium"
                           android:text="Marc Armengol - Spanish translation"
                           android:gravity="center"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:textSize="20sp"
+                  android:textSize="@dimen/text_size_medium"
                   android:text="Yuriy Chorniy - Ukrainian translation"
                   android:gravity="center"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:textSize="20sp"
+                  android:textSize="@dimen/text_size_medium"
                   android:text="Johannes Römer - German translation"
                   android:gravity="center"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size_medium"
             android:text="Claude Dellacherie - French translation"
             android:gravity="center"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:textSize="20sp"
+                  android:textSize="@dimen/text_size_large"
                   android:text="Third party libraries:"
                   android:gravity="center" android:layout_marginTop="20dp"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:textSize="18sp"
+                  android:textSize="@dimen/text_size_medium"
                   android:text="mupdf"
                   android:gravity="center"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:textSize="18sp"
+                  android:textSize="@dimen/text_size_medium"
                   android:text="DjVuLibre"
                   android:gravity="center"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:textSize="18sp"
+                  android:textSize="@dimen/text_size_medium"
                   android:text="apdfViewer for nook"
                   android:gravity="center"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="tree-view-list-android"
-                    android:textSize="18sp"/>
+                    android:textSize="@dimen/text_size_medium"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:textSize="18sp"
+                  android:textSize="@dimen/text_size_medium"
                   android:text="freetype"
                   android:gravity="center"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:textSize="18sp"
+                  android:textSize="@dimen/text_size_medium"
                   android:text="jbig2dec"
                   android:gravity="center"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:textSize="18sp"
+                  android:textSize="@dimen/text_size_medium"
                   android:text="jpeg"
                   android:gravity="center"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:textSize="18sp"
+                  android:textSize="@dimen/text_size_medium"
                   android:text="openjpeg"
                   android:gravity="center"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:textSize="18sp"
+                  android:textSize="@dimen/text_size_medium"
                   android:text="zlib"
                   android:gravity="center"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_medium"
             android:text="libarchive"
             android:gravity="center"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:textSize="20sp"
+                  android:textSize="@dimen/text_size_large"
                   android:text="Third party icons:"
                   android:gravity="center" android:layout_marginTop="20dp"/>
 
@@ -188,7 +188,7 @@
                 android:gravity="center"
                 android:linksClickable="true"
                 android:text="David Tolliday photo from https://www.davidtolliday.co.uk/p374533124/hb8f85e70#hb8f85e70"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_size_medium" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -224,7 +224,7 @@
                 android:gravity="center"
                 android:linksClickable="true"
                 android:text="ESO/Igor Chekalin photo from http://www.eso.org/public/images/eso1103a"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_size_medium" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -255,7 +255,7 @@
                 android:gravity="center"
                 android:linksClickable="true"
                 android:text="Anna Shlyapnikova - shlyapnikova.deviantart.com"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_size_medium" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -284,7 +284,7 @@
                 android:gravity="center"
                 android:linksClickable="true"
                 android:text="DjVuLibre - http://djvu.sourceforge.net/"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_size_medium" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -313,7 +313,7 @@
                 android:gravity="center"
                 android:linksClickable="true"
                 android:text="KDE Oxygen Icons - https://github.com/KDE/oxygen-icons"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_size_medium" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -361,14 +361,14 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Other"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_size_medium" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Android Icons"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_size_medium" />
         </LinearLayout>
 
         <TextView
@@ -380,7 +380,7 @@
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version."
-            android:textSize="18sp" />
+            android:textSize="@dimen/text_size_medium" />
 
 
     </LinearLayout>
