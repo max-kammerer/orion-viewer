@@ -28,58 +28,65 @@ libraries
      alt="Get it on Google Play"
      height="80">](https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer)
 
-## App usage analytics
+### App usage analytics
 
 From version `0.91.0` Orion Viewer automatically collects app crashes and app usage statistics to improve application quality.
 Orion Viewer doesn't collect any personal information (and doesn't pass it to any third parties).
 
 ## Contribution
 
-Whatever you want! Project is open to any ideas and discussions
+Project is open to contributions, ideas and discussions
 
 ### Translations
 
 Project is fully or partially translated into Chinese, English, French, German, Hebrew, Italian, Russian, Spanish, Turkish and Ukrainian languages.
-It would be highly desirable to eliminate gaps and errors in existing translations and to translate project into new languages.
+It would be highly desirable to eliminate gaps and errors in existing translations and add translations to other languages.
 
 Take a look into
 [translations](https://github.com/max-kammerer/orion-viewer/wiki/Translations) page on wiki.
 
-## How to build project?
+## Setting up build and working environment
 
-To build `Orion Viewer` you will need:
+To work with and build *Orion Viewer* project you will need next tools installed:
 
- * Android Studio 2023.1+ (for development)
- * android-sdk 33+
- * android-ndk 23.2.8568313
- * make and python3 for mupdf
- * git
+ * [Android Studio](https://developer.android.com/studio) 2023.1+ integrated development environment
+ * [git tool](https://git-scm.com/downloads) to work with source repository
+ * *make* tool and [python 3](https://www.python.org/downloads/) compiler for building *mupdf* library  
 
- * downloaded native libs (mupdf, djvu):
+1. Checkout repository sources via *git*:
 
-    `./gradlew -b  thirdparty_build.gradle downloadDjvu downloadAndMakeMupdf`
+   `git clone https://github.com/max-kammerer/orion-viewer.git`  
+or if you have [configured ssh access](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)  
+   `git clone git@github.com:max-kammerer/orion-viewer.git`
 
-    Build scripts for them are defined in `externalNativeBuild` section in gradle build files
-    (for details see `djvuModule/build.gradle` and `mupdfModule/build.gradle`).
-    Native libs are checked out into `nativeLibs/djvu` and `nativeLibs/mupdf` folders.
+2. Setup native libraries (*mupdf*, *djvu*) via next command:
 
- * specify path to android-sdk in `local.properties` (use `local.properties.sample` as example).
+    `./gradlew -b thirdparty_build.gradle downloadDjvu downloadAndMakeMupdf`
+    
+    Build scripts for them are defined in *externalNativeBuild* section in gradle build files
+    (for details see *djvuModule/build.gradle* and *mupdfModule/build.gradle* files).
+    Native libs are checked out into *nativeLibs/djvu* and *nativeLibs/mupdf* folders.
 
- To build Android apk files run:
+3. Open project in Android Studio (AS): *Main Menu/File/Open...* and select project folder to open. 
 
- `./gradlew :orion-viewer:assembleDebug` (or `assembleRelease`)
+4. Now you can build project within AS and run it in Android emulator
+ 
+You can also build Android 'apk' artifacts via next command:   
+    
+`./gradlew :orion-viewer:assembleDebug` (or `assembleRelease`) 
 
- It will generate `apk` artifacts suitable for Android 4.1+ devices.
+It will generate *apk* artifacts suitable for Android 4.1+ devices.
 
- For Android 4.0.x devices use next build commands (it also requires android-ndk 17):
+For Android 4.0.x devices use next build commands (it also requires android-ndk 17):
 
- ```
- ./gradlew :nativeLibs:djvuModule:clean :nativeLibs:mupdfModule:clean
- ./gradlew :orion-viewer:assembleDebug -Porion.build.android40=true
- ```
+```
+./gradlew :nativeLibs:djvuModule:clean :nativeLibs:mupdfModule:clean
+./gradlew :orion-viewer:assembleDebug -Porion.build.android40=true
+```
 
 Pre 0.80 versions are compatible with Android 2.1+ devices
 
+    
 ### Troubleshooting
 
 In case of getting error about absent libtinfo.so.5, please install ncurses lib (libncurses5).
