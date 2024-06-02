@@ -31,13 +31,12 @@ import universe.constellation.orion.viewer.prefs.OrionTapActivity.Companion.getD
 import universe.constellation.orion.viewer.prefs.OrionTapActivity.Companion.getKey
 import java.io.Serializable
 
-class GlobalOptions internal constructor(
+class GlobalOptions(
     context: OrionApplication,
-    protected val prefs: SharedPreferences,
+    prefs: SharedPreferences,
     loadRecents: Boolean
-) : Serializable, PageOptions {
+) : PreferenceWrapper(prefs), Serializable, PageOptions {
     var recentFiles = mutableListOf<RecentEntry>()
-
 
     /* Caution: The preference manager does not currently store a strong reference to the listener.
     You must store a strong reference to the listener, or it will be susceptible to garbage collection.
@@ -211,39 +210,6 @@ class GlobalOptions internal constructor(
     val isEinkOptimization: Boolean
         get() = getBooleanProperty(EINK_OPTIMIZATION, false)
 
-    fun getIntFromStringProperty(key: String?, defaultValue: Int): Int {
-        val value = prefs.getString(key, null)
-        val newIntValue = if (value == null || "" == value) {
-            defaultValue
-        } else {
-            value.toInt()
-        }
-        return newIntValue
-    }
-
-    fun getInt(key: String, defaultValue: Int): Int {
-        return prefs.getInt(key, defaultValue)
-    }
-
-    fun getStringProperty(key: String, defaultValue: String): String {
-        return prefs.getString(key, defaultValue) ?: defaultValue
-    }
-
-    private fun getNullableStringProperty(key: String, defaultValue: String?): String? {
-        return prefs.getString(key, defaultValue)
-    }
-
-    fun getBooleanProperty(key: String, defaultValue: Boolean): Boolean {
-        return prefs.getBoolean(key, defaultValue)
-    }
-
-
-    fun saveBooleanProperty(key: String, newValue: Boolean) {
-        val editor = prefs.edit()
-        editor.putBoolean(key, newValue)
-        editor.apply()
-    }
-
     val longCrop: Int
         get() = getIntFromStringProperty(LONG_CROP_VALUE, 10)
 
@@ -281,21 +247,6 @@ class GlobalOptions internal constructor(
     fun getScreenBacklightTimeout(defaultValue: Int): Int {
         return getIntFromStringProperty(SCREEN_BACKLIGHT_TIMEOUT, defaultValue)
     }
-
-    fun removePreference(name: String?) {
-        prefs.edit().remove(name).apply()
-    }
-
-    fun putIntPreference(name: String?, value: Int) {
-        prefs.edit().putInt(name, value).apply()
-    }
-
-    fun removeAll() {
-        prefs.edit().clear().apply()
-    }
-
-    val allProperties: Map<String, *>
-        get() = prefs.all
 
     companion object {
         const val MAX_RECENT_ENTRIES: Int = 20
