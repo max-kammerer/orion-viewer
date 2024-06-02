@@ -21,7 +21,7 @@ class FoldersFragment : Fragment(R.layout.folder_view) {
         val lastOpenedDir =
             (activity as OrionFileManagerActivityBase).globalOptions.lastOpenedDirectory
 
-        if (lastOpenedDir != null && File(lastOpenedDir).exists()) {
+        if (!lastOpenedDir.isNullOrEmpty() && File(lastOpenedDir).exists()) {
             return File(lastOpenedDir)
         }
 

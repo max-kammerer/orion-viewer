@@ -54,6 +54,7 @@ import universe.constellation.orion.viewer.device.OnyxDevice
 import universe.constellation.orion.viewer.device.OnyxUtil
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.logger
+import universe.constellation.orion.viewer.prefs.GlobalOptions.Companion.DEFAULT_LANGUAGE
 import universe.constellation.orion.viewer.prefs.GlobalOptions.DEFAULT_LANGUAGE
 import universe.constellation.orion.viewer.test.IdlingResource
 import java.io.File

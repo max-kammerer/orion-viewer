@@ -30,14 +30,13 @@ import universe.constellation.orion.viewer.prefs.OrionApplication.Companion.inst
 import universe.constellation.orion.viewer.prefs.OrionTapActivity.Companion.getDefaultAction
 import universe.constellation.orion.viewer.prefs.OrionTapActivity.Companion.getKey
 import java.io.Serializable
-import java.util.LinkedList
 
 class GlobalOptions internal constructor(
     context: OrionApplication,
     protected val prefs: SharedPreferences,
     loadRecents: Boolean
 ) : Serializable, PageOptions {
-    var recentFiles: LinkedList<RecentEntry>? = null
+    var recentFiles = mutableListOf<RecentEntry>()
 
 
     /* Caution: The preference manager does not currently store a strong reference to the listener.
@@ -47,7 +46,6 @@ class GlobalOptions internal constructor(
 
     init {
         if (loadRecents) {
-            recentFiles = LinkedList()
             for (i in 0 until MAX_RECENT_ENTRIES) {
                 val entry = prefs.getString(RECENT_PREFIX + i, null)
                 if (entry == null) {
@@ -112,10 +110,10 @@ class GlobalOptions internal constructor(
 
 
     val lastOpenedDirectory: String?
-        get() = getStringProperty(OrionFileManagerActivity.LAST_OPENED_DIRECTORY, null)
+        get() = getNullableStringProperty(OrionFileManagerActivity.LAST_OPENED_DIRECTORY, null)
 
     fun addRecentEntry(newEntry: RecentEntry) {
-        val iterator = recentFiles!!.iterator()
+        val iterator = recentFiles.iterator()
         while (iterator.hasNext()) {
             val recentEntry = iterator.next()
             if (recentEntry.path == newEntry.path) {
@@ -124,17 +122,17 @@ class GlobalOptions internal constructor(
             }
         }
 
-        recentFiles!!.add(0, newEntry)
+        recentFiles.add(0, newEntry)
 
-        if (recentFiles!!.size > MAX_RECENT_ENTRIES) {
-            recentFiles!!.removeLast()
+        if (recentFiles.size > MAX_RECENT_ENTRIES) {
+            recentFiles.removeLast()
         }
     }
 
     fun saveRecents() {
         var i = 0
         val editor = prefs.edit()
-        val iterator: Iterator<RecentEntry> = recentFiles!!.iterator()
+        val iterator: Iterator<RecentEntry> = recentFiles.iterator()
         while (iterator.hasNext()) {
             val next = iterator.next()
             editor.putString(RECENT_PREFIX + i, next.path)
@@ -204,7 +202,7 @@ class GlobalOptions internal constructor(
         return code
     }
 
-    val dictionary: String?
+    val dictionary: String
         get() = getStringProperty(DICTIONARY, "FORA")
 
     val einkRefreshAfter: Int
@@ -223,25 +221,28 @@ class GlobalOptions internal constructor(
         return newIntValue
     }
 
-    fun getInt(key: String?, defaultValue: Int): Int {
+    fun getInt(key: String, defaultValue: Int): Int {
         return prefs.getInt(key, defaultValue)
     }
 
-    fun getStringProperty(key: String?, defaultValue: String?): String? {
+    fun getStringProperty(key: String, defaultValue: String): String {
+        return prefs.getString(key, defaultValue) ?: defaultValue
+    }
+
+    private fun getNullableStringProperty(key: String, defaultValue: String?): String? {
         return prefs.getString(key, defaultValue)
     }
 
-    fun getBooleanProperty(key: String?, defaultValue: Boolean): Boolean {
+    fun getBooleanProperty(key: String, defaultValue: Boolean): Boolean {
         return prefs.getBoolean(key, defaultValue)
     }
 
 
-    fun saveBooleanProperty(key: String?, newValue: Boolean) {
+    fun saveBooleanProperty(key: String, newValue: Boolean) {
         val editor = prefs.edit()
         editor.putBoolean(key, newValue)
         editor.apply()
     }
-
 
     val longCrop: Int
         get() = getIntFromStringProperty(LONG_CROP_VALUE, 10)
@@ -262,19 +263,19 @@ class GlobalOptions internal constructor(
         get() = getBooleanProperty(OPEN_RECENT_BOOK, false)
 
 
-    val applicationTheme: String?
+    val applicationTheme: String
         get() = getStringProperty(APPLICATION_THEME, APPLICATION_THEME_DEFAULT)
 
-    val appLanguage: String?
+    val appLanguage: String
         get() = getStringProperty(APP_LANGUAGE, DEFAULT_LANGUAGE)
 
-    val walkOrder: String?
+    val walkOrder: String
         get() = getStringProperty(WALK_ORDER, PageWalker.WALK_ORDER.ABCD.name)
 
     val pageLayout: Int
         get() = getInt(PAGE_LAYOUT, 0)
 
-    val colorMode: String?
+    val colorMode: String
         get() = getStringProperty(COLOR_MODE, "CM_NORMAL")
 
     fun getScreenBacklightTimeout(defaultValue: Int): Int {
