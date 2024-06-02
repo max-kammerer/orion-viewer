@@ -50,8 +50,6 @@ abstract class OrionBaseActivity(val viewerType: Int = Device.DEFAULT_ACTIVITY) 
 
     val device: AndroidDevice? = if (viewerType == Device.VIEWER_ACTIVITY) OrionApplication.createDevice() else null
 
-    protected var listener: SharedPreferences.OnSharedPreferenceChangeListener? = null
-
     lateinit var toolbar: Toolbar
         private set
 
