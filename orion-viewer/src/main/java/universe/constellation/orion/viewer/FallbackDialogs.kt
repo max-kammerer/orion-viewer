@@ -221,7 +221,7 @@ open class FallbackDialogs {
             },
             callbackAction: () -> Unit
         ) {
-            val res = this.orionContext.idlingRes
+            val res = this.orionApplication.idlingRes
             res.busy()
 
             GlobalScope.launch(Dispatchers.Main + handler) {

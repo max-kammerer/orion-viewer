@@ -55,15 +55,17 @@ abstract class OrionBaseActivity(val viewerType: Int = Device.DEFAULT_ACTIVITY) 
     lateinit var toolbar: Toolbar
         private set
 
-    val orionContext: OrionApplication
+    val orionApplication: OrionApplication
         get() = applicationContext as OrionApplication
 
     val applicationDefaultOrientation: String
-        get() = orionContext.options.getStringProperty(GlobalOptions.SCREEN_ORIENTATION, "DEFAULT")
+        get() = orionApplication.options.getStringProperty(GlobalOptions.SCREEN_ORIENTATION, "DEFAULT")
 
-    val analytics  by lazy { orionContext.analytics }
+    val analytics
+        get() = orionApplication.analytics
 
-    val globalOptions  by lazy { orionContext.options }
+    val globalOptions
+        get() = orionApplication.options
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,8 +74,8 @@ abstract class OrionBaseActivity(val viewerType: Int = Device.DEFAULT_ACTIVITY) 
 
     @JvmOverloads
     protected fun onOrionCreate(savedInstanceState: Bundle?, layoutId: Int, addToolbar: Boolean = true, displayHomeAsUpEnabled: Boolean = false) {
-        orionContext.applyTheme(this)
-        orionContext.updateLanguage(resources)
+        orionApplication.applyTheme(this)
+        orionApplication.updateLanguage(resources)
 
         if (this is OrionViewerActivity || this is OrionFileManagerActivityBase) {
             val screenOrientation = getScreenOrientation(applicationDefaultOrientation)

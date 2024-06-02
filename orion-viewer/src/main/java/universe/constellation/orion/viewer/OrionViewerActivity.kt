@@ -88,10 +88,10 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         get() {
             log("Selecting book id...")
             val info = lastPageInfo!!
-            var bookId: Long? = orionContext.tempOptions!!.bookId
+            var bookId: Long? = orionApplication.tempOptions!!.bookId
             if (bookId == null || bookId == -1L) {
-                bookId = orionContext.getBookmarkAccessor().selectBookId(info.simpleFileName, info.fileSize)
-                orionContext.tempOptions!!.bookId = bookId
+                bookId = orionApplication.getBookmarkAccessor().selectBookId(info.simpleFileName, info.fileSize)
+                orionApplication.tempOptions!!.bookId = bookId
             }
             log("...book id = $bookId")
             return bookId
@@ -102,7 +102,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         log("Creating OrionViewerActivity...")
         updateGlobalOptionsFromIntent(intent)
         isNewUI = globalOptions.isNewUI
-        orionContext.viewActivity = this
+        orionApplication.viewActivity = this
         OptionActions.FULL_SCREEN.doAction(this, !globalOptions.isFullScreen, globalOptions.isFullScreen)
         onOrionCreate(savedInstanceState, R.layout.main_view, !isNewUI)
 
@@ -116,7 +116,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
         val view = findViewById<OrionDrawScene>(R.id.view)
 
-        fullScene = FullScene(findViewById<View>(R.id.orion_full_scene) as ViewGroup, view, findViewById<View>(R.id.orion_status_bar) as ViewGroup, orionContext)
+        fullScene = FullScene(findViewById<View>(R.id.orion_full_scene) as ViewGroup, view, findViewById<View>(R.id.orion_status_bar) as ViewGroup, orionApplication)
 
         OptionActions.SHOW_STATUS_BAR.doAction(this, !globalOptions.isStatusBarVisible, globalOptions.isStatusBarVisible)
         OptionActions.SHOW_OFFSET_ON_STATUS_BAR.doAction(this, !globalOptions.isShowOffsetOnStatusBar, globalOptions.isShowOffsetOnStatusBar)
@@ -248,7 +248,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         log("Debug.getNativeHeapSize(): ${Debug.getNativeHeapSize()}")
         log("openFileAndDestroyOldController")
 
-        orionContext.idlingRes.busy()
+        orionApplication.idlingRes.busy()
 
         GlobalScope.launch(Dispatchers.Main) {
             log("Trying to open file: $file")
@@ -268,7 +268,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     intent, e
                 )
                 executor.close()
-                orionContext.idlingRes.free()
+                orionApplication.idlingRes.free()
                 analytics.errorDuringInitialFileOpen()
                 return@launch
             }
@@ -298,7 +298,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 val lastPageInfo1 = loadBookParameters(rootJob, file)
                 log("Read LastPageInfo for page ${lastPageInfo1.pageNumber}")
                 lastPageInfo = lastPageInfo1
-                orionContext.currentBookParameters = lastPageInfo1
+                orionApplication.currentBookParameters = lastPageInfo1
 
                 controller = controller1
                 bind(view, controller1)
@@ -314,7 +314,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 globalOptions.addRecentEntry(GlobalOptions.RecentEntry(file.absolutePath))
 
                 lastPageInfo1.totalPages = newDocument.pageCount
-                orionContext.onNewBook(file.name)
+                orionApplication.onNewBook(file.name)
                 invalidateOrHideMenu()
                 doOnLayout(lastPageInfo1)
                 analytics.fileOpenedSuccessfully(file)
@@ -332,7 +332,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     e
                 )
             } finally {
-                orionContext.idlingRes.free()
+                orionApplication.idlingRes.free()
             }
         }
     }
@@ -556,7 +556,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         super.onDestroy()
         log("onDestroy")
         destroyController()
-        orionContext.destroyMainActivity()
+        orionApplication.destroyMainActivity()
     }
 
     private fun saveBookPositionAndRecentFiles() {
@@ -595,7 +595,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     private fun processKey(keyCode: Int, event: KeyEvent, isLong: Boolean): Boolean {
         log("key = $keyCode isLong = $isLong")
 
-        val actionCode = orionContext.keyBindingPrefs.getInt(getPrefKey(keyCode, isLong), -1)
+        val actionCode = orionApplication.keyBindingPrefs.getInt(getPrefKey(keyCode, isLong), -1)
         if (actionCode != -1) {
             when (val action = Action.getAction(actionCode)) {
                 Action.PREV, Action.NEXT -> {
@@ -777,11 +777,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private fun insertOrGetBookId(): Long {
         val info = lastPageInfo!!
-        var bookId: Long? = orionContext.tempOptions!!.bookId
+        var bookId: Long? = orionApplication.tempOptions!!.bookId
         if (bookId == null || bookId == -1L) {
-            bookId = orionContext.getBookmarkAccessor()
+            bookId = orionApplication.getBookmarkAccessor()
                 .insertOrUpdate(info.simpleFileName, info.fileSize)
-            orionContext.tempOptions!!.bookId = bookId
+            orionApplication.tempOptions!!.bookId = bookId
         }
         return bookId.toInt().toLong()
     }
@@ -790,7 +790,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         val id = insertOrGetBookId()
         if (id != -1L) {
             val bokmarkId =
-                orionContext.getBookmarkAccessor().insertOrUpdateBookmark(id, page, text)
+                orionApplication.getBookmarkAccessor().insertOrUpdateBookmark(id, page, text)
             return bokmarkId != -1L
         }
         return false
@@ -864,7 +864,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 val parameterText = parameter as String?
 
                 val page = controller!!.currentPage
-                val newText = orionContext.getBookmarkAccessor()
+                val newText = orionApplication.getBookmarkAccessor()
                     .selectExistingBookmark(bookId, page, parameterText)
 
                 val notOverride = parameterText == null || parameterText == newText
@@ -962,7 +962,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         log("Controller: destroy")
         controller?.destroy()
         controller = null
-        orionContext.currentBookParameters = null
+        orionApplication.currentBookParameters = null
     }
 
     private fun updateGlobalOptionsFromIntent(intent: Intent) {

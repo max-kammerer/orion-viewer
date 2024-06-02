@@ -58,14 +58,14 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
 
         Button button = findViewById(R.id.reset_bind);
         button.setOnClickListener(view -> {
-            getOrionContext().getKeyBindingPrefs().removeAll();
+            getOrionApplication().getKeyBindingPrefs().removeAll();
             adapter.clear();
         });
 
         statusText = findViewById(R.id.key_binder_message);
         defaultColor = statusText.getTextColors().getDefaultColor();
         bindedKeys = findViewById(R.id.binded_keys);
-        Map<String, Integer> props = (Map<String, Integer>) getOrionContext().getKeyBindingPrefs().getAllProperties();
+        Map<String, Integer> props = (Map<String, Integer>) getOrionApplication().getKeyBindingPrefs().getAllProperties();
         adapter = new KeyListAdapter(this, props);
         bindedKeys.setAdapter(adapter);
         bindedKeys.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -109,10 +109,10 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
             String prefKey = UtilKt.getPrefKey(keyCode, isLong);
             Action action = Action.getAction(code);
             if (action == Action.NONE) {
-                getOrionContext().getKeyBindingPrefs().removePreference(prefKey);
+                getOrionApplication().getKeyBindingPrefs().removePreference(prefKey);
                 adapter.remove(new KeyCodeAndAction(keyCode, action, isLong));
             } else {
-                getOrionContext().getKeyBindingPrefs().putIntPreference(prefKey, code);
+                getOrionApplication().getKeyBindingPrefs().putIntPreference(prefKey, code);
                 adapter.insertOrUpdate(new KeyCodeAndAction(keyCode, action, isLong));
             }
         }
@@ -156,7 +156,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
 
     private void selectAction(int keyCode, boolean isLong) {
         Intent intent = new Intent(this, ActionListActivity.class);
-        intent.putExtra("code", getOrionContext().getKeyBindingPrefs().getInt(UtilKt.getPrefKey(keyCode, isLong), 0));
+        intent.putExtra("code", getOrionApplication().getKeyBindingPrefs().getInt(UtilKt.getPrefKey(keyCode, isLong), 0));
         intent.putExtra("type", 2);
         intent.putExtra("keyCode", keyCode);
         intent.putExtra("isLong", isLong);

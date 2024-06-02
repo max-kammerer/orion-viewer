@@ -70,7 +70,7 @@ class OrionBookmarkActivity : OrionBaseActivity() {
     }
 
     private fun updateView(bookId: Long) {
-        val accessor = orionContext.getBookmarkAccessor()
+        val accessor = orionApplication.getBookmarkAccessor()
         val bookmarks = accessor.selectBookmarks(bookId)
         val view = findViewById<ListView>(R.id.bookmarks)
         view.adapter = object : ArrayAdapter<Bookmark>(this, R.layout.bookmark_entry, R.id.bookmark_entry, bookmarks) {
@@ -99,7 +99,7 @@ class OrionBookmarkActivity : OrionBaseActivity() {
                             if (editText.text.isEmpty()) {
                                 this@OrionBookmarkActivity.showAlert("Warning", "Coudn't save empty bookmark")
                             } else {
-                                orionContext.getBookmarkAccessor().insertOrUpdateBookmark(bookId, item.page, editText.text.toString())
+                                orionApplication.getBookmarkAccessor().insertOrUpdateBookmark(bookId, item.page, editText.text.toString())
                                 item.text = editText.text.toString()
                                 notifyDataSetChanged()
                             }
@@ -109,7 +109,7 @@ class OrionBookmarkActivity : OrionBaseActivity() {
                         builder.setNegativeButton("Cancel") { dialog, which -> dialog.dismiss() }
 
                         builder.setNeutralButton("Delete") { dialog, which ->
-                            orionContext.getBookmarkAccessor().deleteBookmark(item.id.toLong())
+                            orionApplication.getBookmarkAccessor().deleteBookmark(item.id.toLong())
                             updateView(bookId)
                         }
 
@@ -140,7 +140,7 @@ class OrionBookmarkActivity : OrionBaseActivity() {
                 if (bookId == -1L) {
                     showEmptyResult = true
                 }
-                var file: String? = orionContext.tempOptions!!.openedFile
+                var file: String? = orionApplication.tempOptions!!.openedFile
                 if (file == null) {
                     showEmptyResult = true
                 }
@@ -150,7 +150,7 @@ class OrionBookmarkActivity : OrionBaseActivity() {
                     file = file + "." + (if (bookId == -1L) "all_" else "") + "bookmarks.xml"
                     log("Bookmarks output file: $file")
 
-                    val exporter = BookmarkExporter(orionContext.getBookmarkAccessor(), file)
+                    val exporter = BookmarkExporter(orionApplication.getBookmarkAccessor(), file)
                     try {
                         showEmptyResult = !exporter.export(bookId)
                     } catch (e: IOException) {
@@ -171,7 +171,7 @@ class OrionBookmarkActivity : OrionBaseActivity() {
             R.id.export_all_bookmarks_menu_item -> {
                 //should be granted automatically
                 checkWritePermission(this)
-                var file: String? = orionContext.tempOptions!!.openedFile
+                var file: String? = orionApplication.tempOptions!!.openedFile
                 if (file == null) {
                     showEmptyResult = true
                 }
@@ -179,7 +179,7 @@ class OrionBookmarkActivity : OrionBaseActivity() {
                     val bookId = if (item.itemId == R.id.export_all_bookmarks_menu_item) -1 else this.bookId
                     file = file + "." + (if (bookId == -1L) "all_" else "") + "bookmarks.xml"
                     log("Bookmarks output file: $file")
-                    val exporter = BookmarkExporter(orionContext.getBookmarkAccessor(), file)
+                    val exporter = BookmarkExporter(orionApplication.getBookmarkAccessor(), file)
                     try {
                         showEmptyResult = !exporter.export(bookId)
                     } catch (e: IOException) {
@@ -238,7 +238,7 @@ class OrionBookmarkActivity : OrionBaseActivity() {
                 builder.setTitle("Select source book").setCancelable(true).setView(group)
                 builder.setPositiveButton("Import") { dialog, which ->
                     dialog.dismiss()
-                    val currentBookParameters = orionContext.currentBookParameters
+                    val currentBookParameters = orionApplication.currentBookParameters
                     val toBook = BookNameAndSize(currentBookParameters!!.simpleFileName, currentBookParameters.fileSize)
                     doImport(fileName, getCheckedItems(tree), if (importCurrent) toBook else null)
                 }
@@ -294,11 +294,11 @@ class OrionBookmarkActivity : OrionBaseActivity() {
     private fun doImport(fileName: String?, books: Set<BookNameAndSize>, toBook: BookNameAndSize?) {
         log("Import bookmarks " + books.size)
 
-        val importer = BookmarkImporter(orionContext.getBookmarkAccessor(), fileName, books, toBook)
+        val importer = BookmarkImporter(orionApplication.getBookmarkAccessor(), fileName, books, toBook)
         try {
             importer.doImport()
-            val currentBookParameters = orionContext.currentBookParameters
-            updateView(orionContext.getBookmarkAccessor().selectBookId(currentBookParameters!!.simpleFileName, currentBookParameters.fileSize))
+            val currentBookParameters = orionApplication.currentBookParameters
+            updateView(orionApplication.getBookmarkAccessor().selectBookId(currentBookParameters!!.simpleFileName, currentBookParameters.fileSize))
             showFastMessage("Imported successfully")
         } catch (e: OrionException) {
             showAlert("Error", e.message!!)

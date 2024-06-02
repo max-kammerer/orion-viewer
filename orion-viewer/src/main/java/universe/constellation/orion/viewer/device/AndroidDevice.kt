@@ -28,6 +28,7 @@ import universe.constellation.orion.viewer.OperationHolder
 import universe.constellation.orion.viewer.OrionBaseActivity
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import universe.constellation.orion.viewer.prefs.OrionApplication
+import universe.constellation.orion.viewer.prefs.Preference
 
 open class AndroidDevice @JvmOverloads constructor(
         private val wakeLockType: Int = PowerManager.SCREEN_BRIGHT_WAKE_LOCK
@@ -39,7 +40,7 @@ open class AndroidDevice @JvmOverloads constructor(
 
     protected lateinit var orionContext: OrionApplication
 
-    private var delay = Device.DELAY
+    private var delay: Preference<Int>? = null
 
     lateinit var options: GlobalOptions
 
@@ -62,13 +63,13 @@ open class AndroidDevice @JvmOverloads constructor(
     }
 
     open fun onCreate(activity: OrionBaseActivity) {
-        options = activity.orionContext.options
+        options = activity.orionApplication.options
 
         if (activity.viewerType == Device.VIEWER_ACTIVITY) {
-            delay = activity.orionContext.options.getScreenBacklightTimeout(Device.VIEWER_DELAY) * 1000 * 60
+            delay = activity.orionApplication.options.SCREEN_BACKLIGHT_TIMEOUT
         }
 
-        this.orionContext = activity.orionContext
+        this.orionContext = activity.orionApplication
         val power = activity.getSystemService(Context.POWER_SERVICE) as PowerManager
         screenLock = power.newWakeLock(wakeLockType, "OrionViewer" + hashCode())
         screenLock!!.setReferenceCounted(false)
@@ -79,12 +80,16 @@ open class AndroidDevice @JvmOverloads constructor(
     }
 
     override fun onWindowGainFocus() {
-        screenLock?.acquire(delay.toLong())
+        delay()
     }
 
-
     override fun onUserInteraction() {
-        screenLock?.acquire(delay.toLong())
+        delay()
+    }
+
+    private fun delay() {
+        val value = delay?.value ?: return
+        screenLock?.acquire(value * 1000 * 60.toLong())
     }
 
     override fun flushBitmap(view: View) {

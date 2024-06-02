@@ -183,7 +183,7 @@ public enum Action {
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
             OrionDrawScene view = activity.getView();
             FullScene scene = activity.getFullScene();
-            LastPageInfo currentBookParameters = activity.getOrionContext().getCurrentBookParameters();
+            LastPageInfo currentBookParameters = activity.getOrionApplication().getCurrentBookParameters();
             if (currentBookParameters != null && ColorUtil.getColorMode(currentBookParameters.colorMode) == null) {
                 activity.showLongMessage(activity.getString(R.string.select_color_mode));
                 return;
@@ -355,7 +355,7 @@ public enum Action {
         @Override
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
             //controller.setRotation((controller.getRotation() + 1) % 2);
-            boolean isLevel9 = activity.getOrionContext().getSdkVersion() >= 9;
+            boolean isLevel9 = activity.getOrionApplication().getSdkVersion() >= 9;
             if (!isLevel9 || activity.getRequestedOrientation() == SCREEN_ORIENTATION_LANDSCAPE || activity.getRequestedOrientation() == SCREEN_ORIENTATION_REVERSE_LANDSCAPE) {
                 ROTATE_90.doAction(controller, activity, parameter);
             } else {
@@ -367,7 +367,7 @@ public enum Action {
 
     INVERSE_CROP (R.string.action_inverse_crops, R.integer.action_inverse_crop) {
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            TemporaryOptions opts = activity.getOrionContext().getTempOptions();
+            TemporaryOptions opts = activity.getOrionApplication().getTempOptions();
             opts.inverseCropping = !opts.inverseCropping;
 
             String title = activity.getResources().getString(R.string.action_inverse_crops) + ":" +(opts.inverseCropping ? "inverted" : "normal");
@@ -377,7 +377,7 @@ public enum Action {
 
     SWITCH_CROP (R.string.action_switch_long_crop, R.integer.action_switch_long_crop) {
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            TemporaryOptions opts = activity.getOrionContext().getTempOptions();
+            TemporaryOptions opts = activity.getOrionApplication().getTempOptions();
             opts.switchCropping = !opts.switchCropping;
             String title = activity.getResources().getString(R.string.action_switch_long_crop) + ":" + (opts.switchCropping ?  "big" : "small");
             Toast.makeText(activity.getApplicationContext(), title, Toast.LENGTH_SHORT).show();
@@ -481,7 +481,7 @@ public enum Action {
         }
 
         int[] margins = CropDialogBuilderKt.toDialogMargins(cropMargins);
-        OrionApplication context = controller.getActivity().getOrionContext();
+        OrionApplication context = controller.getActivity().getOrionApplication();
         TemporaryOptions tempOpts = context.getTempOptions();
         if (tempOpts.inverseCropping) {
             isCrop = !isCrop;
