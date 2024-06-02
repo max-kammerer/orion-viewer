@@ -16,405 +16,367 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package universe.constellation.orion.viewer.prefs
 
-package universe.constellation.orion.viewer.prefs;
+import android.content.SharedPreferences
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
+import universe.constellation.orion.viewer.OptionActions
+import universe.constellation.orion.viewer.PageOptions
+import universe.constellation.orion.viewer.PageWalker
+import universe.constellation.orion.viewer.device.EInkDevice
+import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
+import universe.constellation.orion.viewer.log
+import universe.constellation.orion.viewer.prefs.OrionApplication.Companion.instance
+import universe.constellation.orion.viewer.prefs.OrionTapActivity.Companion.getDefaultAction
+import universe.constellation.orion.viewer.prefs.OrionTapActivity.Companion.getKey
+import java.io.Serializable
+import java.util.LinkedList
 
-import static universe.constellation.orion.viewer.LoggerKt.log;
-
-import android.content.SharedPreferences;
-
-import androidx.annotation.NonNull;
-
-import java.io.Serializable;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
-
-import universe.constellation.orion.viewer.OptionActions;
-import universe.constellation.orion.viewer.OrionViewerActivity;
-import universe.constellation.orion.viewer.PageOptions;
-import universe.constellation.orion.viewer.PageWalker;
-import universe.constellation.orion.viewer.device.EInkDevice;
-import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity;
-
-public class GlobalOptions implements Serializable, PageOptions {
-
-    public static final int MAX_RECENT_ENTRIES = 20;
-
-    private static final String RECENT_PREFIX = "recent_";
-
-    public final static String SWAP_KEYS = "SWAP_KEYS";
-
-    public final static String DEFAULT_ZOOM = "DEFAULT_ZOOM";
-
-    public final static String DEFAULT_CONTRAST = "DEFAULT_CONTRAST_3";
-
-    public final static String APPLY_AND_CLOSE = "APPLY_AND_CLOSE";
-
-    public final static String FULL_SCREEN = "FULL_SCREEN";
-
-    public final static String DRAW_OFF_PAGE = "DRAW_OFF_PAGE";
-
-    public final static String SHOW_ACTION_BAR = "SHOW_ACTION_BAR";
-
-    public final static String SHOW_STATUS_BAR = "SHOW_STATUS_BAR";
-
-    public final static String OLD_UI = "OLD_UI";
-
-    public final static String SHOW_OFFSET_ON_STATUS_BAR = "SHOW_OFFSET_ON_STATUS_BAR";
-
-    public final static String SHOW_TIME_ON_STATUS_BAR = "SHOW_TIME_ON_STATUS_BAR";
-
-    public final static String TAP_ZONE = "TAP_ZONE";
-
-    public final static String SCREEN_ORIENTATION = "SCREEN_ORIENTATION";
-
-    public final static String EINK_OPTIMIZATION = "EINK_OPTIMIZATION";
-
-    public final static String EINK_TOTAL_AFTER = "EINK_TOTAL_AFTER";
-
-    public final static String DICTIONARY = "DICTIONARY";
-
-    public final static String LONG_CROP_VALUE = "LONG_CROP_VALUE";
-
-    public final static String SCREEN_OVERLAPPING_HORIZONTAL = "SCREEN_OVERLAPPING_HORIZONTAL";
-
-    public final static String SCREEN_OVERLAPPING_VERTICAL = "SCREEN_OVERLAPPING_VERTICAL";
-
-    public final static String DEBUG = "DEBUG";
-
-    public final static String BRIGHTNESS = "BRIGHTNESS";
-
-    public final static String CUSTOM_BRIGHTNESS = "CUSTOM_BRIGHTNESS";
-
-    public final static String APPLICATION_THEME = "APPLICATION_THEME";
-
-    public final static String APPLICATION_THEME_DEFAULT = "DEFAULT";
-
-    public final static String APP_LANGUAGE = "LANGUAGE";
-
-    public final static String OPEN_RECENT_BOOK = "OPEN_RECENT_BOOK";
-
-    public final static String DAY_NIGHT_MODE = "DAY_NIGHT_MODE";
-
-    public final static String WALK_ORDER = "WALK_ORDER";
-
-    public final static String PAGE_LAYOUT = "PAGE_LAYOUT";
-
-    public final static String COLOR_MODE = "COLOR_MODE";
-
-    public final static String SHOW_TAP_HELP = "SHOW_TAP_HELP";
-
-    public final static String TEST_SCREEN_WIDTH = "TEST_SCREEN_WIDTH";
-
-    public final static String TEST_SCREEN_HEIGHT = "TEST_SCREEN_HEIGHT";
-
-    public final static String OPEN_AS_TEMP_BOOK = "OPEN_AS_TEMP_BOOK";
-
-    public final static String SCREEN_BACKLIGHT_TIMEOUT = "SCREEN_BACKLIGHT_TIMEOUT";
-
-    public final static String ENABLE_TOUCH_MOVE = "ENABLE_TOUCH_MOVE";
-
-    public final static String ENABLE_MOVE_ON_PINCH_ZOOM = "ENABLE_MOVE_ON_PINCH_ZOOM";
-
-    public final static String VERSION = "VERSION";
-
-    public final static String DEFAULT_LANGUAGE = "DEFAULT";
-
-    private LinkedList<RecentEntry> recentFiles;
-
-    protected final SharedPreferences prefs;
+class GlobalOptions internal constructor(
+    context: OrionApplication,
+    protected val prefs: SharedPreferences,
+    loadRecents: Boolean
+) : Serializable, PageOptions {
+    var recentFiles: LinkedList<RecentEntry>? = null
 
 
     /* Caution: The preference manager does not currently store a strong reference to the listener.
     You must store a strong reference to the listener, or it will be susceptible to garbage collection.
     We recommend you keep a reference to the listener in the instance data of an object that will exist as long as you need the listener. */
-    private final SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener;
+    private val onSharedPreferenceChangeListener: OnSharedPreferenceChangeListener
 
-    GlobalOptions(final OrionApplication context, SharedPreferences preferences, boolean loadRecents) {
-        prefs = preferences;
-
+    init {
         if (loadRecents) {
-            recentFiles = new LinkedList<>();
-            for (int i = 0; i < MAX_RECENT_ENTRIES; i++) {
-                String entry = prefs.getString(RECENT_PREFIX + i, null);
+            recentFiles = LinkedList()
+            for (i in 0 until MAX_RECENT_ENTRIES) {
+                val entry = prefs.getString(RECENT_PREFIX + i, null)
                 if (entry == null) {
-                    break;
+                    break
                 } else {
-                    recentFiles.add(new RecentEntry(entry));
+                    recentFiles.add(RecentEntry(entry))
                 }
             }
         }
 
         //TODO ?
-        onSharedPreferenceChangeListener = (preferences1, name) -> {
-            log("onSharedPreferenceChanged " + name);
-
-            OrionViewerActivity activity = context.getViewActivity();
-            if (activity != null) {
-                if (FULL_SCREEN.equals(name)) {
-                    OptionActions.FULL_SCREEN.doAction(activity, false, isFullScreen());
-                } else if (SHOW_ACTION_BAR.equals(name)) {
-                    OptionActions.SHOW_ACTION_BAR.doAction(activity, false, isActionBarVisible());
-                } else if (SHOW_STATUS_BAR.equals(name)) {
-                    OptionActions.SHOW_STATUS_BAR.doAction(activity, false, isStatusBarVisible());
-                } else if (SHOW_OFFSET_ON_STATUS_BAR.equals(name)) {
-                    OptionActions.SHOW_OFFSET_ON_STATUS_BAR.doAction(activity, false, isShowOffsetOnStatusBar());
-                } else if (SCREEN_OVERLAPPING_HORIZONTAL.equals(name)) {
-                    OptionActions.SCREEN_OVERLAPPING_HORIZONTAL.doAction(activity, getHorizontalOverlapping(), getVerticalOverlapping());
-                } else if (SCREEN_OVERLAPPING_VERTICAL.equals(name)) {
-                    OptionActions.SCREEN_OVERLAPPING_VERTICAL.doAction(activity, getHorizontalOverlapping(), getVerticalOverlapping());
-                } else if (APP_LANGUAGE.equals(name)) {
-                    context.setLanguage(getAppLanguage());
-                } else if (DRAW_OFF_PAGE.equals(name)) {
-                    activity.getFullScene().setDrawOffPage(isDrawOffPage());
-                    //TODO ?
-                    activity.getView().invalidate();
-                } else if (OptionActions.SHOW_TIME_ON_STATUS_BAR.key.equals(name)) {
-                    OptionActions.SHOW_TIME_ON_STATUS_BAR.doAction(activity, !isShowClockOnStatusBar(), isShowClockOnStatusBar());
+        onSharedPreferenceChangeListener =
+            OnSharedPreferenceChangeListener { preferences1: SharedPreferences?, name: String? ->
+                log("onSharedPreferenceChanged $name")
+                val activity = context.viewActivity
+                if (activity != null) {
+                    if (FULL_SCREEN == name) {
+                        OptionActions.FULL_SCREEN.doAction(activity, false, isFullScreen)
+                    } else if (SHOW_ACTION_BAR == name) {
+                        OptionActions.SHOW_ACTION_BAR.doAction(activity, false, isActionBarVisible)
+                    } else if (SHOW_STATUS_BAR == name) {
+                        OptionActions.SHOW_STATUS_BAR.doAction(activity, false, isStatusBarVisible)
+                    } else if (SHOW_OFFSET_ON_STATUS_BAR == name) {
+                        OptionActions.SHOW_OFFSET_ON_STATUS_BAR.doAction(
+                            activity,
+                            false,
+                            isShowOffsetOnStatusBar
+                        )
+                    } else if (SCREEN_OVERLAPPING_HORIZONTAL == name) {
+                        OptionActions.SCREEN_OVERLAPPING_HORIZONTAL.doAction(
+                            activity,
+                            horizontalOverlapping,
+                            verticalOverlapping
+                        )
+                    } else if (SCREEN_OVERLAPPING_VERTICAL == name) {
+                        OptionActions.SCREEN_OVERLAPPING_VERTICAL.doAction(
+                            activity,
+                            horizontalOverlapping,
+                            verticalOverlapping
+                        )
+                    } else if (APP_LANGUAGE == name) {
+                        context.setLanguage(appLanguage!!)
+                    } else if (DRAW_OFF_PAGE == name) {
+                        activity.fullScene.setDrawOffPage(isDrawOffPage)
+                        //TODO ?
+                        activity.view.invalidate()
+                    } else if (OptionActions.SHOW_TIME_ON_STATUS_BAR.key == name) {
+                        OptionActions.SHOW_TIME_ON_STATUS_BAR.doAction(
+                            activity,
+                            !isShowClockOnStatusBar,
+                            isShowClockOnStatusBar
+                        )
+                    }
+                }
+                if (DEBUG == name) {
+                    context.startOrStopDebugLogger(getBooleanProperty(DEBUG, false))
                 }
             }
 
-            if (DEBUG.equals(name)) {
-                context.startOrStopDebugLogger(getBooleanProperty(DEBUG, false));
-            }
-
-        };
-
-        prefs.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
+        prefs.registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener)
     }
 
 
+    val lastOpenedDirectory: String?
+        get() = getStringProperty(OrionFileManagerActivity.LAST_OPENED_DIRECTORY, null)
 
-    public String getLastOpenedDirectory() {
-        return getStringProperty(OrionFileManagerActivity.LAST_OPENED_DIRECTORY, null);
-    }
-
-    public void addRecentEntry(RecentEntry newEntry) {
-        for (Iterator<RecentEntry> iterator = recentFiles.iterator(); iterator.hasNext(); ) {
-            RecentEntry recentEntry =  iterator.next();
-            if (recentEntry.getPath().equals(newEntry.getPath())) {
-                iterator.remove();
-                break;
+    fun addRecentEntry(newEntry: RecentEntry) {
+        val iterator = recentFiles!!.iterator()
+        while (iterator.hasNext()) {
+            val recentEntry = iterator.next()
+            if (recentEntry.path == newEntry.path) {
+                iterator.remove()
+                break
             }
         }
 
-        recentFiles.add(0, newEntry);
+        recentFiles!!.add(0, newEntry)
 
-        if (recentFiles.size() > MAX_RECENT_ENTRIES) {
-            recentFiles.removeLast();
-        }
-    }
-    public void saveRecents() {
-        int i = 0;
-        SharedPreferences.Editor editor = prefs.edit();
-        for (Iterator<RecentEntry> iterator = recentFiles.iterator(); iterator.hasNext(); i++) {
-            RecentEntry next =  iterator.next();
-            editor.putString(RECENT_PREFIX  + i, next.getPath());
-        }
-        editor.apply();
-    }
-
-    public static class RecentEntry implements Serializable{
-
-        private final String path;
-
-        public RecentEntry(String path) {
-            this.path = path;
-        }
-
-
-        public String getPath() {
-            return path;
-        }
-
-        public String getLastPathElement() {
-            return path.substring(path.lastIndexOf("/") + 1);
-        }
-
-        @NonNull
-        @Override
-        public String toString() {
-            return getLastPathElement();
+        if (recentFiles!!.size > MAX_RECENT_ENTRIES) {
+            recentFiles!!.removeLast()
         }
     }
 
-    public LinkedList<RecentEntry> getRecentFiles() {
-        return recentFiles;
+    fun saveRecents() {
+        var i = 0
+        val editor = prefs.edit()
+        val iterator: Iterator<RecentEntry> = recentFiles!!.iterator()
+        while (iterator.hasNext()) {
+            val next = iterator.next()
+            editor.putString(RECENT_PREFIX + i, next.path)
+            i++
+        }
+        editor.apply()
+    }
+
+    class RecentEntry(val path: String) : Serializable {
+        val lastPathElement: String
+            get() = path.substring(path.lastIndexOf("/") + 1)
+
+        override fun toString(): String {
+            return lastPathElement
+        }
     }
 
 
-    public boolean isSwapKeys() {
-        return getBooleanProperty(SWAP_KEYS, false);
-    }
+    val isSwapKeys: Boolean
+        get() = getBooleanProperty(SWAP_KEYS, false)
 
-    public boolean isEnableTouchMove() {
-        return getBooleanProperty(ENABLE_TOUCH_MOVE, true);
-    }
+    val isEnableTouchMove: Boolean
+        get() = getBooleanProperty(ENABLE_TOUCH_MOVE, true)
 
-    public boolean isEnableMoveOnPinchZoom() {
-        return getBooleanProperty(ENABLE_MOVE_ON_PINCH_ZOOM, false);
-    }
+    val isEnableMoveOnPinchZoom: Boolean
+        get() = getBooleanProperty(ENABLE_MOVE_ON_PINCH_ZOOM, false)
 
-    public int getDefaultZoom() {
-        return getIntFromStringProperty(DEFAULT_ZOOM, 0);
-    }
+    val defaultZoom: Int
+        get() = getIntFromStringProperty(DEFAULT_ZOOM, 0)
 
-    public int getDefaultContrast() {
-        return getIntFromStringProperty(DEFAULT_CONTRAST, 100);
-    }
+    val defaultContrast: Int
+        get() = getIntFromStringProperty(DEFAULT_CONTRAST, 100)
 
-    public boolean isApplyAndClose() {
-        return getBooleanProperty(APPLY_AND_CLOSE, false);
-    }
+    val isApplyAndClose: Boolean
+        get() = getBooleanProperty(APPLY_AND_CLOSE, false)
 
-    public boolean isFullScreen() {
-        return getBooleanProperty(FULL_SCREEN, false);
-    }
+    val isFullScreen: Boolean
+        get() = getBooleanProperty(FULL_SCREEN, false)
 
-    public boolean isDrawOffPage() {
-        return getBooleanProperty(DRAW_OFF_PAGE, !(OrionApplication.Companion.getInstance().getDevice() instanceof EInkDevice));
-    }
+    val isDrawOffPage: Boolean
+        get() = getBooleanProperty(DRAW_OFF_PAGE, instance.device !is EInkDevice)
 
-    public boolean isActionBarVisible() {
-        return getBooleanProperty(SHOW_ACTION_BAR, true);
-    }
+    val isActionBarVisible: Boolean
+        get() = getBooleanProperty(SHOW_ACTION_BAR, true)
 
-    public boolean isShowTapHelp() {
-        return getBooleanProperty(SHOW_TAP_HELP, true);
-    }
+    val isShowTapHelp: Boolean
+        get() = getBooleanProperty(SHOW_TAP_HELP, true)
 
-    public boolean isStatusBarVisible() {
-        return getBooleanProperty(SHOW_STATUS_BAR, true);
-    }
+    val isStatusBarVisible: Boolean
+        get() = getBooleanProperty(SHOW_STATUS_BAR, true)
 
-    public boolean isNewUI() {
-        return !getBooleanProperty(OLD_UI, false);
-    }
+    val isNewUI: Boolean
+        get() = !getBooleanProperty(OLD_UI, false)
 
-    public boolean isShowOffsetOnStatusBar() {
-        return getBooleanProperty(SHOW_OFFSET_ON_STATUS_BAR, true);
-    }
+    val isShowOffsetOnStatusBar: Boolean
+        get() = getBooleanProperty(SHOW_OFFSET_ON_STATUS_BAR, true)
 
-    public boolean isShowClockOnStatusBar() {
-        return getBooleanProperty(SHOW_TIME_ON_STATUS_BAR, true);
-    }
+    val isShowClockOnStatusBar: Boolean
+        get() = getBooleanProperty(SHOW_TIME_ON_STATUS_BAR, true)
 
-    public int getActionCode(int i, int j, boolean isLong) {
-        String key = OrionTapActivity.getKey(i, j, isLong);
-        int code = getInt(key, -1);
+    fun getActionCode(i: Int, j: Int, isLong: Boolean): Int {
+        val key = getKey(i, j, isLong)
+        var code = getInt(key, -1)
         if (code == -1) {
-            code = getInt(key, OrionTapActivity.getDefaultAction(i, j, isLong));
+            code = getInt(key, getDefaultAction(i, j, isLong))
         }
-        return code;
+        return code
     }
 
-    public String getDictionary() {
-        return getStringProperty(DICTIONARY, "FORA");
-    }
+    val dictionary: String?
+        get() = getStringProperty(DICTIONARY, "FORA")
 
-    public int getEinkRefreshAfter() {
-        return getIntFromStringProperty(EINK_TOTAL_AFTER, 10);
-    }
+    val einkRefreshAfter: Int
+        get() = getIntFromStringProperty(EINK_TOTAL_AFTER, 10)
 
-    public boolean isEinkOptimization() {
-        return getBooleanProperty(EINK_OPTIMIZATION, false);
-    }
+    val isEinkOptimization: Boolean
+        get() = getBooleanProperty(EINK_OPTIMIZATION, false)
 
-    public int getIntFromStringProperty(String key, int defaultValue) {
-        String value = prefs.getString(key, null);
-        int newIntValue;
-        if (value == null || "".equals(value)) {
-            newIntValue = defaultValue;
+    fun getIntFromStringProperty(key: String?, defaultValue: Int): Int {
+        val value = prefs.getString(key, null)
+        val newIntValue = if (value == null || "" == value) {
+            defaultValue
         } else {
-            newIntValue = Integer.parseInt(value);
+            value.toInt()
         }
-        return newIntValue;
+        return newIntValue
     }
 
-    public int getInt(String key, int defaultValue) {
-        return prefs.getInt(key, defaultValue);
+    fun getInt(key: String?, defaultValue: Int): Int {
+        return prefs.getInt(key, defaultValue)
     }
 
-    public String getStringProperty(String key, String defaultValue) {
-        return prefs.getString(key, defaultValue);
+    fun getStringProperty(key: String?, defaultValue: String?): String? {
+        return prefs.getString(key, defaultValue)
     }
 
-    public boolean getBooleanProperty(String key, boolean defaultValue) {
-        return prefs.getBoolean(key, defaultValue);
-    }
-
-
-    public void saveBooleanProperty(String key, boolean newValue) {
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(key, newValue);
-        editor.apply();
+    fun getBooleanProperty(key: String?, defaultValue: Boolean): Boolean {
+        return prefs.getBoolean(key, defaultValue)
     }
 
 
-    public int getLongCrop() {
-        return getIntFromStringProperty(LONG_CROP_VALUE, 10);
-    }
-
-    public int getVerticalOverlapping() {
-        return getIntFromStringProperty(SCREEN_OVERLAPPING_VERTICAL, 3);
-    }
-
-    public int getHorizontalOverlapping() {
-        return getIntFromStringProperty(SCREEN_OVERLAPPING_HORIZONTAL, 3);
-    }
-
-    public int getBrightness() {
-        return getIntFromStringProperty(BRIGHTNESS, 100);
-    }
-
-    public boolean isCustomBrightness() {
-        return getBooleanProperty(CUSTOM_BRIGHTNESS, false);
-    }
-
-    public boolean isOpenRecentBook() {
-        return getBooleanProperty(OPEN_RECENT_BOOK, false);
+    fun saveBooleanProperty(key: String?, newValue: Boolean) {
+        val editor = prefs.edit()
+        editor.putBoolean(key, newValue)
+        editor.apply()
     }
 
 
-    public String getApplicationTheme() {
-        return getStringProperty(APPLICATION_THEME, APPLICATION_THEME_DEFAULT);
+    val longCrop: Int
+        get() = getIntFromStringProperty(LONG_CROP_VALUE, 10)
+
+    override val verticalOverlapping: Int
+        get() = getIntFromStringProperty(SCREEN_OVERLAPPING_VERTICAL, 3)
+
+    override val horizontalOverlapping: Int
+        get() = getIntFromStringProperty(SCREEN_OVERLAPPING_HORIZONTAL, 3)
+
+    val brightness: Int
+        get() = getIntFromStringProperty(BRIGHTNESS, 100)
+
+    val isCustomBrightness: Boolean
+        get() = getBooleanProperty(CUSTOM_BRIGHTNESS, false)
+
+    val isOpenRecentBook: Boolean
+        get() = getBooleanProperty(OPEN_RECENT_BOOK, false)
+
+
+    val applicationTheme: String?
+        get() = getStringProperty(APPLICATION_THEME, APPLICATION_THEME_DEFAULT)
+
+    val appLanguage: String?
+        get() = getStringProperty(APP_LANGUAGE, DEFAULT_LANGUAGE)
+
+    val walkOrder: String?
+        get() = getStringProperty(WALK_ORDER, PageWalker.WALK_ORDER.ABCD.name)
+
+    val pageLayout: Int
+        get() = getInt(PAGE_LAYOUT, 0)
+
+    val colorMode: String?
+        get() = getStringProperty(COLOR_MODE, "CM_NORMAL")
+
+    fun getScreenBacklightTimeout(defaultValue: Int): Int {
+        return getIntFromStringProperty(SCREEN_BACKLIGHT_TIMEOUT, defaultValue)
     }
 
-    public String getAppLanguage() {
-        return getStringProperty(APP_LANGUAGE, DEFAULT_LANGUAGE);
+    fun removePreference(name: String?) {
+        prefs.edit().remove(name).apply()
     }
 
-    public String getWalkOrder() {
-        return getStringProperty(WALK_ORDER, PageWalker.WALK_ORDER.ABCD.name());
+    fun putIntPreference(name: String?, value: Int) {
+        prefs.edit().putInt(name, value).apply()
     }
 
-    public int getPageLayout() {
-        return getInt(PAGE_LAYOUT, 0);
+    fun removeAll() {
+        prefs.edit().clear().apply()
     }
 
-    public String getColorMode() {
-        return getStringProperty(COLOR_MODE, "CM_NORMAL");
-    }
+    val allProperties: Map<String, *>
+        get() = prefs.all
 
-    public int getScreenBacklightTimeout(int defaultValue) {
-        return getIntFromStringProperty(SCREEN_BACKLIGHT_TIMEOUT, defaultValue);
-    }
+    companion object {
+        const val MAX_RECENT_ENTRIES: Int = 20
 
-    public void removePreference(String name) {
-        prefs.edit().remove(name).apply();
-    }
+        private const val RECENT_PREFIX = "recent_"
 
-    public void putIntPreference(String name, int value) {
-        prefs.edit().putInt(name, value).apply();
-    }
+        const val SWAP_KEYS: String = "SWAP_KEYS"
 
-    public void removeAll() {
-        prefs.edit().clear().apply();
-    }
+        const val DEFAULT_ZOOM: String = "DEFAULT_ZOOM"
 
-    public Map<String, ?> getAllProperties() {
-        return prefs.getAll();
-    }
+        const val DEFAULT_CONTRAST: String = "DEFAULT_CONTRAST_3"
 
+        const val APPLY_AND_CLOSE: String = "APPLY_AND_CLOSE"
+
+        const val FULL_SCREEN: String = "FULL_SCREEN"
+
+        const val DRAW_OFF_PAGE: String = "DRAW_OFF_PAGE"
+
+        const val SHOW_ACTION_BAR: String = "SHOW_ACTION_BAR"
+
+        const val SHOW_STATUS_BAR: String = "SHOW_STATUS_BAR"
+
+        const val OLD_UI: String = "OLD_UI"
+
+        const val SHOW_OFFSET_ON_STATUS_BAR: String = "SHOW_OFFSET_ON_STATUS_BAR"
+
+        const val SHOW_TIME_ON_STATUS_BAR: String = "SHOW_TIME_ON_STATUS_BAR"
+
+        const val TAP_ZONE: String = "TAP_ZONE"
+
+        const val SCREEN_ORIENTATION: String = "SCREEN_ORIENTATION"
+
+        const val EINK_OPTIMIZATION: String = "EINK_OPTIMIZATION"
+
+        const val EINK_TOTAL_AFTER: String = "EINK_TOTAL_AFTER"
+
+        const val DICTIONARY: String = "DICTIONARY"
+
+        const val LONG_CROP_VALUE: String = "LONG_CROP_VALUE"
+
+        const val SCREEN_OVERLAPPING_HORIZONTAL: String = "SCREEN_OVERLAPPING_HORIZONTAL"
+
+        const val SCREEN_OVERLAPPING_VERTICAL: String = "SCREEN_OVERLAPPING_VERTICAL"
+
+        const val DEBUG: String = "DEBUG"
+
+        const val BRIGHTNESS: String = "BRIGHTNESS"
+
+        const val CUSTOM_BRIGHTNESS: String = "CUSTOM_BRIGHTNESS"
+
+        const val APPLICATION_THEME: String = "APPLICATION_THEME"
+
+        const val APPLICATION_THEME_DEFAULT: String = "DEFAULT"
+
+        const val APP_LANGUAGE: String = "LANGUAGE"
+
+        const val OPEN_RECENT_BOOK: String = "OPEN_RECENT_BOOK"
+
+        const val DAY_NIGHT_MODE: String = "DAY_NIGHT_MODE"
+
+        const val WALK_ORDER: String = "WALK_ORDER"
+
+        const val PAGE_LAYOUT: String = "PAGE_LAYOUT"
+
+        const val COLOR_MODE: String = "COLOR_MODE"
+
+        const val SHOW_TAP_HELP: String = "SHOW_TAP_HELP"
+
+        const val TEST_SCREEN_WIDTH: String = "TEST_SCREEN_WIDTH"
+
+        const val TEST_SCREEN_HEIGHT: String = "TEST_SCREEN_HEIGHT"
+
+        const val OPEN_AS_TEMP_BOOK: String = "OPEN_AS_TEMP_BOOK"
+
+        const val SCREEN_BACKLIGHT_TIMEOUT: String = "SCREEN_BACKLIGHT_TIMEOUT"
+
+        const val ENABLE_TOUCH_MOVE: String = "ENABLE_TOUCH_MOVE"
+
+        const val ENABLE_MOVE_ON_PINCH_ZOOM: String = "ENABLE_MOVE_ON_PINCH_ZOOM"
+
+        const val VERSION: String = "VERSION"
+
+        const val DEFAULT_LANGUAGE: String = "DEFAULT"
+    }
 }
