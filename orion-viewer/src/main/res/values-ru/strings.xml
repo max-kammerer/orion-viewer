@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
     <string name="navigation">Порядок переходов</string>
-
     <string name="crop_left">Левое</string>
     <string name="crop_right">Правое</string>
     <string name="crop_top">Верхнее</string>
     <string name="crop_bottom">Нижнее</string>
     <string name="enable_even_crop">Отдельная обрезка для четных страниц</string>
-
     <string name="crop_manual">Ручная обрезка</string>
     <string name="crop_auto">Авто-обрезка</string>
     <string name="crop_auto_manual">Авто и ручная</string>
     <string name="crop_manual_auto">Ручная и авто</string>
     <string name="crop_warning">Используйте ручную обрезку для лучшей производительности</string>
-
     <string name="rotate_0">0 градусов</string>
     <string name="rotate_90">90 градусов</string>
     <string name="rotate_270">270 градусов</string>
@@ -22,27 +18,22 @@
     <string name="short_click">При коротком нажатии</string>
     <string name="binding_click">Переназначение</string>
     <string name="key_binder_reset_all">Сбросить все</string>
-
     <string name="orientation_default">По умолчанию</string>
     <string name="orientation_default_rotation">По умолчанию</string>
     <string name="orientation_landscape">Альбомная</string>
     <string name="orientation_portrait">Книжная</string>
     <string name="orientation_landscape_inverse">Альбомная (270)</string>
     <string name="orientation_portrait_inverse">Книжная (180)</string>
-
     <string name="fit_width">По ширине</string>
     <string name="fit_height">По высоте</string>
     <string name="fit_page">По размеру страницы</string>
     <string name="fit_custom">Указать масштаб…</string>
-
     <string name="key_binder_message">Нажмите кнопку и выберите связанное действие!</string>
     <string name="key_binder_warning">Не могу привязать кнопку с нулевым кодом, попробуйте другую!</string>
     <string name="table_of_contents">Содержание</string>
-
     <string name="warn_no_text_in_selection">В выделенном участке отсутствует текст!</string>
     <string name="warn_no_outline">Содержание отсутствует!</string>
     <string name="select_color_mode">Выберите цветовой режим для переключения</string>
-
     <string name="color_mode_normal">Обычные цвета (черный на белом фоне)</string>
     <string name="color_mode_inverted">Инвертированные цвета</string>
     <string name="color_mode_black_on_yellowish">Черный на желтоватом фоне</string>
@@ -50,7 +41,6 @@
     <string name="color_mode_grayscale">Градации серого на сером фоне </string>
     <string name="color_mode_grayscale_dark">Градации серого на темносером фоне</string>
     <string name="color_mode_white_on_blue">Белый на синем фоне</string>
-
-
     <string name="saveFileNameTooltip">ИмяФайла.расширение</string>
+    <string name="save">Сохранить</string>
 </resources>
