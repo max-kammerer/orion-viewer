@@ -21,11 +21,6 @@ package universe.constellation.orion.viewer.prefs;
 
 import universe.constellation.orion.viewer.document.OutlineItem;
 
-/**
- * User: mike
- * Date: 24.01.12
- * Time: 8:27
- */
 public class TemporaryOptions {
 
     public boolean switchCropping;

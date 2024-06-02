@@ -41,15 +41,9 @@ public class GlobalOptions implements Serializable, PageOptions {
 
     public static final int MAX_RECENT_ENTRIES = 20;
 
-    public static final String NEXT_KEY = "next_key_keycode";
-
-    public static final String PREV_KEY = "prev_key_keycode";
-
     private static final String RECENT_PREFIX = "recent_";
 
     public final static String SWAP_KEYS = "SWAP_KEYS";
-
-    public final static String DEFAULT_ORIENTATION = "BOOK_ORIENTATION";
 
     public final static String DEFAULT_ZOOM = "DEFAULT_ZOOM";
 
@@ -211,13 +205,6 @@ public class GlobalOptions implements Serializable, PageOptions {
             recentFiles.removeLast();
         }
     }
-
-    public void saveProperty(String property, String value) {
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(property, value);
-        editor.apply();
-    }
-
     public void saveRecents() {
         int i = 0;
         SharedPreferences.Editor editor = prefs.edit();
@@ -256,12 +243,6 @@ public class GlobalOptions implements Serializable, PageOptions {
         return recentFiles;
     }
 
-//    public void onDestroy(Context applicationContext) {
-//        if (onSharedPreferenceChangeListener != null) {
-//            PreferenceManager.getDefaultSharedPreferences(applicationContext).unregisterOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
-//            onSharedPreferenceChangeListener = null;
-//        }
-//    }
 
     public boolean isSwapKeys() {
         return getBooleanProperty(SWAP_KEYS, false);
@@ -273,10 +254,6 @@ public class GlobalOptions implements Serializable, PageOptions {
 
     public boolean isEnableMoveOnPinchZoom() {
         return getBooleanProperty(ENABLE_MOVE_ON_PINCH_ZOOM, false);
-    }
-
-    public int getDefaultOrientation() {
-        return getIntFromStringProperty(DEFAULT_ORIENTATION, 0);
     }
 
     public int getDefaultZoom() {
@@ -423,28 +400,6 @@ public class GlobalOptions implements Serializable, PageOptions {
     public int getScreenBacklightTimeout(int defaultValue) {
         return getIntFromStringProperty(SCREEN_BACKLIGHT_TIMEOUT, defaultValue);
     }
-
-
-//    public void subscribe(PrefListener listener) {
-//        prefListener.add(listener);
-//    }
-//
-//    private void pushChangePropertyEvent(String key, Object oldValue) {
-//        for (int i = 0; i < prefListener.size(); i++) {
-//            PrefListener prefListener1 =  prefListener.get(i);
-//            try {
-//                prefListener1.onPreferenceChanged(this, key, oldValue);
-//            } catch (Exception e) {
-//                log(e);
-//                //TODO show error
-//            }
-//        }
-//    }
-//
-//
-//    public void unsubscribe(PrefListener listener) {
-//        prefListener.remove(listener);
-//    }
 
     public void removePreference(String name) {
         prefs.edit().remove(name).apply();
