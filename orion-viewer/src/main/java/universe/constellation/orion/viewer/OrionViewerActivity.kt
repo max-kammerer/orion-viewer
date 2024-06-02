@@ -595,7 +595,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     private fun processKey(keyCode: Int, event: KeyEvent, isLong: Boolean): Boolean {
         log("key = $keyCode isLong = $isLong")
 
-        val actionCode = orionContext.keyBinding.getInt(getPrefKey(keyCode, isLong), -1)
+        val actionCode = orionContext.keyBindingPrefs.getInt(getPrefKey(keyCode, isLong), -1)
         if (actionCode != -1) {
             when (val action = Action.getAction(actionCode)) {
                 Action.PREV, Action.NEXT -> {

@@ -43,9 +43,6 @@ open class AndroidDevice @JvmOverloads constructor(
 
     lateinit var options: GlobalOptions
 
-    private val keyBinding: GlobalOptions
-        get() = orionContext.keyBinding
-
     override val defaultTheme: String
         get() = GlobalOptions.APPLICATION_THEME
 

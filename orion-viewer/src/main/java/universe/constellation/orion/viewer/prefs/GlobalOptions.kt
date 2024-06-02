@@ -27,14 +27,11 @@ import universe.constellation.orion.viewer.device.EInkDevice
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.prefs.OrionApplication.Companion.instance
-import universe.constellation.orion.viewer.prefs.OrionTapActivity.Companion.getDefaultAction
-import universe.constellation.orion.viewer.prefs.OrionTapActivity.Companion.getKey
 import java.io.Serializable
 
 class GlobalOptions(
     context: OrionApplication,
-    prefs: SharedPreferences,
-    loadRecents: Boolean
+    prefs: SharedPreferences
 ) : PreferenceWrapper(prefs), Serializable, PageOptions {
     var recentFiles = mutableListOf<RecentEntry>()
 
@@ -44,14 +41,12 @@ class GlobalOptions(
     private val onSharedPreferenceChangeListener: OnSharedPreferenceChangeListener
 
     init {
-        if (loadRecents) {
-            for (i in 0 until MAX_RECENT_ENTRIES) {
-                val entry = prefs.getString(RECENT_PREFIX + i, null)
-                if (entry == null) {
-                    break
-                } else {
-                    recentFiles.add(RecentEntry(entry))
-                }
+        for (i in 0 until MAX_RECENT_ENTRIES) {
+            val entry = prefs.getString(RECENT_PREFIX + i, null)
+            if (entry == null) {
+                break
+            } else {
+                recentFiles.add(RecentEntry(entry))
             }
         }
 
@@ -86,7 +81,7 @@ class GlobalOptions(
                             verticalOverlapping
                         )
                     } else if (APP_LANGUAGE == name) {
-                        context.setLanguage(appLanguage!!)
+                        context.setLanguage(appLanguage)
                     } else if (DRAW_OFF_PAGE == name) {
                         activity.fullScene.setDrawOffPage(isDrawOffPage)
                         //TODO ?
@@ -193,10 +188,10 @@ class GlobalOptions(
         get() = getBooleanProperty(SHOW_TIME_ON_STATUS_BAR, true)
 
     fun getActionCode(i: Int, j: Int, isLong: Boolean): Int {
-        val key = getKey(i, j, isLong)
+        val key = OrionTapActivity.getKey(i, j, isLong)
         var code = getInt(key, -1)
         if (code == -1) {
-            code = getInt(key, getDefaultAction(i, j, isLong))
+            code = getInt(key, OrionTapActivity.getDefaultAction(i, j, isLong))
         }
         return code
     }
@@ -244,9 +239,7 @@ class GlobalOptions(
     val colorMode: String
         get() = getStringProperty(COLOR_MODE, "CM_NORMAL")
 
-    fun getScreenBacklightTimeout(defaultValue: Int): Int {
-        return getIntFromStringProperty(SCREEN_BACKLIGHT_TIMEOUT, defaultValue)
-    }
+    val SCREEN_BACKLIGHT_TIMEOUT = pref("SCREEN_BACKLIGHT_TIMEOUT", 10)
 
     companion object {
         const val MAX_RECENT_ENTRIES: Int = 20
@@ -320,8 +313,6 @@ class GlobalOptions(
         const val TEST_SCREEN_HEIGHT: String = "TEST_SCREEN_HEIGHT"
 
         const val OPEN_AS_TEMP_BOOK: String = "OPEN_AS_TEMP_BOOK"
-
-        const val SCREEN_BACKLIGHT_TIMEOUT: String = "SCREEN_BACKLIGHT_TIMEOUT"
 
         const val ENABLE_TOUCH_MOVE: String = "ENABLE_TOUCH_MOVE"
 

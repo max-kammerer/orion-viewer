@@ -26,7 +26,6 @@ import android.content.res.Resources
 import android.os.Build
 import android.os.Build.VERSION.CODENAME
 import android.os.Build.VERSION.RELEASE
-import android.os.Environment
 import android.system.Os
 import androidx.core.os.ConfigurationCompat
 import androidx.core.os.LocaleListCompat
@@ -55,7 +54,6 @@ import universe.constellation.orion.viewer.device.OnyxUtil
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.logger
 import universe.constellation.orion.viewer.prefs.GlobalOptions.Companion.DEFAULT_LANGUAGE
-import universe.constellation.orion.viewer.prefs.GlobalOptions.DEFAULT_LANGUAGE
 import universe.constellation.orion.viewer.test.IdlingResource
 import java.io.File
 import java.text.SimpleDateFormat
@@ -68,11 +66,11 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
     internal var idlingRes = IdlingResource()
 
     val options: GlobalOptions by lazy {
-        GlobalOptions(this, androidx.preference.PreferenceManager.getDefaultSharedPreferences(this), true)
+        GlobalOptions(this, androidx.preference.PreferenceManager.getDefaultSharedPreferences(this))
     }
 
-    val keyBinding: GlobalOptions by lazy {
-        GlobalOptions(this, getSharedPreferences("key_binding", Context.MODE_PRIVATE), false)
+    val keyBindingPrefs: KeyBindingPreferences by lazy {
+        KeyBindingPreferences(getSharedPreferences("key_binding", Context.MODE_PRIVATE))
     }
 
     val analytics: Analytics by lazy {
