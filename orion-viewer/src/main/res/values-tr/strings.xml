@@ -48,7 +48,6 @@
     <string name="color_mode_grayscale_light">Grimsi zemin üzerine gri tonlamalı</string>
     <string name="color_mode_grayscale">Gri zemin üzerine gri tonlamalı</string>
     <string name="color_mode_grayscale_dark">Koyu gri zemin üzerine gri tonlamalı</string>
-    <string name="color_mode_yellow_on_dark">Siyah zemin üzerine sarı</string>
     <string name="color_mode_white_on_blue">Mavi zemin üzerine beyaz</string>
     <string name="select_color_mode">Geçiş yapılacak renk modunu seçin</string>
 
