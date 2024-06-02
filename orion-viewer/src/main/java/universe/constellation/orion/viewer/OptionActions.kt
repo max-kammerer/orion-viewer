@@ -1,117 +1,98 @@
-package universe.constellation.orion.viewer;
+package universe.constellation.orion.viewer
 
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.view.ViewGroup
+import android.view.WindowManager
+import androidx.core.internal.view.SupportMenuItem
+import universe.constellation.orion.viewer.prefs.GlobalOptions
 
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.internal.view.SupportMenuItem;
-
-
-public enum OptionActions {
-
+enum class OptionActions(@JvmField val key: String) {
     NONE("NONE"),
 
     FULL_SCREEN("FULL_SCREEN") {
-        public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
-            activity.getWindow().setFlags(newValue ? WindowManager.LayoutParams.FLAG_FULLSCREEN : 0, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            activity.getDevice().fullScreen(newValue, activity);
+        override fun doAction(activity: OrionViewerActivity, oldValue: Boolean, newValue: Boolean) {
+            activity.window.setFlags(
+                if (newValue) WindowManager.LayoutParams.FLAG_FULLSCREEN else 0,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
+            activity.device!!.fullScreen(newValue, activity)
         }
     },
 
     SHOW_ACTION_BAR("SHOW_ACTION_BAR") {
-        public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
-            if (activity.isNewUI()) return;
-            Toolbar toolbar = activity.getToolbar();
-            ViewGroup.LayoutParams layoutParams = toolbar.getLayoutParams();
+        override fun doAction(activity: OrionViewerActivity, oldValue: Boolean, newValue: Boolean) {
+            if (activity.isNewUI) return
+            val toolbar = activity.toolbar
+            val layoutParams = toolbar.layoutParams
             if (newValue) {
-                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
             } else {
-                layoutParams.height = 0;
+                layoutParams.height = 0
             }
-            toolbar.setLayoutParams(layoutParams);
-            Menu menu = toolbar.getMenu();
-            menu.clear();
-            activity.onCreateOptionsMenu(menu);
+            toolbar.layoutParams = layoutParams
+            val menu = toolbar.menu
+            menu.clear()
+            activity.onCreateOptionsMenu(menu)
             if (!newValue) {
-                for (int i = 0; i < menu.size(); i++) {
-                    MenuItem item = menu.getItem(i);
-                    item.setShowAsAction(SupportMenuItem.SHOW_AS_ACTION_NEVER);
+                for (i in 0 until menu.size()) {
+                    val item = menu.getItem(i)
+                    item.setShowAsAction(SupportMenuItem.SHOW_AS_ACTION_NEVER)
                 }
             }
         }
     },
 
     SHOW_STATUS_BAR("SHOW_ACTION_BAR") {
-        public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
-            activity.getStatusBarHelper().setShowStatusBar(newValue);
+        override fun doAction(activity: OrionViewerActivity, oldValue: Boolean, newValue: Boolean) {
+            activity.statusBarHelper.setShowStatusBar(newValue)
         }
     },
 
     SHOW_OFFSET_ON_STATUS_BAR("SHOW_OFFSET_ON_STATUS_BAR") {
-        public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
-            activity.getStatusBarHelper().setShowOffset(newValue);
+        override fun doAction(activity: OrionViewerActivity, oldValue: Boolean, newValue: Boolean) {
+            activity.statusBarHelper.setShowOffset(newValue)
         }
     },
 
     SHOW_TIME_ON_STATUS_BAR("SHOW_TIME_ON_STATUS_BAR") {
-        public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
-            activity.getStatusBarHelper().setShowClock(newValue);
+        override fun doAction(activity: OrionViewerActivity, oldValue: Boolean, newValue: Boolean) {
+            activity.statusBarHelper.setShowClock(newValue)
         }
     },
 
     SCREEN_OVERLAPPING_HORIZONTAL("SCREEN_OVERLAPPING_HORIZONTAL") {
-        public void doAction(OrionViewerActivity activity, int hor, int ver) {
-            Controller controller = activity.getController();
-            if (controller != null) {
-                controller.changeOverlap(hor, ver);
-            }
+        override fun doAction(activity: OrionViewerActivity, hor: Int, ver: Int) {
+            val controller = activity.controller
+            controller?.changeOverlap(hor, ver)
         }
     },
 
     SCREEN_OVERLAPPING_VERTICAL("SCREEN_OVERLAPPING_VERTICAL") {
-        public void doAction(OrionViewerActivity activity, int hor, int ver) {
-            Controller controller = activity.getController();
-            if (controller != null) {
-                controller.changeOverlap(hor, ver);
-            }
+        override fun doAction(activity: OrionViewerActivity, hor: Int, ver: Int) {
+            val controller = activity.controller
+            controller?.changeOverlap(hor, ver)
         }
     },
 
     SET_CONTRAST("contrast") {
-        public void doAction(OrionViewerActivity activity, int oldValue, int newValue) {
-            Controller controller = activity.getController();
-            if (controller != null) {
-                controller.changeContrast(newValue);
-            }
+        override fun doAction(activity: OrionViewerActivity, oldValue: Int, newValue: Int) {
+            val controller = activity.controller
+            controller?.changeContrast(newValue)
         }
     },
 
     SET_THRESHOLD("threshold") {
-        public void doAction(OrionViewerActivity activity, int oldValue, int newValue) {
-            Controller controller = activity.getController();
-            if (controller != null) {
-                controller.changeThreshhold(newValue);
-            }
+        override fun doAction(activity: OrionViewerActivity, oldValue: Int, newValue: Int) {
+            val controller = activity.controller
+            controller?.changeThreshhold(newValue)
         }
     };
 
-    private final String key;
-
-    OptionActions(String key) {
-        this.key = key;
+    open fun doAction(activity: OrionViewerActivity, oldValue: Int, newValue: Int) {
     }
 
-    public void doAction(OrionViewerActivity activity, int oldValue, int newValue) {
-
+    fun doAction(activity: OrionViewerActivity?, globalOptions: GlobalOptions?) {
     }
 
-    public void doAction(OrionViewerActivity activity, boolean oldValue, boolean newValue) {
-
-    }
-
-    public String getKey() {
-        return key;
+    open fun doAction(activity: OrionViewerActivity, oldValue: Boolean, newValue: Boolean) {
     }
 }

@@ -176,7 +176,7 @@ public class GlobalOptions implements Serializable, PageOptions {
                     activity.getFullScene().setDrawOffPage(isDrawOffPage());
                     //TODO ?
                     activity.getView().invalidate();
-                } else if (OptionActions.SHOW_TIME_ON_STATUS_BAR.getKey().equals(name)) {
+                } else if (OptionActions.SHOW_TIME_ON_STATUS_BAR.key.equals(name)) {
                     OptionActions.SHOW_TIME_ON_STATUS_BAR.doAction(activity, !isShowClockOnStatusBar(), isShowClockOnStatusBar());
                 }
             }
