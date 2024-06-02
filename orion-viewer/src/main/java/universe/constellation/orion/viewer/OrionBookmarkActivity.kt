@@ -40,7 +40,7 @@ import universe.constellation.orion.viewer.bookmarks.BookmarkImporter
 import java.io.*
 import java.util.*
 
-class OrionBookmarkActivity : OrionBaseActivity(false) {
+class OrionBookmarkActivity : OrionBaseActivity() {
 
     private var bookId: Long = 0
 

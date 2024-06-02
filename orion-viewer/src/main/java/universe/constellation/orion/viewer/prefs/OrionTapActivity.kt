@@ -32,7 +32,7 @@ import universe.constellation.orion.viewer.OrionBaseActivity
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.log
 
-class OrionTapActivity : OrionBaseActivity(false) {
+class OrionTapActivity : OrionBaseActivity() {
 
     private var activeView: View? = null
     private var index: Int = 0

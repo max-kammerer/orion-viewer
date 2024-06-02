@@ -37,7 +37,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import java.util.Date
 
-class OrionHelpActivity : OrionBaseActivity(false) {
+class OrionHelpActivity : OrionBaseActivity() {
 
     class InfoFragment : Fragment(R.layout.general_help)
 

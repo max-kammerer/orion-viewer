@@ -1,7 +1,6 @@
 package universe.constellation.orion.viewer.prefs
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import androidx.preference.PreferenceScreen
@@ -13,7 +12,7 @@ import universe.constellation.orion.viewer.android.DSLPreferenceFragment
 import universe.constellation.orion.viewer.prefs.BookPreferenceKeyX.*
 
 
-class OrionBookPreferencesActivityX : OrionBaseActivity(createDevice = false) {
+class OrionBookPreferencesActivityX : OrionBaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         onOrionCreate(savedInstanceState, R.layout.activity_with_fragment, true, true)

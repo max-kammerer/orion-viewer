@@ -46,9 +46,9 @@ import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivityB
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import universe.constellation.orion.viewer.prefs.OrionApplication
 
-abstract class OrionBaseActivity(createDevice: Boolean = true, val viewerType: Int = Device.DEFAULT_ACTIVITY) : AppCompatActivity() {
+abstract class OrionBaseActivity(val viewerType: Int = Device.DEFAULT_ACTIVITY) : AppCompatActivity() {
 
-    val device: AndroidDevice? = if (createDevice) OrionApplication.createDevice() else null
+    val device: AndroidDevice? = if (viewerType == Device.VIEWER_ACTIVITY) OrionApplication.createDevice() else null
 
     protected var listener: SharedPreferences.OnSharedPreferenceChangeListener? = null
 

@@ -10,7 +10,7 @@ import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.android.DSLPreferenceFragment
 import universe.constellation.orion.viewer.device.EInkDevice
 
-class OrionPreferenceActivityX : OrionBaseActivity(false) {
+class OrionPreferenceActivityX : OrionBaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         onOrionCreate(savedInstanceState, R.layout.activity_with_fragment, true, true)
