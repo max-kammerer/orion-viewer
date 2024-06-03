@@ -326,6 +326,8 @@ class GlobalOptions(
 
         const val OPEN_AS_TEMP_BOOK: String = "OPEN_AS_TEMP_BOOK"
 
+        const val TEST_FLAG: String = "ORION_VIEWER_TEST_FLAG"
+
         const val ENABLE_TOUCH_MOVE: String = "ENABLE_TOUCH_MOVE"
 
         const val ENABLE_MOVE_ON_PINCH_ZOOM: String = "ENABLE_MOVE_ON_PINCH_ZOOM"

@@ -85,7 +85,6 @@ abstract class BaseViewerActivityTest(
         }
     }
 
-
     @After
     fun checkEndInvariant() {
         onActivity {
@@ -95,54 +94,21 @@ abstract class BaseViewerActivityTest(
         }
     }
 
-
-    protected fun applyZoom() {
-        onView(ViewMatchers.withId(R.id.option_dialog_bottom_apply)).perform(ViewActions.click())
-        onView(ViewMatchers.withId(R.id.option_dialog_bottom_close)).perform(ViewActions.click())
-    }
-
     protected fun applyGoTo() {
-        if (!globalOptions.isNewUI) {
-            onView(ViewMatchers.withId(R.id.option_dialog_bottom_apply)).perform(ViewActions.click())
-            //onView(ViewMatchers.withId(R.id.option_dialog_bottom_close)).perform(ViewActions.click())
-        } else {
-            onView(ViewMatchers.withId(R.id.view)).perform(ViewActions.click())
-        }
+        activityScenarioRule.scenario.applyGoTo()
     }
 
     protected fun openZoom() {
-        openMenuAndSelect(R.id.zoom_menu_item, R.string.menu_zoom_text)
+        activityScenarioRule.scenario.openZoom()
     }
 
     protected fun openGoTo() {
-        openMenuAndSelect(-1, R.string.menu_goto_text)
+        activityScenarioRule.scenario.openGoTo()
     }
 
-    fun openCropDialog() {
-        openMenuAndSelect(R.id.crop_menu_item, R.string.menu_crop_text)
-    }
-
-    fun applyCrop() {
-        onView(ViewMatchers.withId(R.id.option_dialog_bottom_apply)).perform(ViewActions.click())
-        onView(ViewMatchers.withId(R.id.option_dialog_bottom_close)).perform(ViewActions.click())
-    }
 
     private fun openMenuAndSelect(id: Int, resId: Int) {
-        val newUI = onActivity {
-            it.showMenu()
-            it.isNewUI
-        }
-        if (newUI) {
-            if (id != -1) {
-                onView(ViewMatchers.withId(id)).perform(ViewActions.click())
-            }
-        } else {
-            val text = appContext.getString(resId)
-            if (isAtLeastKitkat()) {
-                device.wait(Until.findObject(By.textContains(text)), 1000)
-            }
-            onView(ViewMatchers.withText(resId)).perform(ViewActions.click())
-        }
+        activityScenarioRule.scenario.openMenuAndSelect(id, resId)
     }
 
     protected val currentPage0: Int

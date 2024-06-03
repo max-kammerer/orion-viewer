@@ -51,17 +51,6 @@ class AccessToPrivateFileSecondTimeTest : BaseInstrumentationTest() {
         }
 
     private fun ActivityScenario<OrionViewerActivity>.checkFileWasOpened() {
-        onView(withId(R.id.view)).check(ViewAssertions.matches(isCompletelyDisplayed()))
-        onActivity {
-            Assert.assertNotNull(it.controller)
-            Assert.assertEquals(
-                fileName,
-                it.controller!!.document.filePath.substringAfterLast("/")
-            )
-            Assert.assertEquals(
-                pageCount,
-                it.controller!!.document.pageCount
-            )
-        }
+        checkFileWasOpened(fileName, pageCount)
     }
 }

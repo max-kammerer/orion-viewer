@@ -37,6 +37,12 @@ open class PreferenceWrapper(val prefs: SharedPreferences)  {
         editor.apply()
     }
 
+    fun saveStringProperty(key: String, newValue: String) {
+        val editor = prefs.edit()
+        editor.putString(key, newValue)
+        editor.apply()
+    }
+
     fun removePreference(name: String?) {
         prefs.edit().remove(name).apply()
     }

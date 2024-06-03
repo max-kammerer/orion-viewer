@@ -21,6 +21,7 @@ fun createTestViewerIntent(body: Intent.() -> Unit): Intent {
             putExtra(GlobalOptions.SHOW_TAP_HELP, false)
         }
         putExtra(GlobalOptions.OPEN_AS_TEMP_BOOK, true)
+        putExtra(GlobalOptions.TEST_FLAG, true)
     }
 }
 

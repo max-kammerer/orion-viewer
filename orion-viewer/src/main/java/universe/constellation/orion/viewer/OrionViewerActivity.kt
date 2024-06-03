@@ -970,6 +970,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     private fun updateGlobalOptionsFromIntent(intent: Intent) {
+        if (!intent.hasExtra(GlobalOptions.TEST_FLAG) ||
+            !intent.getBooleanExtra(GlobalOptions.TEST_FLAG, false)) {
+            return
+        }
+
         if (intent.hasExtra(GlobalOptions.SHOW_TAP_HELP)) {
             val showTapHelp = intent.getBooleanExtra(GlobalOptions.SHOW_TAP_HELP, false)
             globalOptions.saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, showTapHelp)
@@ -978,6 +983,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         if (intent.hasExtra(GlobalOptions.OLD_UI)) {
             val oldUI = intent.getBooleanExtra(GlobalOptions.OLD_UI, false)
             globalOptions.saveBooleanProperty(GlobalOptions.OLD_UI, oldUI)
+        }
+
+        if (intent.hasExtra(GlobalOptions.APPLICATION_THEME)) {
+            val theme = intent.getStringExtra(GlobalOptions.APPLICATION_THEME)!!
+            globalOptions.saveStringProperty(GlobalOptions.APPLICATION_THEME, theme)
         }
 
         if (intent.hasExtra(GlobalOptions.TEST_SCREEN_WIDTH) && intent.hasExtra(GlobalOptions.TEST_SCREEN_HEIGHT)) {

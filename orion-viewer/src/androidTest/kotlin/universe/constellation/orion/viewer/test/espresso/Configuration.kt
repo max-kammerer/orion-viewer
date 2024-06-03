@@ -13,7 +13,7 @@ open class Configuration(private val name: String, val body: BaseViewerActivityT
 }
 
 object AutoCropConfig : Configuration ("crop", {
-    openCropDialog()
+    activityScenarioRule.scenario.openCropDialog()
     Espresso.onView(ViewMatchers.withText("Auto")).perform(ViewActions.click())
     Espresso.onView(ViewMatchers.withId(R.id.auto)).perform(ViewActions.click())
     applyCrop()
