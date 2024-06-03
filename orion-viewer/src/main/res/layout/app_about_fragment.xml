@@ -99,6 +99,13 @@
                           android:text="Marc Armengol - Spanish translation"
                           android:gravity="center"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Ali Beyaz - Turkish translation"
+            android:textSize="@dimen/text_size_medium" />
+
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:textSize="@dimen/text_size_medium"
                   android:text="Yuriy Chorniy - Ukrainian translation"
