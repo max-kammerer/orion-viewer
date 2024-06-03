@@ -24,6 +24,7 @@ import universe.constellation.orion.viewer.OptionActions
 import universe.constellation.orion.viewer.PageOptions
 import universe.constellation.orion.viewer.PageWalker
 import universe.constellation.orion.viewer.device.EInkDevice
+import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.prefs.OrionApplication.Companion.instance
@@ -34,6 +35,8 @@ class GlobalOptions(
     prefs: SharedPreferences
 ) : PreferenceWrapper(prefs), Serializable, PageOptions {
     var recentFiles = mutableListOf<RecentEntry>()
+
+    private val registeredPreferences = mutableMapOf<String, Preference<*>>()
 
     /* Caution: The preference manager does not currently store a strong reference to the listener.
     You must store a strong reference to the listener, or it will be susceptible to garbage collection.
@@ -52,15 +55,16 @@ class GlobalOptions(
 
         //TODO ?
         onSharedPreferenceChangeListener =
-            OnSharedPreferenceChangeListener { preferences1: SharedPreferences?, name: String? ->
+            OnSharedPreferenceChangeListener { preferences1: SharedPreferences, name: String? ->
                 log("onSharedPreferenceChanged $name")
+
+                registeredPreferences[name]?.update()?.also {
+                    return@OnSharedPreferenceChangeListener
+                }
+
                 val activity = context.viewActivity
                 if (activity != null) {
-                    if (FULL_SCREEN == name) {
-                        OptionActions.FULL_SCREEN.doAction(activity, false, isFullScreen)
-                    } else if (SHOW_ACTION_BAR == name) {
-                        OptionActions.SHOW_ACTION_BAR.doAction(activity, false, isActionBarVisible)
-                    } else if (SHOW_STATUS_BAR == name) {
+                    if (SHOW_STATUS_BAR == name) {
                         OptionActions.SHOW_STATUS_BAR.doAction(activity, false, isStatusBarVisible)
                     } else if (SHOW_OFFSET_ON_STATUS_BAR == name) {
                         OptionActions.SHOW_OFFSET_ON_STATUS_BAR.doAction(
@@ -94,6 +98,7 @@ class GlobalOptions(
                         )
                     }
                 }
+
                 if (DEBUG == name) {
                     context.startOrStopDebugLogger(getBooleanProperty(DEBUG, false))
                 }
@@ -163,14 +168,11 @@ class GlobalOptions(
     val isApplyAndClose: Boolean
         get() = getBooleanProperty(APPLY_AND_CLOSE, false)
 
-    val isFullScreen: Boolean
-        get() = getBooleanProperty(FULL_SCREEN, false)
-
     val isDrawOffPage: Boolean
         get() = getBooleanProperty(DRAW_OFF_PAGE, instance.device !is EInkDevice)
 
     val isActionBarVisible: Boolean
-        get() = getBooleanProperty(SHOW_ACTION_BAR, true)
+        get() = getBooleanProperty(SHOW_ACTION_BAR.key, SHOW_ACTION_BAR.defaultValue)
 
     val isShowTapHelp: Boolean
         get() = getBooleanProperty(SHOW_TAP_HELP, true)
@@ -239,7 +241,17 @@ class GlobalOptions(
     val colorMode: String
         get() = getStringProperty(COLOR_MODE, "CM_NORMAL")
 
-    val SCREEN_BACKLIGHT_TIMEOUT = pref("SCREEN_BACKLIGHT_TIMEOUT", 10)
+    val SCREEN_BACKLIGHT_TIMEOUT = pref("SCREEN_BACKLIGHT_TIMEOUT", 10, stringAsInt = true)
+
+    val FULL_SCREEN= pref("FULL_SCREEN", false)
+
+    val SHOW_ACTION_BAR = pref("SHOW_ACTION_BAR", true)
+
+    fun <T> subscribe(pref: Preference<T>) {
+        registeredPreferences.put(pref.key, pref)?.also {
+            errorInDebug("Pref with key ${pref.key} already registered: $pref ")
+        }
+    }
 
     companion object {
         const val MAX_RECENT_ENTRIES: Int = 20

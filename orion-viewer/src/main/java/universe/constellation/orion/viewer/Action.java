@@ -175,7 +175,7 @@ public enum Action {
     FULL_SCREEN (R.string.action_full_screen, R.integer.action_full_screen) {
         public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
             GlobalOptions options = activity.getGlobalOptions();
-            options.saveBooleanProperty(GlobalOptions.FULL_SCREEN, !options.isFullScreen());
+            options.saveBooleanProperty(GlobalOptions.FULL_SCREEN, Boolean.FALSE.equals(options.getFULL_SCREEN().getValue()));
         }
     },
 

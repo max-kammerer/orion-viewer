@@ -66,8 +66,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private var newTouchProcessor: NewTouchProcessor? = null
 
-    private var hasActionBar: Boolean = false
-
     lateinit var fullScene: FullScene
         private set
 
@@ -103,12 +101,17 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         updateGlobalOptionsFromIntent(intent)
         isNewUI = globalOptions.isNewUI
         orionApplication.viewActivity = this
-        OptionActions.FULL_SCREEN.doAction(this, !globalOptions.isFullScreen, globalOptions.isFullScreen)
+        globalOptions.FULL_SCREEN.observe(this) { flag ->
+            OptionActions.FULL_SCREEN.doAction(this, flag)
+        }
         onOrionCreate(savedInstanceState, R.layout.main_view, !isNewUI)
 
-        hasActionBar = globalOptions.isActionBarVisible
+        val mainMenuLayout = findViewById<LinearLayout>(R.id.main_menu)
+
         if (!isNewUI) {
-            OptionActions.SHOW_ACTION_BAR.doAction(this, !hasActionBar, hasActionBar)
+            globalOptions.SHOW_ACTION_BAR.observe(this) { flag ->
+                OptionActions.SHOW_ACTION_BAR.doAction(this, flag)
+            }
             findViewById<ViewGroup>(R.id.main_menu)?.visibility = View.GONE
         } else {
             findViewById<View>(R.id.toolbar)?.visibility = View.GONE
@@ -129,7 +132,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         }
         processIntentAndCheckPermission(intent, true)
 
-        mainMenu = MainMenu(findViewById<LinearLayout>(R.id.main_menu)!!, this)
+
+        mainMenu = MainMenu(mainMenuLayout!!, this)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -651,7 +655,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             } else {
                 menuInflater.inflate(R.menu.menu_disabled, menu)
             }
-            if (!hasActionBar) {
+            if (!globalOptions.isActionBarVisible) {
                 for (i in 0 until menu.size()) {
                     val item = menu.getItem(i)
                     item.setShowAsAction(SupportMenuItem.SHOW_AS_ACTION_NEVER)

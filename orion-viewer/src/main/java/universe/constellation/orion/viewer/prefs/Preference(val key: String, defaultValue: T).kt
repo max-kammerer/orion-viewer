@@ -1,16 +1,23 @@
 package universe.constellation.orion.viewer.prefs
 
-class Preference<T>(val key: String, val defaultValue: T, val extractor: Preference<T>.() -> T) {
+import androidx.lifecycle.LiveData
 
-    var value: T = extractor()
-        private set
+class Preference<T>(val key: String, val defaultValue: T, val extractor: Preference<T>.() -> T): LiveData<T>() {
+
+    init {
+        setValue(extractor())
+    }
+
+    override fun getValue(): T {
+        return super.getValue() as T
+    }
 
     fun update() {
-        value = extractor()
+        setValue(extractor())
     }
 }
 
-internal inline fun <reified T> GlobalOptions.pref(key: String, defaultValue: T): Preference<T> {
+internal inline fun <reified T> GlobalOptions.pref(key: String, defaultValue: T, stringAsInt: Boolean = false): Preference<T> {
     val extractor: Preference<T>.() -> T = when (T::class) {
         String::class -> {
             { this@pref.prefs.getString(this.key, this.defaultValue as String) as T }
@@ -20,11 +27,15 @@ internal inline fun <reified T> GlobalOptions.pref(key: String, defaultValue: T)
         }
 
         Int::class -> {
-            { this@pref.prefs.getInt(this.key, this.defaultValue as Int) as T }
+            if (!stringAsInt) {
+                { this@pref.prefs.getInt(this.key, this.defaultValue as Int) as T }
+            } else {
+                { this@pref.getIntFromStringProperty(this.key, this.defaultValue as Int) as T }
+            }
         }
 
         else -> error("Unsupported type ${T::class.java}")
     }
 
-    return Preference(key, defaultValue, extractor)
+    return Preference(key, defaultValue, extractor).also { subscribe(it) }
 }

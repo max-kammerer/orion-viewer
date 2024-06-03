@@ -9,7 +9,7 @@ enum class OptionActions(@JvmField val key: String) {
     NONE("NONE"),
 
     FULL_SCREEN("FULL_SCREEN") {
-        override fun doAction(activity: OrionViewerActivity, oldValue: Boolean, newValue: Boolean) {
+        override fun doAction(activity: OrionViewerActivity, newValue: Boolean) {
             activity.window.setFlags(
                 if (newValue) WindowManager.LayoutParams.FLAG_FULLSCREEN else 0,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -19,7 +19,7 @@ enum class OptionActions(@JvmField val key: String) {
     },
 
     SHOW_ACTION_BAR("SHOW_ACTION_BAR") {
-        override fun doAction(activity: OrionViewerActivity, oldValue: Boolean, newValue: Boolean) {
+        override fun doAction(activity: OrionViewerActivity, newValue: Boolean) {
             if (activity.isNewUI) return
             val toolbar = activity.toolbar
             val layoutParams = toolbar.layoutParams
@@ -29,15 +29,7 @@ enum class OptionActions(@JvmField val key: String) {
                 layoutParams.height = 0
             }
             toolbar.layoutParams = layoutParams
-            val menu = toolbar.menu
-            menu.clear()
-            activity.onCreateOptionsMenu(menu)
-            if (!newValue) {
-                for (i in 0 until menu.size()) {
-                    val item = menu.getItem(i)
-                    item.setShowAsAction(SupportMenuItem.SHOW_AS_ACTION_NEVER)
-                }
-            }
+            activity.invalidateMenu()
         }
     },
 
@@ -90,7 +82,8 @@ enum class OptionActions(@JvmField val key: String) {
     open fun doAction(activity: OrionViewerActivity, oldValue: Int, newValue: Int) {
     }
 
-    fun doAction(activity: OrionViewerActivity?, globalOptions: GlobalOptions?) {
+    open fun doAction(activity: OrionViewerActivity,  newValue: Boolean) {
+
     }
 
     open fun doAction(activity: OrionViewerActivity, oldValue: Boolean, newValue: Boolean) {
