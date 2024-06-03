@@ -20,7 +20,7 @@
         <item name="android:drawablePadding">2dp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:tint">?attr/menuIconTint</item>
+        <item name="tint">?attr/menuIconTint</item>
         <item name="drawableTint">?attr/navIconTint</item>
     </style>
 
@@ -36,7 +36,7 @@
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:tint">?attr/menuIconTint</item>
+        <item name="tint">?attr/menuIconTint</item>
         <item name="drawableTint">?attr/navIconTint</item>
         <item name="android:gravity">center_vertical</item>
     </style>
@@ -45,7 +45,7 @@
         <item name="android:drawablePadding">5dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:tint">?attr/menuIconTint</item>
+        <item name="tint">?attr/menuIconTint</item>
         <item name="drawableTint">?attr/navIconTint</item>
         <item name="android:textSize">@dimen/text_size_medium</item>
     </style>
@@ -60,7 +60,7 @@
         <item name="android:height">32dp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:tint">?attr/newMenuTint</item>
+        <item name="tint">?attr/newMenuTint</item>
     </style>
 
     <style name="Tap_Dialog_Top" >
