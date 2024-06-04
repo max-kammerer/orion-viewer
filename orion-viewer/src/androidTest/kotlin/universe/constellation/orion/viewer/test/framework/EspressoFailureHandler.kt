@@ -8,11 +8,8 @@ import org.hamcrest.Matcher
 import universe.constellation.orion.viewer.test.espresso.ScreenshotTakingRule
 
 class EspressoFailureHandler(instrumentation: Instrumentation) : FailureHandler {
-    private val delegate: FailureHandler
 
-    init {
-        delegate = DefaultFailureHandler(instrumentation.targetContext)
-    }
+    private val delegate: FailureHandler = DefaultFailureHandler(instrumentation.targetContext)
 
     private var counter = 1
 
