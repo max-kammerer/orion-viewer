@@ -1,2 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="crop_manual_auto">手動和自動</string>
+    <string name="crop_warning">使用手動裁切以獲得更好的性能</string>
+    <string name="rotate_90">90 度</string>
+    <string name="rotate_270">270 度</string>
+    <string name="orientation_default">預設</string>
+    <string name="orientation_default_rotation">應用程式預設</string>
+    <string name="orientation_landscape">橫向</string>
+    <string name="orientation_portrait">縱向</string>
+    <string name="orientation_landscape_inverse">橫向（270）</string>
+    <string name="fit_height">適合高度</string>
+    <string name="fit_page">適合頁面</string>
+    <string name="fit_custom">自訂…</string>
+    <string name="table_of_contents">目錄</string>
+    <string name="warn_no_text_in_selection">選擇中沒有文字！</string>
+    <string name="color_mode_normal">正常顏色（白底黑字）</string>
+    <string name="color_mode_grayscale">灰底灰字</string>
+    <string name="saveFileNameTooltip">檔案名稱.副檔名</string>
+    <string name="save">儲存</string>
+    <string name="crop_left">左</string>
+    <string name="crop_top">上</string>
+    <string name="color_mode_inverted">反轉顏色</string>
+    <string name="crop_right">右</string>
+    <string name="crop_bottom">下</string>
+    <string name="crop_auto">自動裁切</string>
+    <string name="crop_manual">手動裁切</string>
+    <string name="crop_auto_manual">自動和手動</string>
+    <string name="rotate_0">0 度</string>
+    <string name="key_binder_reset_all">重置全部</string>
+    <string name="orientation_portrait_inverse">縱向（180）</string>
+    <string name="warn_no_outline">沒有大綱！</string>
+    <string name="fit_width">適合寬度</string>
+    <string name="color_mode_grayscale_light">淡灰底灰字</string>
+    <string name="select_color_mode">選擇要切換的色彩模式</string>
+    <string name="color_mode_black_on_yellowish">淡黃底黑字</string>
+    <string name="color_mode_white_on_blue">黑底白字</string>
+    <string name="color_mode_grayscale_dark">深灰底灰字</string>
+</resources>
