@@ -1,22 +1,3 @@
-/*
- * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
- *
- * Copyright (C) 2011-2013  Michael Bogdanov & Co
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package universe.constellation.orion.viewer.prefs;
 
 import android.annotation.SuppressLint;
@@ -35,11 +16,6 @@ import static universe.constellation.orion.viewer.LoggerKt.log;
 
 import androidx.annotation.NonNull;
 
-/**
- * User: mike
- * Date: 27.12.11
- * Time: 14:59
- */
 public class OrionKeyBinderActivity extends OrionBaseActivity {
 
     private TextView statusText;
@@ -52,9 +28,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.key_binder);
+        onOrionCreate(savedInstanceState, R.layout.key_binder, true, true);
 
         Button button = findViewById(R.id.reset_bind);
         button.setOnClickListener(view -> {
@@ -163,23 +137,6 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
         startActivityForResult(intent, 1);
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        boolean result = super.onCreateOptionsMenu(menu);
-        if (result) {
-            getMenuInflater().inflate(R.menu.file_manager_menu, menu);
-        }
-        return result;
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.exit_menu_item) {
-            finish();
-            return true;
-        }
-        return false;
-    }
 
     static class KeyCodeAndAction implements Comparable<KeyCodeAndAction>{
         private final int keyCode;
