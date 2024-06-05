@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <string name="contribution_intro">Orion Viewer is open source project and it\'s open to your ideas and participation! We would be glad to see your contribution!</string>
+    <string name="contribution_intro">Orion Viewer is open source project and you can help do it better!</string>
 
     <string name="contribution_ways">There are many thing that you can bring to the project:</string>
 
     <string name="contribution_report_bug">\u2022 suggest a feature or report a problem into the <a href="https://github.com/max-kammerer/orion-viewer/issues">issue tracker</a></string>
-    <string name="contribution_do_translation">\u2022 help with <a href="https://github.com/max-kammerer/orion-viewer/wiki/Translations">translation to other languages</a> or improve an existing translation</string>
+    <string name="contribution_do_translation">\u2022 translate <a href="https://github.com/max-kammerer/orion-viewer/wiki/Translations">application to other languages</a> or improve an existing translation</string>
     <string name="contribution_code">\u2022 implement <a href="https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-build-project">new feature</a> or <a href="https://github.com/max-kammerer/orion-viewer/issues">fix a bug</a></string>
     <string name="contribution_design">\u2022 design new application theme or/and new UI/UX</string>
     <string name="contribution_review">\u2022 write an application <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">review on Google Play</a> or any other platform</string>
 
-    <string name="contribution_survey">Please, participate in application survey (10–20 minutes)!</string>
+    <string name="contribution_survey">Help to make the application better - participate in the survey about it! (10–20 minutes)</string>
 
     <string name="survey_key">1FAIpQLScc3rrc_Gx0uZ3UK0Gkc66Mq1GJBTKFMUnDSGMuJesgKjZSrg</string>
 </resources>
