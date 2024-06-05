@@ -15,7 +15,7 @@ import universe.constellation.orion.viewer.prefs.OrionBookPreferencesActivityX
 import universe.constellation.orion.viewer.prefs.OrionPreferenceActivityX
 import universe.constellation.orion.viewer.util.ColorUtil.getColorMode
 
-enum class Action(val nameRes: Int, idRes: Int) {
+enum class Action(val nameRes: Int, idRes: Int, val isVisible: Boolean = true) {
     NONE(R.string.action_none, R.integer.action_none) {
         override fun doAction(
             controller: Controller?,
@@ -88,7 +88,7 @@ enum class Action(val nameRes: Int, idRes: Int) {
         }
     },
 
-    FIRST_PAGE(R.string.action_first_page, R.integer.action_first_page) {
+    FIRST_PAGE(R.string.action_first_page, R.integer.action_first_page, isVisible = false) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -98,7 +98,7 @@ enum class Action(val nameRes: Int, idRes: Int) {
         }
     },
 
-    LAST_PAGE(R.string.action_last_page, R.integer.action_last_page) {
+    LAST_PAGE(R.string.action_last_page, R.integer.action_last_page, isVisible = false) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -344,7 +344,7 @@ enum class Action(val nameRes: Int, idRes: Int) {
         }
     },
 
-    CLOSE_ACTION(R.string.action_close, R.integer.action_close) {
+    CLOSE_ACTION(R.string.action_close, R.integer.action_close, isVisible = false) {
         override fun doAction(activity: OrionBaseActivity) {
             activity.finish()
         }
@@ -442,7 +442,7 @@ enum class Action(val nameRes: Int, idRes: Int) {
         }
     },
 
-    CROP_LEFT(R.string.action_crop_left, R.integer.action_crop_left) {
+    CROP_LEFT(R.string.action_crop_left, R.integer.action_crop_left, isVisible = false) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -452,7 +452,7 @@ enum class Action(val nameRes: Int, idRes: Int) {
         }
     },
 
-    UNCROP_LEFT(R.string.action_uncrop_left, R.integer.action_uncrop_left) {
+    UNCROP_LEFT(R.string.action_uncrop_left, R.integer.action_uncrop_left, isVisible = false) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -462,7 +462,7 @@ enum class Action(val nameRes: Int, idRes: Int) {
         }
     },
 
-    CROP_RIGHT(R.string.action_crop_right, R.integer.action_crop_right) {
+    CROP_RIGHT(R.string.action_crop_right, R.integer.action_crop_right, isVisible = false) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -472,7 +472,7 @@ enum class Action(val nameRes: Int, idRes: Int) {
         }
     },
 
-    UNCROP_RIGHT(R.string.action_uncrop_right, R.integer.action_uncrop_right) {
+    UNCROP_RIGHT(R.string.action_uncrop_right, R.integer.action_uncrop_right, isVisible = false) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -482,7 +482,7 @@ enum class Action(val nameRes: Int, idRes: Int) {
         }
     },
 
-    CROP_TOP(R.string.action_crop_top, R.integer.action_crop_top) {
+    CROP_TOP(R.string.action_crop_top, R.integer.action_crop_top, isVisible = false) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -492,7 +492,7 @@ enum class Action(val nameRes: Int, idRes: Int) {
         }
     },
 
-    UNCROP_TOP(R.string.action_uncrop_top, R.integer.action_uncrop_top) {
+    UNCROP_TOP(R.string.action_uncrop_top, R.integer.action_uncrop_top, isVisible = false) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -502,7 +502,7 @@ enum class Action(val nameRes: Int, idRes: Int) {
         }
     },
 
-    CROP_BOTTOM(R.string.action_crop_bottom, R.integer.action_crop_bottom) {
+    CROP_BOTTOM(R.string.action_crop_bottom, R.integer.action_crop_bottom, isVisible = false) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -512,7 +512,7 @@ enum class Action(val nameRes: Int, idRes: Int) {
         }
     },
 
-    UNCROP_BOTTOM(R.string.action_uncrop_bottom, R.integer.action_uncrop_bottom) {
+    UNCROP_BOTTOM(R.string.action_uncrop_bottom, R.integer.action_uncrop_bottom, isVisible = false) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,

@@ -31,11 +31,11 @@ class ActionListActivity : OrionBaseActivity() {
         }
 
         val view = findViewById<ListView>(R.id.actionsGroup)
-        val actions = Action.entries.toTypedArray()
+        val actions = Action.entries.filter { it.isVisible }
         view.adapter = object : ArrayAdapter<Action?>(
             this,
             android.R.layout.simple_list_item_single_choice,
-            Action.entries.toTypedArray()
+            actions
         ) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = super.getView(position, convertView, parent) as CheckedTextView
@@ -56,18 +56,16 @@ class ActionListActivity : OrionBaseActivity() {
                 break
             }
         }
-        view.onItemClickListener =
-            OnItemClickListener { parent: AdapterView<*>?, view1: View?, position: Int, id: Long ->
-                val code1 = actions[position].code
-                val result = Intent()
-                result.putExtra("code", code1)
-                result.putExtra("keyCode", keyCode)
-                result.putExtra("isLong", isLong)
-                setResult(RESULT_OK, result)
-                finish()
-            }
+        OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
+            val code1 = actions[position].code
+            val result = Intent()
+            result.putExtra("code", code1)
+            result.putExtra("keyCode", keyCode)
+            result.putExtra("isLong", isLong)
+            setResult(RESULT_OK, result)
+            finish()
+        }.also { view.onItemClickListener = it }
     }
 
-    val orionContext: OrionApplication
-        get() = applicationContext as OrionApplication
+
 }
