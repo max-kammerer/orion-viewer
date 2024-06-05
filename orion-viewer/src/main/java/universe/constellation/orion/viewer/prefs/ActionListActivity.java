@@ -19,7 +19,6 @@
 
 package universe.constellation.orion.viewer.prefs;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,21 +32,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import universe.constellation.orion.viewer.Action;
+import universe.constellation.orion.viewer.OrionBaseActivity;
 import universe.constellation.orion.viewer.R;
 
 
-public class ActionListActivity extends Activity {
+public class ActionListActivity extends OrionBaseActivity {
 
-    //private boolean populating;
-
-    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getOrionContext().applyTheme(this);
-
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.actions_selection);
+        onOrionCreate(savedInstanceState, R.layout.actions_selection, false);
 
         int type = getIntent().getIntExtra("type", 0);
         TextView header = findViewById(R.id.actions_header);
