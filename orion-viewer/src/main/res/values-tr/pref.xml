@@ -93,7 +93,6 @@
     <string name="pref_key_binder_desc">Eylemleri tuşlara/düğmelere bağlama</string>
 
     <string name="pref_key_double_tap">Çift dokunma eylemi</string>
-    <string name="pref_key_double_tap_desc">İşlemi çift dokunmaya bağlayın</string>
 
     <string name="pref_enable_touch_move">Dokunma hareketini etkinleştir</string>
     <string name="pref_enable_move_on_pinch_zoom">Kıstırma yakınlaştırması sırasında çeviriye izin ver</string>

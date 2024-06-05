@@ -1,9 +1,12 @@
 package universe.constellation.orion.viewer
 
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.widget.Toast
+import androidx.annotation.IntegerRes
+import androidx.annotation.StringRes
 import universe.constellation.orion.viewer.dialog.toDialogMargins
 import universe.constellation.orion.viewer.dialog.toMargins
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
@@ -15,7 +18,7 @@ import universe.constellation.orion.viewer.prefs.OrionBookPreferencesActivityX
 import universe.constellation.orion.viewer.prefs.OrionPreferenceActivityX
 import universe.constellation.orion.viewer.util.ColorUtil.getColorMode
 
-enum class Action(val nameRes: Int, idRes: Int, val isVisible: Boolean = true) {
+enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVisible: Boolean = true) {
     NONE(R.string.action_none, R.integer.action_none) {
         override fun doAction(
             controller: Controller?,
@@ -146,6 +149,17 @@ enum class Action(val nameRes: Int, idRes: Int, val isVisible: Boolean = true) {
             parameter: Any?
         ) {
             activity.textSelectionMode(true, false)
+        }
+    },
+
+    //now just delegates to word selection
+    SELECT_TEXT_NEW(R.string.action_select_text, R.integer.action_select_text_new) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            SELECT_WORD.doAction(controller, activity, parameter)
         }
     },
 
@@ -520,7 +534,9 @@ enum class Action(val nameRes: Int, idRes: Int, val isVisible: Boolean = true) {
         ) {
             updateMargin(controller!!, false, 3)
         }
-    };
+    },
+
+    TAP_ACTION(R.string.action_tap_zone_action, R.integer.action_tap_action);
 
     @JvmField
     val code: Int = instance.resources.getInteger(idRes)
@@ -560,6 +576,10 @@ enum class Action(val nameRes: Int, idRes: Int, val isVisible: Boolean = true) {
         controller.changeCropMargins(
             margins.toMargins(cropMargins.evenCrop, cropMargins.cropMode)
         )
+    }
+
+    fun getActionName(context: Context): String {
+        return context.getString(nameRes)
     }
 
     companion object {

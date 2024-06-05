@@ -48,4 +48,6 @@
     <string name="action_fit_width">Fit Width</string>
     <string name="action_fit_height">Fit Height</string>
     <string name="action_fit_page">Fit Page</string>
+
+    <string name="action_tap_zone_action">Action from tap zones</string>
 </resources>

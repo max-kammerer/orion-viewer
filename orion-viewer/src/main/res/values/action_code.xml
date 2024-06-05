@@ -58,10 +58,13 @@
     <integer name="action_select_text">42</integer>
     <integer name="action_select_word">43</integer>
     <integer name="action_select_word_and_translate">44</integer>
+    <integer name="action_select_text_new">45</integer>
 
 
     <integer name="action_fit_width">50</integer>
     <integer name="action_fit_heigh">51</integer>
     <integer name="action_fit_page">52</integer>
+
+    <integer name="action_tap_action">60</integer>
 
 </resources>

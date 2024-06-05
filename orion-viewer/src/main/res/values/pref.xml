@@ -81,7 +81,6 @@
 
     <string name="pref_page_layout">Page layout</string>
 
-
     <string name="application_settings_title">Application Settings</string>
     <string name="pref_default_book_setting">Default Book Settings</string>
     <string name="pref_default_book_setting_desc">Will be also applied to opened book!</string>
@@ -99,7 +98,8 @@
     <string name="pref_key_binder_desc">Link actions to key/buttons</string>
 
     <string name="pref_key_double_tap">Double tap action</string>
-    <string name="pref_key_double_tap_desc">Link action to double tap</string>
+    <string name="pref_key_long_tap">Long tap action</string>
+    <string name="pref_key_linked_action_summary">Linked action: `%s`</string>
 
     <string name="pref_enable_touch_move">Enable touch move</string>
     <string name="pref_enable_move_on_pinch_zoom">Allow translation during pinch zoom</string>

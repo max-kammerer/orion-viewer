@@ -8,6 +8,24 @@
         android:title="@string/pref_category_quick_actions"
         app:iconSpaceReserved="false">
 
+        <universe.constellation.orion.viewer.prefs.ActionListPreference
+            android:key="LONG_TAP_ACTION"
+            android:persistent="false"
+            android:summary="@string/pref_key_linked_action_summary"
+            android:title="@string/pref_key_long_tap"
+            android:defaultValue="@integer/action_select_text_new"
+            app:iconSpaceReserved="false">
+        </universe.constellation.orion.viewer.prefs.ActionListPreference>
+
+        <universe.constellation.orion.viewer.prefs.ActionListPreference
+            android:key="DOUBLE_TAP_ACTION"
+            android:persistent="false"
+            android:summary="@string/pref_key_linked_action_summary"
+            android:title="@string/pref_key_double_tap"
+            android:defaultValue="@integer/action_select_word_and_translate"
+            app:iconSpaceReserved="false">
+        </universe.constellation.orion.viewer.prefs.ActionListPreference>
+
         <PreferenceScreen
             android:key="TAP_ZONES"
             android:persistent="false"
@@ -16,14 +34,6 @@
             app:iconSpaceReserved="false">
             <intent android:action="universe.constellation.orion.viewer.TAP_ZONES" />
         </PreferenceScreen>
-
-        <!--<PreferenceScreen
-            android:key="DOUBLE_TAP_ACTION"
-            android:persistent="false"
-            android:summary="@string/pref_tap_zones_desc"
-            android:title="@string/menu_tap_text">
-            <intent android:action="universe.constellation.orion.viewer.DOUBLE_TAP" />
-        </PreferenceScreen>-->
 
         <Preference
             android:persistent="false"
