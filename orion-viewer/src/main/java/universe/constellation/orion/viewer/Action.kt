@@ -152,17 +152,6 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
         }
     },
 
-    //now just delegates to word selection
-    SELECT_TEXT_NEW(R.string.action_select_text, R.integer.action_select_text_new) {
-        override fun doAction(
-            controller: Controller?,
-            activity: OrionViewerActivity,
-            parameter: Any?
-        ) {
-            SELECT_WORD.doAction(controller, activity, parameter)
-        }
-    },
-
     SELECT_WORD_AND_TRANSLATE(
         R.string.action_select_word_and_translate,
         R.integer.action_select_word_and_translate
@@ -300,26 +289,32 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             val intent = Intent()
             var queryText: String? = null
 
-            if ("FORA" == dict) {
-                action = "com.ngc.fora.action.LOOKUP"
-                queryText = "HEADWORD"
-            } else if ("COLORDICT" == dict) {
-                action = "colordict.intent.action.SEARCH"
-                queryText = "EXTRA_QUERY"
-            } else if ("AARD" == dict) {
-                action = Intent.ACTION_SEARCH
-                intent.setClassName("aarddict.android", "aarddict.android.LookupActivity")
-                queryText = "query"
-                parameter = safeParameter(parameter)
-            } else if ("AARD2" == dict) {
-                action = "aard2.lookup"
-                queryText = "query"
-                parameter = safeParameter(parameter)
-            } else if ("LINGVO" == dict) {
-                action = "com.abbyy.mobile.lingvo.intent.action.TRANSLATE"
-                intent.setPackage("com.abbyy.mobile.lingvo.market")
-                queryText = "com.abbyy.mobile.lingvo.intent.extra.TEXT"
-                parameter = safeParameter(parameter)
+            when (dict) {
+                "FORA" -> {
+                    action = "com.ngc.fora.action.LOOKUP"
+                    queryText = "HEADWORD"
+                }
+                "COLORDICT" -> {
+                    action = "colordict.intent.action.SEARCH"
+                    queryText = "EXTRA_QUERY"
+                }
+                "AARD" -> {
+                    action = Intent.ACTION_SEARCH
+                    intent.setClassName("aarddict.android", "aarddict.android.LookupActivity")
+                    queryText = "query"
+                    parameter = safeParameter(parameter)
+                }
+                "AARD2" -> {
+                    action = "aard2.lookup"
+                    queryText = "query"
+                    parameter = safeParameter(parameter)
+                }
+                "LINGVO" -> {
+                    action = "com.abbyy.mobile.lingvo.intent.action.TRANSLATE"
+                    intent.setPackage("com.abbyy.mobile.lingvo.market")
+                    queryText = "com.abbyy.mobile.lingvo.intent.extra.TEXT"
+                    parameter = safeParameter(parameter)
+                }
             }
 
             if (action != null) {
@@ -534,9 +529,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
         ) {
             updateMargin(controller!!, false, 3)
         }
-    },
-
-    TAP_ACTION(R.string.action_tap_zone_action, R.integer.action_tap_action);
+    };
 
     @JvmField
     val code: Int = instance.resources.getInteger(idRes)

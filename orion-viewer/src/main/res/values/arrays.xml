@@ -178,4 +178,28 @@
         <!--<item>CM_YELLOW_ON_BLACK</item>-->
     </string-array>
 
+    <string-array name="context_actions_values_full">
+        <item>@string/action_key_select_text_new</item>
+        <item>@string/action_key_select_word_and_translate_new</item>
+        <item>@string/action_key_tap_action</item>
+    </string-array>
+
+    <string-array name="context_actions_desc_full">
+        <item>@string/action_select_text</item>
+        <item>@string/action_select_word_and_translate</item>
+        <item>@string/action_tap_action</item>
+    </string-array>
+
+    <string-array name="context_actions_values">
+        <item>@string/action_key_select_text_new</item>
+        <item>@string/action_key_select_word_and_translate_new</item>
+        <item>@string/action_key_tap_action</item>
+    </string-array>
+
+    <string-array name="context_actions_desc">
+        <item>@string/action_select_text</item>
+        <item>@string/action_select_word_and_translate</item>
+        <item>@string/action_tap_action</item>
+    </string-array>
+
 </resources>

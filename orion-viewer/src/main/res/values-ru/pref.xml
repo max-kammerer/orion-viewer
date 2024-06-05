@@ -94,6 +94,10 @@
     <string name="pref_tap_zones_desc">Привязка операции к зонам экрана</string>
     <string name="pref_key_binder_desc">Привязка операции к клавишам</string>
 
+    <string name="pref_key_double_tap">Действие по двойному клику</string>
+    <string name="pref_key_long_tap">Действие по долгому клику</string>
+    <string name="pref_key_linked_action_summary">Связанное действие: `%s`</string>
+
     <string name="pref_book_threshold">Порог для водяных знаков</string>
     <string name="pref_book_threshold_desc">Порог удаления водяных знаков (по умолчанию 255): %s</string>
 

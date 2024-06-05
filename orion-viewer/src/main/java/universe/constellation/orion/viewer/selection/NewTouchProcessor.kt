@@ -7,6 +7,7 @@ import android.view.View
 import androidx.core.view.GestureDetectorCompat
 import androidx.dynamicanimation.animation.FlingAnimation
 import androidx.dynamicanimation.animation.FloatPropertyCompat
+import universe.constellation.orion.viewer.ContextAction
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.view.OrionDrawScene
@@ -19,6 +20,14 @@ enum class State {
     DOUBLE_TAP,
     SCALE;
 }
+
+enum class ClickType {
+    SHORT,
+    LONG,
+    DOUBLE
+}
+
+class ClickInfo(val x: Int, val y: Int, val clickType: ClickType)
 
 open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewerActivity) : GestureDetector.SimpleOnGestureListener() {
 
@@ -152,14 +161,18 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
 
         log("onSingleTapConfirmed")
         resetNextState()
-        doAction(e.x.toInt(), e.y.toInt(), false)
+        doAction(ContextAction.TAP_ACTION, e, ClickType.SHORT)
         return true
     }
 
     override fun onDoubleTap(e: MotionEvent): Boolean {
         log("onDoubleTap")
         nextState = State.DOUBLE_TAP
-        activity.doubleClickAction(e.x.toInt(), e.y.toInt())
+        doAction(
+            ContextAction.findAction(activity.globalOptions.DOUBLE_TAP_ACTION.value),
+            e,
+            ClickType.DOUBLE
+        )
         return true
     }
 
@@ -170,18 +183,15 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
 
         log("onLongPress $state $nextState")
         if (state != State.UNDEFINED) return
-        doAction(e.x.toInt(), e.y.toInt(), true)
+        doAction(
+            ContextAction.findAction(activity.globalOptions.LONG_TAP_ACTION.value),
+            e,
+            ClickType.LONG
+        )
     }
 
-    private fun doAction(x: Int, y: Int, isLongClick: Boolean) {
-        val width = view.sceneWidth
-        val height = view.sceneHeight
-
-        val i = 3 * y / height
-        val j = 3 * x / width
-
-        val code = activity.globalOptions.getActionCode(i, j, isLongClick)
-        activity.doAction(code)
+    private fun doAction(action: ContextAction?, e: MotionEvent, clickType: ClickType) {
+        action?.doAction(activity, ClickInfo(e.x.toInt(), e.y.toInt(), clickType))
     }
 
 }

@@ -40,6 +40,7 @@
 
     <string name="action_select_word">Выделить слово</string>
     <string name="action_select_word_and_translate">Выделить слово и перевести</string>
+    <string name="action_tap_action">Действие тап-зоны</string>
 
     <string name="action_fit_height">Масштабировать по высоте страницы</string>
     <string name="action_fit_page">Масштабировать по странице</string>

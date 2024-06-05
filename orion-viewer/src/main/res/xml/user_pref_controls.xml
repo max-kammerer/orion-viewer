@@ -8,23 +8,25 @@
         android:title="@string/pref_category_quick_actions"
         app:iconSpaceReserved="false">
 
-        <universe.constellation.orion.viewer.prefs.ActionListPreference
+        <ListPreference
             android:key="LONG_TAP_ACTION"
-            android:persistent="false"
             android:summary="@string/pref_key_linked_action_summary"
             android:title="@string/pref_key_long_tap"
-            android:defaultValue="@integer/action_select_text_new"
+            android:defaultValue="@string/action_key_select_text_new"
+            android:entries="@array/context_actions_desc_full"
+            android:entryValues="@array/context_actions_values_full"
             app:iconSpaceReserved="false">
-        </universe.constellation.orion.viewer.prefs.ActionListPreference>
+        </ListPreference>
 
-        <universe.constellation.orion.viewer.prefs.ActionListPreference
+        <ListPreference
             android:key="DOUBLE_TAP_ACTION"
-            android:persistent="false"
             android:summary="@string/pref_key_linked_action_summary"
             android:title="@string/pref_key_double_tap"
-            android:defaultValue="@integer/action_select_word_and_translate"
+            android:defaultValue="@string/action_key_select_word_and_translate_new"
+            android:entries="@array/context_actions_desc"
+            android:entryValues="@array/context_actions_values"
             app:iconSpaceReserved="false">
-        </universe.constellation.orion.viewer.prefs.ActionListPreference>
+        </ListPreference>
 
         <PreferenceScreen
             android:key="TAP_ZONES"

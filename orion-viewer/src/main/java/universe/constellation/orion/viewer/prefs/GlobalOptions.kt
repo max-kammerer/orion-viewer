@@ -23,6 +23,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import universe.constellation.orion.viewer.OptionActions
 import universe.constellation.orion.viewer.PageOptions
 import universe.constellation.orion.viewer.PageWalker
+import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.device.EInkDevice
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
@@ -246,6 +247,10 @@ class GlobalOptions(
     val FULL_SCREEN= pref("FULL_SCREEN", false)
 
     val SHOW_ACTION_BAR = pref("SHOW_ACTION_BAR", true)
+
+    val LONG_TAP_ACTION = pref("LONG_TAP_ACTION", context.resources.getString(R.string.action_key_select_text_new))
+
+    val DOUBLE_TAP_ACTION = pref("DOUBLE_TAP_ACTION", context.resources.getString(R.string.action_key_select_word_and_translate_new))
 
     fun <T> subscribe(pref: Preference<T>) {
         registeredPreferences.put(pref.key, pref)?.also {

@@ -60,7 +60,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     @JvmField
     var _isResumed: Boolean = false
 
-    private val selectionAutomata: SelectionAutomata by lazy {
+     val selectionAutomata: SelectionAutomata by lazy {
         SelectionAutomata(this)
     }
 
@@ -798,20 +798,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             return bokmarkId != -1L
         }
         return false
-    }
-
-    fun doubleClickAction(x: Int, y: Int) {
-        SelectionAutomata.selectText(
-            this, true, true, selectionAutomata.dialog,
-            SelectionAutomata.getSelectionRectangle(
-                x,
-                y,
-                0,
-                0,
-                true,
-                controller!!.pageLayoutManager
-            )
-        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
