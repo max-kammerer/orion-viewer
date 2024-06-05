@@ -1,2 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="crop_auto">Automatisk beskjæring</string>
+    <string name="navigation">Sidenavigasjon</string>
+    <string name="enable_even_crop">Annen beskjæring for partalssider</string>
+    <string name="key_binder_warning">Kunne ikke tildele tast med null-tastekode. Prøv en annen tast.</string>
+    <string name="warn_no_text_in_selection">Det er ikke noe tekst i utvalget.</string>
+    <string name="warn_no_outline">Omriss mangler.</string>
+    <string name="color_mode_normal">Normale farger (svart på hvit bakgrunn)</string>
+    <string name="save">Lagre</string>
+    <string name="color_mode_black_on_yellowish">Svart på gulaktig bakgrunn</string>
+    <string name="color_mode_grayscale_light">Gråskala på grålig bakgrunn</string>
+    <string name="crop_left">Venstre</string>
+    <string name="crop_top">Topp</string>
+    <string name="crop_manual">Manuell beskjæring</string>
+    <string name="crop_manual_auto">Manuell og automatisk</string>
+    <string name="crop_warning">Bruk manuell beskjæring for bedre ytelse</string>
+    <string name="rotate_90">90 grader</string>
+    <string name="long_click">Ved langklikk</string>
+    <string name="key_binder_reset_all">Tilbakestill alt</string>
+    <string name="orientation_default_rotation">Programforvalg</string>
+    <string name="crop_right">Høyre</string>
+    <string name="orientation_portrait">Stående</string>
+    <string name="orientation_landscape_inverse">Liggende (270)</string>
+    <string name="orientation_portrait_inverse">Stående (180)</string>
+    <string name="crop_bottom">Bunn</string>
+    <string name="crop_auto_manual">Automatisk og manuell</string>
+    <string name="rotate_0">0 grader</string>
+    <string name="rotate_270">270 grader</string>
+    <string name="short_click">Ved kortklikk</string>
+    <string name="orientation_default">Forvalg</string>
+    <string name="orientation_landscape">Liggende</string>
+    <string name="fit_width">Tilpass bredde</string>
+    <string name="fit_height">Tilpass høyde</string>
+    <string name="fit_page">Tilpass siden</string>
+    <string name="color_mode_inverted">Inverterte farger</string>
+    <string name="fit_custom">Egendefinert …</string>
+    <string name="table_of_contents">Innholdsfortegnelse</string>
+    <string name="saveFileNameTooltip">Filnavn.filendelse</string>
+    <string name="binding_click">Ved tastetilknytning</string>
+    <string name="key_binder_message">Trykk en tast og velg handling for å tilknytte dem.</string>
+    <string name="color_mode_grayscale">Gråskala på grå bakgrunn</string>
+    <string name="select_color_mode">Velg fargemodus for å bytte</string>
+    <string name="color_mode_grayscale_dark">Gråskala på grå bakgrunn</string>
+    <string name="color_mode_white_on_blue">Hvit på blå bakgrunn</string>
+</resources>
