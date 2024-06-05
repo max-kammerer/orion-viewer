@@ -66,7 +66,7 @@ public class ActionListActivity extends Activity {
             @Override
             public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                 CheckedTextView view = (CheckedTextView)super.getView(position, convertView, parent);
-                view.setText(actions[position].getName());
+                view.setText(actions[position].getNameRes());
                 return view;
             }
         });
@@ -77,14 +77,14 @@ public class ActionListActivity extends Activity {
 
         for (int i = 0; i < actions.length; i++) {
             Action action = actions[i];
-            if (action.getCode() == code) {
+            if (action.code == code) {
                 view.setItemChecked(i, true);
                 //view.setSelection(i);
                 break;
             }
         }
         view.setOnItemClickListener((parent, view1, position, id) -> {
-            int code1 = actions[position].getCode();
+            int code1 = actions[position].code;
             Intent result = new Intent();
             result.putExtra("code", code1);
             result.putExtra("keyCode", keyCode);

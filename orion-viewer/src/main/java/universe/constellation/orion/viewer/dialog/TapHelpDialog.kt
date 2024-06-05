@@ -49,7 +49,7 @@ class TapHelpDialog : DialogFragment(R.layout.tap)  {
                 val isPrev = singleClickAction === Action.PREV
 
                 layout.setBackgroundColor((0xffffcc66u).toInt())
-                clickActionTextView.text = requireActivity().getString(singleClickAction.getName())
+                clickActionTextView.text = requireActivity().getString(singleClickAction.nameRes)
 
                 val layoutParams = RelativeLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,

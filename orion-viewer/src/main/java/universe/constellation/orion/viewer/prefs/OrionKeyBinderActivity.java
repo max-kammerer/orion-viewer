@@ -251,7 +251,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
             }
             KeyCodeAndAction item = getItem(position);
             TextView action = convertView.findViewById(android.R.id.text2);
-            action.setText(item.action.getName());
+            action.setText(item.action.getNameRes());
 
             TextView code = convertView.findViewById(android.R.id.text1);
             code.setText(KeyEventNamer.getKeyName(item.keyCode) + (item.isLong ? " [long press]" : ""));

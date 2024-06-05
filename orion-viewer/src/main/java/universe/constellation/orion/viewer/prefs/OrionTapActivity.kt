@@ -63,8 +63,8 @@ class OrionTapActivity : OrionBaseActivity() {
                 }
                 val shortAction = Action.getAction(shortCode)
                 val longAction = Action.getAction(longCode)
-                shortText.text = resources.getString(shortAction.getName())
-                longText.text = resources.getString(longAction.getName())
+                shortText.text = resources.getString(shortAction.nameRes)
+                longText.text = resources.getString(longAction.nameRes)
                 val index = i * 3 + j
                 myCode[index][0] = shortCode
                 myCode[index][1] = longCode
@@ -95,7 +95,7 @@ class OrionTapActivity : OrionBaseActivity() {
                 val code = data!!.getIntExtra("code", 0)
                 val action = Action.getAction(code)
                 myCode[index][if (isLong) 1 else 0] = action.code
-                view.text = resources.getString(action.getName())
+                view.text = resources.getString(action.nameRes)
 
                 val i = index / 3
                 val j = index % 3

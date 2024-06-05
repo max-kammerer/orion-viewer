@@ -1,502 +1,581 @@
-/*
- * Orion Viewer - pdf, djvu, xps and cbz file viewer for android devices
- *
- * Copyright (C) 2011-2013  Michael Bogdanov & Co
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+package universe.constellation.orion.viewer
 
-package universe.constellation.orion.viewer;
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.content.pm.ActivityInfo
+import android.widget.Toast
+import universe.constellation.orion.viewer.dialog.toDialogMargins
+import universe.constellation.orion.viewer.dialog.toMargins
+import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
+import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivityBase.Companion.DONT_OPEN_RECENT_FILE
+import universe.constellation.orion.viewer.outline.showOutline
+import universe.constellation.orion.viewer.prefs.GlobalOptions
+import universe.constellation.orion.viewer.prefs.OrionApplication.Companion.instance
+import universe.constellation.orion.viewer.prefs.OrionBookPreferencesActivityX
+import universe.constellation.orion.viewer.prefs.OrionPreferenceActivityX
+import universe.constellation.orion.viewer.util.ColorUtil.getColorMode
 
-import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
-import static universe.constellation.orion.viewer.LoggerKt.log;
-import static universe.constellation.orion.viewer.outline.ShowOutlineKt.showOutline;
-
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.widget.Toast;
-
-import java.util.HashMap;
-
-import universe.constellation.orion.viewer.dialog.CropDialogBuilderKt;
-import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity;
-import universe.constellation.orion.viewer.layout.CropMargins;
-import universe.constellation.orion.viewer.prefs.GlobalOptions;
-import universe.constellation.orion.viewer.prefs.OrionApplication;
-import universe.constellation.orion.viewer.prefs.OrionBookPreferencesActivityX;
-import universe.constellation.orion.viewer.prefs.OrionPreferenceActivityX;
-import universe.constellation.orion.viewer.prefs.TemporaryOptions;
-import universe.constellation.orion.viewer.util.ColorUtil;
-import universe.constellation.orion.viewer.view.FullScene;
-import universe.constellation.orion.viewer.view.OrionDrawScene;
-
-/**
- * User: mike
- * Date: 06.01.12
- * Time: 18:28
- */
-public enum Action {
-
-    NONE (R.string.action_none, R.integer.action_none) {
-        @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+enum class Action(val nameRes: Int, idRes: Int) {
+    NONE(R.string.action_none, R.integer.action_none) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
             //none action
         }
-    } ,
+    },
 
-    MENU (R.string.action_menu, R.integer.action_menu) {
-        @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            activity.showMenu();
-        }
-    } ,
-
-
-    NEXT (R.string.action_next_page, R.integer.action_next_page) {
-            @Override
-            public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-                if (controller != null) {
-                    controller.drawNext();
-                }
-            }
-        } ,
-
-    PREV (R.string.action_prev_page, R.integer.action_prev_page) {
-                @Override
-                public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-                    if (controller != null) {
-                        controller.drawPrev();
-                    }
-                }
-            } ,
-
-    NEXT10 (R.string.action_next_10, R.integer.action_next_10) {
-        @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            int page = controller.getCurrentPage() + 10;
-
-            if (page > controller.getPageCount() - 1) {
-                page = controller.getPageCount() - 1;
-            }
-            controller.drawPage(page);
+    MENU(R.string.action_menu, R.integer.action_menu) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            activity.showMenu()
         }
     },
 
 
-    PREV10 (R.string.action_prev_10, R.integer.action_prev_10) {
-        @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            int page = controller.getCurrentPage() - 10;
+    NEXT(R.string.action_next_page, R.integer.action_next_page) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            controller?.drawNext()
+        }
+    },
+
+    PREV(R.string.action_prev_page, R.integer.action_prev_page) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            controller?.drawPrev()
+        }
+    },
+
+    NEXT10(R.string.action_next_10, R.integer.action_next_10) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            var page = controller!!.currentPage + 10
+
+            if (page > controller.pageCount - 1) {
+                page = controller.pageCount - 1
+            }
+            controller.drawPage(page)
+        }
+    },
+
+
+    PREV10(R.string.action_prev_10, R.integer.action_prev_10) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            var page = controller!!.currentPage - 10
 
             if (page < 0) {
-                page = 0;
+                page = 0
             }
-            controller.drawPage(page);
+            controller.drawPage(page)
         }
     },
 
-    FIRST_PAGE (R.string.action_first_page, R.integer.action_first_page) {
-        @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            if (controller != null) {
-                controller.drawPage(0);
-            }
-        }
-    } ,
-
-    LAST_PAGE (R.string.action_last_page, R.integer.action_last_page) {
-        @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            if (controller != null) {
-                controller.drawPage(controller.getPageCount() - 1);
-            }
-        }
-    } ,
-
-    SHOW_OUTLINE (R.string.action_outline, R.integer.action_open_outline) {
-		public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            log("Show Outline...");
-            showOutline(controller, activity);
+    FIRST_PAGE(R.string.action_first_page, R.integer.action_first_page) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            controller?.drawPage(0)
         }
     },
 
-    SEARCH (R.string.action_crop_page, R.integer.action_crop_page) {
-                @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-
-            activity.startSearch();
+    LAST_PAGE(R.string.action_last_page, R.integer.action_last_page) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            controller?.drawPage(controller.pageCount - 1)
         }
     },
 
-    SELECT_TEXT (R.string.action_select_text, R.integer.action_select_text) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            activity.textSelectionMode(false, false);
+    SHOW_OUTLINE(R.string.action_outline, R.integer.action_open_outline) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            log("Show Outline...")
+            showOutline(controller!!, activity)
         }
     },
 
-    SELECT_WORD (R.string.action_select_word, R.integer.action_select_word) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            activity.textSelectionMode(true, false);
+    SEARCH(R.string.action_crop_page, R.integer.action_crop_page) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            activity.startSearch()
         }
     },
 
-    SELECT_WORD_AND_TRANSLATE (R.string.action_select_word_and_translate, R.integer.action_select_word_and_translate) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            activity.textSelectionMode(true, true);
+    SELECT_TEXT(R.string.action_select_text, R.integer.action_select_text) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            activity.textSelectionMode(false, false)
         }
     },
 
-    ADD_BOOKMARK (R.string.action_add_bookmark, R.integer.action_add_bookmark) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            activity.showOrionDialog(OrionViewerActivity.ADD_BOOKMARK_SCREEN, this, parameter);
+    SELECT_WORD(R.string.action_select_word, R.integer.action_select_word) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            activity.textSelectionMode(true, false)
         }
     },
 
-    OPEN_BOOKMARKS (R.string.action_open_bookmarks, R.integer.action_open_bookmarks) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            Intent bookmark = new Intent(activity.getApplicationContext(), OrionBookmarkActivity.class);
-            bookmark.putExtra(OrionBookmarkActivity.BOOK_ID, activity.getBookId());
-            activity.startActivityForResult(bookmark, OrionViewerActivity.OPEN_BOOKMARK_ACTIVITY_RESULT);
+    SELECT_WORD_AND_TRANSLATE(
+        R.string.action_select_word_and_translate,
+        R.integer.action_select_word_and_translate
+    ) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            activity.textSelectionMode(true, true)
         }
     },
 
-    FULL_SCREEN (R.string.action_full_screen, R.integer.action_full_screen) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            GlobalOptions options = activity.getGlobalOptions();
-            options.saveBooleanProperty(GlobalOptions.FULL_SCREEN, Boolean.FALSE.equals(options.getFULL_SCREEN().getValue()));
+    ADD_BOOKMARK(R.string.action_add_bookmark, R.integer.action_add_bookmark) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            activity.showOrionDialog(OrionViewerActivity.ADD_BOOKMARK_SCREEN, this, parameter)
         }
     },
 
-    SWITCH_COLOR_MODE (R.string.action_switch_color_mode, R.integer.action_switch_color_mode) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            OrionDrawScene view = activity.getView();
-            FullScene scene = activity.getFullScene();
-            LastPageInfo currentBookParameters = activity.getOrionApplication().getCurrentBookParameters();
-            if (currentBookParameters != null && ColorUtil.getColorMode(currentBookParameters.colorMode) == null) {
-                activity.showLongMessage(activity.getString(R.string.select_color_mode));
-                return;
+    OPEN_BOOKMARKS(R.string.action_open_bookmarks, R.integer.action_open_bookmarks) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            val bookmark = Intent(activity.applicationContext, OrionBookmarkActivity::class.java)
+            bookmark.putExtra(OrionBookmarkActivity.BOOK_ID, activity.bookId)
+            activity.startActivityForResult(
+                bookmark,
+                OrionViewerActivity.OPEN_BOOKMARK_ACTIVITY_RESULT
+            )
+        }
+    },
+
+    FULL_SCREEN(R.string.action_full_screen, R.integer.action_full_screen) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            val options = activity.globalOptions
+            options.saveBooleanProperty(
+                GlobalOptions.FULL_SCREEN,
+                java.lang.Boolean.FALSE == options.FULL_SCREEN.value
+            )
+        }
+    },
+
+    SWITCH_COLOR_MODE(R.string.action_switch_color_mode, R.integer.action_switch_color_mode) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            val view = activity.view
+            val scene = activity.fullScene
+            val currentBookParameters = activity.orionApplication.currentBookParameters
+            if (currentBookParameters != null && getColorMode(currentBookParameters.colorMode) == null) {
+                activity.showLongMessage(activity.getString(R.string.select_color_mode))
+                return
             }
             if (view.isDefaultColorMatrix()) {
                 if (currentBookParameters != null) {
-                    scene.setColorMatrix(ColorUtil.getColorMode(currentBookParameters.colorMode));
+                    scene.setColorMatrix(getColorMode(currentBookParameters.colorMode))
                 }
             } else {
-                scene.setColorMatrix(null);
+                scene.setColorMatrix(null)
             }
-            view.invalidate();
+            view.invalidate()
         }
     },
 
-    BOOK_OPTIONS (R.string.action_book_options, R.integer.action_book_options) {
-        @Override
-        public void doAction(OrionBaseActivity activity) {
-            Intent intent = new Intent(activity, OrionBookPreferencesActivityX.class);
-            activity.startActivity(intent);
+    BOOK_OPTIONS(R.string.action_book_options, R.integer.action_book_options) {
+        override fun doAction(activity: OrionBaseActivity) {
+            val intent = Intent(activity, OrionBookPreferencesActivityX::class.java)
+            activity.startActivity(intent)
         }
     },
 
-    ZOOM (R.string.action_zoom_page, R.integer.action_zoom_page) {
-            @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            activity.showOrionDialog(OrionViewerActivity.ZOOM_SCREEN, null, null);
+    ZOOM(R.string.action_zoom_page, R.integer.action_zoom_page) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            activity.showOrionDialog(OrionViewerActivity.ZOOM_SCREEN, null, null)
         }
     },
 
-    PAGE_LAYOUT (R.string.action_layout_page, R.integer.action_page_layout) {
-        @Override
-        public void doAction(OrionBaseActivity activity) {
-            BOOK_OPTIONS.doAction(activity);
+    PAGE_LAYOUT(R.string.action_layout_page, R.integer.action_page_layout) {
+        override fun doAction(activity: OrionBaseActivity) {
+            BOOK_OPTIONS.doAction(activity)
         }
     },
 
-    CROP (R.string.action_crop_page, R.integer.action_crop_page) {
-            @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            activity.showOrionDialog(OrionViewerActivity.CROP_SCREEN, null, null);
+    CROP(R.string.action_crop_page, R.integer.action_crop_page) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            activity.showOrionDialog(OrionViewerActivity.CROP_SCREEN, null, null)
         }
     },
 
-    GOTO (R.string.action_goto_page, R.integer.action_goto_page) {
-
-        @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            activity.showOrionDialog(OrionViewerActivity.PAGE_SCREEN, this, null);
+    GOTO(R.string.action_goto_page, R.integer.action_goto_page) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            activity.showOrionDialog(OrionViewerActivity.PAGE_SCREEN, this, null)
         }
     },
 
-    ROTATION (R.string.action_rotation_page, R.integer.action_rotation_page)  {
-        @Override
-        public void doAction(OrionBaseActivity activity) {
-            BOOK_OPTIONS.doAction(activity);
+    ROTATION(R.string.action_rotation_page, R.integer.action_rotation_page) {
+        override fun doAction(activity: OrionBaseActivity) {
+            BOOK_OPTIONS.doAction(activity)
         }
     },
 
-    DICTIONARY (R.string.action_dictionary, R.integer.action_dictionary) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            String dict = activity.getGlobalOptions().getDictionary();
-            String action = null;
-            Intent intent = new Intent();
-            String queryText = null;
+    DICTIONARY(R.string.action_dictionary, R.integer.action_dictionary) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            var parameter = parameter
+            val dict = activity.globalOptions.dictionary
+            var action: String? = null
+            val intent = Intent()
+            var queryText: String? = null
 
-            if ("FORA".equals(dict)) {
-                action = "com.ngc.fora.action.LOOKUP";
-                queryText = "HEADWORD";
-            } else if ("COLORDICT".equals(dict)) {
-                action = "colordict.intent.action.SEARCH";
-                queryText = "EXTRA_QUERY";
-            } else if ("AARD".equals(dict)) {
-                action = Intent.ACTION_SEARCH;
-                intent.setClassName("aarddict.android", "aarddict.android.LookupActivity");
-                queryText = "query";
-                parameter = safeParameter(parameter);
-            } else if ("AARD2".equals(dict)) {
-                action = "aard2.lookup";
-                queryText = "query";
-                parameter = safeParameter(parameter);
-            }  else if ("LINGVO".equals(dict)) {
-                action = "com.abbyy.mobile.lingvo.intent.action.TRANSLATE";
-                intent.setPackage("com.abbyy.mobile.lingvo.market");
-                queryText = "com.abbyy.mobile.lingvo.intent.extra.TEXT";
-                parameter = safeParameter(parameter);
+            if ("FORA" == dict) {
+                action = "com.ngc.fora.action.LOOKUP"
+                queryText = "HEADWORD"
+            } else if ("COLORDICT" == dict) {
+                action = "colordict.intent.action.SEARCH"
+                queryText = "EXTRA_QUERY"
+            } else if ("AARD" == dict) {
+                action = Intent.ACTION_SEARCH
+                intent.setClassName("aarddict.android", "aarddict.android.LookupActivity")
+                queryText = "query"
+                parameter = safeParameter(parameter)
+            } else if ("AARD2" == dict) {
+                action = "aard2.lookup"
+                queryText = "query"
+                parameter = safeParameter(parameter)
+            } else if ("LINGVO" == dict) {
+                action = "com.abbyy.mobile.lingvo.intent.action.TRANSLATE"
+                intent.setPackage("com.abbyy.mobile.lingvo.market")
+                queryText = "com.abbyy.mobile.lingvo.intent.extra.TEXT"
+                parameter = safeParameter(parameter)
             }
 
             if (action != null) {
-                intent.setAction(action);
+                intent.setAction(action)
                 if (parameter != null) {
-                    intent.putExtra(queryText, (String) parameter);
+                    intent.putExtra(queryText, parameter as String?)
                 }
 
                 try {
-                    activity.startActivity(intent);
-                } catch (ActivityNotFoundException ex) {
-                    log(ex);
-                    String string = activity.getString(R.string.warn_msg_no_dictionary);
-                    activity.showWarning(string + ": " + dict + ": " + ex.getMessage());
+                    activity.startActivity(intent)
+                } catch (ex: ActivityNotFoundException) {
+                    log(ex)
+                    val string = activity.getString(R.string.warn_msg_no_dictionary)
+                    activity.showWarning(string + ": " + dict + ": " + ex.message)
                 }
             }
         }
 
-        private Object safeParameter(Object parameter) {
-            return parameter == null ? "" : parameter;
+        private fun safeParameter(parameter: Any?): Any {
+            return parameter ?: ""
         }
     },
 
-    OPEN_BOOK (R.string.action_open, R.integer.action_open_book) {
-        @Override
-        public void doAction(OrionBaseActivity activity) {
-            Intent intent = new Intent(activity, OrionFileManagerActivity.class);
-            intent.putExtra(OrionFileManagerActivity.DONT_OPEN_RECENT_FILE, true);
-            activity.startActivity(intent);
+    OPEN_BOOK(R.string.action_open, R.integer.action_open_book) {
+        override fun doAction(activity: OrionBaseActivity) {
+            val intent = Intent(activity, OrionFileManagerActivity::class.java)
+            intent.putExtra(DONT_OPEN_RECENT_FILE, true)
+            activity.startActivity(intent)
         }
     },
 
-    OPTIONS (R.string.action_options_page, R.integer.action_options_page) {
-        @Override
-        public void doAction(OrionBaseActivity activity) {
-            Intent intent = new Intent(activity, OrionPreferenceActivityX.class);
-            activity.startActivity(intent);
+    OPTIONS(R.string.action_options_page, R.integer.action_options_page) {
+        override fun doAction(activity: OrionBaseActivity) {
+            val intent = Intent(activity, OrionPreferenceActivityX::class.java)
+            activity.startActivity(intent)
         }
     },
 
-    CLOSE_ACTION (R.string.action_close, R.integer.action_close) {
-        @Override
-        public void doAction(OrionBaseActivity activity) {
-            activity.finish();
+    CLOSE_ACTION(R.string.action_close, R.integer.action_close) {
+        override fun doAction(activity: OrionBaseActivity) {
+            activity.finish()
         }
     },
 
-    FIT_WIDTH (R.string.action_fit_width, R.integer.action_fit_width) {
-        @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            controller.changeZoom(0);
+    FIT_WIDTH(R.string.action_fit_width, R.integer.action_fit_width) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            controller!!.changeZoom(0)
         }
     },
 
-    FIT_HEIGHT (R.string.action_fit_height, R.integer.action_fit_heigh) {
-        @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            controller.changeZoom(-1);
+    FIT_HEIGHT(R.string.action_fit_height, R.integer.action_fit_heigh) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            controller!!.changeZoom(-1)
         }
     },
 
-    FIT_PAGE (R.string.action_fit_page, R.integer.action_fit_page) {
-        @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            controller.changeZoom(-2);
+    FIT_PAGE(R.string.action_fit_page, R.integer.action_fit_page) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            controller!!.changeZoom(-2)
         }
     },
 
 
-    ROTATE_90 (R.string.action_rotate_90, R.integer.action_rotate_90) {
-        @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+    ROTATE_90(R.string.action_rotate_90, R.integer.action_rotate_90) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
             //controller.setRotation((controller.getRotation() - 1) % 2);
-            if (activity.getRequestedOrientation() == SCREEN_ORIENTATION_LANDSCAPE || activity.getRequestedOrientation() == SCREEN_ORIENTATION_REVERSE_LANDSCAPE) {
-                controller.changeOrinatation("PORTRAIT");
+            if (activity.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE || activity.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) {
+                controller!!.changeOrinatation("PORTRAIT")
             } else {
-                controller.changeOrinatation("LANDSCAPE");
+                controller!!.changeOrinatation("LANDSCAPE")
             }
         }
     },
 
-    ROTATE_270 (R.string.action_rotate_270, R.integer.action_rotate_270) {
-        @Override
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
+    ROTATE_270(R.string.action_rotate_270, R.integer.action_rotate_270) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
             //controller.setRotation((controller.getRotation() + 1) % 2);
-            boolean isLevel9 = activity.getOrionApplication().getSdkVersion() >= 9;
-            if (!isLevel9 || activity.getRequestedOrientation() == SCREEN_ORIENTATION_LANDSCAPE || activity.getRequestedOrientation() == SCREEN_ORIENTATION_REVERSE_LANDSCAPE) {
-                ROTATE_90.doAction(controller, activity, parameter);
+            val isLevel9 = activity.orionApplication.sdkVersion >= 9
+            if (!isLevel9 || activity.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE || activity.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) {
+                ROTATE_90.doAction(controller, activity, parameter)
             } else {
-                controller.changeOrinatation("LANDSCAPE_INVERSE");
+                controller!!.changeOrinatation("LANDSCAPE_INVERSE")
             }
         }
     },
 
 
-    INVERSE_CROP (R.string.action_inverse_crops, R.integer.action_inverse_crop) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            TemporaryOptions opts = activity.getOrionApplication().getTempOptions();
-            opts.inverseCropping = !opts.inverseCropping;
+    INVERSE_CROP(R.string.action_inverse_crops, R.integer.action_inverse_crop) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            val opts = activity.orionApplication.tempOptions
+            opts!!.inverseCropping = !opts.inverseCropping
 
-            String title = activity.getResources().getString(R.string.action_inverse_crops) + ":" +(opts.inverseCropping ? "inverted" : "normal");
-            Toast.makeText(activity.getApplicationContext(), title, Toast.LENGTH_SHORT).show();
+            val title =
+                activity.resources.getString(R.string.action_inverse_crops) + ":" + (if (opts.inverseCropping) "inverted" else "normal")
+            Toast.makeText(activity.applicationContext, title, Toast.LENGTH_SHORT).show()
         }
     },
 
-    SWITCH_CROP (R.string.action_switch_long_crop, R.integer.action_switch_long_crop) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            TemporaryOptions opts = activity.getOrionApplication().getTempOptions();
-            opts.switchCropping = !opts.switchCropping;
-            String title = activity.getResources().getString(R.string.action_switch_long_crop) + ":" + (opts.switchCropping ?  "big" : "small");
-            Toast.makeText(activity.getApplicationContext(), title, Toast.LENGTH_SHORT).show();
+    SWITCH_CROP(R.string.action_switch_long_crop, R.integer.action_switch_long_crop) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            val opts = activity.orionApplication.tempOptions
+            opts!!.switchCropping = !opts.switchCropping
+            val title =
+                activity.resources.getString(R.string.action_switch_long_crop) + ":" + (if (opts.switchCropping) "big" else "small")
+            Toast.makeText(activity.applicationContext, title, Toast.LENGTH_SHORT).show()
         }
     },
 
-    CROP_LEFT (R.string.action_crop_left, R.integer.action_crop_left) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            updateMargin(controller, true, 0);
+    CROP_LEFT(R.string.action_crop_left, R.integer.action_crop_left) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            updateMargin(controller!!, true, 0)
         }
     },
 
-    UNCROP_LEFT (R.string.action_uncrop_left, R.integer.action_uncrop_left) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            updateMargin(controller, false, 0);
+    UNCROP_LEFT(R.string.action_uncrop_left, R.integer.action_uncrop_left) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            updateMargin(controller!!, false, 0)
         }
     },
 
-    CROP_RIGHT (R.string.action_crop_right, R.integer.action_crop_right) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            updateMargin(controller, true, 1);
+    CROP_RIGHT(R.string.action_crop_right, R.integer.action_crop_right) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            updateMargin(controller!!, true, 1)
         }
     },
 
-    UNCROP_RIGHT (R.string.action_uncrop_right, R.integer.action_uncrop_right) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            updateMargin(controller, false, 1);
+    UNCROP_RIGHT(R.string.action_uncrop_right, R.integer.action_uncrop_right) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            updateMargin(controller!!, false, 1)
         }
     },
 
-    CROP_TOP (R.string.action_crop_top, R.integer.action_crop_top) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            updateMargin(controller, true, 2);
+    CROP_TOP(R.string.action_crop_top, R.integer.action_crop_top) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            updateMargin(controller!!, true, 2)
         }
     },
 
-    UNCROP_TOP (R.string.action_uncrop_top, R.integer.action_uncrop_top) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            updateMargin(controller, false, 2);
+    UNCROP_TOP(R.string.action_uncrop_top, R.integer.action_uncrop_top) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            updateMargin(controller!!, false, 2)
         }
     },
 
-    CROP_BOTTOM (R.string.action_crop_bottom, R.integer.action_crop_bottom) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            updateMargin(controller, true, 3);
+    CROP_BOTTOM(R.string.action_crop_bottom, R.integer.action_crop_bottom) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            updateMargin(controller!!, true, 3)
         }
     },
 
-    UNCROP_BOTTOM (R.string.action_uncrop_bottom, R.integer.action_uncrop_bottom) {
-        public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-            updateMargin(controller, false, 3);
+    UNCROP_BOTTOM(R.string.action_uncrop_bottom, R.integer.action_uncrop_bottom) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            updateMargin(controller!!, false, 3)
         }
     };
 
-    private static final HashMap<Integer, Action> actions = new HashMap<>();
+    @JvmField
+    val code: Int = instance.resources.getInteger(idRes)
 
-    static {
-        Action [] values = values();
-        for (Action value : values) {
-            actions.put(value.code, value);
-        }
+    open fun doAction(controller: Controller?, activity: OrionViewerActivity, parameter: Any?) {
+        doAction(activity)
     }
 
-    private final int name;
-
-    private final int code;
-
-
-    Action(int nameId, int resId) {
-        this.name = nameId;
-        this.code = OrionApplication.Companion.getInstance().getResources().getInteger(resId);
+    open fun doAction(activity: OrionBaseActivity) {
     }
 
-    public int getName() {
-        return name;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public static Action getAction(int code) {
-        Action result = actions.get(code);
-        return result != null ? result : NONE;
-    }
-
-    public void doAction(Controller controller, OrionViewerActivity activity, Object parameter) {
-        doAction(activity);
-    }
-
-    public void doAction(OrionBaseActivity activity) {
-
-    }
-
-    protected void updateMargin(Controller controller, boolean isCrop, int index) {
-        CropMargins cropMargins = controller.getMargins();
-        if (cropMargins.getEvenCrop() && controller.isEvenPage()) {
+    protected fun updateMargin(controller: Controller, isCrop: Boolean, index: Int) {
+        var isCrop = isCrop
+        var index = index
+        val cropMargins = controller.margins
+        if (cropMargins.evenCrop && controller.isEvenPage) {
             if (index == 0 || index == 1) {
-                index += 4;
+                index += 4
             }
         }
 
-        int[] margins = CropDialogBuilderKt.toDialogMargins(cropMargins);
-        OrionApplication context = controller.getActivity().getOrionApplication();
-        TemporaryOptions tempOpts = context.getTempOptions();
-        if (tempOpts.inverseCropping) {
-            isCrop = !isCrop;
+        val margins = cropMargins.toDialogMargins()
+        val context = controller.activity.orionApplication
+        val tempOpts = context.tempOptions
+        if (tempOpts!!.inverseCropping) {
+            isCrop = !isCrop
         }
-        int delta = tempOpts.switchCropping ? context.getOptions().getLongCrop() : 1;
-        margins[index] += isCrop ? delta : -delta;
+        val delta = if (tempOpts.switchCropping) context.options.longCrop else 1
+        margins[index] += if (isCrop) delta else -delta
         if (margins[index] > OrionViewerActivity.CROP_RESTRICTION_MAX) {
-            margins[index] = OrionViewerActivity.CROP_RESTRICTION_MAX;
+            margins[index] = OrionViewerActivity.CROP_RESTRICTION_MAX
         }
         if (margins[index] < OrionViewerActivity.CROP_RESTRICTION_MIN) {
-            margins[index] = OrionViewerActivity.CROP_RESTRICTION_MIN;
+            margins[index] = OrionViewerActivity.CROP_RESTRICTION_MIN
         }
 
         controller.changeCropMargins(
-                CropDialogBuilderKt.toMargins(margins, cropMargins.getEvenCrop(), cropMargins.getCropMode())
-        );
+            margins.toMargins(cropMargins.evenCrop, cropMargins.cropMode)
+        )
+    }
+
+    companion object {
+        private val actions = HashMap<Int, Action>()
+
+        init {
+            val values = entries.toTypedArray()
+            for (value in values) {
+                actions[value.code] = value
+            }
+        }
+
+        @JvmStatic
+        fun getAction(code: Int): Action {
+            val result = actions[code]
+            return result ?: NONE
+        }
     }
 }
