@@ -43,7 +43,7 @@ class OrionPreferenceFragmentX : DSLPreferenceFragment()
 
 class BehaviourPreferenceFragment : SwitchHeaderPreferenceFragment() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.user_pref_general, rootKey)
+        setPreferencesFromResource(R.xml.user_pref_controls, rootKey)
     }
 }
 
