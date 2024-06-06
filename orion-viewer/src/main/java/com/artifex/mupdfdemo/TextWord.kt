@@ -15,6 +15,15 @@ class TextWord {
         chars.add(tc.c)
     }
 
+    fun add(tc: Char) {
+        chars.add(tc.code)
+    }
+
+    fun add(tc: TextWord) {
+        chars.addAll(tc.chars)
+        rect.union(tc.rect)
+    }
+
     private fun Quad.toRectF(): RectF {
         val x0: Float = min(Math.min(ul_x, ur_x), Math.min(ll_x, lr_x))
         val y0: Float = min(Math.min(ul_y, ur_y), Math.min(ll_y, lr_y))

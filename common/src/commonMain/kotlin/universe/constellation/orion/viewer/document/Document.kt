@@ -56,7 +56,7 @@ interface Page {
 
     fun searchText(text: String): Array<RectF>?
 
-    fun getText(absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): String?
+    fun getText(absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): TextAndSelection?
 
     fun destroy()
 }

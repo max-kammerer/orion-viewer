@@ -5,6 +5,7 @@ import universe.constellation.orion.viewer.PageSize
 import universe.constellation.orion.viewer.document.AbstractDocument
 import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.document.AbstractPage
+import universe.constellation.orion.viewer.document.TextAndSelection
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.errorInDebugOr
 import universe.constellation.orion.viewer.geometry.RectF
@@ -80,7 +81,7 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
             width: Int,
             height: Int,
             singleWord: Boolean
-        ): String? {
+        ): TextAndSelection? {
             return getText(pageNum, absoluteX, absoluteY, width, height, singleWord)
         }
 
@@ -180,7 +181,7 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
     }
 
     fun getText(pageNum: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean) =
-            getText(contextPointer, docPointer, pageNum, absoluteX, absoluteY, width, height)
+            TextAndSelection(getText(contextPointer, docPointer, pageNum, absoluteX, absoluteY, width, height), RectF())
 
     companion object {
 

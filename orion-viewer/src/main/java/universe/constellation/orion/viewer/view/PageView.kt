@@ -292,6 +292,17 @@ class PageView(
         }
         cancelChildJobs()
     }
+
+    fun getSceneRect(pageRect: RectF): RectF {
+        val rect = android.graphics.RectF(pageRect)
+        val layoutInfo = layoutInfo
+        val zoom  = layoutInfo.docZoom
+        rect.zoom(zoom.toFloat())
+        rect.offset(-layoutInfo.x.marginLeft.toFloat(), -layoutInfo.y.marginLeft.toFloat())
+        rect.offset(layoutData.position)
+        return rect
+    }
+
 }
 
 val PageView.isOnScreen

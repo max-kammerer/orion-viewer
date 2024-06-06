@@ -48,7 +48,7 @@ class SelectionTest(
                 selectionRect.height(),
                 isSingleWord
             )
-            assertEquals(expectedText, text)
+            assertEquals(expectedText, text!!.value)
         }
     }
 }

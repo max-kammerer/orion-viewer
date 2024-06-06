@@ -343,7 +343,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
     fun findPageAndPageRect(screenRect: Rect): List<PageAndSelection> {
         return activePages.mapNotNull {
             val pageSelection = it.layoutData.pagePartOnScreen(screenRect, Rect()) ?: return@mapNotNull null
-            log("selection: " + it.pageNum + pageSelection)
+            log("page intersection: " + it.pageNum + " " + pageSelection)
             //TODO zoom and crop
             pageSelection.minusOffset(it.layoutData.position)
             val layoutInfo = it.layoutInfo
@@ -353,8 +353,8 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
                 (pageSelection.top/zoom).toInt(),
                 (pageSelection.right/zoom).toInt(), (pageSelection.bottom/zoom).toInt()
             )
-            log("selection: " + it.pageNum + pageSelection)
-            PageAndSelection(it.page, pageSelection)
+            log("selection: " + it.pageNum + " " + pageSelection)
+            PageAndSelection(it, pageSelection)
         }
     }
 
@@ -644,6 +644,13 @@ fun Rect.minusOffset(p: PointF) {
     this.offset(-p.x.toInt(), -p.y.toInt())
 }
 
+fun RectF.minusOffset(p: PointF) {
+    this.offset(-p.x, -p.y)
+}
+
+fun RectF.offset(p: PointF) {
+    this.offset(p.x, p.y)
+}
 
 fun PointF.offset(p: PointF) {
     this.offset(p.x, p.y)
@@ -654,7 +661,7 @@ fun PointF.zoom(zoom: Float) {
 }
 
 fun RectF.zoom(zoom: Float) {
-    this.set(left * zoom, right * zoom, top * zoom, bottom * zoom)
+    this.set(left * zoom, top * zoom, right * zoom, bottom * zoom)
 }
 
 fun Rect.zoom(zoom: Float) {

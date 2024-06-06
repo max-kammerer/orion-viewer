@@ -1,8 +1,9 @@
 package universe.constellation.orion.viewer.selection;
 
-import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Rect;
-import android.view.*;
+import android.graphics.RectF;
+import android.view.MotionEvent;
 
 import androidx.annotation.NonNull;
 
@@ -13,6 +14,7 @@ import universe.constellation.orion.viewer.Controller;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.R;
 import universe.constellation.orion.viewer.dialog.DialogOverView;
+import universe.constellation.orion.viewer.document.TextAndSelection;
 import universe.constellation.orion.viewer.view.PageLayoutManager;
 
 public class SelectionAutomata extends DialogOverView {
@@ -43,7 +45,7 @@ public class SelectionAutomata extends DialogOverView {
     public boolean onTouch(MotionEvent event) {
         int action = event.getAction();
 
-        //System.out.println("aaaction " + action + " " + event.getX() + ", " + event.getY());
+        //System.out.println("aaaction " + action + " " + event.getX() + ", " + event.getY() + " " + state);
         STATE oldState = state;
         boolean result = true;
         switch (state) {
@@ -80,16 +82,15 @@ public class SelectionAutomata extends DialogOverView {
                 case CANCELED: dialog.dismiss(); break;
 
                 case END:
-                    selectText(activity, isSingleWord, translate, dialog, getSelectionRectangle());
+                    selectText(isSingleWord, translate, getSelectionRectangle());
                     break;
             }
         }
         return result;
     }
 
-    public static void selectText(
-            OrionViewerActivity activity, boolean isSingleWord, boolean translate, Dialog dialog,
-            List<PageAndSelection> data
+    public void selectText(
+            boolean isSingleWord, boolean translate, List<PageAndSelection> data
     ) {
         StringBuilder sb = new StringBuilder();
         boolean first = true;
@@ -98,13 +99,19 @@ public class SelectionAutomata extends DialogOverView {
 
         for (PageAndSelection selection: data) {
             Rect rect = selection.getAbsoluteRectWithoutCrop();
-            String text = controller.selectRawText(selection.getPage(), rect.left, rect.top, rect.width(), rect.height(), isSingleWord);
+            TextAndSelection text = controller.selectRawText(selection.getPage(), rect.left, rect.top, rect.width(), rect.height(), isSingleWord);
             if (text != null) {
                 if (!first) {
                     sb.append(" ");
                 }
-                sb.append(text);
+                sb.append(text.getValue());
                 first = false;
+            }
+            if (isSingleWord) {
+                RectF originRect = text.getRect();
+                RectF sceneRect = selection.getPageView().getSceneRect(originRect);
+                System.out.println(dialog.isShowing());
+                selectionView.updateView((int) sceneRect.left, (int) sceneRect.top, (int) sceneRect.right, (int) sceneRect.bottom);
             }
         }
         String text = sb.toString();
@@ -113,7 +120,20 @@ public class SelectionAutomata extends DialogOverView {
                 dialog.dismiss();
                 Action.DICTIONARY.doAction(controller, activity, text);
             } else {
-                new SelectedTextActions(activity, dialog).show(text);
+                if (isSingleWord && !dialog.isShowing()) {
+                    //TODO: refactor
+                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog2) {
+                            new SelectedTextActions(activity, dialog).show(text);
+                            dialog.setOnShowListener(null);
+                        }
+                    });
+                    startSelection(true, false, true);
+                    state = STATE.END;
+                } else {
+                    new SelectedTextActions(activity, dialog).show(text);
+                }
             }
         } else {
             dialog.dismiss();
@@ -122,22 +142,21 @@ public class SelectionAutomata extends DialogOverView {
     }
 
     public void startSelection(boolean isSingleWord, boolean translate) {
-        selectionView.reset();
+        startSelection(isSingleWord, translate, false);
+    }
+    public void startSelection(boolean isSingleWord, boolean translate, boolean quite) {
+        if (!quite) {
+            selectionView.reset();
+        }
         initDialogSize();
         dialog.show();
-        String msg = activity.getResources().getString(isSingleWord ? R.string.msg_select_word : R.string.msg_select_text);
-        activity.showFastMessage(msg);
+        if (!quite) {
+            String msg = activity.getResources().getString(isSingleWord ? R.string.msg_select_word : R.string.msg_select_text);
+            activity.showFastMessage(msg);
+        }
         state = STATE.START;
         this.isSingleWord = isSingleWord;
         this.translate = translate;
-    }
-
-    public boolean inSelection() {
-        return state == STATE.START || state == STATE.MOVING;
-    }
-
-    public boolean isSuccessful() {
-        return state == STATE.END;
     }
 
     private List<PageAndSelection> getSelectionRectangle() {

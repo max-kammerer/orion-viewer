@@ -39,6 +39,7 @@ import universe.constellation.orion.viewer.bitmap.DeviceInfo
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.document.Page
+import universe.constellation.orion.viewer.document.TextAndSelection
 import universe.constellation.orion.viewer.document.lastPageNum0
 import universe.constellation.orion.viewer.layout.CropMargins
 import universe.constellation.orion.viewer.layout.LayoutPosition
@@ -302,9 +303,8 @@ class Controller(
 
     fun getOutline(): Array<OutlineItem>? = document.outline
 
-    fun selectRawText(page: Page, startX: Int, startY: Int, widht: Int, height: Int, isSingleWord: Boolean): String? {
-        return page.getText(startX, startY, widht, height, isSingleWord)?.trimText(isSingleWord)
-            ?.apply { log("Text selection in ${page.pageNum}: $this") }
+    fun selectRawText(page: Page, startX: Int, startY: Int, widht: Int, height: Int, isSingleWord: Boolean): TextAndSelection? {
+        return page.getText(startX, startY, widht, height, isSingleWord)?.apply { log("Text selection in ${page.pageNum}: $this") }
     }
 
     private fun String.trimText(isSingleWord: Boolean): String {

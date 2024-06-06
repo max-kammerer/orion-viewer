@@ -10,8 +10,8 @@ enum class ContextAction(customName: String? = null) {
     SELECT_TEXT {
         override fun doAction(activity: OrionViewerActivity, clickInfo: ClickInfo) {
             val pos = clickInfo as? ClickInfo ?: return
-            SelectionAutomata.selectText(
-                activity, true, false, activity.selectionAutomata.dialog,
+            activity.selectionAutomata.selectText(
+                true, false,
                 SelectionAutomata.getSelectionRectangle(
                     pos.x,
                     pos.y,
@@ -28,8 +28,8 @@ enum class ContextAction(customName: String? = null) {
 
         override fun doAction(activity: OrionViewerActivity, clickInfo: ClickInfo) {
             val pos = clickInfo as? ClickInfo ?: return
-            SelectionAutomata.selectText(
-                activity, true, true, activity.selectionAutomata.dialog,
+            activity.selectionAutomata.selectText(
+                true, true,
                 SelectionAutomata.getSelectionRectangle(
                     pos.x,
                     pos.y,

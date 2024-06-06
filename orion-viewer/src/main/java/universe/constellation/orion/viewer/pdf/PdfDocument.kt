@@ -34,6 +34,7 @@ import universe.constellation.orion.viewer.PageSize
 import universe.constellation.orion.viewer.document.AbstractDocument
 import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.document.AbstractPage
+import universe.constellation.orion.viewer.document.TextAndSelection
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.errorInDebugOr
 import universe.constellation.orion.viewer.timing
@@ -130,7 +131,7 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
             }
         }
 
-        override fun getText(absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): String? {
+        override fun getText(absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): TextAndSelection? {
             if (destroyed) return null
             readPageDataIfNeeded()
             if (page == null) return null
@@ -163,51 +164,75 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
 
     external override fun setThreshold(threshold: Int)
 
-    private fun getText(page: Page, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): String? {
+    private fun getText(page: Page, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): TextAndSelection? {
         val text: StructuredText = synchronized(core) { page.toStructuredText() }
+        val opRect = RectF()
+        try {
+            // The text of the page held in a hierarchy (blocks, lines, spans).
+            // Currently we don't need to distinguish the blocks level or
+            // the spans, and we need to collect the text into words.
+            val lns: java.util.ArrayList<List<TextWord>> = arrayListOf()
+            val selectionRegion = RectF(
+                absoluteX.toFloat(),
+                absoluteY.toFloat(),
+                (absoluteX + width).toFloat(),
+                (absoluteY + height).toFloat()
+            )
 
-        // The text of the page held in a hierarchy (blocks, lines, spans).
-        // Currently we don't need to distinguish the blocks level or
-        // the spans, and we need to collect the text into words.
-        val lns: java.util.ArrayList<List<TextWord>> = arrayListOf()
-        val region = RectF(absoluteX.toFloat(), absoluteY.toFloat(), (absoluteX + width).toFloat(), (absoluteY + height).toFloat())
-
-        for (block in text.blocks) {
-            if (block != null) {
-                for (ln in block.lines) {
-                    if (ln != null) {
-                        val wordsInLine = arrayListOf<TextWord>()
-                        var word = TextWord()
-                        for (textChar in ln.chars) {
-                            if (textChar.c != ' '.toInt()) {
-                                word.add(textChar)
-                            } else if (word.isNotEmpty()) {
-                                processWord(word, wordsInLine, region, singleWord)
-                                word = TextWord()
+            for (block in text.blocks) {
+                if (block != null) {
+                    for (ln in block.lines) {
+                        if (ln != null) {
+                            val wordsInLine = arrayListOf<TextWord>()
+                            var word = TextWord()
+                            for (textChar in ln.chars) {
+                                if (textChar.c != ' '.code) {
+                                    word.add(textChar)
+                                } else if (word.isNotEmpty()) {
+                                    processWord(word, wordsInLine, selectionRegion, singleWord, opRect)
+                                    word = TextWord()
+                                }
                             }
-                        }
-                        if (word.isNotEmpty()) {
-                            processWord(word, wordsInLine, region, singleWord)
-                        }
-                        if (wordsInLine.size > 0) {
-                            lns.add(wordsInLine)
+                            if (word.isNotEmpty()) {
+                                processWord(word, wordsInLine, selectionRegion, singleWord, opRect)
+                            }
+                            if (wordsInLine.size > 0) {
+                                lns.add(wordsInLine)
+                            }
                         }
                     }
                 }
             }
-        }
 
-        return lns.joinToString(" ") {
-            it.joinToString (" ")
-        }.also {
+            val result = TextWord()
+            lns.fold(result) { acc, line ->
+                if (acc.isNotEmpty()) acc.add(' ')
+
+                val lineRes = TextWord()
+                val res = line.fold(lineRes) { accLine, tc ->
+                    if (accLine.isNotEmpty()) accLine.add(' ')
+                    accLine.add(tc)
+                    accLine
+                }
+                acc.add(res)
+                acc
+            }
+            return TextAndSelection(result.toString(), result.rect);
+        } finally {
             text.destroy()
         }
     }
 
-    private fun processWord(word: TextWord, words: java.util.ArrayList<TextWord>, region: RectF, isSingleWord: Boolean) {
+    private fun processWord(
+        word: TextWord,
+        words: java.util.ArrayList<TextWord>,
+        region: RectF,
+        isSingleWord: Boolean,
+        opRect: RectF
+    ) {
         val wordSquare5: Float = word.width() * word.height() / 5
-        if (word.rect.setIntersect(word.rect, region)) {
-            if (isSingleWord || word.width() * word.height() > wordSquare5) {
+        if (opRect.setIntersect(word.rect, region)) {
+            if (isSingleWord || opRect.width() * opRect.height() > wordSquare5) {
                 words.add(word)
             }
         }
