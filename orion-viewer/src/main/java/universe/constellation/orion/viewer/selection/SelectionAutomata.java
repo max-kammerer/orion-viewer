@@ -1,6 +1,5 @@
 package universe.constellation.orion.viewer.selection;
 
-import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.view.MotionEvent;
@@ -82,7 +81,7 @@ public class SelectionAutomata extends DialogOverView {
                 case CANCELED: dialog.dismiss(); break;
 
                 case END:
-                    selectText(isSingleWord, translate, getSelectionRectangle());
+                    selectText(isSingleWord, translate, getSelectionRectangle(), getScreenSelectionRect());
                     break;
             }
         }
@@ -90,7 +89,7 @@ public class SelectionAutomata extends DialogOverView {
     }
 
     public void selectText(
-            boolean isSingleWord, boolean translate, List<PageAndSelection> data
+            boolean isSingleWord, boolean translate, List<PageAndSelection> data, Rect originSelection
     ) {
         StringBuilder sb = new StringBuilder();
         boolean first = true;
@@ -110,7 +109,7 @@ public class SelectionAutomata extends DialogOverView {
             if (isSingleWord) {
                 RectF originRect = text.getRect();
                 RectF sceneRect = selection.getPageView().getSceneRect(originRect);
-                System.out.println(dialog.isShowing());
+                originSelection = new Rect((int) sceneRect.left, (int) sceneRect.top, (int) sceneRect.right, (int) sceneRect.bottom);
                 selectionView.updateView((int) sceneRect.left, (int) sceneRect.top, (int) sceneRect.right, (int) sceneRect.bottom);
             }
         }
@@ -122,17 +121,15 @@ public class SelectionAutomata extends DialogOverView {
             } else {
                 if (isSingleWord && !dialog.isShowing()) {
                     //TODO: refactor
-                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                        @Override
-                        public void onShow(DialogInterface dialog2) {
-                            new SelectedTextActions(activity, dialog).show(text);
-                            dialog.setOnShowListener(null);
-                        }
+                    final Rect origin = originSelection;
+                    dialog.setOnShowListener(dialog2 -> {
+                        new SelectedTextActions(activity, dialog).show(text, origin);
+                        dialog.setOnShowListener(null);
                     });
                     startSelection(true, false, true);
                     state = STATE.END;
                 } else {
-                    new SelectedTextActions(activity, dialog).show(text);
+                    new SelectedTextActions(activity, dialog).show(text, originSelection);
                 }
             }
         } else {
@@ -160,6 +157,11 @@ public class SelectionAutomata extends DialogOverView {
     }
 
     private List<PageAndSelection> getSelectionRectangle() {
+        Rect screenRect = getScreenSelectionRect();
+        return getSelectionRectangle(screenRect.left, screenRect.top, screenRect.width(), screenRect.height(), isSingleWord, activity.getController().getPageLayoutManager());
+    }
+
+    private Rect getScreenSelectionRect() {
         int startX = this.startX;
         int startY = this.startY;
         int width = this.width;
@@ -174,7 +176,7 @@ public class SelectionAutomata extends DialogOverView {
             height = -height;
         }
 
-        return getSelectionRectangle(startX, startY, width, height, isSingleWord, activity.getController().getPageLayoutManager());
+        return new Rect(startX, startY, startX + width, startY + height);
     }
 
     public static List<PageAndSelection> getSelectionRectangle(int startX, int startY, int width, int height, boolean isSingleWord, PageLayoutManager pageLayoutManager) {

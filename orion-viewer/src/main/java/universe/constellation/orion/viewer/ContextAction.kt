@@ -1,5 +1,6 @@
 package universe.constellation.orion.viewer
 
+import android.graphics.Rect
 import universe.constellation.orion.viewer.selection.ClickInfo
 import universe.constellation.orion.viewer.selection.ClickType
 import universe.constellation.orion.viewer.selection.SelectionAutomata
@@ -19,7 +20,8 @@ enum class ContextAction(customName: String? = null) {
                     0,
                     true,
                     activity.controller?.pageLayoutManager ?: return
-                )
+                ),
+                Rect()
             )
         }
     },
@@ -37,7 +39,8 @@ enum class ContextAction(customName: String? = null) {
                     0,
                     true,
                     activity.controller?.pageLayoutManager ?: return
-                )
+                ),
+                Rect()
             )
         }
     },

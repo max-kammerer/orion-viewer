@@ -3,8 +3,8 @@ package universe.constellation.orion.viewer.selection;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.text.ClipboardManager;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 
 import universe.constellation.orion.viewer.Action;
+import universe.constellation.orion.viewer.OrionBaseActivityKt;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.R;
 
@@ -19,11 +20,14 @@ public class SelectedTextActions {
 
     private final PopupWindow popup;
 
+    private final int height;
+
     private String text;
 
     private final Dialog originalDialog;
 
     public SelectedTextActions(final OrionViewerActivity activity, final Dialog originalDialog) {
+        height = activity.getView().getSceneHeight();
         this.originalDialog = originalDialog;
         popup = new PopupWindow(activity);
         popup.setFocusable(true);
@@ -88,9 +92,20 @@ public class SelectedTextActions {
         popup.setOnDismissListener(originalDialog::dismiss);
     }
 
-    public void show(String text) {
+    public void show(String text, Rect selectionRect) {
+        int x = selectionRect.left, y = 0;
+        System.out.println(selectionRect);
+        if (selectionRect.bottom <= height * 4 /5) {
+            y = (int) (selectionRect.bottom + OrionBaseActivityKt.dpToPixels(originalDialog.getContext(), 5));
+        } else if (selectionRect.top >= height / 5) {
+            System.out.println("1 " + popup.getHeight());
+            y = (int) (selectionRect.top - OrionBaseActivityKt.dpToPixels(originalDialog.getContext(), 60));
+        } else {
+            y = selectionRect.centerY();
+        }
         this.text = text;
-        popup.showAtLocation(originalDialog.getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+        View decorView = originalDialog.getWindow().getDecorView();
+        popup.showAsDropDown(decorView, x, -decorView.getHeight() + y);
     }
 
 }
