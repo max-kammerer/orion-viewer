@@ -2,6 +2,8 @@ package universe.constellation.orion.viewer.selection
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.ColorFilter
 import android.graphics.Paint
 import android.graphics.Rect
 import android.util.AttributeSet
@@ -22,20 +24,15 @@ class SelectionView : View {
         defStyle
     )
 
-
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        paint.alpha = 64
-
         if (oldRect != null) {
-            //System.out.println("Draw rect " + oldRect);
             canvas.drawRect(oldRect!!, paint)
         }
     }
 
     fun updateView(left: Int, top: Int, right: Int, bottom: Int) {
-        //System.out.println("updateView");
         val newRect = Rect(left, top, right, bottom)
         val invalidate = Rect(newRect)
         if (oldRect != null) {
@@ -43,11 +40,16 @@ class SelectionView : View {
         }
         oldRect = newRect
 
-        //postInvalidateDelayed(30, invalidate.left, invalidate.top, invalidate.right, invalidate.bottom);
         invalidate(invalidate)
     }
 
     fun reset() {
         oldRect = null
+    }
+
+    fun setColorFilter(colorFilter: ColorFilter?) {
+        paint.color = Color.BLACK
+        paint.colorFilter = colorFilter
+        paint.alpha = 64
     }
 }

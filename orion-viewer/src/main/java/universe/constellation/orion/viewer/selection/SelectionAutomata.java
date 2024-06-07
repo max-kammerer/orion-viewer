@@ -39,8 +39,6 @@ public class SelectionAutomata extends DialogOverView {
         selectionView.setOnTouchListener((v, event) -> SelectionAutomata.this.onTouch(event));
     }
 
-
-
     public boolean onTouch(MotionEvent event) {
         int action = event.getAction();
 
@@ -142,6 +140,7 @@ public class SelectionAutomata extends DialogOverView {
         startSelection(isSingleWord, translate, false);
     }
     public void startSelection(boolean isSingleWord, boolean translate, boolean quite) {
+        selectionView.setColorFilter(activity.getFullScene().getColorStuff().getBackgroundPaint().getColorFilter());
         if (!quite) {
             selectionView.reset();
         }
