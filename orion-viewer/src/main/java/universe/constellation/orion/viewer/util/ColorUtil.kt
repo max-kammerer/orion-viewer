@@ -57,7 +57,9 @@ object ColorUtil {
 
     @ColorInt
     @JvmStatic
-    fun transformColor(color: Int, transformation: FloatArray): Int {
+    fun transformColor(@ColorInt color: Int, transformation: FloatArray?): Int {
+        if (transformation == null) return color
+
         val r = Color.red(color)
         val g = Color.green(color)
         val b = Color.blue(color)

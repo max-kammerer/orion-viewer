@@ -26,10 +26,12 @@ class ColorStuff {
 
     private var colorDrawable = ColorDrawable(backgroundPaint.color)
     private var renderOffPage: Boolean = false
-    private var transformationArray: FloatArray? = null
+
+    var colorMatrix: FloatArray? = null
+        private set
 
     fun setColorMatrix(view: View, colorMatrix: FloatArray?) {
-        transformationArray = colorMatrix
+        this.colorMatrix = colorMatrix
         val filter = if (colorMatrix != null) ColorMatrixColorFilter(ColorMatrix(colorMatrix)) else null
         backgroundPaint.colorFilter = filter
         colorDrawable.colorFilter = filter
@@ -42,9 +44,9 @@ class ColorStuff {
         renderOffPage = on
         backgroundPaint.color = if (on) Color.rgb(230, 230, 230) else Color.WHITE
         colorDrawable.color = backgroundPaint.color
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && transformationArray != null) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && colorMatrix != null) {
             //ugly hack
-            colorDrawable.color = ColorUtil.transformColor(colorDrawable.color, transformationArray!!)
+            colorDrawable.color = ColorUtil.transformColor(colorDrawable.color, colorMatrix!!)
         }
         ViewCompat.setBackground(view, colorDrawable)
     }

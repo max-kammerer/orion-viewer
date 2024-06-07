@@ -37,6 +37,7 @@ import universe.constellation.orion.viewer.layout.LayoutPosition;
 import universe.constellation.orion.viewer.layout.LayoutStrategy;
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy;
 import universe.constellation.orion.viewer.search.SearchTask;
+import universe.constellation.orion.viewer.util.ColorUtil;
 import universe.constellation.orion.viewer.util.Util;
 import universe.constellation.orion.viewer.view.ColorStuff;
 import universe.constellation.orion.viewer.view.DrawContext;
@@ -96,6 +97,8 @@ public class SearchDialog extends DialogFragment {
 
         searchField = dialog.findViewById(R.id.searchText);
         searchField.getBackground().setAlpha(ALPHA);
+        int textColor = searchField.getTextColors().getDefaultColor();
+        searchField.setTextColor(ColorUtil.transformColor(textColor, orionViewerActivity.getFullScene().getColorStuff().getColorMatrix()));
 
         android.widget.ImageButton searchNext = dialog.findViewById(R.id.searchNext);
         searchNext.getBackground().setAlpha(ALPHA);

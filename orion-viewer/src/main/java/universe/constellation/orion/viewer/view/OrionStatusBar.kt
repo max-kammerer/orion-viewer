@@ -1,13 +1,14 @@
 package universe.constellation.orion.viewer.view
 
 import android.annotation.SuppressLint
-import android.graphics.ColorMatrixColorFilter
+import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import universe.constellation.orion.viewer.OrionBookListener
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.android.isAtJellyBean
+import universe.constellation.orion.viewer.util.ColorUtil
 
 class OrionStatusBarHelper(val view: ViewGroup) : OrionBookListener {
 
@@ -56,10 +57,11 @@ class OrionStatusBarHelper(val view: ViewGroup) : OrionBookListener {
     }
 
     fun setColorMatrix(colorMatrix: FloatArray?) {
-        val colorFilter = if (colorMatrix == null) null else ColorMatrixColorFilter(colorMatrix)
         (0 until panel.childCount).forEach {
             val child = panel.getChildAt(it)
-            if (child is TextView) child.paint.colorFilter = colorFilter
+            if (child is TextView) {
+                child.setTextColor(colorMatrix?.let { ColorUtil.transformColor(Color.BLACK, colorMatrix) } ?: Color.BLACK)
+            }
         }
     }
 
