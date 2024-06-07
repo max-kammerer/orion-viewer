@@ -1,59 +1,53 @@
-package universe.constellation.orion.viewer.selection;
+package universe.constellation.orion.viewer.selection
 
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.util.AttributeSet;
-import android.view.View;
+import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Rect
+import android.util.AttributeSet
+import android.view.View
 
-public class SelectionView extends View {
+class SelectionView : View {
+    private var oldRect: Rect? = null
 
-    private Rect oldRect;
+    private val paint = Paint()
 
-    private final Paint paint = new Paint();
+    constructor(context: Context?) : super(context)
 
-    public SelectionView(Context context) {
-        super(context);
-    }
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
 
-    public SelectionView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public SelectionView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-    }
+    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(
+        context,
+        attrs,
+        defStyle
+    )
 
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
 
-        paint.setAlpha(128);
+        paint.alpha = 64
 
         if (oldRect != null) {
             //System.out.println("Draw rect " + oldRect);
-            canvas.drawRect(oldRect, paint);
+            canvas.drawRect(oldRect!!, paint)
         }
     }
 
-    public void updateView(int left, int top, int right, int bottom) {
+    fun updateView(left: Int, top: Int, right: Int, bottom: Int) {
         //System.out.println("updateView");
-        Rect newRect = new Rect(left, top, right, bottom);
-        Rect invalidate = new Rect(newRect);
+        val newRect = Rect(left, top, right, bottom)
+        val invalidate = Rect(newRect)
         if (oldRect != null) {
-            invalidate.union(oldRect);
+            invalidate.union(oldRect!!)
         }
-        oldRect = newRect;
+        oldRect = newRect
 
         //postInvalidateDelayed(30, invalidate.left, invalidate.top, invalidate.right, invalidate.bottom);
-        invalidate(invalidate);
+        invalidate(invalidate)
     }
 
-    public void reset() {
-        oldRect = null;
+    fun reset() {
+        oldRect = null
     }
-
-
 }
