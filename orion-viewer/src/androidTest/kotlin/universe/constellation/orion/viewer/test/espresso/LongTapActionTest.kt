@@ -11,14 +11,17 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.R
+import universe.constellation.orion.viewer.prefs.GlobalOptions
 import universe.constellation.orion.viewer.test.framework.BookFile
-import universe.constellation.orion.viewer.test.framework.checkEquals
+import universe.constellation.orion.viewer.test.framework.appContext
 import universe.constellation.orion.viewer.test.framework.checkTrue
 import universe.constellation.orion.viewer.test.framework.onActivity
 
 @SdkSuppress(minSdkVersion = Build.VERSION_CODES.KITKAT)
 @RunWith(Parameterized::class)
-class OptionsTest(bookDescription: BookFile): BaseViewerActivityTest(bookDescription) {
+class LongTapActionTest(bookDescription: BookFile): BaseViewerActivityTest(bookDescription, bookDescription.toOpenIntent {
+    this.putExtra(GlobalOptions.Companion.LONG_TAP_ACTION, appContext.getString(R.string.action_key_tap_action))
+}) {
     @Test
     fun testLongClick() {
         onView(withId(R.id.view)).perform(swipeUp())

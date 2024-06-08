@@ -16,6 +16,7 @@ import androidx.core.view.doOnLayout
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.*
+import resetSettingInTest
 import universe.constellation.orion.viewer.FallbackDialogs.Companion.saveFileByUri
 import universe.constellation.orion.viewer.Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN
 import universe.constellation.orion.viewer.Permissions.hasReadStoragePermission
@@ -36,6 +37,7 @@ import universe.constellation.orion.viewer.selection.SelectionAutomata
 import universe.constellation.orion.viewer.view.FullScene
 import universe.constellation.orion.viewer.view.OrionDrawScene
 import universe.constellation.orion.viewer.view.OrionStatusBarHelper
+import updateGlobalOptionsFromIntent
 import java.io.File
 import java.util.concurrent.Executors
 import kotlin.coroutines.resume
@@ -98,7 +100,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     @SuppressLint("MissingSuperCall")
     public override fun onCreate(savedInstanceState: Bundle?) {
         log("Creating OrionViewerActivity...")
-        updateGlobalOptionsFromIntent(intent)
+        openAsTempTestBook = updateGlobalOptionsFromIntent(intent)
         isNewUI = globalOptions.isNewUI
         orionApplication.viewActivity = this
         globalOptions.FULL_SCREEN.observe(this) { flag ->
@@ -561,6 +563,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         log("onDestroy")
         destroyController()
         orionApplication.destroyMainActivity()
+        if (openAsTempTestBook) {
+            resetSettingInTest(intent)
+        }
     }
 
     private fun saveBookPositionAndRecentFiles() {
@@ -955,39 +960,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         orionApplication.currentBookParameters = null
     }
 
-    private fun updateGlobalOptionsFromIntent(intent: Intent) {
-        if (!intent.hasExtra(GlobalOptions.TEST_FLAG) ||
-            !intent.getBooleanExtra(GlobalOptions.TEST_FLAG, false)) {
-            return
-        }
-
-        if (intent.hasExtra(GlobalOptions.SHOW_TAP_HELP)) {
-            val showTapHelp = intent.getBooleanExtra(GlobalOptions.SHOW_TAP_HELP, false)
-            globalOptions.saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, showTapHelp)
-        }
-
-        if (intent.hasExtra(GlobalOptions.OLD_UI)) {
-            val oldUI = intent.getBooleanExtra(GlobalOptions.OLD_UI, false)
-            globalOptions.saveBooleanProperty(GlobalOptions.OLD_UI, oldUI)
-        }
-
-        if (intent.hasExtra(GlobalOptions.APPLICATION_THEME)) {
-            val theme = intent.getStringExtra(GlobalOptions.APPLICATION_THEME)!!
-            globalOptions.saveStringProperty(GlobalOptions.APPLICATION_THEME, theme)
-        }
-
-        if (intent.hasExtra(GlobalOptions.TEST_SCREEN_WIDTH) && intent.hasExtra(GlobalOptions.TEST_SCREEN_HEIGHT)) {
-            val newWidth =
-                intent.getIntExtra(GlobalOptions.TEST_SCREEN_WIDTH, view.layoutParams.width)
-            val newHeigth =
-                intent.getIntExtra(GlobalOptions.TEST_SCREEN_HEIGHT, view.layoutParams.height)
-            view.layoutParams.width = newWidth
-            view.layoutParams.height = newHeigth
-            view.requestLayout()
-        }
-        openAsTempTestBook = intent.getBooleanExtra(GlobalOptions.OPEN_AS_TEMP_BOOK, false)
-    }
-
     fun showMenu() {
         if (isNewUI) {
             mainMenu.showMenu()
@@ -1124,5 +1096,3 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         const val USER_INTENT = "USER_INTENT"
     }
 }
-
-

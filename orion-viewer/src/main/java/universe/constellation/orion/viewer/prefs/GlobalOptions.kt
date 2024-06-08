@@ -248,9 +248,9 @@ class GlobalOptions(
 
     val SHOW_ACTION_BAR = pref("SHOW_ACTION_BAR", true)
 
-    val LONG_TAP_ACTION = pref("LONG_TAP_ACTION", context.resources.getString(R.string.action_key_select_text_new))
+    val LONG_TAP_ACTION = pref(Companion.LONG_TAP_ACTION, context.resources.getString(R.string.action_key_select_text_new))
 
-    val DOUBLE_TAP_ACTION = pref("DOUBLE_TAP_ACTION", context.resources.getString(R.string.action_key_select_word_and_translate_new))
+    val DOUBLE_TAP_ACTION = pref(Companion.DOUBLE_TAP_ACTION, context.resources.getString(R.string.action_key_select_word_and_translate_new))
 
     fun <T> subscribe(pref: Preference<T>) {
         registeredPreferences.put(pref.key, pref)?.also {
@@ -276,6 +276,10 @@ class GlobalOptions(
         const val DRAW_OFF_PAGE: String = "DRAW_OFF_PAGE"
 
         const val SHOW_ACTION_BAR: String = "SHOW_ACTION_BAR"
+
+        const val DOUBLE_TAP_ACTION: String = "DOUBLE_TAP_ACTION"
+
+        const val LONG_TAP_ACTION: String = "LONG_TAP_ACTION"
 
         const val SHOW_STATUS_BAR: String = "SHOW_STATUS_BAR"
 
