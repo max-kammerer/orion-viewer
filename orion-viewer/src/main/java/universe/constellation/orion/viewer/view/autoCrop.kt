@@ -59,13 +59,13 @@ suspend fun CorePageView.getPageInfo(layoutStrategy: SimpleLayoutStrategy): Page
     return pageInfo
 }
 
-private suspend fun CorePageView.fillAutoCropInfo(strategy: SimpleLayoutStrategy, page: PageInfo, cropMode: Int) {
+private suspend fun CorePageView.fillAutoCropInfo(originStrategy: SimpleLayoutStrategy, page: PageInfo, cropMode: Int) {
     if (page.width == 0 || page.height == 0) {
         page.autoCrop = AutoCropMargins(0, 0, 0, 0)
         return
     }
     val strategy = SimpleLayoutStrategy.create()
-    strategy.changeCropMargins(strategy.margins)
+    strategy.changeCropMargins(originStrategy.margins)
     strategy.setViewSceneDimension(cropBitmap.width, cropBitmap.height)
     strategy.changeZoom(-2)
 
