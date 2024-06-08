@@ -16,6 +16,11 @@
 #include "jni.h"
 #include <unistd.h>
 
+static jclass textBuilderClass;
+static jmethodID addWordId;
+static jmethodID newLineId;
+static jmethodID addSpaceId;
+
 extern void orion_updateContrast(unsigned char *, int);
 
 static inline jlong jlong_cast(void *p) {
@@ -102,6 +107,20 @@ void handle_ddjvu_messages_and_wait(JNIEnv *env, ddjvu_context_t *ctx) {
     handle_ddjvu_messages_or_record_error(env, ctx, TRUE, TRUE);
 }
 
+JNIEXPORT JNICALL void JNI_FN(DjvuDocument_initNative)(JNIEnv *env, jclass type) {
+    if (textBuilderClass == NULL) {
+        textBuilderClass = (*env)->FindClass(env, "universe/constellation/orion/viewer/djvu/TextBuilder");
+    }
+    if (addWordId == NULL) {
+        addWordId = (*env)->GetMethodID(env, textBuilderClass, "addWord", "(Ljava/lang/String;IIII)V");
+    }
+    if (newLineId == NULL) {
+        newLineId = (*env)->GetMethodID(env, textBuilderClass, "newLine", "()V");
+    }
+    if (addSpaceId == NULL) {
+        addSpaceId = (*env)->GetMethodID(env, textBuilderClass, "addSpace", "()V");
+    }
+}
 
 JNIEXPORT jlong JNICALL JNI_FN(DjvuDocument_initContext)(JNIEnv *env, jclass type) {
     LOGI("Creating context");
@@ -475,63 +494,58 @@ JNIEXPORT jobjectArray JNICALL JNI_FN(DjvuDocument_getOutline)(JNIEnv *env, jcla
 #endif
 
 //sumatrapdf code
-int extractText(miniexp_t item, Arraylist list, fz_bbox *target) {
+int extractText(JNIEnv* env, miniexp_t item, jobject textBuilder, int height) {
     miniexp_t type = miniexp_car(item);
-
-    if (!miniexp_symbolp(type))
+    if (!miniexp_symbolp(type)) {
         return 0;
-
+    }
     item = miniexp_cdr(item);
 
-    if (!miniexp_numberp(miniexp_car(item))) return 0;
+    if (!miniexp_numberp(miniexp_car(item))) {
+        return 0;
+    }
     int x0 = miniexp_to_int(miniexp_car(item));
     item = miniexp_cdr(item);
-    if (!miniexp_numberp(miniexp_car(item))) return 0;
-    int y0 = miniexp_to_int(miniexp_car(item));
+    if (!miniexp_numberp(miniexp_car(item))) {
+        return 0;
+    }
+    int y1 = height - miniexp_to_int(miniexp_car(item));
     item = miniexp_cdr(item);
-    if (!miniexp_numberp(miniexp_car(item))) return 0;
+    if (!miniexp_numberp(miniexp_car(item))) {
+        return 0;
+    }
     int x1 = miniexp_to_int(miniexp_car(item));
     item = miniexp_cdr(item);
-    if (!miniexp_numberp(miniexp_car(item))) return 0;
-    int y1 = miniexp_to_int(miniexp_car(item));
+    if (!miniexp_numberp(miniexp_car(item))) {
+        return 0;
+    }
+
+    int y0 = height - miniexp_to_int(miniexp_car(item));
     item = miniexp_cdr(item);
-    //RectI rect = RectI::FromXY(x0, y0, x1, y1);
-    fz_bbox rect = {x0, y0, x1, y1};
 
     miniexp_t str = miniexp_car(item);
 
     if (miniexp_stringp(str) && !miniexp_cdr(item)) {
-        fz_bbox inters = fz_intersect_bbox(rect, *target);
-        //LOGI("Start text extraction: rectangle=[%d,%d,%d,%d] %s", rect.x0, rect.y0, rect.x1, rect.y1, content);
-        if (!fz_is_empty_bbox(inters)) {
-            const char *content = miniexp_to_str(str);
+        const char* content = miniexp_to_str(str);
+        if (type != miniexp_symbol("char") && type != miniexp_symbol("word")) {
+            (*env)->CallVoidMethod(env, textBuilder, newLineId);
+        }
 
-            while (*content) {
-                arraylist_add(list, *content++);
-            }
+        if (content) {
+            jstring string = (*env)->NewStringUTF(env, content);
+            (*env)->CallVoidMethod(env, textBuilder, addWordId, string, x0, y0, x1, y1);
+            (*env)->DeleteLocalRef(env, string);
+        }
 
-            //        if (value) {
-            //            size_t len = str::Len(value);
-            //            // TODO: split the rectangle into individual parts per glyph
-            //            for (size_t i = 0; i < len; i++)
-            //                coords.Append(RectI(rect.x, rect.y, rect.dx, rect.dy));
-            //            extracted.AppendAndFree(value);
-            //        }
-            if (miniexp_symbol("word") == type) {
-                arraylist_add(list, ' ');
-                //coords.Append(RectI(rect.x + rect.dx, rect.y, 2, rect.dy));
-            } else if (miniexp_symbol("char") != type) {
-                arraylist_add(list, '\n');
-                //            extracted.Append(lineSep);
-                //            for (size_t i = 0; i < str::Len(lineSep); i++)
-                //                coords.Append(RectI());
-            }
+        if (miniexp_symbol("word") == type) {
+            (*env)->CallVoidMethod(env, textBuilder, addSpaceId);
+            //coords.Append(Rect(rect.x + rect.dx, rect.y, 2, rect.dy));
         }
         item = miniexp_cdr(item);
     }
 
     while (miniexp_consp(str)) {
-        extractText(str, list, target);
+        extractText(env, str, textBuilder, height);
         item = miniexp_cdr(item);
         str = miniexp_car(item);
     }
@@ -540,8 +554,9 @@ int extractText(miniexp_t item, Arraylist list, fz_bbox *target) {
 }
 
 
-JNIEXPORT jstring JNICALL JNI_FN(DjvuDocument_getText)(JNIEnv *env, jclass clazz, jlong contextl, jlong docl, jint pageNumber,
-                                          int startX, jint startY, jint width, jint height) {
+JNIEXPORT jstring JNICALL
+JNI_FN(DjvuDocument_getText)(JNIEnv *env, jclass clazz, jlong contextl, jlong docl, jint pageNumber,
+                             jobject textBuilder) {
     ddjvu_context_t *context = (ddjvu_context_t *) contextl;
     ddjvu_document_t *doc = (ddjvu_document_t *) docl;
 
@@ -565,29 +580,8 @@ JNIEXPORT jstring JNICALL JNI_FN(DjvuDocument_getText)(JNIEnv *env, jclass clazz
         return NULL;
     }
 
-    LOGI("Extraction rectangle=[%d,%d,%d,%d]", startX, startY, width, height);
-
-    Arraylist values = arraylist_create();
-
-    int w = info.width;
-    int h = info.height;
-    fz_bbox target = {startX, h - startY - height, startX + width, h - startY};
-    LOGI("Extraction irectangle=[%d,%d,%d,%d]", target.x0, target.y0, target.x1, target.y1);
-
-    extractText(pagetext, values, &target);
-
-    arraylist_add(values, 0);
-
-    char *data = arraylist_getData(values);
-    LOGI("Data: %s", data);
-#ifdef ORION_FOR_ANDROID
-    jstring result = (*env)->NewStringUTF(env, data);
-    arraylist_free(values);
-
-    return result;
-#else
-    return data;
-#endif
+    extractText(env, pagetext, textBuilder, info.height);
+    return textBuilder;
 }
 
 static int qMax(int a, int b) {

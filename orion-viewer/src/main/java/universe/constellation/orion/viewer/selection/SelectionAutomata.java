@@ -104,7 +104,7 @@ public class SelectionAutomata extends DialogOverView {
                 sb.append(text.getValue());
                 first = false;
             }
-            if (isSingleWord) {
+            if (isSingleWord && text != null) {
                 RectF originRect = text.getRect();
                 RectF sceneRect = selection.getPageView().getSceneRect(originRect);
                 originSelection = new Rect((int) sceneRect.left, (int) sceneRect.top, (int) sceneRect.right, (int) sceneRect.bottom);

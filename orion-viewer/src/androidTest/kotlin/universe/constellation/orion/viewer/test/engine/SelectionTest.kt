@@ -24,8 +24,8 @@ class SelectionTest(
             return listOf(
                     arrayOf(BookDescription.SICP, 12, Rect(242, 172, 242 + 140, 172 + 8), false, "These programs"),
                     arrayOf(BookDescription.SICP, 12, Rect(250, 176, 250 + 0, 176 + 0), true, "These"),
-                    arrayOf(BookDescription.ALICE, 6, Rect(1288, 517, 1288 + 115, 517 + 50), false, "tunnel "),
-                    arrayOf(BookDescription.ALICE, 6, Rect(518, 556, 518 + 0, 556 + 0), true, "The ")
+                    arrayOf(BookDescription.ALICE, 6, Rect(1288, 517, 1288 + 115, 517 + 50), false, "tunnel"),
+                    arrayOf(BookDescription.ALICE, 6, Rect(518, 556, 518 + 0, 556 + 0), true, "The")
             )
         }
     }

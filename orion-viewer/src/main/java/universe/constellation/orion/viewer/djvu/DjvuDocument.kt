@@ -8,6 +8,7 @@ import universe.constellation.orion.viewer.document.AbstractPage
 import universe.constellation.orion.viewer.document.TextAndSelection
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.errorInDebugOr
+import universe.constellation.orion.viewer.geometry.Rect
 import universe.constellation.orion.viewer.geometry.RectF
 import universe.constellation.orion.viewer.pdf.DocInfo
 import universe.constellation.orion.viewer.timing
@@ -18,6 +19,9 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
     inner class DjvuPage(pageNum: Int) : AbstractPage(pageNum) {
         @Volatile
         private var pagePointer: Long = 0
+
+        @Volatile
+        private var textBuilder: TextBuilder? = null
 
         override fun readPageSize(): PageSize? {
             if (docPointer == 0L) return errorInDebugOr("Document for $pageNum is null") { null }
@@ -82,7 +86,75 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
             height: Int,
             singleWord: Boolean
         ): TextAndSelection? {
-            return getText(pageNum, absoluteX, absoluteY, width, height, singleWord)
+            if (textBuilder == null) {
+                textBuilder = Companion.getText(contextPointer, docPointer, pageNum, TextBuilder()) ?: TextBuilder.NULL
+            }
+            val builder = textBuilder
+            if (builder == null || builder == TextBuilder.NULL) {
+                return null
+            }
+            return getText(builder, absoluteX, absoluteY, width, height, singleWord)
+        }
+
+
+        private fun getText(builder: TextBuilder, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): TextAndSelection? {
+            val opRect = android.graphics.RectF()
+            val lns: java.util.ArrayList<List<TextWord>> = arrayListOf()
+            val selectionRegion = android.graphics.RectF(
+                absoluteX.toFloat(),
+                absoluteY.toFloat(),
+                (absoluteX + width).toFloat(),
+                (absoluteY + height).toFloat()
+            )
+
+            for (line in builder.lines) {
+                val wordsInLine = arrayListOf<TextWord>()
+                for (word in line) {
+                    if (word.isNotEmpty()) {
+                        processWord(word, wordsInLine, selectionRegion, singleWord, opRect)
+                    }
+                }
+
+                if (wordsInLine.size > 0) {
+                    lns.add(wordsInLine)
+                }
+            }
+
+            val result = TextWord()
+            lns.fold(result) { acc, line ->
+                if (acc.isNotEmpty()) acc.add(" ", Rect())
+
+                val lineRes = TextWord()
+                val res = line.fold(lineRes) { accLine, tc ->
+                    if (accLine.isNotEmpty()) accLine.add(" ", Rect())
+                    accLine.add(tc.toString(), tc.rect)
+                    accLine
+                }
+                acc.add(res.toString(), res.rect)
+                acc
+            }
+
+            return if (result.isNotEmpty()) {
+                TextAndSelection(result.toString(), RectF(result.rect));
+            } else {
+                null
+            }
+        }
+
+        private fun processWord(
+            word: TextWord,
+            words: java.util.ArrayList<TextWord>,
+            region: android.graphics.RectF,
+            isSingleWord: Boolean,
+            opRect: android.graphics.RectF
+        ) {
+            val wordSquare5: Float = word.width() * word.height() / 5f
+            opRect.set(word.rect)
+            if (opRect.intersect(region)) {
+                if (isSingleWord || opRect.width() * opRect.height() > wordSquare5) {
+                    words.add(word)
+                }
+            }
         }
 
         override fun destroyInternal() {
@@ -180,17 +252,18 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
         return rects[position]
     }
 
-    fun getText(pageNum: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean) =
-            TextAndSelection(getText(contextPointer, docPointer, pageNum, absoluteX, absoluteY, width, height), RectF())
-
     companion object {
 
         init {
             System.loadLibrary("djvu")
+            initNative()
         }
 
         @JvmStatic @Synchronized
         external fun initContext(): Long
+
+        @JvmStatic @Synchronized
+        external fun initNative()
 
         @JvmStatic @Synchronized
         external fun openFile(filename: String, context: Long, info: DocInfo): Long
@@ -217,7 +290,7 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
         external fun getOutline(doc: Long): Array<OutlineItem>
 
         @JvmStatic @Synchronized
-        external fun getText(context: Long, doc: Long, pageNumber: Int, absoluteX: Int, absoluteY: Int, width: Int, height: Int): String
+        external fun getText(context: Long, doc: Long, pageNumber: Int, textBuilder: TextBuilder): TextBuilder?
 
         @JvmStatic @Synchronized
         external fun releasePage(page: Long)
