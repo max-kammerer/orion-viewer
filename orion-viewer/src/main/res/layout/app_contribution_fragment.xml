@@ -66,6 +66,7 @@
             android:textSize="@dimen/text_size_large"
             android:paddingTop="20dp"
             android:text="@string/contribution_survey"
+            app:drawableLeftCompat="@drawable/priority"
             android:visibility="gone"/>
 
     </LinearLayout>
