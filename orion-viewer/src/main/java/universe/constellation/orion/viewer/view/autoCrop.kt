@@ -3,6 +3,7 @@ package universe.constellation.orion.viewer.view
 
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import universe.constellation.orion.viewer.Bitmap
 import universe.constellation.orion.viewer.PageInfo
 import universe.constellation.orion.viewer.PageSize
@@ -98,9 +99,8 @@ private suspend fun CorePageView.fillAutoCropInfo(originStrategy: SimpleLayoutSt
 
     val leftTopCorner = strategy.convertToPoint(curPos)
 
-    mutex.lock()
-    val margins = try {
-        this.renderForCrop {
+    val margins = renderForCrop {
+        mutex.withLock {
             timing("Render page for auto crop processing") {
                 //TODO
                 this.page.renderPage(
@@ -131,9 +131,8 @@ private suspend fun CorePageView.fillAutoCropInfo(originStrategy: SimpleLayoutSt
                 findMargins(ArrayImage(newWidth, newHeight, bitmapArray))
             }
         }
-    } finally {
-        mutex.unlock()
     }
+
 
     val marginsWithPadding = pad(margins, newWidth, newHeight, controller.cropPadding)
 
