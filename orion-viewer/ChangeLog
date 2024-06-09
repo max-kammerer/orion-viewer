@@ -1,3 +1,7 @@
+===== 0.94.0 (Jun 09, 2024) =====
+* Added options to define logic for long and double clicks: text selection, word translation, tap zones
+* Default behavior change: long tap now performs text selection
+
 ===== 0.93.4 (Jun 02, 2024) =====
 * Updated option dialogs
 * Added contribution info
