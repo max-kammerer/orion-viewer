@@ -3,6 +3,7 @@ package universe.constellation.orion.viewer.test.espresso.contenturi
 import android.os.Build
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.launchActivity
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
@@ -15,7 +16,7 @@ import org.junit.Test
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.test.framework.BaseInstrumentationTest
-import universe.constellation.orion.viewer.test.framework.createContentIntentWithGenerated
+import universe.constellation.orion.viewer.test.framework.createContentIntentWithGeneratedFile
 import universe.constellation.orion.viewer.test.framework.onActivityRes
 import java.io.File
 
@@ -26,9 +27,13 @@ class AccessToPrivateFileSecondTimeTest : BaseInstrumentationTest() {
     private val fileName = "secondTime.$pageCount.pdf"
 
     @Test
-    fun openViaTemporaryFile() {
+    fun openViaTemporaryTwice() {
+        processEmulatorErrors()
+        Espresso.onIdle()
+
         val firstAttempt =
-            launchActivity<OrionViewerActivity>(createContentIntentWithGenerated(fileName))
+            launchActivity<OrionViewerActivity>(createContentIntentWithGeneratedFile(fileName))
+
         var time = -1L
         firstAttempt.use {
             onTextNotButtonView(R.string.fileopen_open_in_temporary_file).perform(ViewActions.click())
@@ -36,7 +41,7 @@ class AccessToPrivateFileSecondTimeTest : BaseInstrumentationTest() {
             time = getFileModificationTime(it)
         }
 
-        launchActivity<OrionViewerActivity>(createContentIntentWithGenerated(fileName)).use {
+        launchActivity<OrionViewerActivity>(createContentIntentWithGeneratedFile(fileName)).use {
             onView(withId(R.id.view)).check(ViewAssertions.matches(isCompletelyDisplayed()))
             it.checkFileWasOpened()
             val newTime = getFileModificationTime(it)

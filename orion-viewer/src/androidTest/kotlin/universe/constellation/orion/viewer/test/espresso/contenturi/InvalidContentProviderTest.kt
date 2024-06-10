@@ -14,10 +14,10 @@ import org.junit.Ignore
 import org.junit.Test
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.test.framework.BaseTestWithActivity
-import universe.constellation.orion.viewer.test.framework.createContentIntentWithGenerated
+import universe.constellation.orion.viewer.test.framework.createContentIntentWithGeneratedFile
 
 @SdkSuppress(minSdkVersion = Build.VERSION_CODES.KITKAT)
-class InvalidContentProviderTest : BaseTestWithActivity(createContentIntentWithGenerated("secondTime.error.pdf")) {
+class InvalidContentProviderTest : BaseTestWithActivity(createContentIntentWithGeneratedFile("secondTime.error.pdf")) {
 
     @Test
     fun openViaTemporaryFile() {
@@ -31,7 +31,7 @@ class InvalidContentProviderTest : BaseTestWithActivity(createContentIntentWithG
 
 @Ignore
 @SdkSuppress(minSdkVersion = Build.VERSION_CODES.KITKAT)
-class InvalidContentProvider2Test : BaseTestWithActivity(createContentIntentWithGenerated("secondTime.error2.pdf")) {
+class InvalidContentProvider2Test : BaseTestWithActivity(createContentIntentWithGeneratedFile("secondTime.error2.pdf")) {
 
     @Test
     fun openViaTemporaryFile() {

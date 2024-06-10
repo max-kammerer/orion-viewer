@@ -25,7 +25,7 @@ fun createTestViewerIntent(body: Intent.() -> Unit): Intent {
     }
 }
 
-fun createContentIntentWithGenerated(fileName: String): Intent {
+fun createContentIntentWithGeneratedFile(fileName: String): Intent {
     return createTestViewerIntent {
         val uri = Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT)
             .authority(universe.constellation.orion.viewer.test.BuildConfig.APPLICATION_ID + ".fileprovider")

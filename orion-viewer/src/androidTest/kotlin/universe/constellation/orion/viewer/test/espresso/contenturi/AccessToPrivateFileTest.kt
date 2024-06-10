@@ -16,7 +16,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.filters.SdkSuppress
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
-import org.hamcrest.CoreMatchers
 import org.hamcrest.core.AllOf
 import org.hamcrest.core.IsNot
 import org.junit.After
@@ -30,7 +29,7 @@ import universe.constellation.orion.viewer.test.framework.BaseTestWithActivity
 import universe.constellation.orion.viewer.test.framework.LONG_TIMEOUT
 import universe.constellation.orion.viewer.test.framework.SHORT_TIMEOUT
 import universe.constellation.orion.viewer.test.framework.appContext
-import universe.constellation.orion.viewer.test.framework.createContentIntentWithGenerated
+import universe.constellation.orion.viewer.test.framework.createContentIntentWithGeneratedFile
 import universe.constellation.orion.viewer.test.framework.doFail
 import universe.constellation.orion.viewer.test.framework.onActivity
 
@@ -45,7 +44,7 @@ fun onTextNotButtonView(stringId: Int): ViewInteraction {
 @SdkSuppress(minSdkVersion = KITKAT)
 @RunWith(Parameterized::class)
 class AccessToPrivateFileTest(private val simpleFileName: String) :
-    BaseTestWithActivity(createContentIntentWithGenerated(simpleFileName)) {
+    BaseTestWithActivity(createContentIntentWithGeneratedFile(simpleFileName)) {
 
     companion object {
         @JvmStatic

@@ -16,12 +16,12 @@ import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.cacheContentFolder
 import universe.constellation.orion.viewer.test.framework.BaseTestWithActivity
 import universe.constellation.orion.viewer.test.framework.appContext
-import universe.constellation.orion.viewer.test.framework.createContentIntentWithGenerated
+import universe.constellation.orion.viewer.test.framework.createContentIntentWithGeneratedFile
 import universe.constellation.orion.viewer.test.framework.onActivity
 
 @SdkSuppress(minSdkVersion = Build.VERSION_CODES.KITKAT)
 class EmptyFileTest :
-    BaseTestWithActivity(createContentIntentWithGenerated("empty.0.pdf")) {
+    BaseTestWithActivity(createContentIntentWithGeneratedFile("empty.0.pdf")) {
 
     @After
     fun clean() {

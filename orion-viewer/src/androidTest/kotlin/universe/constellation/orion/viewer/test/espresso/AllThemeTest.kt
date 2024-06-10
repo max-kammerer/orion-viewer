@@ -1,6 +1,7 @@
 package universe.constellation.orion.viewer.test.espresso
 
 import androidx.test.core.app.launchActivity
+import androidx.test.espresso.Espresso
 import org.junit.Assert
 import org.junit.Test
 import universe.constellation.orion.viewer.OrionViewerActivity
@@ -22,6 +23,8 @@ class AllThemeTest : BaseInstrumentationTest() {
             val activity = launchActivity<OrionViewerActivity>(BookDescription.SICP.toOpenIntent {
                 this.putExtra(GlobalOptions.APPLICATION_THEME, theme)
             })
+            Espresso.onIdle()
+
             try {
                 with(this) {
                     activity.openCropDialog()
