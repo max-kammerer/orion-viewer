@@ -22,10 +22,14 @@ class AllThemeTest : BaseInstrumentationTest() {
             val activity = launchActivity<OrionViewerActivity>(BookDescription.SICP.toOpenIntent {
                 this.putExtra(GlobalOptions.APPLICATION_THEME, theme)
             })
-            with(this) {
-                activity.openCropDialog()
-                closeDialog()
-                //TODO check colors
+            try {
+                with(this) {
+                    activity.openCropDialog()
+                    closeDialog()
+                    //TODO check colors
+                }
+            } finally {
+                activity.close()
             }
         }
     }

@@ -155,7 +155,7 @@ abstract class OrionBaseActivity(val viewerType: Int = Device.DEFAULT_ACTIVITY) 
     }
 
     fun changeOrientation(orientationId: Int) {
-        println("Display orientation " + requestedOrientation + " screenOrientation " + window.attributes.screenOrientation)
+        log("Display orientation: lastRequested=" + requestedOrientation + " screenOrientation=" + window.attributes.screenOrientation + " newOrientation=$orientationId")
         if (requestedOrientation != orientationId) {
             requestedOrientation = orientationId
         }

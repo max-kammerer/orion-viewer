@@ -42,9 +42,7 @@ class BenchmarkTest : BaseTest() {
         }
     }
 
-    companion object {
-        private val BITMAP_CACHE = BitmapCache(20)
-    }
+    private val BITMAP_CACHE = BitmapCache(20)
 
     private val bitmap = Bitmap.createBitmap(WIDTH, HEIGHT, android.graphics.Bitmap.Config.ARGB_8888)
     private val bitmapFull = FlexibleBitmap(WIDTH, HEIGHT, WIDTH, HEIGHT)

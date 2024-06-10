@@ -17,13 +17,9 @@ class RotationTest : BaseViewerActivityTest(BookDescription.SICP) {
 
     @Test
     fun testRotation() {
-        lateinit var view: OrionDrawScene
-        onActivity {
-            view = it.view
+        val (width, height) = onActivity {
+            it.view.sceneWidth to it.view.sceneHeight
         }
-
-        val width = view.sceneWidth
-        val height = view.sceneHeight
 
         checkTrue("Width is empty", width != 0)
         checkTrue("Height is empty", height != 0)
@@ -42,8 +38,10 @@ class RotationTest : BaseViewerActivityTest(BookDescription.SICP) {
             }
 
             checkNotEquals("Orientation not changed: $orientation", orientation, newOrientation)
-            val width2 = view.sceneWidth
-            val height2 = view.sceneHeight
+
+            val (width2, height2) = onActivity {
+                it.view.sceneWidth to it.view.sceneHeight
+            }
             checkTrue("w1: $width, w2: $width2, original orientation: $orientation", width != width2)
             checkTrue("h1: $height, h2: $$height2, original orientation: $orientation", height != height2)
         } finally {

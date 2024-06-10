@@ -30,13 +30,13 @@ class FlexibleBitmapTest(bookDescription: BookDescription) : BookTest(bookDescri
         fun testData(): List<BookDescription> {
             return BookDescription.testData()
         }
-
-        private val BITMAP_CACHE = BitmapCache(20)
-        private val PAINTS = ColorStuff()
-
-        private val screenRect = Rect(0, 0, 600, 800)
-        private val pageRect = Rect(0, 0, 600, 800)
     }
+
+    private val BITMAP_CACHE = BitmapCache(20)
+    private val PAINTS = ColorStuff()
+
+    private val screenRect = Rect(0, 0, 600, 800)
+    private val pageRect = Rect(0, 0, 600, 800)
 
     private val flexibleBitmapPart: FlexibleBitmap = FlexibleBitmap(pageRect, screenRect.centerX(), screenRect.centerY())
     private val flexibleBitmapFull: FlexibleBitmap = FlexibleBitmap(pageRect, screenRect.width(), screenRect.height())

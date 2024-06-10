@@ -35,7 +35,7 @@ class DjvuExceptionTest : BaseTest() {
         } catch (e: Exception) {
             e.printStackTrace()
             if (isAtLeastLollipop()) {
-                assertEquals(e.message, "Unexpected End Of File.")
+                assertEquals("Unexpected End Of File.", e.message)
             }
             else {
                 assertTrue(e.message, e.message!!.contains("EOF"))
