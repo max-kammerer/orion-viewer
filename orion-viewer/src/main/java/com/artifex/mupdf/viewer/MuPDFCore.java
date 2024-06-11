@@ -16,10 +16,14 @@ import com.artifex.mupdf.fitz.Rect;
 import com.artifex.mupdf.fitz.StructuredText;
 import com.artifex.mupdf.fitz.android.AndroidDrawDevice;
 
+import kotlin.jvm.Volatile;
+
 public class MuPDFCore
 {
 	public Document doc;
 	private Outline[] outline;
+
+	@Volatile
 	private int pageCount = -1;
 	private int currentPage;
 	private Page page;
@@ -231,7 +235,11 @@ public class MuPDFCore
 	}
 
 	public synchronized boolean authenticatePassword(String password) {
-		return doc.authenticatePassword(password);
+		boolean res = doc.authenticatePassword(password);
+		if (res) {
+			pageCount = doc.countPages();
+		}
+		return res;
 	}
 
 	/**

@@ -28,6 +28,7 @@ import universe.constellation.orion.viewer.device.Device
 import universe.constellation.orion.viewer.dialog.SearchDialog
 import universe.constellation.orion.viewer.dialog.TapHelpDialog
 import universe.constellation.orion.viewer.dialog.create
+import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import universe.constellation.orion.viewer.prefs.initalizer
@@ -280,6 +281,14 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             }
 
             try {
+                if (!askPassword(newDocument)) {
+                    showErrorOrFallbackPanel(
+                        getString(R.string.crash_on_book_opening_encrypted),
+                        intent
+                    )
+                    return@launch
+                }
+
                 if (newDocument.pageCount == 0) {
                     showErrorAndErrorPanel(
                         getString(R.string.crash_on_book_opening_title),
@@ -297,9 +306,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 val layoutStrategy = SimpleLayoutStrategy.create()
                 val controller1 = Controller(this@OrionViewerActivity, newDocument, layoutStrategy, rootJob, context = executor)
 
-                if (!askPassword(controller1)) {
-                    return@launch
-                }
 
                 val lastPageInfo1 = loadBookParameters(rootJob, file)
                 log("Read LastPageInfo for page ${lastPageInfo1.pageNumber}")
@@ -891,13 +897,13 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             }
     }
 
-    private suspend fun askPassword(controller: Controller): Boolean {
+    private suspend fun askPassword(controller: Document): Boolean {
         if (controller.needPassword()) {
             val view = layoutInflater.inflate(R.layout.password, null)
             val builder = createThemedAlertBuilder()
 
             builder.setView(view)
-                .setNegativeButton(R.string.string_cancel) { dialog, _ -> dialog.dismiss() }
+                .setNegativeButton(R.string.string_cancel) { dialog, _ -> dialog.cancel() }
                 .setPositiveButton(R.string.string_apply) { _, _ -> }
 
 
@@ -917,6 +923,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                         }
                     }
                 }
+
                 dialog.setOnCancelListener {
                     continuation.resume(false)
                 }

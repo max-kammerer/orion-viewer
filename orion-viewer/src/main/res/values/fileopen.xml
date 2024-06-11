@@ -24,6 +24,8 @@
     <string name="crash_on_book_opening_message_header">Error during file \`%1$s\` opening. Please report an issue:</string>
     <string name="crash_on_book_opening_message_header_panel">Error during file \`%1$s\` opening:</string>
 
+    <string name="crash_on_book_opening_encrypted">Encrypted document</string>
+
     <string name="string_send">Send…</string>
     <string name="send_report_header">[Please provide additional details (steps to reproduce issue)]</string>
 
