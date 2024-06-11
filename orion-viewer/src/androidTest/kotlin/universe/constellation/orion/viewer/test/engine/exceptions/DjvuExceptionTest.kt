@@ -1,17 +1,28 @@
 package universe.constellation.orion.viewer.test.engine.exceptions
 
+import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
+import org.junit.BeforeClass
 import org.junit.Ignore
 import org.junit.Test
 import universe.constellation.orion.viewer.android.isAtLeastLollipop
 import universe.constellation.orion.viewer.djvu.DjvuDocument
+import universe.constellation.orion.viewer.prefs.OrionApplication
 import universe.constellation.orion.viewer.test.framework.BaseTest
 import universe.constellation.orion.viewer.test.framework.BookDescription
 import java.io.File
 
 class DjvuExceptionTest : BaseTest() {
+
+    companion object {
+        @BeforeClass
+        @JvmStatic
+        fun init() {
+            OrionApplication.initDjvuResources(InstrumentationRegistry.getInstrumentation().targetContext)
+        }
+    }
 
     @Test
     fun testFailOnNonExistingFile() {

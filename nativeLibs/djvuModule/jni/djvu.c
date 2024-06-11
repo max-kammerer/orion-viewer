@@ -82,7 +82,7 @@ void resolveErrorIfPossibleStub(JNIEnv *env, ddjvu_context_t *ctx, ddjvu_status_
 
 }
 
-void resolveErrorIfPossible(JNIEnv *env, ddjvu_context_t *ctx, ddjvu_status_t status, int allowLongWait) {
+void resolveErrorIfPossible(JNIEnv *env, ddjvu_context_t *ctx, ddjvu_status_t status) {
     int ex = exceptionStatus(env);
     if (status == DDJVU_JOB_OK || status == DDJVU_JOB_STOPPED) {
         if (ex) {
@@ -93,11 +93,7 @@ void resolveErrorIfPossible(JNIEnv *env, ddjvu_context_t *ctx, ddjvu_status_t st
             for (int i = 0; i < 5; i++) {
                 //Don't call blocking function as error can be absent
                 if (handle_error_if_present(env, ctx)) break;
-                if (allowLongWait) {
-                    usleep(3);
-                } else {
-                    usleep(1);
-                }
+                usleep(1);
             }
         }
     }
@@ -152,7 +148,7 @@ JNI_FN(DjvuDocument_openFile)(JNIEnv *env, jclass type, jstring jfileName, jlong
         }
     }
 
-    resolveErrorIfPossible(env, context, status, TRUE);
+    resolveErrorIfPossible(env, context, status);
     if (status == DDJVU_JOB_OK) {
         int pageNum = ddjvu_document_get_pagenum(doc);
         LOGI("Doc opened successfully: %p, pagecount = %i", doc, pageNum);

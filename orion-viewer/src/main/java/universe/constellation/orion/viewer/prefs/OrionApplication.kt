@@ -118,14 +118,7 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
         super<Application>.onCreate()
         setLanguage(options.appLanguage)
         logOrionAndDeviceInfo()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val fileToCopy = File(filesDir, "djvuConf")
-            val envPath = File(fileToCopy, "osi").absolutePath
-            CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
-                copyResIfNotExists(assets, "osi", fileToCopy)
-            }
-            Os.setenv("DJVU_CONFIG_DIR", envPath, true)
-        }
+        initDjvuResources(this)
     }
 
     fun setLanguage(langCode: String) {
@@ -306,5 +299,16 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
 
         @JvmField
         val version: String = Build.VERSION.INCREMENTAL
+
+        fun initDjvuResources(orionApplication: Context) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val fileToCopy = File(orionApplication.filesDir, "djvuConf")
+                val envPath = File(fileToCopy, "osi").absolutePath
+                CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
+                    copyResIfNotExists(orionApplication.assets, "osi", fileToCopy)
+                }
+                Os.setenv("DJVU_CONFIG_DIR", envPath, true)
+            }
+        }
     }
 }

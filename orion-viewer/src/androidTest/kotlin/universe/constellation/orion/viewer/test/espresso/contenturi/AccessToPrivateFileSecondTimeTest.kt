@@ -1,6 +1,7 @@
 package universe.constellation.orion.viewer.test.espresso.contenturi
 
 import android.os.Build
+import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.launchActivity
 import androidx.test.espresso.Espresso
@@ -13,6 +14,7 @@ import androidx.test.filters.SdkSuppress
 import org.junit.Assert
 import org.junit.Ignore
 import org.junit.Test
+import universe.constellation.orion.viewer.AndroidLogger.log
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.test.framework.BaseInstrumentationTest
@@ -28,11 +30,11 @@ class AccessToPrivateFileSecondTimeTest : BaseInstrumentationTest() {
 
     @Test
     fun openViaTemporaryTwice() {
-        processEmulatorErrors()
-        Espresso.onIdle()
-
         val firstAttempt =
             launchActivity<OrionViewerActivity>(createContentIntentWithGeneratedFile(fileName))
+
+        log("State: " + firstAttempt.state)
+        check(firstAttempt.state == Lifecycle.State.RESUMED || firstAttempt.state == Lifecycle.State.STARTED)
 
         var time = -1L
         firstAttempt.use {
