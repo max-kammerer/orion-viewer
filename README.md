@@ -35,7 +35,7 @@ Orion Viewer doesn't collect any personal information (and doesn't pass it to an
 
 ## Contribution
 
-Project is open to contributions, ideas and discussions
+Contributions are always welcome! Feel free to open any issue, send pull request or suggest any idea
 
 ### Translations
 
