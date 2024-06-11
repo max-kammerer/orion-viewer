@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Translated by Bruce Li--><resources>
+<resources>
     <string name="navigation">浏览顺序</string>
     <string name="crop_left">左</string>
     <string name="enable_even_crop">偶数页面分别裁边</string>
