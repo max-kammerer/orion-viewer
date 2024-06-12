@@ -1,3 +1,7 @@
+===== 0.94.1 (Jun 12, 2024) =====
+* Fixed problem with encrypted file processing
+* Fixed problem with search result highlighting
+
 ===== 0.94.0 (Jun 09, 2024) =====
 * Added options to define logic for long and double clicks: text selection, word translation, tap zones
 * Default behavior change: long tap now performs text selection
