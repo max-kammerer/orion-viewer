@@ -156,7 +156,10 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         isTapNavigation: Boolean = false
     ) {
         val distanceY2 = if (isTapNavigation) distanceY else clampLimits(distanceY)
-        if (distanceY2 == 0f && distanceX == 0f) return
+        if (distanceY2 == 0f && distanceX == 0f) {
+            scene.invalidate()
+            return
+        }
 
         activePages.forEach {
             val layoutData = it.layoutData
