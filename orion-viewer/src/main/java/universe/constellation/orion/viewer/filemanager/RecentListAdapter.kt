@@ -32,6 +32,8 @@ import java.util.Locale
 class RecentListAdapter(context: Context, val globalOptions: GlobalOptions) :
     ArrayAdapter<GlobalOptions.RecentEntry>(context, R.layout.recent_entry, R.id.fileName, globalOptions.recentFiles) {
 
+    var showTrashButton = false
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val newConvertView = super.getView(position, convertView, parent)
         getItem(position)?.let { entry ->
@@ -41,14 +43,15 @@ class RecentListAdapter(context: Context, val globalOptions: GlobalOptions) :
             val iconView = newConvertView.findViewById<ImageView>(R.id.fileImage)!!
             iconView.setImageResource(icon)
 
-            val fileName = newConvertView.findViewById<TextView>(R.id.fileName)!!
-            fileName.text = name
-
             val delete = newConvertView.findViewById<ImageView>(R.id.trash)
-            delete.setOnClickListener {it
+            delete.setOnClickListener {
                 this.remove(entry)
                 globalOptions.removeRecentEntry(entry)
             }
+            delete.visibility = if (showTrashButton) View.VISIBLE else View.GONE
+
+            val fileName = newConvertView.findViewById<TextView>(R.id.fileName)!!
+            fileName.text = name
         }
 
         return newConvertView

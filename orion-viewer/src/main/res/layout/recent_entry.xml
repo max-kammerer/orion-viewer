@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:ellipsize="end"
-        android:paddingLeft="5dp"
+        android:layout_marginLeft="5dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ImageView
@@ -31,6 +31,7 @@
         android:layout_height="32dp"
         android:layout_weight="0"
         android:gravity="right"
-        android:paddingLeft="5dp"
+        android:layout_marginLeft="5dp"
+        android:visibility="gone"
         app:srcCompat="@drawable/trash" />
 </LinearLayout>
