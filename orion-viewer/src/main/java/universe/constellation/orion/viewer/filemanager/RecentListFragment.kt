@@ -35,7 +35,7 @@ class RecentListFragment : ListFragment() {
     private fun updateRecentListAdapter() {
         listAdapter = RecentListAdapter(
             requireActivity(),
-            (requireActivity() as OrionFileManagerActivityBase).globalOptions.recentFiles
+            (requireActivity() as OrionFileManagerActivityBase).globalOptions
         )
     }
 

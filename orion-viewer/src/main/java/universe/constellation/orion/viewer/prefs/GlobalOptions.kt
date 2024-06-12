@@ -113,15 +113,7 @@ class GlobalOptions(
         get() = getNullableStringProperty(OrionFileManagerActivity.LAST_OPENED_DIRECTORY, null)
 
     fun addRecentEntry(newEntry: RecentEntry) {
-        val iterator = recentFiles.iterator()
-        while (iterator.hasNext()) {
-            val recentEntry = iterator.next()
-            if (recentEntry.path == newEntry.path) {
-                iterator.remove()
-                break
-            }
-        }
-
+        recentFiles.remove(newEntry)
         recentFiles.add(0, newEntry)
 
         if (recentFiles.size > MAX_RECENT_ENTRIES) {
@@ -129,7 +121,13 @@ class GlobalOptions(
         }
     }
 
-    fun saveRecents() {
+    fun removeRecentEntry(toRemove: RecentEntry) {
+        recentFiles.remove(toRemove)
+        saveRecentFiles()
+    }
+
+    fun saveRecentFiles() {
+        log("Saving recent files...")
         var i = 0
         val editor = prefs.edit()
         val iterator: Iterator<RecentEntry> = recentFiles.iterator()
@@ -141,7 +139,7 @@ class GlobalOptions(
         editor.apply()
     }
 
-    class RecentEntry(val path: String) : Serializable {
+    data class RecentEntry(val path: String) : Serializable {
         val lastPathElement: String
             get() = path.substring(path.lastIndexOf("/") + 1)
 

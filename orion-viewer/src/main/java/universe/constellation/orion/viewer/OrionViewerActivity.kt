@@ -584,7 +584,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         } catch (ex: Exception) {
             log(ex)
         }
-        saveGlobalOptions()
+        globalOptions.saveRecentFiles()
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
@@ -650,12 +650,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 controller!!.drawPrev()
             }
         }
-    }
-
-    private fun saveGlobalOptions() {
-        log("Saving global options...")
-        globalOptions.saveRecents()
-        log("Done!")
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

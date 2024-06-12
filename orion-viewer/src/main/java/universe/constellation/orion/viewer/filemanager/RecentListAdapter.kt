@@ -29,12 +29,13 @@ import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import java.util.Locale
 
-class RecentListAdapter(context: Context, entries: List<GlobalOptions.RecentEntry>) : ArrayAdapter<GlobalOptions.RecentEntry>(context, R.layout.file_entry, R.id.fileName, entries) {
+class RecentListAdapter(context: Context, val globalOptions: GlobalOptions) :
+    ArrayAdapter<GlobalOptions.RecentEntry>(context, R.layout.recent_entry, R.id.fileName, globalOptions.recentFiles) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val newConvertView = super.getView(position, convertView, parent)
-        getItem(position)?.let {
-            val name = it.lastPathElement
+        getItem(position)?.let { entry ->
+            val name = entry.lastPathElement
 
             val icon = getIconByNameExtension(name)
             val iconView = newConvertView.findViewById<ImageView>(R.id.fileImage)!!
@@ -42,6 +43,12 @@ class RecentListAdapter(context: Context, entries: List<GlobalOptions.RecentEntr
 
             val fileName = newConvertView.findViewById<TextView>(R.id.fileName)!!
             fileName.text = name
+
+            val delete = newConvertView.findViewById<ImageView>(R.id.trash)
+            delete.setOnClickListener {it
+                this.remove(entry)
+                globalOptions.removeRecentEntry(entry)
+            }
         }
 
         return newConvertView
