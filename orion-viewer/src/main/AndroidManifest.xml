@@ -29,6 +29,12 @@
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
+    <queries>
+        <intent>
+            <action android:name="android.settings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION" />
+        </intent>
+    </queries>
+
     <supports-screens
             android:xlargeScreens="true"
             android:largeScreens="true"

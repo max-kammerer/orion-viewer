@@ -27,6 +27,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.Settings
+import androidx.annotation.RequiresApi
 import universe.constellation.orion.viewer.android.isAtLeastAndroidM
 import universe.constellation.orion.viewer.android.isAtLeastAndroidR
 import universe.constellation.orion.viewer.android.isAtLeastTiramisu
@@ -43,12 +44,10 @@ object Permissions {
 
     @JvmStatic
     fun Activity.checkAndRequestStorageAccessPermissionOrReadOne(code: Int, doRequest: Boolean = true): Boolean {
-        if (isAtLeastAndroidR() && (isAtLeastTiramisu() || !packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK))) {
+        if (isAtLeastAndroidR() && createManageAppStorageIntent().resolveActivity(packageManager) != null) {
             if (!Environment.isExternalStorageManager()) {
                 if (doRequest) {
-                    val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-                    val uri = Uri.fromParts("package", packageName, null)
-                    intent.data = uri
+                    val intent = createManageAppStorageIntent()
                     startActivityForResult(intent, code)
                 }
             } else {
@@ -60,6 +59,14 @@ object Permissions {
             return true
         }
         return false
+    }
+
+    @RequiresApi(Build.VERSION_CODES.R)
+    private fun Activity.createManageAppStorageIntent(): Intent {
+        val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+        val uri = Uri.fromParts("package", packageName, null)
+        intent.data = uri
+        return intent
     }
 
     @JvmStatic
