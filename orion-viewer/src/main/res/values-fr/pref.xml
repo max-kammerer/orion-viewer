@@ -16,7 +16,6 @@
     <string name="pref_fullScreen">Plein écran</string>
     <string name="pref_showActionBar">Montrer la barre d\'action</string>
     <string name="pref_showActionBar_desc">Montrer la barre d\'action (réinitialisation nécessaire)</string>
-    <string name="pref_showStatusBar">Montrer la barre de statut</string>
     <string name="pref_showOffsetOnStatusBar">Montrer l\'offset de la page dans la barre de statut</string>
     <string name="pref_bookDefaultOrientation">Orientation par défaut</string>
     <string name="pref_bookDefaultZoom">Zoom</string>

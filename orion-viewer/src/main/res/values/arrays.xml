@@ -83,6 +83,12 @@
         <item>ANDROID_LIGHT</item>
   </string-array>
 
+    <string-array name="status_bar_position">
+        <item>TOP</item>
+        <item>BOTTOM</item>
+        <item>INVISIBLE</item>
+    </string-array>
+
     <string-array name="application_theme_desc">
         <item>Default</item>
         <item>Orion Dark</item>

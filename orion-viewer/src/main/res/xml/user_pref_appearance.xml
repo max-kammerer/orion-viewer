@@ -9,20 +9,6 @@
     <PreferenceCategory
         android:title="@string/pref_category_general"
         app:iconSpaceReserved="false">
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="FULL_SCREEN"
-            android:summary="@string/pref_fullScreen"
-            android:title="@string/pref_fullScreen"
-            app:iconSpaceReserved="false" />
-
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="OLD_UI"
-            android:summary="@string/pref_new_ui_summary"
-            android:title="@string/pref_old_ui"
-            app:iconSpaceReserved="false" />
 
         <ListPreference
             android:defaultValue="DEFAULT"
@@ -35,16 +21,25 @@
             app:iconSpaceReserved="false" />
 
         <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="FULL_SCREEN"
+            android:summary="@string/pref_fullScreen"
+            android:title="@string/pref_fullScreen"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="OLD_UI"
+            android:summary="@string/pref_new_ui_summary"
+            android:title="@string/pref_old_ui"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
             android:defaultValue="true"
             android:key="DRAW_OFF_PAGE"
             android:summary="@string/pref_renderOffPage"
             android:title="@string/pref_renderOffPage"
             app:iconSpaceReserved="false" />
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/pref_category_bars"
-        app:iconSpaceReserved="false">
 
         <CheckBoxPreference
             android:defaultValue="true"
@@ -54,16 +49,23 @@
             android:title="@string/pref_showActionBar"
             app:iconSpaceReserved="false" />
 
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="SHOW_STATUS_BAR"
-            android:summary="@string/pref_showStatusBar"
-            android:title="@string/pref_showStatusBar"
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_category_status_bar"
+        app:iconSpaceReserved="false">
+
+        <ListPreference
+            android:defaultValue="TOP"
+            android:key="STATUS_BAR_POSITION"
+            android:summary="@string/pref_value"
+            android:title="@string/pref_statusBarPosition"
+            android:entries="@array/status_bar_position"
+            android:entryValues="@array/status_bar_position"
             app:iconSpaceReserved="false" />
 
         <CheckBoxPreference
             android:defaultValue="true"
-            android:dependency="SHOW_STATUS_BAR"
             android:key="SHOW_OFFSET_ON_STATUS_BAR"
             android:summary="@string/pref_showOffsetOnStatusBar"
             android:title="@string/pref_showOffsetOnStatusBar"
@@ -71,10 +73,16 @@
 
         <CheckBoxPreference
             android:defaultValue="true"
-            android:dependency="SHOW_STATUS_BAR"
             android:key="SHOW_TIME_ON_STATUS_BAR"
             android:summary="@string/pref_showTimeOnStatusBar"
             android:title="@string/pref_showTimeOnStatusBar"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="SHOW_BATTERY_STATUS"
+            android:summary="@string/pref_showBatteryInfo"
+            android:title="@string/pref_showBatteryInfo"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 

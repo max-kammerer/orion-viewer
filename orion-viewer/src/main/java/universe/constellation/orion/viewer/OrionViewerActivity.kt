@@ -122,11 +122,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
         val view = findViewById<OrionDrawScene>(R.id.view)
 
-        fullScene = FullScene(findViewById<View>(R.id.orion_full_scene) as ViewGroup, view, findViewById<View>(R.id.orion_status_bar) as ViewGroup, orionApplication)
-
-        OptionActions.SHOW_STATUS_BAR.doAction(this, !globalOptions.isStatusBarVisible, globalOptions.isStatusBarVisible)
-        OptionActions.SHOW_OFFSET_ON_STATUS_BAR.doAction(this, !globalOptions.isShowOffsetOnStatusBar, globalOptions.isShowOffsetOnStatusBar)
-        OptionActions.SHOW_TIME_ON_STATUS_BAR.doAction(this, !globalOptions.isShowClockOnStatusBar, globalOptions.isShowClockOnStatusBar)
+        fullScene = FullScene(findViewById<View>(R.id.orion_full_scene) as ViewGroup, view, findViewById<View>(R.id.orion_status_bar) as ViewGroup, this)
         fullScene.setDrawOffPage(globalOptions.isDrawOffPage)
 
         newTouchProcessor = NewTouchProcessorWithScale(view, this)
@@ -134,7 +130,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             newTouchProcessor!!.onTouch(event)
         }
         processIntentAndCheckPermission(intent, true)
-
 
         mainMenu = MainMenu(mainMenuLayout!!, this)
     }
@@ -396,6 +391,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             it.onPause()
             saveBookPositionAndRecentFiles()
         }
+        statusBarHelper.onPause(this)
     }
 
     private fun AppCompatDialog.initGoToPageScreen() {
@@ -562,6 +558,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             analytics.action("onResumeOpenedBook")
             controller!!.processPendingEvents()
         }
+        statusBarHelper.onResume(this)
     }
 
     override fun onDestroy() {

@@ -8,6 +8,9 @@
     <string name="pref_category_add_parameters">Дополнительные параметры</string>
     <string name="pref_category_system">Системные параметры</string>
     <string name="pref_category_quick_actions">Быстрые действия</string>
+    <string name="pref_category_status_bar">Панель статуса</string>
+    <string name="pref_statusBarPosition">Положение панели статуса</string>
+    <string name="pref_value">Значение: %s</string>
 
     <!--General Prefs-->
     <string name="pref_appearance">Внешний вид</string>
@@ -18,7 +21,6 @@
     <string name="pref_renderOffPage">Отрисовывать внестраничное пространство</string>
     <string name="pref_showActionBar">Показывать панель действий</string>
     <string name="pref_showActionBar_desc">Показывать панель действий (необходим перезапуск)</string>
-    <string name="pref_showStatusBar">Показывать строку состояния</string>
     <string name="pref_showOffsetOnStatusBar">Показывать смещение на странице</string>
     <string name="pref_showTimeOnStatusBar">Показывать время</string>
     <string name="pref_bookDefaultOrientation">Ориентация книги по умолчанию</string>

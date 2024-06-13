@@ -65,15 +65,7 @@ class GlobalOptions(
 
                 val activity = context.viewActivity
                 if (activity != null) {
-                    if (SHOW_STATUS_BAR == name) {
-                        OptionActions.SHOW_STATUS_BAR.doAction(activity, false, isStatusBarVisible)
-                    } else if (SHOW_OFFSET_ON_STATUS_BAR == name) {
-                        OptionActions.SHOW_OFFSET_ON_STATUS_BAR.doAction(
-                            activity,
-                            false,
-                            isShowOffsetOnStatusBar
-                        )
-                    } else if (SCREEN_OVERLAPPING_HORIZONTAL == name) {
+                    if (SCREEN_OVERLAPPING_HORIZONTAL == name) {
                         OptionActions.SCREEN_OVERLAPPING_HORIZONTAL.doAction(
                             activity,
                             horizontalOverlapping,
@@ -91,12 +83,6 @@ class GlobalOptions(
                         activity.fullScene.setDrawOffPage(isDrawOffPage)
                         //TODO ?
                         activity.view.invalidate()
-                    } else if (OptionActions.SHOW_TIME_ON_STATUS_BAR.key == name) {
-                        OptionActions.SHOW_TIME_ON_STATUS_BAR.doAction(
-                            activity,
-                            !isShowClockOnStatusBar,
-                            isShowClockOnStatusBar
-                        )
                     }
                 }
 
@@ -176,17 +162,8 @@ class GlobalOptions(
     val isShowTapHelp: Boolean
         get() = getBooleanProperty(SHOW_TAP_HELP, true)
 
-    val isStatusBarVisible: Boolean
-        get() = getBooleanProperty(SHOW_STATUS_BAR, true)
-
     val isNewUI: Boolean
         get() = !getBooleanProperty(OLD_UI, false)
-
-    val isShowOffsetOnStatusBar: Boolean
-        get() = getBooleanProperty(SHOW_OFFSET_ON_STATUS_BAR, true)
-
-    val isShowClockOnStatusBar: Boolean
-        get() = getBooleanProperty(SHOW_TIME_ON_STATUS_BAR, true)
 
     fun getActionCode(i: Int, j: Int, isLong: Boolean): Int {
         val key = OrionTapActivity.getKey(i, j, isLong)
@@ -244,11 +221,19 @@ class GlobalOptions(
 
     val FULL_SCREEN= pref("FULL_SCREEN", false)
 
-    val SHOW_ACTION_BAR = pref("SHOW_ACTION_BAR", true)
+    val SHOW_ACTION_BAR = pref(Companion.SHOW_ACTION_BAR, true)
 
     val LONG_TAP_ACTION = pref(Companion.LONG_TAP_ACTION, context.resources.getString(R.string.action_key_select_text_new))
 
     val DOUBLE_TAP_ACTION = pref(Companion.DOUBLE_TAP_ACTION, context.resources.getString(R.string.action_key_select_word_and_translate_new))
+
+    val SHOW_BATTERY_STATUS = pref(Companion.SHOW_BATTERY_STATUS, true)
+
+    val STATUS_BAR_POSITION = pref(Companion.STATUS_BAR_POSITION, "TOP")
+
+    val SHOW_OFFSET_ON_STATUS_BAR = pref(Companion.SHOW_OFFSET_ON_STATUS_BAR, true)
+
+    val SHOW_TIME_ON_STATUS_BAR = pref(Companion.SHOW_TIME_ON_STATUS_BAR, true)
 
     fun <T> subscribe(pref: Preference<T>) {
         registeredPreferences.put(pref.key, pref)?.also {
@@ -277,9 +262,11 @@ class GlobalOptions(
 
         const val DOUBLE_TAP_ACTION: String = "DOUBLE_TAP_ACTION"
 
-        const val LONG_TAP_ACTION: String = "LONG_TAP_ACTION"
+        const val SHOW_BATTERY_STATUS: String = "SHOW_BATTERY_STATUS"
 
-        const val SHOW_STATUS_BAR: String = "SHOW_STATUS_BAR"
+        const val STATUS_BAR_POSITION: String = "STATUS_BAR_POSITION"
+
+        const val LONG_TAP_ACTION: String = "LONG_TAP_ACTION"
 
         const val OLD_UI: String = "OLD_UI"
 

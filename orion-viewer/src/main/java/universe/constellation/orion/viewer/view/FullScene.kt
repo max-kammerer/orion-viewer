@@ -1,13 +1,12 @@
 package universe.constellation.orion.viewer.view
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import universe.constellation.orion.viewer.OrionBookListener
+import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.R
 
 interface Scene  {
@@ -19,9 +18,9 @@ interface Scene  {
 }
 
 @SuppressLint("UseCompatLoadingForDrawables")
-class FullScene(private val scene: ViewGroup, val drawView: OrionDrawScene, statusBar: ViewGroup, val context: Context) : Scene, OrionBookListener {
+class FullScene(private val scene: ViewGroup, val drawView: OrionDrawScene, statusBar: ViewGroup, val context: OrionViewerActivity) : Scene, OrionBookListener {
 
-    val statusBarHelper = OrionStatusBarHelper(statusBar)
+    val statusBarHelper = OrionStatusBarHelper(scene, statusBar, context)
 
     val colorStuff = ColorStuff()
 

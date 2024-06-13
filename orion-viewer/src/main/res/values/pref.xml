@@ -10,7 +10,9 @@
     <string name="pref_category_move">Touch Move</string>
     <string name="pref_category_quick_actions">Quick Actions</string>
     <string name="pref_category_behavior">Default Behavior</string>
-    <string name="pref_category_bars">Action and Status Bars</string>
+    <string name="pref_category_status_bar">Status Bar</string>
+
+    <string name="pref_value">Value: %s</string>
 
     <!--General Prefs-->
     <string name="pref_appearance">Appearance</string>
@@ -21,9 +23,10 @@
     <string name="pref_renderOffPage">Draw off-page space</string>
     <string name="pref_showActionBar">Show Action Bar</string>
     <string name="pref_showActionBar_desc">Show Action Bar (restart needed)</string>
-    <string name="pref_showStatusBar">Show Status Bar</string>
+    <string name="pref_statusBarPosition">Status Bar Position</string>
     <string name="pref_showOffsetOnStatusBar">Show offset on page</string>
     <string name="pref_showTimeOnStatusBar">Show time</string>
+    <string name="pref_showBatteryInfo">Show battery info</string>
     <string name="pref_bookDefaultOrientation">Book default orientation</string>
 
     <string name="pref_bookDefaultZoom">Zoom</string>

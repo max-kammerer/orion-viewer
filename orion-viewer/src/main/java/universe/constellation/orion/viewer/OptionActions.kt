@@ -33,24 +33,6 @@ enum class OptionActions(@JvmField val key: String) {
         }
     },
 
-    SHOW_STATUS_BAR("SHOW_ACTION_BAR") {
-        override fun doAction(activity: OrionViewerActivity, oldValue: Boolean, newValue: Boolean) {
-            activity.statusBarHelper.setShowStatusBar(newValue)
-        }
-    },
-
-    SHOW_OFFSET_ON_STATUS_BAR("SHOW_OFFSET_ON_STATUS_BAR") {
-        override fun doAction(activity: OrionViewerActivity, oldValue: Boolean, newValue: Boolean) {
-            activity.statusBarHelper.setShowOffset(newValue)
-        }
-    },
-
-    SHOW_TIME_ON_STATUS_BAR("SHOW_TIME_ON_STATUS_BAR") {
-        override fun doAction(activity: OrionViewerActivity, oldValue: Boolean, newValue: Boolean) {
-            activity.statusBarHelper.setShowClock(newValue)
-        }
-    },
-
     SCREEN_OVERLAPPING_HORIZONTAL("SCREEN_OVERLAPPING_HORIZONTAL") {
         override fun doAction(activity: OrionViewerActivity, hor: Int, ver: Int) {
             val controller = activity.controller
@@ -86,6 +68,4 @@ enum class OptionActions(@JvmField val key: String) {
 
     }
 
-    open fun doAction(activity: OrionViewerActivity, oldValue: Boolean, newValue: Boolean) {
-    }
 }
