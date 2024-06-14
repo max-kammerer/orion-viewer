@@ -35,7 +35,7 @@ class OrionDrawScene : View {
     internal lateinit var loadingDrawable: Drawable
         private set
 
-    internal lateinit var orionStatusBarHelper: OrionStatusBarHelper
+    internal lateinit var statusBar: StatusBar
         private set
 
     private var dimensionAware: ViewDimensionAware? = null
@@ -71,11 +71,11 @@ class OrionDrawScene : View {
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
-    fun init(colorStuff: ColorStuff, statusBarHelper: OrionStatusBarHelper, loadingDrawable: Drawable) {
+    fun init(colorStuff: ColorStuff, statusBarHelper: StatusBar, loadingDrawable: Drawable) {
         this.stuff = colorStuff
         defaultPaint = colorStuff.backgroundPaint
         borderPaint = colorStuff.borderPaint
-        this.orionStatusBarHelper = statusBarHelper
+        this.statusBar = statusBarHelper
         this.loadingDrawable = loadingDrawable
         inited = true
     }

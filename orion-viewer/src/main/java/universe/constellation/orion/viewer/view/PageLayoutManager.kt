@@ -389,7 +389,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         it.draw(canvas, scene)
         if (isFirst) {
             val visibleRect = it.visibleRect()
-            scene.orionStatusBarHelper.onPageUpdate(
+            scene.statusBar.onPageUpdate(
                 it.pageNum,
                 visibleRect?.left ?: 0,
                 visibleRect?.top ?: 0

@@ -37,7 +37,7 @@ import universe.constellation.orion.viewer.selection.NewTouchProcessorWithScale
 import universe.constellation.orion.viewer.selection.SelectionAutomata
 import universe.constellation.orion.viewer.view.FullScene
 import universe.constellation.orion.viewer.view.OrionDrawScene
-import universe.constellation.orion.viewer.view.OrionStatusBarHelper
+import universe.constellation.orion.viewer.view.StatusBar
 import updateGlobalOptionsFromIntent
 import java.io.File
 import java.util.concurrent.Executors
@@ -75,7 +75,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     val view: OrionDrawScene
         get() = fullScene.drawView
 
-    val statusBarHelper: OrionStatusBarHelper
+    private val statusBarHelper: StatusBar
         get() = fullScene.statusBarHelper
 
     private var openAsTempTestBook = false

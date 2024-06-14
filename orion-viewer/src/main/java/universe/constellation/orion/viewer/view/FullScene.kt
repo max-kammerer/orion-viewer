@@ -20,7 +20,7 @@ interface Scene  {
 @SuppressLint("UseCompatLoadingForDrawables")
 class FullScene(private val scene: ViewGroup, val drawView: OrionDrawScene, statusBar: ViewGroup, val context: OrionViewerActivity) : Scene, OrionBookListener {
 
-    val statusBarHelper = OrionStatusBarHelper(scene, statusBar, context)
+    val statusBarHelper = StatusBar(scene, statusBar, context)
 
     val colorStuff = ColorStuff()
 

@@ -33,9 +33,9 @@ class PageScene : View {
         }
     }
 
-    internal lateinit var orionStatusBarHelper: OrionStatusBarHelper
+    private lateinit var statusBar: StatusBar
 
-    internal var pageView: PageView? = null
+    private var pageView: PageView? = null
         set(value) {
             field = value
             triggerPaint()
@@ -67,11 +67,11 @@ class PageScene : View {
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
-    fun init(colorStuff: ColorStuff, orionStatusBarHelper: OrionStatusBarHelper) {
+    fun init(colorStuff: ColorStuff, statusBar: StatusBar) {
         this.stuff = colorStuff
         defaultPaint = colorStuff.backgroundPaint
         borderPaint = colorStuff.borderPaint
-        this.orionStatusBarHelper = orionStatusBarHelper
+        this.statusBar = statusBar
         inited = true
     }
 

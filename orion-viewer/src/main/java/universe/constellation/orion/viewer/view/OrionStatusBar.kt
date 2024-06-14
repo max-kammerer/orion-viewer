@@ -11,18 +11,16 @@ import android.os.BatteryManager
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.view.children
 import androidx.core.widget.ImageViewCompat
-import universe.constellation.orion.viewer.OptionActions
 import universe.constellation.orion.viewer.OrionBookListener
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.android.isAtJellyBean
 import universe.constellation.orion.viewer.util.ColorUtil
 
-class OrionStatusBarHelper(private val fullScene: ViewGroup, private val statusBar: ViewGroup, orionViewerActivity: OrionViewerActivity) : OrionBookListener {
+class StatusBar(private val fullScene: ViewGroup, private val statusBar: ViewGroup, orionViewerActivity: OrionViewerActivity) : OrionBookListener {
 
     private val panel = statusBar.findViewById<ViewGroup>(R.id.orion_status_bar)
     private val title = statusBar.findViewById<TextView>(R.id.title)
