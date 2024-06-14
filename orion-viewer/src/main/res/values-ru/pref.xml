@@ -109,4 +109,11 @@
     <string name="pref_enable_touch_move">Включить сдвиг одним пальцем</string>
     <string name="pref_enable_move_on_pinch_zoom">Разрешить сдвиг при масштабировании двумя пальцами</string>
 
+    <string name="pref_position_top">Сверху</string>
+    <string name="pref_position_bottom">Снизу</string>
+    <string name="pref_position_hide">Скрыть</string>
+
+    <string name="pref_size_small">Маленький</string>
+    <string name="pref_size_medium">Средний</string>
+    <string name="pref_size_large">Большой</string>
 </resources>

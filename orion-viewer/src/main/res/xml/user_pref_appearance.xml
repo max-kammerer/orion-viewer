@@ -60,8 +60,17 @@
             android:key="STATUS_BAR_POSITION"
             android:summary="@string/pref_value"
             android:title="@string/pref_statusBarPosition"
-            android:entries="@array/status_bar_position"
+            android:entries="@array/status_bar_position_desc"
             android:entryValues="@array/status_bar_position"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
+            android:defaultValue="MEDIUM"
+            android:key="STATUS_BAR_SIZE"
+            android:summary="@string/pref_value"
+            android:title="@string/pref_statusBarSize"
+            android:entries="@array/status_bar_size_desc"
+            android:entryValues="@array/status_bar_size"
             app:iconSpaceReserved="false" />
 
         <CheckBoxPreference

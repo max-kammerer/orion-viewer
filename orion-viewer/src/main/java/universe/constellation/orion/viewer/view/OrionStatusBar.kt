@@ -17,10 +17,14 @@ import androidx.core.widget.ImageViewCompat
 import universe.constellation.orion.viewer.OrionBookListener
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.R
-import universe.constellation.orion.viewer.android.isAtJellyBean
+import universe.constellation.orion.viewer.dpToPixels
 import universe.constellation.orion.viewer.util.ColorUtil
 
-class StatusBar(private val fullScene: ViewGroup, private val statusBar: ViewGroup, orionViewerActivity: OrionViewerActivity) : OrionBookListener {
+class StatusBar(
+    private val fullScene: ViewGroup,
+    private val statusBar: ViewGroup,
+    private val activity: OrionViewerActivity
+) : OrionBookListener {
 
     private val panel = statusBar.findViewById<ViewGroup>(R.id.orion_status_bar)
     private val title = statusBar.findViewById<TextView>(R.id.title)
@@ -31,38 +35,25 @@ class StatusBar(private val fullScene: ViewGroup, private val statusBar: ViewGro
     private val battery = statusBar.findViewById<ImageView>(R.id.batteryLevel)
 
     init {
-        val globalOptions = orionViewerActivity.globalOptions
-        globalOptions.SHOW_BATTERY_STATUS.observe(orionViewerActivity) {
+        val globalOptions = activity.globalOptions
+        globalOptions.SHOW_BATTERY_STATUS.observe(activity) {
             battery.setVisibleOrGone(it)
         }
 
-        globalOptions.STATUS_BAR_POSITION.observe(orionViewerActivity) {
-            statusBar.setVisibleOrGone(it != "INVISIBLE")
-            if (it == "INVISIBLE") return@observe
-
-            val index = fullScene.children.indexOf(statusBar)
-            when (it) {
-                "BOTTOM" -> {
-                    if (index != fullScene.childCount - 1) {
-                        fullScene.removeView(statusBar)
-                        fullScene.addView(statusBar)
-                    }
-                }
-                else -> {
-                    if (index != 0) {
-                        fullScene.removeView(statusBar)
-                        fullScene.addView(statusBar, 0)
-                    }
-                }
-            }
+        globalOptions.STATUS_BAR_POSITION.observe(activity) {
+            updatePosition(it)
         }
 
-        globalOptions.SHOW_OFFSET_ON_STATUS_BAR.observe(orionViewerActivity) {
+        globalOptions.SHOW_OFFSET_ON_STATUS_BAR.observe(activity) {
             offset.setVisibleOrGone(it)
         }
 
-        globalOptions.SHOW_TIME_ON_STATUS_BAR.observe(orionViewerActivity) {
+        globalOptions.SHOW_TIME_ON_STATUS_BAR.observe(activity) {
             clock.setVisibleOrGone(it)
+        }
+
+        globalOptions.STATUS_BAR_SIZE.observe(activity) {
+            updateSize(it)
         }
     }
 
@@ -95,21 +86,7 @@ class StatusBar(private val fullScene: ViewGroup, private val statusBar: ViewGro
         }
     }
 
-    fun setShowOffset(showOffset: Boolean) {
-        offset.visibility = if (showOffset) View.VISIBLE else View.GONE
-    }
-
-    fun setShowClock(showOffset: Boolean) {
-        if (isAtJellyBean()) {
-            clock.visibility = if (showOffset) View.VISIBLE else View.GONE
-        }
-    }
-
-    fun setShowStatusBar(showStatusBar: Boolean) {
-        panel.visibility = if (showStatusBar) View.VISIBLE else View.GONE
-    }
-
-    fun View.setVisibleOrGone(show: Boolean) {
+    private fun View.setVisibleOrGone(show: Boolean) {
         visibility = if (show) View.VISIBLE else View.GONE
     }
 
@@ -120,23 +97,32 @@ class StatusBar(private val fullScene: ViewGroup, private val statusBar: ViewGro
                 is TextView -> {
                     child.setTextColor(transformedColor)
                 }
+
                 is ImageView -> {
-                    ImageViewCompat.setImageTintList(child, ColorStateList.valueOf(transformedColor));
+                    ImageViewCompat.setImageTintList(
+                        child,
+                        ColorStateList.valueOf(transformedColor)
+                    );
                 }
             }
         }
     }
 
     fun onResume(context: Context) {
-        updateBatteryLevel(context.registerReceiver(batteryReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED)))
+        updateBatteryLevel(
+            context.registerReceiver(
+                batteryReceiver,
+                IntentFilter(Intent.ACTION_BATTERY_CHANGED)
+            )
+        )
     }
 
     fun onPause(context: Context) {
         context.unregisterReceiver(batteryReceiver)
     }
 
-    private fun  updateBatteryLevel(intent: Intent?) {
-        if (intent == null)  {
+    private fun updateBatteryLevel(intent: Intent?) {
+        if (intent == null) {
             battery.setImageResource(R.drawable.battery_unknown)
             return
         }
@@ -144,16 +130,64 @@ class StatusBar(private val fullScene: ViewGroup, private val statusBar: ViewGro
         val level: Int = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
         val scale: Int = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
         val batteryPct = (level * 100 / scale.toFloat()).toInt()
-        battery.setImageResource(when {
-            batteryPct >= 95 -> R.drawable.battery_full
-            batteryPct >= 85 -> R.drawable.battery_6_bar
-            batteryPct >= 70 -> R.drawable.battery_5_bar
-            batteryPct >= 55 -> R.drawable.battery_4_bar
-            batteryPct >= 40 -> R.drawable.battery_3_bar
-            batteryPct >= 25 -> R.drawable.battery_2_bar
-            batteryPct >= 10 -> R.drawable.battery_1_bar
-            else -> R.drawable.battery_alert
-        })
+        battery.setImageResource(
+            when {
+                batteryPct >= 95 -> R.drawable.battery_full
+                batteryPct >= 85 -> R.drawable.battery_6_bar
+                batteryPct >= 70 -> R.drawable.battery_5_bar
+                batteryPct >= 55 -> R.drawable.battery_4_bar
+                batteryPct >= 40 -> R.drawable.battery_3_bar
+                batteryPct >= 25 -> R.drawable.battery_2_bar
+                batteryPct >= 10 -> R.drawable.battery_1_bar
+                else -> R.drawable.battery_alert
+            }
+        )
     }
 
+    private fun updatePosition(value: String?) {
+        statusBar.setVisibleOrGone(value != "HIDE")
+        if (value == "HIDE") return
+
+        val index = fullScene.children.indexOf(statusBar)
+        when (value) {
+            "BOTTOM" -> {
+                if (index != fullScene.childCount - 1) {
+                    fullScene.removeView(statusBar)
+                    fullScene.addView(statusBar)
+                }
+            }
+
+            else -> {
+                if (index != 0) {
+                    fullScene.removeView(statusBar)
+                    fullScene.addView(statusBar, 0)
+                }
+            }
+        }
+    }
+
+
+    private fun updateSize(value: String?) {
+        val size = when (value) {
+            "SMALL" -> 12
+            "LARGE" -> 16
+            else -> 14
+        }
+        statusBar.children.forEach {
+            when (it) {
+                is TextView -> {
+                    it.textSize = size.toFloat()
+                }
+
+                is ImageView -> {
+                    it.layoutParams =
+                        it.layoutParams?.apply {
+                            val newSize = activity.dpToPixels(size.toFloat())
+                            width = newSize
+                            height = newSize
+                        }
+                }
+            }
+        }
+    }
 }

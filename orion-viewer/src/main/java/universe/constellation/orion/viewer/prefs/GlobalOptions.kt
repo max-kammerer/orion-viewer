@@ -231,6 +231,8 @@ class GlobalOptions(
 
     val STATUS_BAR_POSITION = pref(Companion.STATUS_BAR_POSITION, "TOP")
 
+    val STATUS_BAR_SIZE = pref(Companion.STATUS_BAR_SIZE, "MEDIUM")
+
     val SHOW_OFFSET_ON_STATUS_BAR = pref(Companion.SHOW_OFFSET_ON_STATUS_BAR, true)
 
     val SHOW_TIME_ON_STATUS_BAR = pref(Companion.SHOW_TIME_ON_STATUS_BAR, true)
@@ -265,6 +267,8 @@ class GlobalOptions(
         const val SHOW_BATTERY_STATUS: String = "SHOW_BATTERY_STATUS"
 
         const val STATUS_BAR_POSITION: String = "STATUS_BAR_POSITION"
+
+        const val STATUS_BAR_SIZE: String = "STATUS_BAR_SIZE"
 
         const val LONG_TAP_ACTION: String = "LONG_TAP_ACTION"
 

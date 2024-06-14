@@ -24,6 +24,7 @@
     <string name="pref_showActionBar">Show Action Bar</string>
     <string name="pref_showActionBar_desc">Show Action Bar (restart needed)</string>
     <string name="pref_statusBarPosition">Status Bar Position</string>
+    <string name="pref_statusBarSize">Status Bar Size</string>
     <string name="pref_showOffsetOnStatusBar">Show offset on page</string>
     <string name="pref_showTimeOnStatusBar">Show time</string>
     <string name="pref_showBatteryInfo">Show battery info</string>
@@ -110,4 +111,11 @@
     <string name="pref_color_mode">Color Mode</string>
     <string name="pref_color_mode_desc">%s</string>
 
+    <string name="pref_position_top">Top</string>
+    <string name="pref_position_bottom">Bottom</string>
+    <string name="pref_position_hide">Hide</string>
+
+    <string name="pref_size_small">Small</string>
+    <string name="pref_size_medium">Medium</string>
+    <string name="pref_size_large">Large</string>
 </resources>

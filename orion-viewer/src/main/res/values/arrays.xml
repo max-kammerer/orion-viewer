@@ -86,7 +86,25 @@
     <string-array name="status_bar_position">
         <item>TOP</item>
         <item>BOTTOM</item>
-        <item>INVISIBLE</item>
+        <item>HIDE</item>
+    </string-array>
+
+    <string-array name="status_bar_position_desc">
+        <item>@string/pref_position_top</item>
+        <item>@string/pref_position_bottom</item>
+        <item>@string/pref_position_hide</item>
+    </string-array>
+
+    <string-array name="status_bar_size">
+        <item>SMALL</item>
+        <item>MEDIUM</item>
+        <item>LARGE</item>
+    </string-array>
+
+    <string-array name="status_bar_size_desc">
+        <item>@string/pref_size_small</item>
+        <item>@string/pref_size_medium</item>
+        <item>@string/pref_size_large</item>
     </string-array>
 
     <string-array name="application_theme_desc">
