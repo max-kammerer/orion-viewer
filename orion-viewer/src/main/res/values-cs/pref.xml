@@ -2,109 +2,109 @@
 
 <resources>
     <!--Categories-->
-    <string name="pref_category_general">General</string>
-    <string name="pref_category_key_manager">Key Manager</string>
-    <string name="pref_category_device_parameters">Device Parameters</string>
-    <string name="pref_category_add_parameters">Additional Parameters</string>
-    <string name="pref_category_system">System</string>
-    <string name="pref_category_move">Touch Move</string>
-    <string name="pref_category_quick_actions">Quick Actions</string>
-    <string name="pref_category_behavior">Default Behavior</string>
-    <string name="pref_category_bars">Action and Status Bars</string>
+    <string name="pref_category_general">Obecné</string>
+    <string name="pref_category_key_manager">Správce kláves</string>
+    <string name="pref_category_device_parameters">Parametry zařízení</string>
+    <string name="pref_category_add_parameters">Další parametry</string>
+    <string name="pref_category_system">Systém</string>
+    <string name="pref_category_move">Pohyb dotykem</string>
+    <string name="pref_category_quick_actions">Rychlé akce</string>
+    <string name="pref_category_behavior">Výchozí chování</string>
+    <string name="pref_category_bars">Akce a stavové lišty</string>
 
     <!--General Prefs-->
-    <string name="pref_appearance">Appearance</string>
-    <string name="pref_behavior">Controls and Behavior</string>
-    <string name="pref_fullScreen">Full screen</string>
-    <string name="pref_old_ui">Enable old UI</string>
-    <string name="pref_new_ui_summary">Application restart is required</string>
-    <string name="pref_renderOffPage">Draw off-page space</string>
-    <string name="pref_showActionBar">Show Action Bar</string>
-    <string name="pref_showActionBar_desc">Show Action Bar (restart needed)</string>
-    <string name="pref_showStatusBar">Show Status Bar</string>
-    <string name="pref_showOffsetOnStatusBar">Show offset on page</string>
-    <string name="pref_showTimeOnStatusBar">Show time</string>
-    <string name="pref_bookDefaultOrientation">Book default orientation</string>
+    <string name="pref_appearance">Vzhled</string>
+    <string name="pref_behavior">Ovládání a chování</string>
+    <string name="pref_fullScreen">Celá obrazovka</string>
+    <string name="pref_old_ui">Povolit staré uživatelské rozhraní</string>
+    <string name="pref_new_ui_summary">Je vyžadován restart aplikace</string>
+    <string name="pref_renderOffPage">Vykresllit prostor mimo stránku</string>
+    <string name="pref_showActionBar">Zobrazit panel akcí</string>
+    <string name="pref_showActionBar_desc">Zobrazi panel akcí (vyžaduje restart)</string>
+    <string name="pref_showStatusBar">Zobrazit stavový řádek</string>
+    <string name="pref_showOffsetOnStatusBar">Zobrazit posun na stránce</string>
+    <string name="pref_showTimeOnStatusBar">Zobrazit čas</string>
+    <string name="pref_bookDefaultOrientation">Výchozí orientace knihy</string>
 
-    <string name="pref_bookDefaultZoom">Zoom</string>
-    <string name="pref_bookDefaultZoom_desc">Zoom: %s</string>
+    <string name="pref_bookDefaultZoom">Přiblížení</string>
+    <string name="pref_bookDefaultZoom_desc">Přiblížení: %s</string>
 
-    <string name="pref_rotate_new_book_on_opening">Rotate new book on opening</string>
+    <string name="pref_rotate_new_book_on_opening">Při otevření otočit novou knihu</string>
 
-    <string name="pref_screen_orientation">Screen orientation</string>
-    <string name="pref_screen_orientation_desc">Screen orientation: %s (restart application to apply)</string>
+    <string name="pref_screen_orientation">Orientace obrazovky</string>
+    <string name="pref_screen_orientation_desc">Orientace obrazovky: %s (vyžaduje restart)</string>
 
-    <string name="pref_book_screen_orientation">Screen orientation for current book</string>
-    <string name="pref_book_screen_orientation_desc">Screen orientation: %s</string>
+    <string name="pref_book_screen_orientation">Orientace obrazovky pro aktuální knihu</string>
+    <string name="pref_book_screen_orientation_desc">Orientace obrazovky: %s</string>
 
-    <string name="pref_close_dialog_on_apply">Close dialog on apply button click</string>
-    <string name="pref_close_page_option_dialog_on_apply">Close page option dialog on apply button click</string>
-    <string name="pref_swap_prev_next_keys">Swap prev/next keys</string>
-    <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Swap prev/next keys in landscape mode</string>
-    <string name="pref_dictionary">Dictionary</string>
-    <string name="pref_dictionary_desc">Dictionary: %s</string>
+    <string name="pref_close_dialog_on_apply">Zavřit dialogové okno kliknutím na tlačítko Použít</string>
+    <string name="pref_close_page_option_dialog_on_apply">Zavřít dialogové okno možností stránky kliknutím na tlačítko Použít</string>
+    <string name="pref_swap_prev_next_keys">Prohodit předchozí/další klávesy</string>
+    <string name="pref_swap_prev_next_keys_on_90_degree_rotation">V režimu na šířku vyměňte klávesy předchozí/další</string>
+    <string name="pref_dictionary">Slovník</string>
+    <string name="pref_dictionary_desc">Slovník: %s</string>
     <string name="pref_e_ink_optimization">E-ink</string>
-    <string name="pref_e_ink_fast_refresh">E-ink fast refresh</string>
-    <string name="pref_total_refresh_after">Total refresh after…</string>
+    <string name="pref_e_ink_fast_refresh">Rychlé obnovení E-ink</string>
+    <string name="pref_total_refresh_after">Celkové obnovení po…</string>
 
-    <string name="pref_long_crop_value">Big crop value</string>
-    <string name="pref_long_crop_value_desc">Big crop value (0–40%)</string>
+    <string name="pref_long_crop_value">Hodnota velkého oříznutí</string>
+    <string name="pref_long_crop_value_desc">Hodnota velkého oříznutí (0–40%)</string>
 
-    <string name="pref_screen_overlapping_horizontal">Horizontal screen overlapping</string>
-    <string name="pref_screen_overlapping_horizontal_desc">Horizontal screen overlapping on page turn (0–90%)</string>
+    <string name="pref_screen_overlapping_horizontal">Horizontální překrývání obrazovky</string>
+    <string name="pref_screen_overlapping_horizontal_desc">Horizontální překrývání obrazovky při otočení stránky (0–90%)</string>
 
-    <string name="pref_screen_overlapping_vertical">Vertical screen overlapping</string>
-    <string name="pref_screen_overlapping_vertical_desc">Vertical screen overlapping on page turn (0–90%)</string>
+    <string name="pref_screen_overlapping_vertical">Vertikální překrývání obrazovky</string>
+    <string name="pref_screen_overlapping_vertical_desc">Vertikální překrývání obrazovky při otočení stránky (0–90%)</string>
 
-    <string name="pref_custom_brightness">Adjust Brightness</string>
-    <string name="pref_brightness">Brightness</string>
-    <string name="pref_brightness_desc">Brightness (1–100%)</string>
+    <string name="pref_custom_brightness">Nastavení jasu</string>
+    <string name="pref_brightness">Jas</string>
+    <string name="pref_brightness_desc">Jas (1–100%)</string>
 
-    <string name="pref_application_theme">Application Theme</string>
-    <string name="pref_application_theme_desc">Theme: %s. (Restart application on change)</string>
+    <string name="pref_application_theme">Téma aplikace</string>
+    <string name="pref_application_theme_desc">Téma: %s. (vyžaduje restart)</string>
 
-    <string name="pref_open_recent_book">Open recent book on start up</string>
+    <string name="pref_open_recent_book">Při spuštění otevřít nedávnou knihu</string>
 
     <!--book preferences-->
-    <string name="pref_book_contrast">Contrast</string>
-    <string name="pref_book_contrast_desc">Contrast (default 100): %s</string>
+    <string name="pref_book_contrast">Kontrast</string>
+    <string name="pref_book_contrast_desc">Kontrast (výchozí 100): %s</string>
 
-    <string name="pref_book_threshold">Watermark threshold</string>
-    <string name="pref_book_threshold_desc">Threshold for watermark removal (default 255): %s</string>
+    <string name="pref_book_threshold">Hranice vodoznaku</string>
+    <string name="pref_book_threshold_desc">Hranice pro odstranění vodoznaku (výchozí 255): %s</string>
 
-    <string name="pref_device_info">Device Info</string>
-    <string name="pref_debug">Debug &amp; Logs</string>
-    <string name="pref_debug_desc">Write debug information into file</string>
+    <string name="pref_device_info">Informace o zařízení</string>
+    <string name="pref_debug">Ladění &amp; Protokoly</string>
+    <string name="pref_debug_desc">Zapište do souboru informace o ladění</string>
 
-    <string name="pref_walk_order">Page traversal</string>
-    <string name="pref_walk_order_desc">Page traversal: %s</string>
+    <string name="pref_walk_order">Procházení stránky</string>
+    <string name="pref_walk_order_desc">Procházení stránky: %s</string>
 
-    <string name="pref_page_layout">Page layout</string>
+    <string name="pref_page_layout">Rozvržení stránky</string>
 
-    <string name="application_settings_title">Application Settings</string>
-    <string name="pref_default_book_setting">Default Book Settings</string>
-    <string name="pref_default_book_setting_desc">Will be also applied to opened book!</string>
+    <string name="application_settings_title">Nastavení aplikace</string>
+    <string name="pref_default_book_setting">Výchozí nastavení knihy</string>
+    <string name="pref_default_book_setting_desc">Bude aplikováno i na otevřenou knihu!</string>
 
-    <string name="book_pref_title">Current Book Options</string>
+    <string name="book_pref_title">Možnosti aktuální knihy</string>
 
-    <string name="pref_screen_backlight_timeout">Screen backlight timeout</string>
-    <string name="pref_screen_backlight_timeout_desc">Screen backlight timeout: %s</string>
+    <string name="pref_screen_backlight_timeout">Časový limit podsvícení obrazovky</string>
+    <string name="pref_screen_backlight_timeout_desc">Časový limit podsvícení obrazovky: %s</string>
 
-    <string name="pref_app_language">Application Language</string>
-    <string name="pref_app_language_desc">Language: %s. (Restart application on change)</string>
+    <string name="pref_app_language">Jazyk aplikace</string>
+    <string name="pref_app_language_desc">Jazyk aplikace: %s. (vyžaduje restart)</string>
 
-    <string name="pref_tap_zones_desc">Link actions to screen zones</string>
+    <string name="pref_tap_zones_desc">Propojit akce se zónami obrazovky</string>
 
-    <string name="pref_key_binder_desc">Link actions to key/buttons</string>
+    <string name="pref_key_binder_desc">Propojit akce s klávesami/tlačítky</string>
 
-    <string name="pref_key_double_tap">Double tap action</string>
-    <string name="pref_key_long_tap">Long tap action</string>
-    <string name="pref_key_linked_action_summary">Linked action: `%s`</string>
+    <string name="pref_key_double_tap">Akce dvojitým klepnutím</string>
+    <string name="pref_key_long_tap">Akce dlouhého klepnutí</string>
+    <string name="pref_key_linked_action_summary">Propojené akce: `%s`</string>
 
-    <string name="pref_enable_touch_move">Enable touch move</string>
-    <string name="pref_enable_move_on_pinch_zoom">Allow translation during pinch zoom</string>
+    <string name="pref_enable_touch_move">Povolit pohyb dotykem</string>
+    <string name="pref_enable_move_on_pinch_zoom">Povolit překlad během přiblížení a oddálení roztažením</string>
 
-    <string name="pref_color_mode">Color Mode</string>
+    <string name="pref_color_mode">Barevný režim</string>
     <string name="pref_color_mode_desc">%s</string>
 
 </resources>
