@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<!--Translated by Claude Dellacherie-->
 <resources>
     <string name="navigation">Navigation</string>
     <string name="crop_left">Rognage à gauche</string>
@@ -15,31 +12,22 @@
     <string name="long_click">Tape longue</string>
     <string name="short_click">Tape courte</string>
     <string name="binding_click">Touche associée</string>
-
-
-    <string name="orientation_default">Orientation par défaut</string>
+    <string name="orientation_default">Par défaut</string>
     <string name="orientation_default_rotation">Rotation par défaut</string>
     <string name="orientation_landscape">Paysage</string>
     <string name="orientation_portrait">Portrait</string>
     <string name="orientation_landscape_inverse">Paysage (270°)</string>
     <string name="orientation_portrait_inverse">Portrait (180°)</string>
-
-
     <string name="fit_width">Adapter à la largeur</string>
     <string name="fit_height">Adapter à la hauteur</string>
     <string name="fit_page">Adapter à la page</string>
-    <string name="fit_custom">Personnaliser</string>
-
-    <string name="key_binder_message">Appuyer sur une touche pour lui associer une action</string>
-    <string name="key_binder_warning">On ne peut associer une action à cette touche; essayer une autre</string>
+    <string name="fit_custom">Personnaliser…</string>
+    <string name="key_binder_message">Appuyer sur une touche pour lui associer une action !</string>
+    <string name="key_binder_warning">On ne peut associer une action à cette touche ; essayer une autre !</string>
     <string name="table_of_contents">Table des matières</string>
-
-
-    <string name="warn_no_text_in_selection">Pas de texte dans la sélection</string>
+    <string name="warn_no_text_in_selection">Pas de texte dans la sélection !</string>
     <string name="msg_select_text">Sélection du texte</string>
-
-    <string name="warn_no_outline">Pas de sommaire</string>
-    
+    <string name="warn_no_outline">Pas de sommaire !</string>
     <string name="color_mode_normal">Couleurs normales (noir sur fond blanc)</string>
     <string name="color_mode_inverted">Couleurs inversées</string>
     <string name="color_mode_black_on_yellowish">Noir sur fond jaunâtre</string>
@@ -47,6 +35,13 @@
     <string name="color_mode_grayscale">Echelle de gris sur fond gris</string>
     <string name="color_mode_grayscale_dark">Echelle de gris sur fond gris sombre</string>
     <string name="select_color_mode">Choisir la couleur</string>
-
-
+    <string name="color_mode_white_on_blue">Blanc sur fond bleu</string>
+    <string name="saveFileNameTooltip">NomduDossier.extension</string>
+    <string name="save">Enregistrer</string>
+    <string name="crop_manual">Recadrage manuel</string>
+    <string name="crop_auto">Recadrage auto</string>
+    <string name="crop_auto_manual">Automatique et manuel</string>
+    <string name="crop_manual_auto">Manuel et automatique</string>
+    <string name="crop_warning">Utiliser le recadrage manuel pour une meilleure performance</string>
+    <string name="key_binder_reset_all">Tout réinitialiser</string>
 </resources>
