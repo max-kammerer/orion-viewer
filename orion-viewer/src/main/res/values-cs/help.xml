@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <string name="zoom">Opens zoom dialog. Zero zoom value means zooming by width.</string>
-    <string name="rotation">Rotates document to the 90 degree clockwise. Long click rotates counterclockwise.</string>
+    <string name="zoom">Otevře dialogové okno přiblížení. Nulová hodnota zoomu znamená přiblížení na šířku.</string>
+    <string name="rotation">Otočí dokument o 90 stupňů ve směru hodinových ručiček. Dlouhé kliknutí otáčí proti směru hodinových ručiček.</string>
 
-    <string name="crop">Opens borders crop dialog. Values defined relative to page size. Long click for plus or minus in this dialog changes crop value for 10%. Negative value add additional borders.</string>
+    <string name="crop">Otevře dialogové okno oříznutí ohraničení. Hodnoty jsou definované vzhledem k velikosti stránky. Dlouhé kliknutí na plus nebo mínus v tomto dialogu změní hodnotu oříznutí o 10%. Záporná hodnota přidá další ohraničení.</string>
 
-    <string name="apply">Apply current options.</string>
-    <string name="escape">Return/Escape.</string>
+    <string name="apply">Použít aktuální možnosti.</string>
+    <string name="escape">Zpět/Zrušit</string>
 
-    <string name="general_usage">How to use:</string>
+    <string name="general_usage">Jak používat:</string>
 
-    <string name="general_usage_step1">1. Open document (zoom by width by default)
+    <string name="general_usage_step1">1. Otevřete dokument
         </string>
 
     <string name="general_usage_step2">
-        2. Select appropriate orientation: portrait or landscape
+        2. Vyberte vhodnou orientaci: na výšku nebo na šířku
         </string>
 
     <string name="general_usage_step3">
-        3. Crop borders, text size will be changed accordingly to changing borders (if zoom by width specified)
+        3. Ořízněte okraje, velikost textu se změní podle měnících se okrajů (pokud je zadáno přiblížení na šířku)
         </string>
 
     <string name="general_usage_step4">
-        4. Enjoy reading!</string>
+        4. Příjemnou zábavu při čtení!</string>
 
     <!--<string name="help_taps">-->
         <!--Click on screen - go to next page, long click - go to prev page.</string>-->
 
     <string name="option_help">
-        Application parameters</string>
+        Parametry aplikace</string>
 
     <string name="navigation_help">
-        Opens page layout dialog. On reading comics or viewing books with images you could select appropriate page layout.</string>
+        Otevře dialogové okno rozvržení stránky. Při čtení komiksů nebo prohlížení knih s obrázky si můžete vybrat vhodné rozvržení stránky.</string>
 
     <string name="dictionary_help">
-        Opens External Dictionary. Choose appropriate Dictionary application in Settings.</string>
+        Otevře externí slovník. V Nastavení vyberte příslušnou aplikaci Slovník.</string>
 
     <string name="tap_help">
-        Tap zones allow user to link different parts of device screen to commonly used commands.
-        There are 3x3 cells where user could define actions for short (top label) and long (bottom label) clicks.</string>
+        Dotykové zóny umožňují uživateli propojit různé části obrazovky zařízení s běžně používanými příkazy.
+        Jsou zde buňky 3x3, kde uživatel může definovat akce pro krátké (horní štítek) a dlouhé (dolní štítek) kliknutí.</string>
 
     <string name="bookmarks_export_help">
-        Allow user to export bookmarks (for all books or for current one).
-        Bookmarks are exported to xml file with the name of opened book + [bookmarks.xml or all_bookmarks.xml] suffix.
-        This option is available at Bookmarks screen menu.</string>
+        Povolit uživateli exportovat záložky (pro všechny knihy nebo pro aktuální).
+        Záložky se exportují do xml souboru s názvem otevřené knihy + příponou [bookmarks.xml nebo all_bookmarks.xml].
+        Tato možnost je dostupná v nabídce obrazovky Záložky.</string>
 </resources>
