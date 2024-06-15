@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!--Translated by Johannes Römer-->
-<resources>
+<!--Translated by Johannes Römer--><resources>
     <string name="menu_search_item">Suchen</string>
     <string name="menu_add_bookmark_item">Lesezeichen setzen</string>
     <string name="menu_bookmarks_text">Lesezeichen verwalten</string>
@@ -20,9 +18,8 @@
     <string name="menu_navigation_text">Anzeigemodus</string>
     <string name="menu_tap_text">Tap-Zonen</string>
     <string name="menu_key_binder_text">Tasten verknüpfen</string>
-
     <string name="export_bookmarks_menu_item">Aktuelle Lesezeichen exportieren</string>
     <string name="export_all_bookmarks_menu_item">Alle Lesezeichen exportieren</string>
-    <string name="import_current_bookmarks_menu_item">Lesezeichen hinzufügen…</string>
-    <string name="import_all_bookmarks_menu_item">Lesezeichen importieren…</string>
+    <string name="import_current_bookmarks_menu_item">Lesezeichen hinzufügen …</string>
+    <string name="import_all_bookmarks_menu_item">Importieren …</string>
 </resources>
