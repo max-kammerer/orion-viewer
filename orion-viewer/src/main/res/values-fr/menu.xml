@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!--Translated by Claude Dellacherie-->
-<resources>
+<!--Translated by Claude Dellacherie--><resources>
     <string name="menu_zoom_text">Zoom</string>
     <string name="menu_crop_text">Rognage</string>
     <string name="menu_goto_text">Aller à la page</string>
@@ -9,7 +7,7 @@
     <string name="menu_add_bookmark_item">Ajouter un signet</string>
     <string name="menu_select_text">Sélection d\'un texte</string>
     <string name="menu_rotation_text">Rotation</string>
-    <string name="menu_navigation_text">Navigation</string>
+    <string name="menu_navigation_text">Mise en page</string>
     <string name="menu_help_text">Aide</string>
     <string name="menu_open_text">Ouvrir un livre</string>
     <string name="menu_outline_text">Sommaire</string>
@@ -17,15 +15,14 @@
     <string name="menu_day_night_text">Mode jour/nuit</string>
     <string name="menu_exit_text">Quitter</string>
     <string name="menu_key_binder_text">Associer des touches</string>
-    <string name="menu_options_text">Configuration</string>
+    <string name="menu_options_text">Paramètres</string>
     <string name="menu_tap_text">Zones de tapes</string>
     <string name="menu_search_item">Recherche</string>
-
-    <string name="menu_book_preferences">Options pour livre</string>
-
-
+    <string name="menu_book_preferences">Options pour les livres</string>
     <string name="export_all_bookmarks_menu_item">Exporter tous les signets</string>
     <string name="export_bookmarks_menu_item">Exporter les signets actuels</string>
-    <string name="import_all_bookmarks_menu_item">Importer tous les signets</string>
-    <string name="import_current_bookmarks_menu_item">Importer les signets actuels</string>
+    <string name="import_all_bookmarks_menu_item">Importer…</string>
+    <string name="import_current_bookmarks_menu_item">Annexer à partir de…</string>
+    <string name="menu_about_text">À propos…</string>
+    <string name="menu_other">Autre…</string>
 </resources>
