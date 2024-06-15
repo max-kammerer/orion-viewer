@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="msg_dialog_search">Dialogové okno Hledat</string>
+    <string name="msg_dialog_dismis">Zrušit</string>
+    <string name="warn_text_not_found">Žádný text</string>
+    <string name="warn_no_further_occurrences_found">Žádné další výskyty nebyly nalezeny</string>
+    <string name="msg_searching">Vyhledávání…</string>
+
+    <string name="msg_select_text">Vyberte text!</string>
+    <string name="msg_select_word">Klikněte na slovo!</string>
+
+    <string name="msg_error">Chyba</string>
+    <string name="msg_warning">Varování</string>
+    <string name="msg_specify_keyword_for_search">Zadejte klíčové slovo pro vyhledávání</string>
+
+    <string name="recent_book_not_found">Nelze najít soubor s knihou!</string>
+    <string name="tap_zones_header">Navigace pomocí dotykových zón: výchozí akce zóny</string>
+
+    <string name="permission_directory_warning">Poskytněte prosím oprávnění ke čtení pro přístup k datům úložiště</string>
+    <string name="permission_grant">Poskytnout…</string>
+    <string name="permission_cancel">Zrušit</string>
+
+    <string name="string_cancel">Zrušit</string>
+    <string name="string_close">Zavřít</string>
+    <string name="string_apply">Použít</string>
+
+    <string name="string_wrong_password">Špatné heslo</string>
+    <string name="password_for_file">Heslo k souboru</string>
+
+</resources>

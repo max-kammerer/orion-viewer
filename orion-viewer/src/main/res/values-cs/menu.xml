@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="menu_zoom_text">Přiblížení</string>
+    <string name="menu_crop_text">Oříznutí</string>
+    <string name="menu_goto_text">Přejít na</string>
+    <string name="menu_bookmarks_text">Záložky</string>
+    <string name="menu_add_bookmark_item">Přidat záložku</string>
+    <string name="menu_select_text">Vybrat text</string>
+    <string name="menu_rotation_text">Otočení obrazovky</string>
+    <string name="menu_navigation_text">Rozvržení stránky</string>
+    <string name="menu_help_text">Nápověda</string>
+    <string name="menu_about_text">O aplikaci…</string>
+    <string name="menu_open_text">Otevřít knihu</string>
+    <string name="menu_outline_text">Přehled</string>
+    <string name="menu_open_dictionary_text">Otevřít slovník</string>
+    <string name="menu_day_night_text">Denní/Noční režim</string>
+    <string name="menu_exit_text">Konec</string>
+    <string name="menu_key_binder_text">Klávesové zkratky</string>
+    <string name="menu_options_text">Nastavení</string>
+    <string name="menu_tap_text">Dotykové zóny</string>
+    <string name="menu_search_item">Hledat</string>
+    <string name="menu_other">Další…</string>
+
+    <string name="menu_book_preferences">Možnosti knihy</string>
+
+
+    <string name="export_all_bookmarks_menu_item">Exportovat všechny záložky</string>
+    <string name="export_bookmarks_menu_item">Exportovat aktuální záložky</string>
+    <string name="import_all_bookmarks_menu_item">Importovat…</string>
+    <string name="import_current_bookmarks_menu_item">Přidat z…</string>
+</resources>

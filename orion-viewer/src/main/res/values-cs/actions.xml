@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="action_none">Žádný</string>
+    <string name="action_menu">Hlavní menu</string>
+    <string name="action_next_page">Další strana</string>
+    <string name="action_prev_page">Předchozí strana</string>
+    <string name="action_first_page">První strana</string>
+    <string name="action_last_page">Poslední strana</string>
+    <string name="action_crop_page">Dialogové okno oříznutí</string>
+    <string name="action_zoom_page">Dialogové okno přiblížení</string>
+    <string name="action_layout_page">@string/menu_navigation_text</string>
+    <string name="action_rotation_page">Dialogové okno otočení</string>
+    <string name="action_options_page">Možnosti</string>
+    <string name="action_book_options">@string/menu_book_preferences</string>
+    <string name="action_goto_page">Přejít na</string>
+    <string name="action_dictionary">Otevřít slovník</string>
+    <string name="action_open">Otevřít knihu</string>
+    <string name="action_outline">@string/menu_outline_text</string>
+    <string name="action_add_bookmark">Přidat záložku</string>
+    <string name="action_open_bookmarks">Otevřít záložky</string>
+    <string name="action_full_screen">Přepnout na celou obrazovku</string>
+    <string name="action_switch_color_mode">Přepnout barevný režim</string>
+    <string name="action_close">Ukončit aplikaci</string>
+
+    <string name="action_crop_left">Oříznout levý okraj</string>
+    <string name="action_crop_right">Oříznout pravý okraj</string>
+    <string name="action_crop_top">Oříznout horní okraj</string>
+    <string name="action_crop_bottom">Oříznout dolní okraj</string>
+
+    <string name="action_uncrop_left">Zvětšit levý okraj</string>
+    <string name="action_uncrop_right">Zvětšit pravý okraj</string>
+    <string name="action_uncrop_top">Zvětšit horní okraj</string>
+    <string name="action_uncrop_bottom">Zvětšit dolní okraj</string>
+    <string name="action_inverse_crops">Přepnout oříznutí/zvětšení okraje</string>
+    <string name="action_switch_long_crop">Přepnout malé/velké oříznutí</string>
+
+    <string name="action_next_10">Vpřed o 10 stran</string>
+    <string name="action_prev_10">Zpět o 10 stran</string>
+
+    <string name="action_rotate_90">Otočit o 90/-90 stupňů</string>
+    <string name="action_rotate_270">Otočit o 270/-270 stupňů</string>
+
+    <string name="action_select_text">@string/menu_select_text</string>
+    <string name="action_select_word">Vybrat slovo</string>
+    <string name="action_select_word_and_translate">Vybrat slovo a přeložit</string>
+    <string name="action_tap_action">Akce dotykové zóny</string>
+
+    <string name="action_fit_width">Přizpůsobit šířku</string>
+    <string name="action_fit_height">Přizpůsobit výšku</string>
+    <string name="action_fit_page">Přizpůsobit stránku</string>
+
+    <string name="action_tap_zone_action">Akce dotykových zón</string>
+</resources>

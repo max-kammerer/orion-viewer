@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="navigation">Procházení stránky</string>
+    <string name="crop_left">Vlevo</string>
+    <string name="enable_even_crop">Další oříznutí pro sudé stránky</string>
+    <string name="crop_right">Vpravo</string>
+    <string name="crop_top">Nahoře</string>
+    <string name="crop_bottom">Dole</string>
+
+    <string name="crop_auto">Automatické oříznutí</string>
+    <string name="crop_manual">Vlastní oříznutí</string>
+    <string name="crop_auto_manual">Automatické a vlastní</string>
+    <string name="crop_manual_auto">Vlastní a automatické</string>
+    <string name="crop_warning">Pro lepší výkon použijte vlastní oříznutí</string>
+
+    <string name="rotate_0">0 stupňů</string>
+    <string name="rotate_90">90 stupňů</string>
+    <string name="rotate_270">270 stupňů</string>
+    <string name="long_click">Při dlouhém kliknutí</string>
+    <string name="short_click">Při krátkém kliknutí</string>
+    <string name="binding_click">On binding</string>
+    <string name="key_binder_reset_all">Obnovit vše</string>
+
+    <string name="orientation_default">Výchozí</string>
+    <string name="orientation_default_rotation">Výchozí nastavení aplikace</string>
+    <string name="orientation_landscape">Na šířku</string>
+    <string name="orientation_portrait">Na výšku</string>
+    <string name="orientation_landscape_inverse">Na šířku (270)</string>
+    <string name="orientation_portrait_inverse">Na výšku (180)</string>
+
+
+    <string name="fit_width">Přizpůsobit šířku</string>
+    <string name="fit_height">Přizpůsobit výšku</string>
+    <string name="fit_page">Přizpůsobit stránku</string>
+    <string name="fit_custom">Vlastní…</string>
+
+    <string name="key_binder_message">Stiskněte libovolnou klávesu a vyberte akci, která je sváže!</string>
+    <string name="key_binder_warning">Klávesu se nepodařilo svázat s nulovým kódem, zkuste jinou klávesu!</string>
+    <string name="table_of_contents">Obsah</string>
+
+    <string name="warn_no_text_in_selection">Ve výběru není žádný text!</string>
+    <string name="warn_no_outline">Přehled chybí!</string>
+
+    <string name="color_mode_normal">Normální barvy (černá na bílém pozadí)</string>
+    <string name="color_mode_inverted">Obrácené barvy</string>
+    <string name="color_mode_black_on_yellowish">Černá na nažloutlém pozadí</string>
+    <string name="color_mode_grayscale_light">Stupně šedi na našedlém pozadí</string>
+    <string name="color_mode_grayscale">Stupně šedi na šedém pozadí</string>
+    <string name="color_mode_grayscale_dark">Stupně šedi na tmavém pozadí</string>
+    <string name="color_mode_white_on_blue">Bílá na modrém pozadí</string>
+    <string name="select_color_mode">Vyberte barevný režim, který chcete přepnout</string>
+
+    <string name="saveFileNameTooltip">Název_souboru.přípona</string>
+    <string name="save">Uložit</string>
+</resources>

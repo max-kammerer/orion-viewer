@@ -1,0 +1,37 @@
+<resources>
+    <string name="fileopen_error_during_intent_processing">Chyba při zpracování záměru</string>
+    <string name="fileopen_error_during_intent_processing_info">Nelze extrahovat cestu k souboru ze záměru. Chcete-li je otevřít, uložte data záměru do souboru nebo:</string>
+
+    <string name="fileopen_private_resource_access">Přístup k soukromému souboru</string>
+    <string name="fileopen_private_resource_access_info">Soubor nelze číst přímo, vyberte prosím jednu z níže uvedených možností:</string>
+
+    <string name="fileopen_permission_dialog">Nelze získat přímý přístup k souboru</string>
+    <string name="fileopen_permission_dialog_info">Udělte prosím oprávnění ke čtení souboru pro přímý přístup nebo vyberte možnost níže:</string>
+
+    <string name="fileopen_permissions_grant_read">Udělit oprávnění ke čtení úložiště…</string>
+    <string name="fileopen_save_to_file">Uložit do nového souboru…</string>
+    <string name="fileopen_open_in_temporary_file">Otevřít prostřednictvím dočasného souboru</string>
+    <string name="fileopen_open_recent_files">Přejít na poslední knihy…</string>
+    <string name="fileopen_report_error_by_github_and_return">Nahlaste problém na githubu a vraťte se do dialogového okna…</string>
+    <string name="fileopen_report_error_by_email_and_return">Nahlaste chybu e-mailem a vraťte se do dialogového okna…</string>
+
+    <string name="string_exception">Výjimka</string>
+    <string name="string_intent">Záměr</string>
+    <string name="string_cause">Příčina</string>
+
+    <string name="crash_on_book_opening_title">Chyba při otevírání souboru</string>
+    <string name="crash_on_intent_opening_title">Při zpracování záměru došlo k chybě</string>
+    <string name="crash_on_book_opening_message_header">Chyba při otevírání souboru \`%1$s\`. Nahlaste prosím problém:</string>
+    <string name="crash_on_book_opening_message_header_panel">Chyba při otevírání souboru \`%1$s\`:</string>
+
+    <string name="crash_on_book_opening_encrypted">Šifrovaný dokument</string>
+
+    <string name="string_send">Odeslat…</string>
+    <string name="send_report_header">[Uveďte prosím další podrobnosti (kroky pro reprodukci problému)]</string>
+
+    <string name="error_on_file_saving_title">Chyba při ukládání souboru</string>
+
+    <string name="fileopen_cant_open">Dokument nelze otevřít: %s.</string>
+    <string name="fileopen_file_is_emppty">soubor je prázdný</string>
+    <string name="fileopen_no_pages">dokument nemá žádné stránky</string>
+</resources>

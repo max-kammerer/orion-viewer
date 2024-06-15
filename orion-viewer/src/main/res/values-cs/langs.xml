@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="lang_default_user">Systémový jazyk</string>
+    <string name="lang_english_user">Anglicky</string>
+    <string name="lang_russian_user">Rusky</string>
+    <string name="lang_hebrew_user">Hebrejsky</string>
+    <string name="lang_chinese_user">Činsky</string>
+    <string name="lang_italian_user">Italsky</string>
+    <string name="lang_spanish_user">Španělsky</string>
+    <string name="lang_ukrainian_user">Ukrajinsky</string>
+    <string name="lang_german_user">Německy</string>
+    <string name="lang_french_user">Francouzsky</string>
+    <string name="lang_turkish_user">Turecky</string>
+</resources>

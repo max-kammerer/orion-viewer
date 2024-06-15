@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="contribution_intro">Orion Viewer je projekt s otevřeným zdrojovým kódem a i vy ho můžete vylepšit!</string>
+
+    <string name="contribution_ways">Existuje mnoho věcí, které můžete do projektu přinést:</string>
+
+    <string name="contribution_report_bug">\u2022 navrhněte funkci nebo nahlaste problém do <a href="https://github.com/max-kammerer/orion-viewer/issues">nástroje pro sledování problémů</a></string>
+
+    <string name="contribution_do_translation">\u2022 přeložte <a href="https://github.com/max-kammerer/orion-viewer/wiki/Translations">aplikaci do jiných jazyků</a> nebo vylepšete stávající překlad</string>
+
+    <string name="contribution_code">\u2022 implementujte <a href="https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-build-project">novou funkci</a> nebo <a href="https://github.com/max-kammerer/orion-viewer/issues">opravte chyby</a></string>
+
+    <string name="contribution_design">\u2022 navrhněte nové téma aplikace nebo/a nové uživatelské rozhraní UI/UX</string>
+
+    <string name="contribution_review">\u2022 napište <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">recenzi aplikace na Google Play</a> nebo na jakékoli jiné platformě</string>
+
+    <string name="contribution_survey">Pomozte vylepšit aplikaci – zapojte se do průzkumu! (10–20 minut)</string>
+
+</resources>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="zoom">Otevře dialogové okno přiblížení. Nulová hodnota zoomu znamená přiblížení na šířku.</string>
+    <string name="rotation">Otočí dokument o 90 stupňů ve směru hodinových ručiček. Dlouhé kliknutí otáčí proti směru hodinových ručiček.</string>
+
+    <string name="crop">Otevře dialogové okno oříznutí ohraničení. Hodnoty jsou definované vzhledem k velikosti stránky. Dlouhé kliknutí na plus nebo mínus v tomto dialogu změní hodnotu oříznutí o 10%. Záporná hodnota přidá další ohraničení.</string>
+
+    <string name="apply">Použít aktuální možnosti.</string>
+    <string name="escape">Zpět/Zrušit</string>
+
+    <string name="general_usage">Jak používat:</string>
+
+    <string name="general_usage_step1">1. Otevřete dokument
+        </string>
+
+    <string name="general_usage_step2">
+        2. Vyberte vhodnou orientaci: na výšku nebo na šířku
+        </string>
+
+    <string name="general_usage_step3">
+        3. Ořízněte okraje, velikost textu se změní podle měnících se okrajů (pokud je zadáno přiblížení na šířku)
+        </string>
+
+    <string name="general_usage_step4">
+        4. Příjemnou zábavu při čtení!</string>
+
+    <!--<string name="help_taps">-->
+        <!--Click on screen - go to next page, long click - go to prev page.</string>-->
+
+    <string name="option_help">
+        Parametry aplikace</string>
+
+    <string name="navigation_help">
+        Otevře dialogové okno rozvržení stránky. Při čtení komiksů nebo prohlížení knih s obrázky si můžete vybrat vhodné rozvržení stránky.</string>
+
+    <string name="dictionary_help">
+        Otevře externí slovník. V Nastavení vyberte příslušnou aplikaci Slovník.</string>
+
+    <string name="tap_help">
+        Dotykové zóny umožňují uživateli propojit různé části obrazovky zařízení s běžně používanými příkazy.
+        Jsou zde buňky 3x3, kde uživatel může definovat akce pro krátké (horní štítek) a dlouhé (dolní štítek) kliknutí.</string>
+
+    <string name="bookmarks_export_help">
+        Povolit uživateli exportovat záložky (pro všechny knihy nebo pro aktuální).
+        Záložky se exportují do xml souboru s názvem otevřené knihy + příponou [bookmarks.xml nebo all_bookmarks.xml].
+        Tato možnost je dostupná v nabídce obrazovky Záložky.</string>
+</resources>
