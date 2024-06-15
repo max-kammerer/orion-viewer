@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<!--Translated by Claude Dellacherie-->
-<resources>
+<!--Translated by Claude Dellacherie--><resources>
     <string name="navigation">Navigation</string>
     <string name="crop_left">Rognage à gauche</string>
     <string name="enable_even_crop">Autre rognage pour pages paires</string>
