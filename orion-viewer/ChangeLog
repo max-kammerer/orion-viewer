@@ -1,3 +1,8 @@
+===== 0.94.2 (Jun 12, 2024) =====
+* Added ability to customize status bar position and size
+* Added information about battery level to status bar
+* Fixed compatibility with low-end devices lacking MANAGE_APP_ALL_FILES_ACCESS_PERMISSION activity
+
 ===== 0.94.1 (Jun 12, 2024) =====
 * Fixed problem with encrypted file processing
 * Fixed problem with search result highlighting
