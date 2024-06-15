@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <!--Do not translate this section and do not include it in result localization: start-->
+        <string name="app_name" translatable="false">Orion Viewer</string>
+
+        <string name="ABCD" translatable="false">ABCD</string>
+        <string name="ACBD" translatable="false">ACBD</string>
+        <string name="BADC" translatable="false">BADC</string>
+        <string name="BDAC" translatable="false">BDAC</string>
+
+        <integer name="layout_right_bottom_outside">0</integer>
+        <integer name="layout_only_bottom_outside">1</integer>
+        <integer name="layout_always_inside">2</integer>
+    <!--Do not translate this section and do not include it in result localization: end-->
+
+
+    <string name="navigation">Page traversal</string>
+    <string name="crop_left">Left</string>
+    <string name="enable_even_crop">Another cropping for even pages</string>
+    <string name="crop_right">Right</string>
+    <string name="crop_top">Top</string>
+    <string name="crop_bottom">Bottom</string>
+
+    <string name="crop_auto">Auto crop</string>
+    <string name="crop_manual">Manual crop</string>
+    <string name="crop_auto_manual">Auto and manual</string>
+    <string name="crop_manual_auto">Manual and auto</string>
+    <string name="crop_warning">Use manual crop for better performance</string>
+
+    <string name="rotate_0">0 degree</string>
+    <string name="rotate_90">90 degree</string>
+    <string name="rotate_270">270 degree</string>
+    <string name="long_click">On long click</string>
+    <string name="short_click">On short click</string>
+    <string name="binding_click">On binding</string>
+    <string name="key_binder_reset_all">Reset All</string>
+
+    <string name="orientation_default">Default</string>
+    <string name="orientation_default_rotation">Application Default</string>
+    <string name="orientation_landscape">Landscape</string>
+    <string name="orientation_portrait">Portrait</string>
+    <string name="orientation_landscape_inverse">Landscape (270)</string>
+    <string name="orientation_portrait_inverse">Portrait (180)</string>
+
+
+    <string name="fit_width">Fit Width</string>
+    <string name="fit_height">Fit Height</string>
+    <string name="fit_page">Fit Page</string>
+    <string name="fit_custom">Custom…</string>
+
+    <string name="key_binder_message">Push any key and select action to bind them!</string>
+    <string name="key_binder_warning">Couldn\'t bind key with zero keycode, try another key!</string>
+    <string name="table_of_contents">Table of Contents</string>
+
+    <string name="warn_no_text_in_selection">There is no text in selection!</string>
+    <string name="warn_no_outline">Outline is absent!</string>
+
+    <string name="color_mode_normal">Normal colors (black on white background)</string>
+    <string name="color_mode_inverted">Inverted Colors</string>
+    <string name="color_mode_black_on_yellowish">Black on yellowish background</string>
+    <string name="color_mode_grayscale_light">Grayscale on greyish background</string>
+    <string name="color_mode_grayscale">Grayscale on gray background</string>
+    <string name="color_mode_grayscale_dark">Grayscale on dark gray background</string>
+    <string name="color_mode_white_on_blue">White on blue background</string>
+    <string name="select_color_mode">Select color mode to switch</string>
+
+    <string name="saveFileNameTooltip">FileName.extension</string>
+    <string name="save">Save</string>
+</resources>

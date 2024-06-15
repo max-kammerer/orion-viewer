@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="msg_dialog_search">Search Dialog</string>
+    <string name="msg_dialog_dismis">Dismiss</string>
+    <string name="warn_text_not_found">No text</string>
+    <string name="warn_no_further_occurrences_found">No further occurrences found</string>
+    <string name="msg_searching">Searching…</string>
+
+    <string name="msg_select_text">Select text!</string>
+    <string name="msg_select_word">Click to word!</string>
+
+    <string name="msg_error">Error</string>
+    <string name="msg_warning">Warning</string>
+    <string name="msg_specify_keyword_for_search">Specify keyword for search</string>
+
+    <string name="recent_book_not_found">Can\'t find book file!</string>
+    <string name="tap_zones_header">Navigation via Tap Zones: default zone actions</string>
+
+    <string name="permission_directory_warning">Please provide read permission to access storage data</string>
+    <string name="permission_grant">Grant…</string>
+    <string name="permission_cancel">Cancel</string>
+
+    <string name="string_cancel">Cancel</string>
+    <string name="string_close">Close</string>
+    <string name="string_apply">Apply</string>
+
+    <string name="string_wrong_password">Wrong password</string>
+    <string name="password_for_file">Password for file</string>
+
+</resources>
