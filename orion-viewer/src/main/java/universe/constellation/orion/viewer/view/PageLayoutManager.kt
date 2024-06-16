@@ -212,8 +212,8 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
             val mainPage = activePages.firstOrNull { it.isActivePage }
             println("Render... ${mainPage?.pageNum}")
             //if (mainPage?.state != PageState.SIZE_AND_BITMAP_CREATED) return
-            mainPage?.renderVisible()
-            mainPage?.precache()
+            val mainTask = mainPage?.renderVisible()
+            mainPage?.precache(mainTask)
         }
 
         //Second of all: render active or hidden on screen pages
@@ -225,7 +225,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         //Third do precaching for all
         for (page in activePages) {
             if (isSinglePageMode && page.isActivePage) continue
-            page.precache()
+            page.precache(page.lastMainRenderingJob)
         }
 
         activePages.firstOrNull()?.takeIf { it.isOnScreen }?.precacheNeighbours(false)

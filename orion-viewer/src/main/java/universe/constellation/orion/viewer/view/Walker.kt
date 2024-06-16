@@ -1,9 +1,10 @@
 package universe.constellation.orion.viewer.view
 
 import android.graphics.Rect
+import kotlinx.coroutines.Job
 import universe.constellation.orion.viewer.log
 
-fun PageView.precache() {
+fun PageView.precache(joinJob: Job?) {
     log("Precaching $pageNum: $state")
     if (this.state != PageState.SIZE_AND_BITMAP_CREATED) return
 
@@ -20,13 +21,13 @@ fun PageView.precache() {
     val deltaY = getDeltaY(sceneInfo)
 
     val top = Rect(leftX - deltaX, topY - deltaY, rightX + deltaX, topY)
-    precacheSide(top, globalPageRect, "top")
+    precacheSide(top, globalPageRect, "top", joinJob)
     val bottom = Rect(leftX - deltaX, bottomY, rightX + deltaX, bottomY + deltaY)
-    precacheSide(bottom, globalPageRect, "bottom")
+    precacheSide(bottom, globalPageRect, "bottom", joinJob)
     val left = Rect(leftX - deltaX, topY, leftX, bottomY)
-    precacheSide(left, globalPageRect, "left")
+    precacheSide(left, globalPageRect, "left", joinJob)
     val right = Rect(rightX, topY, rightX + deltaX, bottomY)
-    precacheSide(right, globalPageRect, "right")
+    precacheSide(right, globalPageRect, "right", joinJob)
 }
 
 fun PageView.precacheNeighbours(next: Boolean) {
@@ -48,11 +49,11 @@ fun PageView.precacheNeighbours(next: Boolean) {
     }
 }
 
-fun PageView.precacheSide(rectOnScreen: Rect, pageGlobal: Rect, side: String) {
+fun PageView.precacheSide(rectOnScreen: Rect, pageGlobal: Rect, side: String, joinJob: Job?) {
     val intersect = rectOnScreen.intersect(pageGlobal)
     if (intersect && !rectOnScreen.isEmpty) {
         println("precache $pageNum: $side")
-        renderInvisible(layoutData.toLocalCoord(rectOnScreen), side)
+        renderInvisible(layoutData.toLocalCoord(rectOnScreen), side, joinJob)
     }
 }
 

@@ -68,6 +68,11 @@ class PageView(
     lateinit var pageInfoJob: Job
         private set
 
+    @Volatile
+    var lastMainRenderingJob: Job? = null
+        private set
+
+
     fun init() {
        reinit("init", Operation.DEFAULT)
     }
@@ -159,23 +164,25 @@ class PageView(
         }
     }
 
-    internal fun renderVisible() {
+    internal fun renderVisible(): Job? {
         if (!isOnScreen) {
             log("Non visible $pageNum");
-            return
-        }
-
-        renderingScopeOnUI.launch {
-            layoutData.visibleOnScreenPart(pageLayoutManager.sceneRect)?.let {
-                render(it, true, "Render visible")
+            lastMainRenderingJob = null
+        } else {
+            lastMainRenderingJob = renderingScopeOnUI.launch {
+                layoutData.visibleOnScreenPart(pageLayoutManager.sceneRect)?.let {
+                    render(it, true, "Render visible")
+                }
             }
         }
+        return lastMainRenderingJob
     }
 
-    fun renderInvisible(rect: Rect, tag: String) {
+    fun renderInvisible(rect: Rect, tag: String, joinJob: Job?) {
         //TODO yield
         if (Rect.intersects(rect, wholePageRect)) {
             renderingScopeOnUI.launch {
+                joinJob?.join()
                 render(rect, false, "Render invisible $tag")
             }
         }
@@ -194,28 +201,24 @@ class PageView(
         val bound = Rect(rect)
         val bitmap = bitmap!!
 
-        renderingScope.launch {
+        withContext(renderingScope.coroutineContext) {
             timing("$tag $pageNum page in rendering engine: $bound") {
                 bitmap.render(bound, layoutInfo, page)
             }
-            if (isActive) {
-                withContext(Dispatchers.Main) {
-                    if (kotlin.coroutines.coroutineContext.isActive) {
-                        if (fromUI) {
-                            log("PageView ($tag) invalidate: $pageNum $layoutData ${scene != null}")
-                            with(pageLayoutManager) {
-                                if (this@PageView.isActivePage) {
-                                    scene.invalidate()
-                                }
-                            }
-                        }
+        }
+
+        if (coroutineContext.isActive) {
+            if (fromUI) {
+                log("PageView ($tag) invalidate: $pageNum $layoutData ${scene != null}")
+                with(pageLayoutManager) {
+                    if (this@PageView.isActivePage) {
+                        scene.invalidate()
                     }
                 }
-            } else {
-                log("PageView.render $pageNum $layoutData: canceled")
             }
-        }/*.join()*/
-
+        } else {
+            log("PageView.render $pageNum $layoutData: canceled")
+        }
     }
 
     private val drawTmp  = Rect()
