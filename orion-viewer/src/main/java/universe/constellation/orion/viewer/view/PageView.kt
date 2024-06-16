@@ -3,8 +3,10 @@ package universe.constellation.orion.viewer.view
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -18,6 +20,7 @@ import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.timing
+import kotlin.coroutines.coroutineContext
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.min
@@ -92,6 +95,7 @@ class PageView(
         if (::pageInfoJob.isInitialized) {
             pageInfoJob.cancel()
         }
+
         pageInfo = null
         pageInfoJob = dataPageScope.launch(Dispatchers.Main) {
             val info = getPageInfo(controller.layoutStrategy as SimpleLayoutStrategy)
@@ -161,30 +165,24 @@ class PageView(
             return
         }
 
-        renderingScope.launch {
+        renderingScopeOnUI.launch {
             layoutData.visibleOnScreenPart(pageLayoutManager.sceneRect)?.let {
                 render(it, true, "Render visible")
             }
         }
     }
 
-    fun launchJobInRenderingScope(body: suspend () -> Unit): Job {
-        return renderingScope.launch {
-            body()
-        }
-    }
-
     fun renderInvisible(rect: Rect, tag: String) {
         //TODO yield
         if (Rect.intersects(rect, wholePageRect)) {
-            renderingScope.launch {
+            renderingScopeOnUI.launch {
                 render(rect, false, "Render invisible $tag")
             }
         }
     }
 
     private suspend fun render(rect: Rect, fromUI: Boolean, tag: String) {
-        readPageDataFromUI().await()
+        readPageDataFromUI().fastJoin()
 
         val layoutStrategy = controller.layoutStrategy
         if (!(layoutStrategy.viewWidth > 0 &&  layoutStrategy.viewHeight > 0)) return
@@ -319,3 +317,20 @@ val PageView.wholePageRect
 
 val PageView.pageEndY: Float
     get() = layoutData.position.y + wholePageRect.height()
+
+//suspend fun <T> Deferred<T>.getOrAwait(): T {
+//    if (isCompleted)  {
+//        coroutineContext.ensureActive()
+//    } else {
+//
+//    }
+//}
+//
+//
+suspend fun <T> Deferred<T>.fastJoin() {
+    if (isCompleted)  {
+        coroutineContext.ensureActive()
+    } else {
+        join()
+    }
+}

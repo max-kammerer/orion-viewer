@@ -3,12 +3,14 @@ package universe.constellation.orion.viewer.view
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.plus
 import kotlinx.coroutines.withContext
 import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.PageSize
@@ -44,6 +46,8 @@ open class CorePageView(
     protected val renderingScope = CoroutineScope(
         controller.renderingDispatcher.limitedParallelism(2) + renderingPageJobs + handler
     )
+
+    protected val renderingScopeOnUI = renderingScope + Dispatchers.Main
 
     protected val dataPageScope = CoroutineScope(controller.context + dataPageJobs + handler)
 
