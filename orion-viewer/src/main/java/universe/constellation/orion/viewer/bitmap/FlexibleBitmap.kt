@@ -14,7 +14,13 @@ import universe.constellation.orion.viewer.document.Page
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.log
 import kotlin.coroutines.coroutineContext
-import kotlin.math.min
+
+data class Key(val x: Int, val y: Int) : Comparable<Key> {
+    override fun compareTo(other: Key): Int {
+        val res = x.compareTo(other.x)
+        return if (res != 0) res else y.compareTo(other.y)
+    }
+}
 
 data class PagePart(val absPartRect: Rect) {
 
@@ -134,26 +140,9 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
     val height: Int
         get() = renderingArea.height()
 
-    private fun initData(width: Int, height: Int): Array<Array<PagePart>> {
+    private fun initData(width: Int, height: Int): MutableMap<Key, PagePart> {
         log("FB: initData $pageNum $width $height")
-        val rowCount = height.countCells(partHeight)
-        return Array(rowCount) { row ->
-            val colCount = width.countCells(partWidth)
-            Array(colCount) { col ->
-                val left = partWidth * col
-                val top = partHeight * row
-                val partWidth = min(width - left, partWidth)
-                val partHeight = min(height - top, partHeight)
-                PagePart(
-                    Rect(
-                        left,
-                        top,
-                        left + partWidth,
-                        top + partHeight
-                    )
-                )
-            }
-        }
+        return sortedMapOf()
     }
 
     fun resize(width: Int, height: Int, bitmapCache: BitmapCache): FlexibleBitmap {
@@ -170,30 +159,70 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
     }
 
     fun disableAll(cache: BitmapCache) {
-        updateDrawAreaAndUpdateNonRenderingPart(Rect(-1, -1, -1, -1), cache)
+        data.values.forEach { it.deactivate(cache) }
     }
 
     fun updateDrawAreaAndUpdateNonRenderingPart(activationRect: Rect, cache: BitmapCache) {
-        //free out of view bitmaps
-        forEach {
-            val newState = Rect.intersects(absPartRect, activationRect)
-            if (isActive && !newState) {
-                deactivate(cache)
-            }
+        val rect = Rect(activationRect)
+        val isEmptyIntersection = !rect.intersect(renderingArea)
+
+        val left = rect.left.countCellInc(partWidth)
+        val right = rect.right.countCell(partWidth)
+
+        val top = rect.top.countCellInc(partHeight)
+        val bottom = rect.bottom.countCell(partHeight)
+
+        //free bitmaps
+        val it = data.iterator()
+        while (it.hasNext()) {
+                val (key, value) = it.next()
+                val (x, y) = key
+                if (isEmptyIntersection || x !in left..right || y !in top..bottom) {
+                    if (value.isActive) {
+                        value.deactivate(cache)
+                    }
+
+                    if (x !in left - 2..right + 2 || y !in top - 2..bottom + 2) {
+                        synchronized(data) {
+                            it.remove()
+                        }
+                    }
+                }
         }
+
+
         //then enable visible ones
-        forEach {
-            val newState = Rect.intersects(absPartRect, activationRect)
-            if (!isActive && newState) {
-                activate(cache, partWidth, partHeight)
+        if (!isEmptyIntersection) {
+            for (col in left..right) {
+                for (row in top..bottom) {
+                    val key = Key(col, row)
+                    var page = data[key]
+                    if (page == null) {
+                        page = PagePart(
+                            Rect(
+                                col * partWidth,
+                                row * partHeight,
+                                (col + 1) * partWidth,
+                                (row + 1) * partHeight
+                            )
+                        )
+                        synchronized(data) {
+                            data.put(key, page)
+                        }
+                    }
+                    if (!page.isActive) {
+                        page.activate(cache, partWidth, partHeight)
+                    }
+                }
             }
         }
+        log("FB data size: " + data.size + data.keys.joinToString())
     }
 
     @TestOnly
     suspend fun renderFull(zoom: Double, page: Page) {
         coroutineScope {
-            forEach {
+            forEach(true) {
                 launch {
                     render(
                         renderingArea,
@@ -210,7 +239,7 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
     suspend fun render(renderingArea: Rect, curPos: LayoutPosition, page: Page) {
         log("FB rendering $page $renderingArea")
         coroutineScope {
-            forEach {
+            forEach(true) {
                 if (isActive) {
                     launch {
                         render(
@@ -227,12 +256,13 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
     }
 
     fun forAllTest(body: PagePart.() -> Unit) {
-        forEach(body)
+        forEach(body = body)
     }
 
-    private inline fun forEach(body: PagePart.() -> Unit) {
-        this.data.forEach {
-            it.forEach { part -> part.body() }
+    private inline fun forEach(copy: Boolean = false, body: PagePart.() -> Unit) {
+        val data = if (copy) synchronized(data)  { ArrayList(data.values) } else data.values
+        data.forEach { part ->
+            part.body()
         }
     }
 
@@ -252,9 +282,14 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
     }
 }
 
-fun Int.countCells(cellSize: Int): Int {
-    if (this == 0) return 0
-    return (this - 1) / cellSize + 1
+private fun Int.countCellInc(cellSize: Int): Int {
+    if (this == 0 || cellSize == 0) return 0
+    return this / cellSize
+}
+
+private fun Int.countCell(cellSize: Int): Int {
+    if (this == 0 || cellSize == 0) return 0
+    return (this - 1) / cellSize
 }
 
 private fun renderInner(bound: Rect, zoom: Double, offsetX: Int, offsetY: Int, page: Page, bitmap: Bitmap): Bitmap {

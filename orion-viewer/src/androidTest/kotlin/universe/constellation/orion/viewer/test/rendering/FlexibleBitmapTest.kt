@@ -97,15 +97,19 @@ class FlexibleBitmapTest(bookDescription: BookDescription) : BookTest(bookDescri
     @Test
     fun checkPartCountTest() {
         val bm = FlexibleBitmap(pageRect, pageRect.width(), pageRect.height())
+        bm.enableAll(BITMAP_CACHE)
         checkPartCount(bm, 1)
 
         bm.resize(pageRect.width(), pageRect.height(), BITMAP_CACHE)
+        bm.enableAll(BITMAP_CACHE)
         checkPartCount(bm, 1)
 
         bm.resize(pageRect.width() - 1, pageRect.height() - 1, BITMAP_CACHE)
+        bm.enableAll(BITMAP_CACHE)
         checkPartCount(bm, 1)
 
         bm.resize(pageRect.width() + 1, pageRect.height() + 1, BITMAP_CACHE)
+        bm.enableAll(BITMAP_CACHE)
         checkPartCount(bm, 2, 2)
     }
 
@@ -113,8 +117,9 @@ class FlexibleBitmapTest(bookDescription: BookDescription) : BookTest(bookDescri
         var counter = 0
         bm.forAllTest { ++counter }
         Assert.assertEquals(expectedRows * expectedCols, counter)
-        Assert.assertEquals(expectedRows, bm.data.size)
-        Assert.assertEquals(expectedCols, bm.data[0].size)
+
+        Assert.assertEquals(expectedRows, bm.data.keys.map { it.y }.distinct().size)
+        Assert.assertEquals(expectedCols, bm.data.keys.map { it.x }.distinct().size)
     }
 
     @After
