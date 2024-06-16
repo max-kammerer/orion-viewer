@@ -1,2 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="file_manager_grant_read_permissions">Innvilg lesetilganger</string>
+    <string name="file_manager_internal_storage">Internlagring</string>
+    <string name="file_manager_nav_locations">Steder</string>
+    <string name="file_manager_nav_other">Annet</string>
+    <string name="file_manager_title">Filbehandler</string>
+    <string name="file_manager_fodlers">Mapper</string>
+    <string name="file_manager_history">Historikk</string>
+    <string name="file_manager_path">Sti:</string>
+    <string name="file_manager_documents">Dokumenter</string>
+    <string name="file_manager_downloads">Nedlastninger</string>
+    <string name="file_manager_sdcard">SD-kort</string>
+    <string name="file_manager_nav_settings">Innstillinger</string>
+    <string name="file_manager_primary_storage">Hovedlagring</string>
+    <string name="file_manager_nav_system_select">Velg fil i systemet</string>
+    <string name="file_manager_nav_exit">Avslutt</string>
+    <string name="file_manager_contribution">Bidrag</string>
+    <string name="file_manager_select_tip">Velg en fil å åpne i Orion Viewer</string>
+</resources>
