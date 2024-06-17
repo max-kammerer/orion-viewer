@@ -1,2 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="menu_rotation_text">Skjermretning</string>
+    <string name="menu_goto_text">Gå til</string>
+    <string name="menu_zoom_text">Forstørrelse</string>
+    <string name="menu_crop_text">Beskjæring</string>
+    <string name="menu_bookmarks_text">Bokmerker</string>
+    <string name="menu_open_text">Åpne bok</string>
+    <string name="menu_add_bookmark_item">Legg til bokmerke</string>
+    <string name="menu_select_text">Velg tekst</string>
+    <string name="menu_help_text">Hjelp</string>
+    <string name="menu_about_text">Om</string>
+    <string name="menu_open_dictionary_text">Åpne ordboken</string>
+    <string name="menu_exit_text">Avslutt</string>
+    <string name="menu_options_text">Innstillinger</string>
+    <string name="menu_tap_text">Trykkesoner</string>
+    <string name="menu_search_item">Søk</string>
+    <string name="menu_other">Annet …</string>
+    <string name="import_all_bookmarks_menu_item">Importer …</string>
+    <string name="menu_book_preferences">Bokalternativer</string>
+    <string name="export_all_bookmarks_menu_item">Eksporter alle bokmerker</string>
+</resources>
