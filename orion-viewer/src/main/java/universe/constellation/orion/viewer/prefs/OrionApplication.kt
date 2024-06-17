@@ -34,6 +34,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.multidex.MultiDex
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import universe.constellation.orion.viewer.AndroidLogger
@@ -300,15 +301,17 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
         @JvmField
         val version: String = Build.VERSION.INCREMENTAL
 
-        fun initDjvuResources(orionApplication: Context) {
+        fun initDjvuResources(orionApplication: Context): Job? {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val fileToCopy = File(orionApplication.filesDir, "djvuConf")
                 val envPath = File(fileToCopy, "osi").absolutePath
-                CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
+                return CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
                     copyResIfNotExists(orionApplication.assets, "osi", fileToCopy)
+                }.also {
+                    Os.setenv("DJVU_CONFIG_DIR", envPath, true)
                 }
-                Os.setenv("DJVU_CONFIG_DIR", envPath, true)
             }
+            return null
         }
     }
 }

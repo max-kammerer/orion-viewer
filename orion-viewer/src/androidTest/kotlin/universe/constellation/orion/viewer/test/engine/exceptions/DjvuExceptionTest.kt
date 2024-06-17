@@ -1,6 +1,7 @@
 package universe.constellation.orion.viewer.test.engine.exceptions
 
 import androidx.test.platform.app.InstrumentationRegistry
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
@@ -20,7 +21,10 @@ class DjvuExceptionTest : BaseTest() {
         @BeforeClass
         @JvmStatic
         fun init() {
-            OrionApplication.initDjvuResources(InstrumentationRegistry.getInstrumentation().targetContext)
+            runBlocking {
+                OrionApplication.initDjvuResources(InstrumentationRegistry.getInstrumentation().targetContext)
+                    ?.join()
+            }
         }
     }
 
