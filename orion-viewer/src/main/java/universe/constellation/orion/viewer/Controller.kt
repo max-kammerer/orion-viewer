@@ -88,7 +88,7 @@ class Controller(
         log("Creating controller for `$document`")
         listener = object : DocumentViewAdapter() {
             override fun renderingParametersChanged() {
-                println("viewParametersChanged")
+                log("viewParametersChanged")
                 hasPendingEvents = if (this@Controller.activity._isResumed) {
                     pageLayoutManager.forcePageUpdate()
                     false

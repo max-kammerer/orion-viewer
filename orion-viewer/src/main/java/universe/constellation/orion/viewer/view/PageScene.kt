@@ -26,7 +26,7 @@ class PageScene : View {
 
     private fun triggerPaint() {
         if (getGlobalVisibleRect(visibleRect)) {
-            println("PageView.triggerPaint " + pageView?.pageNum + ": " + visibleRect)
+            log("PageView.triggerPaint " + pageView?.pageNum + ": " + visibleRect)
         }
         if (getLocalVisibleRect(visibleRect)) {
             pageView?.renderVisible()
@@ -77,7 +77,7 @@ class PageScene : View {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        println("Scene onDraw: ${pageView?.pageNum}")
+        log("Scene onDraw: ${pageView?.pageNum}")
         if (!inited) {
             return
         }

@@ -57,7 +57,7 @@ class OrionBookmarkActivity : OrionBaseActivity() {
             val bookmark = parent.getItemAtPosition(position) as Bookmark
             val result = Intent()
             result.putExtra(OPEN_PAGE, bookmark.page)
-            println("bookmark id = " + bookmark.id + " page = " + bookmark.page)
+            log("bookmark id = " + bookmark.id + " page = " + bookmark.page)
             setResult(Activity.RESULT_OK, result)
             finish()
         }

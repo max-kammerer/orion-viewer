@@ -1,6 +1,7 @@
 package universe.constellation.orion.viewer.prefs
 
 import android.content.res.AssetManager
+import universe.constellation.orion.viewer.log
 import java.io.File
 
 fun copyResIfNotExists(assets: AssetManager, path: String, targetRoot: File) {
@@ -14,7 +15,7 @@ fun copyResIfNotExists(assets: AssetManager, path: String, targetRoot: File) {
                 newFile.parentFile?.mkdirs()
                 assets.open(relPath).use { input ->
                     newFile.outputStream().use { output ->
-                        println("Copy " + newFile.absolutePath)
+                        log("Copy " + newFile.absolutePath)
                         input.copyTo(output)
                     }
                 }

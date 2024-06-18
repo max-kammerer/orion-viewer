@@ -52,7 +52,7 @@ fun PageView.precacheNeighbours(next: Boolean) {
 fun PageView.precacheSide(rectOnScreen: Rect, pageGlobal: Rect, side: String, joinJob: Job?) {
     val intersect = rectOnScreen.intersect(pageGlobal)
     if (intersect && !rectOnScreen.isEmpty) {
-        println("precache $pageNum: $side")
+        log("precache $pageNum: $side")
         renderInvisible(layoutData.toLocalCoord(rectOnScreen), side, joinJob)
     }
 }

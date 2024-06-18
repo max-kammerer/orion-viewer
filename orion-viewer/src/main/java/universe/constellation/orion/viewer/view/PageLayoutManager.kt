@@ -210,7 +210,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         //First of all: render single active page and precache data around
         if (isSinglePageMode) {
             val mainPage = activePages.firstOrNull { it.isActivePage }
-            println("Render... ${mainPage?.pageNum}")
+            log("Render... ${mainPage?.pageNum}")
             //if (mainPage?.state != PageState.SIZE_AND_BITMAP_CREATED) return
             val mainTask = mainPage?.renderVisible()
             mainPage?.precache(mainTask)
@@ -496,7 +496,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
                 activePages.size -> (activePages.lastOrNull()?.pageNum ?: -1) != pageNum - 1
                 else -> false
             }
-            println("insertIndex $pageNum: $insertIndex ${activePages.size} $destroy")
+            log("insertIndex $pageNum: $insertIndex ${activePages.size} $destroy")
             if (destroy) {
                 destroyPages()
             }
@@ -613,6 +613,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         updateCacheAndRender()
 
         if (operation != Operation.PINCH_ZOOM && updatedView.isActivePage) {
+            log("Invalidate ${updatedView.pageNum} scene in onPageSizeCalculated: $operation")
             scene.invalidate()
         }
         dump()

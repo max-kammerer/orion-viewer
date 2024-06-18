@@ -145,7 +145,7 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
     }
 
     override fun onScroll(e1: MotionEvent?, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
-        println("onScroll $enableTouchMove")
+        log("onScroll $enableTouchMove")
         if (!enableTouchMove) {
             return false
         }

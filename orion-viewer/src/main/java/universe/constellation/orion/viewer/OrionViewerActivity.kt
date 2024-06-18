@@ -137,7 +137,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (ASK_READ_PERMISSION_FOR_BOOK_OPEN == requestCode) {
-            println("Permission callback $requestCode...")
+            log("Permission callback $requestCode...")
             processIntentAndCheckPermission(intent ?: return)
         }
     }

@@ -4,6 +4,7 @@ import android.graphics.PointF
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import universe.constellation.orion.viewer.OrionViewerActivity
+import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.util.MoveUtil
 import universe.constellation.orion.viewer.view.OrionDrawScene
 
@@ -38,7 +39,7 @@ class NewTouchProcessorWithScale(view: OrionDrawScene, activity: OrionViewerActi
     }
 
     override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {
-        println("OnScaleBegin")
+        log("OnScaleBegin")
         curScale = detector.scaleFactor
         startFocus.set(detector.focusX, detector.focusY)
         nextState = State.SCALE
@@ -51,7 +52,7 @@ class NewTouchProcessorWithScale(view: OrionDrawScene, activity: OrionViewerActi
     }
 
     override fun onScaleEnd(detector: ScaleGestureDetector) {
-        println("OnScaleEnd")
+        log("OnScaleEnd")
         resetNextState()
         val newX = MoveUtil.calcOffset(startFocus.x, endFocus.x, curScale, enableTouchMoveOnPinchZoom)
         val newY = MoveUtil.calcOffset(startFocus.y, endFocus.y, curScale, enableTouchMoveOnPinchZoom)
@@ -60,7 +61,7 @@ class NewTouchProcessorWithScale(view: OrionDrawScene, activity: OrionViewerActi
     }
 
     override fun onScale(detector: ScaleGestureDetector): Boolean {
-        println("onScale")
+        log("onScale")
         curScale *= detector.scaleFactor
         endFocus.set(detector.focusX, detector.focusY)
         view.enableScalingMode()
