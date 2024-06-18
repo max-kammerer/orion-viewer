@@ -1,3 +1,12 @@
+===== 0.94.3 (Jun 18, 2024) =====
+* New performance and memory optimizations
+* Added new translations:
+    Czech translation by Amerey
+    Norwegian Bokmål by Allan Nordhøy
+* Updated translations:
+    Chinese by hugoalh and 大王叫我来巡山
+    French by J. Lavoie
+
 ===== 0.94.2 (Jun 12, 2024) =====
 * Added ability to customize status bar position and size
 * Added information about battery level to status bar
