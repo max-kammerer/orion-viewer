@@ -248,6 +248,8 @@ class GlobalOptions(
 
         private const val RECENT_PREFIX = "recent_"
 
+        const val DISABLE = "DISABLE"
+
         const val SWAP_KEYS: String = "SWAP_KEYS"
 
         const val DEFAULT_ZOOM: String = "DEFAULT_ZOOM"

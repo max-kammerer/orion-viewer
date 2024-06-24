@@ -12,6 +12,7 @@ import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.view.OrionDrawScene
 import universe.constellation.orion.viewer.dpToPixels
+import universe.constellation.orion.viewer.prefs.GlobalOptions
 import kotlin.math.abs
 
 enum class State {
@@ -70,7 +71,10 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
     private var isFlingActiveOnDown = false
 
     init {
-        detector.setIsLongpressEnabled(true)
+        activity.globalOptions.LONG_TAP_ACTION.observe(activity) {
+            detector.setIsLongpressEnabled(it != GlobalOptions.DISABLE)
+        }
+
         detector.setOnDoubleTapListener(this)
     }
 
@@ -121,7 +125,7 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
             flingAnim.cancel()
         }
 
-        log("onDown")
+        log("gesture: onDown")
         return true
     }
 
@@ -145,7 +149,7 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
     }
 
     override fun onScroll(e1: MotionEvent?, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
-        log("onScroll $enableTouchMove")
+        log("gesture: onScroll $enableTouchMove")
         if (!enableTouchMove) {
             return false
         }
@@ -154,19 +158,38 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
         return true
     }
 
+    override fun onSingleTapUp(e: MotionEvent): Boolean {
+        if (activity.globalOptions.DOUBLE_TAP_ACTION.value == GlobalOptions.DISABLE) {
+            return processSingleTap(e, "onSingleTapUp")
+        }
+        return false
+    }
+
+
     override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+        if (activity.globalOptions.DOUBLE_TAP_ACTION.value != GlobalOptions.DISABLE) {
+            return processSingleTap(e, "onSingleTapConfirmed")
+        }
+        return false
+    }
+
+    private fun processSingleTap(e: MotionEvent, msg: String): Boolean {
         if (isFlingActiveOnDown) {
             return true
         }
 
-        log("onSingleTapConfirmed")
+        log("processSingleTap: $msg")
         resetNextState()
         doAction(ContextAction.TAP_ACTION, e, ClickType.SHORT)
         return true
     }
 
     override fun onDoubleTap(e: MotionEvent): Boolean {
-        log("onDoubleTap")
+        if (activity.globalOptions.DOUBLE_TAP_ACTION.value == GlobalOptions.DISABLE) {
+            return processSingleTap(e, "onDoubleTap skipped")
+        }
+
+        log("gesture: onDoubleTap")
         nextState = State.DOUBLE_TAP
         doAction(
             ContextAction.findAction(activity.globalOptions.DOUBLE_TAP_ACTION.value),
@@ -181,7 +204,7 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
             return
         }
 
-        log("onLongPress $state $nextState")
+        log("gesture: onLongPress $state $nextState")
         if (state != State.UNDEFINED) return
         doAction(
             ContextAction.findAction(activity.globalOptions.LONG_TAP_ACTION.value),

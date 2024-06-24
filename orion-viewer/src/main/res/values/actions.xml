@@ -45,6 +45,7 @@
     <string name="action_select_word">Select word</string>
     <string name="action_select_word_and_translate">Select word and translate</string>
     <string name="action_tap_action">Tap zone action</string>
+    <string name="action_disable">Disable</string>
 
     <string name="action_fit_width">Fit Width</string>
     <string name="action_fit_height">Fit Height</string>

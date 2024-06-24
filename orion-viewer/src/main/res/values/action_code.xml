@@ -69,4 +69,5 @@
     <string name="action_key_select_text_new" translatable="false">SELECT_TEXT</string>
     <string name="action_key_select_word_and_translate_new" translatable="false">SELECT_WORD_AND_TRANSLATE</string>
     <string name="action_key_tap_action" translatable="false">TAP_ACTION</string>
+    <string name="action_key_disable" translatable="false">DISABLE</string>
 </resources>
