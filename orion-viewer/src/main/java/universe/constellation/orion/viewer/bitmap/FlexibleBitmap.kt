@@ -216,7 +216,6 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
                 }
             }
         }
-        log("FB data size: " + data.size + data.keys.joinToString())
     }
 
     @TestOnly
