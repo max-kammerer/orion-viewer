@@ -2,16 +2,16 @@
 <!--Translated by Johannes Römer--><resources>
     <string name="menu_search_item">Suchen</string>
     <string name="menu_add_bookmark_item">Lesezeichen setzen</string>
-    <string name="menu_bookmarks_text">Lesezeichen verwalten</string>
+    <string name="menu_bookmarks_text">Lesezeichen</string>
     <string name="menu_zoom_text">Zoomen</string>
     <string name="menu_crop_text">Zuschneiden</string>
     <string name="menu_select_text">Text auswählen</string>
     <string name="menu_book_preferences">Dokumenteinstellungen</string>
-    <string name="menu_goto_text">Gehe zu…</string>
+    <string name="menu_goto_text">Gehe zu</string>
     <string name="menu_outline_text">Inhaltsübersicht</string>
     <string name="menu_open_dictionary_text">Wörterbuch öffnen</string>
     <string name="menu_options_text">Einstellungen</string>
-    <string name="menu_open_text">Dokument öffnen</string>
+    <string name="menu_open_text">Buch öffnen</string>
     <string name="menu_help_text">Hilfe</string>
     <string name="menu_exit_text">Schließen</string>
     <string name="menu_rotation_text">Bildschirmausrichtung</string>
@@ -22,4 +22,5 @@
     <string name="export_all_bookmarks_menu_item">Alle Lesezeichen exportieren</string>
     <string name="import_current_bookmarks_menu_item">Lesezeichen hinzufügen …</string>
     <string name="import_all_bookmarks_menu_item">Importieren …</string>
+    <string name="menu_about_text">Über …</string>
 </resources>
