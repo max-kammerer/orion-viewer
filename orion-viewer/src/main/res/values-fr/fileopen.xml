@@ -1,2 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="fileopen_error_during_intent_processing">Erreur lors du traitement des intentions</string>
+    <string name="fileopen_private_resource_access">Accès au fichier privé</string>
+    <string name="fileopen_private_resource_access_info">Vous ne pouvez pas lire le fichier directement, choisissez une des options ci-dessous :</string>
+    <string name="fileopen_permission_dialog">Impossible d\'accéder directement au fichier</string>
+    <string name="fileopen_permission_dialog_info">Veuillez accorder des permissions de fichier pour l\'accéder directement ou choisissez l\'option ci-dessous :</string>
+    <string name="fileopen_permissions_grant_read">Autoriser la lecture du stockage…</string>
+    <string name="fileopen_save_to_file">Enregistrer dans un nouveau fichier…</string>
+    <string name="fileopen_open_recent_files">Aller dans les livres récents…</string>
+    <string name="fileopen_report_error_by_github_and_return">Signaler le problème sur GitHub et retourner au dialogue…</string>
+    <string name="fileopen_report_error_by_email_and_return">Signaler l\'erreur par courriel et retourner au dialogue…</string>
+    <string name="crash_on_book_opening_title">Erreur lors de l\'ouverture du fichier</string>
+    <string name="crash_on_book_opening_message_header">Erreur lors de l\'ouverture du fichier %1$s. Veuillez signaler un problème :</string>
+    <string name="crash_on_book_opening_message_header_panel">Erreur lors de l\'ouverture du fichier %1$s :</string>
+    <string name="crash_on_book_opening_encrypted">Document chiffré</string>
+    <string name="string_send">Envoyer…</string>
+    <string name="send_report_header">[Veuillez fournir des détails supplémentaires (étapes pour reproduire le problème)]</string>
+    <string name="error_on_file_saving_title">Erreur lors de l\'enregistrement de fichiers</string>
+    <string name="fileopen_file_is_emppty">le fichier est vide</string>
+    <string name="fileopen_no_pages">le document n\'a aucune page</string>
+    <string name="fileopen_open_in_temporary_file">Ouvrir via fichier temporaire</string>
+    <string name="string_exception">Exception</string>
+    <string name="string_cause">Cause</string>
+    <string name="fileopen_cant_open">Impossible d\'ouvrir le document : %s.</string>
+</resources>
