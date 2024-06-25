@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!--Translated by Claude Dellacherie-->
-<resources>
+<!--Translated by Claude Dellacherie--><resources>
     <!--Categories-->
     <string name="pref_category_general">Général</string>
     <string name="pref_category_key_manager">Association des touches</string>
@@ -9,7 +7,6 @@
     <string name="pref_category_add_parameters">Paramètres additionnels</string>
     <string name="pref_category_system">Système</string>
     <string name="pref_category_move">Bouger</string>
-
     <!--General Prefs-->
     <string name="pref_appearance">Apparence</string>
     <string name="pref_behavior">Contrôles et comportement</string>
@@ -27,65 +24,68 @@
     <string name="pref_close_page_option_dialog_on_apply">Fermer un dialogue après une tape au lieu de deux</string>
     <string name="pref_swap_prev_next_keys">Echanger les touches précédent/suivant</string>
     <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Echanger les touches précédent/suivant en mode paysage</string>
-
     <string name="pref_dictionary">Dictionnaire</string>
     <string name="pref_dictionary_desc">Dictionnaire: %s</string>
-
     <string name="pref_e_ink_optimization">E-ink: optimisation</string>
     <string name="pref_e_ink_fast_refresh">E-ink: rapide rafraichissement</string>
     <string name="pref_total_refresh_after">Rafraichissement total après…</string>
-
     <string name="pref_long_crop_value">Valeur du grand rognage</string>
     <string name="pref_long_crop_value_desc">Valeur du grand rognage (0–40%)</string>
-
     <string name="pref_screen_overlapping_horizontal">Recouvrement horizontal</string>
     <string name="pref_screen_overlapping_horizontal_desc">Recouvrement horizontal de l\'écran au changement de page (0–90%)</string>
-
     <string name="pref_screen_overlapping_vertical">Recouvrement vertical</string>
     <string name="pref_screen_overlapping_vertical_desc">Recouvrement vertical de l\'écran au changement de page (0–90%)</string>
-
     <string name="pref_custom_brightness">Ajustement de la luminosité</string>
     <string name="pref_brightness">Luminosité</string>
     <string name="pref_brightness_desc">Luminosité (1–100%)</string>
-
     <string name="pref_application_theme">Thèmes</string>
     <string name="pref_application_theme_desc">Thème: %s. (Réinitialiser Orion pour appliquer les changements)</string>
-
     <string name="pref_open_recent_book">Ouvrir un livre récent au départ</string>
-
     <!--book preferences-->
     <string name="pref_book_contrast">Contraste</string>
     <string name="pref_book_contrast_desc">Contraste (défaut 100): %s</string>
-
     <string name="pref_book_threshold">Filigrane</string>
     <string name="pref_book_threshold_desc">Eliminer un filigrane (par défaut 255): %s</string>
-
     <string name="pref_device_info">Informations sur le dispositif</string>
     <string name="pref_debug">Déboguer</string>
-
     <string name="pref_walk_order">Sélection de direction de lecture</string>
     <string name="pref_walk_order_desc">Sélection de direction de lecture: %s</string>
-
     <string name="pref_page_layout">Disposition d\'une page</string>
-
-
     <string name="application_settings_title">Configuration</string>
     <string name="pref_default_book_setting">Réglages pour livre</string>
-
     <string name="book_pref_title">Options pour livre</string>
-
     <string name="pref_screen_backlight_timeout">Laps de temps avant extinction de l\'écran</string>
     <string name="pref_screen_backlight_timeout_desc">Laps de temps avant exticntion de l\'écran: %s</string>
-
     <string name="pref_app_language">Langue de l\'application</string>
     <string name="pref_app_language_desc">Langue: %s. (réinitialiser Orion pour appliquer un changement)</string>
-
     <string name="pref_tap_zones_desc">Zones de tapes: associer des actions aux zones de l\'écran</string>
-    
     <string name="pref_enable_touch_move">Permet de bouger avec un doigt</string>
     <string name="pref_enable_move_on_pinch_zoom">Permet une translation pendant un zoom à deux doigts</string>
-    
     <string name="pref_color_mode">Choix de la couleur</string>
-
-
+    <string name="pref_category_status_bar">Barre d\'état</string>
+    <string name="pref_value">Valeur : %s</string>
+    <string name="pref_statusBarSize">Taille de la barre d\'état</string>
+    <string name="pref_statusBarPosition">Position de la barre</string>
+    <string name="pref_showBatteryInfo">Afficher les infos batterie</string>
+    <string name="pref_position_top">En haut</string>
+    <string name="pref_position_bottom">En bas</string>
+    <string name="pref_position_hide">Masquer</string>
+    <string name="pref_size_small">Petit</string>
+    <string name="pref_size_medium">Moyen</string>
+    <string name="pref_size_large">Grand</string>
+    <string name="pref_category_quick_actions">Actions rapides</string>
+    <string name="pref_category_behavior">Comportement par défaut</string>
+    <string name="pref_old_ui">Activer l\'ancienne interface</string>
+    <string name="pref_new_ui_summary">Le redémarrage de l\'appli est requis</string>
+    <string name="pref_renderOffPage">Tirer l\'espace hors page</string>
+    <string name="pref_showTimeOnStatusBar">Afficher l\'heure</string>
+    <string name="pref_bookDefaultZoom_desc">Zoom : %s</string>
+    <string name="pref_book_screen_orientation_desc">Orientation de l\'écran : %s</string>
+    <string name="pref_debug_desc">Écrire les infos de débogage dans le fichier</string>
+    <string name="pref_default_book_setting_desc">Sera également appliqué au livre ouvert !</string>
+    <string name="pref_key_binder_desc">Actions liées aux touches/boutons</string>
+    <string name="pref_key_double_tap">Action du double appui</string>
+    <string name="pref_key_long_tap">Action de l\'appui long</string>
+    <string name="pref_key_linked_action_summary">Action de liage : `%s`</string>
+    <string name="pref_color_mode_desc">%s</string>
 </resources>
