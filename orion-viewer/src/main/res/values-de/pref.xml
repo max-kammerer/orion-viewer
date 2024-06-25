@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!--Translated by Johannes Römer-->
-<resources>
+<!--Translated by Johannes Römer--><resources>
     <!--Categories-->
     <string name="pref_category_general">Allgemein</string>
     <string name="pref_category_device_parameters">Geräte-Einstellungen</string>
@@ -9,7 +7,6 @@
     <string name="pref_category_add_parameters">Andere Einstellungen</string>
     <string name="pref_category_system">System</string>
     <string name="pref_category_move">Verschieben</string>
-
     <!--General Prefs-->
     <string name="pref_appearance">Erscheinungsbild</string>
     <string name="pref_fullScreen">Vollbildmodus</string>
@@ -25,15 +22,11 @@
     <string name="pref_enable_touch_move">Verschieben mittels Touchscreen aktivieren</string>
     <string name="pref_enable_move_on_pinch_zoom">Verschieben bei Zwei-Finger-Zoom zulassen</string>
     <string name="pref_default_book_setting">Standardeinstellungen</string>
-
     <string name="pref_walk_order">Anzeigemodus</string>
     <string name="pref_walk_order_desc">Anzeigemodus: %s</string>
-
     <string name="pref_page_layout">Seitenaufteilung</string>
-
     <string name="pref_bookDefaultZoom">Zoomen</string>
     <string name="pref_bookDefaultZoom_desc">Zoomen: %s</string>
-
     <string name="pref_book_contrast">Kontrast</string>
     <string name="pref_book_contrast_desc">Kontrastwert (Voreinstellung: 100): %s</string>
     <string name="pref_tap_zones_desc">Bildschirmbereiche mit bestimmten Aktionen verknüpfen</string>
@@ -41,7 +34,6 @@
     <string name="pref_screen_orientation_desc">Standardausrichtung (erfordert Neustart der Anwendung)</string>
     <string name="pref_app_language">Sprache der Benutzeroberfläche</string>
     <string name="pref_app_language_desc">Sprache: %s. (Erfordert Neustart der Anwendung)</string>
-
     <!--Device Prefs-->
     <string name="pref_screen_backlight_timeout">Hintergrundbeleuchtung</string>
     <string name="pref_screen_backlight_timeout_desc">Abschaltzeit der Hintergrundbeleuchtung: %s</string>
@@ -52,15 +44,12 @@
     <string name="pref_e_ink_optimization">E-Ink</string>
     <string name="pref_e_ink_fast_refresh">Schneller Bildwechsel für E-Ink</string>
     <string name="pref_total_refresh_after">Vollständiger Bildneuaufbau nach…</string>
-
     <!--Key Prefs-->
     <string name="pref_swap_prev_next_keys">Vor-/Zurücktaste vertauschen</string>
     <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Vor-/Zurücktaste im Querformat vertauschen</string>
-
     <!--Dictionary Prefs-->
     <string name="pref_dictionary">Wörterbuch</string>
     <string name="pref_dictionary_desc">Wörterbuch: %s</string>
-
     <!--Other Prefs-->
     <string name="pref_long_crop_value">Großer Zuschnitt</string>
     <string name="pref_long_crop_value_desc">Wert für großen Zuschnitt (0–40%)</string>
@@ -68,16 +57,17 @@
     <string name="pref_screen_overlapping_horizontal_desc">Horizontale Überlappung der Ansicht beim Blättern (0–90%)</string>
     <string name="pref_screen_overlapping_vertical">Vertikales Überlappen</string>
     <string name="pref_screen_overlapping_vertical_desc">Vertikale Überlappung der Ansicht beim Blättern (0–90%)</string>
-
     <!--System Prefs-->
     <string name="pref_debug">Debugging</string>
-
     <!--Book Prefs-->
     <string name="book_pref_title">Einstellungen für aktuelles Dokument</string>
     <string name="pref_book_screen_orientation">Bildschirmausrichtung für aktuelles Dokument</string>
     <string name="pref_color_mode">Farbmodus</string>
     <string name="pref_book_threshold">Wasserzeichen</string>
     <string name="pref_book_threshold_desc">Schwellwert zur Entfernung von Wasserzeichen (Voreinstellung: 255): %s</string>
-
     <string name="application_settings_title">Anwendungs-Einstellungen</string>
+    <string name="pref_category_status_bar">Statusleiste</string>
+    <string name="pref_value">Wert: %s</string>
+    <string name="pref_category_quick_actions">Schnellaktionen</string>
+    <string name="pref_category_behavior">Standardverhalten</string>
 </resources>
