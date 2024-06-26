@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="fill_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:paddingLeft="4dp"
@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="0"
         android:paddingRight="4dp"
+        android:paddingLeft="4dp"
         android:singleLine="true"
         android:layout_gravity="center"
         android:textAppearance="?android:attr/textAppearanceMedium" />
