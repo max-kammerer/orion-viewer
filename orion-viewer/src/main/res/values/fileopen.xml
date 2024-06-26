@@ -3,7 +3,7 @@
     <string name="fileopen_error_during_intent_processing_info">Can\'t extract file path from intent. Please save intent data into file to open it or:</string>
 
     <string name="fileopen_private_resource_access">Access to private file</string>
-    <string name="fileopen_private_resource_access_info">Can\'t read file directly, please select one of options below:</string>
+    <string name="fileopen_private_resource_access_info">Impossible de lire le fichier directement, veuillez sélectionner l\'une des options ci-dessous :</string>
 
     <string name="fileopen_permission_dialog">Can\'t access file directly</string>
     <string name="fileopen_permission_dialog_info">Please grant read file permissions to access it directly or choose option below:</string>

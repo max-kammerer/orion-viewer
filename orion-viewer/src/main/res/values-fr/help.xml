@@ -6,8 +6,7 @@
     <string name="apply">Applique les modifications dans les différentes options.</string>
     <string name="escape">Retour/Échap.</string>
     <string name="general_usage">Mode d\'emploi :</string>
-    <string name="general_usage_step1">1. Ouvre un document (zoom largeur par défaut)
-        </string>
+    <string name="general_usage_step1">1. Ouvre un document (zoom largeur par défaut)</string>
     <string name="general_usage_step2">2. Choisissez l\'orientation appropriée : portrait ou paysage</string>
     <string name="general_usage_step3">3. Rogne les marges ; la taille du texte sera changée selon le changement des marges (si zoom largeur est spécifié)</string>
     <string name="general_usage_step4">4. Bonne lecture !</string>
