@@ -64,7 +64,13 @@ class OutlineAdapter(
         val viewLayout = view as LinearLayout
 
         view.findViewById<TextView>(R.id.title).text = getDescription(treeNodeInfo.id)
-        view.findViewById<TextView>(R.id.page).text = (getPage(treeNodeInfo.id) + 1).toString()
+        val page0 = getPage(treeNodeInfo.id)
+        val textView = view.findViewById<TextView>(R.id.page)
+        if (page0 < 0) {
+            textView.text = " "
+        } else {
+            textView.text = (page0 + 1).toString()
+        }
 
         return viewLayout
     }
@@ -81,11 +87,21 @@ class OutlineAdapter(
     override fun handleItemClick(view: View, id: Any) {
         val longId = id as Int
         val info = manager.getNodeInfo(longId)
+        val outlineItem = this.items[longId]
+        if (outlineItem.page < 0) return
+
         if (false && info.isWithChildren) {
             super.handleItemClick(view, id)
         } else {
-            controller.drawPage(this.items[longId].page)
-            this.dialog.dismiss()
+            try {
+                controller.drawPage(outlineItem.page)
+                this.dialog.dismiss()
+            } catch (e: Exception) {
+                log(e)
+                val viewerActivity = activity as OrionViewerActivity
+                viewerActivity.analytics.error(e, outlineItem.toString())
+                viewerActivity.showWarning(activity.getString(R.string.wrong_outline_item, e.message))
+            }
         }
     }
 

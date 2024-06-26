@@ -27,4 +27,6 @@
     <string name="string_wrong_password">Wrong password</string>
     <string name="password_for_file">Password for file</string>
 
+    <string name="wrong_outline_item">Incorrect page: %s</string>
+
 </resources>
