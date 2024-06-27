@@ -4,11 +4,11 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent" android:background="@android:color/transparent">
 
-    <universe.constellation.orion.viewer.selection.SelectionView android:id="@+id/text_selector"
+    <universe.constellation.orion.viewer.selection.SelectionViewNew android:id="@+id/text_selector"
                                                        android:background="@android:color/transparent"
                                                        android:layout_width="fill_parent"
                                            android:layout_height="fill_parent">
 
-    </universe.constellation.orion.viewer.selection.SelectionView>
+    </universe.constellation.orion.viewer.selection.SelectionViewNew>
 
 </LinearLayout>

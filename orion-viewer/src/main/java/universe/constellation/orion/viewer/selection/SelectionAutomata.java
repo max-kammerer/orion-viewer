@@ -24,9 +24,9 @@ public class SelectionAutomata extends DialogOverView {
 
     private STATE state = STATE.CANCELED;
 
-    private int startX, startY, width, height;
+    private float startX, startY, width, height;
 
-    private final SelectionView selectionView;
+    private final SelectionViewNew selectionView;
 
     private boolean isSingleWord = false;
 
@@ -42,14 +42,13 @@ public class SelectionAutomata extends DialogOverView {
     public boolean onTouch(MotionEvent event) {
         int action = event.getAction();
 
-        //System.out.println("aaaction " + action + " " + event.getX() + ", " + event.getY() + " " + state);
         STATE oldState = state;
         boolean result = true;
         switch (state) {
             case START:
                 if (action == MotionEvent.ACTION_DOWN) {
-                    startX = (int) event.getX();
-                    startY = (int) event.getY();
+                    startX = event.getX();
+                    startY = event.getY();
                     width = 0;
                     height = 0;
                     state = STATE.MOVING;
@@ -60,14 +59,14 @@ public class SelectionAutomata extends DialogOverView {
                 break;
 
             case MOVING:
-                int endX = (int) event.getX();
-                int endY = (int) event.getY();
+                float endX = event.getX();
+                float endY = event.getY();
                 width = endX - startX;
                 height = endY - startY;
                 if (action == MotionEvent.ACTION_UP) {
                     state = STATE.END;
                 } else {
-                    selectionView.updateView(Math.min(startX, endX), Math.min(startY, endY), Math.max(startX, endX), Math.max(startY, endY));
+                    selectionView.updateView(new RectF(Math.min(startX, endX), Math.min(startY, endY), Math.max(startX, endX), Math.max(startY, endY)));
                 }
                 break;
 
@@ -108,7 +107,7 @@ public class SelectionAutomata extends DialogOverView {
                 RectF originRect = text.getRect();
                 RectF sceneRect = selection.getPageView().getSceneRect(originRect);
                 originSelection = new Rect((int) sceneRect.left, (int) sceneRect.top, (int) sceneRect.right, (int) sceneRect.bottom);
-                selectionView.updateView((int) sceneRect.left, (int) sceneRect.top, (int) sceneRect.right, (int) sceneRect.bottom);
+                selectionView.updateView(sceneRect);
             }
         }
         String text = sb.toString();
@@ -161,10 +160,10 @@ public class SelectionAutomata extends DialogOverView {
     }
 
     private Rect getScreenSelectionRect() {
-        int startX = this.startX;
-        int startY = this.startY;
-        int width = this.width;
-        int height = this.height;
+        float startX = this.startX;
+        float startY = this.startY;
+        float width = this.width;
+        float height = this.height;
 
         if (width < 0) {
             startX += width;
@@ -175,7 +174,7 @@ public class SelectionAutomata extends DialogOverView {
             height = -height;
         }
 
-        return new Rect(startX, startY, startX + width, startY + height);
+        return new Rect((int) startX, (int) startY, (int) (startX + width), (int) (startY + height));
     }
 
     public static List<PageAndSelection> getSelectionRectangle(int startX, int startY, int width, int height, boolean isSingleWord, PageLayoutManager pageLayoutManager) {

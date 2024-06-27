@@ -5,14 +5,19 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.ColorFilter
 import android.graphics.Paint
-import android.graphics.Rect
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 
-class SelectionView : View {
-    private var oldRect: Rect? = null
+class SelectionViewNew : View {
 
     private val paint = Paint()
+
+    private var rects: List<RectF> = emptyList()
+
+    private var startHandler: Handler? = null
+
+    private var endHandler: Handler? = null
 
     constructor(context: Context?) : super(context)
 
@@ -27,24 +32,32 @@ class SelectionView : View {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        if (oldRect != null) {
-            canvas.drawRect(oldRect!!, paint)
+        rects.forEach {
+            canvas.drawRect(it, paint)
+        }
+
+        startHandler?.let { handler ->
+            canvas.drawCircle(handler.x, handler.y, handler.radius, paint)
+        }
+
+        endHandler?.let { handler ->
+            canvas.drawCircle(handler.x, handler.y, handler.radius, paint)
         }
     }
 
-    fun updateView(left: Int, top: Int, right: Int, bottom: Int) {
-        val newRect = Rect(left, top, right, bottom)
-        val invalidate = Rect(newRect)
-        if (oldRect != null) {
-            invalidate.union(oldRect!!)
-        }
-        oldRect = newRect
+    fun updateView(rects: RectF) {
+        updateView(listOf(rects))
+    }
 
+    fun updateView(rects: List<RectF>, startHandler: Handler? = null, endHandler: Handler? = null) {
+        this.rects = rects
+        this.startHandler = startHandler
+        this.endHandler = endHandler
         invalidate()
     }
 
     fun reset() {
-        oldRect = null
+        rects = emptyList()
     }
 
     fun setColorFilter(colorFilter: ColorFilter?) {
@@ -53,3 +66,5 @@ class SelectionView : View {
         paint.alpha = 64
     }
 }
+
+class Handler(var x: Float, var y: Float, var radius: Float)
