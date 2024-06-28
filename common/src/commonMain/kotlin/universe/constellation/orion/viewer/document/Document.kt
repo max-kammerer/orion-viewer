@@ -58,6 +58,8 @@ interface Page {
 
     fun getText(absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): TextAndSelection?
 
+    fun getTextInfo(): TextInfoBuilder?
+
     fun destroy()
 }
 

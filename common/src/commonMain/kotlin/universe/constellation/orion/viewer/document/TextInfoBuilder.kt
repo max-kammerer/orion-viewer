@@ -1,12 +1,12 @@
-package universe.constellation.orion.viewer.djvu
+package universe.constellation.orion.viewer.document
 
 import android.graphics.Rect
 
-class TextBuilder {
+class TextInfoBuilder {
 
     companion object {
 
-        val NULL = TextBuilder()
+        val NULL = TextInfoBuilder()
 
         val space = TextWord().apply { add(" ", Rect()) }
     }
@@ -17,6 +17,10 @@ class TextBuilder {
         lastLine().add(TextWord().apply { add(value, Rect(x, y, x2, y2)) })
     }
 
+    fun addWord(value: String, rect: Rect) {
+        lastLine().add(TextWord().apply { add(value, rect) })
+    }
+
     private fun lastLine(): MutableList<TextWord> {
         if (lines.isEmpty()) {
             lines.add(mutableListOf())
@@ -25,7 +29,9 @@ class TextBuilder {
     }
 
     fun newLine() {
-        lines.add(mutableListOf())
+        if (lastLine().isNotEmpty()) {
+            lines.add(mutableListOf())
+        }
     }
 
     fun addSpace() {

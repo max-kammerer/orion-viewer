@@ -8,6 +8,7 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
+import kotlin.math.sqrt
 
 class SelectionViewNew : View {
 
@@ -15,9 +16,11 @@ class SelectionViewNew : View {
 
     private var rects: List<RectF> = emptyList()
 
-    private var startHandler: Handler? = null
+    var startHandler: Handler? = null
+        private set
 
-    private var endHandler: Handler? = null
+    var endHandler: Handler? = null
+        private set
 
     constructor(context: Context?) : super(context)
 
@@ -45,14 +48,17 @@ class SelectionViewNew : View {
         }
     }
 
-    fun updateView(rects: RectF) {
-        updateView(listOf(rects))
+    fun updateView(rect: RectF) {
+        updateView(listOf(rect))
     }
 
-    fun updateView(rects: List<RectF>, startHandler: Handler? = null, endHandler: Handler? = null) {
-        this.rects = rects
+    fun setHandlers(startHandler: Handler, endHandler: Handler) {
         this.startHandler = startHandler
         this.endHandler = endHandler
+    }
+
+    fun updateView(rects: List<RectF>) {
+        this.rects = rects
         invalidate()
     }
 
@@ -67,4 +73,20 @@ class SelectionViewNew : View {
     }
 }
 
-class Handler(var x: Float, var y: Float, var radius: Float)
+class Handler(var x: Float, var y: Float, var radius: Float) {
+    constructor(x: Int, y: Int, radius: Int) : this(x.toFloat(), y.toFloat(), radius.toFloat())
+}
+
+fun SelectionViewNew.findClosestHandler(x: Float, y: Float, trashHold: Float): Handler? {
+    val min = listOfNotNull(
+        startHandler to startHandler?.distance(x, y),
+        endHandler to endHandler?.distance(x, y)
+    ).minByOrNull { it.second ?: Float.MAX_VALUE } ?: return null
+    return min.takeIf { trashHold >= (it.second ?: Float.MAX_VALUE) }?.first
+}
+
+fun Handler.distance(x: Float, y: Float): Float {
+    val dx = this.x - x
+    val dy = this.y - y
+    return sqrt((dx * dx + dy * dy).toDouble()).toFloat()
+}

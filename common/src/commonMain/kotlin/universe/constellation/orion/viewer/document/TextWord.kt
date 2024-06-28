@@ -1,4 +1,4 @@
-package universe.constellation.orion.viewer.djvu
+package universe.constellation.orion.viewer.document
 
 import android.graphics.Rect
 

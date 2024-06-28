@@ -6,6 +6,8 @@ import universe.constellation.orion.viewer.document.AbstractDocument
 import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.document.AbstractPage
 import universe.constellation.orion.viewer.document.TextAndSelection
+import universe.constellation.orion.viewer.document.TextInfoBuilder
+import universe.constellation.orion.viewer.document.TextWord
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.errorInDebugOr
 import universe.constellation.orion.viewer.geometry.Rect
@@ -21,7 +23,7 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
         private var pagePointer: Long = 0
 
         @Volatile
-        private var textBuilder: TextBuilder? = null
+        private var textInfoBuilder: TextInfoBuilder? = null
 
         override fun readPageSize(): PageSize? {
             if (docPointer == 0L) return errorInDebugOr("Document for $pageNum is null") { null }
@@ -79,6 +81,17 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
             return searchPage(this.pageNum, text)
         }
 
+        override fun getTextInfo(): TextInfoBuilder? {
+            if (textInfoBuilder == null) {
+                textInfoBuilder = Companion.getText(contextPointer, docPointer, pageNum, TextInfoBuilder()) ?: TextInfoBuilder.NULL
+            }
+            val builder = textInfoBuilder
+            if (builder == null || builder == TextInfoBuilder.NULL) {
+                return null
+            }
+            return textInfoBuilder
+        }
+
         override fun getText(
             absoluteX: Int,
             absoluteY: Int,
@@ -86,18 +99,18 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
             height: Int,
             singleWord: Boolean
         ): TextAndSelection? {
-            if (textBuilder == null) {
-                textBuilder = Companion.getText(contextPointer, docPointer, pageNum, TextBuilder()) ?: TextBuilder.NULL
+            if (textInfoBuilder == null) {
+                textInfoBuilder = Companion.getText(contextPointer, docPointer, pageNum, TextInfoBuilder()) ?: TextInfoBuilder.NULL
             }
-            val builder = textBuilder
-            if (builder == null || builder == TextBuilder.NULL) {
+            val builder = textInfoBuilder
+            if (builder == null || builder == TextInfoBuilder.NULL) {
                 return null
             }
             return getText(builder, absoluteX, absoluteY, width, height, singleWord)
         }
 
 
-        private fun getText(builder: TextBuilder, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): TextAndSelection? {
+        private fun getText(builder: TextInfoBuilder, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): TextAndSelection? {
             val opRect = android.graphics.RectF()
             val lns: java.util.ArrayList<List<TextWord>> = arrayListOf()
             val selectionRegion = android.graphics.RectF(
@@ -135,7 +148,7 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
             }
 
             return if (result.isNotEmpty()) {
-                TextAndSelection(result.toString(), RectF(result.rect));
+                TextAndSelection(result.toString(), RectF(result.rect), builder);
             } else {
                 null
             }
@@ -290,7 +303,7 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
         external fun getOutline(doc: Long): Array<OutlineItem>
 
         @JvmStatic @Synchronized
-        external fun getText(context: Long, doc: Long, pageNumber: Int, textBuilder: TextBuilder): TextBuilder?
+        external fun getText(context: Long, doc: Long, pageNumber: Int, textInfoBuilder: TextInfoBuilder): TextInfoBuilder?
 
         @JvmStatic @Synchronized
         external fun releasePage(page: Long)

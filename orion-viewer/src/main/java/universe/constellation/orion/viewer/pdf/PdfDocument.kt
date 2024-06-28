@@ -20,6 +20,7 @@
 package universe.constellation.orion.viewer.pdf
 
 import android.graphics.RectF
+import androidx.core.graphics.toRect
 import com.artifex.mupdf.fitz.Device
 import com.artifex.mupdf.fitz.DisplayList
 import com.artifex.mupdf.fitz.Matrix
@@ -35,6 +36,7 @@ import universe.constellation.orion.viewer.document.AbstractDocument
 import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.document.AbstractPage
 import universe.constellation.orion.viewer.document.TextAndSelection
+import universe.constellation.orion.viewer.document.TextInfoBuilder
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.errorInDebugOr
 import universe.constellation.orion.viewer.timing
@@ -138,6 +140,13 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
             return getText(page!!, absoluteX, absoluteY, width, height, singleWord)
         }
 
+        override fun getTextInfo(): TextInfoBuilder? {
+            if (destroyed) return null
+            readPageDataIfNeeded()
+            if (page == null) return null
+            return getTextInfo(page!!)
+        }
+
         override fun destroy() {
             destroyPage(this)
         }
@@ -163,6 +172,43 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
     external fun updateContrast(bitmap: Bitmap, size: Int)
 
     external override fun setThreshold(threshold: Int)
+
+    private fun getTextInfo(page: Page): TextInfoBuilder? {
+        val text: StructuredText = synchronized(core) { page.toStructuredText() }
+        try {
+           return buildTextInfo(text)
+        } finally {
+            text.destroy()
+        }
+    }
+
+    private fun buildTextInfo(text: StructuredText): TextInfoBuilder {
+        val textInfoBuilder = TextInfoBuilder()//TODO: cache
+        for (block in text.blocks) {
+            if (block != null) {
+                for (ln in block.lines) {
+                    textInfoBuilder.newLine()
+                    if (ln != null) {
+                        var word = TextWord()
+                        textInfoBuilder.addSpace()
+                        for (textChar in ln.chars) {
+                            if (textChar.c != ' '.code) {
+                                word.add(textChar)
+                            } else if (word.isNotEmpty()) {
+                                if (word.isNotEmpty()) {
+                                    textInfoBuilder.addWord(word.toString(), word.rect.toRect())
+                                    textInfoBuilder.addSpace()
+                                }
+                                word = TextWord()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return textInfoBuilder
+    }
 
     private fun getText(page: Page, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): TextAndSelection? {
         val text: StructuredText = synchronized(core) { page.toStructuredText() }
@@ -217,7 +263,7 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
                 acc.add(res)
                 acc
             }
-            return TextAndSelection(result.toString(), result.rect);
+            return TextAndSelection(result.toString(), result.rect, buildTextInfo(text));
         } finally {
             text.destroy()
         }
