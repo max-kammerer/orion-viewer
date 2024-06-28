@@ -1,254 +1,320 @@
-package universe.constellation.orion.viewer.selection;
+package universe.constellation.orion.viewer.selection
 
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.view.MotionEvent;
+import android.content.DialogInterface
+import android.graphics.Rect
+import android.graphics.RectF
+import android.view.MotionEvent
+import android.view.View
+import universe.constellation.orion.viewer.Action
+import universe.constellation.orion.viewer.OrionViewerActivity
+import universe.constellation.orion.viewer.R
+import universe.constellation.orion.viewer.dialog.DialogOverView
+import universe.constellation.orion.viewer.document.TextInfoBuilder
+import universe.constellation.orion.viewer.dpToPixels
+import universe.constellation.orion.viewer.view.PageLayoutManager
+import kotlin.math.max
+import kotlin.math.min
 
-import androidx.annotation.NonNull;
-
-import java.util.List;
-
-import universe.constellation.orion.viewer.Action;
-import universe.constellation.orion.viewer.Controller;
-import universe.constellation.orion.viewer.OrionBaseActivityKt;
-import universe.constellation.orion.viewer.OrionViewerActivity;
-import universe.constellation.orion.viewer.R;
-import universe.constellation.orion.viewer.dialog.DialogOverView;
-import universe.constellation.orion.viewer.document.TextAndSelection;
-import universe.constellation.orion.viewer.document.TextInfoBuilder;
-import universe.constellation.orion.viewer.view.PageLayoutManager;
-
-public class SelectionAutomata extends DialogOverView {
-
-    private enum STATE {START, MOVING, ACTIVE_SELECTION, MOVING_HANDLER, CANCELED}
-
-    private final static int SINGLE_WORD_AREA = 2;
-
-    private STATE state = STATE.CANCELED;
-
-    private float startX, startY, width, height;
-
-    private final SelectionViewNew selectionView;
-
-    private boolean isSingleWord = false;
-
-    private boolean translate = false;
-
-    private final float radius;
-
-    private Handler activeHandler = null;
-
-    private SelectedTextActions actions = null;
-
-    private boolean isMovingHandlers = false;
-
-    private TextInfoBuilder builder = null;
-
-    public SelectionAutomata(final OrionViewerActivity activity) {
-        super(activity, universe.constellation.orion.viewer.R.layout.text_selector, android.R.style.Theme_Translucent_NoTitleBar);
-
-        selectionView = dialog.findViewById(R.id.text_selector);
-        selectionView.setOnTouchListener((v, event) -> SelectionAutomata.this.onTouch(event));
-        radius = OrionBaseActivityKt.dpToPixels(activity, 10);
+class SelectionAutomata(activity: OrionViewerActivity) :
+    DialogOverView(activity, R.layout.text_selector, android.R.style.Theme_Translucent_NoTitleBar) {
+    private enum class STATE {
+        START, MOVING, ACTIVE_SELECTION, MOVING_HANDLER, CANCELED
     }
 
-    public boolean onTouch(MotionEvent event) {
-        int action = event.getAction();
+    private var state = STATE.CANCELED
 
-        STATE oldState = state;
-        boolean result = true;
-        switch (state) {
-            case START:
-                if (action == MotionEvent.ACTION_DOWN) {
-                    startX = event.getX();
-                    startY = event.getY();
-                    width = 0;
-                    height = 0;
-                    state = STATE.MOVING;
-                    selectionView.reset();
-                } else {
-                    state = STATE.CANCELED;
-                }
-                break;
+    private var startX = 0f
+    private var startY = 0f
+    private var width = 0f
+    private var height = 0f
 
-            case MOVING:
-                float endX = event.getX();
-                float endY = event.getY();
-                width = endX - startX;
-                height = endY - startY;
-                if (action == MotionEvent.ACTION_UP) {
-                    state = STATE.ACTIVE_SELECTION;
-                } else {
-                    selectionView.updateView(new RectF(Math.min(startX, endX), Math.min(startY, endY), Math.max(startX, endX), Math.max(startY, endY)));
-                }
-                break;
+    private val selectionView: SelectionViewNew = dialog.findViewById(R.id.text_selector)
 
-            case ACTIVE_SELECTION:
-                System.out.println("XXX" + action);
-                if (action == MotionEvent.ACTION_DOWN) {
-                    activeHandler = SelectionViewNewKt.findClosestHandler(selectionView, event.getX(), event.getY(), radius * 1.2f);
-                    System.out.println(activeHandler);
-                    if (activeHandler == null) {
-                        state = STATE.CANCELED;
-                        result = false;
-                    } else {
-                        state = STATE.MOVING_HANDLER;
-                        isMovingHandlers = true;
-                        isSingleWord = false;
-                        if (actions != null)
-                            actions.dismissOnlyDialog();
-                    }
-                }
-                break;
-            case MOVING_HANDLER:
-                 if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_MOVE) {
-                    activeHandler.setX(event.getX());
-                    activeHandler.setY(event.getY());
-                    selectionView.invalidate();
+    private var isSingleWord = false
 
-                    if (action == MotionEvent.ACTION_UP) {
-                        state = STATE.ACTIVE_SELECTION;
-                        startX = selectionView.getStartHandler().getX();
-                        width = selectionView.getEndHandler().getX() - startX;
+    private var translate = false
 
-                        startY = selectionView.getStartHandler().getY();
-                        height = selectionView.getEndHandler().getY() - startY;
-                    }
-                } else {
-                    result = false;
-                }
-            break;
+    private val radius: Float
 
-            default: result = false;
+    private var activeHandler: Handler? = null
+
+    private var actions: SelectedTextActions? = null
+
+    private var isMovingHandlers = false
+
+    private var builder: TextInfoBuilder? = null
+
+    init {
+        selectionView.setOnTouchListener { v: View?, event: MotionEvent ->
+            this@SelectionAutomata.onTouch(
+                event
+            )
         }
+        radius = activity.dpToPixels(10f).toFloat()
+    }
 
+    fun onTouch(event: MotionEvent): Boolean {
+        val action = event.action
+
+        val oldState = state
+        var result = true
+        when (state) {
+            STATE.START -> if (action == MotionEvent.ACTION_DOWN) {
+                startX = event.x
+                startY = event.y
+                width = 0f
+                height = 0f
+                state = STATE.MOVING
+                selectionView.reset()
+            } else {
+                state = STATE.CANCELED
+            }
+
+            STATE.MOVING -> {
+                val endX = event.x
+                val endY = event.y
+                width = endX - startX
+                height = endY - startY
+                if (action == MotionEvent.ACTION_UP) {
+                    state = STATE.ACTIVE_SELECTION
+                } else {
+                    selectionView.updateView(
+                        RectF(
+                            min(startX.toDouble(), endX.toDouble()).toFloat(),
+                            min(startY.toDouble(), endY.toDouble())
+                                .toFloat(),
+                            max(startX.toDouble(), endX.toDouble())
+                                .toFloat(),
+                            max(startY.toDouble(), endY.toDouble()).toFloat()
+                        )
+                    )
+                }
+            }
+
+            STATE.ACTIVE_SELECTION -> {
+                println("XXX$action")
+                if (action == MotionEvent.ACTION_DOWN) {
+                    activeHandler =
+                        selectionView.findClosestHandler(event.x, event.y, radius * 1.2f)
+                    println(activeHandler)
+                    if (activeHandler == null) {
+                        state = STATE.CANCELED
+                        result = false
+                    } else {
+                        state = STATE.MOVING_HANDLER
+                        isMovingHandlers = true
+                        isSingleWord = false
+                        if (actions != null) actions!!.dismissOnlyDialog()
+                    }
+                }
+            }
+
+            STATE.MOVING_HANDLER -> if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_MOVE) {
+                activeHandler!!.x = event.x
+                activeHandler!!.y = event.y
+                selectionView.invalidate()
+
+                if (action == MotionEvent.ACTION_UP) {
+                    state = STATE.ACTIVE_SELECTION
+                    startX = selectionView.startHandler!!.x
+                    width = selectionView.endHandler!!.x - startX
+
+                    startY = selectionView.startHandler!!.y
+                    height = selectionView.endHandler!!.y - startY
+                }
+            } else {
+                result = false
+            }
+
+            else -> result = false
+        }
         if (oldState != state) {
-            switch (state) {
-                case CANCELED:
-                    actions.dismissOnlyDialog();
+            when (state) {
+                STATE.CANCELED -> {
+                    actions!!.dismissOnlyDialog()
 
-                    actions = null;
-                    dialog.dismiss();
-                    break;
+                    actions = null
+                    dialog.dismiss()
+                }
 
-                case ACTIVE_SELECTION:
-                    selectText(isSingleWord, translate, getSelectionRectangle(), getScreenSelectionRect());
-                    break;
+                STATE.ACTIVE_SELECTION -> selectText(
+                    isSingleWord,
+                    translate,
+                    selectionRectangle,
+                    screenSelectionRect
+                )
+                else -> {
+                }
             }
         }
-        return result;
+        return result
     }
 
-    public void selectText(
-            boolean isSingleWord, boolean translate, List<PageAndSelection> data, Rect originSelection
+    fun selectText(
+        isSingleWord: Boolean,
+        translate: Boolean,
+        data: List<PageAndSelection>,
+        originSelection: Rect
     ) {
-        StringBuilder sb = new StringBuilder();
-        boolean first = true;
-        Controller controller = activity.getController();
-        if (controller == null) return;
+        var originSelection = originSelection
+        val sb = StringBuilder()
+        var first = true
+        val controller = activity.controller ?: return
 
-        for (PageAndSelection selection: data) {
-            System.out.println(selection.getAbsoluteRectWithoutCrop());
-            Rect rect = selection.getAbsoluteRectWithoutCrop();
-            TextAndSelection text = controller.selectRawText(selection.getPage(), rect.left, rect.top, rect.width(), rect.height(), isSingleWord);
+        for (selection in data) {
+            println(selection.absoluteRectWithoutCrop)
+            val rect = selection.absoluteRectWithoutCrop
+            val text = controller.selectRawText(
+                selection.page,
+                rect.left,
+                rect.top,
+                rect.width(),
+                rect.height(),
+                isSingleWord
+            )
 
             if (text != null) {
                 if (!first) {
-                    sb.append(" ");
+                    sb.append(" ")
                 }
-                sb.append(text.getValue());
-                first = false;
+                sb.append(text.value)
+                first = false
             }
-            if ((isSingleWord && text != null)  || isMovingHandlers) {
-                RectF originRect = text.getRect();
-                RectF sceneRect = selection.getPageView().getSceneRect(originRect);
-                originSelection = new Rect((int) sceneRect.left, (int) sceneRect.top, (int) sceneRect.right, (int) sceneRect.bottom);
-                selectionView.updateView(sceneRect);
-                builder = text.getTextInfo();
+            if ((isSingleWord && text != null) || isMovingHandlers) {
+                val originRect = text!!.rect
+                val sceneRect = selection.pageView.getSceneRect(originRect)
+                originSelection = Rect(
+                    sceneRect.left.toInt(),
+                    sceneRect.top.toInt(),
+                    sceneRect.right.toInt(),
+                    sceneRect.bottom.toInt()
+                )
+                selectionView.updateView(sceneRect)
+                builder = text.textInfo
                 if (!isMovingHandlers) {
-                    selectionView.setHandlers(new Handler(originSelection.left - radius / 2, originSelection.top - radius / 2, radius), new Handler(originSelection.right + radius / 2, originSelection.bottom + radius / 2, radius));
+                    selectionView.setHandlers(
+                        Handler(
+                            originSelection.left - radius / 2,
+                            originSelection.top - radius / 2,
+                            radius
+                        ),
+                        Handler(
+                            originSelection.right + radius / 2,
+                            originSelection.bottom + radius / 2,
+                            radius
+                        )
+                    )
                 }
             }
         }
-        String text = sb.toString();
+        val text = sb.toString()
         if (!text.isEmpty()) {
             if (isSingleWord && translate) {
-                dialog.dismiss();
-                Action.DICTIONARY.doAction(controller, activity, text);
+                dialog.dismiss()
+                Action.DICTIONARY.doAction(controller, activity, text)
             } else {
-                SelectedTextActions selectedTextActions = new SelectedTextActions(activity, dialog);
-                actions = selectedTextActions;
-                if (isSingleWord && !dialog.isShowing()) {
+                val selectedTextActions = SelectedTextActions(activity, dialog)
+                actions = selectedTextActions
+                if (isSingleWord && !dialog.isShowing) {
                     //TODO: refactor
-                    final Rect origin = originSelection;
-                    dialog.setOnShowListener(dialog2 -> {
-                        selectedTextActions.show(text, origin);
-                        dialog.setOnShowListener(null);
-                    });
-                    startSelection(true, false, true);
-                    state = STATE.ACTIVE_SELECTION;
+                    val origin = originSelection
+                    dialog.setOnShowListener { dialog2: DialogInterface? ->
+                        selectedTextActions.show(text, origin)
+                        dialog.setOnShowListener(null)
+                    }
+                    startSelection(true, false, true)
+                    state = STATE.ACTIVE_SELECTION
                 } else {
-                    selectedTextActions.show(text, originSelection);
+                    selectedTextActions.show(text, originSelection)
                 }
             }
         } else {
-            dialog.dismiss();
-            activity.showFastMessage(R.string.warn_no_text_in_selection);
+            dialog.dismiss()
+            activity.showFastMessage(R.string.warn_no_text_in_selection)
         }
     }
 
-    public void startSelection(boolean isSingleWord, boolean translate) {
-        startSelection(isSingleWord, translate, false);
-    }
-    public void startSelection(boolean isSingleWord, boolean translate, boolean quite) {
-        selectionView.setColorFilter(activity.getFullScene().getColorStuff().getBackgroundPaint().getColorFilter());
+    @JvmOverloads
+    fun startSelection(isSingleWord: Boolean, translate: Boolean, quite: Boolean = false) {
+        selectionView.setColorFilter(activity.fullScene.colorStuff.backgroundPaint.colorFilter)
         if (!quite) {
-            selectionView.reset();
+            selectionView.reset()
         }
-        initDialogSize();
-        dialog.show();
+        initDialogSize()
+        dialog.show()
         if (!quite) {
-            String msg = activity.getResources().getString(isSingleWord ? R.string.msg_select_word : R.string.msg_select_text);
-            activity.showFastMessage(msg);
+            val msg =
+                activity.resources.getString(if (isSingleWord) R.string.msg_select_word else R.string.msg_select_text)
+            activity.showFastMessage(msg)
         }
-        state = STATE.START;
-        this.isSingleWord = isSingleWord;
-        this.translate = translate;
+        state = STATE.START
+        this.isSingleWord = isSingleWord
+        this.translate = translate
     }
 
-    private List<PageAndSelection> getSelectionRectangle() {
-        Rect screenRect = getScreenSelectionRect();
-        return getSelectionRectangle(screenRect.left, screenRect.top, screenRect.width(), screenRect.height(), isSingleWord, activity.getController().getPageLayoutManager());
-    }
-
-    private Rect getScreenSelectionRect() {
-        float startX = this.startX;
-        float startY = this.startY;
-        float width = this.width;
-        float height = this.height;
-
-        if (width < 0) {
-            startX += width;
-            width = -width;
-        }
-        if (height < 0) {
-            startY += height;
-            height = -height;
+    private val selectionRectangle: List<PageAndSelection>
+        get() {
+            val screenRect = screenSelectionRect
+            return getSelectionRectangle(
+                screenRect.left,
+                screenRect.top,
+                screenRect.width(),
+                screenRect.height(),
+                isSingleWord,
+                activity.controller!!.pageLayoutManager
+            )
         }
 
-        return new Rect((int) startX, (int) startY, (int) (startX + width), (int) (startY + height));
-    }
+    private val screenSelectionRect: Rect
+        get() {
+            var startX = this.startX
+            var startY = this.startY
+            var width = this.width
+            var height = this.height
 
-    public static List<PageAndSelection> getSelectionRectangle(int startX, int startY, int width, int height, boolean isSingleWord, PageLayoutManager pageLayoutManager) {
-        Rect rect = getSelectionRect(startX, startY, width, height, isSingleWord);
-        return pageLayoutManager.findPageAndPageRect(rect);
-    }
+            if (width < 0) {
+                startX += width
+                width = -width
+            }
+            if (height < 0) {
+                startY += height
+                height = -height
+            }
 
-    @NonNull
-    public static Rect getSelectionRect(int startX, int startY, int width, int height, boolean isSingleWord) {
-        int singleWordDelta = isSingleWord ? SINGLE_WORD_AREA : 0;
-        int x = startX - singleWordDelta;
-        int y = startY - singleWordDelta;
-        return new Rect(x, y, x + width + singleWordDelta, y + height + singleWordDelta);
+            return Rect(
+                startX.toInt(),
+                startY.toInt(),
+                (startX + width).toInt(),
+                (startY + height).toInt()
+            )
+        }
+
+    companion object {
+        private const val SINGLE_WORD_AREA = 2
+
+        fun getSelectionRectangle(
+            startX: Int,
+            startY: Int,
+            width: Int,
+            height: Int,
+            isSingleWord: Boolean,
+            pageLayoutManager: PageLayoutManager
+        ): List<PageAndSelection> {
+            val rect = getSelectionRect(startX, startY, width, height, isSingleWord)
+            return pageLayoutManager.findPageAndPageRect(rect)
+        }
+
+        fun getSelectionRect(
+            startX: Int,
+            startY: Int,
+            width: Int,
+            height: Int,
+            isSingleWord: Boolean
+        ): Rect {
+            val singleWordDelta = if (isSingleWord) SINGLE_WORD_AREA else 0
+            val x = startX - singleWordDelta
+            val y = startY - singleWordDelta
+            return Rect(x, y, x + width + singleWordDelta, y + height + singleWordDelta)
+        }
     }
 }
