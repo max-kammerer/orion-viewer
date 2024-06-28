@@ -10,15 +10,17 @@ import java.util.List;
 
 import universe.constellation.orion.viewer.Action;
 import universe.constellation.orion.viewer.Controller;
+import universe.constellation.orion.viewer.OrionBaseActivityKt;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.R;
 import universe.constellation.orion.viewer.dialog.DialogOverView;
 import universe.constellation.orion.viewer.document.TextAndSelection;
+import universe.constellation.orion.viewer.document.TextInfoBuilder;
 import universe.constellation.orion.viewer.view.PageLayoutManager;
 
 public class SelectionAutomata extends DialogOverView {
 
-    private enum STATE {START, MOVING, END, CANCELED}
+    private enum STATE {START, MOVING, ACTIVE_SELECTION, MOVING_HANDLER, CANCELED}
 
     private final static int SINGLE_WORD_AREA = 2;
 
@@ -32,11 +34,22 @@ public class SelectionAutomata extends DialogOverView {
 
     private boolean translate = false;
 
+    private final float radius;
+
+    private Handler activeHandler = null;
+
+    private SelectedTextActions actions = null;
+
+    private boolean isMovingHandlers = false;
+
+    private TextInfoBuilder builder = null;
+
     public SelectionAutomata(final OrionViewerActivity activity) {
         super(activity, universe.constellation.orion.viewer.R.layout.text_selector, android.R.style.Theme_Translucent_NoTitleBar);
 
         selectionView = dialog.findViewById(R.id.text_selector);
         selectionView.setOnTouchListener((v, event) -> SelectionAutomata.this.onTouch(event));
+        radius = OrionBaseActivityKt.dpToPixels(activity, 10);
     }
 
     public boolean onTouch(MotionEvent event) {
@@ -64,20 +77,61 @@ public class SelectionAutomata extends DialogOverView {
                 width = endX - startX;
                 height = endY - startY;
                 if (action == MotionEvent.ACTION_UP) {
-                    state = STATE.END;
+                    state = STATE.ACTIVE_SELECTION;
                 } else {
                     selectionView.updateView(new RectF(Math.min(startX, endX), Math.min(startY, endY), Math.max(startX, endX), Math.max(startY, endY)));
                 }
                 break;
+
+            case ACTIVE_SELECTION:
+                System.out.println("XXX" + action);
+                if (action == MotionEvent.ACTION_DOWN) {
+                    activeHandler = SelectionViewNewKt.findClosestHandler(selectionView, event.getX(), event.getY(), radius * 1.2f);
+                    System.out.println(activeHandler);
+                    if (activeHandler == null) {
+                        state = STATE.CANCELED;
+                        result = false;
+                    } else {
+                        state = STATE.MOVING_HANDLER;
+                        isMovingHandlers = true;
+                        isSingleWord = false;
+                        if (actions != null)
+                            actions.dismissOnlyDialog();
+                    }
+                }
+                break;
+            case MOVING_HANDLER:
+                 if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_MOVE) {
+                    activeHandler.setX(event.getX());
+                    activeHandler.setY(event.getY());
+                    selectionView.invalidate();
+
+                    if (action == MotionEvent.ACTION_UP) {
+                        state = STATE.ACTIVE_SELECTION;
+                        startX = selectionView.getStartHandler().getX();
+                        width = selectionView.getEndHandler().getX() - startX;
+
+                        startY = selectionView.getStartHandler().getY();
+                        height = selectionView.getEndHandler().getY() - startY;
+                    }
+                } else {
+                    result = false;
+                }
+            break;
 
             default: result = false;
         }
 
         if (oldState != state) {
             switch (state) {
-                case CANCELED: dialog.dismiss(); break;
+                case CANCELED:
+                    actions.dismissOnlyDialog();
 
-                case END:
+                    actions = null;
+                    dialog.dismiss();
+                    break;
+
+                case ACTIVE_SELECTION:
                     selectText(isSingleWord, translate, getSelectionRectangle(), getScreenSelectionRect());
                     break;
             }
@@ -94,8 +148,10 @@ public class SelectionAutomata extends DialogOverView {
         if (controller == null) return;
 
         for (PageAndSelection selection: data) {
+            System.out.println(selection.getAbsoluteRectWithoutCrop());
             Rect rect = selection.getAbsoluteRectWithoutCrop();
             TextAndSelection text = controller.selectRawText(selection.getPage(), rect.left, rect.top, rect.width(), rect.height(), isSingleWord);
+
             if (text != null) {
                 if (!first) {
                     sb.append(" ");
@@ -103,11 +159,15 @@ public class SelectionAutomata extends DialogOverView {
                 sb.append(text.getValue());
                 first = false;
             }
-            if (isSingleWord && text != null) {
+            if ((isSingleWord && text != null)  || isMovingHandlers) {
                 RectF originRect = text.getRect();
                 RectF sceneRect = selection.getPageView().getSceneRect(originRect);
                 originSelection = new Rect((int) sceneRect.left, (int) sceneRect.top, (int) sceneRect.right, (int) sceneRect.bottom);
                 selectionView.updateView(sceneRect);
+                builder = text.getTextInfo();
+                if (!isMovingHandlers) {
+                    selectionView.setHandlers(new Handler(originSelection.left - radius / 2, originSelection.top - radius / 2, radius), new Handler(originSelection.right + radius / 2, originSelection.bottom + radius / 2, radius));
+                }
             }
         }
         String text = sb.toString();
@@ -116,17 +176,19 @@ public class SelectionAutomata extends DialogOverView {
                 dialog.dismiss();
                 Action.DICTIONARY.doAction(controller, activity, text);
             } else {
+                SelectedTextActions selectedTextActions = new SelectedTextActions(activity, dialog);
+                actions = selectedTextActions;
                 if (isSingleWord && !dialog.isShowing()) {
                     //TODO: refactor
                     final Rect origin = originSelection;
                     dialog.setOnShowListener(dialog2 -> {
-                        new SelectedTextActions(activity, dialog).show(text, origin);
+                        selectedTextActions.show(text, origin);
                         dialog.setOnShowListener(null);
                     });
                     startSelection(true, false, true);
-                    state = STATE.END;
+                    state = STATE.ACTIVE_SELECTION;
                 } else {
-                    new SelectedTextActions(activity, dialog).show(text, originSelection);
+                    selectedTextActions.show(text, originSelection);
                 }
             }
         } else {
