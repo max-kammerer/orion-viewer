@@ -10,7 +10,6 @@
     <string name="pref_category_move">Pohyb dotykem</string>
     <string name="pref_category_quick_actions">Rychlé akce</string>
     <string name="pref_category_behavior">Výchozí chování</string>
-    <string name="pref_category_bars">Akce a stavové lišty</string>
 
     <!--General Prefs-->
     <string name="pref_appearance">Vzhled</string>
@@ -21,7 +20,6 @@
     <string name="pref_renderOffPage">Vykresllit prostor mimo stránku</string>
     <string name="pref_showActionBar">Zobrazit panel akcí</string>
     <string name="pref_showActionBar_desc">Zobrazi panel akcí (vyžaduje restart)</string>
-    <string name="pref_showStatusBar">Zobrazit stavový řádek</string>
     <string name="pref_showOffsetOnStatusBar">Zobrazit posun na stránce</string>
     <string name="pref_showTimeOnStatusBar">Zobrazit čas</string>
     <string name="pref_bookDefaultOrientation">Výchozí orientace knihy</string>
