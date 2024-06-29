@@ -109,7 +109,7 @@ void handle_ddjvu_messages_and_wait(JNIEnv *env, ddjvu_context_t *ctx) {
 
 JNIEXPORT JNICALL void JNI_FN(DjvuDocument_initNative)(JNIEnv *env, jclass type) {
     if (textBuilderClass == NULL) {
-        textBuilderClass = (*env)->FindClass(env, "universe/constellation/orion/viewer/djvu/TextBuilder");
+        textBuilderClass = (*env)->FindClass(env, "universe/constellation/orion/viewer/document/TextInfoBuilder");
     }
     if (addWordId == NULL) {
         addWordId = (*env)->GetMethodID(env, textBuilderClass, "addWord", "(Ljava/lang/String;IIII)V");

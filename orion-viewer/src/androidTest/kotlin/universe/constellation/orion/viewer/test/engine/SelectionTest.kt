@@ -33,7 +33,7 @@ class SelectionTest(
 
     @Test
     fun testSelection() {
-        val selectionRect = SelectionAutomata.getSelectionRect(
+        val selectionRect = SelectionAutomata.getScreenSelectionRectWithDelta(
             absoluteRect.left,
             absoluteRect.top,
             absoluteRect.width(),

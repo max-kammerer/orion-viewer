@@ -86,7 +86,7 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
                 textInfoBuilder = Companion.getText(contextPointer, docPointer, pageNum, TextInfoBuilder()) ?: TextInfoBuilder.NULL
             }
             val builder = textInfoBuilder
-            if (builder == null || builder == TextInfoBuilder.NULL) {
+            if (builder == TextInfoBuilder.NULL) {
                 return null
             }
             return textInfoBuilder
@@ -161,7 +161,7 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
             isSingleWord: Boolean,
             opRect: android.graphics.RectF
         ) {
-            val wordSquare5: Float = word.width() * word.height() / 5f
+            val wordSquare5: Float = word.width() * word.height() / 3f
             opRect.set(word.rect)
             if (opRect.intersect(region)) {
                 if (isSingleWord || opRect.width() * opRect.height() > wordSquare5) {

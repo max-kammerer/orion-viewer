@@ -2,90 +2,62 @@ package universe.constellation.orion.viewer.selection
 
 import android.graphics.Rect
 import android.graphics.RectF
+import androidx.core.graphics.toRectF
 import universe.constellation.orion.viewer.document.TextAndSelection
 import universe.constellation.orion.viewer.document.TextInfoBuilder
 import universe.constellation.orion.viewer.document.TextWord
-import kotlin.math.max
-import kotlin.math.min
 
-private fun getTextByHandlers(builder: TextInfoBuilder, startHandler: Handler, endHandler: Handler): TextAndSelection? {
+fun SelectionAutomata.getTextByHandlers(startHandler: Handler, endHandler: Handler, isRect: Boolean = false, isSingleWord: Boolean = false): TextAndSelection? {
     val opRect = RectF()
     val lns: java.util.ArrayList<List<TextWord>> = arrayListOf()
-    val selectionRegion = RectF(
-        min(startHandler.x, endHandler.x),
-        min(startHandler.y, endHandler.y),
-        max(startHandler.x, endHandler.x),
-        max(startHandler.y, endHandler.y)
-    )
+    val rects: ArrayList<RectF> = arrayListOf()
+    val screenSelection = SelectionAutomata.getScreenSelectionRect(startHandler, endHandler)
 
-    val selectionRegionFull = RectF(
-        0f,
-        min(startHandler.y, endHandler.y),
-        max(startHandler.x, endHandler.x),
-        Float.MAX_VALUE
+    val pageLayoutManager = this.activity.controller!!.pageLayoutManager
+    val pageSelectionRectangles = SelectionAutomata.getPageSelectionRectangles(
+        screenSelection,
+        false,
+        pageLayoutManager
     )
+    val invertCheck = startHandler.y > endHandler.y
 
-    for (line in builder.lines) {
-        val wordsInLine = arrayListOf<TextWord>()
-        for (word in line) {
-            if (word.isNotEmpty()) {
-                processWord(word, wordsInLine, selectionRegion, false, opRect)
+    for (selection in pageSelectionRectangles) {
+        for (line in selection.page.getTextInfo()?.lines ?: emptyList()) {
+            val wordsInLine = arrayListOf<TextWord>()
+            val region = selection.absoluteRectWithoutCrop.toRectF()
+            for (word in line) {
+                if (word.isNotEmpty()) {
+                    if (isRect || isSingleWord) {
+                        if (includeWord(word, region, isSingleWord, opRect)) {
+                            wordsInLine.add(word)
+                            rects.add(selection.pageView.getSceneRect(word.rect.toRectF()))
+                        }
+                    } else {
+                        if (includeWordComplex(word, region, invertCheck)) {
+                            wordsInLine.add(word)
+                            rects.add(selection.pageView.getSceneRect(word.rect.toRectF()))
+                        }
+                    }
+                }
+            }
+
+            if (wordsInLine.size > 0) {
+                lns.add(wordsInLine)
             }
         }
-
-        if (wordsInLine.size > 0) {
-            lns.add(wordsInLine)
-        }
     }
+
     if (lns.isEmpty()) return null
 
-    if (startHandler.y >= endHandler.y) {
-        lns.first() to lns.last()
-    } else {
-        lns.last() to lns.first()
-    }
-
     val result = foldResults(lns)
 
     return if (result.isNotEmpty()) {
-        TextAndSelection(result.toString(), RectF(result.rect), builder);
+        TextAndSelection(result.toString(), rects, TextInfoBuilder())
     } else {
         null
     }
 }
 
-
-private fun getText(builder: TextInfoBuilder, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): TextAndSelection? {
-    val opRect = RectF()
-    val lns: java.util.ArrayList<List<TextWord>> = arrayListOf()
-    val selectionRegion = RectF(
-        absoluteX.toFloat(),
-        absoluteY.toFloat(),
-        (absoluteX + width).toFloat(),
-        (absoluteY + height).toFloat()
-    )
-
-    for (line in builder.lines) {
-        val wordsInLine = arrayListOf<TextWord>()
-        for (word in line) {
-            if (word.isNotEmpty()) {
-                processWord(word, wordsInLine, selectionRegion, singleWord, opRect)
-            }
-        }
-
-        if (wordsInLine.size > 0) {
-            lns.add(wordsInLine)
-        }
-    }
-
-    val result = foldResults(lns)
-
-    return if (result.isNotEmpty()) {
-        TextAndSelection(result.toString(), RectF(result.rect), builder);
-    } else {
-        null
-    }
-}
 
 private fun foldResults(lns: ArrayList<List<TextWord>>): TextWord {
     val result = TextWord()
@@ -104,18 +76,64 @@ private fun foldResults(lns: ArrayList<List<TextWord>>): TextWord {
     return result
 }
 
-private fun processWord(
+private fun includeWord(
     word: TextWord,
-    words: java.util.ArrayList<TextWord>,
     region: RectF,
     isSingleWord: Boolean,
     opRect: RectF
-) {
-    val wordSquare5: Float = word.width() * word.height() / 5f
+): Boolean {
+    val wordSquare3: Float = word.width() * word.height() / 4f
     opRect.set(word.rect)
     if (opRect.intersect(region)) {
-        if (isSingleWord || opRect.width() * opRect.height() > wordSquare5) {
-            words.add(word)
+        if (isSingleWord || opRect.width() * opRect.height() > wordSquare3) {
+            return true
         }
     }
+    return false
+}
+
+private fun includeWordComplex(
+    textWord: TextWord,
+    selection: RectF,
+    invertCheck: Boolean
+): Boolean {
+    val rect = textWord.rect
+    val top = selection.top
+    val bottom = selection.bottom
+    if (top < rect.top && bottom > rect.bottom) {
+        return true
+    }
+
+    val top2 = selection.top
+    val bottom2 = selection.bottom
+
+    var insideTop  = false
+    var topCheck  = false
+    var insideBottom  = false
+    var bottomCheck  = false
+
+    if (rect.top <= top2 && top2 <= rect.bottom) {
+        if (rect.bottom - top2 >= rect.height() / 4) {
+            insideTop = true
+            val left = if (false && invertCheck) selection.right else selection.left
+            if (rect.left + rect.width() / 2 >= left) topCheck = true
+        }
+    }
+
+    if (rect.top <= bottom2 && bottom2 <= rect.bottom) {
+        if (bottom2 - rect.top >= rect.height() / 4) {
+            insideBottom = true
+            val right = if (false && invertCheck) selection.left else selection.right
+            if (rect.left + rect.width() / 2 <= right) bottomCheck = true
+        }
+    }
+
+    if (insideTop && insideBottom) {
+        return topCheck && bottomCheck
+    }
+    if (insideTop) return topCheck
+    if (insideBottom) return bottomCheck
+
+
+    return false
 }

@@ -35,10 +35,13 @@ class SelectionViewNew : View {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
+        paint.style = Paint.Style.FILL
+        paint.alpha = 64
         rects.forEach {
             canvas.drawRect(it, paint)
         }
 
+        paint.alpha = 96
         startHandler?.let { handler ->
             canvas.drawCircle(handler.x, handler.y, handler.radius, paint)
         }
@@ -46,6 +49,20 @@ class SelectionViewNew : View {
         endHandler?.let { handler ->
             canvas.drawCircle(handler.x, handler.y, handler.radius, paint)
         }
+
+        startHandler?.let { startHandler ->
+            endHandler?.let { endHandler ->
+                val left = minOf(startHandler.x, endHandler.x)
+                val top = minOf(startHandler.y, endHandler.y)
+                val right = maxOf(startHandler.x, endHandler.x)
+                val bottom = maxOf(startHandler.y, endHandler.y)
+
+                paint.style = Paint.Style.STROKE
+                paint.alpha = 64
+                canvas.drawRect(left, top, right, bottom, paint)
+            }
+        }
+
     }
 
     fun updateView(rect: RectF) {
@@ -55,6 +72,7 @@ class SelectionViewNew : View {
     fun setHandlers(startHandler: Handler, endHandler: Handler) {
         this.startHandler = startHandler
         this.endHandler = endHandler
+        println("" + startHandler + endHandler)
     }
 
     fun updateView(rects: List<RectF>) {
@@ -64,18 +82,19 @@ class SelectionViewNew : View {
 
     fun reset() {
         rects = emptyList()
+        startHandler = null
+        endHandler = null
     }
 
     fun setColorFilter(colorFilter: ColorFilter?) {
         paint.color = Color.BLACK
         paint.colorFilter = colorFilter
         paint.alpha = 64
+        paint.strokeWidth = 2f
     }
 }
 
-class Handler(var x: Float, var y: Float, var radius: Float) {
-    constructor(x: Int, y: Int, radius: Int) : this(x.toFloat(), y.toFloat(), radius.toFloat())
-}
+data class Handler(var x: Float, var y: Float, var radius: Float, val isStart: Boolean)
 
 fun SelectionViewNew.findClosestHandler(x: Float, y: Float, trashHold: Float): Handler? {
     val min = listOfNotNull(

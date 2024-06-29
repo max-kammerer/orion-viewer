@@ -303,19 +303,6 @@ class Controller(
 
     fun getOutline(): Array<OutlineItem>? = document.outline
 
-    fun selectRawText(page: Page, startX: Int, startY: Int, widht: Int, height: Int, isSingleWord: Boolean): TextAndSelection? {
-        return page.getText(startX, startY, widht, height, isSingleWord)?.apply { log("Text selection in ${page.pageNum}: $this") }
-    }
-
-    private fun String.trimText(isSingleWord: Boolean): String {
-        return if (!isSingleWord) trim()
-        else this.dropWhile { it.isWhitespace() || it in PUNCTUATION_CHARS }.dropLastWhile { it.isWhitespace() || it in PUNCTUATION_CHARS }
-    }
-
-    fun needPassword(): Boolean {
-        return document.needPassword()
-    }
-
     suspend fun authenticate(password: String): Boolean {
         val result = withContext(context) { document.authenticate(password) }
         if (result) {

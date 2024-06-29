@@ -872,7 +872,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
 
     fun textSelectionMode(isSingleSelection: Boolean, translate: Boolean) {
-        selectionAutomata.startSelection(isSingleSelection, translate)
+        selectionAutomata.startTextSelection(isSingleSelection, translate)
     }
 
     private class MyArrayAdapter(context: Context) :

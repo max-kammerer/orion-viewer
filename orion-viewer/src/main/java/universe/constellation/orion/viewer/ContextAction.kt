@@ -1,9 +1,7 @@
 package universe.constellation.orion.viewer
 
-import android.graphics.Rect
 import universe.constellation.orion.viewer.selection.ClickInfo
 import universe.constellation.orion.viewer.selection.ClickType
-import universe.constellation.orion.viewer.selection.SelectionAutomata
 
 enum class ContextAction(customName: String? = null) {
 
@@ -11,18 +9,8 @@ enum class ContextAction(customName: String? = null) {
     SELECT_TEXT {
         override fun doAction(activity: OrionViewerActivity, clickInfo: ClickInfo) {
             val pos = clickInfo as? ClickInfo ?: return
-            activity.selectionAutomata.selectText(
-                true, false,
-                SelectionAutomata.getSelectionRectangle(
-                    pos.x,
-                    pos.y,
-                    0,
-                    0,
-                    true,
-                    activity.controller?.pageLayoutManager ?: return
-                ),
-                Rect()
-            )
+            val selectionAutomata = activity.selectionAutomata
+            selectionAutomata.initSelectionByPosition(pos, false)
         }
     },
 
@@ -30,18 +18,8 @@ enum class ContextAction(customName: String? = null) {
 
         override fun doAction(activity: OrionViewerActivity, clickInfo: ClickInfo) {
             val pos = clickInfo as? ClickInfo ?: return
-            activity.selectionAutomata.selectText(
-                true, true,
-                SelectionAutomata.getSelectionRectangle(
-                    pos.x,
-                    pos.y,
-                    0,
-                    0,
-                    true,
-                    activity.controller?.pageLayoutManager ?: return
-                ),
-                Rect()
-            )
+            val selectionAutomata = activity.selectionAutomata
+            selectionAutomata.initSelectionByPosition(pos, true)
         }
     },
 

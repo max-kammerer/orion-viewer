@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.text.ClipboardManager;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,9 +31,9 @@ public class SelectedTextActions {
         height = activity.getView().getSceneHeight();
         this.originalDialog = originalDialog;
         popup = new PopupWindow(activity);
-        popup.setFocusable(true);
+        //popup.setFocusable(true);
         popup.setTouchable(true);
-        popup.setOutsideTouchable(true);
+        //popup.setOutsideTouchable(true);
         popup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
         popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
 
@@ -92,8 +93,8 @@ public class SelectedTextActions {
         popup.setOnDismissListener(originalDialog::dismiss);
     }
 
-    public void show(String text, Rect selectionRect) {
-        int x = selectionRect.left, y = 0;
+    public void show(String text, RectF selectionRect) {
+        float x = selectionRect.left, y = 0;
         System.out.println(selectionRect);
         if (selectionRect.bottom <= height * 4 /5) {
             y = (int) (selectionRect.bottom + OrionBaseActivityKt.dpToPixels(originalDialog.getContext(), 5));
@@ -105,7 +106,13 @@ public class SelectedTextActions {
         }
         this.text = text;
         View decorView = originalDialog.getWindow().getDecorView();
-        popup.showAsDropDown(decorView, x, -decorView.getHeight() + y);
+        popup.showAsDropDown(decorView, (int) x, (int) (-decorView.getHeight() + y));
+    }
+
+    public void dismissOnlyDialog() {
+        popup.setOnDismissListener(null);
+        popup.dismiss();
+
     }
 
 }

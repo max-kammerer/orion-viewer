@@ -202,6 +202,9 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
                                 word = TextWord()
                             }
                         }
+                        if (word.isNotEmpty()) {
+                            textInfoBuilder.addWord(word.toString(), word.rect.toRect())
+                        }
                     }
                 }
             }
@@ -276,7 +279,7 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
         isSingleWord: Boolean,
         opRect: RectF
     ) {
-        val wordSquare5: Float = word.width() * word.height() / 5
+        val wordSquare5: Float = word.width() * word.height() / 3
         if (opRect.setIntersect(word.rect, region)) {
             if (isSingleWord || opRect.width() * opRect.height() > wordSquare5) {
                 words.add(word)
