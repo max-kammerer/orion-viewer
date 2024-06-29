@@ -57,13 +57,18 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
         when (state) {
             STATE.START -> if (action == MotionEvent.ACTION_DOWN) {
                 selectionView.reset()
-                val start = PointF(event.x, event.y)
-                setHandlers(start, start)
+                setStartHandlers(event.x, event.y)
 
                 activeHandler = selectionView.endHandler
-                state = STATE.MOVING_HANDLER
+                if (!isSingleWord) {
+                    state = STATE.MOVING_HANDLER
+                }
             } else {
-                state = STATE.CANCELED
+                state = if (isSingleWord && action == MotionEvent.ACTION_UP) {
+                    STATE.ACTIVE_SELECTION
+                } else {
+                    STATE.CANCELED
+                }
             }
 
             STATE.ACTIVE_SELECTION -> {
@@ -109,8 +114,15 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
 
                 STATE.ACTIVE_SELECTION -> {
                     val text = getSelectedText()
+                    if (oldState == STATE.START && isSingleWord) {
+                        text?.let {
+                            it.rect.firstOrNull()?.let {
+                                updateHandlersByTextSelection(it)
+                            }
+                        }
+                    }
                     updateSelectionAndGetText(text)
-                    showActionsPopupOrDoTranslation(text?.value.toString(), translate, activity.controller!!)
+                    showActionsPopupOrDoTranslation(text?.value ?: "", translate, activity.controller!!)
                 }
 
                 else -> {
@@ -141,7 +153,7 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
         selectionView.invalidate()
     }
 
-    private fun getSelectedText(isSingleWord: Boolean = false): TextAndSelection? {
+    private fun getSelectedText(): TextAndSelection? {
         return getTextByHandlers(
             selectionView.startHandler!!,
             selectionView.endHandler!!,
@@ -154,10 +166,9 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
         resetState(true, translate)
         isRectSelection = false
 
-        val selection = getScreenSelectionRectWithDelta(RectF(pos.x.toFloat(), pos.y.toFloat(), pos.x.toFloat(), pos.y.toFloat()), true)
-        setHandlers(PointF(selection.left, selection.top), PointF(selection.right, selection.bottom))
+        setStartHandlers(pos.x.toFloat(), pos.y.toFloat())
 
-        val selectedText = getSelectedText(true)
+        val selectedText = getSelectedText()
         val controller = activity.controller ?: return
         if (selectedText == null || selectedText.value.isEmpty()) {
             showActionsPopupOrDoTranslation("", translate, controller)
@@ -166,6 +177,28 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
         }
 
         val rect = selectedText.rect.firstOrNull() ?: return
+        updateHandlersByTextSelection(rect)
+
+        updateSelectionAndGetText(selectedText)
+        showActionsPopupOrDoTranslation(selectedText.value, translate, controller)
+    }
+
+    private fun setStartHandlers(x: Float, y: Float) {
+        val selection = getScreenSelectionRectWithDelta(
+            RectF(
+                x,
+                y,
+                x,
+                y,
+            ), isSingleWord
+        )
+        setHandlers(
+            PointF(selection.left, selection.top),
+            PointF(selection.right, selection.bottom)
+        )
+    }
+
+    private fun updateHandlersByTextSelection(rect: RectF) {
         selectionView.startHandler!!.apply {
             x = rect.left
             y = rect.top
@@ -174,9 +207,6 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
             x = rect.right
             y = rect.bottom
         }
-
-        updateSelectionAndGetText(selectedText)
-        showActionsPopupOrDoTranslation(selectedText.value, translate, controller)
     }
 
     private fun showActionsPopupOrDoTranslation(
@@ -227,6 +257,7 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
                 activity.resources.getString(if (isSingleWord) R.string.msg_select_word else R.string.msg_select_text)
             activity.showFastMessage(msg)
             resetState(isSingleWord, translate)
+            isRectSelection = !isSingleWord
         }
     }
 
