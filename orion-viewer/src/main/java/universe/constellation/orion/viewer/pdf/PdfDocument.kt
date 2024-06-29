@@ -33,8 +33,8 @@ import com.artifex.mupdfdemo.TextWord
 import universe.constellation.orion.viewer.Bitmap
 import universe.constellation.orion.viewer.PageSize
 import universe.constellation.orion.viewer.document.AbstractDocument
-import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.document.AbstractPage
+import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.document.TextAndSelection
 import universe.constellation.orion.viewer.document.TextInfoBuilder
 import universe.constellation.orion.viewer.errorInDebug
@@ -47,6 +47,9 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
         @Volatile
         private var page: Page? = null
         private var displayList: DisplayList? = null
+
+        @Volatile
+        private var textInfoBuilder: TextInfoBuilder? = null
 
         private fun readPageDataIfNeeded() {
             if (destroyed) return errorInDebug("Page $pageNum already destroyed")
@@ -144,7 +147,16 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
             if (destroyed) return null
             readPageDataIfNeeded()
             if (page == null) return null
-            return getTextInfo(page!!)
+
+            if (textInfoBuilder == null) {
+                textInfoBuilder = getTextInfo(page!!) ?: TextInfoBuilder.NULL
+            }
+
+            val builder = textInfoBuilder
+            if (builder == TextInfoBuilder.NULL) {
+                return null
+            }
+            return builder
         }
 
         override fun destroy() {
