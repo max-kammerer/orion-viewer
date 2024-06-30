@@ -122,7 +122,11 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
                         }
                     }
                     updateSelectionAndGetText(text)
-                    showActionsPopupOrDoTranslation(text?.value ?: "", translate, activity.controller!!)
+                    showActionsPopupOrDoTranslation(
+                        text?.value ?: "",
+                        translate,
+                        activity.controller!!
+                    )
                 }
 
                 else -> {
@@ -170,17 +174,15 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
 
         val selectedText = getSelectedText()
         val controller = activity.controller ?: return
-        if (selectedText == null || selectedText.value.isEmpty()) {
-            showActionsPopupOrDoTranslation("", translate, controller)
-            selectionView.reset()
-            return
+
+        selectedText?.rect?.let {
+            it.firstOrNull()?.let { rect ->
+                updateHandlersByTextSelection(rect)
+            }
         }
 
-        val rect = selectedText.rect.firstOrNull() ?: return
-        updateHandlersByTextSelection(rect)
-
         updateSelectionAndGetText(selectedText)
-        showActionsPopupOrDoTranslation(selectedText.value, translate, controller)
+        showActionsPopupOrDoTranslation(selectedText?.value ?: "", translate, controller)
     }
 
     private fun setStartHandlers(x: Float, y: Float) {
@@ -212,35 +214,27 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
     private fun showActionsPopupOrDoTranslation(
         text: String,
         translate: Boolean,
-        controller: Controller,
-        autoClose: Boolean = true
+        controller: Controller
     ) {
-        if (text.isNotBlank()) {
-            if (translate) {
-                dialog.dismiss()
-                Action.DICTIONARY.doAction(controller, activity, text)
-            } else {
-                val selectedTextActions = SelectedTextActions(activity, dialog)
-                actions = selectedTextActions
-                val occupiedArea = getScreenSelectionRect(selectionView.startHandler!!, selectionView.endHandler!!)
-                occupiedArea.inset(0f, -radius)
-                if (!dialog.isShowing) {
-                    //TODO: refactor
-                    dialog.setOnShowListener { dialog2: DialogInterface? ->
-                        selectedTextActions.show(text, occupiedArea)
-                        dialog.setOnShowListener(null)
-                    }
-                    startTextSelection(true, false, true)
-                    state = STATE.ACTIVE_SELECTION
-                } else {
-                    selectedTextActions.show(text, occupiedArea)
-                }
-            }
+        if (translate && text.isNotBlank()) {
+            dialog.dismiss()
+            Action.DICTIONARY.doAction(controller, activity, text)
         } else {
-            if (autoClose) {
-                dialog.dismiss()
+            val selectedTextActions = SelectedTextActions(activity, dialog)
+            actions = selectedTextActions
+            val occupiedArea = getScreenSelectionRect(selectionView.startHandler!!, selectionView.endHandler!!)
+            occupiedArea.inset(0f, -radius)
+            if (!dialog.isShowing) {
+                //TODO: refactor
+                dialog.setOnShowListener { dialog2: DialogInterface? ->
+                    selectedTextActions.show(text, occupiedArea)
+                    dialog.setOnShowListener(null)
+                }
+                startTextSelection(true, false, true)
+                state = STATE.ACTIVE_SELECTION
+            } else {
+                selectedTextActions.show(text, occupiedArea)
             }
-            activity.showFastMessage(R.string.warn_no_text_in_selection)
         }
     }
 
