@@ -1,2 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="fileopen_private_resource_access">Özel dosyaya erişin</string>
+    <string name="fileopen_open_recent_files">Son kitaplara git…</string>
+    <string name="fileopen_error_during_intent_processing">Amaç işlenirken hata oluştu</string>
+    <string name="fileopen_permissions_grant_read">Depolama alanına okuma izni ver…</string>
+    <string name="fileopen_error_during_intent_processing_info">Amaçtan dosya yolu çıkarılamıyor. Lütfen açmak için amaç verilerini dosyaya kaydedin veya:</string>
+    <string name="fileopen_private_resource_access_info">Dosya doğrudan okunamıyor, lütfen aşağıdaki seçeneklerden birini seçin:</string>
+    <string name="fileopen_permission_dialog">Dosyaya doğrudan erişilemiyor</string>
+    <string name="fileopen_save_to_file">Yeni dosyaya kaydet…</string>
+    <string name="fileopen_permission_dialog_info">Doğrudan erişmek için lütfen dosya okuma izni verin veya aşağıdaki seçeneklerden birini seçin:</string>
+    <string name="fileopen_open_in_temporary_file">Geçici dosya aracılığıyla aç</string>
+    <string name="fileopen_no_pages">belgede sayfa yok</string>
+    <string name="fileopen_report_error_by_github_and_return">Sorunu github\'da bildir ve iletişim kutusuna geri dön…</string>
+    <string name="fileopen_report_error_by_email_and_return">Sorunu e-posta ile bildir ve iletişim kutusuna geri dön…</string>
+    <string name="string_exception">İstisna</string>
+    <string name="string_intent">Amaç</string>
+    <string name="crash_on_intent_opening_title">Amaç işlenirken hata oluştu</string>
+    <string name="crash_on_book_opening_message_header">%1$s dosyası açılırken hata oluştu. Lütfen sorunu bildirin:</string>
+    <string name="crash_on_book_opening_title">Dosya açılırken hata oluştu</string>
+    <string name="string_cause">Neden</string>
+    <string name="string_send">Gönder…</string>
+    <string name="fileopen_cant_open">Belge açılamıyor: %s.</string>
+    <string name="fileopen_file_is_emppty">dosya boş</string>
+    <string name="crash_on_book_opening_encrypted">Şifreli belge</string>
+    <string name="send_report_header">[Lütfen ek ayrıntılar sağlayın (sorunu yeniden oluşturmak için adımlar)]</string>
+    <string name="error_on_file_saving_title">Dosya kaydedilirken hata oluştu</string>
+    <string name="crash_on_book_opening_message_header_panel">%1$s dosyası açılırken hata oluştu:</string>
+</resources>
