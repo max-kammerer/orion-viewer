@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
     <string name="menu_zoom_text">Yakınlaştır</string>
     <string name="menu_crop_text">Kırp</string>
@@ -18,13 +17,10 @@
     <string name="menu_exit_text">Çıkış</string>
     <string name="menu_key_binder_text">Anahtar bağlayıcı</string>
     <string name="menu_options_text">Ayarlar</string>
-    <string name="menu_tap_text">Tap zones</string>
+    <string name="menu_tap_text">Dokunma bölgeleri</string>
     <string name="menu_search_item">Ara</string>
     <string name="menu_other">Diğer…</string>
-
     <string name="menu_book_preferences">Kitap seçenekleri</string>
-
-
     <string name="export_all_bookmarks_menu_item">Bütün yer imlerini dışa aktar</string>
     <string name="export_bookmarks_menu_item">Şimdiki yer imini dışa aktar</string>
     <string name="import_all_bookmarks_menu_item">İçe aktar…</string>
