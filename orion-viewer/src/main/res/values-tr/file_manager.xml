@@ -1,2 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="file_manager_title">Dosya Yöneticisi</string>
+    <string name="file_manager_fodlers">Klasörler</string>
+    <string name="file_manager_history">Geçmiş</string>
+    <string name="file_manager_contribution">Katkıda bulunma</string>
+    <string name="file_manager_select_tip">Lütfen Orion Viewer\'da açmak için bir dosya seçin</string>
+    <string name="file_manager_path">Yol:</string>
+    <string name="file_manager_documents">Belgeler</string>
+    <string name="file_manager_nav_settings">Ayarlar</string>
+    <string name="file_manager_downloads">İndirilenler</string>
+    <string name="file_manager_nav_locations">Konumlar</string>
+    <string name="file_manager_sdcard">SD Kart</string>
+    <string name="file_manager_grant_read_permissions">Okuma izni verin</string>
+    <string name="file_manager_nav_other">Diğer</string>
+    <string name="file_manager_nav_system_select">Sistemde dosya seçin</string>
+    <string name="file_manager_nav_exit">Çıkış</string>
+    <string name="file_manager_internal_storage">Dahili depolama</string>
+    <string name="file_manager_primary_storage">Birincil depolama</string>
+</resources>
