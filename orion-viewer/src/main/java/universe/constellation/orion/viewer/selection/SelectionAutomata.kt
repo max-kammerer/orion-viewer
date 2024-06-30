@@ -33,6 +33,8 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
 
     private val radius: Float
 
+    private val singleWordDelta: Float
+
     private var activeHandler: Handler? = null
 
     private var actions: SelectedTextActions? = null
@@ -46,6 +48,7 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
             )
         }
         radius = activity.dpToPixels(15f).toFloat()
+        singleWordDelta = activity.dpToPixels(2f).toFloat()
     }
 
 
@@ -265,27 +268,25 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
         activeHandler = null
     }
 
+    fun getPageSelectionRectangles(
+        rect: RectF,
+        isSingleWord: Boolean,
+        pageLayoutManager: PageLayoutManager
+    ): List<PageAndSelection> {
+        val expandedRect = getScreenSelectionRectWithDelta(rect, isSingleWord)
+        return pageLayoutManager.findPageAndPageRect(expandedRect.toRect())
+    }
+
+    private fun getScreenSelectionRectWithDelta(
+        rect: RectF,
+        isSingleWord: Boolean
+    ): RectF {
+        if (!isSingleWord) return rect
+        rect.inset(-singleWordDelta, -singleWordDelta) //TODO: dp to pixel
+        return rect
+    }
+
     companion object {
-        private const val SINGLE_WORD_AREA = 2f
-
-        fun getPageSelectionRectangles(
-            rect: RectF,
-            isSingleWord: Boolean,
-            pageLayoutManager: PageLayoutManager
-        ): List<PageAndSelection> {
-            val expandedRect = getScreenSelectionRectWithDelta(rect, isSingleWord)
-            return pageLayoutManager.findPageAndPageRect(expandedRect.toRect())
-        }
-
-        fun getScreenSelectionRectWithDelta(
-            rect: RectF,
-            isSingleWord: Boolean
-        ): RectF {
-            if (!isSingleWord) return rect
-            rect.inset(-SINGLE_WORD_AREA, -SINGLE_WORD_AREA) //TODO: dp to pixel
-            return rect
-        }
-
         fun getScreenSelectionRect(startHandler: Handler, endHandler: Handler): RectF {
             return RectF(
                 min(startHandler.x, endHandler.x),

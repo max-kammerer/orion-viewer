@@ -14,7 +14,7 @@ fun SelectionAutomata.getTextByHandlers(startHandler: Handler, endHandler: Handl
     val screenSelection = SelectionAutomata.getScreenSelectionRect(startHandler, endHandler)
 
     val pageLayoutManager = this.activity.controller!!.pageLayoutManager
-    val pageSelectionRectangles = SelectionAutomata.getPageSelectionRectangles(
+    val pageSelectionRectangles = getPageSelectionRectangles(
         screenSelection,
         false,
         pageLayoutManager
