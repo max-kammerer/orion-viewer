@@ -114,7 +114,7 @@ class SelectionViewNew : View {
     }
 
     fun setColorFilter(colorFilter: ColorFilter?) {
-        paint.color = Color.BLACK
+        paint.color = 0x1d897f
         paint.colorFilter = colorFilter
         paint.alpha = 64
         paint.strokeWidth = 2f
