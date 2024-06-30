@@ -5,10 +5,19 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.ColorFilter
 import android.graphics.Paint
+import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
+import kotlin.math.cos
+import kotlin.math.sin
 import kotlin.math.sqrt
+
+private val sin15 = sin(15.0/180.0*Math.PI).toFloat()
+
+private val cos15 = cos(15.0/180.0*Math.PI).toFloat()
+
+private val sqrt6 = sqrt(6.0).toFloat()
 
 class SelectionViewNew : View {
 
@@ -21,6 +30,10 @@ class SelectionViewNew : View {
 
     var endHandler: Handler? = null
         private set
+
+    private val start = Path()
+
+    private val end = Path()
 
     constructor(context: Context?) : super(context)
 
@@ -43,11 +56,11 @@ class SelectionViewNew : View {
 
         paint.alpha = 96
         startHandler?.let { handler ->
-            canvas.drawCircle(handler.x, handler.y, handler.radius, paint)
+            canvas.drawPath(handlerPath(handler), paint)
         }
 
         endHandler?.let { handler ->
-            canvas.drawCircle(handler.x, handler.y, handler.radius, paint)
+            canvas.drawPath(handlerPath(handler), paint)
         }
 
         startHandler?.let { startHandler ->
@@ -63,6 +76,20 @@ class SelectionViewNew : View {
             }
         }
 
+    }
+
+    private fun handlerPath(handler: Handler): Path {
+        val path = if (handler.isStart) start else end
+        path.reset()
+        val x = handler.x
+        val y = handler.y
+        val r = if (handler.isStart) handler.triangleSize else -handler.triangleSize
+        path.moveTo(x, y)
+        path.lineTo(x - r * sin15, y - r * cos15)
+        path.lineTo(x - r * cos15, y - r * sin15)
+        path.lineTo(x, y)
+        path.close()
+        return path
     }
 
     fun updateView(rect: RectF) {
@@ -94,7 +121,7 @@ class SelectionViewNew : View {
     }
 }
 
-data class Handler(var x: Float, var y: Float, var radius: Float, val isStart: Boolean)
+data class Handler(var x: Float, var y: Float, var triangleSize: Float, val isStart: Boolean)
 
 fun SelectionViewNew.findClosestHandler(x: Float, y: Float, trashHold: Float): Handler? {
     val min = listOfNotNull(
@@ -105,7 +132,12 @@ fun SelectionViewNew.findClosestHandler(x: Float, y: Float, trashHold: Float): H
 }
 
 fun Handler.distance(x: Float, y: Float): Float {
-    val dx = this.x - x
-    val dy = this.y - y
+    var delta = - triangleSize * sqrt6 / 4 / 2
+    if (!isStart) delta = -delta
+    val x1 = this.x + delta
+    val y1 = this.y + delta
+
+    val dx = x1 - x
+    val dy = y1 - y
     return sqrt((dx * dx + dy * dy).toDouble()).toFloat()
 }

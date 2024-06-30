@@ -31,7 +31,7 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
 
     private var translate = false
 
-    private val radius: Float
+    private val triangleSide: Float
 
     private val singleWordDelta: Float
 
@@ -47,7 +47,7 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
                 event
             )
         }
-        radius = activity.dpToPixels(15f).toFloat()
+        triangleSide = activity.dpToPixels(20f).toFloat()
         singleWordDelta = activity.dpToPixels(2f).toFloat()
     }
 
@@ -77,7 +77,7 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
             STATE.ACTIVE_SELECTION -> {
                 if (action == MotionEvent.ACTION_DOWN) {
                     activeHandler =
-                        selectionView.findClosestHandler(event.x, event.y, radius * 1.2f)
+                        selectionView.findClosestHandler(event.x, event.y, 0.8f * triangleSide)
                     println(activeHandler)
                     if (activeHandler == null) {
                         state = STATE.CANCELED
@@ -144,12 +144,12 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
             Handler(
                 start.x,
                 start.y,
-                radius,
+                triangleSide,
                 true
             ), Handler(
                 end.x,
                 end.y,
-                radius,
+                triangleSide,
                 false
             )
         )
@@ -226,7 +226,7 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
             val selectedTextActions = SelectedTextActions(activity, dialog)
             actions = selectedTextActions
             val occupiedArea = getScreenSelectionRect(selectionView.startHandler!!, selectionView.endHandler!!)
-            occupiedArea.inset(0f, -radius)
+            occupiedArea.inset(0f, -triangleSide)
             if (!dialog.isShowing) {
                 //TODO: refactor
                 dialog.setOnShowListener { dialog2: DialogInterface? ->
