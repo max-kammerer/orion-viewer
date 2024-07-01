@@ -49,12 +49,12 @@ class SelectionViewNew : View {
         super.onDraw(canvas)
 
         paint.style = Paint.Style.FILL
-        paint.alpha = 64
+        paint.alpha = 96
         rects.forEach {
             canvas.drawRect(it, paint)
         }
 
-        paint.alpha = 96
+        paint.alpha = 128
         startHandler?.let { handler ->
             canvas.drawPath(handlerPath(handler), paint)
         }
