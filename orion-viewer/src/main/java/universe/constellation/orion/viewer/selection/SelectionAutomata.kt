@@ -13,6 +13,7 @@ import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.dialog.DialogOverView
 import universe.constellation.orion.viewer.document.TextAndSelection
 import universe.constellation.orion.viewer.dpToPixels
+import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.view.PageLayoutManager
 import kotlin.math.max
 import kotlin.math.min
@@ -39,6 +40,9 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
 
     private var actions: SelectedTextActions? = null
 
+    private var lastX: Float = 0f
+    private var lastY: Float = 0f
+
     private var isRectSelection = true
 
     init {
@@ -47,13 +51,17 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
                 event
             )
         }
-        triangleSide = activity.dpToPixels(20f).toFloat()
+        triangleSide = activity.dpToPixels(30f).toFloat()
         singleWordDelta = activity.dpToPixels(2f).toFloat()
     }
 
+    private fun debug(msg: String) {
+        log("touch: $msg")
+    }
 
     private fun processTouch(event: MotionEvent): Boolean {
         val action = event.action
+        debug("action: $action oldState: $state")
 
         val oldState = state
         var result = true
@@ -69,6 +77,8 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
             } else {
                 state = if (isSingleWord && action == MotionEvent.ACTION_UP) {
                     STATE.ACTIVE_SELECTION
+                } else if (isSingleWord && action == MotionEvent.ACTION_MOVE) {
+                    STATE.START
                 } else {
                     STATE.CANCELED
                 }
@@ -93,8 +103,9 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
             }
 
             STATE.MOVING_HANDLER -> if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_MOVE) {
-                activeHandler!!.x = event.x
-                activeHandler!!.y = event.y
+                activeHandler!!.x += event.x - lastX
+                activeHandler!!.y += event.y - lastY
+                recordLastEvent(event)
 
                 updateSelectionAndGetText(getSelectedText())
 
@@ -107,7 +118,9 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
 
             else -> result = false
         }
+
         if (oldState != state) {
+            debug("new state: $action oldState: $state")
             when (state) {
                 STATE.CANCELED -> {
                     actions?.dismissOnlyDialog()
@@ -118,8 +131,10 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
                 STATE.ACTIVE_SELECTION -> {
                     val text = getSelectedText()
                     if (oldState == STATE.START && isSingleWord) {
+                        debug("oldState == STATE.START && isSingleWord")
                         text?.let {
                             it.rect.firstOrNull()?.let {
+                                debug("rect: $it")
                                 updateHandlersByTextSelection(it)
                             }
                         }
@@ -132,11 +147,21 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
                     )
                 }
 
+                STATE.MOVING_HANDLER -> {
+                    recordLastEvent(event)
+                }
+
                 else -> {
                 }
             }
         }
+        debug("result = $result")
         return result
+    }
+
+    private fun recordLastEvent(event: MotionEvent) {
+        lastX = event.x
+        lastY = event.y
     }
 
     private fun setHandlers(start: PointF, end: PointF) {
