@@ -21,7 +21,7 @@ import kotlin.math.min
 class SelectionAutomata(val activity: OrionViewerActivity) :
     DialogOverView(activity, R.layout.text_selector, android.R.style.Theme_Translucent_NoTitleBar) {
     private enum class STATE {
-        START, MOVING, ACTIVE_SELECTION, MOVING_HANDLER, CANCELED
+        START, ACTIVE_SELECTION, MOVING_HANDLER, CANCELED
     }
 
     private var state = STATE.CANCELED
@@ -258,7 +258,7 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
                     selectedTextActions.show(text, occupiedArea)
                     dialog.setOnShowListener(null)
                 }
-                startTextSelection(true, false, true)
+                startTextSelection(true, translate = false, quite = true)
                 state = STATE.ACTIVE_SELECTION
             } else {
                 selectedTextActions.show(text, occupiedArea)
