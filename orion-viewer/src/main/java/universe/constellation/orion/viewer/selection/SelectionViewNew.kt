@@ -103,7 +103,7 @@ class SelectionViewNew : View {
     }
 
     fun updateView(rects: List<RectF>) {
-        this.rects = rects
+        this.rects = rects.distinct()
         invalidate()
     }
 
