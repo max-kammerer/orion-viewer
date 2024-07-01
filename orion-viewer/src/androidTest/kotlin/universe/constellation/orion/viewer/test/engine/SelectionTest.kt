@@ -1,11 +1,14 @@
 package universe.constellation.orion.viewer.test.engine
 
 import android.graphics.Rect
+import android.graphics.RectF
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runners.Parameterized
 import universe.constellation.orion.viewer.document.withPage
+import universe.constellation.orion.viewer.selection.ExtractionInfo
 import universe.constellation.orion.viewer.selection.SelectionAutomata
+import universe.constellation.orion.viewer.selection.extractText
 import universe.constellation.orion.viewer.test.framework.BookDescription
 import universe.constellation.orion.viewer.test.framework.BookTest
 
@@ -33,20 +36,17 @@ class SelectionTest(
 
     @Test
     fun testSelection() {
-        val selectionRect = SelectionAutomata.getScreenSelectionRectWithDelta(
-            absoluteRect.left,
-            absoluteRect.top,
-            absoluteRect.width(),
-            absoluteRect.height(),
-            isSingleWord
+        val selectionRect = SelectionAutomata.expandRect(
+            RectF(absoluteRect),
+            2f
         )
         document.withPage(page1Based - 1 /*zero based*/) {
-            val text = getText(
-                selectionRect.left,
-                selectionRect.top,
-                selectionRect.width(),
-                selectionRect.height(),
-                isSingleWord
+            val textInfo = getTextInfo()
+            val text = extractText(
+                listOf(ExtractionInfo(this, selectionRect) { it }),
+                true,
+                isSingleWord,
+                false
             )
             assertEquals(expectedText, text!!.value)
         }

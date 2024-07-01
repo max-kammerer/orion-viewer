@@ -1,5 +1,6 @@
 package universe.constellation.orion.viewer.view
 
+import android.graphics.RectF
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred

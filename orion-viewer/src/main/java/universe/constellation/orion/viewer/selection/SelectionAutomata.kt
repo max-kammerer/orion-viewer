@@ -307,8 +307,7 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
         isSingleWord: Boolean
     ): RectF {
         if (!isSingleWord) return rect
-        rect.inset(-singleWordDelta, -singleWordDelta) //TODO: dp to pixel
-        return rect
+        return expandRect(rect, singleWordDelta)
     }
 
     companion object {
@@ -319,6 +318,14 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
                 max(startHandler.x, endHandler.x),
                 max(startHandler.y, endHandler.y)
             )
+        }
+
+        fun expandRect(
+            rect: RectF,
+            delta: Float
+        ): RectF {
+            rect.inset(-delta, -delta)
+            return rect
         }
     }
 }

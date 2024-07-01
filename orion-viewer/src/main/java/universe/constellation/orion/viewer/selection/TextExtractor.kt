@@ -3,16 +3,15 @@ package universe.constellation.orion.viewer.selection
 import android.graphics.Rect
 import android.graphics.RectF
 import androidx.core.graphics.toRectF
+import universe.constellation.orion.viewer.document.Page
 import universe.constellation.orion.viewer.document.TextAndSelection
 import universe.constellation.orion.viewer.document.TextInfoBuilder
 import universe.constellation.orion.viewer.document.TextWord
 
-fun SelectionAutomata.getTextByHandlers(startHandler: Handler, endHandler: Handler, isRect: Boolean = false, isSingleWord: Boolean = false): TextAndSelection? {
-    val opRect = RectF()
-    val lns: java.util.ArrayList<List<TextWord>> = arrayListOf()
-    val rects: ArrayList<RectF> = arrayListOf()
-    val screenSelection = SelectionAutomata.getScreenSelectionRect(startHandler, endHandler)
+class ExtractionInfo(val page: Page, val absoluteRectWithoutCrop: RectF, val sceneRect: (RectF) -> RectF)
 
+fun SelectionAutomata.getTextByHandlers(startHandler: Handler, endHandler: Handler, isRect: Boolean = false, isSingleWord: Boolean = false): TextAndSelection? {
+    val screenSelection = SelectionAutomata.getScreenSelectionRect(startHandler, endHandler)
     val pageLayoutManager = this.activity.controller!!.pageLayoutManager
     val pageSelectionRectangles = getPageSelectionRectangles(
         screenSelection,
@@ -21,21 +20,36 @@ fun SelectionAutomata.getTextByHandlers(startHandler: Handler, endHandler: Handl
     )
     val invertCheck = startHandler.y > endHandler.y
 
-    for (selection in pageSelectionRectangles) {
+    return extractText(pageSelectionRectangles.map { ExtractionInfo(it.page, it.absoluteRectWithoutCrop.toRectF(), it.pageView::getSceneRect) }, isRect, isSingleWord, invertCheck)
+}
+
+
+
+fun extractText(
+    extractionInfo: List<ExtractionInfo>,
+    isRectMode: Boolean,
+    isSingleWord: Boolean,
+    invertCheck: Boolean
+): TextAndSelection? {
+    val opRect = RectF()
+    val lns: java.util.ArrayList<List<TextWord>> = arrayListOf()
+    val rects: ArrayList<RectF> = arrayListOf()
+
+    for (selection in extractionInfo) {
         for (line in selection.page.getTextInfo()?.lines ?: emptyList()) {
             val wordsInLine = arrayListOf<TextWord>()
-            val region = selection.absoluteRectWithoutCrop.toRectF()
+            val region = selection.absoluteRectWithoutCrop
             for (word in line) {
                 if (word.isNotEmpty()) {
-                    if (isRect || isSingleWord) {
+                    if (isRectMode || isSingleWord) {
                         if (includeWord(word, region, isSingleWord, opRect)) {
                             wordsInLine.add(word)
-                            rects.add(selection.pageView.getSceneRect(word.rect.toRectF()))
+                            rects.add(selection.sceneRect(word.rect.toRectF()))
                         }
                     } else {
                         if (includeWordComplex(word, region, invertCheck)) {
                             wordsInLine.add(word)
-                            rects.add(selection.pageView.getSceneRect(word.rect.toRectF()))
+                            rects.add(selection.sceneRect(word.rect.toRectF()))
                         }
                     }
                 }
