@@ -71,8 +71,6 @@
             android:gravity="center" android:linksClickable="true" android:autoLink="web"/>
 
 
-
-
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:textSize="@dimen/text_size_medium"
                   android:text="Contributors:"
@@ -118,8 +116,14 @@
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_medium"
-            android:text="Claude Dellacherie - French translation"
+            android:text="Claude Dellacherie, J. Lavoie - French translation"
             android:gravity="center"/>
+
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_medium"
+            android:text="Amerey - Czech translation"
+            android:gravity="center"/>
+
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
                   android:textSize="@dimen/text_size_large"
