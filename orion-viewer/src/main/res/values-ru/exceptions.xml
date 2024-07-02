@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="warn_msg_no_dictionary">Словарь не найден</string>
-    <string name="ex_msg_operation_failed">Операция не удалась</string>
-</resources>

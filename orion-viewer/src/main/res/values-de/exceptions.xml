@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<!--Translated by Johannes Römer-->
-<resources>
-    <string name="warn_msg_no_dictionary">Wörterbuch unauffindbar!</string>
-    <string name="ex_msg_operation_failed">Operation fehlgeschlagen!</string>
-</resources>

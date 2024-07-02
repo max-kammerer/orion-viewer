@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="warn_msg_no_dictionary">Pas de dictionnaire</string>
+    <string name="ex_msg_operation_failed">Echec de l\'opération</string>
+
     <string name="msg_dialog_search">Recherche, dialogue</string>
     <string name="msg_dialog_dismis">Abandonner</string>
     <string name="warn_text_not_found">Texte non trouvé</string>
