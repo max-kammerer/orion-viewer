@@ -1,20 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="fileopen_error_during_intent_processing">Ошибка при обработке запроса</string>
     <string name="fileopen_error_during_intent_processing_info">Не извлечь путь к файлу из запроса. Пожалуйста, сохраните данные запроса в файл, чтобы открыть или:</string>
-
     <string name="fileopen_private_resource_access">Доступ к приватному файлу</string>
     <string name="fileopen_private_resource_access_info">Не возможно получить доступ к файлу напрямую, пожалуйста, выберите одну из опций:</string>
-
     <string name="fileopen_permission_dialog">Нет прямого доступа к файлу</string>
     <string name="fileopen_permission_dialog_info">Пожалуйста, предоставте права на чтение файла напрямую или выберите опцию ниже:</string>
-
     <string name="fileopen_permissions_grant_read">Предоставить права на чтение диска…</string>
     <string name="fileopen_save_to_file">Сохранить в новый файл…</string>
     <string name="fileopen_open_in_temporary_file">Открыть через временный файл</string>
     <string name="fileopen_open_recent_files">Перейти к недавно открытым книгам…</string>
     <string name="fileopen_report_error_by_github_and_return">Создать ошибку на github и вернуться к диалогу…</string>
     <string name="fileopen_report_error_by_email_and_return">Отправить ошибку по e-mail и вернуться к диалогу…</string>
-
     <string name="string_intent">Интент</string>
     <string name="string_exception">Ошибка</string>
     <string name="string_cause">Причина</string>
@@ -23,12 +20,9 @@
     <string name="crash_on_book_opening_message_header">Ошибка при открытии \`%1$s\` файла. Пожалуйста, отправьте сообщение об ошибке:</string>
     <string name="crash_on_book_opening_message_header_panel">Ошибка при открытии \`%1$s\` файла:</string>
     <string name="crash_on_book_opening_encrypted">Зашифрованный документ</string>
-
     <string name="string_send">Отправить…</string>
     <string name="send_report_header">[Пожалуйста, укажите дополнительную информацию (как воспроизвести проблему)]</string>
-
     <string name="error_on_file_saving_title">Ошибка при cохранинии файла</string>
-
     <string name="fileopen_cant_open">Невозможно открыть документ: %s.</string>
     <string name="fileopen_file_is_emppty">пустой файл</string>
     <string name="fileopen_no_pages">в документе нет страниц</string>
