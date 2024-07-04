@@ -1,3 +1,6 @@
+===== 0.94.5 (Jul 04, 2024) =====
+* Fixed compatibility with Android 4.x
+
 ===== 0.94.4 (Jul 02, 2024) =====
 * Reworked text selection logic
 * Added ability to disable long and double click processing
