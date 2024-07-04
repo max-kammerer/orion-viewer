@@ -91,7 +91,7 @@ open class OrionEditTextPreference @JvmOverloads constructor(
                 it,
                 R.styleable.universe_constellation_orion_viewer_prefs_OrionEditTextPreference_maxValue
             )
-            it.close()
+            it.recycle()
         }
 
         if (pattern != null || minValue != null || maxValue != null) {

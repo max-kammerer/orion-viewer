@@ -8,12 +8,6 @@ android {
     defaultConfig {
         minSdkVersion 14
     }
-    buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
 
     namespace 'universe.constellation.orion.common'
     compileOptions {
