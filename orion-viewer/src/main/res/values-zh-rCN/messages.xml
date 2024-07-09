@@ -1,2 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="msg_dialog_dismis">暂时不管</string>
+    <string name="warn_text_not_found">没有文本</string>
+    <string name="msg_searching">正在查找…</string>
+    <string name="msg_select_text">选择文本！</string>
+    <string name="msg_error">出错</string>
+    <string name="msg_dialog_search">查找对话框</string>
+    <string name="msg_warning">警告</string>
+    <string name="recent_book_not_found">没找着书籍文件！</string>
+    <string name="permission_grant">授权…</string>
+    <string name="permission_cancel">取消</string>
+    <string name="string_close">关闭</string>
+    <string name="string_cancel">取消</string>
+    <string name="string_apply">确认</string>
+    <string name="string_wrong_password">密码不对</string>
+    <string name="password_for_file">文件密码</string>
+    <string name="wrong_outline_item">错误的页面: %s</string>
+    <string name="ex_msg_operation_failed">操作失败</string>
+    <string name="warn_msg_no_dictionary">没找到词典</string>
+</resources>
