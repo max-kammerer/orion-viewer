@@ -1,2 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="file_manager_title">文件管理器</string>
+    <string name="file_manager_fodlers">文件夹</string>
+    <string name="file_manager_history">历史记录</string>
+    <string name="file_manager_contribution">开发人员</string>
+    <string name="file_manager_path">路径:</string>
+    <string name="file_manager_documents">文档</string>
+    <string name="file_manager_downloads">下载</string>
+    <string name="file_manager_sdcard">SD 卡</string>
+    <string name="file_manager_grant_read_permissions">授予读取权限</string>
+    <string name="file_manager_nav_locations">位置</string>
+    <string name="file_manager_nav_settings">设置</string>
+    <string name="file_manager_nav_system_select">在系统中选择文件</string>
+    <string name="file_manager_nav_exit">退出</string>
+    <string name="file_manager_internal_storage">内部存储空间</string>
+    <string name="file_manager_primary_storage">优先使用的存储位置</string>
+    <string name="file_manager_select_tip">选择文件，在 Orion Viewer 上打开</string>
+</resources>
