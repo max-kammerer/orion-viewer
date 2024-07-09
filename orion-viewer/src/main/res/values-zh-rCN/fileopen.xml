@@ -1,2 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="fileopen_error_during_intent_processing">执行操作时出错</string>
+    <string name="fileopen_permission_dialog">文件不能直接访问</string>
+    <string name="fileopen_permission_dialog_info">请授予读取文件的权限，或者用下面的办法之一:</string>
+    <string name="fileopen_permissions_grant_read">授予读取存储空间的权限…</string>
+    <string name="fileopen_open_in_temporary_file">通过临时文件打开</string>
+    <string name="fileopen_open_recent_files">跳转到最近打开的书籍…</string>
+    <string name="fileopen_report_error_by_github_and_return">在 github 里告知开发者问题，返回到对话框…</string>
+    <string name="fileopen_report_error_by_email_and_return">写 email 告知开发者问题，返回到对话框…</string>
+    <string name="crash_on_book_opening_title">打开文件出错</string>
+    <string name="crash_on_book_opening_message_header">打开文件 %1$s 出错。请告知开发者问题:</string>
+    <string name="crash_on_book_opening_message_header_panel">打开文件 %1$s 出错:</string>
+    <string name="crash_on_book_opening_encrypted">文档加密了</string>
+    <string name="string_send">发送…</string>
+    <string name="send_report_header">[请告知出错的细节 (重现问题的步骤)]</string>
+    <string name="error_on_file_saving_title">保存文件出错</string>
+    <string name="fileopen_cant_open">文档 %s 打不开。</string>
+    <string name="fileopen_no_pages">文档连一页都没有</string>
+    <string name="fileopen_file_is_emppty">文件是空的</string>
+</resources>
