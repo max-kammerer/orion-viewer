@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Translated by Claude Dellacherie--><resources>
+<resources>
     <string name="menu_zoom_text">Zoom</string>
     <string name="menu_crop_text">Recadrer</string>
     <string name="menu_goto_text">Aller à la page</string>
