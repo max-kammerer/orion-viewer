@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
     <!--Categories-->
     <string name="pref_category_general">Основные</string>
@@ -12,7 +11,6 @@
     <string name="pref_statusBarPosition">Положение панели</string>
     <string name="pref_statusBarSize">Размер панели</string>
     <string name="pref_value">Значение: %s</string>
-
     <!--General Prefs-->
     <string name="pref_appearance">Внешний вид</string>
     <string name="pref_behavior">Управление и поведение</string>
@@ -26,95 +24,68 @@
     <string name="pref_showTimeOnStatusBar">Показывать время</string>
     <string name="pref_showBatteryInfo">Отображать информацию о батарее</string>
     <string name="pref_bookDefaultOrientation">Ориентация книги по умолчанию</string>
-
     <string name="pref_bookDefaultZoom">Масштаб</string>
     <string name="pref_bookDefaultZoom_desc">Масштаб: %s</string>
-
     <string name="pref_rotate_new_book_on_opening">Поворачивать книгу при первом открытии</string>
     <string name="pref_screen_orientation">Ориентация экрана</string>
     <string name="pref_screen_orientation_desc">Ориентация экрана по умолчанию: необходим перезапуск приложения</string>
-
     <string name="pref_book_screen_orientation">Ориентация экрана</string>
     <string name="pref_book_screen_orientation_desc">Ориентация экрана для текущей книги: %s</string>
-
     <string name="pref_close_dialog_on_apply">Закрывать диалог при применении настроеек</string>
     <string name="pref_close_page_option_dialog_on_apply">Закрывать диалог параметров страницы при применении настроек</string>
     <string name="pref_swap_prev_next_keys">Обменять клавиши местами</string>
     <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Обменять действия клавиш вперед/назад в портретном режиме</string>
-
     <string name="pref_dictionary">Словарь</string>
     <string name="pref_dictionary_desc">Словарь: %s</string>
-
     <string name="pref_e_ink_optimization">E-ink</string>
     <string name="pref_e_ink_fast_refresh">Быстрое обновление e-ink</string>
     <string name="pref_total_refresh_after">Полное обновление после…</string>
-
     <string name="pref_long_crop_value">Большая обрезка</string>
     <string name="pref_long_crop_value_desc">Значение параметра большой обрезки (0–40%)</string>
-
     <string name="pref_screen_overlapping_horizontal">Горизонтальный нахлест</string>
     <string name="pref_screen_overlapping_horizontal_desc">Горизонтальный нахлест отображаемых частей страницы (0–90%)</string>
-
     <string name="pref_screen_overlapping_vertical">Вертикальный нахлест</string>
     <string name="pref_screen_overlapping_vertical_desc">Вертикальный нахлест отображаемых частей страницы (0–90%)</string>
-
-
     <string name="pref_custom_brightness">Регулировка Яркости</string>
     <string name="pref_brightness">Яркость</string>
     <string name="pref_brightness_desc">Яркость (1–100%)</string>
-
     <string name="pref_application_theme">Тема приложения</string>
     <string name="pref_application_theme_desc">Тема: %s. (При изменении необходимо перезапустить приложение)</string>
-
     <string name="pref_open_recent_book">Открывать последнюю книгу при старте</string>
-
     <!--book preferences-->
     <string name="pref_book_contrast">Контрастность</string>
     <string name="pref_book_contrast_desc">Контрастность (по умолчанию 100): %s</string>
-
     <!--<string name="pref_book_threshold">Threshold</string>-->
     <!--<string name="pref_book_threshold_desc">Threshold for watermark removal</string>-->
 
     <string name="pref_device_info">Устройство</string>
     <string name="pref_debug">Отладка и логи</string>
     <string name="pref_debug_desc">Запись отладочной информации в лог-файл</string>
-
     <string name="pref_walk_order">@string/navigation</string>
     <string name="pref_walk_order_desc">Порядок переходов: %s</string>
-
     <string name="pref_page_layout">@string/menu_navigation_text</string>
-
     <string name="pref_default_book_setting">Параметры по умолчанию для книги</string>
     <string name="pref_default_book_setting_desc">Будут применены также и к открытой книге!</string>
     <string name="book_pref_title">Настройки для открытой книги</string>
     <string name="application_settings_title">Настройки приложения</string>
-
     <string name="pref_screen_backlight_timeout">Подсветка экрана</string>
     <string name="pref_screen_backlight_timeout_desc">Длительность подсветки экрана: %s</string>
-
     <string name="pref_app_language">Язык приложения</string>
     <string name="pref_app_language_desc">Язык приложения: %s. (Необходим перезапуск при изменении)</string>
-
     <string name="pref_tap_zones_desc">Привязка операции к зонам экрана</string>
     <string name="pref_key_binder_desc">Привязка операции к клавишам</string>
-
     <string name="pref_key_double_tap">Действие по двойному клику</string>
     <string name="pref_key_long_tap">Действие по долгому клику</string>
     <string name="pref_key_linked_action_summary">Связанное действие: `%s`</string>
-
     <string name="pref_book_threshold">Порог для водяных знаков</string>
     <string name="pref_book_threshold_desc">Порог удаления водяных знаков (по умолчанию 255): %s</string>
-
     <string name="pref_color_mode">Цветовой режим</string>
-
     <string name="pref_category_move">Сдвиг</string>
     <string name="pref_enable_touch_move">Включить сдвиг одним пальцем</string>
     <string name="pref_enable_move_on_pinch_zoom">Разрешить сдвиг при масштабировании двумя пальцами</string>
-
     <string name="pref_position_top">Сверху</string>
     <string name="pref_position_bottom">Снизу</string>
     <string name="pref_position_hide">Скрыть</string>
-
     <string name="pref_size_small">Маленький</string>
     <string name="pref_size_medium">Средний</string>
     <string name="pref_size_large">Большой</string>
