@@ -57,7 +57,7 @@
     <string name="pref_page_layout">Sayfa düzeni</string>
     <string name="application_settings_title">Uygulama ayarları</string>
     <string name="pref_default_book_setting">Varsayılan kitap ayarları</string>
-    <string name="pref_default_book_setting_desc">Açılan kitaba da uygulanacaktır!</string>
+    <string name="pref_default_book_setting_desc">Şu anda açık olan kitaba da uygulanacaktır!</string>
     <string name="book_pref_title">Mevcut kitap seçenekleri</string>
     <string name="pref_screen_backlight_timeout">Ekran ışığı zaman aşımı</string>
     <string name="pref_screen_backlight_timeout_desc">Ekran ışığı zaman aşımı: %s</string>
@@ -66,8 +66,8 @@
     <string name="pref_tap_zones_desc">Eylemleri ekran bölgelerine bağlayın</string>
     <string name="pref_key_binder_desc">Eylemleri tuşlara/düğmelere bağlama</string>
     <string name="pref_key_double_tap">Çift dokunma eylemi</string>
-    <string name="pref_enable_touch_move">Dokunma hareketini etkinleştir</string>
-    <string name="pref_enable_move_on_pinch_zoom">Kıstırma yakınlaştırması sırasında çeviriye izin ver</string>
+    <string name="pref_enable_touch_move">Dokunarak taşımayı etkinleştir</string>
+    <string name="pref_enable_move_on_pinch_zoom">Kıstırma yakınlaştırması sırasında sayfa taşımaya izin ver</string>
     <string name="pref_color_mode">Renk modu</string>
     <string name="pref_category_status_bar">Durum Çubuğu</string>
     <string name="pref_value">Değer: %s</string>
