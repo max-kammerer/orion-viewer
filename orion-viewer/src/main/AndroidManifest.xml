@@ -148,11 +148,7 @@
                   android:theme="@style/Theme.AppCompat"
                   android:launchMode="singleTask"
                   android:icon="@drawable/orion"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="universe.constellation.orion.viewer.KEY_MANAGER"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
+                  android:exported="false">
         </activity>
 
         <activity android:name=".OrionHelpActivity"
@@ -173,10 +169,6 @@
                   android:theme="@style/Theme.AppCompat"
                   android:label="Tap Zones"
             android:exported="false">
-            <intent-filter>
-                <action android:name="universe.constellation.orion.viewer.TAP_ZONES"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
         </activity>
 
         <activity android:name=".prefs.ActionListActivity" android:screenOrientation="behind"

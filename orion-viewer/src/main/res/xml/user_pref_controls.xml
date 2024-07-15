@@ -34,7 +34,7 @@
             android:summary="@string/pref_tap_zones_desc"
             android:title="@string/menu_tap_text"
             app:iconSpaceReserved="false">
-            <intent android:action="universe.constellation.orion.viewer.TAP_ZONES" />
+            <intent android:targetPackage="universe.constellation.orion.viewer" android:targetClass="universe.constellation.orion.viewer.prefs.OrionTapActivity" />
         </PreferenceScreen>
 
         <Preference
@@ -42,7 +42,7 @@
             android:summary="@string/pref_key_binder_desc"
             android:title="@string/menu_key_binder_text"
             app:iconSpaceReserved="false">
-            <intent android:action="universe.constellation.orion.viewer.KEY_MANAGER" />
+            <intent android:targetPackage="universe.constellation.orion.viewer" android:targetClass="universe.constellation.orion.viewer.prefs.OrionKeyBinderActivity" />
         </Preference>
 
     </PreferenceCategory>
