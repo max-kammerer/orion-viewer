@@ -71,7 +71,12 @@
     <string name="pref_app_language_desc">语言: %s。(更改会重启应用程序)</string>
     <string name="pref_key_double_tap">双击操作</string>
     <string name="pref_key_long_tap">长按操作</string>
-    <string name="pref_enable_move_on_pinch_zoom">双指缩放时仍显示翻译</string>
+    <string name="pref_enable_move_on_pinch_zoom">双指缩放时允许移动页面</string>
     <string name="pref_position_bottom">底部</string>
     <string name="pref_position_hide">隐藏</string>
+    <string name="pref_behavior">控制与行为</string>
+    <string name="pref_renderOffPage">绘制页面外空间</string>
+    <string name="pref_dictionary_desc">字典：%s</string>
+    <string name="pref_key_linked_action_summary">链接的操作：`%s`</string>
+    <string name="pref_color_mode">颜色模式</string>
 </resources>
