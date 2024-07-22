@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="fileopen_error_during_intent_processing">执行操作时出错</string>
+    <string name="fileopen_error_during_intent_processing">处理意图时出错</string>
     <string name="fileopen_permission_dialog">文件不能直接访问</string>
     <string name="fileopen_permission_dialog_info">请授予读取文件的权限，或者用下面的办法之一:</string>
     <string name="fileopen_permissions_grant_read">授予读取存储空间的权限…</string>
