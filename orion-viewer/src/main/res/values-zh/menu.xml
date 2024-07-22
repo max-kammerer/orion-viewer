@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
     <string name="menu_zoom_text">缩放</string>
     <string name="menu_crop_text">切边</string>
@@ -18,13 +17,12 @@
     <string name="menu_key_binder_text">绑定按键</string>
     <string name="menu_options_text">设置</string>
     <string name="menu_tap_text">触摸区域</string>
-
-
     <string name="menu_book_preferences">书籍设置</string>
-
-
     <string name="export_all_bookmarks_menu_item">导出所有书签</string>
     <string name="export_bookmarks_menu_item">导出当前书籍书签</string>
     <string name="import_all_bookmarks_menu_item">导入…</string>
     <string name="import_current_bookmarks_menu_item">添加…</string>
+    <string name="menu_about_text">关于…</string>
+    <string name="menu_search_item">搜索</string>
+    <string name="menu_other">其他…</string>
 </resources>
