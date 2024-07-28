@@ -94,7 +94,7 @@ class OutlineAdapter(
             super.handleItemClick(view, id)
         } else {
             try {
-                controller.drawPage(outlineItem.page)
+                controller.drawPage(outlineItem.page, isTapNavigation = true)
                 this.dialog.dismiss()
             } catch (e: Exception) {
                 log(e)
