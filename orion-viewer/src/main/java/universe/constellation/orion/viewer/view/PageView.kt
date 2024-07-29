@@ -276,10 +276,12 @@ class PageView(
         canvas: Canvas,
         scene: OrionDrawScene,
     ) {
-        canvas.drawRect(
-            layoutData.wholePageRect,
-            scene.borderPaint!!
-        )
+        if (controller.drawBorder.value) {
+            canvas.drawRect(
+                layoutData.wholePageRect,
+                scene.borderPaint!!
+            )
+        }
     }
 
     fun invalidateAndUpdate() {

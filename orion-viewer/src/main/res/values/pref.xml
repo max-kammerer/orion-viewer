@@ -21,6 +21,7 @@
     <string name="pref_old_ui">Enable old UI</string>
     <string name="pref_new_ui_summary">Application restart is required</string>
     <string name="pref_renderOffPage">Draw off-page space</string>
+    <string name="pref_renderPageBorder">Draw page border</string>
     <string name="pref_showActionBar">Show Action Bar</string>
     <string name="pref_showActionBar_desc">Show Action Bar (restart needed)</string>
     <string name="pref_statusBarPosition">Status Bar Position</string>

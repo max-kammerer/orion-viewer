@@ -18,6 +18,7 @@
     <string name="pref_old_ui">Включить старый UI</string>
     <string name="pref_new_ui_summary">Требуется перезапуск приложения</string>
     <string name="pref_renderOffPage">Отрисовывать внестраничное пространство</string>
+    <string name="pref_renderPageBorder">Отрисовывать границу страницы</string>
     <string name="pref_showActionBar">Показывать панель действий</string>
     <string name="pref_showActionBar_desc">Показывать панель действий (необходим перезапуск)</string>
     <string name="pref_showOffsetOnStatusBar">Показывать смещение на странице</string>

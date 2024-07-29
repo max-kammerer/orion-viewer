@@ -237,6 +237,8 @@ class GlobalOptions(
 
     val SHOW_TIME_ON_STATUS_BAR = pref(Companion.SHOW_TIME_ON_STATUS_BAR, true)
 
+    val DRAW_PAGE_BORDER = pref("DRAW_PAGE_BORDER", true)
+
     fun <T> subscribe(pref: Preference<T>) {
         registeredPreferences.put(pref.key, pref)?.also {
             errorInDebug("Pref with key ${pref.key} already registered: $pref ")

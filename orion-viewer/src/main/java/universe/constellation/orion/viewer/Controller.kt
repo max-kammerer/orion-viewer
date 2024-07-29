@@ -80,6 +80,8 @@ class Controller(
 
     private var hasPendingEvents = false
 
+    val drawBorder = activity.globalOptions.DRAW_PAGE_BORDER
+
     lateinit var pageLayoutManager: PageLayoutManager
 
     var cropPadding = 5

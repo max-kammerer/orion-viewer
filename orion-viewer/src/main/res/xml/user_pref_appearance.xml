@@ -36,6 +36,13 @@
 
         <CheckBoxPreference
             android:defaultValue="true"
+            android:key="DRAW_PAGE_BORDER"
+            android:summary="@string/pref_renderPageBorder"
+            android:title="@string/pref_renderPageBorder"
+            app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
             android:key="DRAW_OFF_PAGE"
             android:summary="@string/pref_renderOffPage"
             android:title="@string/pref_renderOffPage"
