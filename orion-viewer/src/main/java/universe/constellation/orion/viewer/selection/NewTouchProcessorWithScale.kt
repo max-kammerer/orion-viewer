@@ -21,9 +21,11 @@ class NewTouchProcessorWithScale(view: OrionDrawScene, activity: OrionViewerActi
     private var curScale = 1.0F
 
     override fun onTouch(e: MotionEvent): Boolean {
-        scaleDetector.onTouchEvent(e)
-        if (scaleDetector.isInProgress) {
-            return true
+        if (state != State.DOUBLE_TAP) {
+            scaleDetector.onTouchEvent(e)
+            if (scaleDetector.isInProgress) {
+                return true
+            }
         }
         return super.onTouch(e)
     }
