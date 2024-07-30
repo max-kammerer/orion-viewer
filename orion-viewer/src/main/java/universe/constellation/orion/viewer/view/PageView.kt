@@ -276,7 +276,7 @@ class PageView(
         canvas: Canvas,
         scene: OrionDrawScene,
     ) {
-        if (controller.drawBorder.value) {
+        if (scene.inScalingMode || controller.drawBorder.value) {
             canvas.drawRect(
                 layoutData.wholePageRect,
                 scene.borderPaint!!
