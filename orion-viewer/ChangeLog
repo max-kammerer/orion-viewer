@@ -1,3 +1,6 @@
+===== 0.94.9 (Jul 31, 2024) =====
+* Rollback changes in touch processor made in 0.94.8
+
 ===== 0.94.8 (Jul 30, 2024) =====
 * Added ability to switch off page border rendering
 * Tuned touch processing
