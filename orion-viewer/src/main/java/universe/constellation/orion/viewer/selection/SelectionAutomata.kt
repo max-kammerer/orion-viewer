@@ -268,7 +268,7 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
 
     @JvmOverloads
     fun startTextSelection(isSingleWord: Boolean, translate: Boolean, quite: Boolean = false) {
-        selectionView.setColorFilter(activity.fullScene.colorStuff.backgroundPaint.colorFilter)
+        selectionView.setColorFilter(activity.fullScene.colorStuff.mainPagePaint.colorFilter)
         if (!quite) {
             selectionView.reset()
         }

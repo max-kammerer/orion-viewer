@@ -239,7 +239,7 @@ class PageView(
         val pageRect = layoutData.wholePageRect
         canvas.drawRect(
             pageRect,
-            scene.stuff.pagePaint
+            scene.stuff.blankPagePaint
         )
         val size = min(pageRect.width(), pageRect.height()) / 10
         scene.loadingDrawable.setBounds(

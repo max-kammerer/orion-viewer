@@ -73,7 +73,7 @@ class OrionDrawScene : View {
 
     fun init(colorStuff: ColorStuff, statusBarHelper: StatusBar, loadingDrawable: Drawable) {
         this.stuff = colorStuff
-        defaultPaint = colorStuff.backgroundPaint
+        defaultPaint = colorStuff.mainPagePaint
         borderPaint = colorStuff.borderPaint
         this.statusBar = statusBarHelper
         this.loadingDrawable = loadingDrawable

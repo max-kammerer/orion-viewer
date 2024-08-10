@@ -69,7 +69,7 @@ class PageScene : View {
 
     fun init(colorStuff: ColorStuff, statusBar: StatusBar) {
         this.stuff = colorStuff
-        defaultPaint = colorStuff.backgroundPaint
+        defaultPaint = colorStuff.mainPagePaint
         borderPaint = colorStuff.borderPaint
         this.statusBar = statusBar
         inited = true

@@ -16,15 +16,15 @@ class ColorStuff {
         style = Paint.Style.STROKE
     }
 
-    val backgroundPaint = Paint(FILTER_BITMAP_FLAG).apply {
+    val mainPagePaint = Paint(FILTER_BITMAP_FLAG).apply {
         color = Color.WHITE
     }
 
-    val pagePaint = Paint(FILTER_BITMAP_FLAG).apply {
+    val blankPagePaint = Paint(FILTER_BITMAP_FLAG).apply {
         color = Color.WHITE
     }
 
-    private var colorDrawable = ColorDrawable(backgroundPaint.color)
+    private var colorDrawable = ColorDrawable(mainPagePaint.color)
     private var renderOffPage: Boolean = false
 
     var colorMatrix: FloatArray? = null
@@ -33,17 +33,17 @@ class ColorStuff {
     fun setColorMatrix(view: View, colorMatrix: FloatArray?) {
         this.colorMatrix = colorMatrix
         val filter = if (colorMatrix != null) ColorMatrixColorFilter(ColorMatrix(colorMatrix)) else null
-        backgroundPaint.colorFilter = filter
+        mainPagePaint.colorFilter = filter
         colorDrawable.colorFilter = filter
         borderPaint.colorFilter = filter
-        pagePaint.colorFilter = filter
+        blankPagePaint.colorFilter = filter
         renderOffPage(view, renderOffPage)
     }
 
     fun renderOffPage(view: View, on: Boolean) {
         renderOffPage = on
-        backgroundPaint.color = if (on) Color.rgb(230, 230, 230) else Color.WHITE
-        colorDrawable.color = backgroundPaint.color
+        mainPagePaint.color = if (on) Color.rgb(230, 230, 230) else Color.WHITE
+        colorDrawable.color = mainPagePaint.color
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && colorMatrix != null) {
             //ugly hack
             colorDrawable.color = ColorUtil.transformColor(colorDrawable.color, colorMatrix!!)
