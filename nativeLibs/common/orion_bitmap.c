@@ -10,7 +10,7 @@ unsigned int contrast = 100;
 unsigned int threshold = 255;
 
 void orion_setContrast(JNIEnv *env, jobject thiz, jint contrast1);
-void orion_updateContrast(unsigned char *data, int size);
+void orion_updateContrast(unsigned char *data, int startRow, int startCol, int  endRow, int endCol, int width);
 
 #ifdef ORION_PDF
 JNIEXPORT void
@@ -27,7 +27,7 @@ JNICALL JNI_FN(PdfDocument_setThreshold)(JNIEnv * env, jobject thiz, jint thresh
 }
 
 JNIEXPORT void
-JNICALL JNI_FN(PdfDocument_updateContrast)(JNIEnv *env, jobject thiz, jobject jbitmap, jint size) {
+JNICALL JNI_FN(PdfDocument_updateContrast)(JNIEnv *env, jobject thiz, jobject jbitmap, jint startRow, jint startCol, jint  endRow, jint endCol, jint width) {
     void *pixels;
     int ret;
 
@@ -36,7 +36,7 @@ JNICALL JNI_FN(PdfDocument_updateContrast)(JNIEnv *env, jobject thiz, jobject jb
         //TODO: log
         return;
     }
-    orion_updateContrast((unsigned char *) pixels, (unsigned int)size);
+    orion_updateContrast((unsigned char *) pixels, startRow, startCol, endRow, endCol, width);
 
     if (AndroidBitmap_unlockPixels(env, jbitmap) != ANDROID_BITMAP_RESULT_SUCCESS) {
         //log
@@ -64,25 +64,31 @@ void orion_setContrast(JNIEnv *env, jobject thiz, jint contrast1) {
     float kgamma = contrast1 / 100.0f;
     int i;
     for (i = 0; i < 256; i++) {
-        orion_gamma[i] = (unsigned char) (pow(i / 255.0f, kgamma) * 255);
+        orion_gamma[i] = (uint8_t) (pow(i / 255.0f, kgamma) * 255);
     }
 }
 
 
-void orion_updateContrast(unsigned char *data, int size) {
+void orion_updateContrast(uint8_t *data, int startRow, int startCol, int  endRow, int endCol, int width) {
     if (contrast != DEFAULT_CONTRAST) {
-        LOGI("Update gamma : %i", size);
-        int i;
-        for (i = 0; i < size; i++) {
-            data[i] = orion_gamma[data[i]];
+        LOGI("Update gamma : %i-%i %i-%i %i", startRow, endRow, startCol, endCol, width);
+        int i, j;
+        for (i = startRow; i < endRow; i++) {
+            for (j = 4 * startCol; j < 4 * endCol; j++) {
+                int index = j + i * width * 4;
+                data[index] = orion_gamma[data[index]];
+            }
         }
     }
 
     if (threshold > 0 && threshold < 255) {
-        int i;
-        for (i = 0; i < size; i++) {
-            if (data[i] > threshold) {
-                data[i] = 255;
+        int i, j;
+        for (i = startRow; i < endRow; i++) {
+            for (j = 4 * startCol; j < 4 * endCol; j++) {
+                int index = j + i * width * 4;
+                if (data[index] > threshold) {
+                    data[index] = 255;
+                }
             }
         }
     }

@@ -103,6 +103,10 @@ abstract class BaseInstrumentationTest : BaseTest() {
         openMenuAndSelect(R.id.crop_menu_item, R.string.menu_crop_text)
     }
 
+    fun ActivityScenario<OrionViewerActivity>.openBookOptions() {
+        openMenuAndSelect(R.id.book_options_menu_item, R.string.menu_book_preferences)
+    }
+
     fun applyCrop() {
         Espresso.onView(ViewMatchers.withId(R.id.option_dialog_bottom_apply)).perform(ViewActions.click())
         closeDialog()

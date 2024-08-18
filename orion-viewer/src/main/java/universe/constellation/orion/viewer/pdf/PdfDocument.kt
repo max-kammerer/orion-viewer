@@ -98,7 +98,14 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
             try {
                 val zoom1 = zoom.toFloat()
                 displayList!!.run(dev, Matrix(zoom1, zoom1), null)
-                updateContrast(bitmap, bitmap.width * bitmap.height * 4)
+                updateContrast(
+                    bitmap,
+                    top,
+                    left,
+                    bottom,
+                    right,
+                    bitmap.width
+                )
                 dev.close()
             } finally {
                 dev.destroy()
@@ -181,7 +188,7 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
     }
 
     external override fun setContrast(contrast: Int)
-    external fun updateContrast(bitmap: Bitmap, size: Int)
+    external fun updateContrast(bitmap: Bitmap, startRow: Int, startCol: Int, endRow: Int, endCol: Int, width: Int)
 
     external override fun setThreshold(threshold: Int)
 

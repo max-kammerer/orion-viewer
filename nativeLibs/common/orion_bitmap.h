@@ -22,4 +22,4 @@ JNICALL JNI_FN(DjvuDocument_setThreshold)(JNIEnv *env, jobject thiz, jint thresh
 #endif
 
 
-void orion_updateContrast(unsigned char *data, int size);
+void orion_updateContrast(unsigned char *data, int startRow, int startCol, int  endRow, int endCol, int width);

@@ -21,7 +21,7 @@ static jmethodID addWordId;
 static jmethodID newLineId;
 static jmethodID addSpaceId;
 
-extern void orion_updateContrast(unsigned char *, int);
+//extern void orion_updateContrast(unsigned char *data, unsigned int startRow, unsigned int startCol, unsigned int  endRow, unsigned int endCol);
 
 static inline jlong jlong_cast(void *p) {
     return (jlong) (intptr_t) p;
@@ -266,11 +266,6 @@ JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong context, jlong doc
     }
 #endif
 
-    int num_pixels = bitmapWidth * bitmapHeight;
-
-
-    //float zoom = 0.0001f * zoom10000;
-
     int pageWidth = ddjvu_page_get_width(page);
     int pageHeight = ddjvu_page_get_height(page);
 
@@ -281,6 +276,7 @@ JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong context, jlong doc
     pageRect.h = (unsigned int) round(zoom * (unsigned int) pageHeight);
     LOGI("Original page=%dx%d patch=[%d,%d,%d,%d]",
          pageWidth, pageHeight, pageRect.x, pageRect.y, pageRect.w, pageRect.h);
+
     ddjvu_rect_t targetRect;
     targetRect.x = patchX;
     targetRect.y = patchY;
@@ -288,18 +284,6 @@ JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong context, jlong doc
     targetRect.h = (unsigned int)patchH;
 
     int shift = originX + originY * bitmapWidth;
-//    int shift = 0;
-//    if (targetRect.x < 0) {
-//        shift = -targetRect.x;
-//        targetRect.w += targetRect.x;
-//        targetRect.x = 0;
-//    }
-//    if (targetRect.y < 0) {
-//        shift += -targetRect.y * bitmapWidth;
-//        targetRect.h += targetRect.y;
-//        targetRect.y = 0;
-//    }
-
 
     if (pageRect.w < targetRect.x + targetRect.w) {
         targetRect.w = targetRect.w - (targetRect.x + targetRect.w - pageRect.w);
@@ -307,9 +291,8 @@ JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong context, jlong doc
     if (pageRect.h < targetRect.y + targetRect.h) {
         targetRect.h = targetRect.h - (targetRect.y + targetRect.h - pageRect.h);
     }
-    //memset(pixels, 255, num_pixels * 4);
 
-    LOGI("Rendering page=%dx%d patch=[%d,%d,%d,%d], shift=%d zoom=%f",
+    LOGI("Target rect=%dx%d patch=[%d,%d,%d,%d], shift=%d zoom=%f",
          patchW, patchH, targetRect.x, targetRect.y, targetRect.w, targetRect.h, shift, zoom);
 
     unsigned int masks[4] = {0xff, 0xff00, 0xff0000, 0xff000000};
@@ -325,7 +308,8 @@ JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong context, jlong doc
 
     ddjvu_format_release(pixelFormat);
 
-    orion_updateContrast((unsigned char *) pixels, num_pixels * 4);
+    orion_updateContrast((unsigned char *) pixels, originY, originX,
+                         originY + targetRect.h, originX + targetRect.w, bitmapWidth);
 
 
 #ifdef ORION_FOR_ANDROID
