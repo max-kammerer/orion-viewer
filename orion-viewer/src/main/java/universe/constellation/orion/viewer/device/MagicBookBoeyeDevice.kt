@@ -13,11 +13,11 @@ class MagicBookBoeyeDevice : EInkDevice() {
     override fun onKeyUp(keyCode: Int, isLongPress: Boolean, operation: OperationHolder): Boolean {
         if (isT62) {
             when (keyCode) {
-                PAGE_UP, VOLUME_UP -> {
+                PAGE_UP -> {
                     operation.value = Device.PREV
                     return true
                 }
-                PAGE_DOWN, VOLUME_DOWN -> {
+                PAGE_DOWN -> {
                     operation.value = Device.NEXT
                     return true
                 }
