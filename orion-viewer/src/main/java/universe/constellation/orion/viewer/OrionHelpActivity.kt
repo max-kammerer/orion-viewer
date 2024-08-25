@@ -53,7 +53,7 @@ class OrionHelpActivity : OrionBaseActivity() {
                 }
             }
 
-            if (Date().before(Date(2024 - 1900, 8, 10))) {
+            if (Date().before(Date(2024 - 1900, 10, 10))) {
                 val survey = view.findViewById<TextView>(R.id.survey)
                 val key = resources.getString(R.string.survey_key)
                 val fullPath = "https://docs.google.com/forms/d/e/$key/viewform?usp=sf_link"
