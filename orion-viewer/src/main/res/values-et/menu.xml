@@ -1,2 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="menu_rotation_text">Ekraani pööramine</string>
+    <string name="menu_open_dictionary_text">Ava sõnastik</string>
+    <string name="menu_day_night_text">Päeavavaade / Öövaade</string>
+    <string name="menu_exit_text">Välju</string>
+    <string name="menu_options_text">Seadistused</string>
+    <string name="menu_search_item">Otsi</string>
+    <string name="menu_other">Muud…</string>
+    <string name="menu_book_preferences">Raamatu eelistused</string>
+    <string name="export_all_bookmarks_menu_item">Ekspordi kõik järjehoidjad</string>
+    <string name="export_bookmarks_menu_item">Ekspordi praegused järjehoidjad</string>
+    <string name="menu_outline_text">Piiritle</string>
+    <string name="menu_key_binder_text">Viipamiste ja klahvide seosed</string>
+    <string name="menu_tap_text">Puutealad</string>
+    <string name="import_all_bookmarks_menu_item">Impordi…</string>
+    <string name="import_current_bookmarks_menu_item">Lisa järjehoidjaid siit…</string>
+    <string name="menu_zoom_text">Suumi</string>
+    <string name="menu_crop_text">Kadreeri</string>
+    <string name="menu_goto_text">Mine</string>
+    <string name="menu_bookmarks_text">Järjehoidjad</string>
+    <string name="menu_add_bookmark_item">Lisa järjehoidja</string>
+    <string name="menu_select_text">Vali tekst</string>
+    <string name="menu_navigation_text">Lehe paigutus</string>
+    <string name="menu_help_text">Abiteave</string>
+    <string name="menu_about_text">Rakenduse teave…</string>
+    <string name="menu_open_text">Ava raamat</string>
+</resources>
