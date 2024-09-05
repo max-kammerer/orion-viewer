@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="crop_left">Vasakult</string>
+    <string name="save">Salvesta</string>
+    <string name="saveFileNameTooltip">failinimi.laiend</string>
+    <string name="color_mode_inverted">Pööratud värvid</string>
+    <string name="color_mode_normal">Tavalised värvid (must tekst valgel taustal)</string>
+    <string name="color_mode_black_on_yellowish">Must kollakal taustal</string>
+    <string name="color_mode_grayscale_light">Halltoonid hallikal taustal</string>
+    <string name="color_mode_grayscale_dark">Halltoonid tumehallil taustal</string>
+    <string name="color_mode_white_on_blue">Valge sinisel taustal</string>
+    <string name="color_mode_grayscale">Halltoonid hallil taustal</string>
+    <string name="select_color_mode">Vali värvikombinatsioon, mida tahad kasutada</string>
 </resources>
