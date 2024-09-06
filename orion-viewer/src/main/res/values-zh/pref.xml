@@ -76,7 +76,8 @@
     <string name="pref_position_hide">隐藏</string>
     <string name="pref_behavior">控制与行为</string>
     <string name="pref_renderOffPage">绘制页面外空间</string>
-    <string name="pref_dictionary_desc">字典：%s</string>
+    <string name="pref_dictionary_desc">字典: %s</string>
     <string name="pref_key_linked_action_summary">链接的操作：`%s`</string>
     <string name="pref_color_mode">颜色模式</string>
+    <string name="pref_book_screen_orientation_desc">屏幕方向: %s</string>
 </resources>
