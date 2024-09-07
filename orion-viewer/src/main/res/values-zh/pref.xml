@@ -66,7 +66,7 @@
     <string name="pref_category_general">全局</string>
     <string name="pref_category_system">系统</string>
     <string name="pref_showActionBar">显示操作栏</string>
-    <string name="pref_default_book_setting_desc">打开的书籍也会变更！</string>
+    <string name="pref_default_book_setting_desc">同样应用到当前打开的书籍！</string>
     <string name="pref_app_language">应用程序的语言</string>
     <string name="pref_app_language_desc">语言: %s。(更改会重启应用程序)</string>
     <string name="pref_key_double_tap">双击操作</string>
@@ -80,4 +80,10 @@
     <string name="pref_key_linked_action_summary">链接的操作：`%s`</string>
     <string name="pref_color_mode">颜色模式</string>
     <string name="pref_book_screen_orientation_desc">屏幕方向: %s</string>
+    <string name="pref_category_move">轻触移动</string>
+    <string name="pref_category_key_manager">按键管理器</string>
+    <string name="pref_showOffsetOnStatusBar">在页面上显示偏移</string>
+    <string name="pref_tap_zones_desc">将操作链接到屏幕区域</string>
+    <string name="pref_key_binder_desc">将操作链接到键/按钮</string>
+    <string name="pref_enable_touch_move">启用轻触移动</string>
 </resources>
