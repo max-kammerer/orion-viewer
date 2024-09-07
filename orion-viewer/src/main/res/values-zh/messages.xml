@@ -18,4 +18,8 @@
     <string name="wrong_outline_item">错误的页面: %s</string>
     <string name="ex_msg_operation_failed">操作失败</string>
     <string name="warn_msg_no_dictionary">没找到词典</string>
+    <string name="warn_no_further_occurrences_found">没有找到其他匹配搜索词的地方</string>
+    <string name="msg_specify_keyword_for_search">指定搜索关键词</string>
+    <string name="tap_zones_header">通过轻触区域导肮：默认区域操作</string>
+    <string name="permission_directory_warning">请提供读取权限来访问存储数据</string>
 </resources>
