@@ -18,4 +18,11 @@
     <string name="fileopen_cant_open">文档 %s 打不开。</string>
     <string name="fileopen_no_pages">文档连一页都没有</string>
     <string name="fileopen_file_is_emppty">文件是空的</string>
+    <string name="fileopen_error_during_intent_processing_info">无法从 intent 提取文件路径。请保存 intent 数据到文件来打开它或者：</string>
+    <string name="fileopen_private_resource_access">访问私密文件</string>
+    <string name="fileopen_save_to_file">保存到新文件…</string>
+    <string name="string_exception">异常</string>
+    <string name="string_intent">Intent</string>
+    <string name="string_cause">原因</string>
+    <string name="crash_on_intent_opening_title">处理 intent 期间出错</string>
 </resources>
