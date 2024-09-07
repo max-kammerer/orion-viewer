@@ -16,4 +16,5 @@
     <string name="file_manager_internal_storage">内部存储空间</string>
     <string name="file_manager_primary_storage">优先使用的存储位置</string>
     <string name="file_manager_select_tip">选择文件，在 Orion Viewer 上打开</string>
+    <string name="file_manager_nav_other">其他</string>
 </resources>
