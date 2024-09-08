@@ -6,7 +6,7 @@
     <string name="pref_bookDefaultZoom_desc">缩放: %s</string>
     <string name="pref_rotate_new_book_on_opening">打开新书籍时旋转</string>
     <string name="pref_screen_orientation">屏幕方向</string>
-    <string name="pref_screen_orientation_desc">默认屏幕方向(重启使设定生效)</string>
+    <string name="pref_screen_orientation_desc">默认屏幕方向：%s (重启程序使设定生效)</string>
     <string name="pref_book_screen_orientation">当前书籍屏幕方向</string>
     <string name="pref_close_dialog_on_apply">应用生效时关闭对话框</string>
     <string name="pref_close_page_option_dialog_on_apply">生效时关闭页面选项对话框</string>
@@ -26,7 +26,7 @@
     <string name="pref_brightness">亮度</string>
     <string name="pref_brightness_desc">亮度 (1–100%)</string>
     <string name="pref_application_theme">主题</string>
-    <string name="pref_application_theme_desc">重启程序使设置生效</string>
+    <string name="pref_application_theme_desc">主题：%s （重启程序使设置生效）</string>
     <string name="pref_open_recent_book">启动时打开最近阅读的书</string>
     <!--book preferences-->
     <string name="pref_book_contrast">对比度</string>
