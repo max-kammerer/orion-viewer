@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!--Translated by Yuriy Chorniy-->
-<resources>
+<!--Translated by Yuriy Chorniy--><resources>
     <string name="navigation">Порядок переходів</string>
     <string name="crop_left">Ліве</string>
     <string name="crop_right">Праве</string>
@@ -14,21 +12,34 @@
     <string name="long_click">При довгому натисненні</string>
     <string name="short_click">При короткому натисненні</string>
     <string name="binding_click">Перепризначення</string>
-
-    <string name="orientation_default">Стандартно</string>
-    <string name="orientation_default_rotation">Стандартно</string>
+    <string name="orientation_default">Стандартна</string>
+    <string name="orientation_default_rotation">Стандартна програми</string>
     <string name="orientation_landscape">Альбомна</string>
     <string name="orientation_portrait">Книжкова</string>
     <string name="orientation_landscape_inverse">Альбомна (270)</string>
     <string name="orientation_portrait_inverse">Книжкова (180)</string>
-
     <string name="fit_width">За шириною</string>
     <string name="fit_height">За висотою</string>
     <string name="fit_page">За розміром сторінки</string>
     <string name="fit_custom">Вказати масштаб…</string>
-
     <string name="table_of_contents">Зміст</string>
-
     <string name="warn_no_text_in_selection">У виділеній ділянці відсутній текст!</string>
     <string name="warn_no_outline">Зміст відсутній!</string>
+    <string name="crop_auto">Автоматичне обрізання</string>
+    <string name="crop_manual">Ручне обрізання</string>
+    <string name="crop_auto_manual">Автометичне й ручне</string>
+    <string name="crop_manual_auto">Ручне й автоматичне</string>
+    <string name="crop_warning">Використовуйте ручне обрізання для кращої продуктивності</string>
+    <string name="key_binder_reset_all">Скинути все</string>
+    <string name="key_binder_message">Натисніть будь-яку клавішу і виберіть дію, щоб зв\'язати їх!</string>
+    <string name="key_binder_warning">Не вдалося зв\'язати клавішу з нульовим кодом, спробуйте іншу клавішу!</string>
+    <string name="color_mode_normal">Звичайні кольори (чорний на білому тлі)</string>
+    <string name="color_mode_grayscale_light">Відтінки сірого на сіроватому тлі</string>
+    <string name="color_mode_grayscale">Відтінки сірого на сірому тлі</string>
+    <string name="color_mode_grayscale_dark">Відтінки сірого на темно-сірому тлі</string>
+    <string name="color_mode_white_on_blue">Білий на синьому тлі</string>
+    <string name="select_color_mode">Виберіть колірний режим для перемикання</string>
+    <string name="save">Зберегти</string>
+    <string name="color_mode_black_on_yellowish">Чорний на жовтуватому тлі</string>
+    <string name="color_mode_inverted">Інвертовані кольори</string>
 </resources>
