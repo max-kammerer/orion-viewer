@@ -1,78 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!--Translated by Yuriy Chorniy-->
-<resources>
+<!--Translated by Yuriy Chorniy--><resources>
     <!--Categories-->
     <string name="pref_category_general">Загальне</string>
     <string name="pref_category_key_manager">Менеджер клавіш</string>
     <string name="pref_category_device_parameters">Налаштування пристрою</string>
     <string name="pref_category_add_parameters">Додаткові параметри</string>
     <string name="pref_category_system">Системні параметри</string>
-
     <!--General Prefs-->
     <string name="pref_fullScreen">Повноекранний режим</string>
     <string name="pref_bookDefaultOrientation">Орієнтація книги за замовчуванням</string>
-
     <string name="pref_bookDefaultZoom">Масштаб</string>
     <string name="pref_bookDefaultZoom_desc">Масштаб: %s</string>
-
     <string name="pref_rotate_new_book_on_opening">Повертати книгу при першому відкритті</string>
-    <string name="pref_screen_orientation">Орієнтація екрану</string>
-    <string name="pref_screen_orientation_desc">Орієнтація екрану за замовчанням: необхідний перезапуск програми</string>
+    <string name="pref_screen_orientation">Орієнтація екрана</string>
+    <string name="pref_screen_orientation_desc">Орієнтація екрана: %s (необхідний перезапуск програми)</string>
     <string name="pref_book_screen_orientation">Орієнтація екрану для поточної книжки</string>
     <string name="pref_close_dialog_on_apply">Закривати діалог при застосуванні налаштувань</string>
     <string name="pref_close_page_option_dialog_on_apply">Закривати діалог параметрів сторінки при застосуванні налаштувань</string>
     <string name="pref_swap_prev_next_keys">Поміняти клавіші місцями</string>
     <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Обміняти дії клавіш вперед / назад в портретному режимі</string>
-
     <string name="pref_dictionary">Словник</string>
     <string name="pref_dictionary_desc">Словник: %s</string>
-
     <string name="pref_e_ink_optimization">E-ink</string>
     <string name="pref_e_ink_fast_refresh">Швидке оновлення e-ink</string>
     <string name="pref_total_refresh_after">Повне оновлення після…</string>
-
     <string name="pref_long_crop_value">Велика обрізка</string>
     <string name="pref_long_crop_value_desc">Значення параметра великий обрізки (0–40%)</string>
-
     <string name="pref_screen_overlapping_horizontal">Горизонтальне перекриття</string>
     <string name="pref_screen_overlapping_horizontal_desc">Горизонтальне перекриття відображуваних частин сторінки (0–90%)</string>
-
     <string name="pref_screen_overlapping_vertical">Вертикальне перекриття</string>
     <string name="pref_screen_overlapping_vertical_desc">Вертикальне перекриття відображуваних частин сторінки (0–90%)</string>
-
-
     <string name="pref_custom_brightness">Регулювання Яскравості</string>
     <string name="pref_brightness">Яскравість</string>
     <string name="pref_brightness_desc">Яскравість (1–100%)</string>
-
     <string name="pref_application_theme">Тема програми</string>
-    <string name="pref_application_theme_desc">Необхідно перезапустити програму</string>
-
+    <string name="pref_application_theme_desc">Тема: %s (Потрібен перезапуск при зміні)</string>
     <string name="pref_open_recent_book">Відкривати останню книгу при старті</string>
-
     <!--book preferences-->
     <string name="pref_book_contrast">Контраст</string>
     <string name="pref_book_contrast_desc">Контраст (за замовчуванням 100): %s</string>
-
     <!--<string name="pref_book_threshold">Threshold</string>-->
     <!--<string name="pref_book_threshold_desc">Threshold for watermark removal</string>-->
 
     <string name="pref_device_info">Про пристрій</string>
     <string name="pref_debug">Налагодження</string>
-
     <string name="pref_default_book_setting">Параметри за замовчуванням для книжок</string>
     <string name="book_pref_title">Налаштування для відкритої книги</string>
     <string name="application_settings_title">Налаштування програми</string>
-
     <string name="pref_screen_backlight_timeout">Підсвітка екрану</string>
     <string name="pref_screen_backlight_timeout_desc">Тривалість підсвічування екрану: %s</string>
-
     <string name="pref_app_language">Мова програми</string>
-    <string name="pref_app_language_desc">Мова програми: %s. Необхідний перезапуск програми!</string>
-
+    <string name="pref_app_language_desc">Мова програми: %s. (Необхідний перезапуск при зміні)</string>
     <string name="pref_tap_zones_desc">Тап зони: прив\'язка операції до зон екрану</string>
-
     <string name="pref_book_threshold">Поріг для водяних знаків</string>
     <string name="pref_book_threshold_desc">Поріг видалення водяних знаків (за замовчуванням 255): %s</string>
+    <string name="pref_renderPageBorder">Відображати лінії меж сторінки</string>
+    <string name="pref_color_mode">Режим кольору</string>
+    <string name="pref_enable_move_on_pinch_zoom">Дозволити переміщення сторінки під час зменшення масштабу</string>
+    <string name="pref_category_status_bar">Панель статусу</string>
+    <string name="pref_value">Значення: %s</string>
+    <string name="pref_statusBarPosition">Розташування панелі статусу</string>
+    <string name="pref_statusBarSize">Розмір панелі статусу</string>
+    <string name="pref_showBatteryInfo">Показувати інформацію про батарею</string>
+    <string name="pref_position_top">Вгорі</string>
+    <string name="pref_position_bottom">Внизу</string>
+    <string name="pref_position_hide">Приховати</string>
+    <string name="pref_size_small">Маленький</string>
+    <string name="pref_size_medium">Середній</string>
+    <string name="pref_size_large">Великий</string>
+    <string name="pref_behavior">Керування та поведінка</string>
+    <string name="pref_category_quick_actions">Швидкі дії</string>
+    <string name="pref_category_behavior">Поведінка за замовчуванням</string>
+    <string name="pref_appearance">Зовнішній вигляд</string>
+    <string name="pref_old_ui">Увімкнути старий інтерфейс</string>
+    <string name="pref_new_ui_summary">Потрібно перезапустити додаток</string>
+    <string name="pref_showActionBar">Показувати панель дій</string>
+    <string name="pref_showActionBar_desc">Показувати панель дій (потрібен перезапуск)</string>
+    <string name="pref_showOffsetOnStatusBar">Показати зміщення на сторінці</string>
+    <string name="pref_showTimeOnStatusBar">Показувати час</string>
+    <string name="pref_book_screen_orientation_desc">Орієнтація екрана: %s</string>
+    <string name="pref_debug_desc">Записувати інформацію налагодження в файл</string>
+    <string name="pref_page_layout">Макет сторінки</string>
+    <string name="pref_default_book_setting_desc">Також буде застосовано до поточної відкритої книги!</string>
+    <string name="pref_key_double_tap">Дія при подвійному дотику</string>
+    <string name="pref_key_long_tap">Дія при довгому дотику</string>
+    <string name="pref_key_linked_action_summary">Повʼязана дія: `%s`</string>
 </resources>
