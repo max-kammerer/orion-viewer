@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!--Translated by Yuriy Chorniy-->
-<resources>
+<!--Translated by Yuriy Chorniy--><resources>
     <string name="menu_zoom_text">Масштаб</string>
     <string name="menu_crop_text">Обрізка полів</string>
     <string name="menu_goto_text">Перейти до…</string>
@@ -13,18 +11,18 @@
     <string name="menu_open_text">Відкрити книжку</string>
     <string name="menu_open_dictionary_text">Відкрити словник</string>
     <string name="menu_day_night_text">Денний/Нічний режим</string>
-    <string name="menu_exit_text">Закрити</string>
+    <string name="menu_exit_text">Вийти</string>
     <string name="menu_key_binder_text">Призначення дій клавішам</string>
     <string name="menu_options_text">Налаштування</string>
     <string name="menu_tap_text">Тап зони</string>
-
     <string name="menu_book_preferences">Налаштування книжки</string>
     <string name="menu_outline_text">Зміст</string>
-
     <string name="menu_select_text">Виділити текст</string>
-
     <string name="export_all_bookmarks_menu_item">Експортувати всі закладки</string>
     <string name="export_bookmarks_menu_item">Експортувати поточні закладки</string>
     <string name="import_all_bookmarks_menu_item">Імпортувати…</string>
     <string name="import_current_bookmarks_menu_item">Додати закладки з…</string>
+    <string name="menu_about_text">Про…</string>
+    <string name="menu_search_item">Пошук</string>
+    <string name="menu_other">Інше…</string>
 </resources>
