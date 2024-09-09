@@ -1,2 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="file_manager_fodlers">Kaustad</string>
+    <string name="file_manager_history">Ajalugu</string>
+    <string name="file_manager_contribution">Kaastöö</string>
+    <string name="file_manager_select_tip">Palun vali fail, mida soovid Orion Vieweriga avada</string>
+    <string name="file_manager_path">Asukoht:</string>
+    <string name="file_manager_nav_system_select">Vali fail nutiseadmest</string>
+    <string name="file_manager_grant_read_permissions">Jaga lugemisõigused</string>
+    <string name="file_manager_title">Failihaldur</string>
+    <string name="file_manager_documents">Dokumendid</string>
+    <string name="file_manager_downloads">Allalaadimised</string>
+    <string name="file_manager_sdcard">SD-kaart</string>
+    <string name="file_manager_nav_locations">Asukohad</string>
+    <string name="file_manager_nav_other">Muud eelistused</string>
+    <string name="file_manager_nav_settings">Seadistused</string>
+    <string name="file_manager_internal_storage">Sisemine andmehoidla</string>
+    <string name="file_manager_nav_exit">Välju</string>
+    <string name="file_manager_primary_storage">Esmane andmeruum</string>
+</resources>
