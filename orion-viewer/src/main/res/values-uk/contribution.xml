@@ -1,2 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="contribution_intro">Orion Viewer - це проєкт з відкритим кодом і ви можете допомогти зробити його кращим!</string>
+    <string name="contribution_ways">Є багато речей, які ви можете покращити в проєкті:</string>
+    <string name="contribution_design">• розробіть нову тему додатка та/або новий UI/UX</string>
+    <string name="contribution_survey">Допоможіть зробити додаток кращим - візьміть участь в опитуванні про нього! (10-20 хвилин)</string>
+    <string name="contribution_report_bug">• запропонувати функцію або повідомити про проблему в <a href="https://github.com/max-kammerer/orion-viewer/issues">трекері проблем</a></string>
+    <string name="contribution_do_translation">• перекласти <a href="https://github.com/max-kammerer/orion-viewer/wiki/Translations">додаток іншими мовами</a> або покращити існуючий переклад</string>
+    <string name="contribution_code">• реалізувати <a href="https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-build-project">нову функцію</a> або <a href="https://github.com/max-kammerer/orion-viewer/issues">виправити помилку</a></string>
+    <string name="contribution_review">• написати <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">відгук на Google Play</a> або будь-яку іншу платформу</string>
+</resources>
