@@ -1,2 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="fileopen_save_to_file">Зберегти в новий файл…</string>
+    <string name="fileopen_open_recent_files">Перейти до останніх книг…</string>
+    <string name="fileopen_report_error_by_email_and_return">Повідомте про помилку електронною поштою і поверніться до діалогового вікна…</string>
+    <string name="string_intent">Намір</string>
+    <string name="crash_on_book_opening_message_header">Помилка при відкритті файлу %1$s. Будь ласка, повідомте про проблему:</string>
+    <string name="crash_on_book_opening_encrypted">Зашифрований документ</string>
+    <string name="error_on_file_saving_title">Помилка під час збереження файлу</string>
+    <string name="fileopen_cant_open">Не вдається відкрити документ: %s.</string>
+    <string name="fileopen_file_is_emppty">файл порожній</string>
+    <string name="fileopen_no_pages">документ не має сторінок</string>
+    <string name="fileopen_permission_dialog_info">Будь ласка, надайте права на читання файлу, щоб отримати до нього прямий доступ, або виберіть опцію нижче:</string>
+    <string name="fileopen_permission_dialog">Не вдається отримати прямий доступ до файлу</string>
+    <string name="fileopen_permissions_grant_read">Надати дозвіл на читання сховища…</string>
+    <string name="fileopen_report_error_by_github_and_return">Повідомити про проблему на github і повернутися до діалогу…</string>
+    <string name="fileopen_open_in_temporary_file">Відкрити через тимчасовий файл</string>
+    <string name="string_exception">Виняток</string>
+    <string name="string_cause">Причина</string>
+    <string name="crash_on_book_opening_title">Помилка під час відкриття файлу</string>
+    <string name="crash_on_book_opening_message_header_panel">Помилка під час відкриття файлу %1$s:</string>
+    <string name="send_report_header">[Будь ласка, надайте додаткову інформацію (кроки для відтворення проблеми)]</string>
+    <string name="fileopen_private_resource_access">Доступ до особистого файлу</string>
+</resources>
