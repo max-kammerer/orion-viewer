@@ -1,2 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="warn_msg_no_dictionary">Словник не знайдено</string>
+    <string name="ex_msg_operation_failed">Операція не вдалася</string>
+    <string name="msg_dialog_search">Діалогове вікно пошуку</string>
+    <string name="warn_text_not_found">Немає тексту</string>
+    <string name="msg_dialog_dismis">Відмовлено</string>
+    <string name="warn_no_further_occurrences_found">Більше випадків не виявлено</string>
+    <string name="msg_searching">Шукаю…</string>
+    <string name="msg_select_text">Виберіть текст!</string>
+    <string name="msg_select_word">Натисніть на слово!</string>
+    <string name="msg_warning">Попередження</string>
+    <string name="msg_specify_keyword_for_search">Вкажіть ключове слово для пошуку</string>
+    <string name="permission_directory_warning">Будь ласка, надайте дозвіл на читання для доступу до даних сховища</string>
+    <string name="permission_grant">Надати…</string>
+    <string name="permission_cancel">Скасовано</string>
+    <string name="string_cancel">Скасувати</string>
+    <string name="string_close">Закрити</string>
+    <string name="string_apply">Застосувати</string>
+    <string name="string_wrong_password">Неправильний пароль</string>
+    <string name="password_for_file">Пароль для файлу</string>
+    <string name="msg_error">Помилка</string>
+    <string name="tap_zones_header">Навігація за допомогою сенсорних зон: дії зон за замовчуванням</string>
+    <string name="recent_book_not_found">Не можу знайти файл книги!</string>
+    <string name="wrong_outline_item">Неправильна сторінка: %s</string>
+</resources>
