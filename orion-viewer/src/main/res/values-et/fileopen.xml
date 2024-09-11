@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="fileopen_private_resource_access">Ligipääs privaatsele failile</string>
+    <string name="fileopen_error_during_intent_processing">Viga päringu töötlemisel</string>
+    <string name="fileopen_error_during_intent_processing_info">Ei suuda päringust tuvastada asukohta. Avamiseks palun salvesta päringu sisu failina või:</string>
+</resources>
