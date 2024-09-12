@@ -1,47 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!--Translated by Marc Armengol-->
-<resources>
+<!--Translated by Marc Armengol--><resources>
     <string name="zoom">Abre la ventana Zoom. Un valor igual a cero adapta el zoom a la anchura de la página.</string>
     <string name="rotation">Rota el documento 90 grados en el sentido horario. Un click largo rota el documento en el sentido antihorario.</string>
-
     <string name="crop">Abre la ventana Recortar márgenes. Los valores son relativos al tamaño de la página. Un click largo cambia el valor del recorte en un +/-10%. Valores negativos aumentan el margen. </string>
-
     <string name="apply">Aplica las modificaciones en las diferentes opciones.</string>
-    <string name="escape">Volver/Salir</string>
-
-    <string name="general_usage">Utilización</string>
-
+    <string name="escape">Volver/Salir.</string>
+    <string name="general_usage">Modo de empleo:</string>
     <string name="general_usage_step1">1. Abrir documento (por defecto el zoom se adapta a la anchura de la página)
 	</string>
-
     <string name="general_usage_step2">
         2. Seleccionar la orientación apropiada: vertical o apaisada
         </string>
-
     <string name="general_usage_step3">
         3. Recortar los márgenes; el tamaño del texto se adapta a ellos (si se especifica el zoom a la anchura de la página)
 	</string>
-
     <string name="general_usage_step4">
         4. ¡Disfrute leyendo!</string>
-
     <!--<string name="help_taps">-->
         <!--Click on screen - go to next page, long click - go to prev page.</string>-->
 
     <string name="option_help">
         Parámetros de la aplicación</string>
-
     <string name="navigation_help">
         Abre la ventana de formato de página. De esta manera se puede seleccionar el formato de página apropiado para visualizar cómics o leer libros.</string>
-
     <string name="dictionary_help">
         Abre un diccionario externo. Elija la aplicación de diccionario adecuada en Opciones.</string>
-
-    <string name="tap_help">
-        Las diferentes áreas de pulsación en la pantalla táctil permiten asociarse a los comandos más frecuentemente usados.
-        Hay una cuadrícula de 3x3 celdillas donde el usuario puede definir las diferentes acciones a realizar tras una pulsación corta (etiqueta superior) o larga (etiqueta inferior)</string>
-
+    <string name="tap_help">Las zonas de pulsación permiten al usuario vincular distintas partes de la pantalla del dispositivo a comandos de uso común. Hay celdas de 3x3 en las que el usuario puedes definir acciones para pulsaciones cortas (etiqueta superior) y largas (etiqueta inferior).</string>
     <string name="bookmarks_export_help">
 	Permite al usuario exportar marcadores (para todos los libros o el actual)
 	Los marcadores se exportan a un archivo xml con el nombre del documento abierto más el sufijo  bookmarks.xml o all_bookmarks.xml.
