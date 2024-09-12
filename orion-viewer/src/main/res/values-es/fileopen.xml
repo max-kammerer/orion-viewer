@@ -1,2 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="fileopen_error_during_intent_processing">Error al procesar la solicitud</string>
+    <string name="fileopen_private_resource_access">Acceso al archivo privado</string>
+    <string name="fileopen_private_resource_access_info">No se puede reproducir el archivo directamente, selecciona una de las siguientes opciones :</string>
+    <string name="fileopen_permission_dialog_info">Por favor, concede permisos de lectura al archivo para acceder a él directamente o elige la opción siguiente:</string>
+    <string name="fileopen_permissions_grant_read">Conceder permiso de lectura al almacenamiento…</string>
+    <string name="fileopen_save_to_file">Guardar en un nuevo archivo…</string>
+    <string name="fileopen_open_in_temporary_file">Abrir mediante un archivo temporal</string>
+    <string name="fileopen_report_error_by_github_and_return">Informar del problema en Github y volver al diálogo…</string>
+    <string name="fileopen_report_error_by_email_and_return">Informar de un error por correo electrónico y volver al diálogo…</string>
+    <string name="string_exception">Excepción</string>
+    <string name="string_intent">Intención</string>
+    <string name="string_cause">Causa</string>
+    <string name="crash_on_book_opening_title">Error al abrir el archivo</string>
+    <string name="crash_on_intent_opening_title">Error al procesar la solicitud</string>
+    <string name="crash_on_book_opening_message_header">Error al abrir el archivo %1$s. Por favor, informe de un problema:</string>
+    <string name="crash_on_book_opening_encrypted">Documento cifrado</string>
+    <string name="string_send">Enviar …</string>
+    <string name="error_on_file_saving_title">Error al guardar el archivo</string>
+    <string name="fileopen_no_pages">el documento no tiene páginas</string>
+    <string name="fileopen_error_during_intent_processing_info">No se puede localizar la solicitud. Para abrir, guarde el contenido de la solicitud como un archivo o:</string>
+    <string name="fileopen_permission_dialog">No se puede acceder al archivo directamente</string>
+    <string name="fileopen_open_recent_files">Ir a libros recientes…</string>
+    <string name="fileopen_cant_open">No se puede abrir el documento: %s.</string>
+    <string name="fileopen_file_is_emppty">el archivo está vacío</string>
+    <string name="crash_on_book_opening_message_header_panel">Error al abrir el fichero %1$s:</string>
+    <string name="send_report_header">[Por favor, poporciona detalles adicionales (pasos para reproducir el problema)]</string>
+</resources>
