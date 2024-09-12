@@ -64,7 +64,7 @@
     <string name="pref_new_ui_summary">Es necesario reiniciar la aplicación</string>
     <string name="pref_showActionBar">Mostrar la barra de herramientas</string>
     <string name="pref_showActionBar_desc">Mostrar barra de herramientas (requiere reiniciar la aplicación)</string>
-    <string name="pref_renderPageBorder">Dibujar el margen de la página</string>
+    <string name="pref_renderPageBorder">Dibujar en el margen de la página</string>
     <string name="pref_showBatteryInfo">Mostrar información de la batería</string>
     <string name="pref_size_large">Grande</string>
     <string name="pref_position_top">Arriba</string>
