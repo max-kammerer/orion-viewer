@@ -1,2 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="warn_msg_no_dictionary">Diccionario no encontrado</string>
+    <string name="ex_msg_operation_failed">Error en la operación</string>
+    <string name="msg_dialog_dismis">Descartar</string>
+    <string name="warn_text_not_found">Sin texto</string>
+    <string name="msg_dialog_search">Cuadro de diálogo de búsqueda</string>
+    <string name="msg_searching">Buscando…</string>
+    <string name="msg_select_text">¡Seleccionar texto!</string>
+    <string name="msg_select_word">¡Haz clic en la palabra!</string>
+    <string name="msg_error">Error</string>
+    <string name="msg_specify_keyword_for_search">Ingresa una palabra clave para buscar</string>
+    <string name="recent_book_not_found">¡No encuentro el archivo del libro!</string>
+    <string name="tap_zones_header">Navegación táctil: acciones predeterminadas</string>
+    <string name="permission_directory_warning">Por favor, proporcione permiso de lectura para acceder a los datos de almacenamiento</string>
+    <string name="permission_grant">Proporcionar…</string>
+    <string name="permission_cancel">Cancelar</string>
+    <string name="string_cancel">Cancelar</string>
+    <string name="string_close">Cerrar</string>
+    <string name="string_apply">Aplicar</string>
+    <string name="string_wrong_password">Contraseña incorrecta</string>
+    <string name="password_for_file">Contraseña del archivo</string>
+    <string name="wrong_outline_item">Página incorrecta: %s</string>
+    <string name="warn_no_further_occurrences_found">No se encontraron más casos</string>
+    <string name="msg_warning">Advertencia</string>
+</resources>
