@@ -1,2 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="contribution_intro">¡Orion Viewer es un proyecto de código abierto y tú puedes ayudar a mejorarlo!</string>
+    <string name="contribution_ways">Hay muchas cosas que puedes aportar al proyecto:</string>
+    <string name="contribution_report_bug">• sugiere una función o informe de un problema en <a href="https://github.com/max-kammerer/orion-viewer/issues">gestor de incidencias</a></string>
+    <string name="contribution_do_translation">• traducir <a href="https://github.com/max-kammerer/orion-viewer/wiki/Translations">aplicación a otros idiomas</a> o mejorar una traducción existente</string>
+    <string name="contribution_code">• implementar <a href="https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-build-project">nueva función</a> o <a href="https://github.com/max-kammerer/orion-viewer/issues">corregir un error</a></string>
+    <string name="contribution_design">• diseñar un nuevo tema para la aplicación y/o una nueva UI/UX</string>
+    <string name="contribution_review">• escribir una aplicación <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">consulta en Google Play</a> o cualquier otra plataforma</string>
+    <string name="contribution_survey">Ayuda a mejorar la aplicación: ¡participa en la encuesta sobre ella! (10-20 minutos)</string>
+    <string name="survey_key">1FAIpQLScc3rrc_Gx0uZ3UK0Gkc66Mq1GJBTKFMUnDSGMuJesgKjZSrg</string>
+</resources>
