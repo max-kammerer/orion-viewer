@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Translated by Yuriy Chorniy--><resources>
+<resources>
     <string name="menu_zoom_text">Масштаб</string>
     <string name="menu_crop_text">Обрізка полів</string>
     <string name="menu_goto_text">Перейти до…</string>
