@@ -5,7 +5,7 @@
     <string name="fileopen_error_during_intent_processing">Amaç işlenirken hata oluştu</string>
     <string name="fileopen_permissions_grant_read">Depolama alanına okuma izni ver…</string>
     <string name="fileopen_error_during_intent_processing_info">Amaçtan dosya yolu çıkarılamıyor. Lütfen açmak için amaç verilerini dosyaya kaydedin veya:</string>
-    <string name="fileopen_private_resource_access_info">Dosya doğrudan okunamıyor, lütfen aşağıdaki seçeneklerden birini seçin:</string>
+    <string name="fileopen_private_resource_access_info">Dosyaya doğrudan erişilemiyor, lütfen aşağıdaki seçeneklerden birini seçin:</string>
     <string name="fileopen_permission_dialog">Dosyaya doğrudan erişilemiyor</string>
     <string name="fileopen_save_to_file">Yeni dosyaya kaydet…</string>
     <string name="fileopen_permission_dialog_info">Doğrudan erişmek için lütfen dosya okuma izni verin veya aşağıdaki seçeneklerden birini seçin:</string>
