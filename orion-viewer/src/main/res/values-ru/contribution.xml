@@ -14,5 +14,5 @@
 
     <string name="contribution_survey">Помогите сделать приложение лучше - примите участие в опросе о нем! (10–20 минут)</string>
 
-    <string name="survey_key">1FAIpQLScEFaR67qHqhcpRKGCgA_ThJ0VztKZVV_PaJWxoPD5Ce8akNA</string>
+    <string name="survey_key" translatable="false">1FAIpQLScEFaR67qHqhcpRKGCgA_ThJ0VztKZVV_PaJWxoPD5Ce8akNA</string>
 </resources>

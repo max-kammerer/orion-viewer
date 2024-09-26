@@ -13,5 +13,5 @@
 
     <string name="contribution_survey">Help to make the application better - participate in the survey about it! (10–20 minutes)</string>
 
-    <string name="survey_key">1FAIpQLScc3rrc_Gx0uZ3UK0Gkc66Mq1GJBTKFMUnDSGMuJesgKjZSrg</string>
+    <string name="survey_key" translatable="false">1FAIpQLScc3rrc_Gx0uZ3UK0Gkc66Mq1GJBTKFMUnDSGMuJesgKjZSrg</string>
 </resources>
