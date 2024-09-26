@@ -86,4 +86,5 @@
     <string name="pref_tap_zones_desc">将操作链接到屏幕区域</string>
     <string name="pref_key_binder_desc">将操作链接到键/按钮</string>
     <string name="pref_enable_touch_move">启用轻触移动</string>
+    <string name="pref_renderPageBorder">绘制页面边框</string>
 </resources>
