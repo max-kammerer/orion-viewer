@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Translated by Marc Armengol--><resources>
+<resources>
     <string name="menu_zoom_text">Zoom</string>
     <string name="menu_crop_text">Recortar</string>
     <string name="menu_goto_text">Ir a </string>

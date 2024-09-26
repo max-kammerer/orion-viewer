@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Translated by Marc Armengol--><resources>
+<resources>
     <string name="navigation">Navegación</string>
     <string name="crop_left">Izquierdo</string>
     <string name="enable_even_crop">Otro recorte para páginas impares</string>
