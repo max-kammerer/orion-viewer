@@ -2,7 +2,7 @@
 <resources>
     <string name="fileopen_error_during_intent_processing">Error al procesar la solicitud</string>
     <string name="fileopen_private_resource_access">Acceso al archivo privado</string>
-    <string name="fileopen_private_resource_access_info">No se puede reproducir el archivo directamente, selecciona una de las siguientes opciones :</string>
+    <string name="fileopen_private_resource_access_info">No se puede acceder directamente al archivo, por favor selecciona una de las opciones siguientes:</string>
     <string name="fileopen_permission_dialog_info">Por favor, concede permisos de lectura al archivo para acceder a él directamente o elige la opción siguiente:</string>
     <string name="fileopen_permissions_grant_read">Conceder permiso de lectura al almacenamiento…</string>
     <string name="fileopen_save_to_file">Guardar en un nuevo archivo…</string>
