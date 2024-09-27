@@ -3,7 +3,7 @@
     <string name="fileopen_error_during_intent_processing">Chyba při zpracování záměru</string>
     <string name="fileopen_error_during_intent_processing_info">Nelze extrahovat cestu k souboru ze záměru. Chcete-li je otevřít, uložte data záměru do souboru nebo:</string>
     <string name="fileopen_private_resource_access">Přístup k soukromému souboru</string>
-    <string name="fileopen_private_resource_access_info">Soubor nelze číst přímo, vyberte prosím jednu z níže uvedených možností:</string>
+    <string name="fileopen_private_resource_access_info">Nelze získat přímý přístup k souboru, vyberte prosím jednu z níže uvedených možností:</string>
     <string name="fileopen_permission_dialog">Nelze získat přímý přístup k souboru</string>
     <string name="fileopen_permission_dialog_info">Udělte prosím oprávnění ke čtení souboru pro přímý přístup nebo vyberte možnost níže:</string>
     <string name="fileopen_permissions_grant_read">Udělit oprávnění ke čtení úložiště…</string>
