@@ -43,6 +43,7 @@ import universe.constellation.orion.viewer.device.AndroidDevice
 import universe.constellation.orion.viewer.device.Device
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivityBase
 import universe.constellation.orion.viewer.prefs.GlobalOptions
+import universe.constellation.orion.viewer.prefs.KeyBindingPreferences
 import universe.constellation.orion.viewer.prefs.OrionApplication
 
 abstract class OrionBaseActivity(val viewerType: Int = Device.DEFAULT_ACTIVITY) : AppCompatActivity() {
@@ -204,8 +205,18 @@ abstract class OrionBaseActivity(val viewerType: Int = Device.DEFAULT_ACTIVITY) 
         return AlertDialog.Builder(this)
     }
 
-    protected fun doTrack(keyCode: Int): Boolean {
-        return keyCode != KeyEvent.KEYCODE_MENU && keyCode != KeyEvent.KEYCODE_BACK
+    @JvmOverloads
+    protected fun doKeyTrack(keyCode: Int, keyBindingPrefs: KeyBindingPreferences? = null): Boolean {
+        return when(keyCode) {
+            KeyEvent.KEYCODE_MENU, KeyEvent.KEYCODE_BACK -> false
+            KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_VOLUME_DOWN, KeyEvent.KEYCODE_VOLUME_MUTE  -> {
+                if (keyBindingPrefs == null) return true
+
+                return keyBindingPrefs.getInt(getPrefKey(keyCode, false), -1) != -1 ||
+                        keyBindingPrefs.getInt(getPrefKey(keyCode, true), -1) != -1
+            }
+            else -> true
+        }
     }
 
     protected fun checkPermissionGranted(grantResults: IntArray, permissions: Array<String>, checkPermission: String): Boolean {

@@ -94,7 +94,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (doTrack(keyCode)) {
+        if (doKeyTrack(keyCode)) {
             event.startTracking();
             return true;
         }

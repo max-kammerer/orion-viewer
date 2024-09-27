@@ -585,7 +585,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
-        log("onKeyUp key = " + keyCode + " " + event.isCanceled + " " + doTrack(keyCode))
+        log("onKeyUp key = " + keyCode + " " + event.isCanceled + " " + doKeyTrack(keyCode))
         if (event.isCanceled) {
             log("Tracking = $keyCode")
             return super.onKeyUp(keyCode, event)
@@ -595,8 +595,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        log("onKeyDown = " + keyCode + " " + event.isCanceled + " " + doTrack(keyCode))
-        if (doTrack(keyCode)) {
+        log("onKeyDown = " + keyCode + " " + event.isCanceled + " " + doKeyTrack(keyCode))
+        if (doKeyTrack(keyCode, orionApplication.keyBindingPrefs)) {
             log("Tracking = $keyCode")
             event.startTracking()
             return true
