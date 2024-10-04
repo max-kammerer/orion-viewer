@@ -1,2 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="file_manager_title">Мэнэджар файлаў</string>
+    <string name="file_manager_fodlers">Папкі</string>
+    <string name="file_manager_history">Гісторыя</string>
+    <string name="file_manager_contribution">Удзел</string>
+    <string name="file_manager_select_tip">Абярыце файл для адкрыцця ў Orion Viewer</string>
+    <string name="file_manager_path">Шлях:</string>
+    <string name="file_manager_documents">Дакументы</string>
+    <string name="file_manager_downloads">Спампоўкі</string>
+    <string name="file_manager_sdcard"></string>
+    <string name="file_manager_grant_read_permissions">Даць правы на чытанне</string>
+    <string name="file_manager_nav_locations">Мейсца</string>
+    <string name="file_manager_nav_settings">Налады</string>
+    <string name="file_manager_nav_other">Іншае</string>
+    <string name="file_manager_nav_system_select">Выбраць файл у сістэме</string>
+    <string name="file_manager_nav_exit">Выхад</string>
+    <string name="file_manager_internal_storage">Унутраннае сховішча</string>
+    <string name="file_manager_primary_storage">Галоўнае сховішча</string>
+</resources>
