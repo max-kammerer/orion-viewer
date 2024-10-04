@@ -1,2 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="enable_even_crop">Абрэзаць цотныя старонкі</string>
+    <string name="crop_bottom">Знізу</string>
+    <string name="crop_top">Зверху</string>
+    <string name="crop_auto">Аўта абрэзка</string>
+    <string name="crop_manual">Ручная абрэзка</string>
+    <string name="crop_auto_manual">Аўта і ручная</string>
+    <string name="crop_manual_auto">Ручная ды аўта</string>
+    <string name="crop_warning">Выкарыстоўвайце ручную абрэзку для лепшай прадукцыйнасці</string>
+    <string name="rotate_0">0 градусаў</string>
+    <string name="long_click">Пры доўгім кліку</string>
+    <string name="short_click">На кароткі клік</string>
+    <string name="binding_click">На пераплёт</string>
+    <string name="key_binder_reset_all">Скінуць усе</string>
+    <string name="orientation_default">Па змаўчанні</string>
+    <string name="orientation_default_rotation">Праграма па змаўчанні</string>
+    <string name="orientation_landscape">Гарызантальна</string>
+    <string name="orientation_portrait">Вертыкальна</string>
+    <string name="orientation_landscape_inverse">Гарызантальна (270)</string>
+    <string name="key_binder_message">Націсніце любую клавішу і абярыце дзеянне, каб звязаць іх!</string>
+    <string name="key_binder_warning">Немагчыма прывязаць ключ з нулявым кодам, паспрабуйце іншы ключ!</string>
+    <string name="table_of_contents">Змест</string>
+    <string name="warn_no_text_in_selection">У выбары няма тэксту!</string>
+    <string name="warn_no_outline">Кантура адсутнічае!</string>
+    <string name="color_mode_normal">Нармальныя колеры (чорны на белым фоне)</string>
+    <string name="color_mode_inverted">Інверсіўныя колеры</string>
+    <string name="color_mode_black_on_yellowish">Чорны на жаўтлявым фоне</string>
+    <string name="color_mode_grayscale">Адценні шэрага на шэрым фоне</string>
+    <string name="color_mode_grayscale_light">Адценні шэрага на шэраватым фоне</string>
+    <string name="color_mode_grayscale_dark">Адценні шэрага на цёмна шэрым фоне</string>
+    <string name="color_mode_white_on_blue">Белы на блакітным фоне</string>
+    <string name="fit_custom">Індывідуальна…</string>
+    <string name="select_color_mode">Выберыце каляровы рэжым для пераключэння</string>
+    <string name="save">Захаваць</string>
+    <string name="navigation">Абыход старонкі</string>
+    <string name="crop_left">Налева</string>
+    <string name="crop_right">Направа</string>
+    <string name="rotate_270">270 градусаў</string>
+    <string name="rotate_90">90 градусаў</string>
+    <string name="fit_width">Адпавядаць шырыні</string>
+    <string name="fit_height">Адпавядаць вышыні</string>
+    <string name="orientation_portrait_inverse">Вертыкальна (180)</string>
+    <string name="fit_page">Падагнаць старонку</string>
+</resources>
