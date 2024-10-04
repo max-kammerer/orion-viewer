@@ -1,2 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="menu_zoom_text">Маштабаванне</string>
+    <string name="menu_goto_text">Перайсці да</string>
+    <string name="menu_bookmarks_text">Закладкі</string>
+    <string name="menu_select_text">Вылучыце тэкст</string>
+    <string name="menu_rotation_text">Паварот экрана</string>
+    <string name="menu_navigation_text">Макет старонкі</string>
+    <string name="menu_open_text">Адкрыць кнігу</string>
+    <string name="menu_outline_text">План</string>
+    <string name="menu_open_dictionary_text">Адкрыць слоўнік</string>
+    <string name="menu_day_night_text">Рэжым дзень/ноч</string>
+    <string name="menu_exit_text">Выхад</string>
+    <string name="menu_key_binder_text">Пераплёт ключоў</string>
+    <string name="menu_options_text">Налады</string>
+    <string name="menu_tap_text">Зоны крана</string>
+    <string name="menu_search_item">Пошук</string>
+    <string name="menu_other">Іншае…</string>
+    <string name="menu_book_preferences">Параметры кнігі</string>
+    <string name="export_all_bookmarks_menu_item">Экспартаваць усе закладкі</string>
+    <string name="export_bookmarks_menu_item">Экспартаваць бягучыя закладкі</string>
+    <string name="import_all_bookmarks_menu_item">Імпартаваць…</string>
+    <string name="import_current_bookmarks_menu_item">Дадаць з…</string>
+    <string name="menu_crop_text">Абрэзка</string>
+    <string name="menu_add_bookmark_item">Дадаць закладкі</string>
+    <string name="menu_help_text">Дапамога</string>
+    <string name="menu_about_text">Аб…</string>
+</resources>
