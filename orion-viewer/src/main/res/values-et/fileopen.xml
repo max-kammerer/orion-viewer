@@ -3,4 +3,27 @@
     <string name="fileopen_private_resource_access">Ligipääs privaatsele failile</string>
     <string name="fileopen_error_during_intent_processing">Viga päringu töötlemisel</string>
     <string name="fileopen_error_during_intent_processing_info">Ei suuda päringust tuvastada asukohta. Avamiseks palun salvesta päringu sisu failina või:</string>
+    <string name="fileopen_permission_dialog">Faili ei õnnestu otse avada</string>
+    <string name="fileopen_permission_dialog_info">Palun luba faili lugeda või vali üks järgnev tegevus:</string>
+    <string name="fileopen_permissions_grant_read">Anna õigused andmeruumist lugemiseks…</string>
+    <string name="fileopen_save_to_file">Salvesta uue failina…</string>
+    <string name="fileopen_open_in_temporary_file">Ava ajutise failina</string>
+    <string name="fileopen_open_recent_files">Mine viimatiavatud raamatute juurde…</string>
+    <string name="fileopen_report_error_by_github_and_return">Teata veast GitHubis ja naase selle vaate juurde…</string>
+    <string name="fileopen_report_error_by_email_and_return">Teata veast e-kirjaga ja naase selle vaate juurde…</string>
+    <string name="string_exception">Erandlik olukord</string>
+    <string name="string_intent">Kavatsus</string>
+    <string name="string_cause">Põhjus</string>
+    <string name="crash_on_book_opening_title">Viga faili avamisel</string>
+    <string name="crash_on_intent_opening_title">Viga eesmärgi täitmisel</string>
+    <string name="crash_on_book_opening_message_header">Viga %1$s faili avamisel. Palun teata veast:</string>
+    <string name="crash_on_book_opening_message_header_panel">Viga %1$s faili avamisel:</string>
+    <string name="crash_on_book_opening_encrypted">Krüptitud dokument</string>
+    <string name="string_send">Saada…</string>
+    <string name="send_report_header">[Palun jaga lisateavet (näiteks kuidas seda viga korrata)]</string>
+    <string name="error_on_file_saving_title">Viga faili salvestamisel</string>
+    <string name="fileopen_cant_open">Dokumenti ei õnnestu avada: %s.</string>
+    <string name="fileopen_file_is_emppty">fail on tühi</string>
+    <string name="fileopen_no_pages">dokumendis pole lehti</string>
+    <string name="fileopen_private_resource_access_info">Faili ei õnnestu otse avada, palun vali üks järgmistest tegevustest:</string>
 </resources>
