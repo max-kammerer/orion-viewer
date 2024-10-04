@@ -1,2 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="warn_msg_no_dictionary">Слоўнік не знойдзены</string>
+    <string name="ex_msg_operation_failed">Аперацыя няўдалая</string>
+    <string name="msg_dialog_search">Дыялог пошуку</string>
+    <string name="msg_dialog_dismis">Звольніць</string>
+    <string name="warn_text_not_found">Няма тэксту</string>
+    <string name="warn_no_further_occurrences_found">Далейшых выпадкаў не знойдзена</string>
+    <string name="msg_searching">Пошук…</string>
+    <string name="msg_select_text">Выберыце тэкст!</string>
+    <string name="msg_select_word">Націсніце на слова!</string>
+    <string name="recent_book_not_found">Не магу знайсці файл кнігі!</string>
+    <string name="permission_grant">Дазволы…</string>
+    <string name="permission_cancel">Адмена</string>
+    <string name="string_cancel">Адмена</string>
+    <string name="string_close">Зачыніць</string>
+    <string name="string_apply">Ўжываць</string>
+    <string name="string_wrong_password">Няправільны пароль</string>
+    <string name="password_for_file">Пароль для файла</string>
+    <string name="wrong_outline_item">Няправільная старонка: %s</string>
+    <string name="msg_error">Памылка</string>
+    <string name="msg_specify_keyword_for_search">Пакажыце ключавое слова для пошуку</string>
+    <string name="permission_directory_warning">Калі ласка, падайце дазвол на чытанне для доступу да дадзеных сховішчы</string>
+    <string name="msg_warning">Папярэджанне</string>
+    <string name="tap_zones_header">Навігацыя па зонах дотыку: дзеянні ў зонах па змаўчанні</string>
+</resources>
