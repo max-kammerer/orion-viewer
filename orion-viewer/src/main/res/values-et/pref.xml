@@ -11,4 +11,23 @@
     <string name="pref_category_status_bar">Olekuriba</string>
     <string name="pref_category_general">Üldised seadistused</string>
     <string name="pref_appearance">Välimus</string>
+    <string name="pref_showTimeOnStatusBar">Näita aega</string>
+    <string name="pref_showBatteryInfo">Näita akuteavet</string>
+    <string name="pref_bookDefaultOrientation">Raamatu vaikimisi paigutus</string>
+    <string name="pref_bookDefaultZoom">Suum</string>
+    <string name="pref_screen_orientation">Ekraani suund</string>
+    <string name="pref_screen_orientation_desc">Ekraani suund: %s (eeldab rakenduse taaskäivitamist)</string>
+    <string name="pref_book_screen_orientation">Ekraani suund praeguse raamatu puhul</string>
+    <string name="pref_book_screen_orientation_desc">Ekraani suund: %s</string>
+    <string name="pref_close_dialog_on_apply">Sulge vaade klõpsides nuppu „Rakenda“</string>
+    <string name="pref_swap_prev_next_keys">Vaheta edasi/tagasi nupud</string>
+    <string name="pref_total_refresh_after">Täielik uuendus peale…</string>
+    <string name="pref_bookDefaultZoom_desc">Suum: %s</string>
+    <string name="pref_rotate_new_book_on_opening">Avamisel pööra raamatut</string>
+    <string name="pref_close_page_option_dialog_on_apply">Sulge lehekülje eelistuste vaade klõpsides nuppu „Rakenda“</string>
+    <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Vaheta edasi/tagasi nupud rõhtvaates</string>
+    <string name="pref_dictionary">Sõnastik</string>
+    <string name="pref_dictionary_desc">Sõnastik: %s</string>
+    <string name="pref_e_ink_optimization">E-tint</string>
+    <string name="pref_e_ink_fast_refresh">E-tindi kiire uuendamine</string>
 </resources>
