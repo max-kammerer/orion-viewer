@@ -60,6 +60,7 @@ class FireBaseAnalytics : Analytics() {
             val hash = file.length().hashCode() + file.name.hashCode()
             param("book_id", hash.toLong())
             param("book_ext", file.name.fileExtension)
+            param("file_size", file.length())
         }
     }
 
