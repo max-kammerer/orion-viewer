@@ -100,7 +100,7 @@ open class FallbackDialogs {
      //content intent
      private fun createFallbackDialog(activity: OrionViewerActivity, fileInfo: FileInfo?, intent: Intent, title: Int, info: Int, defaultAction: Int?, list: List<Int>): Dialog {
          val dialogTitle = activity.getString(title)
-         activity.showErrorOrFallbackPanel(dialogTitle, intent, cause = dialogTitle)
+         activity.showErrorOnFallbackPanel(dialogTitle, intent, cause = dialogTitle)
 
          activity.analytics.dialog(FALLBACK_DIALOG, true)
 

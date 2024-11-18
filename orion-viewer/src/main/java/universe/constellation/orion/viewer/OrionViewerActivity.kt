@@ -277,7 +277,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
             try {
                 if (!askPassword(newDocument)) {
-                    showErrorOrFallbackPanel(
+                    showErrorOnFallbackPanel(
                         getString(R.string.crash_on_book_opening_encrypted),
                         intent
                     )
@@ -993,18 +993,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         exception: Throwable? = null,
         sendException: Throwable? = exception
     ) {
-        val dialog = createThemedAlertBuilder()
-            .setPositiveButton(R.string.string_close) { dialog, _ ->
-                dialog.dismiss()
-            }
-            .setOnDismissListener {
-                analytics.dialog(SHOW_ERROR_PANEL_DIALOG, false)
-            }
-            .setTitle(dialogTitle)
-            .setMessage(message + if (exception != null) "\n\n" + exception.message else "")
-            .create()
-        dialog.show()
-
         if (sendException != null) {
             log(sendException)
             analytics.error(sendException, "$message $intent")
@@ -1012,11 +1000,26 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             logError("$message $intent")
             analytics.logWarning("$message $intent")
         }
+        showErrorOnFallbackPanel(message, intent, null, exception = exception)
 
-        showErrorOrFallbackPanel(message, intent, null, exception = exception)
+        if (!isFinishing) {
+            val dialog = createThemedAlertBuilder()
+                .setPositiveButton(R.string.string_close) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .setOnDismissListener {
+                    analytics.dialog(SHOW_ERROR_PANEL_DIALOG, false)
+                }
+                .setTitle(dialogTitle)
+                .setMessage(message + if (exception != null) "\n\n" + exception.message else "")
+                .create()
+            dialog.show()
+        } else {
+            analytics.logWarning("showErrorAndErrorPanel in finishing activity")
+        }
     }
 
-    fun showErrorOrFallbackPanel(
+    fun showErrorOnFallbackPanel(
         message: String,
         intent: Intent,
         info: String? = null,
