@@ -118,7 +118,9 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             parameter: Any?
         ) {
             log("Show Outline...")
-            showOutline(controller!!, activity)
+            controller?.let {
+                showOutline(it, activity)
+            }
         }
     },
 

@@ -639,12 +639,13 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         val swapKeys = globalOptions.isSwapKeys
         val width = view.sceneWidth
         val height = view.sceneHeight
-        val landscape = width > height || controller!!.rotation != 0 /*second condition for nook and alex*/
-        if (controller != null) {
+        val controller1 = controller
+        if (controller1 != null) {
+            val landscape = width > height || controller1.rotation != 0 /*second condition for nook and alex*/
             if (operation == Device.NEXT && (!landscape || !swapKeys) || swapKeys && operation == Device.PREV && landscape) {
-                controller!!.drawNext()
+                controller1.drawNext()
             } else {
-                controller!!.drawPrev()
+                controller1.drawPrev()
             }
         }
     }
@@ -701,9 +702,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         return true
     }
 
-    private fun createOptionDialog(screenId: Int): AppCompatDialog {
+    private fun createOptionDialog(screenId: Int): AppCompatDialog? {
         val dialog = if (CROP_SCREEN == screenId) {
-            create(this, controller!!.margins)
+            create(this, controller?.margins ?: return null)
         } else {
             val dialog = AppCompatDialog(this)
             dialog.supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -850,7 +851,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     fun showOrionDialog(screenId: Int, action: Action?, parameter: Any?) {
         if (screenId != -1) {
-            val dialog = createOptionDialog(screenId)
+            val dialog = createOptionDialog(screenId) ?: return
 
             if (action === Action.ADD_BOOKMARK) {
                 val parameterText = parameter as String?
