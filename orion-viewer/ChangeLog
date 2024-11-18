@@ -1,3 +1,8 @@
+===== 0.95.2 (Nov 18, 2024) =====
+* Updated translations
+* Fixed several NPEs
+* Updated mupdf to 1.24.10 and libarchive to 3.7.7
+
 ===== 0.95.1 (Sep 27, 2024) =====
 * Updated translations
 * Updated mupdf to 1.24.9 and libarchive to 3.7.6
