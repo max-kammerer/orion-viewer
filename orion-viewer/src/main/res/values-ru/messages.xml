@@ -1,34 +1,26 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="warn_msg_no_dictionary">Словарь не найден</string>
     <string name="ex_msg_operation_failed">Операция не удалась</string>
-
     <string name="msg_dialog_search">Диалог поиска</string>
     <string name="msg_dialog_dismis">Закрыть</string>
     <string name="warn_text_not_found">Текст не найден</string>
     <string name="warn_no_further_occurrences_found">Совпадений не найдено</string>
     <string name="msg_searching">Поиск…</string>
-
     <string name="msg_select_text">Выделите текст!</string>
     <string name="msg_select_word">Кликните по слову!</string>
-
     <string name="msg_error">Ошибка</string>
     <string name="msg_warning">Предупреждение</string>
     <string name="msg_specify_keyword_for_search">Не задано слово для поиска</string>
-
     <string name="recent_book_not_found">Не могу найти файл книги!</string>
-
     <string name="tap_zones_header">Навигация с помощью касаний: действия по-умолчанию</string>
-
     <string name="permission_directory_warning">Пожалуйста, предоставте права на чтение данных диска</string>
     <string name="permission_grant">Предоставить…</string>
     <string name="permission_cancel">Отмена</string>
-
     <string name="string_cancel">Отмена</string>
     <string name="string_close">Закрыть</string>
     <string name="string_apply">Применить</string>
-
     <string name="string_wrong_password">Неверный пароль</string>
     <string name="password_for_file">Пароль для файла</string>
-
+    <string name="wrong_outline_item">Неверная страница: %s</string>
 </resources>
