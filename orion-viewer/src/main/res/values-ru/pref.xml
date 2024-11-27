@@ -66,7 +66,7 @@
     <string name="pref_walk_order_desc">Порядок переходов: %s</string>
     <string name="pref_page_layout">@string/menu_navigation_text</string>
     <string name="pref_default_book_setting">Параметры по умолчанию для книги</string>
-    <string name="pref_default_book_setting_desc">Будут применены также и к открытой книге!</string>
+    <string name="pref_default_book_setting_desc">Будет также применена к текущей открытой книге!</string>
     <string name="book_pref_title">Настройки для открытой книги</string>
     <string name="application_settings_title">Настройки приложения</string>
     <string name="pref_screen_backlight_timeout">Подсветка экрана</string>
@@ -83,11 +83,13 @@
     <string name="pref_color_mode">Цветовой режим</string>
     <string name="pref_category_move">Сдвиг</string>
     <string name="pref_enable_touch_move">Включить сдвиг одним пальцем</string>
-    <string name="pref_enable_move_on_pinch_zoom">Разрешить сдвиг при масштабировании двумя пальцами</string>
+    <string name="pref_enable_move_on_pinch_zoom">Разрешить перемещение страницы при масштабировании с помощью пинча</string>
     <string name="pref_position_top">Сверху</string>
     <string name="pref_position_bottom">Снизу</string>
     <string name="pref_position_hide">Скрыть</string>
     <string name="pref_size_small">Маленький</string>
     <string name="pref_size_medium">Средний</string>
     <string name="pref_size_large">Большой</string>
+    <string name="pref_color_mode_desc">%s</string>
+    <string name="pref_category_behavior">Поведение по умолчанию</string>
 </resources>
