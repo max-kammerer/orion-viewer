@@ -110,7 +110,7 @@
     <string name="pref_enable_move_on_pinch_zoom">Allow page move during pinch zoom</string>
 
     <string name="pref_color_mode">Color Mode</string>
-    <string name="pref_color_mode_desc">%s</string>
+    <string name="pref_color_mode_desc" translatable="false">%s</string>
 
     <string name="pref_position_top">Top</string>
     <string name="pref_position_bottom">Bottom</string>
