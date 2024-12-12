@@ -71,6 +71,8 @@ target_compile_definitions(libarchive PRIVATE
     -DOPJ_HAVE_STDINT_H
     -DPLATFORM_CONFIG_H="${LIBARCH}/contrib/android/config/android.h"
     -D__LIBARCHIVE_CONFIG_H_INCLUDED
+    -DHAVE_DECL_INT32_MAX
+    -DHAVE_DECL_INT32_MIN
 )
 
 # --- Build a local static library for thirdparty libraries ---
@@ -383,6 +385,7 @@ ${MUPDF_PATH}/platform/java/mupdf_native.c
 include_directories(
 ${MUPDF_PATH}/include
 ${MUPDF_PATH}/platform/java/
+${MUPDF_PATH}/include.mupdf
 )
 
 target_compile_definitions(mupdf_java PRIVATE -DHAVE_ANDROID -DORION_PDF -DORION_FOR_ANDROID)
