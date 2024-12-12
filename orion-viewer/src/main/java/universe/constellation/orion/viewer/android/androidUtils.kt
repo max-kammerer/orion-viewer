@@ -5,7 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 
-fun isAtJellyBean() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1
+fun isAtJellyBean() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
 
 fun isAtLeastKitkat() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
 

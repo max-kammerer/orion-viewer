@@ -2,6 +2,7 @@ package universe.constellation.orion.viewer
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -23,6 +24,7 @@ import universe.constellation.orion.viewer.Permissions.hasReadStoragePermission
 import universe.constellation.orion.viewer.analytics.SHOW_ERROR_PANEL_DIALOG
 import universe.constellation.orion.viewer.analytics.TAP_HELP_DIALOG
 import universe.constellation.orion.viewer.android.getFileInfo
+import universe.constellation.orion.viewer.android.isAtJellyBean
 import universe.constellation.orion.viewer.android.isRestrictedAccessPath
 import universe.constellation.orion.viewer.device.Device
 import universe.constellation.orion.viewer.dialog.SearchDialog
@@ -246,10 +248,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     @Throws(Exception::class)
     private fun openFile(file: File) {
-        log("Runtime.getRuntime().totalMemory(): ${Runtime.getRuntime().totalMemory()}")
-        log("Debug.getNativeHeapSize(): ${Debug.getNativeHeapSize()}")
+        dumpMemoryState()
         log("openFileAndDestroyOldController")
-
         orionApplication.idlingRes.busy()
 
         GlobalScope.launch(Dispatchers.Main) {
@@ -341,6 +341,19 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             } finally {
                 orionApplication.idlingRes.free()
             }
+        }
+    }
+
+    private fun dumpMemoryState() {
+        log("Runtime.getRuntime().totalMemory(): ${Runtime.getRuntime().totalMemory()}")
+        log("Debug.getNativeHeapSize(): ${Debug.getNativeHeapSize()}")
+        if (isAtJellyBean()) {
+            val memInfo = ActivityManager.MemoryInfo()
+            (applicationContext.getSystemService(ACTIVITY_SERVICE) as ActivityManager).getMemoryInfo(
+                memInfo
+            )
+            val totalMemory = memInfo.totalMem
+            log("TotalMemory: $totalMemory")
         }
     }
 
