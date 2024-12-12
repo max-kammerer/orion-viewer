@@ -13,7 +13,7 @@ on:
 jobs:
   build_and_upload_artifacts:
     name: Generate APKs
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - uses: actions/checkout@v4
@@ -54,7 +54,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        arch: [[15, x86, ubuntu-latest], [16, x86, ubuntu-latest], [19, x86, ubuntu-latest], [21, x86, ubuntu-latest], [23, x86, ubuntu-latest], [28, x86, ubuntu-latest], [30, x86_64, ubuntu-latest],  [32, x86_64, ubuntu-latest], [33, x86_64, ubuntu-latest], [34, x86_64, ubuntu-latest]]
+        arch: [[15, x86, ubuntu-22.04], [16, x86, ubuntu-22.04], [19, x86, ubuntu-22.04], [21, x86, ubuntu-22.04], [23, x86, ubuntu-22.04], [28, x86, ubuntu-22.04], [30, x86_64, ubuntu-22.04],  [32, x86_64, ubuntu-22.04], [33, x86_64, ubuntu-22.04], [34, x86_64, ubuntu-22.04]]
     env:
       ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 170
       EMULATOR_API: ${{ matrix.arch[0] }}
