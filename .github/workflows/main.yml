@@ -64,9 +64,9 @@ jobs:
       - name: Run job configurations
         uses: ./.github/workflows/config
 
-      - name: install libncurses5
-        run: sudo apt-get install -y libncurses5
-        if:  ${{ matrix.arch[0] == 15 }}
+#      - name: install libncurses5
+#        run: sudo apt-get install -y libncurses5
+#        if:  ${{ matrix.arch[0] == 15 }}
 
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
