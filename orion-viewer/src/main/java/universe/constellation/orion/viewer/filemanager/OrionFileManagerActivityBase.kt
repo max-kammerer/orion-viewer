@@ -89,7 +89,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         for (storage in this.describeStorages()) {
             val folder = storage.file
             val subMenu = locations.subMenu!!//.addSubMenu(storage.description)
-            addFodlerItem(
+            addFolderItem(
                 subMenu,
                 storage.description,
                 viewPager,
@@ -98,7 +98,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
             )
             for (subFolder in storage.folders) {
                 if (!subFolder.file.exists()) continue
-                addFodlerItem(
+                addFolderItem(
                     subMenu,
                     subFolder.description,
                     viewPager,
@@ -113,7 +113,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         drawerLayoutListener.syncState()
     }
 
-    private fun addFodlerItem(
+    private fun addFolderItem(
         menu: SubMenu,
         name: String,
         viewPager: ViewPager,
