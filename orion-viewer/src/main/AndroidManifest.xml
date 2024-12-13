@@ -179,10 +179,6 @@
                   android:theme="@style/Theme.AppCompat.NoActionBar"
                   android:label="@string/menu_bookmarks_text"/>
 
-        <activity android:name=".outline.OutlineActivity" android:screenOrientation="behind"
-                  android:theme="@style/Theme.AppCompat"
-                  android:label="Outlines"/>
-
     </application>
 
 </manifest>
