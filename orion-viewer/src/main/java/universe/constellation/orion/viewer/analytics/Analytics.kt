@@ -38,7 +38,7 @@ open class Analytics {
 
     }
 
-    open fun onStartStop(activity: String, start: Boolean, isNewUser: Boolean) {
+    open fun onStartStop(activity: String, isStart: Boolean, isNewUser: Boolean) {
 
     }
 

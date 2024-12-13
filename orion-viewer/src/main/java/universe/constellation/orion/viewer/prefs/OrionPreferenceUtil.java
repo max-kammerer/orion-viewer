@@ -55,11 +55,6 @@ public class OrionPreferenceUtil {
         return false;
     }
 
-    public static int getPersistedInt(Preference pref, int defaultReturnValue) {
-        OrionApplication appContext = (OrionApplication) pref.getContext().getApplicationContext();
-        return getPersistedInt(pref.getKey(), defaultReturnValue, appContext);
-    }
-
     public static int getPersistedInt(String key, int defaultReturnValue, OrionApplication appContext) {
         LastPageInfo info = appContext.getCurrentBookParameters();
         if (info != null) {
@@ -71,11 +66,6 @@ public class OrionPreferenceUtil {
             }
         }
         return defaultReturnValue;
-    }
-
-    public static String getPersistedString(Preference pref, String defaultReturnValue) {
-        OrionApplication applicationContext = (OrionApplication) pref.getContext().getApplicationContext();
-        return getPersistedString(pref.getKey(), defaultReturnValue, applicationContext);
     }
 
     public static String getPersistedString(String key, String defaultReturnValue, OrionApplication applicationContext) {

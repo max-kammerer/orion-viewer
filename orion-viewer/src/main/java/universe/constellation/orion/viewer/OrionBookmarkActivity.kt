@@ -75,11 +75,10 @@ class OrionBookmarkActivity : OrionBaseActivity() {
         val view = findViewById<ListView>(R.id.bookmarks)
         view.adapter = object : ArrayAdapter<Bookmark>(this, R.layout.bookmark_entry, R.id.bookmark_entry, bookmarks) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                var convertView = convertView
-                convertView = super.getView(position, convertView, parent)
+                val convertView = super.getView(position, convertView, parent)
 
                 val bookmark = getItem(position)
-                val page = convertView!!.findViewById<View>(R.id.bookmark_entry_page) as TextView
+                val page = convertView.findViewById<View>(R.id.bookmark_entry_page) as TextView
                 page.text = "${if (bookmark!!.page == -1) "*" else bookmark.page + 1}"
 
                 val edit = convertView.findViewById<View>(R.id.bookmark_edit_entry) as ImageView
@@ -106,9 +105,9 @@ class OrionBookmarkActivity : OrionBaseActivity() {
                             dialog.dismiss()
                         }
 
-                        builder.setNegativeButton("Cancel") { dialog, which -> dialog.dismiss() }
+                        builder.setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
 
-                        builder.setNeutralButton("Delete") { dialog, which ->
+                        builder.setNeutralButton("Delete") { _, _ ->
                             orionApplication.getBookmarkAccessor().deleteBookmark(item.id.toLong())
                             updateView(bookId)
                         }
@@ -249,18 +248,17 @@ class OrionBookmarkActivity : OrionBaseActivity() {
 
 
                 tree.choiceMode = if (!importCurrent) ListView.CHOICE_MODE_MULTIPLE else ListView.CHOICE_MODE_SINGLE
-                tree.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id -> dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled = tree.checkedItemPositions.size() != 0 }
+                tree.onItemClickListener = AdapterView.OnItemClickListener { _, _, _, _ -> dialog.getButton(Dialog.BUTTON_POSITIVE).isEnabled = tree.checkedItemPositions.size() != 0 }
 
                 tree.adapter = object : ArrayAdapter<BookNameAndSize>(this, if (importCurrent) R.layout.select_book_item else R.layout.select_book_item_multi, R.id.title, books) {
 
                     private var positiveDisabled: Boolean = false
 
                     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                        var convertView = convertView
-                        convertView = super.getView(position, convertView, parent)
+                        val convertView = super.getView(position, convertView, parent)
 
                         val book = getItem(position)
-                        var view = convertView!!.findViewById<View>(R.id.page) as TextView
+                        var view = convertView.findViewById<View>(R.id.page) as TextView
                         view.text = book!!.beautifySize()
 
                         view = convertView.findViewById<View>(R.id.title) as TextView

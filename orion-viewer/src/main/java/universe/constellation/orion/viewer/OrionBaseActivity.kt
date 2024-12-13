@@ -186,7 +186,7 @@ abstract class OrionBaseActivity(val viewerType: Int = Device.DEFAULT_ACTIVITY) 
         builder.setTitle(title)
         builder.setMessage(message)
 
-        builder.setPositiveButton("OK") { dialog, which -> dialog.dismiss() }
+        builder.setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
 
         builder.create().show()
     }
@@ -196,7 +196,7 @@ abstract class OrionBaseActivity(val viewerType: Int = Device.DEFAULT_ACTIVITY) 
         builder.setTitle(titleId)
         builder.setMessage(messageId)
 
-        builder.setPositiveButton("OK") { dialog, which -> dialog.dismiss() }
+        builder.setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
 
         builder.create().show()
     }

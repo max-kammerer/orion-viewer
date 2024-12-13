@@ -1,5 +1,6 @@
 package universe.constellation.orion.viewer.prefs
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -16,6 +17,7 @@ import universe.constellation.orion.viewer.R
 
 class ActionListActivity : OrionBaseActivity() {
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         onOrionCreate(savedInstanceState, R.layout.actions_selection, false)
 

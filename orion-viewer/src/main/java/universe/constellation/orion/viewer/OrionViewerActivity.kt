@@ -17,7 +17,6 @@ import androidx.core.view.doOnLayout
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.*
-import resetSettingInTest
 import universe.constellation.orion.viewer.FallbackDialogs.Companion.saveFileByUri
 import universe.constellation.orion.viewer.Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN
 import universe.constellation.orion.viewer.Permissions.hasReadStoragePermission
@@ -37,10 +36,11 @@ import universe.constellation.orion.viewer.prefs.initalizer
 import universe.constellation.orion.viewer.selection.NewTouchProcessor
 import universe.constellation.orion.viewer.selection.NewTouchProcessorWithScale
 import universe.constellation.orion.viewer.selection.SelectionAutomata
+import universe.constellation.orion.viewer.test.resetSettingInTest
+import universe.constellation.orion.viewer.test.updateGlobalOptionsFromIntent
 import universe.constellation.orion.viewer.view.FullScene
 import universe.constellation.orion.viewer.view.OrionDrawScene
 import universe.constellation.orion.viewer.view.StatusBar
-import updateGlobalOptionsFromIntent
 import java.io.File
 import java.util.concurrent.Executors
 import kotlin.coroutines.resume
@@ -117,7 +117,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             globalOptions.SHOW_ACTION_BAR.observe(this) { flag ->
                 OptionActions.SHOW_ACTION_BAR.doAction(this, flag)
             }
-            findViewById<ViewGroup>(R.id.main_menu)?.visibility = View.GONE
+            mainMenuLayout?.visibility = View.GONE
         } else {
             findViewById<View>(R.id.toolbar)?.visibility = View.GONE
         }

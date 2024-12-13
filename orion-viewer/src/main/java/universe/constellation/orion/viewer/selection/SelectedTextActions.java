@@ -3,7 +3,6 @@ package universe.constellation.orion.viewer.selection;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.text.ClipboardManager;
 import android.view.MotionEvent;

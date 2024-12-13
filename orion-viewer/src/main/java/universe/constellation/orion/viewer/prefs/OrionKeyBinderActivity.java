@@ -26,6 +26,7 @@ public class OrionKeyBinderActivity extends OrionBaseActivity {
 
     private KeyListAdapter adapter;
 
+    @SuppressLint("MissingSuperCall")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         onOrionCreate(savedInstanceState, R.layout.key_binder, true, true);

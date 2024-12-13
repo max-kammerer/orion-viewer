@@ -1,3 +1,5 @@
+package universe.constellation.orion.viewer.test
+
 import android.content.Intent
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.prefs.GlobalOptions

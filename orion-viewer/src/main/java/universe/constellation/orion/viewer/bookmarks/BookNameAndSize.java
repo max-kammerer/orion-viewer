@@ -1,5 +1,7 @@
 package universe.constellation.orion.viewer.bookmarks;
 
+import androidx.annotation.NonNull;
+
 import universe.constellation.orion.viewer.FileUtil;
 
 public class BookNameAndSize implements Comparable<BookNameAndSize> {
@@ -40,6 +42,7 @@ public class BookNameAndSize implements Comparable<BookNameAndSize> {
         return FileUtil.beautifyFileSize(size);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return name + " " + beautifySize();
