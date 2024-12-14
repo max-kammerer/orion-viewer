@@ -143,7 +143,10 @@ public class BookmarkAccessor extends SQLiteOpenHelper {
             if (bookId != -1 ) {
                 c = dataBase.rawQuery("select " + BOOKMARK_TEXT + " from " + BOOKMARKS_TABLE_NAME + " where " + BOOK_REF + " = " + bookId + " and " + BOOKMARK_PAGE + " = " + pageNum, null);
                 if (c != null && c.moveToFirst()) {
-                    return c.getString(c.getColumnIndex(BOOKMARK_TEXT));
+                    int columnIndex = c.getColumnIndex(BOOKMARK_TEXT);
+                    if (columnIndex >= 0) {
+                        return c.getString(columnIndex);
+                    }
                 }
             }
 
@@ -161,7 +164,10 @@ public class BookmarkAccessor extends SQLiteOpenHelper {
         long id = -1;
         try (Cursor c = dataBase.rawQuery("select " + BOOK_ID + " from " + BOOKS_TABLE_NAME + " where " + BOOK_NAME + " = \"" + name + "\" and " + BOOK_FILE_SIZE + " = " + size, null)) {
             if (c != null && c.moveToFirst()) {
-                id = c.getLong(c.getColumnIndex(BOOK_ID));
+                int columnIndex = c.getColumnIndex(BOOK_ID);
+                if (columnIndex >= 0) {
+                    id = c.getLong(columnIndex);
+                }
             }
 
             System.out.println("selectBookId " + id);
@@ -192,7 +198,10 @@ public class BookmarkAccessor extends SQLiteOpenHelper {
             if (bookId != -1 ) {
                 c = dataBase.rawQuery("select " + BOOKMARK_ID + " from " + BOOKMARKS_TABLE_NAME + " where " + BOOK_REF + " = " + bookId + " and " + BOOKMARK_PAGE + " = " + page, null);
                 if (c != null && c.moveToFirst()) {
-                    bookmarkId = c.getLong(c.getColumnIndex(BOOKMARK_ID));
+                    int columnIndex = c.getColumnIndex(BOOKMARK_ID);
+                    if (columnIndex >= 0) {
+                        bookmarkId = c.getLong(columnIndex);
+                    }
                 }
             }
         } finally {
