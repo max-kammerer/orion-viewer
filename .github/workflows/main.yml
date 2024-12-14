@@ -54,7 +54,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        arch: [[15, x86, ubuntu-22.04], [16, x86, ubuntu-22.04], [19, x86, ubuntu-22.04], [21, x86, ubuntu-22.04], [23, x86, ubuntu-22.04], [28, x86, ubuntu-22.04], [30, x86_64, ubuntu-22.04],  [32, x86_64, ubuntu-22.04], [33, x86_64, ubuntu-22.04], [34, x86_64, ubuntu-22.04]]
+        arch: [[15, x86, ubuntu-22.04], [16, x86, ubuntu-22.04], [19, x86, ubuntu-22.04], [21, x86, ubuntu-22.04], [23, x86, ubuntu-22.04], [28, x86, ubuntu-22.04], [30, x86_64, ubuntu-22.04],  [32, x86_64, ubuntu-22.04], [33, x86_64, ubuntu-22.04], [35, x86_64, ubuntu-22.04]]
     env:
       ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 170
       EMULATOR_API: ${{ matrix.arch[0] }}
