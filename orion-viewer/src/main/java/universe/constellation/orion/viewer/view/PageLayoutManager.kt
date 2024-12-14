@@ -173,7 +173,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
                 } else if (!isTapNavigation) {
                     var newDistance = 0f
                     if (distanceX > 0 && layoutData.globalLeft < 0) {
-                        newDistance = MathUtils.clamp(distanceX, distanceX, sceneRect.left - layoutData.globalLeft,)
+                        newDistance = MathUtils.clamp(distanceX, distanceX, sceneRect.left - layoutData.globalLeft)
                     } else if (distanceX < 0 && layoutData.globalRight > sceneRect.right) {
                         newDistance = -MathUtils.clamp(-distanceX, -distanceX, layoutData.globalRight - sceneRect.right)
                     }
@@ -368,7 +368,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
                 renderPage(active, canvas, scene, true)
                 return
             }
-            errorInDebug("No active page $activePage, $active")
+            errorInDebug("No active page for $activePage (page is null)")
         }
 
         var first = true

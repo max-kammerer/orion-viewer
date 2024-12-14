@@ -31,7 +31,7 @@ class ListPreferenceWithIconsLayoutDialog : PreferenceDialogFragmentCompat() {
             mIconsRes = preference.iconsRes
         } else {
             mClickedDialogEntryIndex = savedInstanceState.getInt(
-                Companion.SAVE_STATE_INDEX,
+                SAVE_STATE_INDEX,
                 0
             )
             mEntries =

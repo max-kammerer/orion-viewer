@@ -49,7 +49,7 @@ fun createDefaultLastPageInfo(defaultInitializer: Function1<LastPageInfo, Unit>)
 
 @Throws(IOException::class)
 fun writeValue(serializer: XmlSerializer, name: String?, value: Int) {
-    writeValue(serializer, name, Integer.toString(value))
+    writeValue(serializer, name, value.toString())
 }
 
 @Throws(IOException::class)

@@ -33,7 +33,7 @@ open class OrionFileManagerActivity : OrionFileManagerActivityBase(
 
         val dontStartRecent = intent.getBooleanExtra(DONT_OPEN_RECENT_FILE, false)
         if (!dontStartRecent && globalOptions.isOpenRecentBook) {
-            if (!globalOptions.recentFiles.isEmpty()) {
+            if (globalOptions.recentFiles.isNotEmpty()) {
                 val entry = globalOptions.recentFiles[0]
                 val book = File(entry.path)
                 if (book.exists()) {

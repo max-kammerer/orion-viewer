@@ -13,7 +13,6 @@ class DeviceInfo(
 
     val heapMemoryInBytes = heapMemoryInMB * 1024 * 1024
 
-
     fun visiblePageLimit(): Int {
         if (deviceUseNativeBitmap) {
             return 3
