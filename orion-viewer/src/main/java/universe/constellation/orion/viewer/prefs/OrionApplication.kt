@@ -20,6 +20,7 @@
 package universe.constellation.orion.viewer.prefs
 
 import android.app.Activity
+import android.app.ActivityManager
 import android.app.Application
 import android.content.Context
 import android.content.res.Resources
@@ -43,15 +44,19 @@ import universe.constellation.orion.viewer.AndroidLogger.stopLogger
 import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.BuildConfig.DEBUG
 import universe.constellation.orion.viewer.BuildConfig.VERSION_NAME
+import universe.constellation.orion.viewer.FileUtil.beautifyFileSize
 import universe.constellation.orion.viewer.LastPageInfo
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.analytics.Analytics
+import universe.constellation.orion.viewer.android.isAtJellyBean
+import universe.constellation.orion.viewer.android.isAtLeastLollipop
 import universe.constellation.orion.viewer.bookmarks.BookmarkAccessor
 import universe.constellation.orion.viewer.device.AndroidDevice
 import universe.constellation.orion.viewer.device.MagicBookBoeyeDevice
 import universe.constellation.orion.viewer.device.OnyxDevice
 import universe.constellation.orion.viewer.device.OnyxUtil
+import universe.constellation.orion.viewer.device.calcFZCacheSize
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.logger
 import universe.constellation.orion.viewer.prefs.GlobalOptions.Companion.DEFAULT_LANGUAGE
@@ -118,7 +123,9 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
         instance = this
         super<Application>.onCreate()
         setLanguage(options.appLanguage)
-        logOrionAndDeviceInfo()
+        val totalMemory = getTotalMemory(this)
+        setMupdfCacheLimit(totalMemory)
+        logOrionAndDeviceInfo(totalMemory)
         initDjvuResources(this)
     }
 
@@ -243,12 +250,25 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
         var instance: OrionApplication by Delegates.notNull()
             private set
 
-        fun logOrionAndDeviceInfo() {
+        fun logOrionAndDeviceInfo(totalMemory: Long?) {
             log("Orion Viewer $VERSION_NAME")
+            log("Android version :  $CODENAME $RELEASE")
+            log("Total:  ${totalMemory?.beautifyFileSize()}")
+            log("Mupdf cache:  ${calcFZCacheSize(totalMemory ?: 0).beautifyFileSize()}")
             log("Device: $DEVICE")
             log("Model: $MODEL")
             log("Manufacturer:  $MANUFACTURER")
-            log("Android version :  $CODENAME $RELEASE")
+        }
+
+        fun getTotalMemory(applicationContext: Context): Long? {
+            if (isAtJellyBean()) {
+                val memInfo = ActivityManager.MemoryInfo()
+                (applicationContext.getSystemService(ACTIVITY_SERVICE) as ActivityManager).getMemoryInfo(
+                    memInfo
+                )
+                return memInfo.totalMem
+            }
+            return null
         }
 
         @JvmStatic
@@ -312,6 +332,13 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
                 }
             }
             return null
+        }
+
+        fun setMupdfCacheLimit(memorySize: Long?){
+            if (isAtLeastLollipop()) {
+                val cacheSize = calcFZCacheSize(memorySize ?: 0)
+                Os.setenv("FZ_JAVA_STORE_SIZE", cacheSize.toString(), true)
+            }
         }
     }
 }

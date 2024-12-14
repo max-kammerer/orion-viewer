@@ -18,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.*
 import universe.constellation.orion.viewer.FallbackDialogs.Companion.saveFileByUri
+import universe.constellation.orion.viewer.FileUtil.beautifyFileSize
 import universe.constellation.orion.viewer.Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN
 import universe.constellation.orion.viewer.Permissions.hasReadStoragePermission
 import universe.constellation.orion.viewer.analytics.SHOW_ERROR_PANEL_DIALOG
@@ -32,6 +33,7 @@ import universe.constellation.orion.viewer.dialog.create
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy
 import universe.constellation.orion.viewer.prefs.GlobalOptions
+import universe.constellation.orion.viewer.prefs.OrionApplication
 import universe.constellation.orion.viewer.prefs.initalizer
 import universe.constellation.orion.viewer.selection.NewTouchProcessor
 import universe.constellation.orion.viewer.selection.NewTouchProcessorWithScale
@@ -347,14 +349,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     private fun dumpMemoryState() {
         log("Runtime.getRuntime().totalMemory(): ${Runtime.getRuntime().totalMemory()}")
         log("Debug.getNativeHeapSize(): ${Debug.getNativeHeapSize()}")
-        if (isAtJellyBean()) {
-            val memInfo = ActivityManager.MemoryInfo()
-            (applicationContext.getSystemService(ACTIVITY_SERVICE) as ActivityManager).getMemoryInfo(
-                memInfo
-            )
-            val totalMemory = memInfo.totalMem
-            log("TotalMemory: $totalMemory")
-        }
+        log("TotalMemory: ${OrionApplication.getTotalMemory(orionApplication)?.beautifyFileSize()}")
     }
 
     private fun invalidateOrHideMenu() {

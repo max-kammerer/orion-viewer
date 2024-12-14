@@ -388,7 +388,7 @@ ${MUPDF_PATH}/platform/java/
 ${MUPDF_PATH}/include.mupdf
 )
 
-target_compile_definitions(mupdf_java PRIVATE -DHAVE_ANDROID -DORION_PDF -DORION_FOR_ANDROID)
+target_compile_definitions(mupdf_java PRIVATE -DHAVE_ANDROID -DORION_PDF -DORION_FOR_ANDROID -DFZ_JAVA_STORE_SIZE=64<<20)
 target_compile_options(mupdf_java PRIVATE -ffunction-sections -fdata-sections)
 
 add_dependencies(mupdf_java mupdf_core mupdf_thirdparty libarchive)
