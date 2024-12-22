@@ -1,3 +1,6 @@
+===== 0.95.3 (Dec 22, 2024) =====
+* Set cache limit for mupdf cache store depending on device memory size
+
 ===== 0.95.3 (Dec 14, 2024) =====
 * Updated mupdf to 1.25.2
 
