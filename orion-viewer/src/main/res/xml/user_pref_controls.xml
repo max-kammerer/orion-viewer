@@ -72,6 +72,13 @@
             android:summary="@string/pref_swap_prev_next_keys_on_90_degree_rotation"
             android:title="@string/pref_swap_prev_next_keys"
             app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="SYNC_X_SCROLL"
+            android:summary="@string/pref_sync_x_scroll"
+            android:title="@string/pref_sync_x_scroll"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory

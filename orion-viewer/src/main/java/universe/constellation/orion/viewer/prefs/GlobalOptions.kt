@@ -138,6 +138,9 @@ class GlobalOptions(
     val isSwapKeys: Boolean
         get() = getBooleanProperty(SWAP_KEYS, false)
 
+    val isSyncXScroll: Boolean
+        get() = getBooleanProperty(SYNC_X_SCROLL, false)
+
     val isEnableTouchMove: Boolean
         get() = getBooleanProperty(ENABLE_TOUCH_MOVE, true)
 
@@ -329,6 +332,8 @@ class GlobalOptions(
         const val OPEN_AS_TEMP_BOOK: String = "OPEN_AS_TEMP_BOOK"
 
         const val TEST_FLAG: String = "ORION_VIEWER_TEST_FLAG"
+
+        const val SYNC_X_SCROLL: String = "SYNC_X_SCROLL"
 
         const val ENABLE_TOUCH_MOVE: String = "ENABLE_TOUCH_MOVE"
 
