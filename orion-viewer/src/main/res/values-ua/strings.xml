@@ -42,4 +42,5 @@
     <string name="save">Зберегти</string>
     <string name="color_mode_black_on_yellowish">Чорний на жовтуватому тлі</string>
     <string name="color_mode_inverted">Інвертовані кольори</string>
+    <string name="saveFileNameTooltip">І\'мяФайлу.розширення</string>
 </resources>
