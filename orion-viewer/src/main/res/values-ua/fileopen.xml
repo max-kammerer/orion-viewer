@@ -21,4 +21,7 @@
     <string name="crash_on_book_opening_message_header_panel">Помилка під час відкриття файлу %1$s:</string>
     <string name="send_report_header">[Будь ласка, надайте додаткову інформацію (кроки для відтворення проблеми)]</string>
     <string name="fileopen_private_resource_access">Доступ до особистого файлу</string>
+    <string name="fileopen_error_during_intent_processing">Помилка під час обробки призначення</string>
+    <string name="fileopen_error_during_intent_processing_info">Не вдається витягти шлях до файлу з призначення. Будь ласка, збережіть дані призначення у файл, щоб відкрити його або:</string>
+    <string name="fileopen_private_resource_access_info">Не вдається отримати прямий доступ до файлу, будь ласка, виберіть один з варіантів нижче:</string>
 </resources>
