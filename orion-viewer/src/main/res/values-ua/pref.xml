@@ -85,4 +85,6 @@
     <string name="pref_key_double_tap">Дія при подвійному дотику</string>
     <string name="pref_key_long_tap">Дія при довгому дотику</string>
     <string name="pref_key_linked_action_summary">Повʼязана дія: `%s`</string>
+    <string name="pref_renderOffPage">Намалювати простір поза сторінкою</string>
+    <string name="pref_key_binder_desc">Прив\'язати дії до клавіш/кнопок</string>
 </resources>
