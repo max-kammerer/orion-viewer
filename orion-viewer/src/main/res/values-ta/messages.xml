@@ -1,2 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="msg_specify_keyword_for_search">தேடலுக்கான முக்கிய சொல்லைக் குறிப்பிடவும்</string>
+    <string name="permission_grant">கிராண்ட்…</string>
+    <string name="warn_msg_no_dictionary">அகராதி காணப்படவில்லை</string>
+    <string name="ex_msg_operation_failed">செயல்பாடு தோல்வியடைந்தது</string>
+    <string name="msg_dialog_search">உரையாடல் தேடல்</string>
+    <string name="msg_dialog_dismis">தள்ளுபடி</string>
+    <string name="warn_text_not_found">உரை இல்லை</string>
+    <string name="warn_no_further_occurrences_found">மேலும் நிகழ்வுகள் எதுவும் கிடைக்கவில்லை</string>
+    <string name="msg_searching">தேடுகிறது…</string>
+    <string name="msg_select_text">உரையைத் தேர்ந்தெடுக்கவும்!</string>
+    <string name="msg_select_word">வார்த்தைக்கு சொடுக்கு செய்க!</string>
+    <string name="msg_error">பிழை</string>
+    <string name="msg_warning">எச்சரிக்கை</string>
+    <string name="recent_book_not_found">புத்தகக் கோப்பைக் கண்டுபிடிக்க முடியவில்லை!</string>
+    <string name="tap_zones_header">தட்டு மண்டலங்கள் வழியாக வழிசெலுத்தல்: இயல்புநிலை மண்டல செயல்கள்</string>
+    <string name="permission_directory_warning">சேமிப்பக தரவை அணுக வாசிப்பு இசைவு வழங்கவும்</string>
+    <string name="permission_cancel">ரத்துசெய்</string>
+    <string name="string_cancel">ரத்துசெய்</string>
+    <string name="string_close">மூடு</string>
+    <string name="string_apply">இடு</string>
+    <string name="string_wrong_password">தவறான கடவுச்சொல்</string>
+    <string name="password_for_file">கோப்பிற்கான கடவுச்சொல்</string>
+    <string name="wrong_outline_item">தவறான பக்கம்: %s</string>
+</resources>
