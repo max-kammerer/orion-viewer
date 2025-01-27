@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_bookmarks_text">புக்மார்க்குகள்</string>
+    <string name="menu_add_bookmark_item">புக்மார்க்கைச் சேர்க்கவும்</string>
+    <string name="menu_select_text">உரையைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="menu_zoom_text">பெரிதாக்கு</string>
+    <string name="menu_crop_text">பயிர்</string>
+    <string name="menu_goto_text">செல்</string>
+    <string name="menu_rotation_text">திரை சுழற்சி</string>
+    <string name="menu_navigation_text">பக்க தளவமைப்பு</string>
+    <string name="menu_help_text">உதவி</string>
+    <string name="menu_open_text">திறந்த நூல்</string>
+    <string name="menu_about_text">பற்றி…</string>
+    <string name="menu_outline_text">அவுட்லைன்</string>
+    <string name="menu_open_dictionary_text">திறந்த அகராதி</string>
+    <string name="menu_day_night_text">பகல்/இரவு முறை</string>
+    <string name="menu_exit_text">வெளியேறு</string>
+    <string name="menu_key_binder_text">முக்கிய பைண்டர்</string>
+    <string name="menu_search_item">தேடல்</string>
+    <string name="menu_options_text">அமைப்புகள்</string>
+    <string name="menu_tap_text">மண்டலங்களைத் தட்டவும்</string>
+    <string name="menu_other">மற்றொன்று…</string>
+    <string name="menu_book_preferences">புத்தக விருப்பங்கள்</string>
+    <string name="export_all_bookmarks_menu_item">அனைத்து புக்மார்க்குகளையும் ஏற்றுமதி செய்யுங்கள்</string>
+    <string name="export_bookmarks_menu_item">தற்போதைய புக்மார்க்குகளை ஏற்றுமதி செய்யுங்கள்</string>
+    <string name="import_all_bookmarks_menu_item">இறக்குமதி…</string>
+    <string name="import_current_bookmarks_menu_item">இருந்து சேர்க்கவும்…</string>
+</resources>
