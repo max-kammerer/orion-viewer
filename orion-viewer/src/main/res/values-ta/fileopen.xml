@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fileopen_permissions_grant_read">சேமிப்பக வாசிப்பு இசைவு வழங்கவும்…</string>
+    <string name="fileopen_report_error_by_github_and_return">கிதுபில் சிக்கலைப் புகாரளித்து உரையாடலுக்குத் திரும்புக…</string>
+    <string name="fileopen_save_to_file">புதிய கோப்பில் சேமிக்கவும்…</string>
+    <string name="fileopen_report_error_by_email_and_return">மின்னஞ்சல் மூலம் பிழையைப் புகாரளித்து உரையாடலுக்குத் திரும்புக…</string>
+    <string name="crash_on_intent_opening_title">நோக்கம் செயலாக்கத்தின் போது பிழை</string>
+    <string name="crash_on_book_opening_message_header">கோப்பு %1$s திறக்கும் போது பிழை. தயவுசெய்து ஒரு சிக்கலைப் புகாரளிக்கவும்:</string>
+    <string name="crash_on_book_opening_title">கோப்பு திறப்பின் போது பிழை</string>
+    <string name="crash_on_book_opening_message_header_panel">கோப்பு %1$s திறப்பின் போது பிழை:</string>
+    <string name="string_send">அனுப்பு…</string>
+    <string name="crash_on_book_opening_encrypted">மறைகுறியாக்கப்பட்ட ஆவணம்</string>
+    <string name="send_report_header">[தயவுசெய்து கூடுதல் விவரங்களை வழங்கவும் (சிக்கலை இனப்பெருக்கம் செய்வதற்கான படிகள்)]]</string>
+    <string name="error_on_file_saving_title">கோப்பு சேமிப்பின் போது பிழை</string>
+    <string name="fileopen_cant_open">ஆவணத்தைத் திறக்க முடியாது: %s.</string>
+    <string name="fileopen_no_pages">ஆவணத்திற்கு பக்கங்கள் இல்லை</string>
+    <string name="fileopen_error_during_intent_processing">நோக்கம் செயலாக்கத்தின் போது பிழை</string>
+    <string name="fileopen_error_during_intent_processing_info">நோக்கத்திலிருந்து கோப்பு பாதையை பிரித்தெடுக்க முடியாது. அதைத் திறக்க நோக்கம் தரவை கோப்பில் சேமிக்கவும் அல்லது:</string>
+    <string name="fileopen_private_resource_access">தனியார் கோப்பிற்கான அணுகல்</string>
+    <string name="fileopen_private_resource_access_info">கோப்பை நேரடியாக அணுக முடியாது, கீழே உள்ள விருப்பங்களில் ஒன்றைத் தேர்ந்தெடுக்கவும்:</string>
+    <string name="fileopen_permission_dialog">கோப்பை நேரடியாக அணுக முடியாது</string>
+    <string name="fileopen_permission_dialog_info">அதை நேரடியாக அணுக கோப்பு அனுமதிகளைப் படிக்கவும் அல்லது கீழே உள்ள விருப்பத்தைத் தேர்வுசெய்க:</string>
+    <string name="fileopen_open_in_temporary_file">தற்காலிக கோப்பு வழியாக திறக்கவும்</string>
+    <string name="fileopen_open_recent_files">அண்மைக் கால புத்தகங்களுக்குச் செல்லுங்கள்…</string>
+    <string name="string_exception">விதிவிலக்கு</string>
+    <string name="string_intent">நோக்கம்</string>
+    <string name="string_cause">காரணம்</string>
+    <string name="fileopen_file_is_emppty">கோப்பு காலியாக உள்ளது</string>
+</resources>

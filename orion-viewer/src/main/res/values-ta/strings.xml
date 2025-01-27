@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="crop_left">இடது</string>
+    <string name="enable_even_crop">பக்கங்களுக்கு கூட மற்றொரு பயிர்</string>
+    <string name="crop_right">வலது</string>
+    <string name="crop_warning">சிறந்த செயல்திறனுக்கு கையேடு பயிரைப் பயன்படுத்தவும்</string>
+    <string name="crop_top">மேலே</string>
+    <string name="crop_auto_manual">ஆட்டோ மற்றும் கையேடு</string>
+    <string name="crop_manual_auto">கையேடு மற்றும் ஆட்டோ</string>
+    <string name="rotate_90">90 பட்டம்</string>
+    <string name="short_click">குறுகிய கிளிக்கில்</string>
+    <string name="binding_click">பிணைப்பில்</string>
+    <string name="key_binder_reset_all">அனைத்தையும் மீட்டமைக்கவும்</string>
+    <string name="orientation_default">இயல்புநிலை</string>
+    <string name="orientation_default_rotation">பயன்பாட்டு இயல்புநிலை</string>
+    <string name="orientation_landscape">நிலப்பரப்பு</string>
+    <string name="orientation_portrait">உருவப்படம்</string>
+    <string name="orientation_landscape_inverse">நிலப்பரப்பு (270)</string>
+    <string name="orientation_portrait_inverse">உருவப்படம் (180)</string>
+    <string name="fit_width">பொருந்தக்கூடிய அகலம்</string>
+    <string name="fit_height">பொருத்தமான உயரத்திற்கு</string>
+    <string name="fit_page">பொருத்தம் பக்கம்</string>
+    <string name="key_binder_message">எந்தவொரு விசையையும் தள்ளி அவற்றை பிணைக்க செயலைத் தேர்ந்தெடுக்கவும்!</string>
+    <string name="key_binder_warning">சுழிய கீகோடுடன் விசையை பிணைக்க முடியவில்லை, மற்றொரு விசையை முயற்சிக்கவும்!</string>
+    <string name="table_of_contents">உள்ளடக்க அட்டவணை</string>
+    <string name="warn_no_text_in_selection">தேர்வில் உரை இல்லை!</string>
+    <string name="warn_no_outline">அவுட்லைன் இல்லை!</string>
+    <string name="color_mode_normal">சாதாரண வண்ணங்கள் (வெள்ளை பின்னணியில் கருப்பு)</string>
+    <string name="color_mode_inverted">தலைகீழ் வண்ணங்கள்</string>
+    <string name="color_mode_black_on_yellowish">மஞ்சள் பின்னணியில் கருப்பு</string>
+    <string name="color_mode_grayscale_light">சாம்பல் பின்னணியில் கிரேச்கேல்</string>
+    <string name="color_mode_grayscale">சாம்பல் பின்னணியில் கிரேச்கேல்</string>
+    <string name="color_mode_grayscale_dark">அடர் சாம்பல் பின்னணியில் கிரேச்கேல்</string>
+    <string name="color_mode_white_on_blue">நீல பின்னணியில் வெள்ளை</string>
+    <string name="select_color_mode">மாற வண்ண பயன்முறையைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="saveFileNameTooltip">FileName.extension</string>
+    <string name="save">சேமி</string>
+    <string name="navigation">பக்கம் பயண</string>
+    <string name="crop_bottom">கீழே</string>
+    <string name="crop_auto">வாகன பயிர்</string>
+    <string name="crop_manual">கையேடு பயிர்</string>
+    <string name="rotate_0">0 பட்டம்</string>
+    <string name="rotate_270">270 பட்டம்</string>
+    <string name="long_click">நீண்ட கிளிக்கில்</string>
+    <string name="fit_custom">வழக்கம்…</string>
+</resources>
