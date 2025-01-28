@@ -81,7 +81,7 @@ task downloadLibArchive {
 }
 
 task downloadMupdf {
-    def version = "1.25.2"
+    def version = "1.25.4"
 
     doLast {
         def mupdfFolder = new File(mupdf)
