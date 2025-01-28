@@ -91,7 +91,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
         }
     },
 
-    FIRST_PAGE(R.string.action_first_page, R.integer.action_first_page, isVisible = false) {
+    FIRST_PAGE(R.string.action_first_page, R.integer.action_first_page) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -101,7 +101,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
         }
     },
 
-    LAST_PAGE(R.string.action_last_page, R.integer.action_last_page, isVisible = false) {
+    LAST_PAGE(R.string.action_last_page, R.integer.action_last_page) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
