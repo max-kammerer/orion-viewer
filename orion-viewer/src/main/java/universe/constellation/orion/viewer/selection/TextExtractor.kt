@@ -12,7 +12,7 @@ class ExtractionInfo(val page: Page, val absoluteRectWithoutCrop: RectF, val sce
 
 fun SelectionAutomata.getTextByHandlers(startHandler: Handler, endHandler: Handler, isRect: Boolean = false, isSingleWord: Boolean = false): TextAndSelection? {
     val screenSelection = SelectionAutomata.getScreenSelectionRect(startHandler, endHandler)
-    val pageLayoutManager = this.activity.controller!!.pageLayoutManager
+    val pageLayoutManager = this.activity.controller?.pageLayoutManager ?: return null
     val pageSelectionRectangles = getPageSelectionRectangles(
         screenSelection,
         false,

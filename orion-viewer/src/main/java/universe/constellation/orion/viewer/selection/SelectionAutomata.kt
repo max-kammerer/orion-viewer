@@ -200,8 +200,8 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
 
         setStartHandlers(pos.x.toFloat(), pos.y.toFloat())
 
-        val selectedText = getSelectedText()
         val controller = activity.controller ?: return
+        val selectedText = getSelectedText()
 
         selectedText?.rect?.let {
             it.firstOrNull()?.let { rect ->
