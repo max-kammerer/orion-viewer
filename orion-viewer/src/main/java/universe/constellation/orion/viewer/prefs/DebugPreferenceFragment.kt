@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
+import kotlinx.coroutines.launch
 import universe.constellation.orion.viewer.FallbackDialogs.Companion.saveFileByUri
 import universe.constellation.orion.viewer.OrionBaseActivity
 import universe.constellation.orion.viewer.R
@@ -20,6 +22,14 @@ class DebugPreferenceFragment : SwitchHeaderPreferenceFragment() {
 
         val debugLogFolder =
             (requireContext().applicationContext as OrionApplication).debugLogFolder() ?: return
+
+        (requireContext().applicationContext as OrionApplication).oldDebugLogFolder()?.let {
+            if (it.exists()) {
+                lifecycleScope.launch {
+                    it.deleteRecursively()
+                }
+            }
+        }
 
         val files = debugLogFolder.listFiles() ?: return
         if (files.isNotEmpty()) {

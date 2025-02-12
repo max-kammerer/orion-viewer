@@ -216,8 +216,13 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
     }
 
     fun debugLogFolder(): File? {
-        val download = cacheDir ?: return null
-        return File(download, "debug/logs")
+        val external = cacheDir ?: return null
+        return File(external, "debug/logs")
+    }
+
+    fun oldDebugLogFolder(): File? {
+        val external = getExternalFilesDir(null) ?: return null
+        return File(external, "debug/logs")
     }
 
     fun startOrStopDebugLogger(start: Boolean) {
