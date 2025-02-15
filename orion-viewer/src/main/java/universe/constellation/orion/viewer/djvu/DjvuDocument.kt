@@ -5,12 +5,10 @@ import universe.constellation.orion.viewer.PageSize
 import universe.constellation.orion.viewer.document.AbstractDocument
 import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.document.AbstractPage
-import universe.constellation.orion.viewer.document.TextAndSelection
-import universe.constellation.orion.viewer.document.TextInfoBuilder
-import universe.constellation.orion.viewer.document.TextWord
+import universe.constellation.orion.viewer.document.PageText
+import universe.constellation.orion.viewer.document.PageTextBuilder
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.errorInDebugOr
-import universe.constellation.orion.viewer.geometry.Rect
 import universe.constellation.orion.viewer.geometry.RectF
 import universe.constellation.orion.viewer.pdf.DocInfo
 import universe.constellation.orion.viewer.timing
@@ -23,7 +21,7 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
         private var pagePointer: Long = 0
 
         @Volatile
-        private var textInfoBuilder: TextInfoBuilder? = null
+        private var pageTextBuilder: PageTextBuilder? = null
 
         override fun readPageSize(): PageSize? {
             if (docPointer == 0L) return errorInDebugOr("Document for $pageNum is null") { null }
@@ -81,93 +79,15 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
             return searchPage(this.pageNum, text)
         }
 
-        override fun getTextInfo(): TextInfoBuilder? {
-            if (textInfoBuilder == null) {
-                textInfoBuilder = Companion.getText(contextPointer, docPointer, pageNum, TextInfoBuilder()) ?: TextInfoBuilder.NULL
+        override fun getPageText(): PageText? {
+            if (pageTextBuilder == null) {
+                pageTextBuilder = Companion.getText(contextPointer, docPointer, pageNum, PageTextBuilder()) ?: PageTextBuilder.NULL
             }
-            val builder = textInfoBuilder
-            if (builder == TextInfoBuilder.NULL) {
+            val builder = pageTextBuilder
+            if (builder == PageTextBuilder.NULL) {
                 return null
             }
-            return textInfoBuilder
-        }
-
-        override fun getText(
-            absoluteX: Int,
-            absoluteY: Int,
-            width: Int,
-            height: Int,
-            singleWord: Boolean
-        ): TextAndSelection? {
-            if (textInfoBuilder == null) {
-                textInfoBuilder = Companion.getText(contextPointer, docPointer, pageNum, TextInfoBuilder()) ?: TextInfoBuilder.NULL
-            }
-            val builder = textInfoBuilder
-            if (builder == null || builder == TextInfoBuilder.NULL) {
-                return null
-            }
-            return getText(builder, absoluteX, absoluteY, width, height, singleWord)
-        }
-
-
-        private fun getText(builder: TextInfoBuilder, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): TextAndSelection? {
-            val opRect = android.graphics.RectF()
-            val lns: java.util.ArrayList<List<TextWord>> = arrayListOf()
-            val selectionRegion = android.graphics.RectF(
-                absoluteX.toFloat(),
-                absoluteY.toFloat(),
-                (absoluteX + width).toFloat(),
-                (absoluteY + height).toFloat()
-            )
-
-            for (line in builder.lines) {
-                val wordsInLine = arrayListOf<TextWord>()
-                for (word in line) {
-                    if (word.isNotEmpty()) {
-                        processWord(word, wordsInLine, selectionRegion, singleWord, opRect)
-                    }
-                }
-
-                if (wordsInLine.size > 0) {
-                    lns.add(wordsInLine)
-                }
-            }
-
-            val result = TextWord()
-            lns.fold(result) { acc, line ->
-                if (acc.isNotEmpty()) acc.add(" ", Rect())
-
-                val lineRes = TextWord()
-                val res = line.fold(lineRes) { accLine, tc ->
-                    if (accLine.isNotEmpty()) accLine.add(" ", Rect())
-                    accLine.add(tc.toString(), tc.rect)
-                    accLine
-                }
-                acc.add(res.toString(), res.rect)
-                acc
-            }
-
-            return if (result.isNotEmpty()) {
-                TextAndSelection(result.toString(), RectF(result.rect), builder);
-            } else {
-                null
-            }
-        }
-
-        private fun processWord(
-            word: TextWord,
-            words: java.util.ArrayList<TextWord>,
-            region: android.graphics.RectF,
-            isSingleWord: Boolean,
-            opRect: android.graphics.RectF
-        ) {
-            val wordSquare5: Float = word.width() * word.height() / 3f
-            opRect.set(word.rect)
-            if (opRect.intersect(region)) {
-                if (isSingleWord || opRect.width() * opRect.height() > wordSquare5) {
-                    words.add(word)
-                }
-            }
+            return pageTextBuilder
         }
 
         override fun destroyInternal() {
@@ -303,7 +223,7 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
         external fun getOutline(doc: Long): Array<OutlineItem>
 
         @JvmStatic @Synchronized
-        external fun getText(context: Long, doc: Long, pageNumber: Int, textInfoBuilder: TextInfoBuilder): TextInfoBuilder?
+        external fun getText(context: Long, doc: Long, pageNumber: Int, pageTextBuilder: PageTextBuilder): PageTextBuilder?
 
         @JvmStatic @Synchronized
         external fun releasePage(page: Long)

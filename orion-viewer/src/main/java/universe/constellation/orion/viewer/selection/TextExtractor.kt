@@ -5,7 +5,7 @@ import android.graphics.RectF
 import androidx.core.graphics.toRectF
 import universe.constellation.orion.viewer.document.Page
 import universe.constellation.orion.viewer.document.TextAndSelection
-import universe.constellation.orion.viewer.document.TextInfoBuilder
+import universe.constellation.orion.viewer.document.PageTextBuilder
 import universe.constellation.orion.viewer.document.TextWord
 
 class ExtractionInfo(val page: Page, val absoluteRectWithoutCrop: RectF, val sceneRect: (RectF) -> RectF)
@@ -36,7 +36,7 @@ fun extractText(
     val rects: ArrayList<RectF> = arrayListOf()
 
     for (selection in extractionInfo) {
-        for (line in selection.page.getTextInfo()?.lines ?: emptyList()) {
+        for (line in selection.page.getPageText()?.lines ?: emptyList()) {
             val wordsInLine = arrayListOf<TextWord>()
             val region = selection.absoluteRectWithoutCrop
             for (word in line) {
@@ -66,7 +66,7 @@ fun extractText(
     val result = foldResults(lns)
 
     return if (result.isNotEmpty()) {
-        TextAndSelection(result.toString(), rects, TextInfoBuilder())
+        TextAndSelection(result.toString(), rects, PageTextBuilder())
     } else {
         null
     }

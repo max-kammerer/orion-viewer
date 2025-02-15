@@ -2,16 +2,20 @@ package universe.constellation.orion.viewer.document
 
 import android.graphics.Rect
 
-class TextInfoBuilder {
+interface PageText {
+    val lines: List<List<TextWord>>
+}
+
+class PageTextBuilder : PageText {
 
     companion object {
 
-        val NULL = TextInfoBuilder()
+        val NULL = PageTextBuilder()
 
         val space = TextWord().apply { add(" ", Rect()) }
     }
 
-    val lines = mutableListOf<MutableList<TextWord>>()
+    override val lines = mutableListOf<MutableList<TextWord>>()
 
     fun addWord(value: String, x: Int, y: Int, x2: Int, y2: Int) {
         lastLine().add(TextWord().apply { add(value, Rect(x, y, x2, y2)) })

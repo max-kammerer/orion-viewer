@@ -41,7 +41,7 @@ class SelectionTest(
             2f
         )
         document.withPage(page1Based - 1 /*zero based*/) {
-            val textInfo = getTextInfo()
+            val textInfo = getPageText()
             val text = extractText(
                 listOf(ExtractionInfo(this, selectionRect) { it }),
                 true,

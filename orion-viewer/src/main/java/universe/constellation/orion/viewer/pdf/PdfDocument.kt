@@ -35,8 +35,8 @@ import universe.constellation.orion.viewer.PageSize
 import universe.constellation.orion.viewer.document.AbstractDocument
 import universe.constellation.orion.viewer.document.AbstractPage
 import universe.constellation.orion.viewer.document.OutlineItem
-import universe.constellation.orion.viewer.document.TextAndSelection
-import universe.constellation.orion.viewer.document.TextInfoBuilder
+import universe.constellation.orion.viewer.document.PageText
+import universe.constellation.orion.viewer.document.PageTextBuilder
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.errorInDebugOr
 import universe.constellation.orion.viewer.timing
@@ -49,7 +49,7 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
         private var displayList: DisplayList? = null
 
         @Volatile
-        private var textInfoBuilder: TextInfoBuilder? = null
+        private var pageTextBuilder: PageTextBuilder? = null
 
         private fun readPageDataIfNeeded() {
             if (destroyed) return errorInDebug("Page $pageNum already destroyed")
@@ -143,24 +143,17 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
             }
         }
 
-        override fun getText(absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): TextAndSelection? {
-            if (destroyed) return null
-            readPageDataIfNeeded()
-            if (page == null) return null
-            return getText(page!!, absoluteX, absoluteY, width, height, singleWord)
-        }
-
-        override fun getTextInfo(): TextInfoBuilder? {
+        override fun getPageText(): PageText? {
             if (destroyed) return null
             readPageDataIfNeeded()
             if (page == null) return null
 
-            if (textInfoBuilder == null) {
-                textInfoBuilder = getTextInfo(page!!) ?: TextInfoBuilder.NULL
+            if (pageTextBuilder == null) {
+                pageTextBuilder = getTextInfo(page!!) ?: PageTextBuilder.NULL
             }
 
-            val builder = textInfoBuilder
-            if (builder == TextInfoBuilder.NULL) {
+            val builder = pageTextBuilder
+            if (builder == PageTextBuilder.NULL) {
                 return null
             }
             return builder
@@ -192,7 +185,7 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
 
     external override fun setThreshold(threshold: Int)
 
-    private fun getTextInfo(page: Page): TextInfoBuilder? {
+    private fun getTextInfo(page: Page): PageTextBuilder? {
         val text: StructuredText = synchronized(core) { page.toStructuredText() }
         try {
            return buildTextInfo(text)
@@ -201,109 +194,35 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
         }
     }
 
-    private fun buildTextInfo(text: StructuredText): TextInfoBuilder {
-        val textInfoBuilder = TextInfoBuilder()//TODO: cache
+    private fun buildTextInfo(text: StructuredText): PageTextBuilder {
+        val pageTextBuilder = PageTextBuilder()//TODO: cache
         for (block in text.blocks) {
             if (block != null) {
                 for (ln in block.lines) {
-                    textInfoBuilder.newLine()
+                    pageTextBuilder.newLine()
                     if (ln != null) {
                         var word = TextWord()
-                        textInfoBuilder.addSpace()
+                        pageTextBuilder.addSpace()
                         for (textChar in ln.chars) {
                             if (textChar.c != ' '.code) {
                                 word.add(textChar)
                             } else if (word.isNotEmpty()) {
                                 if (word.isNotEmpty()) {
-                                    textInfoBuilder.addWord(word.toString(), word.rect.toRect())
-                                    textInfoBuilder.addSpace()
+                                    pageTextBuilder.addWord(word.toString(), word.rect.toRect())
+                                    pageTextBuilder.addSpace()
                                 }
                                 word = TextWord()
                             }
                         }
                         if (word.isNotEmpty()) {
-                            textInfoBuilder.addWord(word.toString(), word.rect.toRect())
+                            pageTextBuilder.addWord(word.toString(), word.rect.toRect())
                         }
                     }
                 }
             }
         }
 
-        return textInfoBuilder
-    }
-
-    private fun getText(page: Page, absoluteX: Int, absoluteY: Int, width: Int, height: Int, singleWord: Boolean): TextAndSelection? {
-        val text: StructuredText = synchronized(core) { page.toStructuredText() }
-        val opRect = RectF()
-        try {
-            // The text of the page held in a hierarchy (blocks, lines, spans).
-            // Currently we don't need to distinguish the blocks level or
-            // the spans, and we need to collect the text into words.
-            val lns: java.util.ArrayList<List<TextWord>> = arrayListOf()
-            val selectionRegion = RectF(
-                absoluteX.toFloat(),
-                absoluteY.toFloat(),
-                (absoluteX + width).toFloat(),
-                (absoluteY + height).toFloat()
-            )
-
-            for (block in text.blocks) {
-                if (block != null) {
-                    for (ln in block.lines) {
-                        if (ln != null) {
-                            val wordsInLine = arrayListOf<TextWord>()
-                            var word = TextWord()
-                            for (textChar in ln.chars) {
-                                if (textChar.c != ' '.code) {
-                                    word.add(textChar)
-                                } else if (word.isNotEmpty()) {
-                                    processWord(word, wordsInLine, selectionRegion, singleWord, opRect)
-                                    word = TextWord()
-                                }
-                            }
-                            if (word.isNotEmpty()) {
-                                processWord(word, wordsInLine, selectionRegion, singleWord, opRect)
-                            }
-                            if (wordsInLine.size > 0) {
-                                lns.add(wordsInLine)
-                            }
-                        }
-                    }
-                }
-            }
-
-            val result = TextWord()
-            lns.fold(result) { acc, line ->
-                if (acc.isNotEmpty()) acc.add(' ')
-
-                val lineRes = TextWord()
-                val res = line.fold(lineRes) { accLine, tc ->
-                    if (accLine.isNotEmpty()) accLine.add(' ')
-                    accLine.add(tc)
-                    accLine
-                }
-                acc.add(res)
-                acc
-            }
-            return TextAndSelection(result.toString(), result.rect, buildTextInfo(text));
-        } finally {
-            text.destroy()
-        }
-    }
-
-    private fun processWord(
-        word: TextWord,
-        words: java.util.ArrayList<TextWord>,
-        region: RectF,
-        isSingleWord: Boolean,
-        opRect: RectF
-    ) {
-        val wordSquare5: Float = word.width() * word.height() / 3
-        if (opRect.setIntersect(word.rect, region)) {
-            if (isSingleWord || opRect.width() * opRect.height() > wordSquare5) {
-                words.add(word)
-            }
-        }
+        return pageTextBuilder
     }
 
     override val outline: Array<OutlineItem>?
