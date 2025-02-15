@@ -1,3 +1,7 @@
+===== 0.95.6 (Feb 15, 2025) =====
+* Fixed several NPEs
+* Moved debug logs saving into cache dir
+
 ===== 0.95.5 (Jan 30, 2025) =====
 * Restore fast action for moving to first and last pages
 * Updated mupdf to 1.25.4
