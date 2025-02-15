@@ -61,7 +61,7 @@ interface Page {
     fun destroy()
 }
 
-abstract class AbstractDocument(override val filePath: String) : Document {
+abstract class AbstractDocument(final override val filePath: String) : Document {
 
     private val shortName = filePath.substringAfterLast("/")
 
