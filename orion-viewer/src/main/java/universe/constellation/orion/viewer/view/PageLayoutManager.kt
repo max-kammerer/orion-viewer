@@ -51,6 +51,8 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
 
     var isSinglePageMode = false
 
+    var syncXScroll = controller.activity.globalOptions.SYNC_X_SCROLL
+
     private var activePage = -1
 
     val sceneRect = Rect(0, 0, scene.width, scene.height)
@@ -163,7 +165,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
 
         activePages.forEach {
             val layoutData = it.layoutData
-            if (layoutData.containsY(yPos)) {
+            if (syncXScroll.value || layoutData.containsY(yPos)) {
                 val leftDelta = layoutData.globalLeft - sceneRect.left
                 val righDelta = sceneRect.right - layoutData.globalRight
                 if (layoutData.wholePageRect.width() < sceneRect.width()) {
@@ -372,8 +374,13 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         }
 
         var first = true
+        var firstXPos = 0f
         activePages.forEach {
             if (it.isOnScreen) {
+                if (first)
+                    firstXPos = it.layoutData.position.x
+                else if (syncXScroll.value)
+                    it.layoutData.position.x = firstXPos
                 renderPage(it, canvas, scene, first)
                 first = false
             }
