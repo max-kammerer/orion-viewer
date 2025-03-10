@@ -957,7 +957,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     fun startSearch() {
-        SearchDialog.newInstance().show(supportFragmentManager, "search")
+        if (controller != null) {
+            SearchDialog.newInstance().show(supportFragmentManager, "search")
+        }
     }
 
     private fun destroyController() {
