@@ -962,6 +962,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private fun destroyController() {
         log("Controller: destroy")
+        view.setDimensionAware(null)
         controller?.destroy()
         controller = null
         orionApplication.currentBookParameters = null

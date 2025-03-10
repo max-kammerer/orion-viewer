@@ -127,7 +127,7 @@ class OrionDrawScene : View {
         }
     }
 
-    fun setDimensionAware(dimensionAware: ViewDimensionAware) {
+    fun setDimensionAware(dimensionAware: ViewDimensionAware?) {
         this.dimensionAware = dimensionAware
     }
 
