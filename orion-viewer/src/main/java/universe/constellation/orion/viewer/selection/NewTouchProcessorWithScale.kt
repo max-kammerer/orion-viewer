@@ -3,6 +3,7 @@ package universe.constellation.orion.viewer.selection
 import android.graphics.PointF
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
+import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.util.MoveUtil
@@ -19,6 +20,8 @@ class NewTouchProcessorWithScale(view: OrionDrawScene, activity: OrionViewerActi
     private val startFocus = PointF()
     private val endFocus = PointF()
     private var curScale = 1.0F
+
+    private var startController: Controller? = null
 
     override fun onTouch(e: MotionEvent): Boolean {
         scaleDetector.onTouchEvent(e)
@@ -43,6 +46,7 @@ class NewTouchProcessorWithScale(view: OrionDrawScene, activity: OrionViewerActi
         curScale = detector.scaleFactor
         startFocus.set(detector.focusX, detector.focusY)
         nextState = State.SCALE
+        startController = activity.controller
         return true
     }
 
@@ -56,7 +60,9 @@ class NewTouchProcessorWithScale(view: OrionDrawScene, activity: OrionViewerActi
         resetNextState()
         val newX = MoveUtil.calcOffset(startFocus.x, endFocus.x, curScale, enableTouchMoveOnPinchZoom)
         val newY = MoveUtil.calcOffset(startFocus.y, endFocus.y, curScale, enableTouchMoveOnPinchZoom)
-        activity.controller!!.translateAndZoom(curScale, startFocus, endFocus, newX, newY)
+        if (activity.controller === startController) {
+            activity.controller?.translateAndZoom(curScale, startFocus, endFocus, newX, newY)
+        }
         view.disableScalingMode()
     }
 
