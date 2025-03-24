@@ -1,2 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="contribution_intro">Orion Viewer - atvērtā pirmkoda projekts, kuru jūs varat palīdzēt uzlabot!</string>
+    <string name="contribution_do_translation">• iztulkot <a href="https://github.com/max-kammerer/orion-viewer/wiki/Translations">lietotni citās valodās</a> vai uzlabot esošo tulkojumu</string>
+    <string name="contribution_code">• realizēt <a href="https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-build-project">jaunu funkciju</a> vai <a href="https://github.com/max-kammerer/orion-viewer/issues">izlabot kļūdu</a></string>
+    <string name="contribution_design">• izstrādāt jaunu motīvu vai lietotnes dizainu</string>
+    <string name="contribution_review">• uzrakstīt lietotnes <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">recenziju Google Play</a> vai jebkurā citā platformā</string>
+    <string name="contribution_survey">Palīdziet padarīt lietotni labāku - piedalīties to aptaujā! (aizņems 10–20 minūtes)</string>
+    <string name="contribution_ways">Ir daudz lietu, ko varat palīdzēt realizēt projektā:</string>
+    <string name="contribution_report_bug">• ieteikt jaunu funkciju vai ziņot par kļūdu vai problēmu variet <a href="https://github.com/max-kammerer/orion-viewer/issues">GitHub problēmu sadaļā</a></string>
+</resources>
