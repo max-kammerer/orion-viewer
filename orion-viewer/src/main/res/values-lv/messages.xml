@@ -1,2 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="msg_searching">Meklē…</string>
+    <string name="warn_msg_no_dictionary">Vārdnīca nav atrasta</string>
+    <string name="ex_msg_operation_failed">Operācija neizdevās</string>
+    <string name="msg_dialog_search">Meklēšanas dialogs</string>
+    <string name="warn_text_not_found">Nevarēja atrast meklēto tekstu</string>
+    <string name="msg_select_text">Atlasiet tekstu!</string>
+    <string name="msg_select_word">Noklikšķiniet uz vārda!</string>
+</resources>
