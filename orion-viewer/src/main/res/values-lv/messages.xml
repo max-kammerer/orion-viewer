@@ -7,4 +7,20 @@
     <string name="warn_text_not_found">Nevarēja atrast meklēto tekstu</string>
     <string name="msg_select_text">Atlasiet tekstu!</string>
     <string name="msg_select_word">Noklikšķiniet uz vārda!</string>
+    <string name="string_wrong_password">Nederīga parole</string>
+    <string name="msg_warning">Brīdinājums</string>
+    <string name="msg_dialog_dismis">Noraidīt</string>
+    <string name="msg_error">Kļūda</string>
+    <string name="recent_book_not_found">Nevaru atrast grāmatas failu!</string>
+    <string name="permission_cancel">Atcelt</string>
+    <string name="string_cancel">Atcelt</string>
+    <string name="string_close">Aizvērt</string>
+    <string name="tap_zones_header">Navigācija, izmantojot Pieskāriena Zonas: noklusējuma darbības</string>
+    <string name="permission_directory_warning">Lūdzu, piešķiriet lasīšanas tiesības, lai varētu piekļūt krātuves datiem</string>
+    <string name="permission_grant">Piešķirt…</string>
+    <string name="string_apply">Pielietot</string>
+    <string name="password_for_file">Faila parole</string>
+    <string name="wrong_outline_item">Nepareiza lapa: %s</string>
+    <string name="warn_no_further_occurrences_found">Nav atrasta neviena atbilstība</string>
+    <string name="msg_specify_keyword_for_search">Norādiet meklēšanas atslēgvārdu</string>
 </resources>
