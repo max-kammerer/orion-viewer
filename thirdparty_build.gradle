@@ -54,7 +54,7 @@ buildDjvu.mustRunAfter downloadDjvu
 
 /*MUPDF CHAIN*/
 task downloadLibArchive {
-    def version = "v3.7.7"
+    def version = "v3.7.9"
 
     doLast {
         def folder = new File(libarchive)
@@ -81,7 +81,7 @@ task downloadLibArchive {
 }
 
 task downloadMupdf {
-    def version = "1.25.4"
+    def version = "1.25.6"
 
     doLast {
         def mupdfFolder = new File(mupdf)
