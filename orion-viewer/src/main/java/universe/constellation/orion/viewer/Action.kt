@@ -1,6 +1,5 @@
 package universe.constellation.orion.viewer
 
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -9,6 +8,7 @@ import androidx.annotation.IntegerRes
 import androidx.annotation.StringRes
 import universe.constellation.orion.viewer.dialog.toDialogMargins
 import universe.constellation.orion.viewer.dialog.toMargins
+import universe.constellation.orion.viewer.dictionary.openDictionary
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivityBase.Companion.DONT_OPEN_RECENT_FILE
 import universe.constellation.orion.viewer.outline.showOutline
@@ -285,59 +285,9 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             activity: OrionViewerActivity,
             parameter: Any?
         ) {
-            var parameter = parameter
-            val dict = activity.globalOptions.dictionary
-            var action: String? = null
-            val intent = Intent()
-            var queryText: String? = null
-
-            when (dict) {
-                "FORA" -> {
-                    action = "com.ngc.fora.action.LOOKUP"
-                    queryText = "HEADWORD"
-                }
-                "COLORDICT" -> {
-                    action = "colordict.intent.action.SEARCH"
-                    queryText = "EXTRA_QUERY"
-                }
-                "AARD" -> {
-                    action = Intent.ACTION_SEARCH
-                    intent.setClassName("aarddict.android", "aarddict.android.LookupActivity")
-                    queryText = "query"
-                    parameter = safeParameter(parameter)
-                }
-                "AARD2" -> {
-                    action = "aard2.lookup"
-                    queryText = "query"
-                    parameter = safeParameter(parameter)
-                }
-                "LINGVO" -> {
-                    action = "com.abbyy.mobile.lingvo.intent.action.TRANSLATE"
-                    intent.setPackage("com.abbyy.mobile.lingvo.market")
-                    queryText = "com.abbyy.mobile.lingvo.intent.extra.TEXT"
-                    parameter = safeParameter(parameter)
-                }
-            }
-
-            if (action != null) {
-                intent.setAction(action)
-                if (parameter != null) {
-                    intent.putExtra(queryText, parameter as String?)
-                }
-
-                try {
-                    activity.startActivity(intent)
-                } catch (ex: ActivityNotFoundException) {
-                    log(ex)
-                    val string = activity.getString(R.string.warn_msg_no_dictionary)
-                    activity.showWarning(string + ": " + dict + ": " + ex.message)
-                }
-            }
+            openDictionary(parameter as? String?, activity, activity.globalOptions.dictionary)
         }
 
-        private fun safeParameter(parameter: Any?): Any {
-            return parameter ?: ""
-        }
     },
 
     OPEN_BOOK(R.string.action_open, R.integer.action_open_book) {
