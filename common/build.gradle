@@ -10,10 +10,6 @@ android {
     }
 
     namespace 'universe.constellation.orion.common'
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
 
     buildFeatures {
         buildConfig true
@@ -21,6 +17,8 @@ android {
 }
 
 kotlin {
+    jvmToolchain(17)
+
     androidTarget()
 //    targets {
 //        //fromPreset(presets.android, 'android')
