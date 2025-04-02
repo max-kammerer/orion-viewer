@@ -1,3 +1,8 @@
+===== 0.95.7 (Apr 03, 2025) =====
+* Fixed several NPEs
+* Updated mupdf and libarchive
+* Added new dictionaries support
+
 ===== 0.95.6 (Feb 15, 2025) =====
 * Fixed several NPEs
 * Moved debug logs saving into cache dir
