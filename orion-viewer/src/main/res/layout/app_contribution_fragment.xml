@@ -34,13 +34,19 @@
             style="@style/General_Contribution_TextView"
             android:paddingStart="20dp"
             android:paddingLeft="20dp"
-            android:text="@string/contribution_report_bug" />
+            android:text="@string/contribution_review" />
 
         <TextView
             style="@style/General_Contribution_TextView"
             android:paddingStart="20dp"
             android:paddingLeft="20dp"
             android:text="@string/contribution_do_translation" />
+
+        <TextView
+            style="@style/General_Contribution_TextView"
+            android:paddingStart="20dp"
+            android:paddingLeft="20dp"
+            android:text="@string/contribution_report_bug" />
 
         <TextView
             style="@style/General_Contribution_TextView"
@@ -53,12 +59,6 @@
             android:paddingStart="20dp"
             android:paddingLeft="20dp"
             android:text="@string/contribution_design" />
-
-        <TextView
-            style="@style/General_Contribution_TextView"
-            android:paddingStart="20dp"
-            android:paddingLeft="20dp"
-            android:text="@string/contribution_review" />
 
         <TextView
             android:id="@+id/survey"
