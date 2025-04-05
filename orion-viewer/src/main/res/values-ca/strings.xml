@@ -37,7 +37,7 @@
     <string name="table_of_contents">Taula de Continguts</string>
     <string name="crop_manual">Retalla manualment</string>
     <string name="rotate_90">90 graus</string>
-    <string name="orientation_default_rotation">Rotació per defecte</string>
+    <string name="orientation_default_rotation">Gir per defecte</string>
     <string name="key_binder_warning">No s\'ha pogut vincular la tecla, tria\'n una altra!</string>
     <string name="key_binder_message">Pitja una tecla i escull-ne l\'acció vinculada!</string>
     <string name="color_mode_grayscale_dark">Escala de grisos sobre fons gris fosc</string>
