@@ -1,2 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="menu_book_preferences">Opcions del text</string>
+    <string name="menu_zoom_text">Zoom</string>
+    <string name="menu_bookmarks_text">Marcadors</string>
+    <string name="menu_add_bookmark_item">Afegeix un marcador</string>
+    <string name="menu_select_text">Selecciona el text</string>
+    <string name="menu_rotation_text">Gir de pantalla</string>
+    <string name="menu_crop_text">Retall</string>
+    <string name="menu_goto_text">Vés a</string>
+    <string name="menu_navigation_text">Presentació de pàgina</string>
+    <string name="menu_help_text">Ajuda</string>
+    <string name="menu_about_text">Quant a…</string>
+    <string name="menu_open_text">Obre el document</string>
+    <string name="menu_outline_text">Índex</string>
+    <string name="menu_open_dictionary_text">Obre el Diccionari</string>
+    <string name="menu_day_night_text">Mode Dia/Nit</string>
+    <string name="menu_exit_text">Surt</string>
+    <string name="menu_key_binder_text">Associa tecles</string>
+    <string name="menu_options_text">Opcions</string>
+    <string name="menu_tap_text">Zones tàctils</string>
+    <string name="menu_search_item">Cerca</string>
+    <string name="menu_other">Altres…</string>
+    <string name="export_all_bookmarks_menu_item">Exporta tots els marcadors</string>
+    <string name="export_bookmarks_menu_item">Exporta els marcadors actuals</string>
+    <string name="import_all_bookmarks_menu_item">Importa…</string>
+    <string name="import_current_bookmarks_menu_item">Afegeix de…</string>
+</resources>
