@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rotation">Gira el document 90 graus en sentit horari. Un clic llarg el fa girar en senti antihorari.</string>
+    <string name="apply">Aplica les opcions actuals.</string>
+    <string name="escape">Tornar/Sortir.</string>
+    <string name="general_usage_step1">1.Obre el document (zoom a l\'amplada de la pàgina per defecte)</string>
+    <string name="general_usage_step3">3.Retallar els marges, la mida del text s\'hi adapta (si s\'especifica el zoom a l\'amplada)</string>
+    <string name="general_usage_step4">4.A gaudir de la lectura!</string>
+    <string name="dictionary_help">Obre el diccionari extern. Escull l\'aplicació de diccionari adequada a Paràmetres.</string>
+    <string name="navigation_help">Obre el diàleg de presentació de la pàgina. Per llegir còmics o llibres amb imatges hi podreu escollir la presentació de pàgina escaient.</string>
+    <string name="zoom">Obre el diàleg del zoom. El valor zero del zoom l\'ajusta a l\'amplada de la pàgina.</string>
+    <string name="crop">Obre el diàleg per retallar els marges. Els valors defineixen la mida de la pàgina. Un clic llarg al + o al - canvia en un +/-10% el valor del retall. Els valors negatius augmenten els marges.</string>
+    <string name="general_usage">Com usar:</string>
+    <string name="general_usage_step2">2.Tria l\'orientació apropiada: vertical o horitzontal</string>
+    <string name="option_help">Paràmetres de l\'aplicació</string>
+    <string name="tap_help">La zona de toc permet l\'usuari de vincular diferents parts de la pantalla amb les ordres d\'ús més freqüent. Hi trobareu cel·les de 3x3 en què l\'usuari podrà definir accions per a clics curts (etiqueta superior) i clics llargs (etiqueta inferior).</string>
+    <string name="bookmarks_export_help">Permet l\'usuari d\'exportar els marcadors de text (per a tots els textos o només per a l\'actual). Els marcadors de text s\'exporten a un fitxer xml amb el nom del document obert + el sufix [bookmarks.xml o all_bookmarks.xml]. Aquesta opció està disponible al menú de Marcadors .</string>
+</resources>

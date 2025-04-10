@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="orientation_portrait_inverse">Vertical (180)</string>
+    <string name="crop_warning">Usa el retall manual per a un rendiment millor</string>
+    <string name="navigation">Navegació</string>
+    <string name="fit_height">Ajusta a la llargada</string>
+    <string name="crop_left">Esquerre</string>
+    <string name="enable_even_crop">Un altre retall per a pàgines parelles</string>
+    <string name="crop_right">Dret</string>
+    <string name="crop_bottom">Inferior</string>
+    <string name="crop_top">Superior</string>
+    <string name="crop_auto">Retalla automàticament</string>
+    <string name="crop_auto_manual">Automàtic i manual</string>
+    <string name="crop_manual_auto">Manual i automàtic</string>
+    <string name="rotate_0">0 graus</string>
+    <string name="rotate_270">270 graus</string>
+    <string name="long_click">Clic llarg</string>
+    <string name="short_click">Clic curt</string>
+    <string name="binding_click">toc vinculat</string>
+    <string name="key_binder_reset_all">Restableix-ho tot</string>
+    <string name="orientation_default">Per defecte</string>
+    <string name="orientation_landscape">Horitzontal</string>
+    <string name="orientation_portrait">Vertical</string>
+    <string name="orientation_landscape_inverse">Horitzontal (270)</string>
+    <string name="fit_width">Ajusta a l\'amplada</string>
+    <string name="fit_page">Ajusta a la pàgina</string>
+    <string name="fit_custom">Personalitza…</string>
+    <string name="warn_no_text_in_selection">No hi ha cap text a la selecció!</string>
+    <string name="warn_no_outline">No hi ha índex!</string>
+    <string name="color_mode_inverted">Colors invertits</string>
+    <string name="color_mode_black_on_yellowish">Negre sobre fons groguenc</string>
+    <string name="color_mode_grayscale_light">Escala de grisos sobre fons grisenc</string>
+    <string name="color_mode_white_on_blue">Blanc sobre fons blau</string>
+    <string name="select_color_mode">Tria el color</string>
+    <string name="saveFileNameTooltip">Nom del fitxer.extensió</string>
+    <string name="save">Desa</string>
+    <string name="table_of_contents">Taula de Continguts</string>
+    <string name="crop_manual">Retalla manualment</string>
+    <string name="rotate_90">90 graus</string>
+    <string name="orientation_default_rotation">Gir per defecte</string>
+    <string name="key_binder_warning">No s\'ha pogut vincular la tecla, tria\'n una altra!</string>
+    <string name="key_binder_message">Pitja una tecla i escull-ne l\'acció vinculada!</string>
+    <string name="color_mode_grayscale_dark">Escala de grisos sobre fons gris fosc</string>
+    <string name="color_mode_grayscale">Escala de grisos sobre fons gris</string>
+    <string name="color_mode_normal">Colors normals (negre sobre blanc)</string>
+</resources>

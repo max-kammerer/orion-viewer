@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fileopen_error_during_intent_processing_info">No es pot extreure el camí del fitxer de la sol·licitud. Desa les dades de la sol·licitud al fitxer per obrir-lo o:</string>
+    <string name="crash_on_book_opening_title">Error en obrir el fitxer</string>
+    <string name="fileopen_report_error_by_email_and_return">Informa de l\'error via correu electrònic i torna al diàleg…</string>
+    <string name="fileopen_report_error_by_github_and_return">Informa de la incidència a Github i torna al diàleg…</string>
+    <string name="crash_on_book_opening_message_header">Error en obrir el fitxer%1$s. Informa d\'una incidència:</string>
+    <string name="fileopen_permission_dialog">No es pot accedir al fitxer directament</string>
+    <string name="fileopen_permission_dialog_info">Concedeix permisos de lectura al fitxer per accedir-hi directament o escull l\'opció següent:</string>
+    <string name="fileopen_private_resource_access">Accés al fitxer privat</string>
+    <string name="fileopen_private_resource_access_info">No es pot accedir al fitxer directament, escull una de les opcions següents:</string>
+    <string name="fileopen_permissions_grant_read">Concedeix permisos de lectura a l\'emmagatzematge…</string>
+    <string name="fileopen_save_to_file">Desa en un fitxer nou…</string>
+    <string name="fileopen_open_in_temporary_file">Obre com a fitxer temporal</string>
+    <string name="fileopen_open_recent_files">Vés als llibres recents…</string>
+    <string name="string_exception">Excepció</string>
+    <string name="string_intent">Sol·licitud</string>
+    <string name="string_cause">Causa</string>
+    <string name="crash_on_intent_opening_title">Error en processar la sol·licitud</string>
+    <string name="crash_on_book_opening_message_header_panel">Error en obrir el fitxer%1$s:</string>
+    <string name="crash_on_book_opening_encrypted">Document encriptat</string>
+    <string name="string_send">Envia…</string>
+    <string name="error_on_file_saving_title">Error en desar el fitxer</string>
+    <string name="fileopen_cant_open">No es pot obrir el document:%s.</string>
+    <string name="fileopen_file_is_emppty">El fitxer és buit</string>
+    <string name="fileopen_no_pages">El document no té pàgines</string>
+    <string name="fileopen_error_during_intent_processing">Error en processar la sol·licitud</string>
+    <string name="send_report_header">[Dóna\'n més detalls (passes per reproduir la incidència)]</string>
+</resources>
