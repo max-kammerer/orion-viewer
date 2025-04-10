@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="warn_msg_no_dictionary">No s\'ha trobat el diccionari</string>
+    <string name="tap_zones_header">Navegació via zones tàctils: zona d\'accions per defecte</string>
+    <string name="msg_select_word">Fes clic a la paraula!</string>
+    <string name="ex_msg_operation_failed">Ha fallat l\'operació</string>
+    <string name="msg_dialog_dismis">Descarta</string>
+    <string name="warn_text_not_found">No hi ha text</string>
+    <string name="warn_no_further_occurrences_found">No s\'han trobat més esdeveniments</string>
+    <string name="msg_searching">Cercant…</string>
+    <string name="msg_select_text">Selecciona text!</string>
+    <string name="msg_error">Error</string>
+    <string name="msg_warning">Avís</string>
+    <string name="msg_specify_keyword_for_search">Especifica la paraula que vols cercar</string>
+    <string name="recent_book_not_found">No trobo el fitxer del document!</string>
+    <string name="permission_directory_warning">Concedeix permisos de lectura per accedir a les dades d\'emmagatzematge</string>
+    <string name="permission_grant">Concedir…</string>
+    <string name="permission_cancel">Cancel·lar</string>
+    <string name="string_cancel">Cancel·lar</string>
+    <string name="string_close">Tancar</string>
+    <string name="string_apply">Aplicar</string>
+    <string name="string_wrong_password">Contrasenya incorrecta</string>
+    <string name="password_for_file">Contrasenya del fitxer</string>
+    <string name="wrong_outline_item">Pàgina incorrecta:%s</string>
+    <string name="msg_dialog_search">Diàleg de cerca</string>
+</resources>
