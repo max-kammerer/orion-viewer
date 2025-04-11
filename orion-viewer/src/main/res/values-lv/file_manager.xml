@@ -1,2 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="file_manager_title">Failu pārvaldnieks</string>
+    <string name="file_manager_fodlers">Mapes</string>
+    <string name="file_manager_history">Vēsture</string>
+    <string name="file_manager_select_tip">Lūdzu, atlasiet failu, ko atvērt Orion Viewer</string>
+    <string name="file_manager_documents">Dokumenti</string>
+    <string name="file_manager_downloads">Lejupielādes</string>
+    <string name="file_manager_sdcard">SD karte</string>
+</resources>
