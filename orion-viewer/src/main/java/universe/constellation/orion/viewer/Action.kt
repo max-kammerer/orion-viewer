@@ -66,12 +66,13 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             activity: OrionViewerActivity,
             parameter: Any?
         ) {
-            var page = controller!!.currentPage + 10
+            val controller1 = controller ?:  return
+            var page = controller1.currentPage + 10
 
-            if (page > controller.pageCount - 1) {
-                page = controller.pageCount - 1
+            if (page > controller1.pageCount - 1) {
+                page = controller1.pageCount - 1
             }
-            controller.drawPage(page)
+            controller1.drawPage(page)
         }
     },
 
@@ -82,12 +83,13 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             activity: OrionViewerActivity,
             parameter: Any?
         ) {
-            var page = controller!!.currentPage - 10
+            val controller1 = controller ?: return
+            var page = controller1.currentPage - 10
 
             if (page < 0) {
                 page = 0
             }
-            controller.drawPage(page)
+            controller1.drawPage(page)
         }
     },
 
@@ -317,7 +319,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             activity: OrionViewerActivity,
             parameter: Any?
         ) {
-            controller!!.changeZoom(0)
+            controller?.changeZoom(0)
         }
     },
 
@@ -327,7 +329,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             activity: OrionViewerActivity,
             parameter: Any?
         ) {
-            controller!!.changeZoom(-1)
+            controller?.changeZoom(-1)
         }
     },
 
@@ -337,7 +339,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             activity: OrionViewerActivity,
             parameter: Any?
         ) {
-            controller!!.changeZoom(-2)
+            controller?.changeZoom(-2)
         }
     },
 
@@ -350,9 +352,9 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
         ) {
             //controller.setRotation((controller.getRotation() - 1) % 2);
             if (activity.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE || activity.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) {
-                controller!!.changeOrinatation("PORTRAIT")
+                controller?.changeOrinatation("PORTRAIT")
             } else {
-                controller!!.changeOrinatation("LANDSCAPE")
+                controller?.changeOrinatation("LANDSCAPE")
             }
         }
     },
@@ -368,7 +370,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             if (!isLevel9 || activity.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE || activity.requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) {
                 ROTATE_90.doAction(controller, activity, parameter)
             } else {
-                controller!!.changeOrinatation("LANDSCAPE_INVERSE")
+                controller?.changeOrinatation("LANDSCAPE_INVERSE")
             }
         }
     },
@@ -409,7 +411,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             activity: OrionViewerActivity,
             parameter: Any?
         ) {
-            updateMargin(controller!!, true, 0)
+            updateMargin(controller ?: return, true, 0)
         }
     },
 
@@ -419,7 +421,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             activity: OrionViewerActivity,
             parameter: Any?
         ) {
-            updateMargin(controller!!, false, 0)
+            updateMargin(controller ?: return, false, 0)
         }
     },
 
@@ -429,7 +431,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             activity: OrionViewerActivity,
             parameter: Any?
         ) {
-            updateMargin(controller!!, true, 1)
+            updateMargin(controller ?: return, true, 1)
         }
     },
 
@@ -439,7 +441,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             activity: OrionViewerActivity,
             parameter: Any?
         ) {
-            updateMargin(controller!!, false, 1)
+            updateMargin(controller ?: return, false, 1)
         }
     },
 
@@ -449,7 +451,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             activity: OrionViewerActivity,
             parameter: Any?
         ) {
-            updateMargin(controller!!, true, 2)
+            updateMargin(controller ?: return, true, 2)
         }
     },
 
@@ -459,7 +461,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             activity: OrionViewerActivity,
             parameter: Any?
         ) {
-            updateMargin(controller!!, false, 2)
+            updateMargin(controller ?: return, false, 2)
         }
     },
 
@@ -469,7 +471,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             activity: OrionViewerActivity,
             parameter: Any?
         ) {
-            updateMargin(controller!!, true, 3)
+            updateMargin(controller ?: return, true, 3)
         }
     },
 
@@ -479,7 +481,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             activity: OrionViewerActivity,
             parameter: Any?
         ) {
-            updateMargin(controller!!, false, 3)
+            updateMargin(controller ?: return, false, 3)
         }
     };
 
