@@ -481,7 +481,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
             )
         }
     ): PageView? {
-        log("RenderPageAt $pageNum $x $y $isTapNavigation")
+        log("RenderPageAt page=$pageNum x=$x y=$y isTapNavigation=$isTapNavigation")
         setSinglePageMode(isTapNavigation, pageNum)
 
         val index = activePages.binarySearch { it.pageNum.compareTo(pageNum) }
@@ -496,7 +496,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
                 activePages.size -> (activePages.lastOrNull()?.pageNum ?: -1) != pageNum - 1
                 else -> false
             }
-            log("insertIndex $pageNum: $insertIndex ${activePages.size} $destroy")
+            log("Page $ rendering pageNum: insertIndex=$insertIndex activePages=${activePages.size} destroyThem=$destroy")
             if (destroy) {
                 destroyPages()
             }
@@ -539,7 +539,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
     }
 
     private fun destroyPages() {
-        log("Destroying pages")
+        log("Destroying all pages in layout manager")
         val iterator = activePages.iterator()
         for (page in iterator) {
             //TODO optimize

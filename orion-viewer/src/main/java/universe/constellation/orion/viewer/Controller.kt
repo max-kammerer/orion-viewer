@@ -210,7 +210,7 @@ class Controller(
 
 
     fun init(info: LastPageInfo, viewWidth: Int, viewHeight: Int) {
-        task("init controller: $viewWidth $viewHeight") {
+        task("init controller: viewWidth=$viewWidth viewHeight=$viewHeight") {
             document.setContrast(info.contrast)
             document.setThreshold(info.threshold)
 
