@@ -25,8 +25,11 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.formats.FileFormats.Companion.isSupportedFileExt
+import universe.constellation.orion.viewer.log
 import java.io.File
 import java.io.FilenameFilter
 import java.util.Locale
@@ -39,45 +42,52 @@ class FileChooserAdapter(
 
     private var currentList = arrayListOf<File>()
 
-    private val parentFile = File("..")
+    private var hasParent = false
 
     var currentFolder: File = startFolder
         private set
 
-    init {
-        changeFolder(currentFolder)
-    }
-
-    fun changeFolder(file: File): File {
-        val newFolder = changeFolderInner(file)
-        this.notifyDataSetChanged()
-        return newFolder
-    }
-
-
-    private fun changeFolderInner(file: File): File {
-        currentList.clear()
-        val newFile = if (file === parentFile) currentFolder.parentFile else file
-        currentFolder = newFile
-
-        if (newFile.parent != null) currentList.add(parentFile)
-
-        newFile.listFiles(filter)?.let {
-            currentList.addAll(it)
-        }
-
-        currentList.sortWith (
-            Comparator { f1, f2 ->
-                if (f1 == parentFile) return@Comparator -1
-                if (f2 == parentFile) return@Comparator 1
-                if (f1.isDirectory != f2.isDirectory) {
-                    return@Comparator if (f1.isDirectory) -1 else 1
-                }
-                f1.name.compareTo(f2.name)
+    suspend fun changeFolderAsync(file: File) {
+        try {
+            val result = withContext(Dispatchers.IO) {
+                listFolderFiles(file)
             }
-        )
 
-        return currentFolder
+            currentFolder = result.first
+            currentList.clear()
+            currentList = result.second
+            hasParent = result.third
+
+            notifyDataSetChanged()
+        } catch (e: Exception) {
+            log(e)
+        }
+    }
+
+
+    private fun listFolderFiles(newFolder: File): Triple<File, ArrayList<File>, Boolean> {
+        val result = ArrayList<File>()
+
+        val hasParent = newFolder.parentFile?.let {
+            result.add(it)
+            true
+        } ?: false
+
+        val children = newFolder.listFiles(filter)?.let {
+            it.sortWith (
+                Comparator { f1, f2 ->
+                    if (f1.isDirectory != f2.isDirectory) {
+                        return@Comparator if (f1.isDirectory) -1 else 1
+                    }
+                    f1.name.compareTo(f2.name)
+                }
+            )
+            it
+        } ?: emptyArray<File>()
+
+        result.addAll(children)
+
+        return Triple(newFolder, result, hasParent)
     }
 
     override fun getCount(): Int {
@@ -88,7 +98,7 @@ class FileChooserAdapter(
         val newConvertView = super.getView(position, convertView, parent)
         getItem(position)?.let { data ->
             val isDirectory = data.isDirectory
-            val name = data.name
+            val name = if (position  == 0 && hasParent) ".." else data.name
 
             val icon = if(isDirectory) R.drawable.folder else getIconByNameExtension(name)
             val fileIcon = newConvertView.findViewById<ImageView>(R.id.fileImage)
@@ -101,7 +111,7 @@ class FileChooserAdapter(
         return newConvertView
     }
 
-    override fun getItem(position: Int): File? {
+    override fun getItem(position: Int): File {
         return currentList[position]
     }
 
