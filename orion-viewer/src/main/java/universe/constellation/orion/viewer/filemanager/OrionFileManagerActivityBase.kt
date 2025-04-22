@@ -135,15 +135,9 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
     }
 
     private fun refreshFolder() {
-        val list = findViewById<ListView>(R.id.folderList)
-        // TODO: investigate why null is returned
-        if (list != null) {
-            val adapter = list.adapter
-            if (adapter is FileChooserAdapter) {
-                val currentFolder = adapter.currentFolder
-                log("Refreshing view")
-                adapter.changeFolder(File(currentFolder.absolutePath))
-            }
+        log("Refreshing folder")
+        supportFragmentManager.fragments.filterIsInstance<FoldersFragment>().forEach {
+            it.refreshFolder()
         }
     }
 
