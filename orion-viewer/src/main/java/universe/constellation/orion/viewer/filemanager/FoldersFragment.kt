@@ -7,9 +7,16 @@ import android.widget.AdapterView
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ListView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import universe.constellation.orion.viewer.Permissions
 import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAccessPermissionOrReadOne
 import universe.constellation.orion.viewer.R
@@ -39,10 +46,15 @@ class FoldersFragment : Fragment(R.layout.folder_view) {
 
     private lateinit var pathView: TextView
 
+    private lateinit var progressBar: ProgressBar
+
+    private val refreshJob = SupervisorJob()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         listView = view.findViewById(R.id.folderList)
         pathView = view.findViewById(R.id.path)
+        progressBar = view.findViewById(R.id.folder_loading_progress)
 
         val myActivity = requireActivity() as OrionFileManagerActivityBase
 
@@ -64,8 +76,9 @@ class FoldersFragment : Fragment(R.layout.folder_view) {
         val startFolder = getStartFolder(storages)
         pathView.text = startFolder.absolutePath
 
-        listView.adapter =
-            FileChooserAdapter(requireActivity(), startFolder, myActivity.fileNameFilter)
+        val adapter = FileChooserAdapter(requireActivity(), startFolder, myActivity.fileNameFilter)
+        listView.adapter = adapter
+        changeFolder(startFolder)
 
         val panel = view.findViewById<LinearLayout>(R.id.file_manager_goto_panel)
         storages.flatMap { it.folders + it }.map {
@@ -90,11 +103,25 @@ class FoldersFragment : Fragment(R.layout.folder_view) {
         }
     }
 
+    internal fun refreshFolder() {
+        changeFolder(File(pathView.text.toString()))
+    }
+
     internal fun changeFolder(
         file: File
     ) {
-        val newFolder = (listView.adapter as FileChooserAdapter).changeFolder(file)
-        pathView.text = newFolder.absolutePath
+        refreshJob.cancelChildren()
+        val enableProgress = viewLifecycleOwner.lifecycleScope.async(refreshJob) {
+            delay(75)
+            progressBar.visibility = View.VISIBLE
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch(refreshJob) {
+            (listView.adapter as FileChooserAdapter).changeFolderAsync(file)
+            pathView.text = file.absolutePath
+            enableProgress.cancel()
+            progressBar.visibility = View.GONE
+        }
     }
 
     override fun onResume() {

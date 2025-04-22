@@ -1,3 +1,8 @@
+===== 0.95.8 (Apr 21, 2025) =====
+* Fixed ANR in FileManager
+* Fixed NPE in reader
+* Added Catalan translation by Jordi Cambrells
+
 ===== 0.95.7 (Apr 03, 2025) =====
 * Fixed several NPEs
 * Updated mupdf and libarchive
