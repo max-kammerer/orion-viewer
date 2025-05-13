@@ -698,6 +698,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             R.id.open_dictionary_menu_item ->  Action.DICTIONARY
 
             R.id.bookmarks_menu_item ->  Action.OPEN_BOOKMARKS
+            R.id.share_menu_item -> Action.SHARE_FILE
             R.id.help_menu_item, R.id.about_menu_item -> {
                 openHelpActivity(id)
                 return true

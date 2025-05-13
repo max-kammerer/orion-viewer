@@ -69,6 +69,11 @@
         android:visibility="invisible"
         >
 
+        <ImageView
+            android:id="@+id/share_menu_item"
+            style="@style/New_Viewer_Menu_Item"
+            android:contentDescription="@string/menu_share_file"
+            app:srcCompat="@drawable/share_file"  />
 
         <ImageView
             android:id="@+id/open_menu_item"

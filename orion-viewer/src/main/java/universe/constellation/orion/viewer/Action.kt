@@ -11,12 +11,14 @@ import universe.constellation.orion.viewer.dialog.toMargins
 import universe.constellation.orion.viewer.dictionary.openDictionary
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivityBase.Companion.DONT_OPEN_RECENT_FILE
+import universe.constellation.orion.viewer.formats.FileFormats
 import universe.constellation.orion.viewer.outline.showOutline
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 import universe.constellation.orion.viewer.prefs.OrionApplication.Companion.instance
 import universe.constellation.orion.viewer.prefs.OrionBookPreferencesActivityX
 import universe.constellation.orion.viewer.prefs.OrionPreferenceActivityX
 import universe.constellation.orion.viewer.util.ColorUtil.getColorMode
+import java.io.File
 
 enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVisible: Boolean = true) {
     NONE(R.string.action_none, R.integer.action_none) {
@@ -310,6 +312,32 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
     CLOSE_ACTION(R.string.action_close, R.integer.action_close, isVisible = false) {
         override fun doAction(activity: OrionBaseActivity) {
             activity.finish()
+        }
+    },
+
+    SHARE_FILE(R.string.menu_share_text, R.integer.action_share_file) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            val path = controller?.document?.filePath ?: return
+            val file = File(path)
+            if (file.exists()) {
+                val uri = androidx.core.content.FileProvider.getUriForFile(
+                    activity,
+                    activity.applicationContext.packageName + ".fileprovider",
+                    file
+                )
+                val intent = Intent(Intent.ACTION_SEND)
+
+                val fileExt = file.name.lowercase().substringAfterLast(".")
+                intent.type = FileFormats.getMimeTypeFromExtension(fileExt) ?: "application/pdf"
+
+                intent.putExtra(Intent.EXTRA_STREAM, uri)
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                activity.startActivity(Intent.createChooser(intent, activity.getString(R.string.menu_share_file)))
+            }
         }
     },
 
