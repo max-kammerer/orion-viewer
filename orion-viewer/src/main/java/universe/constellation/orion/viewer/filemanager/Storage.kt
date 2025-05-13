@@ -16,6 +16,7 @@ import universe.constellation.orion.viewer.android.isAtLeastAndroidR
 import universe.constellation.orion.viewer.android.isAtLeastKitkat
 import universe.constellation.orion.viewer.android.isAtLeastLollipop
 import java.io.File
+import java.io.IOException
 
 open class Folder(val description: String, val file: File)
 
@@ -83,7 +84,12 @@ fun StorageManager.listMountedStorages(): List<StorageVolume> {
 
 fun StorageVolume.getVolumeDirectory(): File? {
     return if (isAtLeastAndroidR()) {
-        directory?.canonicalFile
+        try {
+            //TODO: maybe always return simple directory
+            directory?.canonicalFile
+        } catch (ex: IOException) {
+            directory
+        }
     } else {
         try {
             val field = StorageVolume::class.java.getDeclaredField("mPath")
@@ -101,21 +107,6 @@ fun StorageVolume.getVolumeDirectory(): File? {
     }
 }
 
-fun StorageVolume.getVolumeDescription(context: Context): String {
-    return if (isAtLeastAndroidR()) {
-        this.getDescription(context)
-    } else {
-        try {
-            val field = StorageVolume::class.java.getDeclaredField("mDescription")
-            field.isAccessible = true
-            field[this] as String? ?: "Unknown"
-        } catch (e: Exception) {
-            e.printStackTrace()
-            "Unknown"
-        }
-    }
-}
-
 
 fun StorageVolume.isMounted(): Boolean {
     val state = if (isAtLeastAndroidN()) {
@@ -129,12 +120,4 @@ fun StorageVolume.isMounted(): Boolean {
     }
 
     return state == MEDIA_MOUNTED || state == MEDIA_MOUNTED_READ_ONLY
-}
-
-fun StorageVolume.isPrimaryVolume(): Boolean {
-    return if (isAtLeastAndroidN()) {
-        isPrimary
-    } else {
-        getVolumeDirectory() == getExternalStorageDirectory()
-    }
 }
