@@ -80,6 +80,7 @@ class LastPageInfo {
     @Transient
     @JvmField
     var totalPages = 0
+
     @JvmField
     var walkOrder = "ABCD"
     @JvmField
@@ -88,5 +89,7 @@ class LastPageInfo {
     @JvmField
     var isSinglePageMode = true
 
+    @JvmField
+    var dictionary: String? = "DEFAULT"
 }
 

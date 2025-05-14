@@ -75,6 +75,12 @@
         android:title="@string/menu_other">
         <menu>
             <item
+                android:id="@+id/share_menu_item"
+                android:icon="@drawable/new_folder_open"
+                android:title="@string/menu_share_file"
+                orion:iconTint="?attr/menuIconTint" />
+
+            <item
                 android:id="@+id/open_menu_item"
                 android:icon="@drawable/new_folder_open"
                 orion:iconTint="?attr/menuIconTint"

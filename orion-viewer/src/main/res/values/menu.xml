@@ -23,6 +23,8 @@
     <string name="menu_other">Other…</string>
 
     <string name="menu_book_preferences">Book Options</string>
+    <string name="menu_share_text">Share text</string>
+    <string name="menu_share_file">Share file</string>
 
 
     <string name="export_all_bookmarks_menu_item">Export all bookmarks</string>

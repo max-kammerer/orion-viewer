@@ -85,21 +85,6 @@
 
     </PreferenceCategory>
 
-
-    <PreferenceCategory
-        android:title="@string/pref_dictionary"
-        app:iconSpaceReserved="false">
-        <ListPreference
-            android:defaultValue="FORA"
-            android:dialogTitle="@string/pref_dictionary"
-            android:entries="@array/dictionaries_desc"
-            android:entryValues="@array/dictionaries"
-            android:key="DICTIONARY"
-            android:summary="@string/pref_dictionary_desc"
-            android:title="@string/pref_dictionary"
-            app:iconSpaceReserved="false" />
-    </PreferenceCategory>
-
     <PreferenceCategory
         android:key="NOOK2_EINK"
         android:title="@string/pref_e_ink_optimization"
