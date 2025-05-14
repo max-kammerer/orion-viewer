@@ -55,7 +55,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     internal val subscriptionManager = SubscriptionManager()
 
-    private var lastPageInfo: LastPageInfo? = null
+    var lastPageInfo: LastPageInfo? = null
+        private set
 
     var controller: Controller? = null
         private set

@@ -10,6 +10,7 @@ import universe.constellation.orion.viewer.R.array.*
 import universe.constellation.orion.viewer.R.string.*
 import universe.constellation.orion.viewer.android.DSLPreferenceFragment
 import universe.constellation.orion.viewer.prefs.BookPreferenceKeyX.*
+import universe.constellation.orion.viewer.prefs.GlobalOptions.Companion.DEFAULT_DICTIONARY
 
 
 class OrionBookPreferencesActivityX : OrionBaseActivity() {
@@ -75,6 +76,23 @@ class OrionBookPreferencesFragment : DSLPreferenceFragment() {
 
             preferenceScreen.category {
                 isIconSpaceReserved = false //TODO
+
+                list {
+                    key = DICTIONARY.prefKey
+                    title = pref_dictionary.stringRes
+                    summary = pref_dictionary_desc.stringRes
+                    dialogTitle = pref_screen_orientation.stringRes
+
+                    if (!isGeneral) {
+                        setDefaultValue("DEFAULT")
+                        entries = arrayOf("DEFAULT", *dictionaries_desc.stringArray)
+                        entryValues = arrayOf("DEFAULT", *dictionaries.stringArray)
+                    } else {
+                        setDefaultValue(DEFAULT_DICTIONARY)
+                        entries = dictionaries_desc.stringArray
+                        entryValues = dictionaries.stringArray
+                    }
+                }
 
                 //preference<OrionListPreference> {
                 list {

@@ -14,7 +14,8 @@ enum class BookPreferenceKeyX(
     SCREEN_ORIENTATION(GlobalOptions.SCREEN_ORIENTATION, LastPageInfo::screenOrientation.name),
     COLOR_MODE(GlobalOptions.COLOR_MODE, LastPageInfo::colorMode.name),
     CONTRAST(GlobalOptions.DEFAULT_CONTRAST, LastPageInfo::contrast.name),
-    THRESHOLD("THRESHOLD", LastPageInfo::threshold.name);
+    THRESHOLD("THRESHOLD", LastPageInfo::threshold.name),
+    DICTIONARY(GlobalOptions.DICTIONARY, LastPageInfo::dictionary.name);
 
     companion object {
         val key2Operation = entries.associateBy { it.prefKey }

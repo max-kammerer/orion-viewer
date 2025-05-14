@@ -289,7 +289,12 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             activity: OrionViewerActivity,
             parameter: Any?
         ) {
-            openDictionary(parameter as? String?, activity, activity.globalOptions.dictionary)
+            val dict = when (val bookDict = activity.lastPageInfo?.dictionary ?: "DEFAULT") {
+                "DEFAULT" -> activity.globalOptions.defaultDictionary
+                else -> bookDict
+            }
+
+            openDictionary(parameter as? String?, activity, dict)
         }
 
     },
