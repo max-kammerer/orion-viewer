@@ -174,8 +174,8 @@ class GlobalOptions(
         return code
     }
 
-    val dictionary: String
-        get() = getStringProperty(DICTIONARY, "FORA")
+    val defaultDictionary: String
+        get() = getStringProperty(DICTIONARY, DEFAULT_DICTIONARY)
 
     val einkRefreshAfter: Int
         get() = getIntFromStringProperty(EINK_TOTAL_AFTER, 10)
@@ -291,6 +291,8 @@ class GlobalOptions(
         const val EINK_TOTAL_AFTER: String = "EINK_TOTAL_AFTER"
 
         const val DICTIONARY: String = "DICTIONARY"
+
+        const val DEFAULT_DICTIONARY: String = "GOOGLE"
 
         const val LONG_CROP_VALUE: String = "LONG_CROP_VALUE"
 
