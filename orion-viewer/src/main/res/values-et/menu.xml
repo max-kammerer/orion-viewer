@@ -25,4 +25,6 @@
     <string name="menu_help_text">Abiteave</string>
     <string name="menu_about_text">Rakenduse teave…</string>
     <string name="menu_open_text">Ava raamat</string>
+    <string name="menu_share_file">Jaga faili</string>
+    <string name="menu_share_text">Jaga teksti</string>
 </resources>
