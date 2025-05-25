@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--Translated by Johannes Römer--><resources>
-    <string name="fit_custom">benutzerdefiniert</string>
+    <string name="fit_custom">Benutzerdefiniert…</string>
     <string name="fit_width">auf Breite</string>
     <string name="fit_height">auf Höhe</string>
     <string name="fit_page">auf Seite</string>
@@ -11,7 +11,7 @@
     <string name="enable_even_crop">anderer Zuschnitt für gerade Seiten</string>
     <string name="msg_select_text">Text auswählen!</string>
     <string name="warn_no_text_in_selection">Kein Text ausgewählt!</string>
-    <string name="orientation_default_rotation">Systemeinstellung</string>
+    <string name="orientation_default_rotation">Anwendungsstandard</string>
     <string name="orientation_portrait">Hochformat</string>
     <string name="orientation_landscape">Querformat</string>
     <string name="orientation_portrait_inverse">Hochformat (180°)</string>
@@ -24,8 +24,8 @@
     <string name="color_mode_grayscale_dark">Graustufen auf dunkelgrauem Hintergrund</string>
     <string name="select_color_mode">Farbmodus auswählen</string>
     <string name="warn_no_outline">Dokument enthält keine Inhaltsübersicht!</string>
-    <string name="navigation">Anzeigemodus</string>
-    <string name="orientation_default">Systemeinstellung</string>
+    <string name="navigation">Seitenübergang</string>
+    <string name="orientation_default">Standard</string>
     <string name="rotate_0">0 Grad</string>
     <string name="rotate_90">90 Grad</string>
     <string name="rotate_270">270 Grad</string>
