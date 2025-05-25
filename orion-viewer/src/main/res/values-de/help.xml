@@ -16,7 +16,7 @@
         Öffnet das Einstellungsfenster für den Anzeigemodus. Beim Lesen von Comics oder dem Betrachten von Büchern mit vielen Bildern kann hier der jeweils passende Modus zur Verschiebung des angezeigten Bildausschnitts beim Weiterblättern ausgewählt werden.</string>
     <string name="dictionary_help">
         Öffnet ein externes Wörterbuch. Die gewünschte Wörterbuch-Anwendung muss in den Einstellungen ausgewählt werden.</string>
-    <string name="option_help">Anwendungs-Einstellungen</string>
+    <string name="option_help">Anwendungsparameter</string>
     <string name="tap_help">
         Tap-Zonen ermöglichen es dem Anwender, die verschiedenen Bereiche des Bildschirms mit häufig verwendeten Aktionen zu verknüpfen.
         Es gibt 3x3 Bereiche, die separaten Befehlen für kurzes (oberer Eintrag) und langes Antippen (unterer Eintrag) zugeordnet werden können.</string>
