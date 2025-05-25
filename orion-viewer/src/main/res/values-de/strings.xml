@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!--Translated by Johannes Römer-->
-<resources>
+<!--Translated by Johannes Römer--><resources>
     <string name="fit_custom">benutzerdefiniert</string>
     <string name="fit_width">auf Breite</string>
     <string name="fit_height">auf Höhe</string>
@@ -37,4 +35,13 @@
     <string name="key_binder_message">Beliebige Taste drücken und die zu verknüpfende Aktion auswählen!</string>
     <string name="key_binder_warning">Diese Taste kann nicht mit einer Aktion verknüpft werden, versuchen Sie es mit einer anderen Taste!</string>
     <string name="key_binder_reset_all">Zurücksetzen</string>
+    <string name="color_mode_white_on_blue">Weiß auf blauem Hintergrund</string>
+    <string name="save">Speichern</string>
+    <string name="crop_auto_manual">Automatisch und manuell</string>
+    <string name="saveFileNameTooltip">Dateiname.Erweiterung</string>
+    <string name="crop_manual">Manuelles Zuschneiden</string>
+    <string name="crop_manual_auto">Manuell und automatisch</string>
+    <string name="table_of_contents">Inhaltsverzeichnis</string>
+    <string name="crop_auto">Automatisches Zuschneiden</string>
+    <string name="crop_warning">Manuelles Zuschneiden für bessere Leistung verwenden</string>
 </resources>
