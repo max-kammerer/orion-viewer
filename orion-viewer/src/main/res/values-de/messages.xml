@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="warn_msg_no_dictionary">Wörterbuch unauffindbar!</string>
-    <string name="ex_msg_operation_failed">Operation fehlgeschlagen!</string>
-    <string name="msg_dialog_search">Suchen</string>
+    <string name="warn_msg_no_dictionary">Wörterbuch nicht gefunden</string>
+    <string name="ex_msg_operation_failed">Operation fehlgeschlagen</string>
+    <string name="msg_dialog_search">Such-Dialog</string>
     <string name="msg_searching">Suchen…</string>
-    <string name="warn_text_not_found">Der gesuchte Text konnte nicht gefunden werden!</string>
-    <string name="warn_no_further_occurrences_found">Keine weiteren Treffer!</string>
+    <string name="warn_text_not_found">Kein Text</string>
+    <string name="warn_no_further_occurrences_found">Keine weiteren Treffer</string>
     <string name="msg_dialog_dismis">Ablehnen</string>
     <string name="msg_error">Fehler</string>
     <string name="msg_warning">Warnung</string>
-    <string name="msg_specify_keyword_for_search">Kein Suchbegriff angegeben!</string>
+    <string name="msg_specify_keyword_for_search">Stichwort für die Suche angeben</string>
     <string name="string_wrong_password">Falsches Passwort</string>
     <string name="password_for_file">Passwort für die Datei</string>
     <string name="wrong_outline_item">Falsche Seite: %s</string>
