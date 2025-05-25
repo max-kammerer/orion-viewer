@@ -20,7 +20,7 @@
     <string name="pref_close_dialog_on_apply">Dialoge automatisch schließen</string>
     <string name="pref_close_page_option_dialog_on_apply">Einstellungsfenster bei Klick auf \'Anwenden\' automatisch schließen</string>
     <string name="pref_enable_touch_move">Verschieben mittels Touchscreen aktivieren</string>
-    <string name="pref_enable_move_on_pinch_zoom">Verschieben bei Zwei-Finger-Zoom zulassen</string>
+    <string name="pref_enable_move_on_pinch_zoom">Seitenverschiebung während des Zwei-Finger-Zooms zulassen</string>
     <string name="pref_default_book_setting">Standardeinstellungen</string>
     <string name="pref_walk_order">Anzeigemodus</string>
     <string name="pref_walk_order_desc">Anzeigemodus: %s</string>
@@ -70,4 +70,26 @@
     <string name="pref_value">Wert: %s</string>
     <string name="pref_category_quick_actions">Schnellaktionen</string>
     <string name="pref_category_behavior">Standardverhalten</string>
+    <string name="pref_old_ui">Alte UI aktivieren</string>
+    <string name="pref_size_small">Klein</string>
+    <string name="pref_size_medium">Mittel</string>
+    <string name="pref_size_large">Groß</string>
+    <string name="pref_statusBarPosition">Position der Statusleiste</string>
+    <string name="pref_statusBarSize">Größe der Statusleiste</string>
+    <string name="pref_showBatteryInfo">Akku-Informationen anzeigen</string>
+    <string name="pref_rotate_new_book_on_opening">Neues Buch beim Öffnen drehen</string>
+    <string name="pref_position_top">Oben</string>
+    <string name="pref_position_bottom">Unten</string>
+    <string name="pref_position_hide">Ausblenden</string>
+    <string name="pref_new_ui_summary">Neustart der Anwendung ist erforderlich</string>
+    <string name="pref_book_screen_orientation_desc">Bildschirmausrichtung: %s</string>
+    <string name="pref_debug_desc">Debug-Informationen in die Datei schreiben</string>
+    <string name="pref_default_book_setting_desc">Wird auch auf das aktuell geöffnete Buch angewendet!</string>
+    <string name="pref_showTimeOnStatusBar">Zeit anzeigen</string>
+    <string name="pref_bookDefaultOrientation">Standardausrichtung des Buches</string>
+    <string name="pref_key_binder_desc">Aktionen mit Tasten/Schaltflächen verknüpfen</string>
+    <string name="pref_key_double_tap">Doppeltipp-Aktion</string>
+    <string name="pref_key_long_tap">Langtipp-Aktion</string>
+    <string name="pref_key_linked_action_summary">Verknüpfte Aktion: `%s`</string>
+    <string name="pref_renderPageBorder">Seitenrand zeichnen</string>
 </resources>
