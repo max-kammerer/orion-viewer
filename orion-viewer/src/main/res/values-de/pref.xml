@@ -22,7 +22,7 @@
     <string name="pref_enable_touch_move">Verschieben mittels Touchscreen aktivieren</string>
     <string name="pref_enable_move_on_pinch_zoom">Seitenverschiebung während des Zwei-Finger-Zooms zulassen</string>
     <string name="pref_default_book_setting">Standardeinstellungen</string>
-    <string name="pref_walk_order">Anzeigemodus</string>
+    <string name="pref_walk_order">Seitenübergang</string>
     <string name="pref_walk_order_desc">Anzeigemodus: %s</string>
     <string name="pref_page_layout">Seitenaufteilung</string>
     <string name="pref_bookDefaultZoom">Zoomen</string>
@@ -31,7 +31,7 @@
     <string name="pref_book_contrast_desc">Kontrastwert (Voreinstellung: 100): %s</string>
     <string name="pref_tap_zones_desc">Bildschirmbereiche mit bestimmten Aktionen verknüpfen</string>
     <string name="pref_screen_orientation">Bildschirmausrichtung</string>
-    <string name="pref_screen_orientation_desc">Standardausrichtung (erfordert Neustart der Anwendung)</string>
+    <string name="pref_screen_orientation_desc">Bildschirmausrichtung: %s (Anwendung neu starten, um sie anzuwenden)</string>
     <string name="pref_app_language">Sprache der Benutzeroberfläche</string>
     <string name="pref_app_language_desc">Sprache: %s. (Erfordert Neustart der Anwendung)</string>
     <!--Device Prefs-->
