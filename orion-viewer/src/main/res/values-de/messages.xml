@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
     <string name="warn_msg_no_dictionary">Wörterbuch unauffindbar!</string>
     <string name="ex_msg_operation_failed">Operation fehlgeschlagen!</string>
-
     <string name="msg_dialog_search">Suchen</string>
     <string name="msg_searching">Suchen…</string>
     <string name="warn_text_not_found">Der gesuchte Text konnte nicht gefunden werden!</string>
     <string name="warn_no_further_occurrences_found">Keine weiteren Treffer!</string>
-    <string name="msg_dialog_dismis">Abbrechen</string>
+    <string name="msg_dialog_dismis">Ablehnen</string>
     <string name="msg_error">Fehler</string>
     <string name="msg_warning">Warnung</string>
     <string name="msg_specify_keyword_for_search">Kein Suchbegriff angegeben!</string>
+    <string name="string_wrong_password">Falsches Passwort</string>
+    <string name="password_for_file">Passwort für die Datei</string>
+    <string name="wrong_outline_item">Falsche Seite: %s</string>
+    <string name="msg_select_text">Text auswählen!</string>
+    <string name="recent_book_not_found">Kann die Buchdatei nicht finden!</string>
+    <string name="tap_zones_header">Navigation über Tippzonen: Standardzonenaktionen</string>
+    <string name="permission_directory_warning">Bitte gewähre die Leseberechtigung für den Zugriff auf die Speicherdaten</string>
+    <string name="permission_grant">Gewähren…</string>
+    <string name="permission_cancel">Abbrechen</string>
+    <string name="string_cancel">Abbrechen</string>
+    <string name="string_close">Schließen</string>
+    <string name="string_apply">Anwenden</string>
 </resources>
