@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!--Translated by Johannes Römer-->
-<resources>
+<!--Translated by Johannes Römer--><resources>
     <string name="general_usage">Hinweise zur Benutzung:</string>
     <string name="general_usage_step1">
         1. Dokument öffnen (die Ansicht wird standardmäßig auf die Breite der Seite angepasst)</string>
@@ -10,7 +8,6 @@
     <string name="general_usage_step3">
         3. Ränder zuschneiden (die Größe des Textes wird automatisch an die geänderten Seitenränder angepasst)</string>
     <string name="general_usage_step4">4. Viel Spaß beim Lesen!</string>
-
     <string name="zoom">
         Öffnet das Einstellungsfenster zum Zoomen. Ein Zoom-Wert von 0 passt die Ansicht auf die Breite der Seite an.</string>
     <string name="crop">
@@ -29,4 +26,5 @@
         Diese Option ist im Lesezeichen-Menü zu finden.</string>
     <string name="apply">Aktuelle Einstellungen anwenden.</string>
     <string name="escape">Zurück/Abbruch.</string>
+    <string name="rotation">Dreht das Dokument um 90 Grad im Uhrzeigersinn. Ein langer Klick dreht das Dokument gegen den Uhrzeigersinn.</string>
 </resources>
