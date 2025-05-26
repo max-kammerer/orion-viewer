@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="contribution_intro">Orion Viewer ist ein Open-Source-Projekt und du kannst mithelfen, es besser zu machen!</string>
+    <string name="contribution_ways">Es gibt viele Dinge, die du in das Projekt einbringen kannst:</string>
+</resources>
