@@ -9,13 +9,13 @@
     <string name="pref_category_move">Verschieben</string>
     <!--General Prefs-->
     <string name="pref_appearance">Erscheinungsbild</string>
-    <string name="pref_fullScreen">Vollbildmodus</string>
-    <string name="pref_showActionBar">Symbolleiste</string>
-    <string name="pref_showActionBar_desc">Symbolleiste einblenden (erfordert Neustart der Anwendung)</string>
+    <string name="pref_fullScreen">Vollbild</string>
+    <string name="pref_showActionBar">Aktionsleiste anzeigen</string>
+    <string name="pref_showActionBar_desc">Aktionsleiste anzeigen (Neustart erforderlich)</string>
     <string name="pref_showOffsetOnStatusBar">Aktuelle Seitenposition in der Statusleiste anzeigen</string>
     <string name="pref_application_theme">Theme</string>
     <string name="pref_application_theme_desc">Erscheinungsbild: %s (erfordert Neustart der Anwendung)</string>
-    <string name="pref_behavior">Anwendungsverhalten</string>
+    <string name="pref_behavior">Steuerelemente und Verhalten</string>
     <string name="pref_open_recent_book">Beim Start das letzte Dokument öffnen</string>
     <string name="pref_close_dialog_on_apply">Dialoge automatisch schließen</string>
     <string name="pref_close_page_option_dialog_on_apply">Einstellungsfenster bei Klick auf \'Anwenden\' automatisch schließen</string>
