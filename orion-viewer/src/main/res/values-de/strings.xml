@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!--Translated by Johannes Römer-->
-<resources>
-    <string name="fit_custom">benutzerdefiniert</string>
+<!--Translated by Johannes Römer--><resources>
+    <string name="fit_custom">Benutzerdefiniert…</string>
     <string name="fit_width">auf Breite</string>
     <string name="fit_height">auf Höhe</string>
     <string name="fit_page">auf Seite</string>
@@ -13,7 +11,7 @@
     <string name="enable_even_crop">anderer Zuschnitt für gerade Seiten</string>
     <string name="msg_select_text">Text auswählen!</string>
     <string name="warn_no_text_in_selection">Kein Text ausgewählt!</string>
-    <string name="orientation_default_rotation">Systemeinstellung</string>
+    <string name="orientation_default_rotation">Anwendungsstandard</string>
     <string name="orientation_portrait">Hochformat</string>
     <string name="orientation_landscape">Querformat</string>
     <string name="orientation_portrait_inverse">Hochformat (180°)</string>
@@ -26,8 +24,8 @@
     <string name="color_mode_grayscale_dark">Graustufen auf dunkelgrauem Hintergrund</string>
     <string name="select_color_mode">Farbmodus auswählen</string>
     <string name="warn_no_outline">Dokument enthält keine Inhaltsübersicht!</string>
-    <string name="navigation">Anzeigemodus</string>
-    <string name="orientation_default">Systemeinstellung</string>
+    <string name="navigation">Seitenübergang</string>
+    <string name="orientation_default">Standard</string>
     <string name="rotate_0">0 Grad</string>
     <string name="rotate_90">90 Grad</string>
     <string name="rotate_270">270 Grad</string>
@@ -37,4 +35,13 @@
     <string name="key_binder_message">Beliebige Taste drücken und die zu verknüpfende Aktion auswählen!</string>
     <string name="key_binder_warning">Diese Taste kann nicht mit einer Aktion verknüpft werden, versuchen Sie es mit einer anderen Taste!</string>
     <string name="key_binder_reset_all">Zurücksetzen</string>
+    <string name="color_mode_white_on_blue">Weiß auf blauem Hintergrund</string>
+    <string name="save">Speichern</string>
+    <string name="crop_auto_manual">Automatisch und manuell</string>
+    <string name="saveFileNameTooltip">Dateiname.Erweiterung</string>
+    <string name="crop_manual">Manuelles Zuschneiden</string>
+    <string name="crop_manual_auto">Manuell und automatisch</string>
+    <string name="table_of_contents">Inhaltsverzeichnis</string>
+    <string name="crop_auto">Automatisches Zuschneiden</string>
+    <string name="crop_warning">Manuelles Zuschneiden für bessere Leistung verwenden</string>
 </resources>

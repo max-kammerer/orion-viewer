@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="file_manager_path">Pfad:</string>
+    <string name="file_manager_downloads">Downloads</string>
+    <string name="file_manager_fodlers">Ordner</string>
+    <string name="file_manager_contribution">Mitwirkung</string>
+    <string name="file_manager_select_tip">Bitte wähle eine Datei zum Öffnen im Orion Viewer aus</string>
+    <string name="file_manager_sdcard">SD-Karte</string>
+    <string name="file_manager_grant_read_permissions">Leseberechtigungen erteilen</string>
+    <string name="file_manager_nav_locations">Orte</string>
+    <string name="file_manager_nav_settings">Einstellungen</string>
+    <string name="file_manager_nav_other">Sonstiges</string>
+    <string name="file_manager_nav_system_select">Datei im System auswählen</string>
+    <string name="file_manager_nav_exit">Beenden</string>
+    <string name="file_manager_internal_storage">Interner Speicher</string>
+    <string name="file_manager_primary_storage">Primärer Speicher</string>
+    <string name="file_manager_documents">Dokumente</string>
+    <string name="file_manager_history">Verlauf</string>
+    <string name="file_manager_title">Dateimanager</string>
+</resources>
