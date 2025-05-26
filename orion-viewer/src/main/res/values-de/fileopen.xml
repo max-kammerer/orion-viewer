@@ -1,2 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="fileopen_save_to_file">In neuer Datei speichern…</string>
+    <string name="fileopen_private_resource_access">Zugriff auf private Datei</string>
+    <string name="fileopen_private_resource_access_info">Kann nicht direkt auf die Datei zugreifen, bitte eine der folgenden Optionen auswählen:</string>
+    <string name="fileopen_permission_dialog">Kann nicht direkt auf die Datei zugreifen</string>
+    <string name="fileopen_permission_dialog_info">Bitte gewähre Leseberechtigungen, um direkt auf die Datei zuzugreifen, oder wähle die folgende Option:</string>
+    <string name="fileopen_error_during_intent_processing">Fehler bei der Intent-Verarbeitung</string>
+    <string name="fileopen_permissions_grant_read">Leseberechtigung für den Speicher gewähren…</string>
+    <string name="fileopen_open_recent_files">Zu den kürzlichen Büchern gehen…</string>
+    <string name="fileopen_report_error_by_github_and_return">Problem auf Github melden und zum Dialog zurückkehren…</string>
+    <string name="fileopen_report_error_by_email_and_return">Fehler per E-Mail melden und zum Dialog zurückkehren…</string>
+    <string name="string_exception">Ausnahme</string>
+    <string name="string_intent">Intent</string>
+    <string name="string_cause">Ursache</string>
+    <string name="crash_on_book_opening_title">Fehler beim Öffnen der Datei</string>
+    <string name="crash_on_intent_opening_title">Fehler bei der Intent-Verarbeitung</string>
+    <string name="crash_on_book_opening_message_header_panel">Fehler beim Öffnen der Datei %1$s:</string>
+    <string name="crash_on_book_opening_encrypted">Verschlüsseltes Dokument</string>
+    <string name="string_send">Senden…</string>
+    <string name="send_report_header">[Bitte gib zusätzliche Details an (Schritte zur Reproduktion des Problems)]</string>
+    <string name="fileopen_file_is_emppty">Datei ist leer</string>
+    <string name="fileopen_no_pages">Dokument hat keine Seiten</string>
+    <string name="fileopen_cant_open">Kann das Dokument nicht öffnen: %s.</string>
+    <string name="fileopen_error_during_intent_processing_info">Der Dateipfad kann nicht aus dem Intent extrahiert werden. Bitte die Intent-Daten in eine Datei speichern, um sie zu öffnen oder:</string>
+    <string name="fileopen_open_in_temporary_file">Über temporäre Datei öffnen</string>
+    <string name="crash_on_book_opening_message_header">Fehler beim Öffnen der Datei %1$s. Bitte melde das Problem:</string>
+    <string name="error_on_file_saving_title">Fehler beim Speichern der Datei</string>
+</resources>
