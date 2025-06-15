@@ -25,4 +25,5 @@
     <string name="string_intent">Intent</string>
     <string name="string_cause">原因</string>
     <string name="crash_on_intent_opening_title">处理 intent 期间出错</string>
+    <string name="fileopen_private_resource_access_info">无法直接访问访问，请选择以下选项之一：</string>
 </resources>
