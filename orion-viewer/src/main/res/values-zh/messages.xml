@@ -22,4 +22,5 @@
     <string name="msg_specify_keyword_for_search">指定搜索关键词</string>
     <string name="tap_zones_header">通过轻触区域导肮：默认区域操作</string>
     <string name="permission_directory_warning">请提供读取权限来访问存储数据</string>
+    <string name="msg_select_word">单击选中单词！</string>
 </resources>
