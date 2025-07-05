@@ -25,4 +25,6 @@
     <string name="export_bookmarks_menu_item">தற்போதைய புக்மார்க்குகளை ஏற்றுமதி செய்யுங்கள்</string>
     <string name="import_all_bookmarks_menu_item">இறக்குமதி…</string>
     <string name="import_current_bookmarks_menu_item">இருந்து சேர்க்கவும்…</string>
+    <string name="menu_share_text">உரையைப் பகிர்</string>
+    <string name="menu_share_file">கோப்பைப் பகிர்</string>
 </resources>
