@@ -1,2 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="menu_zoom_text">Tālummaiņa</string>
+    <string name="menu_bookmarks_text">Grāmatzīmes</string>
+    <string name="menu_help_text">Palīdzība</string>
+    <string name="menu_about_text">Par lietotni…</string>
+    <string name="menu_exit_text">Iziet</string>
+    <string name="menu_options_text">Iestatījumi</string>
+    <string name="menu_search_item">Meklēt</string>
+    <string name="import_all_bookmarks_menu_item">Ievietot…</string>
+</resources>
