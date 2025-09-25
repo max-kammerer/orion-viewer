@@ -1,2 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="pref_category_system">Sistēmas parametri</string>
+    <string name="pref_appearance">Izskats</string>
+    <string name="pref_bookDefaultZoom">Tālummaiņa</string>
+    <string name="pref_dictionary">Vārdnīca</string>
+    <string name="pref_brightness">Spilgtums</string>
+    <string name="pref_book_contrast">Kontrasts</string>
+    <string name="pref_size_small">Mazs</string>
+    <string name="pref_size_medium">Vidējs</string>
+    <string name="pref_size_large">Liels</string>
+</resources>
