@@ -25,4 +25,6 @@
     <string name="export_bookmarks_menu_item">Şimdiki yer imini dışa aktar</string>
     <string name="import_all_bookmarks_menu_item">İçe aktar…</string>
     <string name="import_current_bookmarks_menu_item">Şuradan ekle…</string>
+    <string name="menu_share_text">Metin paylaş</string>
+    <string name="menu_share_file">Dosya paylaş</string>
 </resources>
