@@ -25,4 +25,6 @@
     <string name="menu_about_text">关于…</string>
     <string name="menu_search_item">搜索</string>
     <string name="menu_other">其他…</string>
+    <string name="menu_share_file">分享文件</string>
+    <string name="menu_share_text">分享文本</string>
 </resources>
