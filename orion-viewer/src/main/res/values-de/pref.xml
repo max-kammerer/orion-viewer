@@ -92,4 +92,5 @@
     <string name="pref_key_long_tap">Langtipp-Aktion</string>
     <string name="pref_key_linked_action_summary">Verknüpfte Aktion: `%s`</string>
     <string name="pref_renderPageBorder">Seitenrand zeichnen</string>
+    <string name="pref_renderOffPage">Bereich außerhalb der Seiten darstellen</string>
 </resources>

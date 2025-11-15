@@ -1,2 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="file_manager_title">கோப்பு மேலாளர்</string>
+    <string name="file_manager_fodlers">கோப்புறைகள்</string>
+    <string name="file_manager_history">வரலாறு</string>
+    <string name="file_manager_contribution">பங்களிப்பு</string>
+    <string name="file_manager_select_tip">ஓரியன் பார்வையாளரில் திறக்க ஒரு கோப்பைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="file_manager_path">பாதை:</string>
+    <string name="file_manager_documents">ஆவணங்கள்</string>
+    <string name="file_manager_downloads">பதிவிறக்கங்கள்</string>
+    <string name="file_manager_sdcard">எச்டி அட்டை</string>
+    <string name="file_manager_grant_read_permissions">வாசிப்பு அனுமதிகளை வழங்கவும்</string>
+    <string name="file_manager_nav_locations">இருப்பிடங்கள்</string>
+    <string name="file_manager_nav_settings">அமைப்புகள்</string>
+    <string name="file_manager_nav_other">மற்றொன்று</string>
+    <string name="file_manager_nav_system_select">கணினியில் கோப்பைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="file_manager_nav_exit">வெளியேறு</string>
+    <string name="file_manager_internal_storage">உள் சேமிப்பு</string>
+    <string name="file_manager_primary_storage">முதன்மை சேமிப்பு</string>
+</resources>

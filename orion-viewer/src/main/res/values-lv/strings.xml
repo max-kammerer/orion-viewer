@@ -1,2 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="orientation_default">Noklusējuma</string>
+    <string name="orientation_landscape">Ainavas (Horizontāli)</string>
+    <string name="orientation_portrait">Portreta (Vertikāli)</string>
+    <string name="saveFileNameTooltip">Datnes nosaukums.paplašinājums</string>
+    <string name="save">Saglabāt</string>
+</resources>
