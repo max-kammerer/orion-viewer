@@ -3,7 +3,7 @@
     <string name="contribution_intro">ஓரியன் பார்வையாளர் திறந்த மூல திட்டம் மற்றும் அதைச் சிறப்பாகச் செய்ய நீங்கள் உதவலாம்!</string>
     <string name="contribution_ways">திட்டத்திற்கு நீங்கள் கொண்டு வரக்கூடிய பல விசயங்கள் உள்ளன:</string>
     <string name="contribution_report_bug">A ஒரு அம்சத்தை பரிந்துரைக்கவும் அல்லது ஒரு சிக்கலை <a href="https://github.com/max-kammerer/orion-viewer/issues"> வெளியீடு டிராக்கர் </a> இல் புகாரளிக்கவும்</string>
-    <string name="contribution_code">• செயல்படுத்தவும் &lt;a href = \"https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-puild-puild-puild-puild-puild-project &lt;/a&gt; அல்லது &lt;a href = \"https://github.com/max-kammerer/orion-viewer/issues\"&gt; ஒரு பிழையை சரிசெய்யவும் &lt;/a&gt;</string>
+    <string name="contribution_code">• செயல்படுத்தவும் <a href="https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-build-project">புதிய நற்பொருத்தம்</a> அல்லது <a href="https://github.com/max-kammerer/orion-viewer/issues">ஒரு பிழையைச் சரிசெய்யவும் </a></string>
     <string name="contribution_review">A ஒரு விண்ணப்பத்தை எழுதுங்கள் <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer"> கூகிள் பிளே பற்றிய மதிப்பாய்வு </a> அல்லது வேறு எந்த தளமும்</string>
     <string name="contribution_do_translation">• மொழிபெயர்க்கவும் <a href="https://github.com/max-kammerer/orion-viewer/wiki/translations"> பிற மொழிகளுக்கு விண்ணப்பம் </a> அல்லது ஏற்கனவே உள்ள மொழிபெயர்ப்பை மேம்படுத்தவும்</string>
     <string name="contribution_design">Application புதிய பயன்பாட்டு கருப்பொருள் அல்லது/மற்றும் புதிய UI/UX ஐ வடிவமைக்கவும்</string>
