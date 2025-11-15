@@ -9,7 +9,6 @@
     <string name="crop_top">Oben</string>
     <string name="crop_bottom">Unten</string>
     <string name="enable_even_crop">anderer Zuschnitt für gerade Seiten</string>
-    <string name="msg_select_text">Text auswählen!</string>
     <string name="warn_no_text_in_selection">Kein Text ausgewählt!</string>
     <string name="orientation_default_rotation">Anwendungsstandard</string>
     <string name="orientation_portrait">Hochformat</string>
