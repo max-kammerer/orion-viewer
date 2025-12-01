@@ -1,3 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="file_manager_title">ตัวจัดการไฟล์</string>
+    <string name="file_manager_fodlers">แฟ้ม</string>
+    <string name="file_manager_history">ประวัติ</string>
+    <string name="file_manager_contribution">การสนับสนุน</string>
+    <string name="file_manager_select_tip">โปรดเลือกไฟล์เพื่อเปิดใน Orion Viewer</string>
+    <string name="file_manager_path">เส้นทาง:</string>
 </resources>
