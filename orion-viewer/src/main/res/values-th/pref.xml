@@ -1,3 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="pref_category_general">ทั่วไป</string>
+    <string name="pref_category_key_manager">ตัวจัดการคีย์</string>
+    <string name="pref_category_device_parameters">พารามิเตอร์อุปกรณ์</string>
+    <string name="pref_category_add_parameters">พารามิเตอร์เพิ่มเติม</string>
+    <string name="pref_category_system">ระบบ</string>
+    <string name="pref_category_move">สัมผัสเพื่อย้าย</string>
+    <string name="pref_category_status_bar">แถบสถานะ</string>
 </resources>
