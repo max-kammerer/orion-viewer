@@ -1,3 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="string_exception">ข้อยกเว้น</string>
+    <string name="string_intent">เจตนา</string>
+    <string name="string_cause">สาเหตุ</string>
+    <string name="crash_on_book_opening_title">เกิดข้อผิดพลาดขณะเปิดไฟล์</string>
+    <string name="crash_on_intent_opening_title">เกิดข้อผิดพลาดขณะประมวลผล intent</string>
+    <string name="crash_on_book_opening_message_header">เกิดข้อผิดพลาดขณะเปิดไฟล์ %1$s กรุณาแจ้งปัญหา:</string>
+    <string name="crash_on_book_opening_message_header_panel">เกิดข้อผิดพลาดขณะเปิดไฟล์ %1$s:</string>
+    <string name="crash_on_book_opening_encrypted">เอกสารเข้ารหัส</string>
+    <string name="string_send">ส่ง…</string>
+    <string name="send_report_header">[กรุณาให้รายละเอียดเพิ่มเติม (ขั้นตอนในการแจ้งปัญหาเข้ามาใหม่)]</string>
+    <string name="error_on_file_saving_title">เกิดข้อผิดพลาดขณะบันทึกไฟล์</string>
+    <string name="fileopen_cant_open">ไม่สามารถเปิดเอกสาร: %s</string>
+    <string name="fileopen_file_is_emppty">เป็นไฟล์ว่างเปล่า</string>
+    <string name="fileopen_no_pages">เอกสารไม่มีหน้า</string>
+    <string name="fileopen_error_during_intent_processing">เกิดข้อผิดพลาดขณะประมวลผล intent</string>
+    <string name="fileopen_error_during_intent_processing_info">ไม่สามารถแตกไฟล์จาก Intent ได้ โปรดบันทึกข้อมูล Intent ลงในไฟล์เพื่อเปิด หรือ:</string>
+    <string name="fileopen_private_resource_access">เข้าถึงไฟล์ส่วนตัว</string>
+    <string name="fileopen_private_resource_access_info">ไม่สามารถเข้าถึงไฟล์ได้โดยตรง กรุณาเลือกตัวเลือกด้านล่าง:</string>
+    <string name="fileopen_permission_dialog">ไม่สามารถเข้าถึงไฟล์ได้โดยตรง</string>
+    <string name="fileopen_permission_dialog_info">กรุณาให้สิทธิ์ในการอ่านไฟล์เพื่อเข้าถึงไฟล์ได้โดยตรง หรือเลือกตัวเลือกด้านล่าง:</string>
+    <string name="fileopen_permissions_grant_read">ให้สิทธิ์การอ่านที่เก็บ…</string>
+    <string name="fileopen_save_to_file">บันทึกเป็นไฟล์ใหม่…</string>
+    <string name="fileopen_open_in_temporary_file">เปิดผ่านไฟล์ชั่วคราว</string>
+    <string name="fileopen_open_recent_files">ไปยังหนังสือล่าสุด…</string>
+    <string name="fileopen_report_error_by_github_and_return">รายงานปัญหาบน github แล้วจึงกลับมาที่กล่องโต้ตอบ..</string>
+    <string name="fileopen_report_error_by_email_and_return">รายงานปัญหาทางอีเมล แล้วจึงกลับมาที่กล่องโต้ตอบ…</string>
 </resources>
