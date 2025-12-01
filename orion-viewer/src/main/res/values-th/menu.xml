@@ -1,3 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_zoom_text">ซูม</string>
+    <string name="menu_crop_text">ครอปตัด</string>
+    <string name="menu_goto_text">ไปยัง</string>
+    <string name="menu_bookmarks_text">บุ๊กมาร์ก</string>
+    <string name="menu_add_bookmark_item">เพิ่มบุ๊กมาร์ก</string>
+    <string name="menu_select_text">เลือกข้อความ</string>
+    <string name="menu_help_text">ช่วยเหลือ</string>
 </resources>
