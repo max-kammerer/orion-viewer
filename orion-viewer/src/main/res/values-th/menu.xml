@@ -7,4 +7,24 @@
     <string name="menu_add_bookmark_item">เพิ่มบุ๊กมาร์ก</string>
     <string name="menu_select_text">เลือกข้อความ</string>
     <string name="menu_help_text">ช่วยเหลือ</string>
+    <string name="menu_rotation_text">การหมุนหน้าจอ</string>
+    <string name="menu_navigation_text">เค้าโครงหน้า</string>
+    <string name="menu_about_text">เกี่ยวกับ…</string>
+    <string name="menu_open_text">เปิดหนังสือ</string>
+    <string name="menu_outline_text">โครงร่าง</string>
+    <string name="menu_open_dictionary_text">เปิดพจนานุกรม</string>
+    <string name="menu_day_night_text">โหมด กลางวัน/กลางคืน</string>
+    <string name="menu_exit_text">ออก</string>
+    <string name="menu_key_binder_text">แหล่งเก็บคีย์</string>
+    <string name="menu_options_text">การตั้งค่า</string>
+    <string name="menu_tap_text">โซน Tap</string>
+    <string name="menu_search_item">ค้นหา</string>
+    <string name="menu_other">อื่น ๆ…</string>
+    <string name="menu_book_preferences">ตัวเลือกหนังสือ</string>
+    <string name="menu_share_text">แชร์ข้อความ</string>
+    <string name="menu_share_file">แชร์ไฟล์</string>
+    <string name="export_all_bookmarks_menu_item">ส่งออกบุ๊กมาร์คทั้งหมด</string>
+    <string name="export_bookmarks_menu_item">ส่งออกบุ๊กมาร์คปัจจุบัน</string>
+    <string name="import_all_bookmarks_menu_item">นำเข้า…</string>
+    <string name="import_current_bookmarks_menu_item">ต่อท้ายจาก…</string>
 </resources>
