@@ -13,4 +13,14 @@
     <string name="msg_warning">คำเตือน</string>
     <string name="msg_specify_keyword_for_search">ระบุคีย์เวิร์ดเพื่อค้นหา</string>
     <string name="recent_book_not_found">ไม่พบไฟล์หนังสือ!</string>
+    <string name="permission_grant">ให้สิทธิ์…</string>
+    <string name="permission_cancel">ยกเลิก</string>
+    <string name="string_cancel">ยกเลิก</string>
+    <string name="string_close">ปิด</string>
+    <string name="string_apply">นำไปใช้</string>
+    <string name="string_wrong_password">รหัสผ่านผิด</string>
+    <string name="password_for_file">รหัสผ่านสำหรับไฟล์</string>
+    <string name="wrong_outline_item">หน้าไม่ถูกต้อง: %s</string>
+    <string name="tap_zones_header">การนำทางผ่าน Tap Zones: แอ็กชันโซนเริ่มต้น</string>
+    <string name="permission_directory_warning">โปรดให้สิทธิ์ในการอ่านเพื่อการเข้าถึงที่เก็บข้อมูล</string>
 </resources>
