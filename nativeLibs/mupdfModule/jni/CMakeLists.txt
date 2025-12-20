@@ -2,10 +2,12 @@
 cmake_minimum_required(VERSION 3.4.1)
 set(MUPDF_PATH ../../mupdf)
 set(LIBARCH ../../libarchive)
+set(BROTLI ${MUPDF_PATH}/thirdparty/brotli/c)
 
 # --- Build a local static library for core mupdf ---
 file(GLOB mupdf_core_SRC
 ${MUPDF_PATH}/source/fitz/*.c
+${MUPDF_PATH}/source/fitz/*.cpp
 ${MUPDF_PATH}/source/pdf/*.c
 ${MUPDF_PATH}/source/xps/*.c
 ${MUPDF_PATH}/source/svg/*.c
@@ -28,6 +30,7 @@ include_directories(
 ${MUPDF_PATH}/include.mupdf
 ${MUPDF_PATH}/scripts/freetype
 ${MUPDF_PATH}/scripts/libjpeg
+${MUPDF_PATH}/thirdparty/brotli/c/include
 ${MUPDF_PATH}/thirdparty/freetype/include
 ${MUPDF_PATH}/thirdparty/harfbuzz/src
 ${MUPDF_PATH}/thirdparty/jbig2dec
@@ -48,7 +51,7 @@ ${MUPDF_PATH}/thirdparty/gumbo-parser/src
 #-DOPJ_STATIC -DOPJ_HAVE_INTTYPES_H -DOPJ_HAVE_STDINT_H \
 #-DHAVE_LCMS2MT \
 
-target_compile_definitions(mupdf_core PRIVATE -D_FILE_OFFSET_BITS=32 -DTOFU_NOTO -DTOFU_CJK -DTOFU_SIL -DAA_BITS=8 -DOPJ_STATIC -DOPJ_HAVE_INTTYPES_H -DOPJ_HAVE_STDINT_H -DHAVE_LCMS2MT -DHAVE_LIBARCHIVE)
+target_compile_definitions(mupdf_core PRIVATE -D_FILE_OFFSET_BITS=32 -DTOFU_NOTO -DTOFU_CJK -DTOFU_SIL -DAA_BITS=8 -DOPJ_STATIC -DOPJ_HAVE_INTTYPES_H -DOPJ_HAVE_STDINT_H -DHAVE_LCMS2MT -DHAVE_LIBARCHIVE -DFZ_ENABLE_BARCODE=0)
 target_compile_options(mupdf_core PRIVATE -ffunction-sections -fdata-sections)
 
 # --- Build a local static library for thirdparty libraries ---
@@ -308,6 +311,97 @@ ${MUPDF_PATH}/thirdparty/gumbo-parser/src/tokenizer.c
 ${MUPDF_PATH}/thirdparty/gumbo-parser/src/utf8.c
 ${MUPDF_PATH}/thirdparty/gumbo-parser/src/util.c
 ${MUPDF_PATH}/thirdparty/gumbo-parser/src/vector.c
+
+${BROTLI}/common/constants.c
+${BROTLI}/common/constants.h
+${BROTLI}/common/context.c
+${BROTLI}/common/context.h
+${BROTLI}/common/dictionary.c
+${BROTLI}/common/dictionary.h
+${BROTLI}/common/platform.c
+${BROTLI}/common/platform.h
+${BROTLI}/common/shared_dictionary.c
+${BROTLI}/common/shared_dictionary_internal.h
+${BROTLI}/common/transform.c
+${BROTLI}/common/transform.h
+${BROTLI}/common/version.h
+${BROTLI}/dec/bit_reader.c
+${BROTLI}/dec/bit_reader.h
+${BROTLI}/dec/decode.c
+${BROTLI}/dec/huffman.c
+${BROTLI}/dec/huffman.h
+${BROTLI}/dec/prefix.h
+${BROTLI}/dec/state.c
+${BROTLI}/dec/state.h
+${BROTLI}/enc/backward_references.c
+${BROTLI}/enc/backward_references.h
+${BROTLI}/enc/backward_references_hq.c
+${BROTLI}/enc/backward_references_hq.h
+${BROTLI}/enc/backward_references_inc.h
+${BROTLI}/enc/bit_cost.c
+${BROTLI}/enc/bit_cost.h
+${BROTLI}/enc/bit_cost_inc.h
+${BROTLI}/enc/block_encoder_inc.h
+${BROTLI}/enc/block_splitter.c
+${BROTLI}/enc/block_splitter.h
+${BROTLI}/enc/block_splitter_inc.h
+${BROTLI}/enc/brotli_bit_stream.c
+${BROTLI}/enc/brotli_bit_stream.h
+${BROTLI}/enc/cluster.c
+${BROTLI}/enc/cluster.h
+${BROTLI}/enc/cluster_inc.h
+${BROTLI}/enc/command.c
+${BROTLI}/enc/command.h
+${BROTLI}/enc/compound_dictionary.c
+${BROTLI}/enc/compound_dictionary.h
+${BROTLI}/enc/compress_fragment.c
+${BROTLI}/enc/compress_fragment.h
+${BROTLI}/enc/compress_fragment_two_pass.c
+${BROTLI}/enc/compress_fragment_two_pass.h
+${BROTLI}/enc/dictionary_hash.c
+${BROTLI}/enc/dictionary_hash.h
+${BROTLI}/enc/encode.c
+${BROTLI}/enc/encoder_dict.c
+${BROTLI}/enc/encoder_dict.h
+${BROTLI}/enc/entropy_encode.c
+${BROTLI}/enc/entropy_encode.h
+${BROTLI}/enc/entropy_encode_static.h
+${BROTLI}/enc/fast_log.c
+${BROTLI}/enc/fast_log.h
+${BROTLI}/enc/find_match_length.h
+${BROTLI}/enc/hash_composite_inc.h
+${BROTLI}/enc/hash_forgetful_chain_inc.h
+${BROTLI}/enc/hash.h
+${BROTLI}/enc/hash_longest_match64_inc.h
+${BROTLI}/enc/hash_longest_match64_simd_inc.h
+${BROTLI}/enc/hash_longest_match_inc.h
+${BROTLI}/enc/hash_longest_match_quickly_inc.h
+${BROTLI}/enc/hash_longest_match_simd_inc.h
+${BROTLI}/enc/hash_rolling_inc.h
+${BROTLI}/enc/hash_to_binary_tree_inc.h
+${BROTLI}/enc/histogram.c
+${BROTLI}/enc/histogram.h
+${BROTLI}/enc/histogram_inc.h
+${BROTLI}/enc/literal_cost.c
+${BROTLI}/enc/literal_cost.h
+${BROTLI}/enc/matching_tag_mask.h
+${BROTLI}/enc/memory.c
+${BROTLI}/enc/memory.h
+${BROTLI}/enc/metablock.c
+${BROTLI}/enc/metablock.h
+${BROTLI}/enc/metablock_inc.h
+${BROTLI}/enc/params.h
+${BROTLI}/enc/prefix.h
+${BROTLI}/enc/quality.h
+${BROTLI}/enc/ringbuffer.h
+${BROTLI}/enc/state.h
+${BROTLI}/enc/static_dict.c
+${BROTLI}/enc/static_dict.h
+${BROTLI}/enc/static_dict_lut.h
+${BROTLI}/enc/utf8_util.c
+${BROTLI}/enc/utf8_util.h
+${BROTLI}/enc/write_bits.h
+
 )
 
 file(GLOB cc_EXT $(MUPDF_PATH)/thirdparty/harfbuzz/src/)
