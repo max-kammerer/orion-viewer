@@ -501,4 +501,9 @@ target_link_libraries(
         -Wl,--gc-sections
 )
 
-
+if(ANDROID_ABI STREQUAL "arm64-v8a" OR ANDROID_ABI STREQUAL "x86_64")
+    target_link_libraries(
+            mupdf_java
+            -Wl,-z,max-page-size=16384
+    )
+endif()

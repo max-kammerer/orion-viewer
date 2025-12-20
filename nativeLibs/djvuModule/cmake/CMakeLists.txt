@@ -89,3 +89,7 @@ target_compile_options(djvu PRIVATE -fexceptions -frtti)
 
 
 target_link_libraries(djvu djvucore  -lm  -llog -ljnigraphics)
+
+if(ANDROID_ABI STREQUAL "arm64-v8a" OR ANDROID_ABI STREQUAL "x86_64")
+    target_link_libraries(djvu -Wl,-z,max-page-size=16384)
+endif()
