@@ -13,7 +13,7 @@ on:
 jobs:
   build_and_upload_artifacts:
     name: Generate APKs
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v4
@@ -54,7 +54,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        arch: [[15, x86, ubuntu-22.04], [16, x86, ubuntu-22.04], [19, x86, ubuntu-22.04], [21, x86, ubuntu-22.04], [23, x86, ubuntu-22.04], [28, x86, ubuntu-22.04], [30, x86_64, ubuntu-22.04],  [32, x86_64, ubuntu-22.04], [33, x86_64, ubuntu-22.04], [35, x86_64, ubuntu-22.04]]
+        arch: [[15, x86, ubuntu-22.04], [16, x86, ubuntu-24.04], [19, x86, ubuntu-24.04], [21, x86, ubuntu-24.04], [23, x86, ubuntu-24.04], [28, x86, ubuntu-24.04], [30, x86_64, ubuntu-24.04],  [32, x86_64, ubuntu-24.04], [33, x86_64, ubuntu-24.04], [33, x86_64, ubuntu-24.04], [35, x86_64, ubuntu-24.04]]
     env:
       ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 170
       EMULATOR_API: ${{ matrix.arch[0] }}
@@ -76,7 +76,7 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          sdcard-path-or-size: 900M
+          sdcard-path-or-size: 500M
           script: ./gradlew forwardLogcat connectedDebugAndroidTest -Porion.CIBuild=true  -Porion.build.android40=${{ matrix.arch[0] == 15 }}
 
       - uses: dorny/test-reporter@v1
