@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="navigation">การข้ามหน้า</string>
+    <string name="crop_right">ขวา</string>
+    <string name="crop_left">ซ้าย</string>
+    <string name="enable_even_crop">การครอบตัดอีกครั้งสำหรับหน้าเลขคู่</string>
+    <string name="crop_top">บน</string>
+    <string name="crop_bottom">ล่าง</string>
+    <string name="crop_auto">ครอบตัดอัตโนมัติ</string>
+    <string name="crop_manual">เลือกครอบตัดเอง</string>
+    <string name="crop_auto_manual">อัตโนมัติและดำเนินการเอง</string>
+    <string name="crop_manual_auto">ดำเนินการเองและอัตโนมัติ</string>
+    <string name="crop_warning">ใช้ครอบตัดแบบดำเนินการเองเพื่อประสิทธิภาพที่ดีกว่า</string>
+    <string name="rotate_0">0 องศา</string>
+    <string name="rotate_90">90 องศา</string>
+    <string name="rotate_270">270 องศา</string>
+    <string name="long_click">เมื่อกดค้าง</string>
+    <string name="short_click">เมื่อคลิกสั้น</string>
+    <string name="binding_click">เมื่อเย็บเล่ม</string>
+    <string name="key_binder_reset_all">รีเซ็ตทั้งหมด</string>
+    <string name="orientation_default">ค่าเริ่มต้น</string>
+    <string name="orientation_default_rotation">ค่าเริ่มต้นแอปพลิเคชัน</string>
+    <string name="orientation_landscape">แนวนอน</string>
+    <string name="orientation_portrait">แนวตั้ง</string>
+    <string name="orientation_landscape_inverse">แนวนอน (270)</string>
+    <string name="orientation_portrait_inverse">แนวตั้ง (180)</string>
+    <string name="fit_width">พอดีความกว้าง</string>
+    <string name="fit_height">พอดีความสูง</string>
+    <string name="fit_page">พอดีหน้า</string>
+    <string name="fit_custom">กำหนดเอง…</string>
+    <string name="key_binder_message">กดปุ่มใด ๆ และเลือกแอ็กชันเพื่อรวมมันเข้าด้วยกัน!</string>
+    <string name="key_binder_warning">ไม่สามารถผูกคีย์ด้วยรหัสการคีย์เป็นศูนย์ได้ ลองใช้คีย์อื่น!</string>
+    <string name="table_of_contents">สารบัญ</string>
+    <string name="warn_no_text_in_selection">ไม่มีข้อความที่เลือก!</string>
+    <string name="warn_no_outline">โครงร่างขาดหาย!</string>
+    <string name="color_mode_normal">สีปกติ (สีดำบนพื้นหลังสีขาว)</string>
+    <string name="color_mode_inverted">กลับสี</string>
+    <string name="color_mode_black_on_yellowish">สีดำบนพื้นหลังสีเหลืองเข้ม</string>
+    <string name="color_mode_grayscale_light">โทนสีเทาบนพื้นหลังสีเทาเข้ม</string>
+    <string name="color_mode_grayscale">โทนสีเทาบนพื้นหลังสีเทา</string>
+    <string name="color_mode_grayscale_dark">โทนสีเทาบนพื้นหลังสีเทาดำ</string>
+    <string name="color_mode_white_on_blue">สีขาวบนพื้นหลังสีฟ้า</string>
+    <string name="select_color_mode">เลือกโหมดสีเพื่อสลับ</string>
+    <string name="saveFileNameTooltip">ชื่อไฟล์.นามสกุล</string>
+    <string name="save">บันทึก</string>
+</resources>
