@@ -103,7 +103,7 @@ class GlobalOptions(
         recentFiles.add(0, newEntry)
 
         if (recentFiles.size > MAX_RECENT_ENTRIES) {
-            recentFiles.removeLast()
+            recentFiles.removeAt(recentFiles.lastIndex)
         }
     }
 
