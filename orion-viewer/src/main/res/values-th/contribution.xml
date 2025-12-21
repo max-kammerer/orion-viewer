@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="contribution_intro">Orion Viewer เป็นโพรเจกต์โอเพ่นซอร์สและคุณสามารถช่วยทำให้มันดีขึ้นได้!</string>
+    <string name="contribution_ways">มีหลายสิ่งที่คุณสามารถนำมาสู่โพรเจกต์ได้:</string>
+    <string name="contribution_report_bug">• แนะนำฟีเจอร์ หรือแจ้งปัญหาไปยัง <a href="https://github.com/max-kammerer/orion-viewer/issues">ระบบติดตามปัญหา</a></string>
+    <string name="contribution_do_translation">• แปล <a href="https://github.com/max-kammerer/orion-viewer/wiki/Translations">แอปพลิเคชันเป็นภาษาอื่น</a> หรือปรับปรุงภาษาที่มีการแปลอยู่แล้ว</string>
+    <string name="contribution_design">• ออกแบบธีมแอปพลิเคชันใหม่ หรือ/และ UI/UX ใหม่</string>
+    <string name="contribution_code">• ลองใช้งาน <a href="https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-build-project">ฟีเจอร์ใหม่</a> หรือ <a href="https://github.com/max-kammerer/orion-viewer/issues">แก้ไขบั๊ก</a></string>
+    <string name="contribution_review">• สร้างแอปพลิเคชัน <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">รีวิวบน Google Play</a> หรือแพลตฟอร์มอื่น ๆ</string>
+    <string name="contribution_survey">ช่วยให้แอปพลิเคชันดีขึ้น - ร่วมทำแบบสอบถาม! (10–20 นาที)</string>
+</resources>

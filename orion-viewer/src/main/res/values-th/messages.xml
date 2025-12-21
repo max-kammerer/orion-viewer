@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="warn_msg_no_dictionary">ไม่พบพจนานุกรม</string>
+    <string name="ex_msg_operation_failed">ปฏิบัติการล้มเหลว</string>
+    <string name="msg_dialog_search">กล่องโต้ตอบค้นหา</string>
+    <string name="msg_dialog_dismis">ยกเลิก</string>
+    <string name="warn_text_not_found">ไม่มีข้อความ</string>
+    <string name="warn_no_further_occurrences_found">ไม่พบเหตุการณ์ที่เกิดขึ้นเพิ่มเติม</string>
+    <string name="msg_select_word">คลิกเป็นคำ!</string>
+    <string name="msg_searching">กำลังค้นหา…</string>
+    <string name="msg_select_text">เลือกข้อความ!</string>
+    <string name="msg_error">ผิดพลาด</string>
+    <string name="msg_warning">คำเตือน</string>
+    <string name="msg_specify_keyword_for_search">ระบุคีย์เวิร์ดเพื่อค้นหา</string>
+    <string name="recent_book_not_found">ไม่พบไฟล์หนังสือ!</string>
+    <string name="permission_grant">ให้สิทธิ์…</string>
+    <string name="permission_cancel">ยกเลิก</string>
+    <string name="string_cancel">ยกเลิก</string>
+    <string name="string_close">ปิด</string>
+    <string name="string_apply">นำไปใช้</string>
+    <string name="string_wrong_password">รหัสผ่านผิด</string>
+    <string name="password_for_file">รหัสผ่านสำหรับไฟล์</string>
+    <string name="wrong_outline_item">หน้าไม่ถูกต้อง: %s</string>
+    <string name="tap_zones_header">การนำทางผ่าน Tap Zones: แอ็กชันโซนเริ่มต้น</string>
+    <string name="permission_directory_warning">โปรดให้สิทธิ์ในการอ่านเพื่อการเข้าถึงที่เก็บข้อมูล</string>
+</resources>
