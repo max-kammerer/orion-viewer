@@ -128,7 +128,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
         }
     },
 
-    SEARCH(R.string.action_crop_page, R.integer.action_crop_page) {
+    SEARCH(R.string.action_search, R.integer.action_search) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,

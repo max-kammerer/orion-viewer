@@ -8,6 +8,7 @@
     <string name="action_first_page">First page</string>
     <string name="action_last_page">Last page</string>
     <string name="action_crop_page">Crop dialog</string>
+    <string name="action_search">Search dialog</string>
     <string name="action_zoom_page">Zoom dialog</string>
     <string name="action_layout_page">@string/menu_navigation_text</string>
     <string name="action_rotation_page">Rotation dialog</string>

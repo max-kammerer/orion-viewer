@@ -8,6 +8,7 @@
     <string name="action_first_page">В начало книги</string>
     <string name="action_last_page">В конец книги</string>
     <string name="action_crop_page">Диалог обрезки полей</string>
+    <string name="action_search">Диалог поиска</string>
     <string name="action_zoom_page">Диалог масштабирования</string>
     <string name="action_rotation_page">Диалог поворота</string>
     <string name="action_options_page">Настройки</string>

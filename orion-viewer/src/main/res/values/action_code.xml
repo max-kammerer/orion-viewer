@@ -38,6 +38,7 @@
     <integer name="action_full_screen">22</integer>
 
     <integer name="action_close">23</integer>
+    <integer name="action_search">24</integer>
 
     <!--crop margins-->
     <integer name="action_crop_left">31</integer>
