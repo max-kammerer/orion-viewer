@@ -1,3 +1,8 @@
+===== 0.96.0 (Dec 21, 2025) =====
+* Added support of Android 15+ devices with 16k memory pages
+* Added Thai translation
+* Updated mupdf library to 1.26.12
+
 ===== 0.95.9 (May 14, 2025) =====
 * Fixed IOException in FileManager
 * Added ability to share opened file
