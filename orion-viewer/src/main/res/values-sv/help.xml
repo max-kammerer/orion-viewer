@@ -1,3 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="option_help">Applikationens parametrar</string>
+    <string name="apply">Verkställ nuvarande alternativ.</string>
+    <string name="general_usage_step4">4. Njut av läsningen!</string>
 </resources>
