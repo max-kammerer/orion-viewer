@@ -1,3 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="pref_category_system">System</string>
+    <string name="pref_appearance">Utseende</string>
+    <string name="pref_dictionary">Lexikon</string>
+    <string name="pref_brightness">Ljusstyrka</string>
+    <string name="pref_book_contrast">Kontrast</string>
+    <string name="pref_position_top">Längst upp</string>
+    <string name="pref_position_bottom">Längst ner</string>
+    <string name="pref_position_hide">Dölj</string>
+    <string name="pref_size_small">Liten</string>
+    <string name="pref_size_medium">Mellan</string>
+    <string name="pref_size_large">Stor</string>
+    <string name="pref_category_key_manager">Nyckelhanterare</string>
+    <string name="pref_category_add_parameters">Ytterligare parametrar</string>
+    <string name="pref_category_quick_actions">Snabba åtgärder</string>
+    <string name="pref_category_behavior">Standardbeteende</string>
+    <string name="pref_category_status_bar">Statusfält</string>
+    <string name="pref_value">Värde: %s</string>
+    <string name="pref_fullScreen">Helskärm</string>
+    <string name="pref_showTimeOnStatusBar">Visa tid</string>
+    <string name="pref_bookDefaultZoom_desc">Zoom: %s</string>
+    <string name="pref_screen_orientation">Skärmoritering</string>
+    <string name="pref_dictionary_desc">Lexikon: %s</string>
+    <string name="pref_custom_brightness">Justera ljusstyrka</string>
+    <string name="pref_brightness_desc">Ljusstyrka (1-100%)</string>
+    <string name="pref_page_layout">Sidlayout</string>
+    <string name="application_settings_title">Inställningar för applikation</string>
+    <string name="pref_app_language">Språk för applikationen</string>
+    <string name="pref_color_mode">Färgläge</string>
+    <string name="pref_behavior">Kontroller och Beteende</string>
+    <string name="pref_old_ui">Aktivera gammalt användargränssnitt</string>
+    <string name="pref_showBatteryInfo">Visa batteri-info</string>
+    <string name="pref_book_screen_orientation_desc">Skärmorientring: %s</string>
+    <string name="pref_total_refresh_after">Total uppdatering efter…</string>
+    <string name="pref_debug">Avlusning &amp; Loggar</string>
 </resources>
