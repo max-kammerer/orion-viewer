@@ -20,4 +20,6 @@
     <string name="menu_share_file">Dela fil</string>
     <string name="export_all_bookmarks_menu_item">Exportera alla bokmärken</string>
     <string name="export_bookmarks_menu_item">Exportera nuvarande bokmärken</string>
+    <string name="menu_navigation_text">Sidlayout</string>
+    <string name="menu_tap_text">Tryckzoner</string>
 </resources>
