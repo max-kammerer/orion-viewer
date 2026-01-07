@@ -3,4 +3,10 @@
     <string name="option_help">Applikationens parametrar</string>
     <string name="apply">Verkställ nuvarande alternativ.</string>
     <string name="general_usage_step4">4. Njut av läsningen!</string>
+    <string name="general_usage_step2">2. Välj passande orientering: porträtt eller landskap</string>
+    <string name="general_usage_step1">1. Öppna dokument (zooma efter bredd som standard)</string>
+    <string name="dictionary_help">Öppnar externt lexikon. Välj passande Lexikon-applikation i Inställningar.</string>
+    <string name="zoom">Öppnar zoom-ruta. Noll zoom-värde innebär zoomning efter bredd.</string>
+    <string name="rotation">Roterar dokument till 90 grader medurs. Långt tryck roterar moturs.</string>
+    <string name="general_usage_step3">3. Gränser för beskärning, textstorleken ändras i enlighet med ändrade gränser (om zoomning efter bredd anges)</string>
 </resources>
