@@ -2,7 +2,7 @@
 ![GitHub Releases Downloads](https://img.shields.io/github/downloads/max-kammerer/orion-viewer/total.svg?label=GitHub%20Releases%20Downloads)
 ![GitHub release](https://img.shields.io/github/release/max-kammerer/orion-viewer.svg)
 
-Orion Viewer is *pdf*, *djvu*, *xps*, *tiff* and comic book (*cbr*, *cbz*, *cbt*) file viewer for Android
+Orion Viewer is a *pdf*, *djvu*, *xps*, *tiff* and comic book (*cbr*, *cbz*, *cbt*) file viewer for Android
 devices based on
 [MuPDF](https://mupdf.com) and
 [DjVuLibre](https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/)
@@ -39,7 +39,7 @@ Contributions are always welcome! Feel free to open any issue, send pull request
 
 ### Translations
 
-Project is fully or partially translated into Chinese, English, French, German, Hebrew, Italian, Russian, Spanish, Turkish and Ukrainian languages.
+Project is fully or partially translated into Chinese, English, French, German, Hebrew, Italian, Russian, Spanish, Swedish, Turkish and Ukrainian languages.
 It would be highly desirable to eliminate gaps and errors in existing translations and add translations to other languages.
 
 Take a look into
@@ -47,7 +47,7 @@ Take a look into
 
 ## Setting up build and working environment
 
-To work with and build *Orion Viewer* project you will need next tools installed:
+To work with and build *Orion Viewer* you will need next tools installed:
 
  * [Android Studio](https://developer.android.com/studio) 2023.1+ integrated development environment
  * [git tool](https://git-scm.com/downloads) to work with source repository
@@ -59,7 +59,7 @@ To work with and build *Orion Viewer* project you will need next tools installed
 or if you have [configured ssh access](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)  
    `git clone git@github.com:max-kammerer/orion-viewer.git`
 
-2. Setup native libraries (*mupdf*, *djvu*) via next command:
+2. Setup native libraries (*mupdf*, *djvu*) using:
 
     `./gradlew -b thirdparty_build.gradle downloadDjvu downloadAndMakeMupdf`
     
@@ -67,11 +67,11 @@ or if you have [configured ssh access](https://docs.github.com/en/authentication
     (for details see *djvuModule/build.gradle* and *mupdfModule/build.gradle* files).
     Native libs are checked out into *nativeLibs/djvu* and *nativeLibs/mupdf* folders.
 
-3. Open project in Android Studio (AS): *Main Menu/File/Open...* and select project folder to open. 
+3. Open the project in Android Studio (AS): *Main Menu/File/Open...* and select project folder to open. 
 
-4. Now you can build project within AS and run it in Android emulator
+4. Now you can build Orion Viewer within Android Studio and run it in the Android emulator
  
-You can also build Android 'apk' artifacts via next command:   
+You can also build an Android 'apk' using:   
     
 `./gradlew :orion-viewer:assembleDebug` (or `assembleRelease`) 
 
