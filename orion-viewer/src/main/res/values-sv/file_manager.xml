@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="file_manager_fodlers">Mappar</string>
+    <string name="file_manager_history">Historik</string>
+    <string name="file_manager_path">Genväg:</string>
+    <string name="file_manager_documents">Dokument</string>
+    <string name="file_manager_downloads">Hämtningar</string>
+    <string name="file_manager_nav_settings">Inställningar</string>
+    <string name="file_manager_nav_exit">Avsluta</string>
+    <string name="file_manager_title">Filhanterare</string>
+    <string name="file_manager_sdcard">SD-kort</string>
+    <string name="file_manager_internal_storage">Internt lagringsutrymme</string>
+    <string name="file_manager_grant_read_permissions">Bevilja läsrättigheter</string>
+</resources>
