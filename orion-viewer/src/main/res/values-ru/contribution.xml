@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
-
     <string name="contribution_intro">Orion Viewer - проект с открытым исходным кодом и вы можете помочь сделать его лучше!</string>
-
     <string name="contribution_ways">Есть много вещей, которые вы можете привнести в проект:</string>
     <string name="contribution_report_bug">\u2022 предложить новую фичу или сообщить об ошибке <a href="https://github.com/max-kammerer/orion-viewer/issues">в issue трекере</a></string>
-
-    <string name="contribution_do_translation">\u2022 перевести <a href="https://github.com/max-kammerer/orion-viewer/wiki/Translations">приложение на другие языки</a> или улучшить существующий перевод</string>
-    <string name="contribution_code">\u2022 сделать <a href="https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-build-project">новую фичу</a> или <a href="https://github.com/max-kammerer/orion-viewer/issues">исправить ошибку</a></string>
-    <string name="contribution_design">\u2022 привнести новую тему или дизайн приложения</string>
-    <string name="contribution_review">\u2022 написать рецензию или сделать ревью <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">на платформе Google Play</a> или на другой платформе</string>
-
+    <string name="contribution_do_translation">• перевести <a href="https://github.com/max-kammerer/orion-viewer/wiki/Translations">приложение на другие языки</a> или улучшить существующий перевод</string>
+    <string name="contribution_code">• сделать <a href="https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-build-project">новую фичу</a> или <a href="https://github.com/max-kammerer/orion-viewer/issues">исправить ошибку</a></string>
+    <string name="contribution_design">• привнести новую тему или дизайн приложения</string>
+    <string name="contribution_review">• написать рецензию или сделать ревью <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">на платформе Google Play</a> или на другой платформе</string>
     <string name="contribution_survey">Помогите сделать приложение лучше - примите участие в опросе о нем! (10–20 минут)</string>
-
 </resources>
