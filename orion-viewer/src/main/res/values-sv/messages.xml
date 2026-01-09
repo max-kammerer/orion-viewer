@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="msg_dialog_dismis">Avfärda</string>
+    <string name="msg_searching">Söker…</string>
+    <string name="msg_error">Fel</string>
+    <string name="msg_warning">Varning</string>
+    <string name="permission_cancel">Avbryt</string>
+    <string name="string_cancel">Avbryt</string>
+    <string name="string_close">Stäng</string>
+    <string name="string_apply">Verkställ</string>
+    <string name="ex_msg_operation_failed">Åtgärden misslyckades</string>
+    <string name="warn_text_not_found">Ingen text</string>
+    <string name="msg_select_text">Välj text!</string>
+    <string name="string_wrong_password">Fel lösenord</string>
+    <string name="warn_msg_no_dictionary">Lexikon hittades inte</string>
+    <string name="password_for_file">Lösenord för fil</string>
+    <string name="wrong_outline_item">Inkorrekt sida: %s</string>
+</resources>
