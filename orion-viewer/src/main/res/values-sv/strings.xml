@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="crop_left">Vänster</string>
+    <string name="crop_right">Höger</string>
+    <string name="crop_top">Längst upp</string>
+    <string name="crop_bottom">Längst ner</string>
+    <string name="orientation_default">Standard</string>
+    <string name="orientation_landscape">Landskap</string>
+    <string name="orientation_portrait">Porträtt</string>
+    <string name="fit_custom">Anpassad…</string>
+    <string name="saveFileNameTooltip">FilNamn.filändelse</string>
+    <string name="save">Spara</string>
+    <string name="crop_auto">Beskär automatiskt</string>
+    <string name="crop_manual">Manuell beskärning</string>
+    <string name="rotate_90">90 grader</string>
+    <string name="rotate_270">270 grader</string>
+    <string name="binding_click">Vid bindning</string>
+    <string name="key_binder_reset_all">Återställ allt</string>
+    <string name="orientation_landscape_inverse">Landskap (270)</string>
+    <string name="orientation_portrait_inverse">Porträtt (180)</string>
+    <string name="crop_auto_manual">Automatisk och manuell</string>
+    <string name="crop_manual_auto">Manuellt och automatiskt</string>
+    <string name="long_click">Vis lång tryckning</string>
+    <string name="short_click">Vid kort tryckning</string>
+    <string name="table_of_contents">Innehållsförteckning</string>
+</resources>
