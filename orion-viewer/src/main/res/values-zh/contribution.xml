@@ -3,9 +3,9 @@
     <string name="contribution_report_bug">• 在 <a href="https://github.com/max-kammerer/orion-viewer/issues">issue tracker</a> 里提建议，希望添加一项功能，或者告知开发者软件的问题</string>
     <string name="contribution_do_translation">• 把 <a href="https://github.com/max-kammerer/orion-viewer/wiki/Translations">应用程序</a> 翻译成其他语言，或者编辑现在有的译文</string>
     <string name="contribution_code">• 实现 <a href="https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-build-project">更多功能</a> 或者 <a href="https://github.com/max-kammerer/orion-viewer/issues">修 bug</a></string>
-    <string name="contribution_design">• 给应用程序设计新的主题和/或用户界面/用户体验</string>
+    <string name="contribution_design">• 给应用程序设计新的主题和/或新的用户界面/用户体验</string>
     <string name="contribution_review">• 在 <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">Google Play</a> 或者别的平台上评论</string>
     <string name="contribution_survey">本应用程序可以怎么改进 - 参与调查! (10–20 分钟)</string>
-    <string name="contribution_ways">您有很多方式给这个软件帮忙:</string>
+    <string name="contribution_ways">您有很多方式给这个软件项目帮忙：</string>
     <string name="contribution_intro">Orion Viewer 是开源项目，您可以给软件帮忙!</string>
 </resources>
