@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_crop_text">Beskär</string>
+    <string name="menu_bookmarks_text">Bokmärken</string>
+    <string name="menu_help_text">Hjälp</string>
+    <string name="menu_about_text">Om…</string>
+    <string name="menu_exit_text">Avsluta</string>
+    <string name="menu_options_text">Inställningar</string>
+    <string name="menu_search_item">Sök</string>
+    <string name="import_all_bookmarks_menu_item">Importera…</string>
+    <string name="menu_goto_text">Gå till</string>
+    <string name="menu_add_bookmark_item">Lägg till bokmärke</string>
+    <string name="menu_select_text">Välj text</string>
+    <string name="menu_rotation_text">Skärmrotering</string>
+    <string name="menu_open_text">Öppna bok</string>
+    <string name="menu_open_dictionary_text">Öppna lexikon</string>
+    <string name="menu_day_night_text">Dag/Natt-läge</string>
+    <string name="menu_book_preferences">Bok-alternativ</string>
+    <string name="menu_share_text">Dela text</string>
+    <string name="menu_share_file">Dela fil</string>
+    <string name="export_all_bookmarks_menu_item">Exportera alla bokmärken</string>
+    <string name="export_bookmarks_menu_item">Exportera nuvarande bokmärken</string>
+    <string name="menu_navigation_text">Sidlayout</string>
+    <string name="menu_tap_text">Tryckzoner</string>
+</resources>
