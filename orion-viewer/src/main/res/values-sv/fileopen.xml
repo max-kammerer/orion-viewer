@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="string_exception">Undantag</string>
+    <string name="string_intent">Avsikt</string>
+    <string name="string_send">Skicka…</string>
+    <string name="crash_on_book_opening_encrypted">Krypterat dokument</string>
+    <string name="fileopen_file_is_emppty">fil är tom</string>
+</resources>
