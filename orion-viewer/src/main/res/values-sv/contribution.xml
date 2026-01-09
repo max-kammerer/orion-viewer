@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="contribution_code">• implementera <a href="https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-build-project">ny funktion</a> eller <a href="https://github.com/max-kammerer/orion-viewer/issues">lös en bugg</a></string>
+    <string name="contribution_do_translation">• översätt <a href="https://github.com/max-kammerer/orion-viewer/wiki/Translations">applikationen till andra språk</a> eller förbättra en befintlig översättning</string>
+    <string name="contribution_intro">Orion Viewer är ett projekt med öppen källkod och du kan hjälpa till att förbättra det!</string>
+    <string name="contribution_report_bug">• föreslå en funktion eller rapportera ett problem till <a href="https://github.com/max-kammerer/orion-viewer/issues">ärendehanterare</a></string>
+    <string name="contribution_review">• skriv ett applikationsomdöme<a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">på Google Play</a> eller någon annan plattform</string>
+</resources>
