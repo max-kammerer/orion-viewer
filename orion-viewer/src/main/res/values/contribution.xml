@@ -3,7 +3,7 @@
 <resources>
     <string name="contribution_intro">Orion Viewer is open source project and you can help do it better!</string>
 
-    <string name="contribution_ways">There are many thing that you can bring to the project:</string>
+    <string name="contribution_ways">There are many things that you can bring to the project:</string>
 
     <string name="contribution_report_bug">\u2022 suggest a feature or report a problem into the <a href="https://github.com/max-kammerer/orion-viewer/issues">issue tracker</a></string>
     <string name="contribution_do_translation">\u2022 translate <a href="https://github.com/max-kammerer/orion-viewer/wiki/Translations">application to other languages</a> or improve an existing translation</string>
