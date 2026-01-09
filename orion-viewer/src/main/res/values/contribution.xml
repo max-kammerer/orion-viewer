@@ -6,12 +6,12 @@
     <string name="contribution_ways">There are many things that you can bring to the project:</string>
 
     <string name="contribution_report_bug">\u2022 suggest a feature or report a problem into the <a href="https://github.com/max-kammerer/orion-viewer/issues">issue tracker</a></string>
-    <string name="contribution_do_translation">\u2022 translate <a href="https://github.com/max-kammerer/orion-viewer/wiki/Translations">application to other languages</a> or improve an existing translation</string>
-    <string name="contribution_code">\u2022 implement <a href="https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-build-project">new feature</a> or <a href="https://github.com/max-kammerer/orion-viewer/issues">fix a bug</a></string>
-    <string name="contribution_design">\u2022 design new application theme or/and new UI/UX</string>
-    <string name="contribution_review">\u2022 write an application <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">review on Google Play</a> or any other platform</string>
+    <string name="contribution_do_translation">\u2022 translate the <a href="https://github.com/max-kammerer/orion-viewer/wiki/Translations">application to other languages</a> or improve an existing translation</string>
+    <string name="contribution_code">\u2022 implement a <a href="https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-build-project">new feature</a> or <a href="https://github.com/max-kammerer/orion-viewer/issues">fix a bug</a></string>
+    <string name="contribution_design">\u2022 design a new application theme or/and new UI/UX</string>
+    <string name="contribution_review">\u2022 write a <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">review on Google Play</a> or any other platform</string>
 
-    <string name="contribution_survey">Help to make the application better - participate in the survey about it! (10–20 minutes)</string>
+    <string name="contribution_survey">Help to improve the application by doing the survey! (10–20 minutes)</string>
 
     <string name="survey_key" translatable="false">1FAIpQLSf0EQaCCjQIbfjNLRXzroCLk6SOd5onkaUR3WiFAH8Hp0CXZA</string>
 </resources>
