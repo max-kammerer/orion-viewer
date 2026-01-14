@@ -15,6 +15,7 @@ ${MUPDF_PATH}/source/cbz/*.c
 ${MUPDF_PATH}/source/html/*.c
 ${MUPDF_PATH}/generated/resources/fonts/urw/*.c
 ${MUPDF_PATH}/generated/resources/fonts/sil/*.c
+${MUPDF_PATH}/generated/resources/hyphen/*.c
 )
 
 file(GLOB LIBARCH_INCLUDE
