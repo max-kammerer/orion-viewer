@@ -1,3 +1,8 @@
+===== 0.96.1 (Jan 15, 2026) =====
+* Disabled edge to edge mode in Android 15+
+* Added Initial Swedish translation
+* Updated mupdf library to 1.27.0
+
 ===== 0.96.0 (Dec 21, 2025) =====
 * Added support of Android 15+ devices with 16k memory pages
 * Added Thai translation
