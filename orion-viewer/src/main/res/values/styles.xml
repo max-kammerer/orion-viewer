@@ -101,6 +101,7 @@
     </style>
 
     <style name="Theme.Orion.Default.NoActionBar" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:fitsSystemWindows">true</item>
         <item name="navIconTint">@color/white</item>
         <item name="appIconTint">?attr/navIconTint</item>
         <item name="menuIconTint">?attr/navIconTint</item>
@@ -117,6 +118,7 @@
     </style>
 
     <style name="Theme.Orion.Dark.NoActionBar" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:fitsSystemWindows">true</item>
         <item name="navIconTint">@color/toolbar_icon_tint_ligth</item>
         <item name="appIconTint">?attr/navIconTint</item>
         <item name="menuIconTint">?attr/navIconTint</item>
@@ -126,6 +128,7 @@
     </style>
 
     <style name="Theme.Orion.Light.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:fitsSystemWindows">true</item>
         <item name="navIconTint">@color/toolbar_icon_tint</item>
         <item name="appIconTint">?attr/navIconTint</item>
         <item name="menuIconTint">?attr/navIconTint</item>
@@ -135,6 +138,7 @@
     </style>
 
     <style name="Theme.Orion.Android.Dark.NoActionBar" parent="Theme.Orion.Dark.NoActionBar">
+        <item name="android:fitsSystemWindows">true</item>
         <item name="navIconTint">?attr/colorControlNormal</item>
 
         <item name="newMenuTint">?attr/navIconTint</item>
@@ -142,6 +146,7 @@
     </style>
 
     <style name="Theme.Orion.Android.Light.NoActionBar" parent="Theme.Orion.Light.NoActionBar">
+        <item name="android:fitsSystemWindows">true</item>
         <item name="navIconTint">?attr/colorControlNormal</item>
 
         <item name="newMenuTint">?attr/navIconTint</item>
