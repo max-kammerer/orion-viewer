@@ -239,6 +239,8 @@ class GlobalOptions(
 
     val DRAW_PAGE_BORDER = pref("DRAW_PAGE_BORDER", true)
 
+    val SYNC_X_SCROLL = pref("SYNC_X_SCROLL", false)
+
     fun <T> subscribe(pref: Preference<T>) {
         registeredPreferences.put(pref.key, pref)?.also {
             errorInDebug("Pref with key ${pref.key} already registered: $pref ")
@@ -331,6 +333,8 @@ class GlobalOptions(
         const val OPEN_AS_TEMP_BOOK: String = "OPEN_AS_TEMP_BOOK"
 
         const val TEST_FLAG: String = "ORION_VIEWER_TEST_FLAG"
+
+        const val SYNC_X_SCROLL: String = "SYNC_X_SCROLL"
 
         const val ENABLE_TOUCH_MOVE: String = "ENABLE_TOUCH_MOVE"
 
