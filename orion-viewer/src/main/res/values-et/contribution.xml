@@ -4,8 +4,8 @@
     <string name="contribution_ways">Sa võid arenduses osaleda mitmel viisil:</string>
     <string name="contribution_report_bug">• soovita uut funktsionaalsust või teata probleemist <a href="https://github.com/max-kammerer/orion-viewer/issues">meie veahaldusliideses</a></string>
     <string name="contribution_design">• loo mõni uus kujundus või täienda kasutajaliidest</string>
-    <string name="contribution_do_translation">• tõlgi <a href="https://github.com/max-kammerer/orion-viewer/wiki/Translations">rakendust teistesse keeltesse</a> või paranda olemasolevat tõlget</string>
-    <string name="contribution_code">• lisa <a href="https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-build-project">uus funktsionaalsus</a> või <a href="https://github.com/max-kammerer/orion-viewer/issues">paranda mõni viga</a></string>
-    <string name="contribution_review">• koosta <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">Google Plays</a> või mõnel muus platvormil meie arvustus</string>
+    <string name="contribution_do_translation">• tõlgi seda <a href="https://github.com/max-kammerer/orion-viewer/wiki/Translations">rakendust teistesse keeltesse</a> või paranda olemasolevat tõlget</string>
+    <string name="contribution_code">• lisa mõni <a href="https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-build-project">uus funktsionaalsus</a> või <a href="https://github.com/max-kammerer/orion-viewer/issues">paranda mõni viga</a></string>
+    <string name="contribution_review">• koosta <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">Google Plays</a> või mõnel muul platvormil meie arvustus</string>
     <string name="contribution_survey">Aita muuta rakendust paremaks - osale vastavas küsitluses! (aega kulub 10-20 minutit)</string>
 </resources>
