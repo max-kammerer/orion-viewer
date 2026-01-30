@@ -1,3 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="fileopen_error_during_intent_processing">Chyba počas spracovania zámeru</string>
 </resources>
