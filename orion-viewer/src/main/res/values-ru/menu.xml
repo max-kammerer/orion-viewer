@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
     <string name="menu_zoom_text">Масштаб</string>
     <string name="menu_crop_text">Обрезка полей</string>
-    <string name="menu_goto_text">Перейти…</string>
+    <string name="menu_goto_text">Перейти</string>
     <string name="menu_bookmarks_text">Закладки</string>
     <string name="menu_add_bookmark_item">Добавить закладку</string>
-    <string name="menu_rotation_text">Ориентация экрана</string>
+    <string name="menu_rotation_text">Поворот экрана</string>
     <string name="menu_navigation_text">Раскладка страницы</string>
     <string name="menu_help_text">Помощь</string>
     <string name="menu_about_text">О программе…</string>
@@ -19,14 +18,13 @@
     <string name="menu_tap_text">Тап зоны</string>
     <string name="menu_search_item">Поиск</string>
     <string name="menu_other">Прочее…</string>
-
     <string name="menu_book_preferences">Настройки книги</string>
-    <string name="menu_outline_text">Содержание</string>
-
+    <string name="menu_outline_text">Краткое содержание</string>
     <string name="menu_select_text">Выделить текст</string>
-
     <string name="export_all_bookmarks_menu_item">Экспортировать все закладки</string>
     <string name="export_bookmarks_menu_item">Экспортировать текущие закладки</string>
     <string name="import_all_bookmarks_menu_item">Импортировать…</string>
     <string name="import_current_bookmarks_menu_item">Дополнить из…</string>
+    <string name="menu_share_text">Поделиться текстом</string>
+    <string name="menu_share_file">Поделиться файлом</string>
 </resources>
