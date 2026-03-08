@@ -13,6 +13,6 @@ fun calcFZCacheSize(deviceMemory: Long): Long {
         deviceMemory <= M_1024_MB -> 96L
         deviceMemory <= M_1536_MB -> 128L
         deviceMemory <= M_2048_MB -> 160L
-        else -> 256
+        else -> 256L
     } shl 20
 }
