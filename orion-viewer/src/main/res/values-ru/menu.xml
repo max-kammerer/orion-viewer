@@ -19,7 +19,7 @@
     <string name="menu_search_item">Поиск</string>
     <string name="menu_other">Прочее…</string>
     <string name="menu_book_preferences">Настройки книги</string>
-    <string name="menu_outline_text">Краткое содержание</string>
+    <string name="menu_outline_text">Cодержание</string>
     <string name="menu_select_text">Выделить текст</string>
     <string name="export_all_bookmarks_menu_item">Экспортировать все закладки</string>
     <string name="export_bookmarks_menu_item">Экспортировать текущие закладки</string>
