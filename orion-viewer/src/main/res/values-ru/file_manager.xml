@@ -4,20 +4,17 @@
     <string name="file_manager_fodlers">Папки</string>
     <string name="file_manager_history">История</string>
     <string name="file_manager_contribution">Участие</string>
-
     <string name="file_manager_select_tip">Выберите файл для открытия в Orion Viewer</string>
     <string name="file_manager_path">Путь:</string>
     <string name="file_manager_documents">Документы</string>
     <string name="file_manager_downloads">Загрузки</string>
-    <string name="file_manager_sdcard">SD Card</string>
+    <string name="file_manager_sdcard">SD карта</string>
     <string name="file_manager_grant_read_permissions">Дать права на чтение</string>
-
     <string name="file_manager_nav_locations">Места</string>
     <string name="file_manager_nav_settings">Настройки</string>
     <string name="file_manager_nav_other">Прочее</string>
     <string name="file_manager_nav_system_select">Выбрать файл в системе</string>
     <string name="file_manager_nav_exit">Выход</string>
-
     <string name="file_manager_internal_storage">Внутренний накопитель</string>
     <string name="file_manager_primary_storage">Главный накопитель</string>
 </resources>
