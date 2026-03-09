@@ -1,2 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="zoom">Avab suumitud vaate. Kui suumi väärtus on null, siis suumitakse laiuse alusel.</string>
+    <string name="rotation">Pöörab dokumenti 90 kraadi päripäeva. Pikk vajutus pöörab vastupäeva.</string>
+    <string name="crop">Avab veeriste/äärejoonte kadreerimise vaate. Väärtused on suhtelised lehekülje suuruse suhtes. Selles vaates pikk vajutus plussil või miinusel muudab kadreerimist 10%. Negatiivne väärtus laiendab veeriseid/äärejooni.</string>
+    <string name="apply">Kasuta praegust valikut.</string>
+    <string name="escape">Tagasi/Välju.</string>
+    <string name="general_usage">Kasutamine toimib nii:</string>
+    <string name="general_usage_step1">1. Ava dokument (vaikimisi suumitud laiusele)</string>
+    <string name="general_usage_step2">2. Vali sobilik paigutus: püstvaade või rõhtvaade</string>
+    <string name="general_usage_step3">3. Kadreeri veeriseid/äärejooni ja teksti suurus muutub vastavalt (kui oled määranud suumi laiuse alusel)</string>
+    <string name="general_usage_step4">4. Ja naudi lugemist!</string>
+    <string name="option_help">Rakenduse parameetrid</string>
+    <string name="navigation_help">Avab lehe paigutuse vaate. Kui loed koomikseid või vaatad pildiraamatut, siis saad valida sobiliku lehe paigutuse.</string>
+    <string name="dictionary_help">Avab välise kausta. Seadistustes saad soovitud kausta valida.</string>
+    <string name="tap_help">Puutealad võimaldavad seadme ekraani erinevaid alasid siduda levinud käskudega. Need on 3x3 ruudud, millele kasutaja saab määrata tegevusi lühikese (ülasilt) või pika puudutuse (alasilt) jaoks.</string>
+    <string name="bookmarks_export_help">Võimaldab kasutajal eksportida järjehoidjaid (kas kõikidest raamatutest või vaid avatud raamatust). Järjehoidjad eksporditakse xml-faili, mille nimi moodustub avatud raamatu nimest + [bookmarks.xml või all_bookmarks.xml] eesliitest. See eelistus on saadaval Järjehoidjate ekraanimenüüs.</string>
+</resources>
