@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_help_text">Pomoc</string>
+    <string name="menu_about_text">O…</string>
+    <string name="menu_open_text">Otvoriť knihu</string>
+    <string name="menu_outline_text">Prehľad</string>
+    <string name="menu_open_dictionary_text">Otvoriť slovník</string>
+    <string name="menu_day_night_text">Denní/Noční režim</string>
+    <string name="menu_exit_text">Koniec</string>
+    <string name="menu_options_text">Nastavenia</string>
+    <string name="menu_tap_text">Dotykové zóny</string>
+    <string name="menu_search_item">Hľadať</string>
+    <string name="menu_other">Dalšie…</string>
+    <string name="menu_book_preferences">Možnosti knihy</string>
+    <string name="menu_share_text">Zdielať text</string>
+    <string name="menu_share_file">Zdielať súbor</string>
+    <string name="export_all_bookmarks_menu_item">Exportovať všetky záložky</string>
+    <string name="export_bookmarks_menu_item">Exportovát aktuálne záložky</string>
+    <string name="import_all_bookmarks_menu_item">Importovať…</string>
+</resources>

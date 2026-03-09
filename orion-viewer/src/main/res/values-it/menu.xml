@@ -22,4 +22,9 @@
     <string name="export_bookmarks_menu_item">Esporta i segnalibri correnti</string>
     <string name="import_all_bookmarks_menu_item">Importa…</string>
     <string name="import_current_bookmarks_menu_item">Importa da…</string>
+    <string name="menu_about_text">Info…</string>
+    <string name="menu_search_item">Cerca</string>
+    <string name="menu_other">Altro…</string>
+    <string name="menu_share_text">Condividi il testo</string>
+    <string name="menu_share_file">Condividi il file</string>
 </resources>
