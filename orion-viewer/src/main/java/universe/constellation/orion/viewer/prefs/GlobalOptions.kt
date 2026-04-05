@@ -122,6 +122,8 @@ class GlobalOptions(
             editor.putString(RECENT_PREFIX + i, next.path)
             i++
         }
+        //delete last entry on delete
+        editor.remove(RECENT_PREFIX + i)
         editor.apply()
     }
 
