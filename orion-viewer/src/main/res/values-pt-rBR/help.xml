@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="zoom">Abre o diálogo de zoom. O valor zero significa ajustar o zoom à largura.</string>
+    <string name="rotation">Rotaciona o documento em 90 graus no sentido horário. Toque longo rotaciona no sentido anti-horário.</string>
+    <string name="crop">Abre a aba de recorte de bordas. O valor é definido pelo tamanho da página. Toque longo nessa aba para aumentar ou diminuir o recorte em 10%. Valor negativo adiciona mais borda.</string>
+    <string name="apply">Aplicar opções atuais.</string>
+    <string name="escape">Retornar/Sair.</string>
+    <string name="general_usage">Como usar:</string>
+    <string name="general_usage_step1">1. Abrir documento (zoom por largura por padrão)</string>
+    <string name="general_usage_step2">2. Selecione a orientação desejada: retrato ou paisagem</string>
+    <string name="option_help">Configurações do aplicativo</string>
+    <string name="general_usage_step4">4. Aproveite a leitura!</string>
+    <string name="general_usage_step3">3. Corte as bordas; o tamanho do texto será ajustado de acordo com as bordas alteradas (se o zoom por largura estiver definido)</string>
+    <string name="navigation_help">Abre a janela de layout da página. Durante a leitura de quadrinhos ou livros com imagens, é possível escolher o layout apropriado.</string>
+    <string name="dictionary_help">Abre o Dicionário Externo. Selecione o aplicativo de dicionário nas Configurações.</string>
+    <string name="tap_help">As zonas de toque permitem ao usuário mapear diferentes áreas da tela para comandos frequentes. A grade de 3x3 células permite definir ações para toque curto (rótulo superior) e toque longo (rótulo inferior).</string>
+    <string name="bookmarks_export_help">Permite ao usuário exportar favoritos (de todos os livros ou do livro atual). Os favoritos são exportados para um arquivo xml com o nome do livro aberto + sufixo [bookmarks.xml ou all_bookmarks.xml]. Esta opção está disponível no menu da tela de Favoritos.</string>
+</resources>
