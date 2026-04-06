@@ -1,3 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="warn_msg_no_dictionary">Dicionário não encontrado</string>
+    <string name="ex_msg_operation_failed">Falha na operação</string>
+    <string name="msg_dialog_search">Janela de pesquisa</string>
+    <string name="msg_dialog_dismis">Negar</string>
+    <string name="warn_text_not_found">Sem texto</string>
+    <string name="warn_no_further_occurrences_found">Não foram encontradas outras ocorrências</string>
+    <string name="msg_searching">Procurando…</string>
+    <string name="msg_select_text">Selecione o texto!</string>
+    <string name="string_wrong_password">Senha incorreta</string>
+    <string name="msg_select_word">Toque na palavra!</string>
+    <string name="password_for_file">Senha do arquivo</string>
+    <string name="wrong_outline_item">Página incorreta: %s</string>
+    <string name="msg_specify_keyword_for_search">Informe a palavra-chave para pesquisa</string>
+    <string name="recent_book_not_found">Não foi possível encontrar o arquivo do livro!</string>
+    <string name="msg_error">Erro</string>
+    <string name="msg_warning">Aviso</string>
+    <string name="tap_zones_header">Navegação por zonas de toque: ações padrão</string>
+    <string name="permission_directory_warning">Conceda permissão de leitura para acessar os dados de armazenamento</string>
+    <string name="permission_grant">Permitir…</string>
+    <string name="permission_cancel">Cancelar</string>
+    <string name="string_cancel">Cancelar</string>
+    <string name="string_close">Fechar</string>
+    <string name="string_apply">Aplicar</string>
 </resources>
