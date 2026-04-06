@@ -1,3 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="fileopen_error_during_intent_processing">Erro ao processar a ação</string>
+    <string name="fileopen_private_resource_access">Acessar arquivo privado</string>
+    <string name="fileopen_private_resource_access_info">Não foi possível acessar o arquivo diretamente, por favor selecione uma das opções abaixo:</string>
+    <string name="fileopen_permission_dialog">Não é possível acessar o arquivo diretamente</string>
+    <string name="fileopen_permission_dialog_info">Conceda permissão de leitura do arquivo para acessá-lo diretamente ou escolha a opção abaixo:</string>
+    <string name="fileopen_permissions_grant_read">Conceder acesso ao armazenamento…</string>
+    <string name="fileopen_save_to_file">Salvar em um novo arquivo…</string>
+    <string name="fileopen_open_in_temporary_file">Abrir usando um arquivo temporário</string>
+    <string name="fileopen_file_is_emppty">O arquivo está vazio</string>
+    <string name="fileopen_open_recent_files">Ir para livros recentes…</string>
+    <string name="crash_on_book_opening_title">Erro ao abrir o arquivo</string>
+    <string name="crash_on_intent_opening_title">Erro no processamento da ação</string>
+    <string name="error_on_file_saving_title">Erro ao salvar o arquivo</string>
+    <string name="fileopen_no_pages">O documento não tem páginas</string>
+    <string name="fileopen_error_during_intent_processing_info">Não é possível extrair o caminho do arquivo. Salve os dados em um arquivo para abri-lo ou:</string>
+    <string name="fileopen_report_error_by_github_and_return">Informe um problema no GitHub e volte ao diálogo…</string>
+    <string name="fileopen_report_error_by_email_and_return">Reportar erro por e-mail e retornar ao diálogo…</string>
+    <string name="string_exception">Exceção</string>
+    <string name="string_intent">Comando</string>
+    <string name="string_cause">Causa</string>
+    <string name="crash_on_book_opening_message_header">Ocorreu um erro ao abrir o arquivo %1$s. Por favor, relate o problema:</string>
+    <string name="crash_on_book_opening_message_header_panel">Erro ao abrir o arquivo %1$s:</string>
+    <string name="crash_on_book_opening_encrypted">Documento encriptado</string>
+    <string name="string_send">Enviar…</string>
+    <string name="send_report_header">Por favor, forneça detalhes adicionais (passos para reproduzir o problema)]</string>
+    <string name="fileopen_cant_open">Não foi possível abrir o documento: %s.</string>
 </resources>
