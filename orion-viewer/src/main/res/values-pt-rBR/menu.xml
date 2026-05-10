@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_zoom_text">Ampliação</string>
+    <string name="menu_crop_text">Cortar</string>
+    <string name="menu_goto_text">Ir Para</string>
+    <string name="menu_bookmarks_text">Marcadores</string>
+    <string name="menu_add_bookmark_item">Adicionar marcador</string>
+    <string name="menu_select_text">Selecionar texto</string>
+    <string name="menu_rotation_text">Rotação de tela</string>
+    <string name="menu_navigation_text">Layout da página</string>
+    <string name="menu_help_text">Ajuda</string>
+    <string name="menu_open_dictionary_text">Abrir Dicionário</string>
+    <string name="menu_day_night_text">Modo Dia/Noite</string>
+    <string name="menu_key_binder_text">Agenda</string>
+    <string name="menu_tap_text">Zonas de toque</string>
+    <string name="menu_book_preferences">Opções de Livro</string>
+    <string name="menu_share_text">Compartilhar texto</string>
+    <string name="menu_share_file">Compartilhar arquivo</string>
+    <string name="import_current_bookmarks_menu_item">Adicionar a partir de…</string>
+    <string name="export_all_bookmarks_menu_item">Exportar todos os marcadores</string>
+    <string name="export_bookmarks_menu_item">Exportar marcadores atuais</string>
+    <string name="menu_about_text">Sobre…</string>
+    <string name="menu_open_text">Abrir livro</string>
+    <string name="menu_outline_text">Contorno</string>
+    <string name="menu_exit_text">Sair</string>
+    <string name="menu_options_text">Configurações</string>
+    <string name="menu_search_item">Procurar</string>
+    <string name="menu_other">Outro…</string>
+    <string name="import_all_bookmarks_menu_item">Importar…</string>
+</resources>
