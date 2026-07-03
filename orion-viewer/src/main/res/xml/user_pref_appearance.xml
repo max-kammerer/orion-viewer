@@ -41,6 +41,17 @@
             android:title="@string/pref_renderPageBorder"
             app:iconSpaceReserved="false" />
 
+        <universe.constellation.orion.viewer.prefs.OrionEditTextPreference
+            android:defaultValue="2"
+            android:key="PAGE_GAP"
+            android:summary="@string/pref_page_gap_desc"
+            android:title="@string/pref_page_gap"
+            app:iconSpaceReserved="false"
+            app:maxValue="50"
+            app:minValue="0"
+            android:inputType="number"
+            app:showSeekBarValue="true" />
+
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="DRAW_OFF_PAGE"
