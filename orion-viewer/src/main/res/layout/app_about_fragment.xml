@@ -198,6 +198,41 @@
                 android:autoLink="web"
                 android:gravity="center"
                 android:linksClickable="true"
+                android:text="astronomy by Md Saiful Alam Saif from https://thenounproject.com/browse/icons/term/astronomy/ (CC BY 3.0)"
+                android:textSize="@dimen/text_size_medium" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:src="@drawable/ic_launcher_monochrome"
+                    android:maxWidth="53dp"
+                    android:maxHeight="53dp"
+                    android:adjustViewBounds="true"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:gravity="center"
+                android:linksClickable="true"
                 android:text="David Tolliday photo from https://www.davidtolliday.co.uk/p374533124/hb8f85e70#hb8f85e70"
                 android:textSize="@dimen/text_size_medium" />
 
@@ -211,7 +246,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:src="@mipmap/ic_launcher_background"
+                    android:src="@drawable/ic_launcher_background"
                     android:maxWidth="53dp"
                     android:maxHeight="53dp"
                     android:adjustViewBounds ="true"
