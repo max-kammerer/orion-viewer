@@ -29,8 +29,8 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
 
     private val analytics = controller.activity.analytics
 
-    private val pageGap: Int
-        get() = controller.activity.globalOptions.pageGap
+    private val pageGap: Float
+        get() = controller.activity.globalOptions.pageGap.toFloat().let { if (it == 0f) -1f else it }
 
     private val handler = CoroutineExceptionHandler { _, ex ->
         errorInDebug("Processing error in PageLayoutManager", ex)
@@ -564,7 +564,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
             if (RectF.intersects(rect1, rect2)) {
                 val intersection = RectF(rect1)
                 intersection.intersect(rect2)
-                if (intersection.width() > 1f && intersection.height() > 1f) {
+                if (intersection.width() > 2f && intersection.height() > 2f) {
                     val message =
                         "intersected pages ${it.first.pageNum} and ${it.second.pageNum} rects: $rect1 $rect2, intersection $intersection"
                     errorInDebug(message)
