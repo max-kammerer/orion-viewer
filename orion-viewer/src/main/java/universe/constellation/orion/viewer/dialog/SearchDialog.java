@@ -12,11 +12,13 @@ import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
@@ -60,7 +62,7 @@ public class SearchDialog extends DialogFragment {
 
     private EditText searchField;
 
-    private static StringBuffer previousSearch = new StringBuffer();
+    private static final StringBuffer previousSearch = new StringBuffer();
 
     private final SearchResultRenderer lastSearchResultRenderer = new SearchResultRenderer();
 
@@ -102,6 +104,26 @@ public class SearchDialog extends DialogFragment {
         int textColor = searchField.getTextColors().getDefaultColor();
         searchField.setTextColor(ColorUtil.transformColor(textColor, orionViewerActivity.getFullScene().getColorStuff().getColorMatrix()));
         searchField.setText(previousSearch);
+        
+        searchField.setOnEditorActionListener((v, actionId, event) -> {
+            boolean isEnter =
+                actionId == EditorInfo.IME_ACTION_SEARCH ||
+                actionId == EditorInfo.IME_ACTION_GO ||
+                actionId == EditorInfo.IME_ACTION_DONE ||
+                actionId == EditorInfo.IME_ACTION_SEND ||
+                actionId == EditorInfo.IME_ACTION_NEXT;
+
+            boolean isKeyEnter =
+                event != null &&
+                event.getAction() == KeyEvent.ACTION_DOWN &&
+                event.getKeyCode() == KeyEvent.KEYCODE_ENTER;
+
+            if (isEnter || isKeyEnter) {
+                doSearch(searchField, controller.getCurrentPage(), 1, controller, previousSearch);
+                return true;
+            }
+            return false;
+        });
 
         android.widget.ImageButton searchNext = dialog.findViewById(R.id.searchNext);
         searchNext.getBackground().setAlpha(ALPHA);
