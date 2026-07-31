@@ -60,6 +60,8 @@ public class SearchDialog extends DialogFragment {
 
     private EditText searchField;
 
+    private static StringBuffer previousSearch = new StringBuffer();
+
     private final SearchResultRenderer lastSearchResultRenderer = new SearchResultRenderer();
 
     private static final int ALPHA = 150;
@@ -99,14 +101,15 @@ public class SearchDialog extends DialogFragment {
         searchField.getBackground().setAlpha(ALPHA);
         int textColor = searchField.getTextColors().getDefaultColor();
         searchField.setTextColor(ColorUtil.transformColor(textColor, orionViewerActivity.getFullScene().getColorStuff().getColorMatrix()));
+        searchField.setText(previousSearch);
 
         android.widget.ImageButton searchNext = dialog.findViewById(R.id.searchNext);
         searchNext.getBackground().setAlpha(ALPHA);
-        searchNext.setOnClickListener(v -> doSearch(searchField, controller.getCurrentPage(), +1, controller));
+        searchNext.setOnClickListener(v -> doSearch(searchField, controller.getCurrentPage(), +1, controller, previousSearch));
 
         android.widget.ImageButton searchPrev = dialog.findViewById(R.id.searchPrev);
         searchPrev.getBackground().setAlpha(ALPHA);
-        searchPrev.setOnClickListener(v -> doSearch(searchField, controller.getCurrentPage(), -1, controller));
+        searchPrev.setOnClickListener(v -> doSearch(searchField, controller.getCurrentPage(), -1, controller, previousSearch));
 
         OrionDrawScene view = orionViewerActivity.getView();
         view.addTask(lastSearchResultRenderer);
@@ -200,7 +203,7 @@ public class SearchDialog extends DialogFragment {
         }
     }
 
-    private void doSearch(EditText searchField, int page, int direction, Controller controller) {
+    private void doSearch(EditText searchField, int page, int direction, Controller controller, StringBuffer newSearchText) {
         InputMethodManager inputManager = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(searchField.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
@@ -242,6 +245,9 @@ public class SearchDialog extends DialogFragment {
             log("Real search for " + page);
             destroyLastPage();
             myTask.go(newSearch, direction, page, -1, (SimpleLayoutStrategy) controller.getLayoutStrategy());
+            
+            newSearchText.setLength(0);
+            newSearchText.append(searchField.getText().toString());
         } else {
             SubBatch subBatch = screens.get(lastPosition);
             drawBatch(subBatch, controller);
