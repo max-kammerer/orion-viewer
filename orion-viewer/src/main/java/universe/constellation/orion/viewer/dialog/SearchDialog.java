@@ -103,7 +103,11 @@ public class SearchDialog extends DialogFragment {
         searchField.getBackground().setAlpha(ALPHA);
         int textColor = searchField.getTextColors().getDefaultColor();
         searchField.setTextColor(ColorUtil.transformColor(textColor, orionViewerActivity.getFullScene().getColorStuff().getColorMatrix()));
-        searchField.setText(previousSearch);
+
+        boolean preserveSearches = Boolean.TRUE.equals(orionViewerActivity.getGlobalOptions().getPRESERVE_SEARCH_TEXT().getValue());
+        if (preserveSearches) {
+            searchField.setText(previousSearch);
+        }
         
         searchField.setOnEditorActionListener((v, actionId, event) -> {
             boolean isEnter =
@@ -119,7 +123,7 @@ public class SearchDialog extends DialogFragment {
                 event.getKeyCode() == KeyEvent.KEYCODE_ENTER;
 
             if (isEnter || isKeyEnter) {
-                doSearch(searchField, controller.getCurrentPage(), 1, controller, previousSearch);
+                doSearch(searchField, controller.getCurrentPage(), 1, controller, preserveSearches, previousSearch);
                 return true;
             }
             return false;
@@ -127,11 +131,11 @@ public class SearchDialog extends DialogFragment {
 
         android.widget.ImageButton searchNext = dialog.findViewById(R.id.searchNext);
         searchNext.getBackground().setAlpha(ALPHA);
-        searchNext.setOnClickListener(v -> doSearch(searchField, controller.getCurrentPage(), +1, controller, previousSearch));
+        searchNext.setOnClickListener(v -> doSearch(searchField, controller.getCurrentPage(), +1, controller, preserveSearches, previousSearch));
 
         android.widget.ImageButton searchPrev = dialog.findViewById(R.id.searchPrev);
         searchPrev.getBackground().setAlpha(ALPHA);
-        searchPrev.setOnClickListener(v -> doSearch(searchField, controller.getCurrentPage(), -1, controller, previousSearch));
+        searchPrev.setOnClickListener(v -> doSearch(searchField, controller.getCurrentPage(), -1, controller, preserveSearches, previousSearch));
 
         OrionDrawScene view = orionViewerActivity.getView();
         view.addTask(lastSearchResultRenderer);
@@ -225,7 +229,13 @@ public class SearchDialog extends DialogFragment {
         }
     }
 
-    private void doSearch(EditText searchField, int page, int direction, Controller controller, StringBuffer newSearchText) {
+    private void doSearch(
+            EditText searchField,
+            int page,
+            int direction,
+            Controller controller,
+            boolean preserveSearches,
+            StringBuffer newSearchText) {
         InputMethodManager inputManager = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(searchField.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
@@ -269,7 +279,9 @@ public class SearchDialog extends DialogFragment {
             myTask.go(newSearch, direction, page, -1, (SimpleLayoutStrategy) controller.getLayoutStrategy());
             
             newSearchText.setLength(0);
-            newSearchText.append(searchField.getText().toString());
+            if (preserveSearches) {
+                newSearchText.append(searchField.getText().toString());
+            }
         } else {
             SubBatch subBatch = screens.get(lastPosition);
             drawBatch(subBatch, controller);
