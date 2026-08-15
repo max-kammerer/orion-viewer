@@ -20,11 +20,4 @@
     <string name="menu_book_preferences">אפשרויות ספר</string>
     <string name="export_all_bookmarks_menu_item">יצוא כל הסימניות</string>
     <string name="export_bookmarks_menu_item">ייצא סימניות</string>
-    <string name="import_current_bookmarks_menu_item"></string>
-    <string name="menu_share_text"></string>
-    <string name="menu_about_text"></string>
-    <string name="import_all_bookmarks_menu_item"></string>
-    <string name="menu_share_file"></string>
-    <string name="menu_other"></string>
-    <string name="menu_search_item"></string>
 </resources>

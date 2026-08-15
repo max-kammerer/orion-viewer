@@ -25,6 +25,4 @@
     <string name="menu_about_text">Про…</string>
     <string name="menu_search_item">Пошук</string>
     <string name="menu_other">Інше…</string>
-    <string name="menu_share_text"></string>
-    <string name="menu_share_file"></string>
 </resources>
