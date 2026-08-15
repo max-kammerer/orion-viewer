@@ -25,4 +25,6 @@
     <string name="menu_add_bookmark_item">Дадаць закладкі</string>
     <string name="menu_help_text">Дапамога</string>
     <string name="menu_about_text">Аб…</string>
+    <string name="menu_share_text"></string>
+    <string name="menu_share_file"></string>
 </resources>
