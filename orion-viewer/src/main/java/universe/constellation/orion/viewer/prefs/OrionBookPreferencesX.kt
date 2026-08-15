@@ -81,7 +81,7 @@ class OrionBookPreferencesFragment : DSLPreferenceFragment() {
                     key = DICTIONARY.prefKey
                     title = pref_dictionary.stringRes
                     summary = pref_dictionary_desc.stringRes
-                    dialogTitle = pref_screen_orientation.stringRes
+                    dialogTitle = pref_dictionary.stringRes
 
                     if (!isGeneral) {
                         setDefaultValue("DEFAULT")
