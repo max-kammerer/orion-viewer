@@ -8,4 +8,5 @@
     <string name="contribution_design">• прыўнесці новую тэму альбо дызайн прылады</string>
     <string name="contribution_review">• напісаць рэцензію альбо зрабіць прэўю <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">на платформе Google Play</a> альбо на іншай платформе</string>
     <string name="contribution_survey">Дапамажыце зрабіць плыладу лепш - прайдзіце апытанне ў ёй! (10–20 хвілін)</string>
+    <string name="survey_key" translatable="false"></string>
 </resources>
