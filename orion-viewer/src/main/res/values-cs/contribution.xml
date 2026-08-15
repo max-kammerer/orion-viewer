@@ -8,4 +8,5 @@
     <string name="contribution_design">• navrhněte nové téma aplikace nebo/a nové uživatelské rozhraní UI/UX</string>
     <string name="contribution_review">• napište <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">recenzi aplikace na Google Play</a> nebo na jakékoli jiné platformě</string>
     <string name="contribution_survey">Pomozte vylepšit aplikaci – zapojte se do průzkumu! (10–20 minut)</string>
+    <string name="survey_key" translatable="false"></string>
 </resources>
