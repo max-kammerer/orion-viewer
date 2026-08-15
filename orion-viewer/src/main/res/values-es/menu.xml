@@ -2,7 +2,7 @@
 <resources>
     <string name="menu_zoom_text">Zoom</string>
     <string name="menu_crop_text">Recortar</string>
-    <string name="menu_goto_text">Ir a </string>
+    <string name="menu_goto_text">Ir a</string>
     <string name="menu_bookmarks_text">Marcadores</string>
     <string name="menu_add_bookmark_item">Añadir Marcador</string>
     <string name="menu_select_text">Seleccionar texto</string>
