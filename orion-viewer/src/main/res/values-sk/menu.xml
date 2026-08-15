@@ -17,4 +17,14 @@
     <string name="export_all_bookmarks_menu_item">Exportovať všetky záložky</string>
     <string name="export_bookmarks_menu_item">Exportovať aktuálne záložky</string>
     <string name="import_all_bookmarks_menu_item">Importovať…</string>
+    <string name="import_current_bookmarks_menu_item"></string>
+    <string name="menu_zoom_text"></string>
+    <string name="menu_add_bookmark_item"></string>
+    <string name="menu_key_binder_text"></string>
+    <string name="menu_bookmarks_text"></string>
+    <string name="menu_navigation_text"></string>
+    <string name="menu_goto_text"></string>
+    <string name="menu_crop_text"></string>
+    <string name="menu_select_text"></string>
+    <string name="menu_rotation_text"></string>
 </resources>
