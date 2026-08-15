@@ -8,5 +8,4 @@
     <string name="contribution_code">• ลองใช้งาน <a href="https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-build-project">ฟีเจอร์ใหม่</a> หรือ <a href="https://github.com/max-kammerer/orion-viewer/issues">แก้ไขบั๊ก</a></string>
     <string name="contribution_review">• สร้างแอปพลิเคชัน <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">รีวิวบน Google Play</a> หรือแพลตฟอร์มอื่น ๆ</string>
     <string name="contribution_survey">ช่วยให้แอปพลิเคชันดีขึ้น - ร่วมทำแบบสอบถาม! (10–20 นาที)</string>
-    <string name="survey_key" translatable="false"></string>
 </resources>

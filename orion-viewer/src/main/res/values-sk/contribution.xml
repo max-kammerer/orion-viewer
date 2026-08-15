@@ -1,12 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="contribution_intro">Orion Viewer je open source projekt, a ty ho môžeš vylepšiť!</string>
-    <string name="contribution_ways"></string>
-    <string name="contribution_review"></string>
-    <string name="survey_key" translatable="false"></string>
-    <string name="contribution_do_translation"></string>
-    <string name="contribution_survey"></string>
-    <string name="contribution_code"></string>
-    <string name="contribution_design"></string>
-    <string name="contribution_report_bug"></string>
 </resources>
