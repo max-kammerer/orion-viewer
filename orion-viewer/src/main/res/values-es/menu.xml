@@ -25,4 +25,6 @@
     <string name="menu_search_item">Buscar</string>
     <string name="menu_about_text">Acerca de…</string>
     <string name="menu_other">Otros…</string>
+    <string name="menu_share_text">Compartir texto</string>
+    <string name="menu_share_file">Compartir archivo</string>
 </resources>
