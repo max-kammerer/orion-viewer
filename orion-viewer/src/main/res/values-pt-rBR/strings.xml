@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="crop_left">Esquerda</string>
+    <string name="enable_even_crop">Outro recorte para páginas pares</string>
+    <string name="crop_auto">Recorte automático</string>
+    <string name="crop_manual">Recorte manual</string>
+    <string name="rotate_0">0 graus</string>
+    <string name="rotate_90">90 graus</string>
+    <string name="rotate_270">270 graus</string>
+    <string name="binding_click">Ao vincular</string>
+    <string name="key_binder_reset_all">Redefinir tudo</string>
+    <string name="orientation_default_rotation">Aplicativo Padrão</string>
+    <string name="orientation_landscape_inverse">Paisagem (270)</string>
+    <string name="orientation_portrait_inverse">Retrato (180)</string>
+    <string name="fit_width">Ajustar à largura</string>
+    <string name="fit_height">Ajustar à altura</string>
+    <string name="fit_page">Ajustar à página</string>
+    <string name="color_mode_inverted">Cores invertidas</string>
+    <string name="crop_auto_manual">Automático e manual</string>
+    <string name="crop_manual_auto">Manual e automático</string>
+    <string name="long_click">Ao pressionar por muito tempo</string>
+    <string name="short_click">Ao clicar rapidamente</string>
+    <string name="table_of_contents">Sumário</string>
+    <string name="warn_no_outline">Estrutura ausente!</string>
+    <string name="navigation">Navegação de páginas</string>
+    <string name="crop_right">Direita</string>
+    <string name="crop_top">Superior</string>
+    <string name="crop_bottom">Inferior</string>
+    <string name="crop_warning">Use o recorte manual pra um melhor desempenho</string>
+    <string name="orientation_default">Padrão</string>
+    <string name="orientation_landscape">Paisagem</string>
+    <string name="orientation_portrait">Retrato</string>
+    <string name="fit_custom">Personalizar…</string>
+    <string name="key_binder_message">Pressione qualquer tecla para atribuí-la a uma ação!</string>
+    <string name="key_binder_warning">Não dá para usar esta tecla. Pressine outra para vincular!</string>
+    <string name="warn_no_text_in_selection">Nenhum texto foi selecionado!</string>
+    <string name="color_mode_normal">Cores normais (texto preto em fundo branco)</string>
+    <string name="color_mode_black_on_yellowish">Texto preto em fundo amarelado</string>
+    <string name="color_mode_grayscale_light">Escala de cinza sobre fundo acinzentado</string>
+    <string name="color_mode_grayscale">Tons de cinza em fundo cinza</string>
+    <string name="color_mode_grayscale_dark">Tons de cinza em fundo cinza escuro</string>
+    <string name="color_mode_white_on_blue">Texto branco em fundo azul</string>
+    <string name="select_color_mode">Escolha o modo de cor para trocar</string>
+    <string name="saveFileNameTooltip">NomeDoArquivo.extensão</string>
+    <string name="save">Salvar</string>
+</resources>
