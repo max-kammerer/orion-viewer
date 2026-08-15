@@ -5,8 +5,4 @@
     <string name="contribution_intro">Orion Viewer är ett projekt med öppen källkod och du kan hjälpa till att förbättra det!</string>
     <string name="contribution_report_bug">• föreslå en funktion eller rapportera ett problem till <a href="https://github.com/max-kammerer/orion-viewer/issues">ärendehanterare</a></string>
     <string name="contribution_review">• skriv ett applikationsomdöme<a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">på Google Play</a> eller någon annan plattform</string>
-    <string name="contribution_ways"></string>
-    <string name="survey_key" translatable="false"></string>
-    <string name="contribution_survey"></string>
-    <string name="contribution_design"></string>
 </resources>

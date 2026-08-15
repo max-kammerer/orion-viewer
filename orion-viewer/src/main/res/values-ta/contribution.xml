@@ -8,5 +8,4 @@
     <string name="contribution_do_translation">• <a href="https://github.com/max-kammerer/orion-viewer/wiki/Translations">பயன்பாடுகளைப் பிற மொழிகளில்</a> மொழிபெயர்க்கவும் அல்லது ஏற்கனவே உள்ள மொழிபெயர்ப்பை மேம்படுத்தவும்</string>
     <string name="contribution_design">• புதிய பயன்பாட்டு கருப்பொருள் அல்லது/மற்றும் புதிய UI/UX வடிவமைக்கவும்</string>
     <string name="contribution_survey">கணக்கெடுப்பு செய்வதன் மூலம் பயன்பாட்டை மேம்படுத்த உதவுங்கள்! (10-20 நிமிடங்கள்)</string>
-    <string name="survey_key" translatable="false"></string>
 </resources>

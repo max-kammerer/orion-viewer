@@ -8,5 +8,4 @@
     <string name="contribution_survey">Palīdziet padarīt lietotni labāku - piedalīties to aptaujā! (aizņems 10–20 minūtes)</string>
     <string name="contribution_ways">Ir daudz lietu, ko varat palīdzēt realizēt projektā:</string>
     <string name="contribution_report_bug">• ieteikt jaunu funkciju vai ziņot par kļūdu vai problēmu variet <a href="https://github.com/max-kammerer/orion-viewer/issues">GitHub problēmu sadaļā</a></string>
-    <string name="survey_key" translatable="false"></string>
 </resources>
