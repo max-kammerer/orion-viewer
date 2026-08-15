@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
     <string name="menu_zoom_text">Přiblížení</string>
     <string name="menu_crop_text">Oříznutí</string>
@@ -21,12 +20,11 @@
     <string name="menu_tap_text">Dotykové zóny</string>
     <string name="menu_search_item">Hledat</string>
     <string name="menu_other">Další…</string>
-
     <string name="menu_book_preferences">Možnosti knihy</string>
-
-
     <string name="export_all_bookmarks_menu_item">Exportovat všechny záložky</string>
     <string name="export_bookmarks_menu_item">Exportovat aktuální záložky</string>
     <string name="import_all_bookmarks_menu_item">Importovat…</string>
     <string name="import_current_bookmarks_menu_item">Přidat z…</string>
+    <string name="menu_share_text"></string>
+    <string name="menu_share_file"></string>
 </resources>
