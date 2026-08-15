@@ -20,9 +20,9 @@
     <string name="menu_key_binder_text">Tasten verknüpfen</string>
     <string name="export_bookmarks_menu_item">Aktuelle Lesezeichen exportieren</string>
     <string name="export_all_bookmarks_menu_item">Alle Lesezeichen exportieren</string>
-    <string name="import_current_bookmarks_menu_item">Lesezeichen hinzufügen …</string>
-    <string name="import_all_bookmarks_menu_item">Importieren …</string>
-    <string name="menu_about_text">Über …</string>
+    <string name="import_current_bookmarks_menu_item">Lesezeichen hinzufügen …</string>
+    <string name="import_all_bookmarks_menu_item">Importieren …</string>
+    <string name="menu_about_text">Über …</string>
     <string name="menu_share_text">Text teilen</string>
     <string name="menu_share_file">Datei teilen</string>
     <string name="menu_day_night_text">Tag/Nacht-Modus</string>
