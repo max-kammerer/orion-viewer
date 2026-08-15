@@ -8,4 +8,5 @@
     <string name="contribution_design">• diseñar un nuevo tema para la aplicación y/o una nueva UI/UX</string>
     <string name="contribution_review">• escribir una <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">reseña en Google Play</a> o cualquier otra plataforma</string>
     <string name="contribution_survey">¡Ayuda a mejorar la aplicación respondiendo la encuesta! (10-20 minutos)</string>
+    <string name="survey_key" translatable="false"></string>
 </resources>
