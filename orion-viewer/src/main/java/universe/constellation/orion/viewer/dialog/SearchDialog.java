@@ -240,6 +240,8 @@ public class SearchDialog extends DialogFragment {
         lastDirectionOnSearch = direction;
         if (newSearch.isEmpty()) {
             requireOrionActivity().showAlert(R.string.msg_error, R.string.msg_specify_keyword_for_search);
+            
+            searchText.setLength(0);
             return;
         }
 
