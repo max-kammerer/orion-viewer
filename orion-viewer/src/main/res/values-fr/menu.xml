@@ -25,4 +25,6 @@
     <string name="import_current_bookmarks_menu_item">Annexer à partir de…</string>
     <string name="menu_about_text">À propos…</string>
     <string name="menu_other">Autre…</string>
+    <string name="menu_share_text"></string>
+    <string name="menu_share_file"></string>
 </resources>
