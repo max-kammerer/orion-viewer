@@ -115,14 +115,12 @@ public class SearchDialog extends DialogFragment {
             boolean isEnter =
                 actionId == EditorInfo.IME_ACTION_SEARCH ||
                 actionId == EditorInfo.IME_ACTION_GO ||
-                actionId == EditorInfo.IME_ACTION_DONE ||
-                actionId == EditorInfo.IME_ACTION_SEND ||
-                actionId == EditorInfo.IME_ACTION_NEXT;
+                actionId == EditorInfo.IME_ACTION_DONE;
 
             boolean isKeyEnter =
                 event != null &&
                 event.getAction() == KeyEvent.ACTION_DOWN &&
-                event.getKeyCode() == KeyEvent.KEYCODE_ENTER;
+                (event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.KEYCODE_NUMPAD_ENTER);
 
             if (isEnter || isKeyEnter) {
                 doSearch(searchField, controller.getCurrentPage(), 1, controller);
