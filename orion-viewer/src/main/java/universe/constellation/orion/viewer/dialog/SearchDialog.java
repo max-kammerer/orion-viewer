@@ -107,6 +107,7 @@ public class SearchDialog extends DialogFragment {
         boolean preserveSearches = Boolean.TRUE.equals(orionViewerActivity.getGlobalOptions().getPRESERVE_SEARCH_TEXT().getValue());
         if (preserveSearches) {
             searchField.setText(previousSearch);
+            searchField.selectAll();
         } else {
             previousSearch = "";
         }
