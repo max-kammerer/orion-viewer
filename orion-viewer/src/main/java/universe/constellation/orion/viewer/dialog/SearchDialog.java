@@ -62,7 +62,7 @@ public class SearchDialog extends DialogFragment {
 
     private EditText searchField;
 
-    private static String previousSearch = "";
+    private StringBuilder savedSearchText;
 
     private final SearchResultRenderer lastSearchResultRenderer = new SearchResultRenderer();
 
@@ -104,12 +104,12 @@ public class SearchDialog extends DialogFragment {
         int textColor = searchField.getTextColors().getDefaultColor();
         searchField.setTextColor(ColorUtil.transformColor(textColor, orionViewerActivity.getFullScene().getColorStuff().getColorMatrix()));
 
-        boolean preserveSearches = Boolean.TRUE.equals(orionViewerActivity.getGlobalOptions().getPRESERVE_SEARCH_TEXT().getValue());
+        savedSearchText = orionViewerActivity.getOrionApplication().getTempOptions().savedSearchText;
+
+        boolean preserveSearches = orionViewerActivity.getGlobalOptions().getPRESERVE_SEARCH_TEXT().getValue();
         if (preserveSearches) {
-            searchField.setText(previousSearch);
+            searchField.setText(savedSearchText);
             searchField.selectAll();
-        } else {
-            previousSearch = "";
         }
         
         searchField.setOnEditorActionListener((v, actionId, event) -> {
@@ -239,8 +239,8 @@ public class SearchDialog extends DialogFragment {
         lastDirectionOnSearch = direction;
         if (newSearch.isEmpty()) {
             requireOrionActivity().showAlert(R.string.msg_error, R.string.msg_specify_keyword_for_search);
-            
-            previousSearch = "";
+
+            savedSearchText.setLength(0);
             return;
         }
 
@@ -275,7 +275,12 @@ public class SearchDialog extends DialogFragment {
             destroyLastPage();
             myTask.go(newSearch, direction, page, -1, (SimpleLayoutStrategy) controller.getLayoutStrategy());
 
-            previousSearch = searchField.getText().toString();
+            savedSearchText.setLength(0);
+
+            boolean preserveSearches = requireOrionActivity().getGlobalOptions().getPRESERVE_SEARCH_TEXT().getValue();
+            if (preserveSearches) {
+                savedSearchText.append(searchField.getText());
+            }
         } else {
             SubBatch subBatch = screens.get(lastPosition);
             drawBatch(subBatch, controller);
