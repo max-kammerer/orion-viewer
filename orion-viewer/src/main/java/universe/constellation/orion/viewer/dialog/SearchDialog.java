@@ -124,7 +124,7 @@ public class SearchDialog extends DialogFragment {
                 (event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.KEYCODE_NUMPAD_ENTER);
 
             if (isEnter || isKeyEnter) {
-                doSearch(searchField, controller.getCurrentPage(), 1, controller);
+                doSearch(searchField, controller.getCurrentPage(), +1, controller);
                 return true;
             }
             return false;
