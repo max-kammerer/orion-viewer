@@ -33,6 +33,6 @@ public class TemporaryOptions {
 
     public String openedFile;
 
-    public StringBuilder savedSearchText;
+    public String savedSearchText;
 }
 

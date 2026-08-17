@@ -165,7 +165,7 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
     fun onNewBook(fileName: String) {
         tempOptions = TemporaryOptions().also {
             it.openedFile = fileName
-            it.savedSearchText = StringBuilder()
+            it.savedSearchText = String()
         }
     }
 

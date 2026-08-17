@@ -62,8 +62,6 @@ public class SearchDialog extends DialogFragment {
 
     private EditText searchField;
 
-    private StringBuilder savedSearchText;
-
     private final SearchResultRenderer lastSearchResultRenderer = new SearchResultRenderer();
 
     private static final int ALPHA = 150;
@@ -104,11 +102,9 @@ public class SearchDialog extends DialogFragment {
         int textColor = searchField.getTextColors().getDefaultColor();
         searchField.setTextColor(ColorUtil.transformColor(textColor, orionViewerActivity.getFullScene().getColorStuff().getColorMatrix()));
 
-        savedSearchText = orionViewerActivity.getOrionApplication().getTempOptions().savedSearchText;
-
         boolean preserveSearches = orionViewerActivity.getGlobalOptions().getPRESERVE_SEARCH_TEXT().getValue();
         if (preserveSearches) {
-            searchField.setText(savedSearchText);
+            searchField.setText(orionViewerActivity.getOrionApplication().getTempOptions().savedSearchText);
             searchField.selectAll();
         }
         
@@ -238,9 +234,10 @@ public class SearchDialog extends DialogFragment {
         String newSearch = searchField.getText().toString();
         lastDirectionOnSearch = direction;
         if (newSearch.isEmpty()) {
-            requireOrionActivity().showAlert(R.string.msg_error, R.string.msg_specify_keyword_for_search);
+            OrionViewerActivity orionViewerActivity = requireOrionActivity();
+            orionViewerActivity.showAlert(R.string.msg_error, R.string.msg_specify_keyword_for_search);
 
-            savedSearchText.setLength(0);
+            orionViewerActivity.getOrionApplication().getTempOptions().savedSearchText = "";
             return;
         }
 
@@ -275,11 +272,13 @@ public class SearchDialog extends DialogFragment {
             destroyLastPage();
             myTask.go(newSearch, direction, page, -1, (SimpleLayoutStrategy) controller.getLayoutStrategy());
 
-            savedSearchText.setLength(0);
+            OrionViewerActivity orionViewerActivity = requireOrionActivity();
 
-            boolean preserveSearches = requireOrionActivity().getGlobalOptions().getPRESERVE_SEARCH_TEXT().getValue();
+            boolean preserveSearches = orionViewerActivity.getGlobalOptions().getPRESERVE_SEARCH_TEXT().getValue();
             if (preserveSearches) {
-                savedSearchText.append(searchField.getText());
+                orionViewerActivity.getOrionApplication().getTempOptions().savedSearchText = searchField.getText().toString();
+            } else {
+                orionViewerActivity.getOrionApplication().getTempOptions().savedSearchText = "";
             }
         } else {
             SubBatch subBatch = screens.get(lastPosition);
