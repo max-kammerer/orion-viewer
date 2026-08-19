@@ -200,6 +200,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
     private val toDestroy = hashSetOf<PageView>()
 
     fun updateCacheAndRender() {
+//        logNativeMemory("scroll: ${activePages.size} active pages")
         updateCache()
 
         //stop rendering

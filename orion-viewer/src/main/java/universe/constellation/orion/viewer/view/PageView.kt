@@ -26,6 +26,8 @@ import kotlin.math.floor
 import kotlin.math.min
 
 
+private const val STORE_SHRINK_PERCENT = 75
+
 enum class PageState(val interactWithUUI: Boolean) {
     STUB(false),
     CALC_GEOMETRY(false),
@@ -86,6 +88,9 @@ class PageView(
         controller.scope.launch {
             waitJobsCancellation(allJobs = true)
             freePagePointer()
+//            shrinkMupdfStore(STORE_SHRINK_PERCENT, "page $pageNum destroyed")
+//            logNativeMemory("page $pageNum destroyed", force = true)
+//            logNativeMemoryBreakdown("page $pageNum destroyed")
         }
     }
 

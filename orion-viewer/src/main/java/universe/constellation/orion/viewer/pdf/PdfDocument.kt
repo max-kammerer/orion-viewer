@@ -46,6 +46,7 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
     inner class PdfPage(pageNum: Int) : AbstractPage(pageNum) {
         @Volatile
         private var page: Page? = null
+        @Volatile
         private var displayList: DisplayList? = null
 
         @Volatile
@@ -115,7 +116,9 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
         private fun getOrCreateDisplayList() {
             if (displayList != null) return
             synchronized(core) {
-                displayList = page?.toDisplayList()
+                if (displayList == null) {
+                    displayList = page?.toDisplayList()
+                }
             }
         }
 

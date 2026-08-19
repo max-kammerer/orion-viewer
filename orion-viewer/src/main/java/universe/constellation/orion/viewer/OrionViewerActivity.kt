@@ -399,6 +399,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             saveBookPositionAndRecentFiles()
         }
         statusBarHelper.onPause(this)
+//        logNativeMemoryAfterGc("onPause")
     }
 
     private fun AppCompatDialog.initGoToPageScreen() {
