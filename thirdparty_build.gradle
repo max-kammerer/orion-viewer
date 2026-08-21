@@ -81,7 +81,7 @@ task downloadLibArchive {
 }
 
 task downloadMupdf {
-    def version = "1.27.0"
+    def version = "1.27.2"
 
     doLast {
         def mupdfFolder = new File(mupdf)
@@ -118,7 +118,38 @@ task downloadMupdf {
     }
 }
 
-task downloadAndMakeMupdf(dependsOn: [downloadMupdf, downloadLibArchive])  {
+/* Apply local patches from nativeLibs/patches (see README.md there).
+   Idempotent: a patch whose reverse applies cleanly is already in. */
+def applyPatches(File repo, File patchDir) {
+    if (!patchDir.isDirectory()) return
+    patchDir.listFiles({ f -> f.name.endsWith('.patch') } as FileFilter).sort().each { patch ->
+        def applied = exec {
+            workingDir repo
+            commandLine 'git', 'apply', '--reverse', '--check', patch.absolutePath
+            ignoreExitValue true
+            errorOutput = new ByteArrayOutputStream()
+        }.exitValue == 0
+        if (applied) {
+            println "patch ${patch.name}: already applied"
+        } else {
+            println "patch ${patch.name}: applying to ${repo}"
+            exec {
+                workingDir repo
+                commandLine 'git', 'apply', patch.absolutePath
+            }
+        }
+    }
+}
+
+task patchMupdf(dependsOn: [downloadMupdf]) {
+    doLast {
+        def patches = file('nativeLibs/patches/mupdf')
+        applyPatches(file(mupdf), patches)
+        applyPatches(file("$mupdf/thirdparty/jbig2dec"), new File(patches, 'thirdparty/jbig2dec'))
+    }
+}
+
+task downloadAndMakeMupdf(dependsOn: [patchMupdf, downloadLibArchive])  {
     doLast {
         /*For more details see mupdf/platform/android/viewer/ReadMe.txt*/
         exec {

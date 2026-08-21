@@ -1,0 +1,36 @@
+Subject: [PATCH] counter
+---
+Index: jbig2_image.c
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/jbig2_image.c b/jbig2_image.c
+--- a/jbig2_image.c	(revision d915733ec69260c1fd2c458b06835cb57bb85ac7)
++++ b/jbig2_image.c	(date 1787143025715)
+@@ -72,11 +72,14 @@
+ }
+ 
+ /* bump the reference count for an image pointer */
++/* Glyph images from a shared Jbig2GlobalCtx are referenced/released by
++ * every thread that decodes with these globals, so the refcount must be
++ * atomic to allow concurrent decoding. */
+ Jbig2Image *
+ jbig2_image_reference(Jbig2Ctx *ctx, Jbig2Image *image)
+ {
+     if (image)
+-        image->refcount++;
++        __atomic_add_fetch(&image->refcount, 1, __ATOMIC_RELAXED);
+     return image;
+ }
+ 
+@@ -86,8 +89,7 @@
+ {
+     if (image == NULL)
+         return;
+-    image->refcount--;
+-    if (image->refcount == 0)
++    if (__atomic_sub_fetch(&image->refcount, 1, __ATOMIC_ACQ_REL) == 0)
+         jbig2_image_free(ctx, image);
+ }
+ 
