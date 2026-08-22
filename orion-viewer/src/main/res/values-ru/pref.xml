@@ -36,6 +36,7 @@
     <string name="pref_close_page_option_dialog_on_apply">Закрывать диалог параметров страницы при применении настроек</string>
     <string name="pref_swap_prev_next_keys">Обменять клавиши местами</string>
     <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Обменять действия клавиш вперед/назад в портретном режиме</string>
+    <string name="pref_sync_x_scroll">Общая позиция по горизонтали</string>
     <string name="pref_dictionary">Словарь</string>
     <string name="pref_dictionary_desc">Словарь: %s</string>
     <string name="pref_e_ink_optimization">E-ink</string>
