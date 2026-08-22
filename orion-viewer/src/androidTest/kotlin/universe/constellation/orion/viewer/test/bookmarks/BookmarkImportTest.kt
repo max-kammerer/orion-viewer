@@ -41,7 +41,7 @@ class BookmarkImportTest : BaseTest() {
                 BookmarkExporter(accessor, exported.absolutePath).export(sourceId)
             )
 
-            BookmarkImporter(accessor, exported.inputStream(), setOf(source), target).doImport()
+            BookmarkImporter(accessor, setOf(source), target).doImport(exported.inputStream())
 
             val targetId = accessor.selectBookId(target.name, target.size)
             val imported = accessor.selectBookmarks(targetId)

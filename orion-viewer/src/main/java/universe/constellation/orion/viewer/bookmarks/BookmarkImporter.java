@@ -40,24 +40,21 @@ public class BookmarkImporter {
 
     private final BookmarkAccessor dataBase;
 
-    private final InputStream input;
-
     private final Set<BookNameAndSize> books;
 
     private final BookNameAndSize toBook;
 
 
-    /**
-     * Takes ownership of the input: it's closed by {@link #doImport()}.
-     */
-    public BookmarkImporter(BookmarkAccessor dataBase, InputStream input, Set<BookNameAndSize> books, BookNameAndSize toBook) {
+    public BookmarkImporter(BookmarkAccessor dataBase, Set<BookNameAndSize> books, BookNameAndSize toBook) {
         this.dataBase = dataBase;
-        this.input = input;
         this.books = books;
         this.toBook = toBook;
     }
 
-    public boolean doImport() throws OrionException {
+    /**
+     * Takes ownership of the input: it's closed before return.
+     */
+    public boolean doImport(InputStream input) throws OrionException {
         InputStreamReader reader = null;
         try {
             reader = new InputStreamReader(input);

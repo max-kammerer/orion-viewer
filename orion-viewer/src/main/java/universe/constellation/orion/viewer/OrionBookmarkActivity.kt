@@ -279,9 +279,9 @@ class OrionBookmarkActivity : OrionBaseActivity() {
         log("Import bookmarks " + books.size)
 
         val input = openImportStream(fileUri) ?: return
-        val importer = BookmarkImporter(orionApplication.getBookmarkAccessor(), input, books, toBook)
+        val importer = BookmarkImporter(orionApplication.getBookmarkAccessor(), books, toBook)
         try {
-            importer.doImport()
+            importer.doImport(input)
             val currentBookParameters = orionApplication.currentBookParameters
             val bookId = currentBookParameters?.let {
                 orionApplication.getBookmarkAccessor().selectBookId(it.simpleFileName, it.fileSize)
