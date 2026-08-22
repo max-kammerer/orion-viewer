@@ -59,6 +59,12 @@ enum class OptionActions(@JvmField val key: String) {
             val controller = activity.controller
             controller?.changeThreshhold(newValue)
         }
+    },
+
+    PAGE_GAP("PAGE_GAP") {
+        override fun doAction(activity: OrionViewerActivity, oldValue: Int, newValue: Int) {
+            activity.controller?.changePageGap(newValue)
+        }
     };
 
     open fun doAction(activity: OrionViewerActivity, oldValue: Int, newValue: Int) {

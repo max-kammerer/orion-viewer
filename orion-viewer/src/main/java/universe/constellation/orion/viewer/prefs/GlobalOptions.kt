@@ -83,6 +83,8 @@ class GlobalOptions(
                         activity.fullScene.setDrawOffPage(isDrawOffPage)
                         //TODO ?
                         activity.view.invalidate()
+                    } else if (PAGE_GAP == name) {
+                        OptionActions.PAGE_GAP.doAction(activity, pageGap, pageGap)
                     }
                 }
 
@@ -241,6 +243,9 @@ class GlobalOptions(
 
     val DRAW_PAGE_BORDER = pref("DRAW_PAGE_BORDER", true)
 
+    val pageGap: Int
+        get() = getIntFromStringProperty(PAGE_GAP, 2)
+
     fun <T> subscribe(pref: Preference<T>) {
         registeredPreferences.put(pref.key, pref)?.also {
             errorInDebug("Pref with key ${pref.key} already registered: $pref ")
@@ -265,6 +270,8 @@ class GlobalOptions(
         const val FULL_SCREEN: String = "FULL_SCREEN"
 
         const val DRAW_OFF_PAGE: String = "DRAW_OFF_PAGE"
+
+        const val PAGE_GAP: String = "PAGE_GAP"
 
         const val SHOW_ACTION_BAR: String = "SHOW_ACTION_BAR"
 
