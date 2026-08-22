@@ -72,6 +72,13 @@
             android:summary="@string/pref_swap_prev_next_keys_on_90_degree_rotation"
             android:title="@string/pref_swap_prev_next_keys"
             app:iconSpaceReserved="false" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="PRESERVE_SEARCH_TEXT"
+            android:summary="@string/pref_preserve_search_text_desc"
+            android:title="@string/pref_preserve_search_text"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory

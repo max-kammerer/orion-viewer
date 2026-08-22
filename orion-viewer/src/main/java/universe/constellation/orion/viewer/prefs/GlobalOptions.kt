@@ -241,6 +241,8 @@ class GlobalOptions(
 
     val DRAW_PAGE_BORDER = pref("DRAW_PAGE_BORDER", true)
 
+    val PRESERVE_SEARCH_TEXT = pref("PRESERVE_SEARCH_TEXT", true)
+
     fun <T> subscribe(pref: Preference<T>) {
         registeredPreferences.put(pref.key, pref)?.also {
             errorInDebug("Pref with key ${pref.key} already registered: $pref ")

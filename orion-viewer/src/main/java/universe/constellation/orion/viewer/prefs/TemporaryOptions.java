@@ -32,5 +32,7 @@ public class TemporaryOptions {
     public Long bookId;
 
     public String openedFile;
+
+    public String savedSearchText;
 }
 

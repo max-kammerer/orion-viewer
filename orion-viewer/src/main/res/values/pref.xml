@@ -46,6 +46,8 @@
     <string name="pref_close_page_option_dialog_on_apply">Close page option dialog on apply button click</string>
     <string name="pref_swap_prev_next_keys">Swap prev/next keys</string>
     <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Swap prev/next keys in landscape mode</string>
+    <string name="pref_preserve_search_text">Preserve search box query</string>
+    <string name="pref_preserve_search_text_desc">Keep previous query in the search box</string>
     <string name="pref_dictionary">Dictionary</string>
     <string name="pref_dictionary_desc">Dictionary: %s</string>
     <string name="pref_e_ink_optimization">E-ink</string>
