@@ -35,8 +35,11 @@ import org.xmlpull.v1.XmlPullParserFactory
 import universe.constellation.orion.viewer.Permissions.checkWritePermission
 import universe.constellation.orion.viewer.bookmarks.BookNameAndSize
 import universe.constellation.orion.viewer.bookmarks.Bookmark
+import universe.constellation.orion.viewer.bookmarks.ALL_BOOKMARKS_SUFFIX
+import universe.constellation.orion.viewer.bookmarks.BOOKMARKS_SUFFIX
 import universe.constellation.orion.viewer.bookmarks.BookmarkExporter
 import universe.constellation.orion.viewer.bookmarks.BookmarkImporter
+import universe.constellation.orion.viewer.bookmarks.bookmarksExportFile
 import java.io.*
 import java.util.*
 
@@ -129,40 +132,15 @@ class OrionBookmarkActivity : OrionBaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        var showEmptyResult = false
-
         when (item.itemId) {
 
             R.id.export_bookmarks_menu_item -> {
                 //should be granted automatically
                 checkWritePermission(this)
                 if (bookId == -1L) {
-                    showEmptyResult = true
-                }
-                var file: String? = orionApplication.tempOptions!!.openedFile
-                if (file == null) {
-                    showEmptyResult = true
-                }
-
-                if (!showEmptyResult) {
-                    val bookId = if (item.itemId == R.id.export_all_bookmarks_menu_item) -1 else this.bookId
-                    file = file + "." + (if (bookId == -1L) "all_" else "") + "bookmarks.xml"
-                    log("Bookmarks output file: $file")
-
-                    val exporter = BookmarkExporter(orionApplication.getBookmarkAccessor(), file)
-                    try {
-                        showEmptyResult = !exporter.export(bookId)
-                    } catch (e: IOException) {
-                        showAndLogError(this, e)
-                        return true
-                    }
-
-                }
-
-                if (showEmptyResult) {
                     showLongMessage("There is nothing to export!")
                 } else {
-                    showLongMessage("Bookmarks exported to " + file!!)
+                    exportBookmarks(bookId, BOOKMARKS_SUFFIX)
                 }
                 return true
             }
@@ -170,28 +148,7 @@ class OrionBookmarkActivity : OrionBaseActivity() {
             R.id.export_all_bookmarks_menu_item -> {
                 //should be granted automatically
                 checkWritePermission(this)
-                var file: String? = orionApplication.tempOptions!!.openedFile
-                if (file == null) {
-                    showEmptyResult = true
-                }
-                if (!showEmptyResult) {
-                    val bookId = if (item.itemId == R.id.export_all_bookmarks_menu_item) -1 else this.bookId
-                    file = file + "." + (if (bookId == -1L) "all_" else "") + "bookmarks.xml"
-                    log("Bookmarks output file: $file")
-                    val exporter = BookmarkExporter(orionApplication.getBookmarkAccessor(), file)
-                    try {
-                        showEmptyResult = !exporter.export(bookId)
-                    } catch (e: IOException) {
-                        showAndLogError(this, e)
-                        return true
-                    }
-
-                }
-                if (showEmptyResult) {
-                    showLongMessage("There is nothing to export!")
-                } else {
-                    showLongMessage("Bookmarks exported to " + file!!)
-                }
+                exportBookmarks(EXPORT_ALL_BOOKS, ALL_BOOKMARKS_SUFFIX)
                 return true
             }
 
@@ -289,6 +246,25 @@ class OrionBookmarkActivity : OrionBaseActivity() {
         }
     }
 
+    private fun exportBookmarks(bookId: Long, suffix: String) {
+        val target = bookmarksExportFile(orionApplication.currentBookParameters?.openingFileName, suffix)
+        log("Bookmarks output file: $target")
+
+        val exporter = BookmarkExporter(orionApplication.getBookmarkAccessor(), target.absolutePath)
+        val exported = try {
+            exporter.export(bookId)
+        } catch (e: IOException) {
+            showAndLogError(this, e)
+            return
+        }
+
+        if (exported) {
+            showLongMessage("Bookmarks exported to $target")
+        } else {
+            showLongMessage("There is nothing to export!")
+        }
+    }
+
     private fun doImport(fileName: String?, books: Set<BookNameAndSize>, toBook: BookNameAndSize?) {
         log("Import bookmarks " + books.size)
 
@@ -378,6 +354,8 @@ class OrionBookmarkActivity : OrionBaseActivity() {
         const val IMPORT_CURRRENT = 1
 
         const val IMPORT_ALL = 2
+
+        const val EXPORT_ALL_BOOKS = -1L
     }
 
 }

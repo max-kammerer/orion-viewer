@@ -20,12 +20,14 @@ fun createTestViewerIntent(body: Intent.() -> Unit): Intent {
         if (!hasExtra(GlobalOptions.SHOW_TAP_HELP)) {
             putExtra(GlobalOptions.SHOW_TAP_HELP, false)
         }
-        putExtra(GlobalOptions.OPEN_AS_TEMP_BOOK, true)
+        if (!hasExtra(GlobalOptions.OPEN_AS_TEMP_BOOK)) {
+            putExtra(GlobalOptions.OPEN_AS_TEMP_BOOK, true)
+        }
         putExtra(GlobalOptions.TEST_FLAG, true)
     }
 }
 
-fun createContentIntentWithGeneratedFile(fileName: String): Intent {
+fun createContentIntentWithGeneratedFile(fileName: String, body: Intent.() -> Unit = {}): Intent {
     return createTestViewerIntent {
         val uri = Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT)
             .authority(universe.constellation.orion.viewer.test.BuildConfig.APPLICATION_ID + ".fileprovider")
@@ -38,6 +40,7 @@ fun createContentIntentWithGeneratedFile(fileName: String): Intent {
         )
         val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileName.fileExtension)
         setDataAndType(uri, mimeType)
+        body()
     }
 }
 

@@ -116,6 +116,22 @@ abstract class BaseInstrumentationTest : BaseTest() {
         Espresso.onView(ViewMatchers.withId(R.id.option_dialog_bottom_close)).perform(ViewActions.click())
     }
 
+    /**
+     * Overflow menu doesn't always open from the first attempt, so retry before failing.
+     */
+    fun selectOptionsMenuItem(resId: Int) {
+        val title = getStringRes(resId)
+        repeat(3) {
+            if (device.hasObject(By.text(title))) {
+                Espresso.onView(ViewMatchers.withText(resId)).perform(ViewActions.click())
+                return
+            }
+            Espresso.openActionBarOverflowOrOptionsMenu(appContext)
+            device.wait(Until.findObject(By.text(title)), SHORT_TIMEOUT)
+        }
+        doFail("Can't find menu item '$title'")
+    }
+
     fun ActivityScenario<OrionViewerActivity>.openMenuAndSelect(id: Int, resId: Int) {
         val newUI = onActivityRes {
             it.showMenu()

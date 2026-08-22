@@ -162,8 +162,8 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
 
     }
 
-    fun onNewBook(fileName: String) {
-        tempOptions = TemporaryOptions().also { it.openedFile = fileName }
+    fun onNewBook() {
+        tempOptions = TemporaryOptions()
     }
 
 

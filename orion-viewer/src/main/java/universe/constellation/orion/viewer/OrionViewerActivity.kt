@@ -322,7 +322,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 globalOptions.addRecentEntry(GlobalOptions.RecentEntry(file.absolutePath))
 
                 lastPageInfo1.totalPages = newDocument.pageCount
-                orionApplication.onNewBook(file.name)
+                orionApplication.onNewBook()
                 invalidateOrHideMenu()
                 doOnLayout(lastPageInfo1)
                 analytics.fileOpenedSuccessfully(file)

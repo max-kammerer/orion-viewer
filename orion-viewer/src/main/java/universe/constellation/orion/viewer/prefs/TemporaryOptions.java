@@ -30,7 +30,5 @@ public class TemporaryOptions {
     public OutlineItem[] outline;
 
     public Long bookId;
-
-    public String openedFile;
 }
 
