@@ -320,7 +320,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
         }
     },
 
-    SHARE_FILE(R.string.menu_share_text, R.integer.action_share_file) {
+    SHARE_FILE(R.string.menu_share_file, R.integer.action_share_file) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
