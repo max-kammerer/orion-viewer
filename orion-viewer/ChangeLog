@@ -1,3 +1,8 @@
+===== 0.96.2 (Aug 22, 2026) =====
+* Fixed crashes on jbig2 pdf files due to race condition
+* Updated translations
+* Updated mupdf library to 1.27.2
+
 ===== 0.96.1 (Jan 15, 2026) =====
 * Disabled edge to edge mode in Android 15+
 * Added Initial Swedish translation
