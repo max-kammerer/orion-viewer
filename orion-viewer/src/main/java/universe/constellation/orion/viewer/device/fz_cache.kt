@@ -6,6 +6,8 @@ const val M_1024_MB = 1024L shl 20
 const val M_1536_MB = 1536L shl 20
 const val M_2048_MB = 2048L shl 20
 
+const val M_4096_MB = 4096L shl 20
+
 fun calcFZCacheSize(deviceMemory: Long): Long {
     return when {
         deviceMemory <= M_256_MB -> 48L
@@ -13,6 +15,7 @@ fun calcFZCacheSize(deviceMemory: Long): Long {
         deviceMemory <= M_1024_MB -> 96L
         deviceMemory <= M_1536_MB -> 128L
         deviceMemory <= M_2048_MB -> 160L
-        else -> 256L
+        deviceMemory <= M_4096_MB -> 256L
+        else -> 256L + 128L
     } shl 20
 }
