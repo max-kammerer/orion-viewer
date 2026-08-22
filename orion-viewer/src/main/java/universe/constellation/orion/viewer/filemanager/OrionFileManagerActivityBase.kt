@@ -26,6 +26,7 @@ import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAcc
 import universe.constellation.orion.viewer.Permissions.hasReadStoragePermission
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.android.isAtLeastKitkat
+import universe.constellation.orion.viewer.formats.FileFormats
 import universe.constellation.orion.viewer.getVectorDrawable
 import universe.constellation.orion.viewer.log
 import java.io.File
@@ -194,7 +195,10 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         }
     }
 
-    fun openFile(uri: Uri, isFromSystemFM: Boolean = false) {
+    open val systemSelectMimeTypes: Array<String>
+        get() = FileFormats.supportedMimeTypes
+
+    open fun openFile(uri: Uri, isFromSystemFM: Boolean = false) {
         log("Opening new book: $uri")
 
         startActivity(

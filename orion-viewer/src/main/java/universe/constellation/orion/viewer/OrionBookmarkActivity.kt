@@ -23,12 +23,14 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.net.toUri
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import org.xmlpull.v1.XmlPullParserFactory
@@ -171,16 +173,18 @@ class OrionBookmarkActivity : OrionBaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
-            val fileName = data!!.getStringExtra(OrionFileSelectorActivity.RESULT_FILE_NAME)
-            if (fileName == null || "" == fileName) {
+            val fileUri = data?.getStringExtra(OrionFileSelectorActivity.RESULT_FILE_URI)
+                ?.takeIf { it.isNotEmpty() }?.toUri()
+            if (fileUri == null) {
                 showWarning("File name is empty")
                 return
             } else {
-                log("To import $fileName")
-                val books = listBooks(fileName) ?: return
+                log("To import $fileUri")
+                val books = listBooks(fileUri) ?: return
 
                 if (books.isEmpty()) {
                     showWarning("There is no any bookmarks")
+                    return
                 }
 
                 val importCurrent = requestCode == IMPORT_CURRRENT
@@ -195,8 +199,14 @@ class OrionBookmarkActivity : OrionBaseActivity() {
                 builder.setPositiveButton("Import") { dialog, which ->
                     dialog.dismiss()
                     val currentBookParameters = orionApplication.currentBookParameters
-                    val toBook = BookNameAndSize(currentBookParameters!!.simpleFileName, currentBookParameters.fileSize)
-                    doImport(fileName, getCheckedItems(tree), if (importCurrent) toBook else null)
+                    if (importCurrent && currentBookParameters == null) {
+                        showWarning("There is no opened book to import into")
+                        return@setPositiveButton
+                    }
+                    val toBook = currentBookParameters?.let {
+                        BookNameAndSize(it.simpleFileName, it.fileSize)
+                    }
+                    doImport(fileUri, getCheckedItems(tree), if (importCurrent) toBook else null)
                 }
                 builder.setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
 
@@ -265,14 +275,18 @@ class OrionBookmarkActivity : OrionBaseActivity() {
         }
     }
 
-    private fun doImport(fileName: String?, books: Set<BookNameAndSize>, toBook: BookNameAndSize?) {
+    private fun doImport(fileUri: Uri, books: Set<BookNameAndSize>, toBook: BookNameAndSize?) {
         log("Import bookmarks " + books.size)
 
-        val importer = BookmarkImporter(orionApplication.getBookmarkAccessor(), fileName, books, toBook)
+        val input = openImportStream(fileUri) ?: return
+        val importer = BookmarkImporter(orionApplication.getBookmarkAccessor(), input, books, toBook)
         try {
             importer.doImport()
             val currentBookParameters = orionApplication.currentBookParameters
-            updateView(orionApplication.getBookmarkAccessor().selectBookId(currentBookParameters!!.simpleFileName, currentBookParameters.fileSize))
+            val bookId = currentBookParameters?.let {
+                orionApplication.getBookmarkAccessor().selectBookId(it.simpleFileName, it.fileSize)
+            } ?: -1L
+            updateView(bookId)
             showFastMessage("Imported successfully")
         } catch (e: OrionException) {
             showAlert("Error", e.message!!)
@@ -280,12 +294,21 @@ class OrionBookmarkActivity : OrionBaseActivity() {
 
     }
 
+    private fun openImportStream(fileUri: Uri): InputStream? {
+        return try {
+            contentResolver.openInputStream(fileUri)
+                ?: throw FileNotFoundException("No content for $fileUri")
+        } catch (e: Exception) {
+            showAndLogError(this, "Couldn't open file", e)
+            null
+        }
+    }
 
-    private fun listBooks(fileName: String): MutableList<BookNameAndSize>? {
+    private fun listBooks(fileUri: Uri): MutableList<BookNameAndSize>? {
         val bookNames = ArrayList<BookNameAndSize>()
         var reader: InputStreamReader? = null
         try {
-            reader = InputStreamReader(FileInputStream(File(fileName)))
+            reader = InputStreamReader(openImportStream(fileUri) ?: return null)
             val factory = XmlPullParserFactory.newInstance()
 
             val xpp = factory.newPullParser()

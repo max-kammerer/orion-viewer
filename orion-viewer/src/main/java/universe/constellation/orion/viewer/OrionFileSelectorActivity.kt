@@ -99,18 +99,31 @@ class OrionSaveFileActivity : OrionFileManagerActivityBase(
 class OrionFileSelectorActivity : OrionFileManagerActivityBase(
     false, FilenameFilter { dir, filename ->
         File(dir, filename).isDirectory || filename.lowercase(Locale.getDefault()).endsWith(".xml")
-    }
+    },
+    enableSystemOptionAction = true
 ) {
 
+    override val systemSelectMimeTypes: Array<String> = XML_MIME_TYPES
+
     override fun openFile(file: File) {
+        returnFile(file.toUri())
+    }
+
+    override fun openFile(uri: Uri, isFromSystemFM: Boolean) {
+        returnFile(uri)
+    }
+
+    private fun returnFile(uri: Uri) {
         val result = Intent()
-        result.putExtra(RESULT_FILE_NAME, file.absolutePath)
+        result.putExtra(RESULT_FILE_URI, uri.toString())
         setResult(Activity.RESULT_OK, result)
         finish()
     }
 
     companion object {
 
-        const val RESULT_FILE_NAME = "RESULT_FILE_NAME"
+        const val RESULT_FILE_URI = "RESULT_FILE_URI"
+
+        private val XML_MIME_TYPES = arrayOf("text/xml", "application/xml")
     }
 }

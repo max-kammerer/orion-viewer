@@ -40,16 +40,19 @@ public class BookmarkImporter {
 
     private final BookmarkAccessor dataBase;
 
-    private final String inputName;
+    private final InputStream input;
 
     private final Set<BookNameAndSize> books;
 
     private final BookNameAndSize toBook;
 
 
-    public BookmarkImporter(BookmarkAccessor dataBase, String inputName, Set<BookNameAndSize> books, BookNameAndSize toBook) {
+    /**
+     * Takes ownership of the input: it's closed by {@link #doImport()}.
+     */
+    public BookmarkImporter(BookmarkAccessor dataBase, InputStream input, Set<BookNameAndSize> books, BookNameAndSize toBook) {
         this.dataBase = dataBase;
-        this.inputName = inputName;
+        this.input = input;
         this.books = books;
         this.toBook = toBook;
     }
@@ -57,7 +60,7 @@ public class BookmarkImporter {
     public boolean doImport() throws OrionException {
         InputStreamReader reader = null;
         try {
-            reader = new InputStreamReader(new FileInputStream(inputName));
+            reader = new InputStreamReader(input);
 
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             XmlPullParser xpp = factory.newPullParser();

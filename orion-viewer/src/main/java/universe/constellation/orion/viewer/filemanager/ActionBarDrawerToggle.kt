@@ -6,7 +6,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import universe.constellation.orion.viewer.Action
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.android.isAtLeastKitkat
-import universe.constellation.orion.viewer.formats.FileFormats
 
 class ActionBarDrawerToggle(
     private val activity: OrionFileManagerActivityBase,
@@ -24,7 +23,7 @@ class ActionBarDrawerToggle(
         when(val itemId = item.itemId) {
             R.id.nav_system_select ->  {
                 if (!isAtLeastKitkat()) return true
-                activity.selectDocumentInSystem?.launch(FileFormats.supportedMimeTypes)
+                activity.selectDocumentInSystem?.launch(activity.systemSelectMimeTypes)
                 return true
             }
             R.id.nav_permissions ->  {
