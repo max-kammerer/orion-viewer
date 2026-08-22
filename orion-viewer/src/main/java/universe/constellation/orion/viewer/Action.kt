@@ -568,7 +568,12 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
         init {
             val values = entries.toTypedArray()
             for (value in values) {
-                actions[value.code] = value
+                //codes are static resources, so a collision is always a build time bug:
+                //the later action silently shadows the earlier one in every action list
+                val shadowed = actions.put(value.code, value)
+                if (shadowed != null) {
+                    error("Actions $shadowed and $value share code ${value.code}")
+                }
             }
         }
 
