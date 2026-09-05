@@ -110,6 +110,8 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
         get() = when(appTheme) {
             "DARK" -> R.style.Theme_Orion_Dark_NoActionBar
             "LIGHT" -> R.style.Theme_Orion_Light_NoActionBar
+            "LIBRARY" -> R.style.Theme_Orion_Library_NoActionBar
+            "CLASSIC" -> R.style.Theme_Orion_Classic_NoActionBar
             "ANDROID_LIGHT" ->  R.style.Theme_Orion_Android_Light_NoActionBar
             "ANDROID_DARK" ->  R.style.Theme_Orion_Android_Dark_NoActionBar
             else -> R.style.Theme_Orion_Dark_NoActionBar

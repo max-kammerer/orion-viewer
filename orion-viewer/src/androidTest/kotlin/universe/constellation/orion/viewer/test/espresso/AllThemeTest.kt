@@ -17,7 +17,7 @@ class AllThemeTest : BaseInstrumentationTest() {
     fun testThemes() {
         val themes = appContext.resources.getStringArray(R.array.application_theme)
 
-        Assert.assertEquals(5, themes.size)
+        Assert.assertEquals(7, themes.size)
 
         themes.forEach { theme ->
             val activity = launchActivity<OrionViewerActivity>(BookDescription.SICP.toOpenIntent {

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- API 23+ pairs with windowLightStatusBar=true (dark icons) in the light themes -->
+    <color name="paper_status_bar">#CBBD9F</color>
+    <color name="classic_status_bar">#FAFAFA</color>
+</resources>

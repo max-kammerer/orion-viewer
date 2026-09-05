@@ -6,9 +6,42 @@
     <color name="whitegrey">#FFF2F2F2</color>
     <color name="orion_orange">#ffcc66</color>
     <color name="orion_orange2">#ffaa55</color>
-    <color name="toolbar_icon_tint_ligth">#89b5ac</color>
-    <color name="toolbar_icon_tint">#2B4678</color>
+    <!-- light/dark branches of the orion_blue family -->
+    <color name="toolbar_icon_tint_ligth">#A9BDD6</color>
+    <color name="toolbar_icon_tint">#3D5878</color>
     <color name="orion_blue">#54759e</color>
+    <!-- dark branch of the orion_orange family: readable accent on light backgrounds -->
+    <color name="orion_ochre_dark">#B87817</color>
+
+    <!-- "Quiet graphite" dark theme: pure black, near-monochrome chrome, muted ochre accent -->
+    <color name="graphite_black">#000000</color>
+    <color name="graphite_surface">#1A1A1A</color>
+    <color name="graphite_chrome">#212528</color>
+    <color name="graphite_icon">#9AA0A5</color>
+    <color name="ochre_muted">#D9A441</color>
+
+    <!-- "Paper and ink" light theme: warm paper, warm ink, ochre accent -->
+    <color name="paper_background">#F3ECDD</color>
+    <color name="paper_surface">#FAF6EC</color>
+    <color name="paper_chrome">#ECE2CD</color>
+    <color name="paper_chrome_dark">#CBBD9F</color>
+    <color name="ink">#2F2A23</color>
+    <color name="ink_secondary">#6B6254</color>
+    <color name="ink_icon">#4A4238</color>
+
+    <!-- System status bar for light themes: dark below API 23 (icons are always
+         white there), light from API 23 on (values-v23 overlay + dark icons) -->
+    <color name="paper_status_bar">#2F2A23</color>
+    <color name="classic_status_bar">#54759e</color>
+
+    <!-- "Library" dark theme: reading-room green baize and brass -->
+    <color name="library_background">#14211C</color>
+    <color name="library_surface">#1D3129</color>
+    <color name="library_deep">#0F1A15</color>
+    <color name="library_text">#EDE6D4</color>
+    <color name="library_text_secondary">#98A69B</color>
+    <color name="library_icon">#C8B78A</color>
+    <color name="library_brass">#C8A24A</color>
     <dimen name="root_padding">5dp</dimen>
     <dimen name="min_entry_height">48dp</dimen>
 </resources>
