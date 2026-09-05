@@ -153,5 +153,5 @@ fun initPageNavControls(
 }
 
 private fun openPage(controller: Controller?, pageNum: Int) {
-    controller?.drawPage(pageNum, isTapNavigation = true)
+    controller?.goToPage(pageNum)
 }

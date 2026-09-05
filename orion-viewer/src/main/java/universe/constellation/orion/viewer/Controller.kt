@@ -103,11 +103,51 @@ class Controller(
         cropPadding = activity.dpToPixels(5f)
     }
 
+    /** Jumps remember the place they leave, so [navigateBack] can return to it. */
+    val history = NavigationHistory()
+
+    /** Where the last [NavKind.STEP] landed: the series goes on while the user is still there. */
+    private var lastStepTarget: DocPlace? = null
+
+    /**
+     * The single way to move to a place in the document. [kind] decides whether the current
+     * place is remembered in [history]; every move opens the target in single page mode.
+     */
     @JvmOverloads
-    fun drawPage(pageNum: Int, pageXOffset: Int = 0, pageYOffset: Int = 0, isTapNavigation: Boolean = false): PageView? {
-        log("Controller drawPage $document $pageNum: $pageXOffset $pageYOffset")
-        return pageLayoutManager.renderPageAt(pageNum, -pageXOffset, -pageYOffset, isTapNavigation)
+    fun goTo(place: DocPlace, kind: NavKind = NavKind.JUMP): PageView? {
+        log("Controller goTo $document $place: $kind")
+        val current = currentPlace()
+        val remember = when (kind) {
+            NavKind.JUMP -> true
+            NavKind.STEP -> lastStepTarget?.let { current?.isSamePlace(it) } != true
+            NavKind.PAGING -> false
+        }
+        if (remember && current != null) history.leave(current)
+        lastStepTarget = place.takeIf { kind == NavKind.STEP }
+        val page = place.page.coerceIn(0, pageCount - 1)
+        return pageLayoutManager.renderPageAtFraction(page, place.xFraction, place.yFraction, true)
     }
+
+    @JvmOverloads
+    fun goToPage(pageNum: Int, kind: NavKind = NavKind.JUMP): PageView? = goTo(DocPlace(pageNum), kind)
+
+    /** Reopens the document where it was closed: the saved pixel offsets and page mode are used as is. */
+    fun restorePosition(info: LastPageInfo): PageView? {
+        log("Controller restorePosition $document ${info.pageNumber}: ${info.newOffsetX} ${info.newOffsetY}")
+        return pageLayoutManager.renderPageAt(info.pageNumber, -info.newOffsetX, -info.newOffsetY, info.isSinglePageMode)
+    }
+
+    fun navigateBack(): Boolean = navigateHistory { history.back(it) }
+
+    fun navigateForward(): Boolean = navigateHistory { history.forward(it) }
+
+    private inline fun navigateHistory(step: (DocPlace) -> DocPlace?): Boolean {
+        val target = step(currentPlace() ?: return false) ?: return false
+        goTo(target, NavKind.PAGING)
+        return true
+    }
+
+    fun currentPlace(): DocPlace? = pageLayoutManager.currentPageLayout()?.toDocPlace()
 
     fun processPendingEvents() {
         if (hasPendingEvents) {
@@ -215,6 +255,7 @@ class Controller(
             document.setThreshold(info.threshold)
 
             layoutStrategy.init(info, activity.globalOptions)
+            history.restore(info.navigationHistory)
 
             lastScreenSize = Point(info.screenWidth, info.screenHeight)
             changeOrinatation(screenOrientation)
@@ -235,6 +276,7 @@ class Controller(
         info.newOffsetY = layoutInfo?.y?.offset ?: 0
         info.pageNumber = layoutInfo?.pageNumber ?: 0
         info.screenOrientation = screenOrientation
+        info.navigationHistory = history.serialize()
         info.save(activity)
     }
 
@@ -321,11 +363,6 @@ class Controller(
             rootJob = rootJob,
             pageLayoutManager = pageLayoutManager
         ).apply { init() }
-    }
-
-    @JvmOverloads
-    fun drawPage(lp: LayoutPosition, isTapNavigation: Boolean = false): PageView? {
-        return drawPage(lp.pageNumber, lp.x.offset, lp.y.offset, isTapNavigation)
     }
 
     companion object {

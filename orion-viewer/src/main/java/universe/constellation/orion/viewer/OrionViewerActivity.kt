@@ -204,7 +204,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     lastPageInfo?.apply {
                         if (openingFileName == filePath) {
                             log("Fast processing")
-                            controller!!.drawPage(pageNumber, newOffsetX, newOffsetY, controller!!.pageLayoutManager.isSinglePageMode)
+                            controller!!.restorePosition(this)
                             return
                         }
                     }
@@ -431,7 +431,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     val userPage = Integer.valueOf(pageNumberText.text.toString())
                     val newPage = MathUtils.clamp(userPage, 1, controller!!.pageCount)
                     if (newPage != controller?.currentPage) {
-                        controller?.drawPage(newPage - 1, isTapNavigation = true)
+                        controller?.goToPage(newPage - 1)
                         pageSeeker.progress = newPage - 1
                     }
                     dismiss()
@@ -829,7 +829,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     if (controller != null) {
                         val page = data!!.getIntExtra(OrionBookmarkActivity.OPEN_PAGE, -1)
                         if (page != -1) {
-                            controller!!.drawPage(page)
+                            controller!!.goToPage(page)
                         } else {
                             doAction(Action.GOTO)
                         }
@@ -957,12 +957,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 globalOptions.saveBooleanProperty(GlobalOptions.SHOW_TAP_HELP, false)
                 analytics.dialog(TAP_HELP_DIALOG, true)
             }
-            controller?.drawPage(
-                lastPageInfo1.pageNumber,
-                lastPageInfo1.newOffsetX,
-                lastPageInfo1.newOffsetY,
-                lastPageInfo1.isSinglePageMode
-            )
+            controller?.restorePosition(lastPageInfo1)
             controller?.pageLayoutManager?.updateCacheAndRender()
         }
     }
