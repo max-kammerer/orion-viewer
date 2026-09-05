@@ -26,4 +26,7 @@
     <string name="fileopen_file_is_emppty">fail on tühi</string>
     <string name="fileopen_no_pages">dokumendis pole lehti</string>
     <string name="fileopen_private_resource_access_info">Faili ei õnnestu otse avada, palun vali üks järgmistest tegevustest:</string>
+    <string name="fileopen_source_unavailable">Fail pole ligipääsetav</string>
+    <string name="fileopen_source_unavailable_info">Rakendus, mis algselt jagas faili (%1$s) ei võimalda failile enam ligipääsu: %2$s. Palun jaga seda faili sellest rakendusest või ava fail või hoopis:</string>
+    <string name="fileopen_source_unavailable_message">Rakendus, mis algselt jagas faili (%1$s) ei võimalda failile enam ligipääsu: %2$s. Palun jaga seda faili sellest rakendusest või ava fail.</string>
 </resources>
