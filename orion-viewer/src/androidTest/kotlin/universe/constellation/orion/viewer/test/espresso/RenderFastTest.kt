@@ -35,7 +35,7 @@ class RenderFastTest(bookDescription: BookFile, config: Configuration): BaseView
 
     private fun testGotoSwipe(page: Int) {
         onActivity {
-            it.controller!!.drawPage(page, 0, 0, true)!!
+            it.controller!!.goToPage(page)!!
             //assertEquals(page, it.controller!!.currentPage)
         }
     }

@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import universe.constellation.orion.viewer.Controller;
+import universe.constellation.orion.viewer.DocPlaceKt;
+import universe.constellation.orion.viewer.NavKind;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.PageWalker;
 import universe.constellation.orion.viewer.R;
@@ -263,7 +265,8 @@ public class SearchDialog extends DialogFragment {
         log("Rect " + toAbsoluteRect(subBatch.lp));
 
         lastSearchResultRenderer.setBatch(subBatch);
-        controller.drawPage(subBatch.lp, true);
+        //hits are steps of one series: "back" returns to where the search started
+        controller.goTo(DocPlaceKt.toDocPlace(subBatch.lp), NavKind.STEP);
     }
 
     @Override

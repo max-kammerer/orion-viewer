@@ -1,3 +1,8 @@
+===== 0.97.0 (Sep 06, 2026) =====
+* Added navigation by history
+* Added support for cb7 files
+* Added experimental markdown files support
+
 ===== 0.96.3 (Aug 23, 2026) =====
 * Fixed issues with bookmark export/import
 * Android 16 support

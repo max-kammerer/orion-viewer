@@ -18,6 +18,7 @@ import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.calcPageLayout
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.logTrace
+import universe.constellation.orion.viewer.offsetAtFraction
 import universe.constellation.orion.viewer.selection.PageAndSelection
 import kotlin.math.abs
 import kotlin.math.max
@@ -409,7 +410,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
                 0 -> {
                     log("renderNextOrPrev new params: $copy")
                     if (isTapNavigation && !next && copy.y.offset < 0) { copy.y.offset = 0 }
-                    return controller.drawPage(copy, isTapNavigation = isTapNavigation)
+                    return renderPageAt(copy.pageNumber, -copy.x.offset, -copy.y.offset, isTapNavigation)
                 }
 
                 1 ->
@@ -466,22 +467,45 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         return y
     }
 
+    /**
+     * Shows the page with the viewport at the given fractions of it. The pixel offsets are
+     * derived once the page is laid out, so they match the zoom and crop in effect right then.
+     */
+    fun renderPageAtFraction(pageNum: Int, xFraction: Float, yFraction: Float, isTapNavigation: Boolean): PageView? {
+        return renderPageAt(pageNum, 0, 0, isTapNavigation) { page, _ ->
+            val layout = page.layoutInfo
+            scrollLaidOutPageTo(
+                page,
+                -layout.x.offsetAtFraction(xFraction),
+                -layout.y.offsetAtFraction(yFraction),
+                isTapNavigation
+            )
+        }
+    }
+
+    /**
+     * Moves an already laid out page so that its viewport lands at (x, y). Valid only once the
+     * page size is known, i.e. from the [renderPageAt] doScroll callback: the move is a delta
+     * from the page's current position, and [getCenteredYInSinglePageMode] needs the real height.
+     */
+    private fun scrollLaidOutPageTo(page: PageView, x: Int, y: Int, isTapNavigation: Boolean) {
+        val oldPosition = page.layoutData.position
+        val newY = getCenteredYInSinglePageMode(y.toFloat(), page.height)
+        doScrollAndDoRendering(
+            oldPosition.x,
+            oldPosition.y,
+            x - oldPosition.x,
+            newY - oldPosition.y,
+            isTapNavigation
+        )
+    }
+
     fun renderPageAt(
         pageNum: Int,
         x: Int,
         y: Int,
         isTapNavigation: Boolean = false,
-        doScroll: (PageView, PageInfo) -> Unit = { page, _ ->
-            val oldPosition = page.layoutData.position
-            val newY = getCenteredYInSinglePageMode(y.toFloat(), page.height)
-            doScrollAndDoRendering(
-                oldPosition.x,
-                oldPosition.y,
-                x - oldPosition.x,
-                newY - oldPosition.y,
-                isTapNavigation
-            )
-        }
+        doScroll: (PageView, PageInfo) -> Unit = { page, _ -> scrollLaidOutPageTo(page, x, y, isTapNavigation) }
     ): PageView? {
         logTrace { "RenderPageAt page=$pageNum x=$x y=$y isTapNavigation=$isTapNavigation" }
         setSinglePageMode(isTapNavigation, pageNum)

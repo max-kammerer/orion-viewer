@@ -74,7 +74,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             if (page > controller1.pageCount - 1) {
                 page = controller1.pageCount - 1
             }
-            controller1.drawPage(page)
+            controller1.goToPage(page, NavKind.STEP)
         }
     },
 
@@ -91,7 +91,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             if (page < 0) {
                 page = 0
             }
-            controller1.drawPage(page)
+            controller1.goToPage(page, NavKind.STEP)
         }
     },
 
@@ -101,7 +101,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             activity: OrionViewerActivity,
             parameter: Any?
         ) {
-            controller?.drawPage(0)
+            controller?.goToPage(0)
         }
     },
 
@@ -111,7 +111,27 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             activity: OrionViewerActivity,
             parameter: Any?
         ) {
-            controller?.drawPage(controller.pageCount - 1)
+            controller?.goToPage(controller.pageCount - 1)
+        }
+    },
+
+    NAVIGATE_BACK(R.string.action_navigate_back, R.integer.action_navigate_back) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            controller?.navigateBack()
+        }
+    },
+
+    NAVIGATE_FORWARD(R.string.action_navigate_forward, R.integer.action_navigate_forward) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            controller?.navigateForward()
         }
     },
 

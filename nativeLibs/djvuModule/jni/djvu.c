@@ -285,11 +285,13 @@ JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong context, jlong doc
 
     int shift = originX + originY * bitmapWidth;
 
+    /* Clamp to the page area; a partially decoded page can report 0x0 dimensions,
+       so guard against unsigned underflow producing huge widths/heights. */
     if (pageRect.w < targetRect.x + targetRect.w) {
-        targetRect.w = targetRect.w - (targetRect.x + targetRect.w - pageRect.w);
+        targetRect.w = (pageRect.w > (unsigned int) targetRect.x) ? pageRect.w - targetRect.x : 0;
     }
     if (pageRect.h < targetRect.y + targetRect.h) {
-        targetRect.h = targetRect.h - (targetRect.y + targetRect.h - pageRect.h);
+        targetRect.h = (pageRect.h > (unsigned int) targetRect.y) ? pageRect.h - targetRect.y : 0;
     }
 
     LOGI("Target rect=%dx%d patch=[%d,%d,%d,%d], shift=%d zoom=%f",
@@ -303,8 +305,21 @@ JNI_FN(DjvuDocument_drawPage)(JNIEnv *env, jclass type, jlong context, jlong doc
     ddjvu_format_set_y_direction(pixelFormat, TRUE);
 
     char *buffer = &(((char *) pixels)[shift * 4]);
-    /*jboolean result = */ddjvu_page_render(page, DDJVU_RENDER_COLOR, &pageRect, &targetRect,
-                                        pixelFormat, info.stride, buffer);
+    jboolean result = FALSE;
+    if (targetRect.w > 0 && targetRect.h > 0) {
+        result = ddjvu_page_render(page, DDJVU_RENDER_COLOR, &pageRect, &targetRect,
+                                   pixelFormat, info.stride, buffer);
+    }
+    if (!result) {
+        /* Nothing was rendered (empty or not-yet-decoded page): paint blank paper
+           over the whole requested patch so stale pixels don't show through. The
+           patch bounds are the caller's contract, same as for the render above. */
+        LOGI("Empty page render, filling patch with white");
+        int y;
+        for (y = 0; y < patchH; y++) {
+            memset(buffer + y * info.stride, 0xFF, (size_t) patchW * 4);
+        }
+    }
 
     ddjvu_format_release(pixelFormat);
 

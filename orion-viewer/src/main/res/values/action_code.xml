@@ -65,6 +65,8 @@
     <integer name="action_fit_width">50</integer>
     <integer name="action_fit_heigh">51</integer>
     <integer name="action_fit_page">52</integer>
+    <integer name="action_navigate_back">53</integer>
+    <integer name="action_navigate_forward">54</integer>
 
     <integer name="action_tap_action">60</integer>
 

@@ -46,5 +46,7 @@
 
     <string name="action_fit_height">Масштабировать по высоте страницы</string>
     <string name="action_fit_page">Масштабировать по странице</string>
+    <string name="action_navigate_back">Назад к предыдущему месту</string>
+    <string name="action_navigate_forward">Вперёд к следующему месту</string>
     <string name="action_fit_width">Масштабировать по ширине страницы</string>
 </resources>

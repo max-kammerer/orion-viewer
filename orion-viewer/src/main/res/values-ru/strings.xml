@@ -33,6 +33,10 @@
     <string name="table_of_contents">Содержание</string>
     <string name="warn_no_text_in_selection">В выделенном участке отсутствует текст!</string>
     <string name="warn_no_outline">Содержание отсутствует!</string>
+    <string name="outline_tab_history">История</string>
+    <string name="outline_expand_all">Развернуть всё</string>
+    <string name="outline_history_empty">Переходов пока не было</string>
+    <string name="outline_history_page">стр. %1$d</string>
     <string name="select_color_mode">Выберите цветовой режим для переключения</string>
     <string name="color_mode_normal">Обычные цвета (черный на белом фоне)</string>
     <string name="color_mode_inverted">Инвертированные цвета</string>

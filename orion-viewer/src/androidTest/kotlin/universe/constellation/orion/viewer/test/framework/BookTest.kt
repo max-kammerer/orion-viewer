@@ -59,6 +59,9 @@ open class BookFile(val simpleFileName: String) {
             SICP
         )
 
+        /** The well-known default books: for scenarios that rely on their size/structure. */
+        fun mainTestEntries(): List<BookFile> = DEFAULT_BOOKS.map { BookFile(it) }
+
         fun testEntriesWithCustoms(): List<BookFile> {
             val files = BaseTest.testDataFolder.listFiles()
             if (files.isNullOrEmpty() || files.count { it.isFile } < DEFAULT_BOOKS.size) return hardCodedEntries()

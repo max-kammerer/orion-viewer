@@ -63,6 +63,7 @@ jobs:
       ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 170
       EMULATOR_API: ${{ matrix.arch[0] }}
     runs-on: ${{ matrix.arch[2] }}
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v7
       - name: Run job configurations

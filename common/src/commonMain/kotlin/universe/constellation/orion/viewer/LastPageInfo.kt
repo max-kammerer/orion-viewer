@@ -91,5 +91,9 @@ class LastPageInfo {
 
     @JvmField
     var dictionary: String? = "DEFAULT"
+
+    /** [NavigationHistory.serialize] output: the format is the only kind of field the xml loader takes. */
+    @JvmField
+    var navigationHistory = ""
 }
 
