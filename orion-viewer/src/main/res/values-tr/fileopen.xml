@@ -26,4 +26,7 @@
     <string name="send_report_header">[Lütfen ek ayrıntılar sağlayın (sorunu yeniden oluşturmak için adımlar)]</string>
     <string name="error_on_file_saving_title">Dosya kaydedilirken hata oluştu</string>
     <string name="crash_on_book_opening_message_header_panel">%1$s dosyası açılırken hata oluştu:</string>
+    <string name="fileopen_source_unavailable">Dosya erişilebilir değil</string>
+    <string name="fileopen_source_unavailable_info">Dosyayı paylaşan uygulama (%1$s) artık bu dosyaya erişim sağlamıyor: %2$s. Lütfen dosyayı o uygulamadan tekrar paylaşın veya açın, veya:</string>
+    <string name="fileopen_source_unavailable_message">Dosyayı paylaşan uygulama (%1$s) artık bu dosyaya erişim sağlamıyor: %2$s. Lütfen dosyayı o uygulamadan tekrar paylaşın veya açın.</string>
 </resources>
