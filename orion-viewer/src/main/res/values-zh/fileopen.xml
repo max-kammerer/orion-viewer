@@ -26,4 +26,7 @@
     <string name="string_cause">原因</string>
     <string name="crash_on_intent_opening_title">处理 intent 期间出错</string>
     <string name="fileopen_private_resource_access_info">无法直接访问访问，请选择以下选项之一：</string>
+    <string name="fileopen_source_unavailable">无法访问文件</string>
+    <string name="fileopen_source_unavailable_info">分享该文件 (%1$s) 的应用不再提供对该文件访问权限：%2$s。请从该应用再次分享或打开该文件，或者：</string>
+    <string name="fileopen_source_unavailable_message">分享该文件 (%1$s) 的应用不再提供对该文件访问权限：%2$s。请从该应用再次分享或打开该文件。</string>
 </resources>
