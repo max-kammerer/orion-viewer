@@ -113,7 +113,19 @@ android {
             java.srcDirs += 'src/androidTest/kotlin'
             assets.srcDirs += 'src/androidTest/assets'
         }
+
+        // compiled on top of androidTest only when the tests target the `tour` build type
+        androidTestTour {
+            java.srcDirs += 'src/androidTestTour/kotlin'
+        }
     }
+
+    /*
+     * The manual screen tour (ScreenTourTest) is not part of the regular suite: it lives in
+     * src/androidTestTour and gets compiled only for the `tour` build type, selected with
+     * `-Porion.tour=true` (see the Screenshots workflow).
+     */
+    testBuildType = isTourBuild ? 'tour' : 'debug'
 
     buildTypes {
         release {
@@ -134,6 +146,11 @@ android {
             multiDexKeepProguard file('multiDexKeep.pro')
 //            minifyEnabled true
 //            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        tour {
+            initWith debug
+            // the library modules only have debug/release
+            matchingFallbacks = ['debug']
         }
     }
 
@@ -250,8 +267,11 @@ def fetchScreenshotsTask = tasks.register('fetchScreenshots') {
 }
 
 afterEvaluate {
-    connectedDebugAndroidTest.dependsOn 'uploadTestData'
-    connectedDebugAndroidTest.finalizedBy fetchScreenshotsTask
+    def connectedTest = tasks.named("connected${android.testBuildType.capitalize()}AndroidTest")
+    connectedTest.configure {
+        dependsOn 'uploadTestData'
+        finalizedBy fetchScreenshotsTask
+    }
 }
 
 task('prepareRelease', type: Copy) {

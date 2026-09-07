@@ -82,8 +82,8 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           sdcard-path-or-size: 500M
-          # the screenshots package holds the manual screen tour, see screenshots.yml
-          script: ./gradlew forwardLogcat connectedDebugAndroidTest -Porion.CIBuild=true  -Porion.build.android40=${{ matrix.arch[0] == 15 }} -Pandroid.testInstrumentationRunnerArguments.notPackage=universe.constellation.orion.viewer.test.screenshots
+          # the manual screen tour (src/androidTestTour) is compiled only for the tour build type, see screenshots.yml
+          script: ./gradlew forwardLogcat connectedDebugAndroidTest -Porion.CIBuild=true  -Porion.build.android40=${{ matrix.arch[0] == 15 }}
 
       - name: Name test suite
         # AGP names the single <testsuite> after the first test class that ran

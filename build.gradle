@@ -26,6 +26,8 @@ allprojects {
 
 project.ext {
     isAndroid40Build = project.findProperty("orion.build.android40")?.toBoolean() ?: false
+    // instrumented tests run against the `tour` build type: the manual screen tour from src/androidTestTour
+    isTourBuild = project.findProperty("orion.tour")?.toBoolean() ?: false
     orionMinSdk = !isAndroid40Build ? 16 : 14
     orionTargetSdk = 36
     orionCompileSdk = 36

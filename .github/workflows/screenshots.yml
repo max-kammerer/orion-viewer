@@ -1,7 +1,8 @@
 name: Screenshots
 
 # Manual run only: walks through the main screens under every theme
-# (ScreenTourTest) on each requested API level and uploads the screenshots.
+# (ScreenTourTest from src/androidTestTour, compiled only for the `tour` test build type)
+# on each requested API level and uploads the screenshots.
 #
 # Default API levels are the ones where the theme machinery differs:
 #   19 - no system bar coloring at all, the only API 4.x still on the test matrix
@@ -51,7 +52,7 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           sdcard-path-or-size: 500M
-          script: ./gradlew forwardLogcat connectedDebugAndroidTest -Porion.CIBuild=true -Pandroid.testInstrumentationRunnerArguments.class=universe.constellation.orion.viewer.test.screenshots.ScreenTourTest -Pandroid.testInstrumentationRunnerArguments.tour.themes=${{ inputs.themes }}
+          script: ./gradlew forwardLogcat connectedTourAndroidTest -Porion.tour=true -Porion.CIBuild=true -Pandroid.testInstrumentationRunnerArguments.class=universe.constellation.orion.viewer.test.screenshots.ScreenTourTest -Pandroid.testInstrumentationRunnerArguments.tour.themes=${{ inputs.themes }}
 
       - name: Upload screenshots
         uses: actions/upload-artifact@v7

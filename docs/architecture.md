@@ -296,11 +296,17 @@ JVM unit-test source set. They fall into a few groups:
 
 - `test/engine/` — document engine level: opening books, search, selection, parallel open,
   Unicode file names.
-- `test/espresso/` — UI level: scrolling, zoom, page navigation, tap zones, themes, screenshots.
+- `test/espresso/` — UI level: scrolling, zoom, page navigation, tap zones, themes.
   `BaseViewerActivityTest` / `BaseViewerActivityTestWithConfig` are the entry points, with
   `Configuration.kt` parameterising books and devices.
 - `test/rendering/`, `test/utils/`, `test/perf/` — bitmap handling, rect invariants, benchmarks.
 - `test/framework/` — shared harness, including `OperationIdlingResource`.
+
+The manual screen tour (`ScreenTourTest`, screenshots of the main screens under every theme) sits
+apart in `orion-viewer/src/androidTestTour`: that source set is compiled on top of `androidTest`
+only when the instrumented tests target the `tour` build type (`-Porion.tour=true`, the build type
+is a copy of debug), so the regular suite never includes it. The "Screenshots" workflow runs it with
+`./gradlew connectedTourAndroidTest -Porion.tour=true`.
 
 `AGrantFilePermissionsTest` is a stub whose only assertion is that the test book is readable; the
 leading `A` makes it run first, so that permission granting done by `BaseViewerActivityTest`

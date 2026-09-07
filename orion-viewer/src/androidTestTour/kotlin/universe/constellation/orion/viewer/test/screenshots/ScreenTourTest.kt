@@ -48,8 +48,9 @@ import universe.constellation.orion.viewer.test.framework.dumpBitmap
 /**
  * Walks through the main screens, mostly the reader, under every application theme and stores
  * a screenshot of each into the failures folder, from where gradle pulls them into build/failures.
- * Not a check of anything, a tool for eyeballing themes, so it isn't part of the regular CI run:
- * the "Screenshots" workflow runs it on demand.
+ * Not a check of anything, a tool for eyeballing themes, so it isn't part of the regular suite:
+ * the source set is compiled only for the `tour` test build type (`-Porion.tour=true`) and the
+ * "Screenshots" workflow runs it on demand.
  *
  * Themes can be limited with the instrumentation argument `tour.themes`, a comma-separated list:
  * `-Pandroid.testInstrumentationRunnerArguments.tour.themes=LIBRARY,CLASSIC`.
@@ -114,10 +115,8 @@ class ScreenTourTest(private val theme: String) : BaseInstrumentationTest() {
             .putExtra(DONT_OPEN_RECENT_FILE, true)
         ActivityScenario.launch<OrionFileManagerActivity>(intent).use { fileManager ->
             onView(withId(R.id.folderList)).check(matches(isDisplayed()))
-            assertNotNull(
-                "$SICP is not listed in ${testDataFolder.absolutePath}",
-                device.wait(Until.findObject(By.text(SICP)), LONG_TIMEOUT)
-            )
+            /* onData scrolls to the book: a device folder with extra files pushes it below the fold */
+            onData(hasToString(endsWith(SICP))).inAdapterView(withId(R.id.folderList)).check(matches(isDisplayed()))
             shot("01_file_manager")
 
             fileManager.onActivity { it.drawer.openDrawer(GravityCompat.START, false) }
@@ -170,24 +169,24 @@ class ScreenTourTest(private val theme: String) : BaseInstrumentationTest() {
             viewer.openMenuItem(R.id.search_menu_item)
             Espresso.closeSoftKeyboard()
             shot("10_search")
-            Espresso.pressBack()
+            viewer.back()
 
             viewer.openMenuItem(R.id.add_bookmark_menu_item)
             Espresso.closeSoftKeyboard()
             shot("11_add_bookmark")
-            Espresso.pressBack()
+            viewer.back()
 
             viewer.openMenuItem(R.id.bookmarks_menu_item)
             shot("12_bookmarks")
-            Espresso.pressBack()
+            viewer.back()
 
             viewer.openMenuItem(R.id.book_options_menu_item)
             shot("13_book_options")
-            Espresso.pressBack()
+            viewer.back()
 
             viewer.openMenuItem(R.id.options_menu_item)
             shot("14_settings")
-            Espresso.pressBack()
+            viewer.back()
         }
     }
 
@@ -201,9 +200,30 @@ class ScreenTourTest(private val theme: String) : BaseInstrumentationTest() {
         Espresso.onIdle()
     }
 
+    /** The menu may need a second attempt right after another activity was closed. */
     private fun OrionViewerActivity.openMenuItem(id: Int) {
-        openMenu()
-        onView(withId(id)).perform(click())
+        val resName = appContext.resources.getResourceEntryName(id)
+        repeat(3) {
+            openMenu()
+            if (this@ScreenTourTest.device.wait(Until.hasObject(By.res(BuildConfig.APPLICATION_ID, resName)), LONG_TIMEOUT / 5)) {
+                onView(withId(id)).perform(click())
+                Espresso.onIdle()
+                return
+            }
+        }
+        throw AssertionError("Menu item $resName didn't show up")
+    }
+
+    /** Leaves a dialog or an activity opened from the viewer and waits until the viewer is in front again. */
+    private fun OrionViewerActivity.back() {
+        Espresso.pressBack()
+        await("Viewer wasn't resumed after going back") {
+            var resumed = false
+            runOnMain {
+                resumed = this in ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED)
+            }
+            resumed
+        }
         Espresso.onIdle()
     }
 
