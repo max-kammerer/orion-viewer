@@ -1,0 +1,41 @@
+diff --git a/libdjvu/ByteStream.cpp b/libdjvu/ByteStream.cpp
+index 215ae41..f87dafe 100644
+--- a/libdjvu/ByteStream.cpp
++++ b/libdjvu/ByteStream.cpp
+@@ -1073,9 +1073,15 @@ ByteStream::create(const GURL &url,char const * const xmode)
+             {
+               MemoryMapByteStream *rb = new MemoryMapByteStream();
+               retval = rb;
+-              GUTF8String errmessage = rb->init(fd,true);
++              /* Keep the fd on failure: the fdopen() fallback below still
++                 needs it, and closing it here lets another thread reuse the
++                 number in between. A successful mmap holds its own reference,
++                 so the fd can go right away. */
++              GUTF8String errmessage = rb->init(fd,false);
+               if(errmessage.length())
+                 retval=0;
++              else
++                close(fd);
+             }
+ #endif
+           if (! retval)
+@@ -1131,11 +1137,18 @@ ByteStream::create(const int fd,char const * const mode,const bool closeme)
+   {
+     MemoryMapByteStream *rb=new MemoryMapByteStream();
+     retval=rb;
+-    GUTF8String errmessage=rb->init(fd,closeme);
++    /* Same as in the GURL overload: never let init() close the fd,
++       the fdopen() fallback below reuses that very number when
++       closeme is set (dup() is only done when it isn't). */
++    GUTF8String errmessage=rb->init(fd,false);
+     if(errmessage.length())
+     {
+       retval=0;
+     }
++    else if(closeme)
++    {
++      close(fd);
++    }
+   }
+   if(!retval)
+ #endif

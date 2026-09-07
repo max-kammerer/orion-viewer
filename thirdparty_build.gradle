@@ -35,8 +35,14 @@ task downloadDjvu {
     }
 }
 
+task patchDjvu(dependsOn: [downloadDjvu]) {
+    doLast {
+        applyPatches(file(djvu), file('nativeLibs/patches/djvu'))
+    }
+}
+
 //Keep until migration
-task downloadAndPatchDjvu(dependsOn: [downloadDjvu])
+task downloadAndPatchDjvu(dependsOn: [patchDjvu])
 
 task buildDjvu() {
     doLast {
