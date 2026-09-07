@@ -5,11 +5,14 @@ import universe.constellation.orion.viewer.PageSize
 import universe.constellation.orion.viewer.document.AbstractDocument
 import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.document.AbstractPage
+import universe.constellation.orion.viewer.document.LinkTarget
+import universe.constellation.orion.viewer.document.PageLink
 import universe.constellation.orion.viewer.document.PageText
 import universe.constellation.orion.viewer.document.PageTextBuilder
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.errorInDebugOr
 import universe.constellation.orion.viewer.geometry.RectF
+import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.pdf.DocInfo
 import universe.constellation.orion.viewer.traceTiming
 import java.util.Locale
@@ -88,6 +91,14 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
                 return null
             }
             return pageTextBuilder
+        }
+
+        override fun readLinks(): List<PageLink> {
+            if (docPointer == 0L) return emptyList()
+            val urls = ArrayList<String>()
+            val rects = ArrayList<RectF>()
+            getPageLinks(contextPointer, docPointer, pageNum, urls, rects)
+            return urls.indices.mapNotNull { resolveLink(urls[it], rects[it], pageNum) }
         }
 
         override fun destroyInternal() {
@@ -180,6 +191,38 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
         return result.toTypedArray()
     }
 
+    /* maparea urls: "#<page ref>" is internal (see [resolvePageRef]), anything else is external. */
+    private fun resolveLink(url: String, rect: RectF, currentPage: Int): PageLink? {
+        val target = if (url.startsWith("#")) {
+            val page = resolvePageRef(url.substring(1), currentPage) ?: return null
+            LinkTarget.Internal(page)
+        } else {
+            LinkTarget.External(url)
+        }
+        return PageLink(rect.left, rect.top, rect.right, rect.bottom, target)
+    }
+
+    /*
+     * The same rules and order as djview4's QDjView::pageNumber: "+n"/"-n" are relative to the
+     * current page, "n" and the obsolete "$n" are 1-based page numbers, all three clamped to the
+     * document instead of dropped; anything else is a component id, name or title looked up by
+     * libdjvu, retried without spaces for files written by careless tools.
+     */
+    private fun resolvePageRef(ref: String, currentPage: Int): Int? {
+        if (ref.isEmpty()) return null
+        val last = pageCount - 1
+        val sign = ref[0]
+        if (sign == '+' || sign == '-') {
+            val n = ref.substring(1).toIntOrNull() ?: return null
+            return (if (sign == '+') currentPage + n else currentPage - n).coerceIn(0, last)
+        }
+        (if (sign == '$') ref.substring(1) else ref).toIntOrNull()?.let { return (it - 1).coerceIn(0, last) }
+        val page = resolvePageByName(docPointer, ref).takeIf { it >= 0 }
+            ?: ref.replace(" ", "").takeIf { it != ref }?.let { resolvePageByName(docPointer, it) }
+        log("djvu link `#$ref` resolved to page $page")
+        return page?.takeIf { it in 0..last }
+    }
+
     private fun getSafeRectInPosition(rects: List<RectF>, position: Int): RectF {
         //TODO
         return rects[position]
@@ -227,5 +270,13 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
 
         @JvmStatic @Synchronized
         external fun releasePage(page: Long)
+
+        /** Fills [urls] and [rects] (page coordinates, top-left origin) from the page maparea annotations. */
+        @JvmStatic @Synchronized
+        external fun getPageLinks(context: Long, doc: Long, pageNumber: Int, urls: ArrayList<*>, rects: ArrayList<*>): Boolean
+
+        /** Zero based page for a page number, component id or title, or -1. */
+        @JvmStatic @Synchronized
+        external fun resolvePageByName(doc: Long, name: String): Int
     }
 }

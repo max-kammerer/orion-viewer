@@ -58,6 +58,12 @@ interface Page {
 
     fun getPageText(): PageText?
 
+    /** Clickable areas of the page; empty when the format or the page has none. */
+    fun getLinks(): List<PageLink>
+
+    /** The links if [getLinks] has already run, null otherwise; never touches the document. */
+    fun loadedLinks(): List<PageLink>?
+
     fun destroy()
 }
 

@@ -24,7 +24,20 @@ abstract class AbstractPage(override val pageNum: Int) : Page {
         return counter.decrementAndGet()
     }
 
+    @Volatile
+    private var links: List<PageLink>? = null
+
     protected abstract fun readPageSize(): PageSize?
+
+    protected abstract fun readLinks(): List<PageLink>
+
+    override fun getLinks(): List<PageLink> {
+        links?.let { return it }
+        if (destroyed) return emptyList()
+        return traceTiming({ "Page $pageNum links extraction" }) { readLinks() }.also { links = it }
+    }
+
+    override fun loadedLinks(): List<PageLink>? = links
 
     override fun getPageSize(): PageSize {
         if (!::pageSize.isInitialized) {

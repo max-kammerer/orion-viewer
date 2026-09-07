@@ -74,7 +74,14 @@ open class CorePageView(
 
     fun readPageDataFromUI(): Deferred<Unit> {
         if (pageData == null) {
-            pageData = dataPageScope.async { page.readPageDataForRendering() }
+            pageData = dataPageScope.async { page.readPageDataForRendering() }.also { data ->
+                /* Every tap looks the links up on the UI thread, so they are read here, in the
+                 * background, after the page data and before the page shows up on screen. */
+                dataPageScope.launchTracked {
+                    data.join()
+                    page.getLinks()
+                }
+            }
         }
         return pageData!!
     }

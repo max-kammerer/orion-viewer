@@ -124,7 +124,8 @@ JNIEXPORT JNICALL void JNI_FN(DjvuDocument_initNative)(JNIEnv *env, jclass type)
 
 JNIEXPORT jlong JNICALL JNI_FN(DjvuDocument_initContext)(JNIEnv *env, jclass type) {
     LOGI("Creating context");
-    return jlong_cast(ddjvu_context_create("orion"));
+    ddjvu_context_t *ctx = ddjvu_context_create("orion");
+    return jlong_cast(ctx);
 }
 
 JNIEXPORT jlong JNICALL
@@ -706,6 +707,139 @@ miniexp_get_text(JNIEnv *env, miniexp_t exp, jobject stringBuilder, jobject posi
 
     *state = qMax(*state, typenum);
     return 1;
+}
+
+
+/* (rect x y w h) | (oval x y w h) | (text x y w h) | (poly x1 y1 x2 y2 ...); djvu coordinates, origin bottom-left */
+static int maparea_bbox(miniexp_t shape, int *x0, int *y0, int *x1, int *y1) {
+    if (!miniexp_consp(shape) || !miniexp_symbolp(miniexp_car(shape))) return 0;
+    miniexp_t type = miniexp_car(shape);
+    miniexp_t r = miniexp_cdr(shape);
+    if (type == miniexp_symbol("rect") || type == miniexp_symbol("oval") || type == miniexp_symbol("text")) {
+        int x, y, w, h;
+        if (!(miniexp_get_int(&r, &x) && miniexp_get_int(&r, &y) &&
+              miniexp_get_int(&r, &w) && miniexp_get_int(&r, &h)))
+            return 0;
+        if (w <= 0 || h <= 0) return 0;
+        *x0 = x; *y0 = y; *x1 = x + w; *y1 = y + h;
+        return 1;
+    }
+    if (type == miniexp_symbol("poly")) {
+        int x, y, count = 0;
+        while (miniexp_get_int(&r, &x) && miniexp_get_int(&r, &y)) {
+            if (count == 0) { *x0 = *x1 = x; *y0 = *y1 = y; }
+            if (x < *x0) *x0 = x;
+            if (x > *x1) *x1 = x;
+            if (y < *y0) *y0 = y;
+            if (y > *y1) *y1 = y;
+            count++;
+        }
+        return count >= 3 && *x1 > *x0 && *y1 > *y0;
+    }
+    return 0;
+}
+
+/* (maparea url comment area ...), url is a string or (url "href" "target") */
+static const char *maparea_href(miniexp_t url) {
+    if (miniexp_stringp(url)) return miniexp_to_str(url);
+    if (miniexp_consp(url) && miniexp_consp(miniexp_cdr(url)) && miniexp_stringp(miniexp_cadr(url)))
+        return miniexp_to_str(miniexp_cadr(url));
+    return NULL;
+}
+
+JNIEXPORT jboolean JNICALL
+JNI_FN(DjvuDocument_getPageLinks)(JNIEnv *env, jclass type, jlong contextl, jlong docl, jint pageNumber,
+                                  jobject urlList, jobject rectList) {
+    ddjvu_context_t *context = (ddjvu_context_t *) contextl;
+    ddjvu_document_t *doc = (ddjvu_document_t *) docl;
+
+    miniexp_t anno;
+    while ((anno = ddjvu_document_get_pageanno(doc, pageNumber)) == miniexp_dummy) {
+        handle_ddjvu_messages_and_wait_stub(env, context);
+    }
+
+    if (anno == NULL || !miniexp_consp(anno)) {
+        LOGI("No annotations on page %i", pageNumber);
+        return 0;
+    }
+
+    ddjvu_status_t status;
+    ddjvu_pageinfo_t dinfo;
+    while ((status = ddjvu_document_get_pageinfo(doc, pageNumber, &dinfo)) < DDJVU_JOB_OK) {
+        handle_ddjvu_messages_and_wait_stub(env, context);
+    }
+    resolveErrorIfPossibleStub(env, context, status);
+    if (status != DDJVU_JOB_OK) return 0;
+
+    jclass listClass = (*env)->FindClass(env, "java/util/ArrayList");
+    if (listClass == NULL) return 0;
+    jmethodID addToList = (*env)->GetMethodID(env, listClass, "add", "(Ljava/lang/Object;)Z");
+    if (addToList == NULL) return 0;
+    jclass rectFClass = (*env)->FindClass(env, "android/graphics/RectF");
+    if (rectFClass == NULL) return 0;
+    jmethodID ctor = (*env)->GetMethodID(env, rectFClass, "<init>", "(FFFF)V");
+    if (ctor == NULL) return 0;
+
+    miniexp_t *links = ddjvu_anno_get_hyperlinks(anno);
+    if (links == NULL) return 0;
+
+    /* maparea coordinates are in the unrotated page; pages are rendered with their
+       INFO orientation applied, so map the areas the same way djview4 does. */
+    int rotation = dinfo.rotation & 3;
+    int width = dinfo.width, height = dinfo.height; /* as rendered, i.e. rotated */
+    ddjvu_rectmapper_t *mapper = NULL;
+    if (rotation) {
+        ddjvu_rect_t unrotated = {0, 0, (rotation & 1) ? height : width, (rotation & 1) ? width : height};
+        ddjvu_rect_t rotated = {0, 0, width, height};
+        mapper = ddjvu_rectmapper_create(&unrotated, &rotated);
+        ddjvu_rectmapper_modify(mapper, rotation, 0, 0);
+    }
+
+    int count = 0;
+    for (int i = 0; links[i]; i++) {
+        miniexp_t rest = miniexp_cdr(links[i]);
+        if (!miniexp_consp(rest)) continue;
+        const char *href = maparea_href(miniexp_car(rest));
+        if (href == NULL || href[0] == 0) continue;
+
+        rest = miniexp_cdr(rest); /* comment */
+        if (!miniexp_consp(rest)) continue;
+        rest = miniexp_cdr(rest); /* area */
+        if (!miniexp_consp(rest)) continue;
+
+        int x0, y0, x1, y1;
+        if (!maparea_bbox(miniexp_car(rest), &x0, &y0, &x1, &y1)) continue;
+        if (mapper) {
+            ddjvu_rect_t r = {x0, y0, (unsigned int) (x1 - x0), (unsigned int) (y1 - y0)};
+            ddjvu_map_rect(mapper, &r);
+            x0 = r.x; y0 = r.y; x1 = r.x + r.w; y1 = r.y + r.h;
+        }
+
+        jstring url = (*env)->NewStringUTF(env, href);
+        jobject rect = (*env)->NewObject(env, rectFClass, ctor,
+                                         (float) x0, (float) (height - y1), (float) x1, (float) (height - y0));
+        if (url != NULL && rect != NULL) {
+            (*env)->CallBooleanMethod(env, urlList, addToList, url);
+            (*env)->CallBooleanMethod(env, rectList, addToList, rect);
+            count++;
+        }
+        if (url != NULL) (*env)->DeleteLocalRef(env, url);
+        if (rect != NULL) (*env)->DeleteLocalRef(env, rect);
+    }
+    free(links);
+    if (mapper) ddjvu_rectmapper_release(mapper);
+    LOGI("Page %i has %i links", pageNumber, count);
+    return count > 0;
+}
+
+JNIEXPORT jint JNICALL
+JNI_FN(DjvuDocument_resolvePageByName)(JNIEnv *env, jclass type, jlong docl, jstring jname) {
+    ddjvu_document_t *doc = (ddjvu_document_t *) docl;
+    const char *name = (*env)->GetStringUTFChars(env, jname, NULL);
+    if (name == NULL) return -1;
+    int pageno = ddjvu_document_search_pageno(doc, name);
+    (*env)->ReleaseStringUTFChars(env, jname, name);
+    return pageno;
 }
 
 JNIEXPORT jboolean JNICALL

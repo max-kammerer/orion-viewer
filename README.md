@@ -2,7 +2,7 @@
 ![GitHub Releases Downloads](https://img.shields.io/github/downloads/max-kammerer/orion-viewer/total.svg?label=GitHub%20Releases%20Downloads)
 ![GitHub release](https://img.shields.io/github/release/max-kammerer/orion-viewer.svg)
 
-Orion Viewer is a *pdf*, *djvu*, *xps*, *tiff* and comic book (*cbr*, *cbz*, *cbt*) file viewer for Android
+Orion Viewer is a *pdf*, *djvu*, *xps*, *tiff* and comic book (*cb7*, *cbr*, *cbz*, *cbt*,) file viewer for Android
 devices based on
 [MuPDF](https://mupdf.com) and
 [DjVuLibre](https://sourceforge.net/p/djvu/djvulibre-git/ci/master/tree/)
@@ -10,6 +10,7 @@ libraries
 
 ### Application features
 * Outline navigation
+* Links inside pdf and djvu documents
 * Bookmarks support
 * Page navigation by screen taps + Tap Zones + Key binding
 * Text selection

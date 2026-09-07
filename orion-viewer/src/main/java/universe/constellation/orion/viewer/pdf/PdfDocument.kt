@@ -23,6 +23,7 @@ import android.graphics.RectF
 import androidx.core.graphics.toRect
 import com.artifex.mupdf.fitz.Device
 import com.artifex.mupdf.fitz.DisplayList
+import com.artifex.mupdf.fitz.Link
 import com.artifex.mupdf.fitz.Matrix
 import com.artifex.mupdf.fitz.Outline
 import com.artifex.mupdf.fitz.Page
@@ -34,11 +35,14 @@ import universe.constellation.orion.viewer.Bitmap
 import universe.constellation.orion.viewer.PageSize
 import universe.constellation.orion.viewer.document.AbstractDocument
 import universe.constellation.orion.viewer.document.AbstractPage
+import universe.constellation.orion.viewer.document.LinkTarget
 import universe.constellation.orion.viewer.document.OutlineItem
+import universe.constellation.orion.viewer.document.PageLink
 import universe.constellation.orion.viewer.document.PageText
 import universe.constellation.orion.viewer.document.PageTextBuilder
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.errorInDebugOr
+import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.traceTiming
 
 class PdfDocument @Throws(Exception::class) constructor(filePath: String) : AbstractDocument(filePath) {
@@ -162,6 +166,12 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
             return builder
         }
 
+        override fun readLinks(): List<PageLink> {
+            readPageDataIfNeeded()
+            val page = page ?: return emptyList()
+            return synchronized(core) { extractLinks(page) }
+        }
+
         override fun destroy() {
             destroyPage(this)
         }
@@ -169,6 +179,45 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
 
 
     private val core = MuPDFCore(filePath)
+
+    /* Called under the core lock: mupdf link loading and destination resolving aren't thread safe. */
+    private fun extractLinks(page: Page): List<PageLink> {
+        val rawLinks = try {
+            page.links
+        } catch (e: Exception) {
+            log("Can't load links of page ${page.hashCode()}", e)
+            null
+        } ?: return emptyList()
+
+        return rawLinks.mapNotNull { link ->
+            try {
+                toPageLink(link)
+            } catch (e: Exception) {
+                log("Broken link $link", e)
+                null
+            } finally {
+                link.destroy()
+            }
+        }
+    }
+
+    private fun toPageLink(link: Link): PageLink? {
+        val uri = link.uri?.takeIf { it.isNotEmpty() } ?: return null
+        val bounds = link.bounds
+        val target = if (Link.isExternal(uri)) {
+            LinkTarget.External(uri)
+        } else {
+            val dest = core.doc.resolveLinkDestination(uri) ?: return null
+            val pageNum = core.doc.pageNumberFromLocation(dest)
+            if (pageNum < 0 || pageNum >= pageCount) return null
+            LinkTarget.Internal(
+                pageNum,
+                if (dest.hasX()) dest.x else Float.NaN,
+                if (dest.hasY()) dest.y else Float.NaN
+            )
+        }
+        return PageLink(bounds.x0, bounds.y0, bounds.x1, bounds.y1, target)
+    }
 
     override val pageCount: Int
         get() = core.countPages()

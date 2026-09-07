@@ -2,8 +2,12 @@ package universe.constellation.orion.viewer
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ActivityNotFoundException
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Debug
 import android.view.*
@@ -893,6 +897,30 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     fun textSelectionMode(isSingleSelection: Boolean, translate: Boolean) {
         selectionAutomata.startTextSelection(isSingleSelection, translate)
+    }
+
+    /** Asks before leaving the app: the link text is the only hint of where a tap leads. */
+    fun openExternalLink(uri: String) {
+        val builder = createThemedAlertBuilder()
+        builder.setTitle(R.string.link_open_title)
+        builder.setMessage(uri)
+        builder.setPositiveButton(R.string.link_open) { dialog, _ ->
+            dialog.dismiss()
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(uri)))
+            } catch (e: ActivityNotFoundException) {
+                log("No handler for $uri", e)
+                showWarning(R.string.link_no_handler)
+            }
+        }
+        builder.setNeutralButton(R.string.link_copy) { dialog, _ ->
+            dialog.dismiss()
+            val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            clipboard.setPrimaryClip(ClipData.newPlainText("link", uri))
+            showFastMessage(R.string.link_copied)
+        }
+        builder.setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.dismiss() }
+        builder.show()
     }
 
     private class MyArrayAdapter(context: Context) :

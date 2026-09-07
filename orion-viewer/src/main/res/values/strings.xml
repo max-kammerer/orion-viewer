@@ -60,6 +60,11 @@
     <string name="outline_collapse_all">Collapse all</string>
     <string name="outline_history_empty">No jumps yet</string>
     <string name="outline_history_page">page %1$d</string>
+    <string name="link_open_title">Open link?</string>
+    <string name="link_open">Open</string>
+    <string name="link_copy">Copy</string>
+    <string name="link_no_handler">No app can open this link</string>
+    <string name="link_copied">Link copied</string>
 
     <string name="color_mode_normal">Normal colors (black on white background)</string>
     <string name="color_mode_inverted">Inverted Colors</string>

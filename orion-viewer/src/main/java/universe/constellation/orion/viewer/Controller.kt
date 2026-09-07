@@ -23,6 +23,7 @@ import android.app.ActivityManager
 import android.content.Context.ACTIVITY_SERVICE
 import android.graphics.Point
 import android.graphics.PointF
+import android.graphics.Rect
 import android.os.Build
 import android.util.DisplayMetrics
 import kotlinx.coroutines.CoroutineDispatcher
@@ -37,10 +38,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import universe.constellation.orion.viewer.bitmap.DeviceInfo
 import universe.constellation.orion.viewer.document.Document
+import universe.constellation.orion.viewer.document.LinkTarget
 import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.document.Page
+import universe.constellation.orion.viewer.document.PageLink
 import universe.constellation.orion.viewer.document.TextAndSelection
+import universe.constellation.orion.viewer.document.findAt
 import universe.constellation.orion.viewer.document.lastPageNum0
+import universe.constellation.orion.viewer.document.toDocPlace
+import universe.constellation.orion.viewer.document.withPage
 import universe.constellation.orion.viewer.layout.CropMargins
 import universe.constellation.orion.viewer.layout.LayoutPosition
 import universe.constellation.orion.viewer.layout.LayoutStrategy
@@ -148,6 +154,37 @@ class Controller(
     }
 
     fun currentPlace(): DocPlace? = pageLayoutManager.currentPageLayout()?.toDocPlace()
+
+    /**
+     * The link under the scene point (view pixels), if the page there has one. Runs on the UI
+     * thread on every tap, so only links already read by the page view are consulted: a tap
+     * that lands before they are loaded is an ordinary tap.
+     */
+    fun findLinkAt(x: Float, y: Float): PageLink? {
+        val probe = Rect(x.toInt() - 1, y.toInt() - 1, x.toInt() + 1, y.toInt() + 1)
+        val hit = pageLayoutManager.findPageAndPageRect(probe).firstOrNull() ?: return null
+        val pageRect = hit.absoluteRectWithoutCrop
+        return hit.page.loadedLinks()?.findAt(pageRect.exactCenterX(), pageRect.exactCenterY())
+    }
+
+    /** Follows the link under the scene point; false when there is none. */
+    fun openLinkAt(x: Float, y: Float): Boolean {
+        val link = findLinkAt(x, y) ?: return false
+        log("Following $link")
+        followLink(link)
+        return true
+    }
+
+    /** An internal link is a jump (the place left is remembered), an external one is handed to the activity. */
+    fun followLink(link: PageLink) {
+        when (val target = link.target) {
+            is LinkTarget.Internal -> {
+                val place = document.withPage(target.page) { target.toDocPlace(getPageSize()) }
+                goTo(place, NavKind.JUMP)
+            }
+            is LinkTarget.External -> activity.openExternalLink(target.uri)
+        }
+    }
 
     fun processPendingEvents() {
         if (hasPendingEvents) {

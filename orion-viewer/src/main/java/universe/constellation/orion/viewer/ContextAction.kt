@@ -25,6 +25,16 @@ enum class ContextAction(customName: String? = null) {
 
     TAP_ACTION {
         override fun doAction(activity: OrionViewerActivity, clickInfo: ClickInfo) {
+            if (clickInfo.clickType == ClickType.SHORT && activity.globalOptions.OPEN_LINKS_BY_TAP.value) {
+                val linkFollowed = try {
+                    activity.controller?.openLinkAt(clickInfo.x.toFloat(), clickInfo.y.toFloat()) == true
+                } catch (e: Exception) {
+                    log("Error during link processing", e)
+                    false
+                }
+                if (linkFollowed) return
+            }
+
             val width = activity.view.sceneWidth
             val height = activity.view.sceneHeight
             if (height == 0 || width == 0) return

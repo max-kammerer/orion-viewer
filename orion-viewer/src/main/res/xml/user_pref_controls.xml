@@ -28,6 +28,13 @@
             app:iconSpaceReserved="false">
         </ListPreference>
 
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="OPEN_LINKS_BY_TAP"
+            android:summary="@string/pref_open_links_by_tap_desc"
+            android:title="@string/pref_open_links_by_tap"
+            app:iconSpaceReserved="false" />
+
         <PreferenceScreen
             android:key="TAP_ZONES"
             android:persistent="false"

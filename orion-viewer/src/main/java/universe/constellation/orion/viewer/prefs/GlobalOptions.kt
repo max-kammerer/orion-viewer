@@ -229,6 +229,8 @@ class GlobalOptions(
 
     val DOUBLE_TAP_ACTION = pref(Companion.DOUBLE_TAP_ACTION, context.resources.getString(R.string.action_key_select_word_and_translate_new))
 
+    val OPEN_LINKS_BY_TAP = pref(Companion.OPEN_LINKS_BY_TAP, true)
+
     val SHOW_BATTERY_STATUS = pref(Companion.SHOW_BATTERY_STATUS, true)
 
     val STATUS_BAR_POSITION = pref(Companion.STATUS_BAR_POSITION, "TOP")
@@ -269,6 +271,8 @@ class GlobalOptions(
         const val SHOW_ACTION_BAR: String = "SHOW_ACTION_BAR"
 
         const val DOUBLE_TAP_ACTION: String = "DOUBLE_TAP_ACTION"
+
+        const val OPEN_LINKS_BY_TAP: String = "OPEN_LINKS_BY_TAP"
 
         const val SHOW_BATTERY_STATUS: String = "SHOW_BATTERY_STATUS"
 
