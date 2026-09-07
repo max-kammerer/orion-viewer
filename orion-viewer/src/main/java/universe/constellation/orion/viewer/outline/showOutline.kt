@@ -5,6 +5,7 @@ import android.view.Window
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDialog
 import androidx.appcompat.widget.AppCompatImageButton
+import androidx.appcompat.widget.TooltipCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,8 +23,9 @@ private const val HISTORY_TAB = 1
 
 private const val DIALOG_WIDTH_FRACTION = 0.90f
 private const val DIALOG_HEIGHT_FRACTION = 0.85f
-private const val MAX_DIALOG_WIDTH_DP = 480
-private const val MAX_DIALOG_HEIGHT_DP = 720
+/* Only the width is capped: a wider outline list reads worse on tablets, while the
+ * height should follow the screen, otherwise the dialog shrinks to a small box there. */
+private const val MAX_DIALOG_WIDTH_DP = 600
 private const val DISABLED_ICON_ALPHA = 0.35f
 
 fun showOutline(controller: Controller, activity: OrionViewerActivity) {
@@ -48,6 +50,7 @@ fun showOutline(controller: Controller, activity: OrionViewerActivity) {
             val emptyText = dialog.findViewById<TextView>(R.id.emptyText)!!
             val tabs = dialog.findViewById<TabLayout>(R.id.outlineTabs)!!
             val expandAll = dialog.findViewById<AppCompatImageButton>(R.id.expandAll)!!
+            TooltipCompat.setTooltipText(expandAll, expandAll.contentDescription)
             list.layoutManager = LinearLayoutManager(activity)
             list.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
 
@@ -139,10 +142,9 @@ fun showOutline(controller: Controller, activity: OrionViewerActivity) {
              * long outline list and a short history one on tab switches. */
             val metrics = activity.resources.displayMetrics
             val maxWidth = (MAX_DIALOG_WIDTH_DP * metrics.density).toInt()
-            val maxHeight = (MAX_DIALOG_HEIGHT_DP * metrics.density).toInt()
             dialog.window?.setLayout(
                 minOf((metrics.widthPixels * DIALOG_WIDTH_FRACTION).toInt(), maxWidth),
-                minOf((metrics.heightPixels * DIALOG_HEIGHT_FRACTION).toInt(), maxHeight)
+                (metrics.heightPixels * DIALOG_HEIGHT_FRACTION).toInt()
             )
 
             expandAll.setOnClickListener {
@@ -156,6 +158,10 @@ fun showOutline(controller: Controller, activity: OrionViewerActivity) {
                 expandAll.setImageResource(
                     if (toolbarExpanded) R.drawable.outline_collapse_all else R.drawable.outline_expand_all
                 )
+                expandAll.contentDescription = activity.getString(
+                    if (toolbarExpanded) R.string.outline_collapse_all else R.string.outline_expand_all
+                )
+                TooltipCompat.setTooltipText(expandAll, expandAll.contentDescription)
             }
         }
     }

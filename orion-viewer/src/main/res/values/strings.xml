@@ -57,6 +57,7 @@
     <string name="warn_no_outline">Outline is absent!</string>
     <string name="outline_tab_history">History</string>
     <string name="outline_expand_all">Expand all</string>
+    <string name="outline_collapse_all">Collapse all</string>
     <string name="outline_history_empty">No jumps yet</string>
     <string name="outline_history_page">page %1$d</string>
 
