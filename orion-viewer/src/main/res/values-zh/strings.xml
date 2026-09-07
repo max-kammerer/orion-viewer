@@ -43,4 +43,8 @@
     <string name="crop_auto_manual">自动和手动</string>
     <string name="color_mode_normal">正常颜色（白底黑字）</string>
     <string name="color_mode_grayscale_light">浅灰底灰度</string>
+    <string name="outline_tab_history">历史记录</string>
+    <string name="outline_expand_all">全部展开</string>
+    <string name="outline_history_empty">尚无跳转</string>
+    <string name="outline_history_page">第 %1$d 页</string>
 </resources>
