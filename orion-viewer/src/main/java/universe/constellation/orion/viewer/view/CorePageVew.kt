@@ -86,6 +86,14 @@ open class CorePageView(
         return pageData!!
     }
 
+    /**
+     * True once [readPageDataFromUI] has finished, i.e. the page is ready to be drawn. Text
+     * selection on the UI thread consults only such pages: for pdf their text comes from the
+     * display list without touching the document, and a page that isn't there yet has nothing
+     * on screen to select anyway.
+     */
+    fun isPageDataLoaded(): Boolean = pageData?.isCompleted == true
+
     fun readRawSizeFromUI(): Deferred<PageSize> {
         if (rawSize == null) {
             rawSize = dataPageScope.async { page.getPageSize() }

@@ -20,7 +20,10 @@ fun SelectionAutomata.getTextByHandlers(startHandler: Handler, endHandler: Handl
     )
     val invertCheck = startHandler.y > endHandler.y
 
-    return extractText(pageSelectionRectangles.map { ExtractionInfo(it.page, it.absoluteRectWithoutCrop.toRectF(), it.pageView::getSceneRect) }, isRect, isSingleWord, invertCheck)
+    /* Runs on the UI thread: a page whose data is still loading isn't on screen yet, and reading
+     * its text would wait for the document lock, so it contributes nothing. */
+    val readyPages = pageSelectionRectangles.filter { it.pageView.isPageDataLoaded() }
+    return extractText(readyPages.map { ExtractionInfo(it.page, it.absoluteRectWithoutCrop.toRectF(), it.pageView::getSceneRect) }, isRect, isSingleWord, invertCheck)
 }
 
 

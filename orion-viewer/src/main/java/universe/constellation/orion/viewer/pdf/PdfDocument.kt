@@ -68,10 +68,8 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
                                 page = core.doc.loadPage(pageNum)
                             }
                         } catch (e: IllegalArgumentException) {
-                            if (e.message == "page number out of range") {
-                                throw IllegalArgumentException("page number out of range: $pageNum of ${this@PdfDocument.pageCount}")
-                            }
-                            throw e;
+                            /* mupdf reports a bad index as "invalid page number: N" (FZ_ERROR_ARGUMENT). */
+                            throw IllegalArgumentException("${e.message}: page $pageNum of ${this@PdfDocument.pageCount}", e)
                         }
                     }
                 }
@@ -152,20 +150,23 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
             }
         }
 
+        /**
+         * The text comes from the display list, not from the page: mupdf allows one thread at a
+         * time on a document and its pages, but a finished display list may be replayed from any
+         * thread, so this needs no [core] lock and doesn't parse the content stream again. The
+         * list is the one built for rendering, hence it also carries annotation and widget text.
+         */
         override fun getPageText(): PageText? {
             if (destroyed) return null
-            readPageDataIfNeeded()
-            if (page == null) return null
+            pageTextBuilder?.let { return it }
 
-            if (pageTextBuilder == null) {
-                pageTextBuilder = getTextInfo(page!!) ?: PageTextBuilder.NULL
-            }
-
-            val builder = pageTextBuilder
-            if (builder == PageTextBuilder.NULL) {
-                return null
-            }
-            return builder
+            return try {
+                readPageDataForRendering()
+                displayList?.let { getTextInfo(it) }
+            } catch (e: Exception) {
+                log("Can't extract text of page $pageNum", e)
+                null
+            }?.also { pageTextBuilder = it }
         }
 
         override fun readLinks(): List<PageLink> {
@@ -239,10 +240,10 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
 
     external override fun setThreshold(threshold: Int)
 
-    private fun getTextInfo(page: Page): PageTextBuilder? {
-        val text: StructuredText = synchronized(core) { page.toStructuredText() }
+    private fun getTextInfo(displayList: DisplayList): PageTextBuilder {
+        val text: StructuredText = displayList.toStructuredText()
         try {
-           return buildTextInfo(text)
+            return buildTextInfo(text)
         } finally {
             text.destroy()
         }
