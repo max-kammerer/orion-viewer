@@ -33,6 +33,7 @@ import com.artifex.mupdf.viewer.MuPDFCore
 import com.artifex.mupdfdemo.TextWord
 import universe.constellation.orion.viewer.Bitmap
 import universe.constellation.orion.viewer.PageSize
+import universe.constellation.orion.viewer.device.calcFZCacheSize
 import universe.constellation.orion.viewer.document.AbstractDocument
 import universe.constellation.orion.viewer.document.AbstractPage
 import universe.constellation.orion.viewer.document.LinkTarget
@@ -43,6 +44,7 @@ import universe.constellation.orion.viewer.document.PageTextBuilder
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.errorInDebugOr
 import universe.constellation.orion.viewer.log
+import universe.constellation.orion.viewer.shrinkMupdfStore
 import universe.constellation.orion.viewer.traceTiming
 
 class PdfDocument @Throws(Exception::class) constructor(filePath: String) : AbstractDocument(filePath) {
@@ -297,4 +299,15 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
 
     override fun authenticate(password: String) = core.authenticatePassword(password)
 
+    override val cacheLimit: Long
+        get() = MUPDF_STORE_LIMIT
+
+    /* The mupdf store is shared by every open document, so this trims it for all of them. */
+    override fun trimCache(keepPercent: Int) = shrinkMupdfStore(keepPercent.coerceIn(0, 100), "trim")
+
+    companion object {
+        /* The store is sized once, from FZ_JAVA_STORE_SIZE read when the mupdf context is created;
+         * the application sets it before the first mupdf call, the build-time default is the fallback. */
+        val MUPDF_STORE_LIMIT: Long = System.getenv("FZ_JAVA_STORE_SIZE")?.toLongOrNull() ?: calcFZCacheSize(0)
+    }
 }

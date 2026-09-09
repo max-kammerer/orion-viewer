@@ -22,11 +22,13 @@ package universe.constellation.orion.viewer.prefs
 import android.app.Activity
 import android.app.ActivityManager
 import android.app.Application
+import android.content.ComponentCallbacks2
 import android.content.Context
 import android.content.res.Resources
 import android.os.Build
 import android.os.Build.VERSION.CODENAME
 import android.os.Build.VERSION.RELEASE
+import android.os.Debug
 import android.system.Os
 import androidx.core.os.ConfigurationCompat
 import androidx.core.os.LocaleListCompat
@@ -44,11 +46,13 @@ import universe.constellation.orion.viewer.AndroidLogger.stopLogger
 import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.BuildConfig.DEBUG
 import universe.constellation.orion.viewer.BuildConfig.VERSION_NAME
+import universe.constellation.orion.viewer.FileUtil
 import universe.constellation.orion.viewer.FileUtil.beautifyFileSize
 import universe.constellation.orion.viewer.LastPageInfo
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.analytics.Analytics
+import universe.constellation.orion.viewer.analytics.ProcessMemory
 import universe.constellation.orion.viewer.android.isAtJellyBean
 import universe.constellation.orion.viewer.android.isAtLeastLollipop
 import universe.constellation.orion.viewer.bookmarks.BookmarkAccessor
@@ -56,6 +60,7 @@ import universe.constellation.orion.viewer.device.AndroidDevice
 import universe.constellation.orion.viewer.device.MagicBookBoeyeDevice
 import universe.constellation.orion.viewer.device.OnyxDevice
 import universe.constellation.orion.viewer.device.OnyxUtil
+import universe.constellation.orion.viewer.device.calcDjvuCacheSize
 import universe.constellation.orion.viewer.device.calcFZCacheSize
 import universe.constellation.orion.viewer.isTraceEnabled
 import universe.constellation.orion.viewer.log
@@ -77,7 +82,7 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
     }
 
     val keyBindingPrefs: KeyBindingPreferences by lazy {
-        KeyBindingPreferences(getSharedPreferences("key_binding", Context.MODE_PRIVATE))
+        KeyBindingPreferences(getSharedPreferences("key_binding", MODE_PRIVATE))
     }
 
     val analytics: Analytics by lazy {
@@ -126,12 +131,42 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
         setLanguage(options.appLanguage)
         val totalMemory = getTotalMemory(this)
         setMupdfCacheLimit(totalMemory)
+        FileUtil.djvuCacheLimit = calcDjvuCacheSize(totalMemory ?: 0)
         logOrionAndDeviceInfo(totalMemory)
         initDjvuResources(this)
     }
 
     fun setLanguage(langCode: String) {
         currentLanguage = langCode
+    }
+
+    override fun onTrimMemory(level: Int) {
+        super.onTrimMemory(level)
+        val keepPercent = when {
+            level >= TRIM_MEMORY_MODERATE -> 0
+            level >= TRIM_MEMORY_BACKGROUND -> 25
+            level >= TRIM_MEMORY_UI_HIDDEN -> 50
+            level >= TRIM_MEMORY_RUNNING_CRITICAL -> 0
+            level >= TRIM_MEMORY_RUNNING_LOW -> 25
+            else -> 50
+        }
+        trimDocumentCache(level, keepPercent)
+    }
+
+    /** The engine cache is the only sizeable memory the app can give back without losing the open pages. */
+    private fun trimDocumentCache(level: Int, keepPercent: Int) {
+        val document = viewActivity?.controller?.document ?: return
+        val before = Debug.getNativeHeapAllocatedSize() shr 20
+        try {
+            document.trimCache(keepPercent)
+        } catch (e: Exception) {
+            log("Cache trim failed for $document", e)
+            analytics.error(e)
+            return
+        }
+        val after = ProcessMemory.snapshot()
+        log("Memory trim, level $level: $document cache kept at $keepPercent%, native heap ${before}M -> ${after.nativeHeapMb}M, $after")
+        analytics.memoryTrim(level, keepPercent, document.javaClass.simpleName, before, after.nativeHeapMb, after.vmSizeMb)
     }
 
     fun updateLanguage(res: Resources) {
@@ -262,6 +297,7 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
             log("Android version :  $CODENAME $RELEASE")
             log("Total:  ${totalMemory?.beautifyFileSize()}")
             log("Mupdf cache:  ${calcFZCacheSize(totalMemory ?: 0).beautifyFileSize()}")
+            log("Djvu cache:  ${calcDjvuCacheSize(totalMemory ?: 0).beautifyFileSize()}")
             log("Device: $DEVICE")
             log("Model: $MODEL")
             log("Manufacturer:  $MANUFACTURER")

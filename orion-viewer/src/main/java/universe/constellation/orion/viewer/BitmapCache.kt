@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import kotlinx.coroutines.sync.Mutex
 import java.util.concurrent.ConcurrentLinkedQueue
-import universe.constellation.orion.viewer.logTrace
 
 private const val DEFAULT_BITMAP_CACHE_SIZE = 32
 private const val CLEAN_THREASHHOLD = 5

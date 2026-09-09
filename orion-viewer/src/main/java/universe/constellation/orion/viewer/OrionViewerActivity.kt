@@ -24,6 +24,7 @@ import universe.constellation.orion.viewer.FallbackDialogs.Companion.saveFileByU
 import universe.constellation.orion.viewer.FileUtil.beautifyFileSize
 import universe.constellation.orion.viewer.Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN
 import universe.constellation.orion.viewer.Permissions.hasReadStoragePermission
+import universe.constellation.orion.viewer.analytics.ProcessMemory
 import universe.constellation.orion.viewer.analytics.SHOW_ERROR_PANEL_DIALOG
 import universe.constellation.orion.viewer.analytics.TAP_HELP_DIALOG
 import universe.constellation.orion.viewer.android.getFileInfo
@@ -269,6 +270,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             log("Trying to open file: $file")
             val rootJob = Job()
             val executor = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+            val memoryBeforeOpen = ProcessMemory.snapshot()
+            analytics.bookOpening(file, memoryBeforeOpen)
             val newDocument = try {
                 withContext(executor + rootJob) {
                     FileUtil.openFile(file)
@@ -337,7 +340,14 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 orionApplication.onNewBook()
                 invalidateOrHideMenu()
                 doOnLayout(lastPageInfo1)
-                analytics.fileOpenedSuccessfully(file)
+                val memory = ProcessMemory.snapshot()
+                analytics.fileOpenedSuccessfully(
+                    file,
+                    newDocument.javaClass.simpleName,
+                    newDocument.cacheLimit shr 20,
+                    memory.vmSizeMb - memoryBeforeOpen.vmSizeMb,
+                    memory
+                )
             } catch (e: Exception) {
                 if (controller != null) {
                     destroyController()

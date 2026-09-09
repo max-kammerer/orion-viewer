@@ -8,11 +8,15 @@ import android.os.ParcelFileDescriptor
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnitRunner
+import universe.constellation.orion.viewer.analytics.Analytics
 import universe.constellation.orion.viewer.prefs.OrionApplication
 
 class Runner : AndroidJUnitRunner() {
 
     override fun callApplicationOnCreate(app: Application?) {
+        /* Run the build's real analytics with collection off: a broken event or key would
+         * otherwise only show up in release. Without google-services.json this is the no-op base. */
+        Analytics.dryRun = true
         val idleResource = OperationIdlingResource()
         (app as OrionApplication).idlingRes = idleResource
         IdlingRegistry.getInstance().register(idleResource.res)
