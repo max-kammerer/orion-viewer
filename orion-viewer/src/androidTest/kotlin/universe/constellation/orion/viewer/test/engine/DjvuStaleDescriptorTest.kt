@@ -1,8 +1,10 @@
 package universe.constellation.orion.viewer.test.engine
 
+import android.os.Build
 import android.system.ErrnoException
 import android.system.Os
 import android.system.OsConstants
+import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -21,7 +23,16 @@ import java.io.FileDescriptor
  * book is being opened, never closes anything itself, and afterwards checks that every
  * descriptor it holds is still alive. A descriptor that is gone (EBADF), or a number
  * that was handed out twice, proves a foreign close. The race is narrow, hence the
- * repetitions. */
+ * repetitions. The growth has to be monotonic: only while the victim owns every lower number
+ * is the one libdjvu just closed the lowest free one, i.e. the next the victim gets.
+ *
+ * It stops short of the descriptor limit (1024 on API 21-27) on purpose: a starved process
+ * breaks libdjvu itself, which opens its message catalog on the first context and keeps an
+ * empty one for the rest of the process when that fails, so every later djvu error in the run
+ * would read "** Unrecognized DjVu Message". */
+/* The churn thread is built on android.system.Os, which arrived with Lollipop: on Dalvik the
+ * nested class fails verification the moment it is instantiated. */
+@SdkSuppress(minSdkVersion = Build.VERSION_CODES.LOLLIPOP)
 class DjvuStaleDescriptorTest : BaseTest() {
 
     @Test
@@ -54,13 +65,14 @@ class DjvuStaleDescriptorTest : BaseTest() {
     }
 
     private class DescriptorChurn : Thread("fd-churn") {
-        private val held = ArrayList<FileDescriptor>(CAP)
+        private val cap = descriptorCap()
+        private val held = ArrayList<FileDescriptor>(cap)
 
         @Volatile
         private var stop = false
 
         override fun run() {
-            while (!stop && held.size < CAP) {
+            while (!stop && held.size < cap) {
                 try {
                     held.add(Os.open("/dev/null", OsConstants.O_RDONLY, 0))
                 } catch (e: ErrnoException) {
@@ -104,8 +116,24 @@ class DjvuStaleDescriptorTest : BaseTest() {
     }
 
     companion object {
-        private const val ITERATIONS = 100
+        private const val ITERATIONS = 500
         private const val CAP = 20_000
+
+        /* Leaves libdjvu, the test and the runtime enough descriptors under the soft limit. */
+        private const val HEADROOM = 200
+
+        /* The soft RLIMIT_NOFILE of this process; Os has no public getrlimit, /proc has it. */
+        private fun descriptorCap(): Int {
+            val limit = try {
+                File("/proc/self/limits").readLines()
+                    .firstOrNull { it.startsWith("Max open files") }
+                    ?.substringAfter("Max open files")?.trim()?.split(Regex("\\s+"))?.firstOrNull()
+                    ?.toIntOrNull()
+            } catch (e: Exception) {
+                null
+            } ?: return CAP
+            return (limit - HEADROOM).coerceIn(64, CAP)
+        }
 
         private fun FileDescriptor.number(): Any = try {
             FileDescriptor::class.java.getMethod("getInt\$").invoke(this) as Int

@@ -364,17 +364,19 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
         @JvmField
         val version: String = Build.VERSION.INCREMENTAL
 
+        @Volatile
+        private var djvuResources: Job? = null
+
+        @Synchronized
         fun initDjvuResources(orionApplication: Context): Job? {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val fileToCopy = File(orionApplication.filesDir, "djvuConf")
-                val envPath = File(fileToCopy, "osi").absolutePath
-                return CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
-                    copyResIfNotExists(orionApplication.assets, "osi", fileToCopy)
-                }.also {
-                    Os.setenv("DJVU_CONFIG_DIR", envPath, true)
-                }
-            }
-            return null
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return null
+            djvuResources?.let { return it }
+            val fileToCopy = File(orionApplication.filesDir, "djvuConf")
+            val envPath = File(fileToCopy, "osi").absolutePath
+            Os.setenv("DJVU_CONFIG_DIR", envPath, true)
+            return CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
+                copyResIfNotExists(orionApplication.assets, "osi", fileToCopy)
+            }.also { djvuResources = it }
         }
 
         fun setMupdfCacheLimit(memorySize: Long?){

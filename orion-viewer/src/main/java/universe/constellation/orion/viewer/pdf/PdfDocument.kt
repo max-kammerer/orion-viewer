@@ -68,7 +68,8 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
                                 page = core.doc.loadPage(pageNum)
                             }
                         } catch (e: IllegalArgumentException) {
-                            /* mupdf reports a bad index as "invalid page number: N" (FZ_ERROR_ARGUMENT). */
+                            /* A bad index is an FZ_ERROR_ARGUMENT; its wording differs between mupdf
+                               versions, so the page and the count are appended rather than matched. */
                             throw IllegalArgumentException("${e.message}: page $pageNum of ${this@PdfDocument.pageCount}", e)
                         }
                     }

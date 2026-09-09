@@ -443,6 +443,8 @@ int buildTOC(ddjvu_document_t *doc, miniexp_t expr, list *myList, jint level, JN
 #ifdef ORION_FOR_ANDROID
 JNIEXPORT jobjectArray JNICALL JNI_FN(DjvuDocument_getOutline)(JNIEnv *env, jclass clazz, jlong docl) {
     ddjvu_document_t *doc = (ddjvu_document_t *) docl;
+    /* Every s-expression the DDJVU API returns stays rooted in the document until
+       ddjvu_miniexp_release(): without it the trees pile up until the document is closed. */
     miniexp_t outline = ddjvu_document_get_outline(doc);
 
     if (outline == miniexp_dummy || outline == NULL) {
@@ -465,12 +467,13 @@ JNIEXPORT jobjectArray JNICALL JNI_FN(DjvuDocument_getOutline)(JNIEnv *env, jcla
 
 #ifdef ORION_FOR_ANDROID
     olClass = (*env)->FindClass(env, "universe/constellation/orion/viewer/document/OutlineItem");
-    if (olClass == NULL) return NULL;
+    if (olClass == NULL) { ddjvu_miniexp_release(doc, outline); return NULL; }
     ctor = (*env)->GetMethodID(env, olClass, "<init>", "(ILjava/lang/String;I)V");
-    if (ctor == NULL) return NULL;
+    if (ctor == NULL) { ddjvu_miniexp_release(doc, outline); return NULL; }
 #endif
 
     buildTOC(doc, miniexp_cdr(outline), myList, 0, env, olClass);
+    ddjvu_miniexp_release(doc, outline);
 
     list_item *next = myList->head;
     int size = 0;
@@ -574,34 +577,37 @@ int extractText(JNIEnv* env, miniexp_t item, jobject textBuilder, int height) {
 }
 
 
-JNIEXPORT jstring JNICALL
+/* Text of a page for selection. Runs without the class lock and never waits: the text chunk is
+   read straight from the page file data, which is there for every page of a bundled document
+   and, for an indirect one, once the page has been decoded. That is the only case the caller
+   (the UI thread, on a page it already shows) cares about. Waiting would mean draining the
+   context message queue, which must not be done concurrently with the other waiting calls: the
+   queue has a single peeked slot, so a second consumer could free the message the first is
+   still reading. Hence "not yet" (miniexp_dummy, or page info still loading) is NULL, and a page
+   without a text layer is the untouched builder, so the caller can remember it. */
+JNIEXPORT jobject JNICALL
 JNI_FN(DjvuDocument_getText)(JNIEnv *env, jclass clazz, jlong contextl, jlong docl, jint pageNumber,
                              jobject textBuilder) {
-    ddjvu_context_t *context = (ddjvu_context_t *) contextl;
     ddjvu_document_t *doc = (ddjvu_document_t *) docl;
 
-    miniexp_t pagetext;
-    while ((pagetext = ddjvu_document_get_pagetext(doc, pageNumber, 0)) == miniexp_dummy) {
-        handle_ddjvu_messages_and_wait_stub(env, context);
-    }
-
-    if (miniexp_nil == pagetext) {
+    miniexp_t pagetext = ddjvu_document_get_pagetext(doc, pageNumber, 0);
+    if (pagetext == miniexp_dummy) {
+        LOGI("Text of page %i is not available yet", pageNumber);
         return NULL;
     }
+    if (!miniexp_consp(pagetext)) {
+        /* miniexp_nil: no text layer; a failed/stopped symbol: nothing to extract either. */
+        return textBuilder;
+    }
 
-    ddjvu_status_t status;
     ddjvu_pageinfo_t info;
-    while ((status = ddjvu_document_get_pageinfo(doc, pageNumber, &info)) < DDJVU_JOB_OK) {
-        handle_ddjvu_messages_and_wait_stub(env, context);
+    ddjvu_status_t status = ddjvu_document_get_pageinfo(doc, pageNumber, &info);
+    if (status == DDJVU_JOB_OK) {
+        extractText(env, pagetext, textBuilder, info.height);
     }
-
-    resolveErrorIfPossibleStub(env, context, status);
-    if (status != DDJVU_JOB_OK) {
-        return NULL;
-    }
-
-    extractText(env, pagetext, textBuilder, info.height);
-    return textBuilder;
+    /* The tree is rooted in the document until released, see getOutline. */
+    ddjvu_miniexp_release(doc, pagetext);
+    return status == DDJVU_JOB_OK ? textBuilder : NULL;
 }
 
 static int qMax(int a, int b) {
@@ -783,31 +789,35 @@ JNI_FN(DjvuDocument_getPageLinks)(JNIEnv *env, jclass type, jlong contextl, jlon
         return 0;
     }
 
+    /* From here on the annotation tree is rooted in the document until released, see getOutline. */
+    int count = 0;
+    miniexp_t *links = NULL;
+    ddjvu_rectmapper_t *mapper = NULL;
+
     ddjvu_status_t status;
     ddjvu_pageinfo_t dinfo;
     while ((status = ddjvu_document_get_pageinfo(doc, pageNumber, &dinfo)) < DDJVU_JOB_OK) {
         handle_ddjvu_messages_and_wait_stub(env, context);
     }
     resolveErrorIfPossibleStub(env, context, status);
-    if (status != DDJVU_JOB_OK) return 0;
+    if (status != DDJVU_JOB_OK) goto done;
 
     jclass listClass = (*env)->FindClass(env, "java/util/ArrayList");
-    if (listClass == NULL) return 0;
+    if (listClass == NULL) goto done;
     jmethodID addToList = (*env)->GetMethodID(env, listClass, "add", "(Ljava/lang/Object;)Z");
-    if (addToList == NULL) return 0;
+    if (addToList == NULL) goto done;
     jclass rectFClass = (*env)->FindClass(env, "android/graphics/RectF");
-    if (rectFClass == NULL) return 0;
+    if (rectFClass == NULL) goto done;
     jmethodID ctor = (*env)->GetMethodID(env, rectFClass, "<init>", "(FFFF)V");
-    if (ctor == NULL) return 0;
+    if (ctor == NULL) goto done;
 
-    miniexp_t *links = ddjvu_anno_get_hyperlinks(anno);
-    if (links == NULL) return 0;
+    links = ddjvu_anno_get_hyperlinks(anno);
+    if (links == NULL) goto done;
 
     /* maparea coordinates are in the unrotated page; pages are rendered with their
        INFO orientation applied, so map the areas the same way djview4 does. */
     int rotation = dinfo.rotation & 3;
     int width = dinfo.width, height = dinfo.height; /* as rendered, i.e. rotated */
-    ddjvu_rectmapper_t *mapper = NULL;
     if (rotation) {
         ddjvu_rect_t unrotated = {0, 0, (rotation & 1) ? height : width, (rotation & 1) ? width : height};
         ddjvu_rect_t rotated = {0, 0, width, height};
@@ -815,7 +825,6 @@ JNI_FN(DjvuDocument_getPageLinks)(JNIEnv *env, jclass type, jlong contextl, jlon
         ddjvu_rectmapper_modify(mapper, rotation, 0, 0);
     }
 
-    int count = 0;
     for (int i = 0; links[i]; i++) {
         miniexp_t rest = miniexp_cdr(links[i]);
         if (!miniexp_consp(rest)) continue;
@@ -846,8 +855,10 @@ JNI_FN(DjvuDocument_getPageLinks)(JNIEnv *env, jclass type, jlong contextl, jlon
         if (url != NULL) (*env)->DeleteLocalRef(env, url);
         if (rect != NULL) (*env)->DeleteLocalRef(env, rect);
     }
-    free(links);
+done:
+    if (links) free(links);
     if (mapper) ddjvu_rectmapper_release(mapper);
+    ddjvu_miniexp_release(doc, anno);
     LOGI("Page %i has %i links", pageNumber, count);
     return count > 0;
 }
@@ -879,23 +890,27 @@ JNI_FN(DjvuDocument_getPageText)(JNIEnv *env, jclass type, jlong contextl, jlong
         return 0;
     }
 
+    /* From here on the text tree is rooted in the document until released, see getOutline.
+       A whole-book search calls this for every page, so the trees added up fast. */
+    jboolean result = 0;
+
     jclass listClass;
     jmethodID addToList;
 
     listClass = (*env)->FindClass(env, "java/util/ArrayList");
-    if (listClass == NULL) return 0;
+    if (listClass == NULL) goto done;
 
     addToList = (*env)->GetMethodID(env, listClass, "add", "(Ljava/lang/Object;)Z");
-    if (addToList == NULL) return 0;
+    if (addToList == NULL) goto done;
 
     jclass rectFClass;
     jmethodID ctor;
 
     rectFClass = (*env)->FindClass(env, "android/graphics/RectF");
-    if (rectFClass == NULL) return 0;
+    if (rectFClass == NULL) goto done;
 
     ctor = (*env)->GetMethodID(env, rectFClass, "<init>", "(FFFF)V");
-    if (ctor == NULL) return 0;
+    if (ctor == NULL) goto done;
 
     ddjvu_status_t status;
     ddjvu_pageinfo_t dinfo;
@@ -906,12 +921,14 @@ JNI_FN(DjvuDocument_getPageText)(JNIEnv *env, jclass type, jlong contextl, jlong
     resolveErrorIfPossibleStub(env, context, status);
     if (status == DDJVU_JOB_OK) {
         int state = -1;
-        return miniexp_get_text(env, pagetext, stringBuilder, positionList, &state, rectFClass,
-                                ctor,
-                                addToList, dinfo.height);
-    } else {
-        return 0;
+        result = miniexp_get_text(env, pagetext, stringBuilder, positionList, &state, rectFClass,
+                                  ctor,
+                                  addToList, dinfo.height);
     }
+
+done:
+    ddjvu_miniexp_release(doc, pagetext);
+    return result;
 }
 
 #endif

@@ -77,7 +77,7 @@ class DjvuExceptionTest : BaseTest() {
             doc.createPage(page).getPageSize()
         } catch (e: Exception) {
             e.printStackTrace()
-            assertTrue(e.message, e.message!!.contains("page number out of range: 1000 of 762"))
+            assertTrue(e.message, e.message!!.contains("page 1000 of 762"))
             return
         }
         fail("Expecting exception to be thrown above")

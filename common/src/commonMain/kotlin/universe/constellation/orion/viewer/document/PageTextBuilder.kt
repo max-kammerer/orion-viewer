@@ -10,8 +10,6 @@ class PageTextBuilder : PageText {
 
     companion object {
 
-        val NULL = PageTextBuilder()
-
         val space = TextWord().apply { add(" ", Rect()) }
     }
 

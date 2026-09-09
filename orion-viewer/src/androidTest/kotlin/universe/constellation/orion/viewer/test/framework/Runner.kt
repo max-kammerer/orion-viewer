@@ -8,6 +8,7 @@ import android.os.ParcelFileDescriptor
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnitRunner
+import kotlinx.coroutines.runBlocking
 import universe.constellation.orion.viewer.analytics.Analytics
 import universe.constellation.orion.viewer.prefs.OrionApplication
 
@@ -21,6 +22,12 @@ class Runner : AndroidJUnitRunner() {
         (app as OrionApplication).idlingRes = idleResource
         IdlingRegistry.getInstance().register(idleResource.res)
         super.callApplicationOnCreate(app)
+        /* The application copies the libdjvu message catalog in the background. libdjvu parses
+         * it once per process, when the first djvu context is created, and keeps an empty one
+         * for good if the files aren't there yet: every later djvu error then reads
+         * "** Unrecognized DjVu Message". A test opening a djvu right at start would do exactly
+         * that, so the run waits for the copy here; the app itself never does. */
+        runBlocking { OrionApplication.initDjvuResources(app)?.join() }
     }
 
     override fun onStart() {

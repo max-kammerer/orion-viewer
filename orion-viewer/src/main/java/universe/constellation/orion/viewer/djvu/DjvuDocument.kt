@@ -84,15 +84,20 @@ class DjvuDocument(filePath: String, override val cacheLimit: Long = DEFAULT_CAC
             return searchPage(this.pageNum, text)
         }
 
+        /* Null means "not available yet" and isn't remembered; a page without text gives an
+         * empty builder, which is. The native call isn't under the class lock, so a document
+         * being closed is fenced off with [lifecycle], the same way as in trimCache: never wait
+         * for it, during a close there is nothing left to select. */
         override fun getPageText(): PageText? {
-            if (pageTextBuilder == null) {
-                pageTextBuilder = Companion.getText(contextPointer, docPointer, pageNum, PageTextBuilder()) ?: PageTextBuilder.NULL
+            if (destroyed) return null
+            pageTextBuilder?.let { return it }
+            if (!lifecycle.tryLock()) return null
+            try {
+                if (docPointer == 0L) return null
+                return Companion.getText(contextPointer, docPointer, pageNum, PageTextBuilder())?.also { pageTextBuilder = it }
+            } finally {
+                lifecycle.unlock()
             }
-            val builder = pageTextBuilder
-            if (builder == PageTextBuilder.NULL) {
-                return null
-            }
-            return pageTextBuilder
         }
 
         override fun readLinks(): List<PageLink> {
@@ -293,7 +298,13 @@ class DjvuDocument(filePath: String, override val cacheLimit: Long = DEFAULT_CAC
         @JvmStatic @Synchronized
         external fun getOutline(doc: Long): Array<OutlineItem>
 
-        @JvmStatic @Synchronized
+        /**
+         * Not under the class lock on purpose: the lock is held for a whole page decode in
+         * [getPageInternal], and text selection asks for this on the UI thread. The native side
+         * doesn't wait for the decoder, it reads the text chunk that is already there, or returns
+         * null when it isn't, and libdjvu guards its own structures.
+         */
+        @JvmStatic
         external fun getText(context: Long, doc: Long, pageNumber: Int, pageTextBuilder: PageTextBuilder): PageTextBuilder?
 
         @JvmStatic @Synchronized
