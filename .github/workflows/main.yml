@@ -23,6 +23,19 @@ jobs:
       - uses: actions/checkout@v7
       - uses: ./.github/workflows/config
 
+      # Same cache as in the test jobs, for the tree with all four ABIs this job builds.
+      - name: Restore native build outputs
+        uses: actions/cache@v6
+        with:
+          path: |
+            nativeLibs/mupdfModule/.cxx
+            nativeLibs/mupdfModule/build/intermediates/cxx
+            nativeLibs/djvuModule/.cxx
+            nativeLibs/djvuModule/build/intermediates/cxx
+          key: ${{ runner.os }}-native-build-all-${{ hashFiles('thirdparty_build.gradle', 'nativeLibs/patches/**', 'nativeLibs/common/**', 'nativeLibs/mupdfModule/jni/**', 'nativeLibs/mupdfModule/build.gradle', 'nativeLibs/djvuModule/jni/**', 'nativeLibs/djvuModule/cmake/**', 'nativeLibs/djvuModule/build.gradle', 'build.gradle', 'project.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-native-build-all-
+
       - name: Build debug APK
         run: bash ./gradlew assembleDebug --stacktrace -Porion.CIBuild=true
 
@@ -58,7 +71,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        arch: [[15, x86, ubuntu-22.04], [16, x86, ubuntu-24.04], [19, x86, ubuntu-24.04], [21, x86, ubuntu-24.04], [23, x86, ubuntu-24.04], [28, x86, ubuntu-24.04], [30, x86_64, ubuntu-24.04],  [32, x86_64, ubuntu-24.04], [33, x86_64, ubuntu-24.04], [35, x86_64, ubuntu-24.04]]
+        arch: [[15, x86, ubuntu-22.04], [16, x86, ubuntu-24.04], [19, x86, ubuntu-24.04], [21, x86, ubuntu-24.04], [23, x86, ubuntu-24.04], [28, x86, ubuntu-24.04], [30, x86_64, ubuntu-24.04],  [33, x86_64, ubuntu-24.04], [35, x86_64, ubuntu-24.04], [36, x86_64, ubuntu-24.04]]
     env:
       ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 170
       EMULATOR_API: ${{ matrix.arch[0] }}
@@ -73,6 +86,22 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y libncurses5
         if:  ${{ matrix.arch[0] == 15 }}
 
+      # cmake/ninja outputs of mupdf and djvu for this job's ABI (about 110 MB compressed):
+      # with injected.build.abi a job builds one ABI, so a restored tree makes buildCMakeDebug[abi]
+      # a no-op apart from the few JNI files the checkout touched. Keyed by everything that goes
+      # into the native build; the Android 4.0 build (API 15) has its own configuration.
+      - name: Restore native build outputs
+        uses: actions/cache@v6
+        with:
+          path: |
+            nativeLibs/mupdfModule/.cxx
+            nativeLibs/mupdfModule/build/intermediates/cxx
+            nativeLibs/djvuModule/.cxx
+            nativeLibs/djvuModule/build/intermediates/cxx
+          key: ${{ runner.os }}-native-build-${{ matrix.arch[1] }}-android40_${{ matrix.arch[0] == 15 }}-${{ hashFiles('thirdparty_build.gradle', 'nativeLibs/patches/**', 'nativeLibs/common/**', 'nativeLibs/mupdfModule/jni/**', 'nativeLibs/mupdfModule/build.gradle', 'nativeLibs/djvuModule/jni/**', 'nativeLibs/djvuModule/cmake/**', 'nativeLibs/djvuModule/build.gradle', 'build.gradle', 'project.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-native-build-${{ matrix.arch[1] }}-android40_${{ matrix.arch[0] == 15 }}-
+
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -83,7 +112,8 @@ jobs:
           disable-animations: true
           sdcard-path-or-size: 500M
           # the manual screen tour (src/androidTestTour) is compiled only for the tour build type, see screenshots.yml
-          script: ./gradlew forwardLogcat connectedDebugAndroidTest -Porion.CIBuild=true  -Porion.build.android40=${{ matrix.arch[0] == 15 }}
+          # injected.build.abi: build and install the native libraries for the emulator's ABI only, not all four
+          script: ./gradlew forwardLogcat connectedDebugAndroidTest -Porion.CIBuild=true -Pandroid.injected.build.abi=${{ matrix.arch[1] }} -Porion.build.android40=${{ matrix.arch[0] == 15 }}
 
       - name: Name test suite
         # AGP names the single <testsuite> after the first test class that ran
@@ -95,9 +125,10 @@ jobs:
           name: Test results ${{ matrix.arch[0] }}
           path: orion-viewer/build/outputs/androidTest-results/connected/debug/TEST-*.xml
           reporter: java-junit
-          use-actions-summary: true
-          fail-on-error: false
-          fail-on-empty: false
+          use-actions-summary: false
+          fail-on-error: true
+          fail-on-empty: true
+          list-tests: failed
         if: failure()
 
       - name: Upload screenshots and logcat

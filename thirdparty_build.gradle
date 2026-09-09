@@ -7,7 +7,7 @@ buildscript {
 }
 
 /*DJVU CHAIN*/
-task downloadDjvu {
+task fetchDjvu {
     doLast {
         def djvuFolder = new File(djvu)
         if (djvuFolder.exists()) {
@@ -35,14 +35,22 @@ task downloadDjvu {
     }
 }
 
-task patchDjvu(dependsOn: [downloadDjvu]) {
+task patchDjvu(dependsOn: [fetchDjvu]) {
     doLast {
         applyPatches(file(djvu), file('nativeLibs/patches/djvu'))
     }
 }
 
-//Keep until migration
+/* The djvu entry point: a checkout of libdjvu with the local patches applied. */
 task downloadAndPatchDjvu(dependsOn: [patchDjvu])
+
+/* Deprecated, use downloadAndPatchDjvu. Kept for scripts that still call it; it used to leave
+   the checkout unpatched, which is how CI built libdjvu without the fd fix. */
+task downloadDjvu(dependsOn: [patchDjvu]) {
+    doFirst {
+        logger.warn("downloadDjvu is deprecated, use downloadAndPatchDjvu")
+    }
+}
 
 task buildDjvu() {
     doLast {
@@ -55,7 +63,7 @@ task buildDjvu() {
 
 task djvuChain(dependsOn: [buildDjvu])
 
-buildDjvu.mustRunAfter downloadDjvu
+buildDjvu.mustRunAfter patchDjvu
 
 
 /*MUPDF CHAIN*/

@@ -37,7 +37,8 @@ runs:
 #          nativeLibs/mupdfModule/.cxx
 #          nativeLibs/djvuModule/build
 #          nativeLibs/djvuModule/.cxx
-        key: ${{ runner.os }}-native-libs-${{ hashFiles('thirdparty_build.gradle') }}2
+        # the cached checkouts carry the local patches, so they must be rebuilt when those change
+        key: ${{ runner.os }}-native-libs-${{ hashFiles('thirdparty_build.gradle', 'nativeLibs/patches/**') }}
 
     - name: Prepare thirdparty
       shell: bash

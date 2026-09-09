@@ -62,7 +62,7 @@ or if you have [configured ssh access](https://docs.github.com/en/authentication
 
 2. Setup native libraries (*mupdf*, *djvu*) using:
 
-    `./gradlew -b thirdparty_build.gradle downloadDjvu downloadAndMakeMupdf`
+    `./gradlew -b thirdparty_build.gradle downloadAndPatchDjvu downloadAndMakeMupdf`
     
     Build scripts for them are defined in *externalNativeBuild* section in gradle build files
     (for details see *djvuModule/build.gradle* and *mupdfModule/build.gradle* files).
