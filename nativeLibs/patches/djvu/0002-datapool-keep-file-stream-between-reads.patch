@@ -1,0 +1,18 @@
+diff --git a/libdjvu/DataPool.cpp b/libdjvu/DataPool.cpp
+index b58fc45..60e5066 100644
+--- a/libdjvu/DataPool.cpp
++++ b/libdjvu/DataPool.cpp
+@@ -1162,7 +1162,12 @@ DataPool::get_data(void * buffer, int offset, int sz, int level)
+ 		 || level)
+ 	       G_RETHROW;
+ 	   } G_ENDCATCH;
+-	   pool->clear_stream(true);
++	   /* The master keeps its file stream between reads. Releasing it
++	      here made every buffered read of a page pool (512 bytes) reopen
++	      and remap the whole document: chunk scans for page info, text
++	      and annotations cost 5-25 ms per page on Android instead of a
++	      fraction of a millisecond. OpenFiles::prune() still caps the
++	      number of open files, and ~DataPool() releases the stream. */
+ 	   return retval;
+ 	 }
+      }
