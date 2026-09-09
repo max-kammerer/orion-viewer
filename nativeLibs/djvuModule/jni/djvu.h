@@ -9,10 +9,12 @@
 #endif
 
 
-extern JNIEXPORT jlong JNICALL JNI_FN(DjvuDocument_initContext)(JNIEnv *env, jclass type);
+extern JNIEXPORT void JNICALL JNI_FN(DjvuDocument_trimCache)(JNIEnv *env, jclass type, jlong contextl, jint keepPercent);
+
+JNIEXPORT jlong JNICALL JNI_FN(DjvuDocument_initContext)(JNIEnv *env, jclass type, jlong cacheLimit);
 
 extern JNIEXPORT jlong JNICALL
-JNI_FN(DjvuDocument_openFile)(JNIEnv *env, jclass type, jstring jfileName, jlong contextl, DocInfo docInfo);
+JNI_FN(DjvuDocument_openFile)(JNIEnv *env, jclass type, jstring jfileName, jlong contextl, DocInfo docInfo, jboolean useCache);
 
 extern JNIEXPORT void JNICALL JNI_FN(DjvuDocument_destroy)(JNIEnv *env, jclass type, jlong context, jlong doc);
 

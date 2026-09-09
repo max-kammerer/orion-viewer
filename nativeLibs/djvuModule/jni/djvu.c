@@ -122,14 +122,34 @@ JNIEXPORT JNICALL void JNI_FN(DjvuDocument_initNative)(JNIEnv *env, jclass type)
     }
 }
 
-JNIEXPORT jlong JNICALL JNI_FN(DjvuDocument_initContext)(JNIEnv *env, jclass type) {
-    LOGI("Creating context");
+JNIEXPORT jlong JNICALL JNI_FN(DjvuDocument_initContext)(JNIEnv *env, jclass type, jlong cacheLimit) {
+    LOGI("Creating context, cache limit %lld", (long long) cacheLimit);
     ddjvu_context_t *ctx = ddjvu_context_create("orion");
+    if (ctx != NULL && cacheLimit > 0) {
+        ddjvu_cache_set_size(ctx, (unsigned long) cacheLimit);
+    }
     return jlong_cast(ctx);
 }
 
+/* The cache reports its limit but not its fill, so the percentage is taken from the limit:
+   lowering the size evicts the oldest files down to it, then the limit is put back. */
+JNIEXPORT void JNICALL
+JNI_FN(DjvuDocument_trimCache)(JNIEnv *env, jclass type, jlong contextl, jint keepPercent) {
+    ddjvu_context_t *context = (ddjvu_context_t *) contextl;
+    if (context == NULL) return;
+    unsigned long limit = ddjvu_cache_get_size(context);
+    unsigned long target = keepPercent <= 0 ? 0 : limit / 100 * (unsigned long) (keepPercent < 100 ? keepPercent : 100);
+    LOGI("Trimming cache to %lu of %lu bytes", target, limit);
+    if (target == 0) {
+        ddjvu_cache_clear(context);
+        return;
+    }
+    ddjvu_cache_set_size(context, target);
+    ddjvu_cache_set_size(context, limit);
+}
+
 JNIEXPORT jlong JNICALL
-JNI_FN(DjvuDocument_openFile)(JNIEnv *env, jclass type, jstring jfileName, jlong contextl, DocInfo docInfo) {
+JNI_FN(DjvuDocument_openFile)(JNIEnv *env, jclass type, jstring jfileName, jlong contextl, DocInfo docInfo, jboolean useCache) {
     ddjvu_context_t *context = (ddjvu_context_t *) contextl;
 
 #ifdef ORION_FOR_ANDROID
@@ -139,7 +159,7 @@ JNI_FN(DjvuDocument_openFile)(JNIEnv *env, jclass type, jstring jfileName, jlong
 #endif
 
     LOGI("Opening document: %s", fileName);
-    ddjvu_document_t *doc = ddjvu_document_create_by_filename_utf8(context, fileName, 0);
+    ddjvu_document_t *doc = ddjvu_document_create_by_filename_utf8(context, fileName, useCache ? 1 : 0);
     LOGI("Start decoding document: %p", doc);
 
     ddjvu_status_t status = DDJVU_JOB_NOTSTARTED;

@@ -127,6 +127,19 @@ interface Document : ImagePostProcessor {
     fun needPassword(): Boolean = false
 
     fun authenticate(password: String): Boolean = true
+
+    /**
+     * Bytes the engine may keep in its cache of decoded data that outlives the page adapters:
+     * fonts, images and glyphs for pdf, decoded page files and shared dictionaries for djvu.
+     * 0 when the cache is off.
+     */
+    val cacheLimit: Long
+
+    /**
+     * Evicts cached data down to about [keepPercent] of what is held, 0 drops everything.
+     * Pages in use keep working, they are only decoded again when shown next time.
+     */
+    fun trimCache(keepPercent: Int)
 }
 
 val Document.lastPageNum0

@@ -9,6 +9,10 @@ import java.io.File
 
 object FileUtil {
 
+    /** Cache limit for djvu documents opened here; the application sizes it from the device memory. */
+    @JvmStatic
+    var djvuCacheLimit: Long = DjvuDocument.DEFAULT_CACHE_LIMIT
+
     private fun isDjvuFile(filePath: String): Boolean {
         return filePath.fileExtensionLC in FileFormats.DJVU.extensions
     }
@@ -19,7 +23,7 @@ object FileUtil {
         val absolutePath = file.absolutePath
         try {
             return if (isDjvuFile(file.name)) {
-                DjvuDocument(absolutePath)
+                DjvuDocument(absolutePath, djvuCacheLimit)
             } else {
                 PdfDocument(absolutePath)
             }

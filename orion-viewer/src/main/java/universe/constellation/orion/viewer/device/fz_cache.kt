@@ -19,3 +19,8 @@ fun calcFZCacheSize(deviceMemory: Long): Long {
         else -> 256L + 128L
     } shl 20
 }
+
+/* libdjvu caches whole decoded page files (JB2 shapes, IW44 coefficients) and the shared
+ * dictionaries: a scanned page takes 0.7-2 MB and the cache undercounts it by about a third.
+ * A quarter of the mupdf store keeps a handful of pages without competing with the bitmaps. */
+fun calcDjvuCacheSize(deviceMemory: Long): Long = calcFZCacheSize(deviceMemory) / 2

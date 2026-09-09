@@ -16,8 +16,10 @@ import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.pdf.DocInfo
 import universe.constellation.orion.viewer.traceTiming
 import java.util.Locale
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
-class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
+class DjvuDocument(filePath: String, override val cacheLimit: Long = DEFAULT_CACHE_LIMIT) : AbstractDocument(filePath) {
 
     inner class DjvuPage(pageNum: Int) : AbstractPage(pageNum) {
         @Volatile
@@ -121,10 +123,10 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
         get() = getOutline(docPointer)
 
     init {
-        contextPointer = initContext()
+        contextPointer = initContext(cacheLimit)
         docInfo.fileName = filePath
         if (contextPointer == 0L) throw RuntimeException("Can't create djvu contextPointer").also { destroy() }
-        docPointer = openFile(filePath, contextPointer, docInfo)
+        docPointer = openFile(filePath, contextPointer, docInfo, cacheLimit > 0)
         if (docPointer == 0L) throw RuntimeException("Can't open file $filePath").also { destroy() }
     }
 
@@ -135,12 +137,25 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
         return DjvuPage(pageNum)
     }
 
-    @Synchronized
-    override fun destroy() {
+    /* Guards the native context against a concurrent close: destroy() runs in the background
+     * after the controller is gone, trimCache() comes from a memory trim on the main thread. */
+    private val lifecycle = ReentrantLock()
+
+    override fun destroy() = lifecycle.withLock {
         destroyPages()
         destroy(contextPointer, docPointer)
         docPointer = 0
         contextPointer = 0
+    }
+
+    /* A trim never waits: if the document is being closed, there is nothing left worth trimming. */
+    override fun trimCache(keepPercent: Int) {
+        if (!lifecycle.tryLock()) return
+        try {
+            if (contextPointer != 0L) trimCache(contextPointer, keepPercent)
+        } finally {
+            lifecycle.unlock()
+        }
     }
 
     override val title: String?
@@ -230,19 +245,32 @@ class DjvuDocument(filePath: String) : AbstractDocument(filePath) {
 
     companion object {
 
+        /** For documents opened outside the app (tests); the app sizes it from the device memory. */
+        const val DEFAULT_CACHE_LIMIT = 24L shl 20
+
         init {
             System.loadLibrary("djvu")
             initNative()
         }
 
+        /** Creates a decoding context; a positive [cacheLimit] sizes its cache of decoded files in bytes. */
         @JvmStatic @Synchronized
-        external fun initContext(): Long
+        external fun initContext(cacheLimit: Long): Long
+
+        /**
+         * Evicts cached files down to [keepPercent] of the cache limit, 0 empties the cache.
+         * Not under the class lock on purpose: libdjvu guards the cache itself, and the class lock
+         * is held for a whole page decode, which the caller (a memory trim on the main thread)
+         * must not wait for.
+         */
+        @JvmStatic
+        external fun trimCache(context: Long, keepPercent: Int)
 
         @JvmStatic @Synchronized
         external fun initNative()
 
         @JvmStatic @Synchronized
-        external fun openFile(filename: String, context: Long, info: DocInfo): Long
+        external fun openFile(filename: String, context: Long, info: DocInfo, useCache: Boolean): Long
 
         @JvmStatic @Synchronized
         external fun getPageInternal(context: Long, doc: Long, pageNum: Int): Long
