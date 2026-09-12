@@ -38,13 +38,17 @@ class AccessToPrivateFileSecondTimeTest : BaseInstrumentationTest() {
 
         var time = -1L
         firstAttempt.use {
-            onTextNotButtonView(R.string.fileopen_open_in_temporary_file).perform(ViewActions.click())
+            retryWithoutWindowFocus {
+                onTextNotButtonView(R.string.fileopen_open_in_temporary_file).perform(ViewActions.click())
+            }
             it.checkFileWasOpened()
             time = getFileModificationTime(it)
         }
 
         launchActivity<OrionViewerActivity>(createContentIntentWithGeneratedFile(fileName)).use {
-            onView(withId(R.id.view)).check(ViewAssertions.matches(isCompletelyDisplayed()))
+            retryWithoutWindowFocus {
+                onView(withId(R.id.view)).check(ViewAssertions.matches(isCompletelyDisplayed()))
+            }
             it.checkFileWasOpened()
             val newTime = getFileModificationTime(it)
             Assert.assertEquals(time, newTime)

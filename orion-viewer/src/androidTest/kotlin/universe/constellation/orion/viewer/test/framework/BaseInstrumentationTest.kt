@@ -15,6 +15,7 @@ import org.junit.Rule
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.android.isAtLeastKitkat
+import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.test.espresso.ScreenshotTakingRule
 
 
@@ -52,6 +53,24 @@ abstract class BaseInstrumentationTest : BaseTest() {
                 //workaround for: ... process has stopped
                 device.findObject(By.textContains("OK"))?.click()
             }
+        }
+    }
+
+    /**
+     * Runs [body], and once more if Espresso gave up waiting for a window with focus. Right after
+     * the previous test's activity is torn down, the window manager of a CI emulator is now and
+     * then late handing the focus to the freshly launched activity or its dialog: the window is
+     * drawn, only nobody owns the focus for longer than Espresso's 10 seconds. Meant for the first
+     * interaction after a launch. The exception class is package-private, hence the name check.
+     */
+    protected fun <T> retryWithoutWindowFocus(body: () -> T): T {
+        return try {
+            body()
+        } catch (e: RuntimeException) {
+            if (e.javaClass.simpleName != "RootViewWithoutFocusException") throw e
+            log("No window took focus in time, retrying once")
+            device.waitForIdle()
+            body()
         }
     }
 
