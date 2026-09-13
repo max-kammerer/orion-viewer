@@ -21,4 +21,3 @@ package universe.constellation.orion.viewer.geometry
 
 actual typealias Rect = android.graphics.Rect
 actual typealias RectF = android.graphics.RectF
-actual typealias Point = android.graphics.Point

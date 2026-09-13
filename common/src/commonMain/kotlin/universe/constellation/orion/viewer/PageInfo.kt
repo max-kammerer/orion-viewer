@@ -21,12 +21,12 @@ package universe.constellation.orion.viewer
 
 import universe.constellation.orion.viewer.layout.AutoCropMargins
 
-expect class PageSize {
+expect class PageSize(width: Int = 0, height: Int = 0) {
     var width: Int
     var height: Int
 }
 
-expect class PageInfo {
+expect class PageInfo(pageNum0: Int, width: Int = 0, height: Int = 0) {
     val pageNum0: Int
     var width: Int
     var height: Int

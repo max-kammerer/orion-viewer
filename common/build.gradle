@@ -20,22 +20,21 @@ kotlin {
     jvmToolchain(17)
 
     androidTarget()
-//    targets {
-//        //fromPreset(presets.android, 'android')
-//        //fromPreset(presets.linuxX64, 'linuxLib')
-//    }
+    // Plain JVM target: lets the document model and layout logic run under `./gradlew :common:jvmTest`
+    // without an emulator. Its actuals live in jvmMain.
+    jvm()
 
     sourceSets {
-        commonMain {
-            dependencies {
-                implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
-            }
-        }
-
 
         androidMain {
             dependencies {
                 implementation 'androidx.collection:collection:1.2.0'
+            }
+        }
+
+        jvmTest {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-test'
             }
         }
     }

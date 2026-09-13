@@ -21,12 +21,12 @@ package universe.constellation.orion.viewer
 
 import universe.constellation.orion.viewer.layout.AutoCropMargins
 
-actual data class PageInfo @JvmOverloads constructor(
+actual data class PageInfo @JvmOverloads actual constructor(
         @JvmField actual val pageNum0: Int,
         /*used from jni*/
-        @JvmField actual var width: Int = 0,
+        @JvmField actual var width: Int,
         /*used from jni*/
-        @JvmField actual var height: Int = 0
+        @JvmField actual var height: Int
 ) {
 
     @JvmField
@@ -34,11 +34,11 @@ actual data class PageInfo @JvmOverloads constructor(
 }
 
 
-actual data class PageSize @JvmOverloads constructor(
+actual data class PageSize @JvmOverloads actual constructor(
     /*used from jni*/
-    @JvmField actual var width: Int = 0,
+    @JvmField actual var width: Int,
     /*used from jni*/
-    @JvmField actual var height: Int = 0
+    @JvmField actual var height: Int
 ) {
 
 }

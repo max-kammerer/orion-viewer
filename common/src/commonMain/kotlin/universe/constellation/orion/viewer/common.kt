@@ -66,3 +66,5 @@ fun memoryInMB(memoryInBytes: Long): String {
 expect fun currentTimeMillis(): Long
 
 expect inline  fun <R> Any.mySynchronized(p: () -> R): R
+/** Debug build of the app on Android; always true on the JVM, where errorInDebug should fail a test. */
+expect val isDebugBuild: Boolean
