@@ -1,6 +1,6 @@
 package universe.constellation.orion.viewer.document
 
-import android.graphics.Rect
+import universe.constellation.orion.viewer.geometry.Rect
 
 interface PageText {
     val lines: List<List<TextWord>>

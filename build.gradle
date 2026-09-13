@@ -1,7 +1,7 @@
 apply from: 'project.gradle'
 
 buildscript {
-    ext.kotlin_version = '1.9.22'
+    ext.kotlin_version = '2.4.20'
     ext.isCIBuild = findProperty("orion.CIBuild")?.toBoolean() ?: false
     repositories {
         mavenCentral()

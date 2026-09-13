@@ -31,7 +31,7 @@ dependencies {
 
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0'
     implementation project(":nativeLibs:djvuModule")
     implementation project(":nativeLibs:mupdfModule")
     if (enableAnalytics) {

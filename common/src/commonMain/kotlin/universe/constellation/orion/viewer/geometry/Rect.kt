@@ -20,4 +20,9 @@
 package universe.constellation.orion.viewer.geometry
 
 
-expect class Rect constructor(left: Int, top: Int, right: Int, bottom: Int)
+expect class Rect constructor(left: Int, top: Int, right: Int, bottom: Int) {
+    constructor()
+    fun union(r: Rect)
+    fun width(): Int
+    fun height(): Int
+}

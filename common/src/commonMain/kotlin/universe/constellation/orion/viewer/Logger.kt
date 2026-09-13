@@ -19,11 +19,10 @@
 
 package universe.constellation.orion.viewer
 
-import universe.constellation.orion.common.BuildConfig
 
 interface Logger {
     fun log(m: String) {
-        if (BuildConfig.DEBUG) {
+        if (isDebugBuild) {
             println(m)
         }
     }
@@ -64,7 +63,7 @@ fun log(m: String, e: Exception) {
 inline fun errorInDebug(message: String, ex: Throwable? = null) {
     logError(message)
     ex?.printStackTrace()
-    if (BuildConfig.DEBUG) {
+    if (isDebugBuild) {
         error(message)
     }
 }
