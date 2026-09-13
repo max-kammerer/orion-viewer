@@ -107,6 +107,10 @@ jobs:
         with:
           api-level: ${{ matrix.arch[0] }}
           arch: ${{ matrix.arch[1] }}
+          # API 30 runs on the Automated Test Device image: no SystemUI, launcher or Google apps,
+          # so less to crash (the default Android 11 image lost surfaceflinger mid-run). ATD images
+          # are published for API 30 only.
+          target: ${{ matrix.arch[0] == 30 && 'aosp_atd' || 'default' }}
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
