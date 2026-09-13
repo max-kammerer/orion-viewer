@@ -44,6 +44,7 @@ import universe.constellation.orion.viewer.document.PageTextBuilder
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.errorInDebugOr
 import universe.constellation.orion.viewer.log
+import universe.constellation.orion.viewer.mupdfLoaded
 import universe.constellation.orion.viewer.shrinkMupdfStore
 import universe.constellation.orion.viewer.traceTiming
 
@@ -181,6 +182,11 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
         }
     }
 
+
+    init {
+        /* Before the core: opening it is what loads libmupdf_java, see shrinkMupdfStore. */
+        mupdfLoaded = true
+    }
 
     private val core = MuPDFCore(filePath)
 

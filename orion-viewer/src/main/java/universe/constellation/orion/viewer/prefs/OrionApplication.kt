@@ -47,6 +47,8 @@ import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.BuildConfig.DEBUG
 import universe.constellation.orion.viewer.BuildConfig.VERSION_NAME
 import universe.constellation.orion.viewer.FileUtil
+import universe.constellation.orion.viewer.pdf.PdfDocument
+import universe.constellation.orion.viewer.shrinkMupdfStore
 import universe.constellation.orion.viewer.FileUtil.beautifyFileSize
 import universe.constellation.orion.viewer.LastPageInfo
 import universe.constellation.orion.viewer.OrionViewerActivity
@@ -153,20 +155,28 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
         trimDocumentCache(level, keepPercent)
     }
 
-    /** The engine cache is the only sizeable memory the app can give back without losing the open pages. */
+    /**
+     * The engine caches are the only sizeable memory the app can give back without losing the
+     * open pages. The mupdf store is one per process and doesn't follow the current document: a
+     * closed pdf keeps its entries until its last page is dropped, which happens in the
+     * background after the next book is already open, and a leaked page would keep them for
+     * good. So it is trimmed whatever is on screen (a no-op when empty), then the current
+     * engine's own cache, which for djvu lives in the document's context.
+     */
     private fun trimDocumentCache(level: Int, keepPercent: Int) {
-        val document = viewActivity?.controller?.document ?: return
+        val document = viewActivity?.controller?.document
         val before = Debug.getNativeHeapAllocatedSize() shr 20
         try {
-            document.trimCache(keepPercent)
+            if (document !is PdfDocument) shrinkMupdfStore(keepPercent, "trim")
+            document?.trimCache(keepPercent)
         } catch (e: Exception) {
             log("Cache trim failed for $document", e)
             analytics.error(e)
             return
         }
         val after = ProcessMemory.snapshot()
-        log("Memory trim, level $level: $document cache kept at $keepPercent%, native heap ${before}M -> ${after.nativeHeapMb}M, $after")
-        analytics.memoryTrim(level, keepPercent, document.javaClass.simpleName, before, after.nativeHeapMb, after.vmSizeMb)
+        log("Memory trim, level $level: ${document ?: "no document"} cache kept at $keepPercent%, native heap ${before}M -> ${after.nativeHeapMb}M, $after")
+        analytics.memoryTrim(level, keepPercent, document?.javaClass?.simpleName ?: "none", before, after.nativeHeapMb, after.vmSizeMb)
     }
 
     fun updateLanguage(res: Resources) {

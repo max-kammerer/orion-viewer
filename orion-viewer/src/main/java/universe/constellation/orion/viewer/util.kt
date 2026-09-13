@@ -84,7 +84,17 @@ fun logNativeMemoryAfterGc(tag: String) = logNativeMemoryBreakdown(tag, force = 
  * than the currently evictable amount, the automatic eviction gives up forever and
  * the store ratchets up without bound. fz_shrink_store evicts greedily instead,
  * so it is the only way back under the limit */
+/**
+ * Set by the first [universe.constellation.orion.viewer.pdf.PdfDocument]: until then libmupdf_java
+ * isn't loaded and there is no store. The shrink helpers check it because they run on memory
+ * trims, and touching the Context class then would load the library and create the base context,
+ * i.e. allocate exactly when memory is short.
+ */
+@Volatile
+var mupdfLoaded = false
+
 fun shrinkMupdfStore(percent: Int, tag: String) {
+    if (!mupdfLoaded) return
     try {
         if (com.artifex.mupdf.fitz.Context.shrinkStore(percent)) {
             log("MUPDF_STORE [$tag]: shrunk to $percent%")
@@ -100,6 +110,7 @@ fun shrinkMupdfStore(percent: Int, tag: String) {
 }
 
 fun emptyMupdfStore(tag: String) {
+    if (!mupdfLoaded) return
     try {
         com.artifex.mupdf.fitz.Context.emptyStore()
         log("MUPDF_STORE [$tag]: emptied")
