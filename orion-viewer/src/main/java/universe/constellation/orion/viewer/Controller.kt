@@ -233,6 +233,10 @@ class Controller(
         }
     }
 
+    fun changePageGap(@Suppress("UNUSED_PARAMETER") gap: Int) {
+        sendViewChangeNotification()
+    }
+
     var rotation: Int
         get() = layoutStrategy.rotation
         set(rotation) {

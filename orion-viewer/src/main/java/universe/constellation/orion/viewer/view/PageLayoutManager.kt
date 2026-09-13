@@ -31,6 +31,9 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
 
     private val analytics = controller.activity.analytics
 
+    private val pageGap: Float
+        get() = controller.activity.globalOptions.pageGap.toFloat().let { if (it == 0f) -1f else it }
+
     private val handler = CoroutineExceptionHandler { _, ex ->
         errorInDebug("Processing error in PageLayoutManager", ex)
         analytics.error(ex)
@@ -305,7 +308,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
             addPageInPosition(
                 newView,
                 0f,
-                page.layoutData.position.y - newView.layoutData.wholePageRect.height() - 2,
+                page.layoutData.position.y - newView.layoutData.wholePageRect.height() - pageGap,
                 0
             )
             return newView
@@ -321,7 +324,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
             return existingPage
         }
 
-        val pageEnd = page.pageEndY + 2
+        val pageEnd = page.pageEndY + pageGap
         if (pageEnd < sceneHeight || addIfAbsent) {
             return addPageInPosition(nextPageNum, pageEnd)
         }
@@ -587,9 +590,11 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
             if (RectF.intersects(rect1, rect2)) {
                 val intersection = RectF(rect1)
                 intersection.intersect(rect2)
-                val message =
-                    "intersected pages ${it.first.pageNum} and ${it.second.pageNum} rects: $rect1 $rect2, intersection $intersection"
-                errorInDebug(message)
+                if (intersection.width() > 2f && intersection.height() > 2f) {
+                    val message =
+                        "intersected pages ${it.first.pageNum} and ${it.second.pageNum} rects: $rect1 $rect2, intersection $intersection"
+                    errorInDebug(message)
+                }
             }
         }
     }
