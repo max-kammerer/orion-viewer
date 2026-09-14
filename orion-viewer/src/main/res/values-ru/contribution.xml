@@ -7,5 +7,6 @@
     <string name="contribution_code">• реализовать <a href="https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-build-project">новую фичу</a> или <a href="https://github.com/max-kammerer/orion-viewer/issues">исправить ошибку</a></string>
     <string name="contribution_design">• привнести новую тему или дизайн приложения</string>
     <string name="contribution_review">• написать <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">рецензию на платформе Google Play</a> или на другой платформе</string>
-    <string name="contribution_survey">Помогите сделать приложение лучше - примите участие в опросе! (10–20 минут)</string>
+    <string name="contribution_survey">Помогите сделать приложение лучше - примите участие в опросе! (5–10 минут)</string>
+    <string name="survey_key" translatable="false">1FAIpQLSe8iQH5g9wm_6O93ufy95JX8-GFX-qO0RcGdjDa-H-E0jsztw</string>
 </resources>

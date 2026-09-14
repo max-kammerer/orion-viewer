@@ -59,16 +59,18 @@
             android:gravity="center" android:linksClickable="true" android:autoLink="email"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/project_ino_2" android:textSize="@dimen/text_size_medium"
-            android:text="Bug reporting: https://github.com/max-kammerer/orion-viewer/issues"
-            android:gravity="center" android:linksClickable="true" android:autoLink="web"/>
+            android:text="@string/about_bug_reporting"
+            android:gravity="center" android:linksClickable="true"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="@dimen/text_size_medium"
-            android:text="Discussion group (EN): https://groups.google.com/group/orionviewer"
-            android:gravity="center" android:linksClickable="true" android:autoLink="web"/>
+            android:id="@+id/discussions"
+            android:text="@string/about_discussions"
+            android:gravity="center" android:linksClickable="true"/>
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="@dimen/text_size_medium"
-                  android:text="Discussion group (RU): https://4pda.to/forum/index.php?showtopic=362925"
-                  android:gravity="center" android:linksClickable="true" android:autoLink="web"/>
+                  android:id="@+id/discussions_ru"
+                  android:text="@string/about_discussions_ru"
+                  android:gravity="center" android:linksClickable="true"/>
 
 
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content"

@@ -5,7 +5,7 @@
     <string name="contribution_code">• 实现 <a href="https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-build-project">更多功能</a> 或者 <a href="https://github.com/max-kammerer/orion-viewer/issues">修 bug</a></string>
     <string name="contribution_design">• 给应用程序设计新的主题和/或新的用户界面/用户体验</string>
     <string name="contribution_review">• 在 <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">Google Play</a> 或者别的平台上评论</string>
-    <string name="contribution_survey">本应用程序可以怎么改进 - 参与调查! (10–20 分钟)</string>
+    <string name="contribution_survey">本应用程序可以怎么改进 - 参与调查! (5–10 分钟)</string>
     <string name="contribution_ways">您有很多方式给这个软件项目帮忙：</string>
     <string name="contribution_intro">Orion Viewer 是开源项目，您可以给软件帮忙!</string>
 </resources>

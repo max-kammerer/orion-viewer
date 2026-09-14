@@ -35,13 +35,23 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
+import java.util.Calendar
 import java.util.Date
+import java.util.GregorianCalendar
 
 class OrionHelpActivity : OrionBaseActivity() {
 
     class InfoFragment : Fragment(R.layout.general_help)
 
-    class AboutFragment : Fragment(R.layout.app_about_fragment)
+    class AboutFragment : Fragment(R.layout.app_about_fragment) {
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
+            /* The links are <a> tags in string resources; without autoLink they need the movement method. */
+            for (id in intArrayOf(R.id.project_ino_2, R.id.discussions, R.id.discussions_ru)) {
+                view.findViewById<TextView>(id).movementMethod = LinkMovementMethod.getInstance()
+            }
+        }
+    }
 
     class ContributionFragment : Fragment(R.layout.app_contribution_fragment) {
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,7 +63,8 @@ class OrionHelpActivity : OrionBaseActivity() {
                 }
             }
 
-            if (Date().before(Date(2025 - 1900, 6, 30))) {
+            val surveyEndDate = GregorianCalendar(2026, Calendar.NOVEMBER, 30).time
+            if (Date().before(surveyEndDate)) {
                 val survey = view.findViewById<TextView>(R.id.survey)
                 val key = resources.getString(R.string.survey_key)
                 val fullPath = "https://docs.google.com/forms/d/e/$key/viewform?usp=sf_link"
@@ -63,7 +74,6 @@ class OrionHelpActivity : OrionBaseActivity() {
                     override fun onClick(widget: View) {
                         val uri = Uri.parse(fullPath)
                         val intent = Intent(Intent.ACTION_VIEW, uri)
-                        startActivity(intent)
                         startActivity(intent)
                     }
                 }
