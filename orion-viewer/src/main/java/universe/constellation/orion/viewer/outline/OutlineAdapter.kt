@@ -36,10 +36,12 @@ import universe.constellation.orion.viewer.document.OutlineItem
  * the same or smaller level.
  */
 class OutlineAdapter(
-    private val items: Array<OutlineItem>,
+    rawItems: Array<OutlineItem>,
     currentPage: Int,
     private val onNavigate: (OutlineItem) -> Unit
 ) : RecyclerView.Adapter<OutlineAdapter.Holder>() {
+
+    private val items: Array<OutlineItem> = withoutSingleRoot(rawItems)
 
     class Holder(view: View) : RecyclerView.ViewHolder(view) {
         val expander: AppCompatImageView = view.findViewById(R.id.expander)
@@ -144,6 +146,8 @@ class OutlineAdapter(
 
     override fun getItemCount(): Int = visible.size
 
+    fun item(position: Int): OutlineItem = items[visible[position]]
+
     override fun getItemId(position: Int): Long = visible[position].toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -191,6 +195,22 @@ class OutlineAdapter(
 
     companion object {
         private const val INDENT_PER_LEVEL_DP = 20
+
+        /**
+         * DjVu outlines often open with a single root entry that has no link and holds the
+         * whole tree, typically the file name (the spec's own example is "Table of Contents").
+         * Showing it only pushes every real entry one level deeper, so such a root is dropped
+         * and its subtree moved up. A linkless entry with siblings is a section header and stays.
+         */
+        internal fun withoutSingleRoot(items: Array<OutlineItem>): Array<OutlineItem> {
+            if (items.size < 2) return items
+            val root = items[0]
+            if (root.page >= 0) return items
+            if ((1 until items.size).any { items[it].level <= root.level }) return items
+            return Array(items.size - 1) { i ->
+                items[i + 1].let { OutlineItem(it.level - 1, it.title, it.page) }
+            }
+        }
     }
 }
 

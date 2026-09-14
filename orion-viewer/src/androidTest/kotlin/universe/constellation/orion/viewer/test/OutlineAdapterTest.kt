@@ -67,6 +67,37 @@ class OutlineAdapterTest {
         assertEquals(listOf("A", "E"), adapter.visibleTitles(items))
     }
 
+    private fun OutlineAdapter.visibleTitles(): List<String> = (0 until itemCount).map { item(it).title }
+
+    @Test
+    fun singleLinklessRootIsDropped() {
+        /* a djvu outline wrapped into a root named after the file, as in DjVu3Spec.djvu */
+        val items = arrayOf(
+            OutlineItem(0, "book.djvu", -1),
+            OutlineItem(1, "A", 0),
+            OutlineItem(2, "B", 2),
+            OutlineItem(1, "C", 5)
+        )
+        val adapter = OutlineAdapter(items, -1) {}
+        adapter.expandAll()
+        assertEquals(listOf("A", "B", "C"), adapter.visibleTitles())
+        assertEquals(listOf(0, 1, 0), (0 until adapter.itemCount).map { adapter.item(it).level })
+    }
+
+    @Test
+    fun linklessRootWithSiblingsIsKept() {
+        /* linkless top-level entries with siblings are section headers, not a wrapper */
+        val items = arrayOf(
+            OutlineItem(0, "Part I", -1),
+            OutlineItem(1, "A", 0),
+            OutlineItem(0, "Part II", -1),
+            OutlineItem(1, "B", 2)
+        )
+        val adapter = OutlineAdapter(items, -1) {}
+        adapter.expandAll()
+        assertEquals(listOf("Part I", "A", "Part II", "B"), adapter.visibleTitles())
+    }
+
     @Test
     fun leafToggleIsNoOp() {
         val items = items()
