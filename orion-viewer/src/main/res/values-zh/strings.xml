@@ -47,4 +47,10 @@
     <string name="outline_expand_all">全部展开</string>
     <string name="outline_history_empty">尚无跳转</string>
     <string name="outline_history_page">第 %1$d 页</string>
+    <string name="outline_collapse_all">全部折叠</string>
+    <string name="link_open_title">打开链接？</string>
+    <string name="link_open">打开</string>
+    <string name="link_copy">复制</string>
+    <string name="link_no_handler">没有应用能打开此链接</string>
+    <string name="link_copied">已复制链接</string>
 </resources>
