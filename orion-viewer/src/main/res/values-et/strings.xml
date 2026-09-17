@@ -43,4 +43,14 @@
     <string name="crop_auto">Kadreeri automaatselt</string>
     <string name="crop_warning">Parema jõudluse nimel kasuta käsitsi kadreerimist</string>
     <string name="short_click">Kiirel vajutusel</string>
+    <string name="outline_tab_history">Ajalugu</string>
+    <string name="outline_expand_all">Laienda kõik</string>
+    <string name="outline_history_empty">Sa pole veel lehti vaadanud</string>
+    <string name="outline_history_page">%1$d. leht</string>
+    <string name="outline_collapse_all">Ahenda kõik</string>
+    <string name="link_open_title">Kas avad lingi?</string>
+    <string name="link_open">Ava</string>
+    <string name="link_copy">Kopeeri</string>
+    <string name="link_no_handler">Ükski rakendus ei oska seda linki avada</string>
+    <string name="link_copied">Link on kopeeritud</string>
 </resources>
