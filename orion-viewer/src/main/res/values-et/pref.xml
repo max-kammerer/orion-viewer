@@ -85,4 +85,6 @@
     <string name="pref_size_small">Väike</string>
     <string name="pref_size_medium">Keskmine</string>
     <string name="pref_size_large">Suur</string>
+    <string name="pref_open_links_by_tap">Ava lingid klõpsamisega</string>
+    <string name="pref_open_links_by_tap_desc">Dokumendis leiduva lingi klõpsamise avab ta</string>
 </resources>
