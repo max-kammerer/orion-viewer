@@ -89,4 +89,6 @@
     <string name="pref_key_linked_action_summary">Bağlantılı eylem: `%s`</string>
     <string name="pref_color_mode_desc">%s</string>
     <string name="pref_renderPageBorder">Sayfa kenarlığını çiz</string>
+    <string name="pref_open_links_by_tap">Bağlantıları dokunarak aç</string>
+    <string name="pref_open_links_by_tap_desc">Bir belgedeki bağlantıya dokunulduğunda, o bağlantıya gidilir</string>
 </resources>
