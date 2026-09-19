@@ -49,6 +49,10 @@ class OrionBookmarkActivity : OrionBaseActivity() {
 
     private var bookId: Long = 0
 
+    /** Bookmarks are shown for the book opened in the viewer, so its page numbering applies. */
+    private val pageNumbering: PageNumbering
+        get() = orionApplication.viewActivity?.controller?.pageNumbering ?: PageNumbering()
+
     @SuppressLint("MissingSuperCall")
     public override fun onCreate(savedInstanceState: Bundle?) {
         onOrionCreate(savedInstanceState, R.layout.bookmarks,
@@ -84,7 +88,7 @@ class OrionBookmarkActivity : OrionBaseActivity() {
 
                 val bookmark = getItem(position)
                 val page = convertView.findViewById<View>(R.id.bookmark_entry_page) as TextView
-                page.text = "${if (bookmark!!.page == -1) "*" else bookmark.page + 1}"
+                page.text = if (bookmark!!.page == -1) "*" else pageNumbering.sheetLabel(bookmark.page)
 
                 val edit = convertView.findViewById<View>(R.id.bookmark_edit_entry) as ImageView
                 //if (edit != null)

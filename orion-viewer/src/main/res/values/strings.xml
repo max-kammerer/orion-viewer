@@ -59,7 +59,7 @@
     <string name="outline_expand_all">Expand all</string>
     <string name="outline_collapse_all">Collapse all</string>
     <string name="outline_history_empty">No jumps yet</string>
-    <string name="outline_history_page">page %1$d</string>
+    <string name="outline_history_page">page %1$s</string>
     <string name="link_open_title">Open link?</string>
     <string name="link_open">Open</string>
     <string name="link_copy">Copy</string>

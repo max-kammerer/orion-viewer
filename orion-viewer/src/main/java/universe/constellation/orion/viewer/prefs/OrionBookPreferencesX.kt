@@ -3,7 +3,12 @@ package universe.constellation.orion.viewer.prefs
 import android.annotation.SuppressLint
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
+import android.text.InputType
+import androidx.preference.EditTextPreference
+import androidx.preference.Preference
+import androidx.preference.PreferenceGroup
 import androidx.preference.PreferenceScreen
+import universe.constellation.orion.viewer.PageNumbering
 import universe.constellation.orion.viewer.OrionBaseActivity
 import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.R.array.*
@@ -72,6 +77,79 @@ class OrionBookPreferencesFragment : DSLPreferenceFragment() {
     }
 
     companion object {
+        /**
+         * The book stores [PageNumbering.offset], but the user is asked for the number printed on
+         * the page being read: no arithmetic, and it stays right for scanned spreads.
+         */
+        private fun DSLPreferenceFragment.pageNumberingPreferences(group: PreferenceGroup) {
+            val app = requireContext().applicationContext as OrionApplication
+            val store = createDataStore(requireContext())
+
+            fun docPage() = app.viewActivity?.controller?.currentPage ?: app.currentBookParameters?.pageNumber ?: 0
+            fun numbering(pagesPerSheet: Int = store.getInt(PAGES_PER_SHEET.prefKey, 1)) =
+                PageNumbering(store.getInt(LOGICAL_PAGE_OFFSET.prefKey, 0), pagesPerSheet)
+            fun refreshNumberingSummary() {
+                //setting the provider is the public way to make the preference re-read it
+                findPreference<EditTextPreference>(LOGICAL_PAGE_OFFSET.prefKey)?.let { it.summaryProvider = it.summaryProvider }
+            }
+
+            with(group) {
+                list {
+                    key = PAGES_PER_SHEET.prefKey
+                    title = pref_book_pages_per_sheet.stringRes
+                    summary = pref_book_pages_per_sheet_desc.stringRes
+                    dialogTitle = pref_book_pages_per_sheet.stringRes
+                    setDefaultValue("1")
+
+                    entries = arrayOf(pref_book_pages_per_sheet_one.stringRes, pref_book_pages_per_sheet_two.stringRes)
+                    entryValues = arrayOf("1", "2")
+
+                    setOnPreferenceChangeListener { _, newValue ->
+                        val old = numbering()
+                        val new = numbering((newValue as String).toInt())
+                        if (old.offset != 0 && old.isSpread != new.isSpread) {
+                            //the offset counts book pages: keep the numbers the user has set up for the current page
+                            store.putInt(LOGICAL_PAGE_OFFSET.prefKey, new.offsetFor(docPage(), old.firstOn(docPage())))
+                        }
+                        //the new value is stored after the listener
+                        view?.post { refreshNumberingSummary() }
+                        true
+                    }
+                }
+
+                preference(EditTextPreference(context)) {
+                    key = LOGICAL_PAGE_OFFSET.prefKey
+                    //the field takes a printed page number, the offset behind it is stored by the listener
+                    isPersistent = false
+                    title = pref_book_page_numbering.stringRes
+                    dialogTitle = pref_book_page_numbering.stringRes
+                    dialogMessage = pref_book_page_numbering_message.stringRes
+                    summaryProvider = Preference.SummaryProvider<EditTextPreference> {
+                        getString(pref_book_page_numbering_desc, numbering().sheetLabel(docPage()), docPage() + 1)
+                    }
+
+                    setOnBindEditTextListener { editText ->
+                        editText.inputType = InputType.TYPE_CLASS_NUMBER
+                        editText.setText(numbering().firstOn(docPage()).takeIf { it >= 1 }?.toString() ?: "")
+                        editText.selectAll()
+                    }
+
+                    setOnPreferenceChangeListener { _, newValue ->
+                        val text = (newValue as String).trim()
+                        val printedNumber = text.toIntOrNull()
+                        if (text.isEmpty() || printedNumber != null) {
+                            store.putInt(
+                                LOGICAL_PAGE_OFFSET.prefKey,
+                                if (printedNumber == null) 0 else numbering().offsetFor(docPage(), printedNumber)
+                            )
+                            refreshNumberingSummary()
+                        }
+                        false
+                    }
+                }
+            }
+        }
+
         fun DSLPreferenceFragment.bookPreferences(preferenceScreen: PreferenceScreen, isGeneral: Boolean) {
 
             preferenceScreen.category {
@@ -192,6 +270,15 @@ class OrionBookPreferencesFragment : DSLPreferenceFragment() {
                         max = 255
                         setDefaultValue(255)
                     }
+                }
+            }
+
+            if (!isGeneral) {
+                preferenceScreen.category {
+                    title = pref_book_logical_pages.stringRes
+                    isIconSpaceReserved = false
+
+                    pageNumberingPreferences(this)
                 }
             }
         }

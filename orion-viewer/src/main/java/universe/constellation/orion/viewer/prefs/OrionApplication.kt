@@ -250,6 +250,8 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
                 "screenOrientation" -> changeOrinatation(value as String)
                 "colorMode" -> changeColorMode(value as String, true)
                 "zoom" -> changeZoom(value as Int)
+                "logicalPageOffset" -> changeLogicalPageOffset(value as Int)
+                "pagesPerSheet" -> changePagesPerSheet(value as Int)
             }
         }
     }

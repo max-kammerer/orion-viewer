@@ -37,7 +37,7 @@
     <string name="outline_expand_all">Развернуть всё</string>
     <string name="outline_collapse_all">Свернуть всё</string>
     <string name="outline_history_empty">Переходов пока не было</string>
-    <string name="outline_history_page">стр. %1$d</string>
+    <string name="outline_history_page">стр. %1$s</string>
     <string name="link_open_title">Открыть ссылку?</string>
     <string name="link_open">Открыть</string>
     <string name="link_copy">Копировать</string>

@@ -62,6 +62,15 @@
     <string name="pref_device_info">Устройство</string>
     <string name="pref_debug">Отладка и логи</string>
     <string name="pref_debug_desc">Запись отладочной информации в лог-файл</string>
+    <string name="pref_book_logical_pages">Логические страницы</string>
+    <string name="pref_book_pages_per_sheet">Страниц на скане</string>
+    <string name="pref_book_pages_per_sheet_desc">Страниц книги на одной странице документа: %s</string>
+    <string name="pref_book_pages_per_sheet_one">Одна страница</string>
+    <string name="pref_book_pages_per_sheet_two">Две страницы (разворот)</string>
+    <string name="pref_book_page_numbering">Нумерация страниц</string>
+    <string name="pref_book_page_numbering_desc">Страница документа %2$d — это страница %1$s в книге</string>
+    <string name="pref_book_page_numbering_message">Номер, напечатанный на текущей странице (для разворота — первой из двух). Пустое поле сбрасывает нумерацию.</string>
+
     <string name="pref_walk_order">@string/navigation</string>
     <string name="pref_walk_order_desc">Порядок переходов: %s</string>
     <string name="pref_page_layout">@string/menu_navigation_text</string>

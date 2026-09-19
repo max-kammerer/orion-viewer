@@ -15,6 +15,8 @@ enum class BookPreferenceKeyX(
     COLOR_MODE(GlobalOptions.COLOR_MODE, LastPageInfo::colorMode.name),
     CONTRAST(GlobalOptions.DEFAULT_CONTRAST, LastPageInfo::contrast.name),
     THRESHOLD("THRESHOLD", LastPageInfo::threshold.name),
+    LOGICAL_PAGE_OFFSET("LOGICAL_PAGE_OFFSET", LastPageInfo::logicalPageOffset.name),
+    PAGES_PER_SHEET("PAGES_PER_SHEET", LastPageInfo::pagesPerSheet.name),
     DICTIONARY(GlobalOptions.DICTIONARY, LastPageInfo::dictionary.name);
 
     companion object {

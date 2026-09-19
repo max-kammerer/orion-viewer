@@ -92,6 +92,14 @@ class LastPageInfo {
     @JvmField
     var dictionary: String? = "DEFAULT"
 
+    /** See [PageNumbering.offset]. */
+    @JvmField
+    var logicalPageOffset = 0
+
+    /** 2 when every document page is a scanned spread of two book pages. */
+    @JvmField
+    var pagesPerSheet = 1
+
     /** [NavigationHistory.serialize] output: the format is the only kind of field the xml loader takes. */
     @JvmField
     var navigationHistory = ""

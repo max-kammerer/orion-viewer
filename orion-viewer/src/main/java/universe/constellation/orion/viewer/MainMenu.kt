@@ -34,8 +34,8 @@ class MainMenu(private val mainMenu: View, val activity: OrionViewerActivity) {
 
         val minus = mainMenu.findViewById<ImageView>(R.id.page_picker_minus)
         val plus = mainMenu.findViewById<ImageView>(R.id.page_picker_plus)
-        initPageNavControls(activity, pageSeeker, minus, plus, curPage) {
-            setGotoSpannable(it.toString())
+        initPageNavControls(activity, pageSeeker, minus, plus, curPage, PageNumbering::sheetLabel) {
+            setGotoSpannable(it)
         }
     }
 
@@ -77,7 +77,7 @@ class MainMenu(private val mainMenu: View, val activity: OrionViewerActivity) {
     fun showMenu() {
         val controller = activity.controller
         initPageNavigationValues(controller, pageSeeker, pageCount) {
-            setGotoSpannable(controller!!.pageCount.toString())
+            setGotoSpannable(it)
         }
         mainMenu.visibility = VISIBLE
     }
@@ -100,12 +100,13 @@ fun initPageNavigationValues(
     controller: Controller?,
     pageSeeker: SeekBar,
     pageCount: TextView,
-    setTextAction: TextView.(page: Int) -> Unit = { text = it.toString() }
+    setTextAction: TextView.(lastPageLabel: String) -> Unit = { text = it }
 ) {
     if (controller != null) {
         pageSeeker.max = controller.pageCount - 1
         pageSeeker.progress = controller.currentPage
-        pageCount.setTextAction(controller.pageCount)
+        val numbering = controller.pageNumbering
+        pageCount.setTextAction(numbering.label(numbering.lastOn(controller.pageCount - 1)))
     } else {
         pageSeeker.max = 1
         pageSeeker.progress = 1
@@ -119,8 +120,10 @@ fun initPageNavControls(
     minus: View,
     plus: View,
     curPage: TextView,
-    setTextAction: TextView.(page: Int) -> Unit = {
-        text = it.toString()
+    /** The text for the 0-based document page under the seeker; an editable field takes a single number. */
+    pageLabel: PageNumbering.(docPage: Int) -> String = { label(firstOn(it)) },
+    setTextAction: TextView.(pageLabel: String) -> Unit = {
+        text = it
     }
 ) {
     pageSeeker.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -128,7 +131,8 @@ fun initPageNavControls(
             if (fromUser) {
                 openPage(activity.controller, progress)
             }
-            curPage.setTextAction(progress + 1)
+            val numbering = activity.controller?.pageNumbering ?: PageNumbering()
+            curPage.setTextAction(numbering.pageLabel(progress))
         }
 
         override fun onStartTrackingTouch(seekBar: SeekBar?) {}

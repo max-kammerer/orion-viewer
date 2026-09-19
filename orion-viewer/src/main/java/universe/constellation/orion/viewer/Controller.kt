@@ -134,6 +134,42 @@ class Controller(
         return pageLayoutManager.renderPageAtFraction(page, place.xFraction, place.yFraction, true)
     }
 
+    /** How document pages map to the numbers printed in the book, see the book options. */
+    var pageNumbering = PageNumbering()
+        private set
+
+    private var logicalPageOffset = 0
+    private var pagesPerSheet = 1
+
+    fun changeLogicalPageOffset(offset: Int) {
+        logicalPageOffset = offset
+        updatePageNumbering()
+    }
+
+    fun changePagesPerSheet(pagesPerSheet: Int) {
+        this.pagesPerSheet = pagesPerSheet
+        updatePageNumbering()
+    }
+
+    private fun updatePageNumbering() {
+        val numbering = PageNumbering(logicalPageOffset, pagesPerSheet)
+        if (numbering != pageNumbering) {
+            log("New page numbering $numbering")
+            pageNumbering = numbering
+            //the status bar takes the page label on redraw
+            activity.view.postInvalidate()
+        }
+    }
+
+    /** Book page numbers of the current document page. */
+    fun currentPageNumbers(): IntRange = pageNumbering.numbersOn(currentPage)
+
+    /** Jump to the document page holding the book page [number] as printed. */
+    fun goToBookPage(number: Int): PageView? = goToPage(pageNumbering.docPageOf(number, pageCount))
+
+    /** Document pages behind a jump of [bookPages] book pages. */
+    fun docPagesFor(bookPages: Int): Int = if (pageNumbering.isSpread) (bookPages + 1) / 2 else bookPages
+
     @JvmOverloads
     fun goToPage(pageNum: Int, kind: NavKind = NavKind.JUMP): PageView? = goTo(DocPlace(pageNum), kind)
 
@@ -292,6 +328,9 @@ class Controller(
             document.setThreshold(info.threshold)
 
             layoutStrategy.init(info, activity.globalOptions)
+            logicalPageOffset = info.logicalPageOffset
+            pagesPerSheet = info.pagesPerSheet
+            updatePageNumbering()
             history.restore(info.navigationHistory)
 
             lastScreenSize = Point(info.screenWidth, info.screenHeight)

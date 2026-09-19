@@ -46,7 +46,7 @@
     <string name="outline_tab_history">Geçmiş</string>
     <string name="outline_expand_all">Tümünü genişlet</string>
     <string name="outline_history_empty">Henüz atlama yok</string>
-    <string name="outline_history_page">sayfa %1$d</string>
+    <string name="outline_history_page">sayfa %1$s</string>
     <string name="outline_collapse_all">Tümünü daralt</string>
     <string name="link_open_title">Bağlantı açılsın mı?</string>
     <string name="link_open">Aç</string>

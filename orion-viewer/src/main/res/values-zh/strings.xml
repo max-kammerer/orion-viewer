@@ -46,7 +46,7 @@
     <string name="outline_tab_history">历史记录</string>
     <string name="outline_expand_all">全部展开</string>
     <string name="outline_history_empty">尚无跳转</string>
-    <string name="outline_history_page">第 %1$d 页</string>
+    <string name="outline_history_page">第 %1$s 页</string>
     <string name="outline_collapse_all">全部折叠</string>
     <string name="link_open_title">打开链接？</string>
     <string name="link_open">打开</string>

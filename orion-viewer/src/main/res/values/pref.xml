@@ -81,6 +81,15 @@
     <string name="pref_debug">Debug &amp; Logs</string>
     <string name="pref_debug_desc">Write debug information into file</string>
 
+    <string name="pref_book_logical_pages">Logical pages</string>
+    <string name="pref_book_pages_per_sheet">Book pages per scan</string>
+    <string name="pref_book_pages_per_sheet_desc">Book pages on one document page: %s</string>
+    <string name="pref_book_pages_per_sheet_one">One page</string>
+    <string name="pref_book_pages_per_sheet_two">Two pages (spread)</string>
+    <string name="pref_book_page_numbering">Page numbering</string>
+    <string name="pref_book_page_numbering_desc">Document page %2$d is book page %1$s</string>
+    <string name="pref_book_page_numbering_message">Number printed on the current page (the first of the two on a spread). Leave empty to reset the numbering.</string>
+
     <string name="pref_walk_order">Page traversal</string>
     <string name="pref_walk_order_desc">Page traversal: %s</string>
 

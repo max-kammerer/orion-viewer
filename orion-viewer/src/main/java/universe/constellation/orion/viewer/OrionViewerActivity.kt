@@ -431,7 +431,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         val minus = findMyViewById(R.id.page_picker_minus) as ImageButton
         initPageNavControls(this@OrionViewerActivity, pageSeeker, minus, plus, pageNumberText)
         initPageNavigationValues(controller, pageSeeker, pageNumberText)
-        pageNumberText.text = ((controller?.currentPage ?: 0) + 1).toString()
+        controller?.let { pageNumberText.text = it.pageNumbering.label(it.currentPageNumbers().first) }
 
         val closePagePeeker = findMyViewById(R.id.option_dialog_bottom_close) as ImageButton
         closePagePeeker.setOnClickListener {
@@ -440,13 +440,16 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
         val pagePreview = findMyViewById(R.id.option_dialog_bottom_apply) as ImageButton
         pagePreview.setOnClickListener {
-            if (pageNumberText.text.isNotEmpty()) {
+            val controller = controller
+            if (pageNumberText.text.isNotEmpty() && controller != null) {
                 try {
-                    val userPage = Integer.valueOf(pageNumberText.text.toString())
-                    val newPage = MathUtils.clamp(userPage, 1, controller!!.pageCount)
-                    if (newPage != controller?.currentPage) {
-                        controller?.goToPage(newPage - 1)
-                        pageSeeker.progress = newPage - 1
+                    //the number is the one printed in the book, see the book page numbering options
+                    val numbering = controller.pageNumbering
+                    val bookPage = numbering.parse(pageNumberText.text.toString())
+                        ?: throw NumberFormatException("Not a page number")
+                    if (bookPage !in controller.currentPageNumbers()) {
+                        controller.goToBookPage(bookPage)
+                        pageSeeker.progress = numbering.docPageOf(bookPage, controller.pageCount)
                     }
                     dismiss()
                 } catch (ex: NumberFormatException) {

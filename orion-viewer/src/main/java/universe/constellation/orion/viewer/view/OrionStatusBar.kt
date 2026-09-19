@@ -67,15 +67,23 @@ class StatusBar(
     override fun onNewBook(title: String?, pageCount: Int) {
         this.title.text = title
         this.totalPages.text = "/$pageCount"
+        shownLastPageLabel = null
         this.page.text = "?"
         this.offset.text = "[?, ?]"
     }
 
     @SuppressLint("SetTextI18n")
-    fun onPageUpdate(pageNum: Int, x: Int, y: Int) {
+    fun onPageUpdate(pageLabel: String, lastPageLabel: String, x: Int, y: Int) {
         offset.text = "[${pad(x)}:${pad(y)}]"
-        page.text = "${pageNum + 1}"
+        page.text = pageLabel
+        //changes with the book page numbering options only
+        if (shownLastPageLabel != lastPageLabel) {
+            shownLastPageLabel = lastPageLabel
+            totalPages.text = "/$lastPageLabel"
+        }
     }
+
+    private var shownLastPageLabel: String? = null
 
     private fun pad(value: Int): String {
         val pValue = abs(value)

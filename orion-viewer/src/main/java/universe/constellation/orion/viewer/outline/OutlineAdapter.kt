@@ -38,6 +38,8 @@ import universe.constellation.orion.viewer.document.OutlineItem
 class OutlineAdapter(
     rawItems: Array<OutlineItem>,
     currentPage: Int,
+    /** The label of a 0-based document page, see the book page numbering options. */
+    private val pageLabel: (Int) -> String = { (it + 1).toString() },
     private val onNavigate: (OutlineItem) -> Unit
 ) : RecyclerView.Adapter<OutlineAdapter.Holder>() {
 
@@ -186,7 +188,7 @@ class OutlineAdapter(
         }
 
         holder.title.text = item.title
-        holder.page.text = if (item.page < 0) " " else (item.page + 1).toString()
+        holder.page.text = if (item.page < 0) " " else pageLabel(item.page)
 
         val isCurrent = index == currentIndex
         holder.itemView.setBackgroundColor(if (isCurrent) holder.itemView.context.listHighlightColor else 0)

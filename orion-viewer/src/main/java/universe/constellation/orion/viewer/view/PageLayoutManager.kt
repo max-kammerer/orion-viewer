@@ -392,8 +392,10 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         it.draw(canvas, scene)
         if (isFirst) {
             val visibleRect = it.visibleRect()
+            val numbering = controller.pageNumbering
             scene.statusBar.onPageUpdate(
-                it.pageNum,
+                numbering.sheetLabel(it.pageNum),
+                numbering.label(numbering.lastOn(controller.pageCount - 1)),
                 visibleRect?.left ?: 0,
                 visibleRect?.top ?: 0
             )

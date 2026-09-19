@@ -20,6 +20,8 @@ class HistoryAdapter(
     private val current: DocPlace?,
     private val forward: List<DocPlace>,
     private val outline: Array<OutlineItem>?,
+    /** The label of a 0-based document page, see the book page numbering options. */
+    private val pageLabel: (Int) -> String,
     private val onNavigate: (Entry) -> Unit
 ) : RecyclerView.Adapter<HistoryAdapter.Holder>() {
 
@@ -73,7 +75,7 @@ class HistoryAdapter(
         )
 
         val chapter = outline?.lastOrNull { it.page in 0..entry.place.page }
-        val pageText = context.getString(R.string.outline_history_page, entry.place.page + 1)
+        val pageText = context.getString(R.string.outline_history_page, pageLabel(entry.place.page))
         holder.title.text = chapter?.title ?: pageText
         holder.place.text = pageText
 

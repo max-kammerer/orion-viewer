@@ -69,7 +69,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             parameter: Any?
         ) {
             val controller1 = controller ?:  return
-            var page = controller1.currentPage + 10
+            var page = controller1.currentPage + controller1.docPagesFor(10)
 
             if (page > controller1.pageCount - 1) {
                 page = controller1.pageCount - 1
@@ -86,7 +86,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             parameter: Any?
         ) {
             val controller1 = controller ?: return
-            var page = controller1.currentPage - 10
+            var page = controller1.currentPage - controller1.docPagesFor(10)
 
             if (page < 0) {
                 page = 0

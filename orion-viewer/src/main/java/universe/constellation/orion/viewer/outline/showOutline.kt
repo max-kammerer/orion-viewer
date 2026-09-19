@@ -55,7 +55,7 @@ fun showOutline(controller: Controller, activity: OrionViewerActivity) {
             list.addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
 
             val outlineAdapter = if (hasOutline) {
-                OutlineAdapter(outline!!, controller.currentPage) { item ->
+                OutlineAdapter(outline!!, controller.currentPage, controller.pageNumbering::sheetLabel) { item ->
                     try {
                         controller.goToPage(item.page)
                         dialog.dismiss()
@@ -100,7 +100,8 @@ fun showOutline(controller: Controller, activity: OrionViewerActivity) {
                     controller.history.backEntries(),
                     controller.currentPlace(),
                     controller.history.forwardEntries(),
-                    outline
+                    outline,
+                    controller.pageNumbering::sheetLabel
                 ) { entry ->
                     val current = controller.currentPlace() ?: return@HistoryAdapter
                     val target = when (entry.kind) {
