@@ -160,7 +160,7 @@ class FireBaseAnalytics : Analytics() {
             param("engine", engine)
             param("nativeBeforeMb", nativeBeforeMb)
             param("nativeAfterMb", nativeAfterMb)
-            param("vmSizeMb", vmSizeMb)
+            param("vm_size_mb", vmSizeMb)
         }
     }
 
