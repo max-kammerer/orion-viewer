@@ -100,6 +100,10 @@ class LastPageInfo {
     @JvmField
     var pagesPerSheet = 1
 
+    /** What the search box held the last time this book was searched, "" when it never was. */
+    @JvmField
+    var lastSearchQuery = ""
+
     /** [NavigationHistory.serialize] output: the format is the only kind of field the xml loader takes. */
     @JvmField
     var navigationHistory = ""

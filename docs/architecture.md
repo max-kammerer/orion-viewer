@@ -286,6 +286,10 @@ mode. `isSinglePageMode` is a separate mode in which the strip logic largely doe
   rest at 64, reusing `ColorStuff.borderPaint` in `FILL` style.
 - The dialog owns `lastPage` and destroys it explicitly (`destroyLastPage`) — search results hold
   a native page handle.
+- The query outlives the dialog: every search stores it in `LastPageInfo.lastSearchQuery` (per
+  book, saved with the book) and in `GlobalOptions.LAST_SEARCH_QUERY` (the fallback for a book not
+  searched yet). The dialog opens with it selected, so typing replaces it and enter (the IME
+  search action, or the hardware key) searches on. Covered by `SearchQueryTest`.
 
 ---
 

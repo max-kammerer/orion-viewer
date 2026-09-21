@@ -12,11 +12,13 @@ import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
@@ -30,6 +32,7 @@ import java.util.List;
 
 import universe.constellation.orion.viewer.Controller;
 import universe.constellation.orion.viewer.DocPlaceKt;
+import universe.constellation.orion.viewer.LastPageInfo;
 import universe.constellation.orion.viewer.NavKind;
 import universe.constellation.orion.viewer.OrionViewerActivity;
 import universe.constellation.orion.viewer.PageWalker;
@@ -38,6 +41,7 @@ import universe.constellation.orion.viewer.document.Page;
 import universe.constellation.orion.viewer.layout.LayoutPosition;
 import universe.constellation.orion.viewer.layout.LayoutStrategy;
 import universe.constellation.orion.viewer.layout.SimpleLayoutStrategy;
+import universe.constellation.orion.viewer.prefs.GlobalOptions;
 import universe.constellation.orion.viewer.search.SearchTask;
 import universe.constellation.orion.viewer.util.ColorUtil;
 import universe.constellation.orion.viewer.util.Util;
@@ -101,6 +105,30 @@ public class SearchDialog extends DialogFragment {
         searchField.getBackground().setAlpha(ALPHA);
         int textColor = searchField.getTextColors().getDefaultColor();
         searchField.setTextColor(ColorUtil.transformColor(textColor, orionViewerActivity.getFullScene().getColorStuff().getColorMatrix()));
+
+        //the previous query, selected: enter continues it, typing replaces it
+        searchField.setText(savedQuery(orionViewerActivity));
+        searchField.selectAll();
+        searchField.setOnEditorActionListener((v, actionId, event) -> {
+            if (event != null) {
+                //a hardware keyboard: search on key down, and take the key up too, or the
+                //text view performs the editor action on it and searches once more
+                boolean isEnterKey = event.getKeyCode() == KeyEvent.KEYCODE_ENTER
+                        || event.getKeyCode() == KeyEvent.KEYCODE_NUMPAD_ENTER;
+                if (isEnterKey && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    doSearch(searchField, controller.getCurrentPage(), +1, controller);
+                }
+                return isEnterKey;
+            }
+            //keyboards ignoring imeOptions send go or done instead of search
+            boolean isSearchAction = actionId == EditorInfo.IME_ACTION_SEARCH
+                    || actionId == EditorInfo.IME_ACTION_GO
+                    || actionId == EditorInfo.IME_ACTION_DONE;
+            if (isSearchAction) {
+                doSearch(searchField, controller.getCurrentPage(), +1, controller);
+            }
+            return isSearchAction;
+        });
 
         android.widget.ImageButton searchNext = dialog.findViewById(R.id.searchNext);
         searchNext.getBackground().setAlpha(ALPHA);
@@ -213,6 +241,7 @@ public class SearchDialog extends DialogFragment {
             requireOrionActivity().showAlert(R.string.msg_error, R.string.msg_specify_keyword_for_search);
             return;
         }
+        saveQuery(requireOrionActivity(), newSearch);
 
         if (newSearch.equals(lastSearch) && screens != null) {
             //iterate
@@ -250,6 +279,25 @@ public class SearchDialog extends DialogFragment {
         }
 
         lastSearch = newSearch;
+    }
+
+    /** The query this book was last searched for, else the one searched for last in any book. */
+    @NonNull
+    private static String savedQuery(OrionViewerActivity activity) {
+        LastPageInfo info = activity.getLastPageInfo();
+        String bookQuery = info != null ? info.lastSearchQuery : "";
+        return bookQuery.isEmpty() ? activity.getGlobalOptions().getLAST_SEARCH_QUERY().getValue() : bookQuery;
+    }
+
+    private static void saveQuery(OrionViewerActivity activity, String query) {
+        LastPageInfo info = activity.getLastPageInfo();
+        if (info != null) {
+            info.lastSearchQuery = query;
+        }
+        GlobalOptions options = activity.getGlobalOptions();
+        if (!query.equals(options.getLAST_SEARCH_QUERY().getValue())) {
+            options.saveStringProperty(options.getLAST_SEARCH_QUERY().getKey(), query);
+        }
     }
 
     @NonNull

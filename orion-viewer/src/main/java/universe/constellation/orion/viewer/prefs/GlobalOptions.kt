@@ -243,6 +243,9 @@ class GlobalOptions(
 
     val DRAW_PAGE_BORDER = pref("DRAW_PAGE_BORDER", true)
 
+    /** The query of the latest search in any book: what the search box offers in a book not searched yet. */
+    val LAST_SEARCH_QUERY = pref("LAST_SEARCH_QUERY", "")
+
     fun <T> subscribe(pref: Preference<T>) {
         registeredPreferences.put(pref.key, pref)?.also {
             errorInDebug("Pref with key ${pref.key} already registered: $pref ")
