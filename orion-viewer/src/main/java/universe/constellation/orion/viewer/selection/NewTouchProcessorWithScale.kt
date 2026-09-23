@@ -15,7 +15,9 @@ class NewTouchProcessorWithScale(view: OrionDrawScene, activity: OrionViewerActi
 
     private val scaleDetector = ScaleGestureDetector(activity, this)
 
-    private val enableTouchMoveOnPinchZoom = activity.globalOptions.isEnableMoveOnPinchZoom
+    //read per gesture: the option applies without a restart
+    private val enableTouchMoveOnPinchZoom: Boolean
+        get() = activity.globalOptions.ENABLE_MOVE_ON_PINCH_ZOOM.value
 
     private val startFocus = PointF()
     private val endFocus = PointF()

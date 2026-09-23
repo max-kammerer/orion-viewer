@@ -140,11 +140,6 @@ class GlobalOptions(
     val isSwapKeys: Boolean
         get() = getBooleanProperty(SWAP_KEYS, false)
 
-    val isEnableTouchMove: Boolean
-        get() = getBooleanProperty(ENABLE_TOUCH_MOVE, true)
-
-    val isEnableMoveOnPinchZoom: Boolean
-        get() = getBooleanProperty(ENABLE_MOVE_ON_PINCH_ZOOM, false)
 
     val defaultZoom: Int
         get() = getIntFromStringProperty(DEFAULT_ZOOM, 0)
@@ -242,6 +237,11 @@ class GlobalOptions(
     val SHOW_TIME_ON_STATUS_BAR = pref(Companion.SHOW_TIME_ON_STATUS_BAR, true)
 
     val DRAW_PAGE_BORDER = pref("DRAW_PAGE_BORDER", true)
+
+    //read by the touch processors on every gesture, so a change applies without a restart
+    val ENABLE_TOUCH_MOVE = pref(Companion.ENABLE_TOUCH_MOVE, true)
+
+    val ENABLE_MOVE_ON_PINCH_ZOOM = pref(Companion.ENABLE_MOVE_ON_PINCH_ZOOM, false)
 
     /** The query of the latest search in any book: what the search box offers in a book not searched yet. */
     val LAST_SEARCH_QUERY = pref("LAST_SEARCH_QUERY", "")

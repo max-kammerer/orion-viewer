@@ -63,8 +63,6 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
 
     protected var nextState = State.UNDEFINED
 
-    private val enableTouchMove = activity.globalOptions.isEnableTouchMove
-
     private val start0 = Point()
     private val last0 = Point()
 
@@ -149,6 +147,7 @@ open class NewTouchProcessor(val view: OrionDrawScene, val activity: OrionViewer
     }
 
     override fun onScroll(e1: MotionEvent?, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+        val enableTouchMove = activity.globalOptions.ENABLE_TOUCH_MOVE.value
         log("gesture: onScroll $enableTouchMove")
         if (!enableTouchMove) {
             return false
