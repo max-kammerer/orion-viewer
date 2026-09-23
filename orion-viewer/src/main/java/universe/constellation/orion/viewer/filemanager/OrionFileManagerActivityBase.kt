@@ -219,8 +219,13 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         })
     }
 
+    /**
+     * The system picker greys out files whose type isn't listed. Providers of usb drives and sd
+     * cards report octet-stream for extensions they don't know (cb7, cbt, cbz on old systems, djvu
+     * on some devices), so it is accepted too: the format is checked on opening anyway.
+     */
     open val systemSelectMimeTypes: Array<String>
-        get() = FileFormats.supportedMimeTypes
+        get() = FileFormats.supportedMimeTypes + "application/octet-stream"
 
     open fun openFile(uri: Uri, isFromSystemFM: Boolean = false) {
         log("Opening new book: $uri")
