@@ -28,6 +28,8 @@
     <string name="crash_on_book_opening_message_header">Error during file \`%1$s\` opening. Please report an issue:</string>
     <string name="crash_on_book_opening_message_header_panel">Error during file \`%1$s\` opening:</string>
 
+    <string name="crash_on_book_opening_no_engine_library">The app was installed without the document engine library for this device (%1$s), so no book can be opened. Please reinstall the app from Google Play, or install the build for your device from the project page on GitHub.</string>
+
     <string name="crash_on_book_opening_encrypted">Encrypted document</string>
 
     <string name="string_send">Send…</string>

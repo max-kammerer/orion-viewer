@@ -277,14 +277,13 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     FileUtil.openFile(file)
                 }
             } catch (e: Exception) {
-                showErrorAndErrorPanel(
-                    getString(R.string.crash_on_book_opening_title),
-                    resources.getString(
-                        R.string.crash_on_book_opening_message_header_panel,
-                        file.name
-                    ),
-                    intent, e
-                )
+                val message = if (e is EngineLibraryMissingException) {
+                    //the apk, not the file: tell what to do instead of the file name
+                    getString(R.string.crash_on_book_opening_no_engine_library, e.abis)
+                } else {
+                    resources.getString(R.string.crash_on_book_opening_message_header_panel, file.name)
+                }
+                showErrorAndErrorPanel(getString(R.string.crash_on_book_opening_title), message, intent, e)
                 executor.close()
                 orionApplication.idlingRes.free()
                 analytics.errorDuringInitialFileOpen()
