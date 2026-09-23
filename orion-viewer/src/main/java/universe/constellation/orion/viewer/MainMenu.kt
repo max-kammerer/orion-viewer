@@ -1,9 +1,6 @@
 package universe.constellation.orion.viewer
 
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
+import android.graphics.Paint
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -32,11 +29,19 @@ class MainMenu(private val mainMenu: View, val activity: OrionViewerActivity) {
         mainMenu.findViewById<View>(R.id.menu_top_actions).setOnClickListener {}
         mainMenu.findViewById<View>(R.id.menu_botton_actions_all).setOnClickListener {}
 
+        //plain click listeners: a ClickableSpan needs LinkMovementMethod, which makes the view
+        //focusable, and on Android 7 taking focus before the first layout crashes in the method
+        for (pageLink in listOf(curPage, pageCount)) {
+            pageLink.paintFlags = pageLink.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+            pageLink.setOnClickListener {
+                hideMenu()
+                activity.doMenuAction(R.id.goto_menu_item)
+            }
+        }
+
         val minus = mainMenu.findViewById<ImageView>(R.id.page_picker_minus)
         val plus = mainMenu.findViewById<ImageView>(R.id.page_picker_plus)
-        initPageNavControls(activity, pageSeeker, minus, plus, curPage, PageNumbering::sheetLabel) {
-            setGotoSpannable(it)
-        }
+        initPageNavControls(activity, pageSeeker, minus, plus, curPage, PageNumbering::sheetLabel)
     }
 
     private fun initImageViewActions(view: View, id: Int) {
@@ -76,23 +81,8 @@ class MainMenu(private val mainMenu: View, val activity: OrionViewerActivity) {
 
     fun showMenu() {
         val controller = activity.controller
-        initPageNavigationValues(controller, pageSeeker, pageCount) {
-            setGotoSpannable(it)
-        }
+        initPageNavigationValues(controller, pageSeeker, pageCount)
         mainMenu.visibility = VISIBLE
-    }
-
-    private fun TextView.setGotoSpannable(text: String) {
-        val spannable = SpannableStringBuilder(text)
-        val onClick = object : ClickableSpan() {
-            override fun onClick(widget: View) {
-                hideMenu()
-                activity.doMenuAction(R.id.goto_menu_item)
-            }
-        }
-        spannable.setSpan(onClick, 0, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        this.text = spannable
-        this.movementMethod = LinkMovementMethod.getInstance();
     }
 }
 
