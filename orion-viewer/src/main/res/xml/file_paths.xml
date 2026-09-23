@@ -5,4 +5,6 @@
     <cache-path name="cache" path="."/>
     <external-files-path name="external_files_path" path="."/>
     <external-cache-path name="external_cache_path" path="."/>
+    <!-- books on a second sd card or a usb drive live outside the roots above -->
+    <root-path name="root" path="."/>
 </paths>

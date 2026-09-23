@@ -25,6 +25,7 @@
     <string name="menu_book_preferences">Book Options</string>
     <string name="menu_share_text">Share text</string>
     <string name="menu_share_file">Share file</string>
+    <string name="msg_share_file_failed">Can\'t share the file from this location</string>
 
 
     <string name="export_all_bookmarks_menu_item">Export all bookmarks</string>

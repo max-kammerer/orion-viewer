@@ -363,11 +363,18 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
             val path = controller?.document?.filePath ?: return
             val file = File(path)
             if (file.exists()) {
-                val uri = androidx.core.content.FileProvider.getUriForFile(
-                    activity,
-                    activity.applicationContext.packageName + ".fileprovider",
-                    file
-                )
+                val uri = try {
+                    androidx.core.content.FileProvider.getUriForFile(
+                        activity,
+                        activity.applicationContext.packageName + ".fileprovider",
+                        file
+                    )
+                } catch (e: IllegalArgumentException) {
+                    //the file is outside the provider roots (file_paths.xml)
+                    activity.analytics.error(e, "share: $path")
+                    activity.showWarning(R.string.msg_share_file_failed)
+                    return
+                }
                 val intent = Intent(Intent.ACTION_SEND)
 
                 val fileExt = file.name.lowercase().substringAfterLast(".")
