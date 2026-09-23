@@ -135,6 +135,20 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
         }
     },
 
+    /** Flips the "Enable touch move" option: the touch processor reads it on every gesture. */
+    SWITCH_TOUCH_MOVE(R.string.action_switch_touch_move, R.integer.action_switch_touch_move) {
+        override fun doAction(
+            controller: Controller?,
+            activity: OrionViewerActivity,
+            parameter: Any?
+        ) {
+            val options = activity.globalOptions
+            val enable = !options.ENABLE_TOUCH_MOVE.value
+            options.saveBooleanProperty(GlobalOptions.ENABLE_TOUCH_MOVE, enable)
+            activity.showFastMessage(if (enable) R.string.msg_touch_move_enabled else R.string.msg_touch_move_disabled)
+        }
+    },
+
     SHOW_OUTLINE(R.string.action_outline, R.integer.action_open_outline) {
         override fun doAction(
             controller: Controller?,
