@@ -1,0 +1,31 @@
+/* Desktop viewer on the JVM: the document model and layout from `common`, rendering through
+ * mupdf's own Java binding (the same fitz classes the Android app uses, minus the android
+ * package) and the native library built by `make -C nativeLibs/mupdf USE_SYSTEM_LIBS=no java`. */
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+    id 'application'
+}
+
+kotlin {
+    jvmToolchain(17)
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs += '../nativeLibs/mupdf/platform/java/src'
+            exclude '**/android/**'
+        }
+    }
+}
+
+dependencies {
+    implementation project(':common')
+}
+
+def mupdfNativeDir = file("${rootDir}/nativeLibs/mupdf/build/release")
+
+application {
+    mainClass = 'universe.constellation.orion.viewer.desktop.MainKt'
+    applicationDefaultJvmArgs = ["-Djava.library.path=${mupdfNativeDir}"]
+}

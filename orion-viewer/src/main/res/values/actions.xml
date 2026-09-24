@@ -8,6 +8,7 @@
     <string name="action_group_text">Text</string>
     <string name="action_group_book">Book</string>
     <string name="action_group_application">Application</string>
+    <string name="action_search_hint">Search actions</string>
     <string name="action_menu">Main menu</string>
     <string name="action_next_page">Next page</string>
     <string name="action_prev_page">Prev page</string>

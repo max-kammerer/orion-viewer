@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.annotation.IntegerRes
 import androidx.annotation.StringRes
 import universe.constellation.orion.viewer.dialog.toDialogMargins
@@ -21,14 +22,18 @@ import universe.constellation.orion.viewer.util.ColorUtil.getColorMode
 import java.io.File
 
 /** Section of the action picker; [needsBook] says whether the actions of it work on an opened book only. */
-enum class ActionGroup(@StringRes val titleRes: Int, val needsBook: Boolean = true) {
-    NAVIGATION(R.string.action_group_navigation),
-    VIEW(R.string.action_group_view),
-    /** Margin cropping by hardware keys, e-ink readers: the crop dialog is the touch way. */
-    CROP_KEYS(R.string.action_group_crop_keys),
-    TEXT(R.string.action_group_text),
-    BOOK(R.string.action_group_book),
-    APPLICATION(R.string.action_group_application, needsBook = false)
+enum class ActionGroup(
+    @StringRes val titleRes: Int,
+    @DrawableRes val iconRes: Int,
+    val needsBook: Boolean = true
+) {
+    NAVIGATION(R.string.action_group_navigation, R.drawable.new_navigation),
+    VIEW(R.string.action_group_view, R.drawable.new_zoom),
+    TEXT(R.string.action_group_text, R.drawable.new_select),
+    BOOK(R.string.action_group_book, R.drawable.new_book_settings),
+    APPLICATION(R.string.action_group_application, R.drawable.new_settings, needsBook = false),
+    /** Margin cropping by hardware keys, e-ink readers: the crop dialog is the touch way. Last and folded. */
+    CROP_KEYS(R.string.action_group_crop_keys, R.drawable.new_cut)
 }
 
 /**
@@ -56,7 +61,6 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val group
             activity.showMenu()
         }
     },
-
 
     NEXT(R.string.action_next_page, R.integer.action_next_page, ActionGroup.NAVIGATION) {
         override fun doAction(
@@ -93,7 +97,6 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val group
             controller1.goToPage(page, NavKind.STEP)
         }
     },
-
 
     PREV10(R.string.action_prev_10, R.integer.action_prev_10, ActionGroup.NAVIGATION) {
         override fun doAction(
@@ -151,7 +154,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val group
         }
     },
 
-    /** Flips the "Enable touch move" option: the touch processor reads it on every gesture. */
+/** Flips the "Enable touch move" option: the touch processor reads it on every gesture. */
     SWITCH_TOUCH_MOVE(R.string.action_switch_touch_move, R.integer.action_switch_touch_move, ActionGroup.APPLICATION) {
         override fun doAction(
             controller: Controller?,
@@ -343,7 +346,6 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val group
 
             openDictionary(parameter as? String?, activity, dict)
         }
-
     },
 
     OPEN_BOOK(R.string.action_open, R.integer.action_open_book, ActionGroup.APPLICATION) {
@@ -430,7 +432,6 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val group
         }
     },
 
-
     ROTATE_90(R.string.action_rotate_90, R.integer.action_rotate_90, ActionGroup.VIEW) {
         override fun doAction(
             controller: Controller?,
@@ -461,7 +462,6 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val group
             }
         }
     },
-
 
     INVERSE_CROP(R.string.action_inverse_crops, R.integer.action_inverse_crop, ActionGroup.CROP_KEYS) {
         override fun doAction(
