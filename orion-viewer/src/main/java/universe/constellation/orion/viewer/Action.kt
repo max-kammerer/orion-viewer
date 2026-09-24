@@ -20,8 +20,18 @@ import universe.constellation.orion.viewer.prefs.OrionPreferenceActivityX
 import universe.constellation.orion.viewer.util.ColorUtil.getColorMode
 import java.io.File
 
-enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVisible: Boolean = true) {
-    NONE(R.string.action_none, R.integer.action_none) {
+/**
+ * [needsBook] is false for the few actions that make sense without an opened book (menus,
+ * opening a book, application-wide switches): the activity runs the others only while a book
+ * is open, so an action started between books, e.g. from a tap during a slow opening, is a no-op.
+ */
+enum class Action(
+    @StringRes val nameRes: Int,
+    @IntegerRes idRes: Int,
+    val isVisible: Boolean = true,
+    val needsBook: Boolean = true
+) {
+    NONE(R.string.action_none, R.integer.action_none, needsBook = false) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -31,7 +41,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
         }
     },
 
-    MENU(R.string.action_menu, R.integer.action_menu) {
+    MENU(R.string.action_menu, R.integer.action_menu, needsBook = false) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -136,7 +146,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
     },
 
     /** Flips the "Enable touch move" option: the touch processor reads it on every gesture. */
-    SWITCH_TOUCH_MOVE(R.string.action_switch_touch_move, R.integer.action_switch_touch_move) {
+    SWITCH_TOUCH_MOVE(R.string.action_switch_touch_move, R.integer.action_switch_touch_move, needsBook = false) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -230,7 +240,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
         }
     },
 
-    FULL_SCREEN(R.string.action_full_screen, R.integer.action_full_screen) {
+    FULL_SCREEN(R.string.action_full_screen, R.integer.action_full_screen, needsBook = false) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -333,7 +343,7 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
 
     },
 
-    OPEN_BOOK(R.string.action_open, R.integer.action_open_book) {
+    OPEN_BOOK(R.string.action_open, R.integer.action_open_book, needsBook = false) {
         override fun doAction(activity: OrionBaseActivity) {
             val intent = Intent(activity, OrionFileManagerActivity::class.java)
             intent.putExtra(DONT_OPEN_RECENT_FILE, true)
@@ -341,14 +351,14 @@ enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val isVis
         }
     },
 
-    OPTIONS(R.string.action_options_page, R.integer.action_options_page) {
+    OPTIONS(R.string.action_options_page, R.integer.action_options_page, needsBook = false) {
         override fun doAction(activity: OrionBaseActivity) {
             val intent = Intent(activity, OrionPreferenceActivityX::class.java)
             activity.startActivity(intent)
         }
     },
 
-    CLOSE_ACTION(R.string.action_close, R.integer.action_close, isVisible = false) {
+    CLOSE_ACTION(R.string.action_close, R.integer.action_close, isVisible = false, needsBook = false) {
         override fun doAction(activity: OrionBaseActivity) {
             activity.finish()
         }

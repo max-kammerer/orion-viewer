@@ -129,6 +129,15 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
                 }
 
                 STATE.ACTIVE_SELECTION -> {
+                    //the book may be gone under the selection dialog: closed or replaced by a new intent
+                    val controller = activity.controller
+                    if (controller == null) {
+                        state = STATE.CANCELED
+                        actions?.dismissOnlyDialog()
+                        actions = null
+                        dialog.dismiss()
+                        return result
+                    }
                     val text = getSelectedText()
                     if (oldState == STATE.START && isSingleWord) {
                         debug("oldState == STATE.START && isSingleWord")
@@ -143,7 +152,7 @@ class SelectionAutomata(val activity: OrionViewerActivity) :
                     showActionsPopupOrDoTranslation(
                         text?.value ?: "",
                         translate,
-                        activity.controller!!
+                        controller
                     )
                 }
 

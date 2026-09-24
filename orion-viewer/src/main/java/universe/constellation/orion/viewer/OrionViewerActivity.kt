@@ -788,6 +788,10 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
 
     internal fun doAction(action: Action) {
+        if (action.needsBook && controller == null) {
+            log("Action $action skipped: no book is open")
+            return
+        }
         action.doAction(controller, this, null)
     }
 
@@ -885,6 +889,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     fun showOrionDialog(screenId: Int, action: Action?, parameter: Any?) {
+        //every option dialog reads the opened book: none while it is loading or failed to open
+        if (controller == null) {
+            log("Option dialog $screenId requested without a book")
+            return
+        }
         if (screenId != -1) {
             val dialog = createOptionDialog(screenId) ?: return
 
