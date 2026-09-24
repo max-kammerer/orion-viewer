@@ -2,6 +2,12 @@
 
 <resources>
     <string name="action_none">None</string>
+    <string name="action_group_navigation">Navigation</string>
+    <string name="action_group_view">View</string>
+    <string name="action_group_crop_keys">Crop margins by keys</string>
+    <string name="action_group_text">Text</string>
+    <string name="action_group_book">Book</string>
+    <string name="action_group_application">Application</string>
     <string name="action_menu">Main menu</string>
     <string name="action_next_page">Next page</string>
     <string name="action_prev_page">Prev page</string>

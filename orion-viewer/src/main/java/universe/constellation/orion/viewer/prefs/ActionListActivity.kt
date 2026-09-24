@@ -12,6 +12,7 @@ import android.widget.CheckedTextView
 import android.widget.ListView
 import android.widget.TextView
 import universe.constellation.orion.viewer.Action
+import universe.constellation.orion.viewer.ActionGroup
 import universe.constellation.orion.viewer.OrionBaseActivity
 import universe.constellation.orion.viewer.R
 
@@ -33,16 +34,37 @@ class ActionListActivity : OrionBaseActivity() {
         }
 
         val view = findViewById<ListView>(R.id.actionsGroup)
-        val actions = Action.entries.filter { it.isVisible }
-        view.adapter = object : ArrayAdapter<Action?>(
-            this,
-            android.R.layout.simple_list_item_single_choice,
-            actions
-        ) {
+        //"None" first on its own, then every group under its header
+        val rows = ArrayList<Any>()
+        rows.add(Action.NONE)
+        for (group in ActionGroup.entries) {
+            rows.add(group)
+            Action.entries.filterTo(rows) { it.group == group }
+        }
+        view.adapter = object : ArrayAdapter<Any>(this, android.R.layout.simple_list_item_single_choice, rows) {
+            override fun getViewTypeCount() = 2
+
+            override fun getItemViewType(position: Int) = if (rows[position] is ActionGroup) 1 else 0
+
+            override fun areAllItemsEnabled() = false
+
+            override fun isEnabled(position: Int) = rows[position] is Action
+
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val view = super.getView(position, convertView, parent) as CheckedTextView
-                view.setText(actions[position].nameRes)
-                return view
+                return when (val row = rows[position]) {
+                    is ActionGroup -> {
+                        val header = (convertView as? TextView)
+                            ?: layoutInflater.inflate(android.R.layout.preference_category, parent, false) as TextView
+                        header.setText(row.titleRes)
+                        header
+                    }
+                    else -> {
+                        val item = (convertView as? CheckedTextView)
+                            ?: layoutInflater.inflate(android.R.layout.simple_list_item_single_choice, parent, false) as CheckedTextView
+                        item.setText((row as Action).nameRes)
+                        item
+                    }
+                }
             }
         }
 
@@ -50,16 +72,15 @@ class ActionListActivity : OrionBaseActivity() {
 
         val code = intent.getIntExtra("code", 0)
 
-        for (i in actions.indices) {
-            val action = actions[i]
+        for (i in rows.indices) {
+            val action = rows[i] as? Action ?: continue
             if (action.code == code) {
                 view.setItemChecked(i, true)
-                //view.setSelection(i);
                 break
             }
         }
         OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
-            val code1 = actions[position].code
+            val code1 = (rows[position] as Action).code
             val result = Intent()
             result.putExtra("code", code1)
             result.putExtra("keyCode", keyCode)

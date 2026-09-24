@@ -20,18 +20,24 @@ import universe.constellation.orion.viewer.prefs.OrionPreferenceActivityX
 import universe.constellation.orion.viewer.util.ColorUtil.getColorMode
 import java.io.File
 
+/** Section of the action picker; [needsBook] says whether the actions of it work on an opened book only. */
+enum class ActionGroup(@StringRes val titleRes: Int, val needsBook: Boolean = true) {
+    NAVIGATION(R.string.action_group_navigation),
+    VIEW(R.string.action_group_view),
+    /** Margin cropping by hardware keys, e-ink readers: the crop dialog is the touch way. */
+    CROP_KEYS(R.string.action_group_crop_keys),
+    TEXT(R.string.action_group_text),
+    BOOK(R.string.action_group_book),
+    APPLICATION(R.string.action_group_application, needsBook = false)
+}
+
 /**
- * [needsBook] is false for the few actions that make sense without an opened book (menus,
- * opening a book, application-wide switches): the activity runs the others only while a book
- * is open, so an action started between books, e.g. from a tap during a slow opening, is a no-op.
+ * [group] is null for [NONE] only, which the picker shows first on its own. The activity runs an
+ * action of a group with [ActionGroup.needsBook] only while a book is open, so an action started
+ * between books, e.g. from a tap during a slow opening, is a no-op.
  */
-enum class Action(
-    @StringRes val nameRes: Int,
-    @IntegerRes idRes: Int,
-    val isVisible: Boolean = true,
-    val needsBook: Boolean = true
-) {
-    NONE(R.string.action_none, R.integer.action_none, needsBook = false) {
+enum class Action(@StringRes val nameRes: Int, @IntegerRes idRes: Int, val group: ActionGroup?) {
+    NONE(R.string.action_none, R.integer.action_none, null) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -41,7 +47,7 @@ enum class Action(
         }
     },
 
-    MENU(R.string.action_menu, R.integer.action_menu, needsBook = false) {
+    MENU(R.string.action_menu, R.integer.action_menu, ActionGroup.APPLICATION) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -52,7 +58,7 @@ enum class Action(
     },
 
 
-    NEXT(R.string.action_next_page, R.integer.action_next_page) {
+    NEXT(R.string.action_next_page, R.integer.action_next_page, ActionGroup.NAVIGATION) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -62,7 +68,7 @@ enum class Action(
         }
     },
 
-    PREV(R.string.action_prev_page, R.integer.action_prev_page) {
+    PREV(R.string.action_prev_page, R.integer.action_prev_page, ActionGroup.NAVIGATION) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -72,7 +78,7 @@ enum class Action(
         }
     },
 
-    NEXT10(R.string.action_next_10, R.integer.action_next_10) {
+    NEXT10(R.string.action_next_10, R.integer.action_next_10, ActionGroup.NAVIGATION) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -89,7 +95,7 @@ enum class Action(
     },
 
 
-    PREV10(R.string.action_prev_10, R.integer.action_prev_10) {
+    PREV10(R.string.action_prev_10, R.integer.action_prev_10, ActionGroup.NAVIGATION) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -105,7 +111,7 @@ enum class Action(
         }
     },
 
-    FIRST_PAGE(R.string.action_first_page, R.integer.action_first_page) {
+    FIRST_PAGE(R.string.action_first_page, R.integer.action_first_page, ActionGroup.NAVIGATION) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -115,7 +121,7 @@ enum class Action(
         }
     },
 
-    LAST_PAGE(R.string.action_last_page, R.integer.action_last_page) {
+    LAST_PAGE(R.string.action_last_page, R.integer.action_last_page, ActionGroup.NAVIGATION) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -125,7 +131,7 @@ enum class Action(
         }
     },
 
-    NAVIGATE_BACK(R.string.action_navigate_back, R.integer.action_navigate_back) {
+    NAVIGATE_BACK(R.string.action_navigate_back, R.integer.action_navigate_back, ActionGroup.NAVIGATION) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -135,7 +141,7 @@ enum class Action(
         }
     },
 
-    NAVIGATE_FORWARD(R.string.action_navigate_forward, R.integer.action_navigate_forward) {
+    NAVIGATE_FORWARD(R.string.action_navigate_forward, R.integer.action_navigate_forward, ActionGroup.NAVIGATION) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -146,7 +152,7 @@ enum class Action(
     },
 
     /** Flips the "Enable touch move" option: the touch processor reads it on every gesture. */
-    SWITCH_TOUCH_MOVE(R.string.action_switch_touch_move, R.integer.action_switch_touch_move, needsBook = false) {
+    SWITCH_TOUCH_MOVE(R.string.action_switch_touch_move, R.integer.action_switch_touch_move, ActionGroup.APPLICATION) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -159,7 +165,7 @@ enum class Action(
         }
     },
 
-    SHOW_OUTLINE(R.string.action_outline, R.integer.action_open_outline) {
+    SHOW_OUTLINE(R.string.action_outline, R.integer.action_open_outline, ActionGroup.NAVIGATION) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -172,7 +178,7 @@ enum class Action(
         }
     },
 
-    SEARCH(R.string.action_search, R.integer.action_search) {
+    SEARCH(R.string.action_search, R.integer.action_search, ActionGroup.TEXT) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -182,7 +188,7 @@ enum class Action(
         }
     },
 
-    SELECT_TEXT(R.string.action_select_text, R.integer.action_select_text) {
+    SELECT_TEXT(R.string.action_select_text, R.integer.action_select_text, ActionGroup.TEXT) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -192,7 +198,7 @@ enum class Action(
         }
     },
 
-    SELECT_WORD(R.string.action_select_word, R.integer.action_select_word) {
+    SELECT_WORD(R.string.action_select_word, R.integer.action_select_word, ActionGroup.TEXT) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -202,10 +208,7 @@ enum class Action(
         }
     },
 
-    SELECT_WORD_AND_TRANSLATE(
-        R.string.action_select_word_and_translate,
-        R.integer.action_select_word_and_translate
-    ) {
+    SELECT_WORD_AND_TRANSLATE(R.string.action_select_word_and_translate, R.integer.action_select_word_and_translate, ActionGroup.TEXT) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -215,7 +218,7 @@ enum class Action(
         }
     },
 
-    ADD_BOOKMARK(R.string.action_add_bookmark, R.integer.action_add_bookmark) {
+    ADD_BOOKMARK(R.string.action_add_bookmark, R.integer.action_add_bookmark, ActionGroup.NAVIGATION) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -225,7 +228,7 @@ enum class Action(
         }
     },
 
-    OPEN_BOOKMARKS(R.string.action_open_bookmarks, R.integer.action_open_bookmarks) {
+    OPEN_BOOKMARKS(R.string.action_open_bookmarks, R.integer.action_open_bookmarks, ActionGroup.NAVIGATION) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -240,7 +243,7 @@ enum class Action(
         }
     },
 
-    FULL_SCREEN(R.string.action_full_screen, R.integer.action_full_screen, needsBook = false) {
+    FULL_SCREEN(R.string.action_full_screen, R.integer.action_full_screen, ActionGroup.APPLICATION) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -254,7 +257,7 @@ enum class Action(
         }
     },
 
-    SWITCH_COLOR_MODE(R.string.action_switch_color_mode, R.integer.action_switch_color_mode) {
+    SWITCH_COLOR_MODE(R.string.action_switch_color_mode, R.integer.action_switch_color_mode, ActionGroup.VIEW) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -278,14 +281,14 @@ enum class Action(
         }
     },
 
-    BOOK_OPTIONS(R.string.action_book_options, R.integer.action_book_options) {
+    BOOK_OPTIONS(R.string.action_book_options, R.integer.action_book_options, ActionGroup.BOOK) {
         override fun doAction(activity: OrionBaseActivity) {
             val intent = Intent(activity, OrionBookPreferencesActivityX::class.java)
             activity.startActivity(intent)
         }
     },
 
-    ZOOM(R.string.action_zoom_page, R.integer.action_zoom_page) {
+    ZOOM(R.string.action_zoom_page, R.integer.action_zoom_page, ActionGroup.VIEW) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -295,13 +298,13 @@ enum class Action(
         }
     },
 
-    PAGE_LAYOUT(R.string.action_layout_page, R.integer.action_page_layout) {
+    PAGE_LAYOUT(R.string.action_layout_page, R.integer.action_page_layout, ActionGroup.VIEW) {
         override fun doAction(activity: OrionBaseActivity) {
             BOOK_OPTIONS.doAction(activity)
         }
     },
 
-    CROP(R.string.action_crop_page, R.integer.action_crop_page) {
+    CROP(R.string.action_crop_page, R.integer.action_crop_page, ActionGroup.VIEW) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -311,7 +314,7 @@ enum class Action(
         }
     },
 
-    GOTO(R.string.action_goto_page, R.integer.action_goto_page) {
+    GOTO(R.string.action_goto_page, R.integer.action_goto_page, ActionGroup.NAVIGATION) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -321,13 +324,13 @@ enum class Action(
         }
     },
 
-    ROTATION(R.string.action_rotation_page, R.integer.action_rotation_page) {
+    ROTATION(R.string.action_rotation_page, R.integer.action_rotation_page, ActionGroup.VIEW) {
         override fun doAction(activity: OrionBaseActivity) {
             BOOK_OPTIONS.doAction(activity)
         }
     },
 
-    DICTIONARY(R.string.action_dictionary, R.integer.action_dictionary) {
+    DICTIONARY(R.string.action_dictionary, R.integer.action_dictionary, ActionGroup.TEXT) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -343,7 +346,7 @@ enum class Action(
 
     },
 
-    OPEN_BOOK(R.string.action_open, R.integer.action_open_book, needsBook = false) {
+    OPEN_BOOK(R.string.action_open, R.integer.action_open_book, ActionGroup.APPLICATION) {
         override fun doAction(activity: OrionBaseActivity) {
             val intent = Intent(activity, OrionFileManagerActivity::class.java)
             intent.putExtra(DONT_OPEN_RECENT_FILE, true)
@@ -351,20 +354,20 @@ enum class Action(
         }
     },
 
-    OPTIONS(R.string.action_options_page, R.integer.action_options_page, needsBook = false) {
+    OPTIONS(R.string.action_options_page, R.integer.action_options_page, ActionGroup.APPLICATION) {
         override fun doAction(activity: OrionBaseActivity) {
             val intent = Intent(activity, OrionPreferenceActivityX::class.java)
             activity.startActivity(intent)
         }
     },
 
-    CLOSE_ACTION(R.string.action_close, R.integer.action_close, isVisible = false, needsBook = false) {
+    CLOSE_ACTION(R.string.action_close, R.integer.action_close, ActionGroup.APPLICATION) {
         override fun doAction(activity: OrionBaseActivity) {
             activity.finish()
         }
     },
 
-    SHARE_FILE(R.string.menu_share_file, R.integer.action_share_file) {
+    SHARE_FILE(R.string.menu_share_file, R.integer.action_share_file, ActionGroup.BOOK) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -397,7 +400,7 @@ enum class Action(
         }
     },
 
-    FIT_WIDTH(R.string.action_fit_width, R.integer.action_fit_width) {
+    FIT_WIDTH(R.string.action_fit_width, R.integer.action_fit_width, ActionGroup.VIEW) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -407,7 +410,7 @@ enum class Action(
         }
     },
 
-    FIT_HEIGHT(R.string.action_fit_height, R.integer.action_fit_heigh) {
+    FIT_HEIGHT(R.string.action_fit_height, R.integer.action_fit_heigh, ActionGroup.VIEW) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -417,7 +420,7 @@ enum class Action(
         }
     },
 
-    FIT_PAGE(R.string.action_fit_page, R.integer.action_fit_page) {
+    FIT_PAGE(R.string.action_fit_page, R.integer.action_fit_page, ActionGroup.VIEW) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -428,7 +431,7 @@ enum class Action(
     },
 
 
-    ROTATE_90(R.string.action_rotate_90, R.integer.action_rotate_90) {
+    ROTATE_90(R.string.action_rotate_90, R.integer.action_rotate_90, ActionGroup.VIEW) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -443,7 +446,7 @@ enum class Action(
         }
     },
 
-    ROTATE_270(R.string.action_rotate_270, R.integer.action_rotate_270) {
+    ROTATE_270(R.string.action_rotate_270, R.integer.action_rotate_270, ActionGroup.VIEW) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -460,7 +463,7 @@ enum class Action(
     },
 
 
-    INVERSE_CROP(R.string.action_inverse_crops, R.integer.action_inverse_crop) {
+    INVERSE_CROP(R.string.action_inverse_crops, R.integer.action_inverse_crop, ActionGroup.CROP_KEYS) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -475,7 +478,7 @@ enum class Action(
         }
     },
 
-    SWITCH_CROP(R.string.action_switch_long_crop, R.integer.action_switch_long_crop) {
+    SWITCH_CROP(R.string.action_switch_long_crop, R.integer.action_switch_long_crop, ActionGroup.CROP_KEYS) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -489,7 +492,7 @@ enum class Action(
         }
     },
 
-    CROP_LEFT(R.string.action_crop_left, R.integer.action_crop_left, isVisible = false) {
+    CROP_LEFT(R.string.action_crop_left, R.integer.action_crop_left, ActionGroup.CROP_KEYS) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -499,7 +502,7 @@ enum class Action(
         }
     },
 
-    UNCROP_LEFT(R.string.action_uncrop_left, R.integer.action_uncrop_left, isVisible = false) {
+    UNCROP_LEFT(R.string.action_uncrop_left, R.integer.action_uncrop_left, ActionGroup.CROP_KEYS) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -509,7 +512,7 @@ enum class Action(
         }
     },
 
-    CROP_RIGHT(R.string.action_crop_right, R.integer.action_crop_right, isVisible = false) {
+    CROP_RIGHT(R.string.action_crop_right, R.integer.action_crop_right, ActionGroup.CROP_KEYS) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -519,7 +522,7 @@ enum class Action(
         }
     },
 
-    UNCROP_RIGHT(R.string.action_uncrop_right, R.integer.action_uncrop_right, isVisible = false) {
+    UNCROP_RIGHT(R.string.action_uncrop_right, R.integer.action_uncrop_right, ActionGroup.CROP_KEYS) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -529,7 +532,7 @@ enum class Action(
         }
     },
 
-    CROP_TOP(R.string.action_crop_top, R.integer.action_crop_top, isVisible = false) {
+    CROP_TOP(R.string.action_crop_top, R.integer.action_crop_top, ActionGroup.CROP_KEYS) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -539,7 +542,7 @@ enum class Action(
         }
     },
 
-    UNCROP_TOP(R.string.action_uncrop_top, R.integer.action_uncrop_top, isVisible = false) {
+    UNCROP_TOP(R.string.action_uncrop_top, R.integer.action_uncrop_top, ActionGroup.CROP_KEYS) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -549,7 +552,7 @@ enum class Action(
         }
     },
 
-    CROP_BOTTOM(R.string.action_crop_bottom, R.integer.action_crop_bottom, isVisible = false) {
+    CROP_BOTTOM(R.string.action_crop_bottom, R.integer.action_crop_bottom, ActionGroup.CROP_KEYS) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -559,7 +562,7 @@ enum class Action(
         }
     },
 
-    UNCROP_BOTTOM(R.string.action_uncrop_bottom, R.integer.action_uncrop_bottom, isVisible = false) {
+    UNCROP_BOTTOM(R.string.action_uncrop_bottom, R.integer.action_uncrop_bottom, ActionGroup.CROP_KEYS) {
         override fun doAction(
             controller: Controller?,
             activity: OrionViewerActivity,
@@ -571,6 +574,9 @@ enum class Action(
 
     @JvmField
     val code: Int = instance.resources.getInteger(idRes)
+
+    val needsBook: Boolean
+        get() = group?.needsBook ?: false
 
     open fun doAction(controller: Controller?, activity: OrionViewerActivity, parameter: Any?) {
         doAction(activity)
