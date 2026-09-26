@@ -27,4 +27,5 @@
     <string name="menu_other">其他…</string>
     <string name="menu_share_file">分享文件</string>
     <string name="menu_share_text">分享文本</string>
+    <string name="msg_share_file_failed">无法分享来自此位置的文件</string>
 </resources>
