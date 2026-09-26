@@ -1,9 +1,11 @@
 package universe.constellation.orion.viewer.test
 
 import android.content.Intent
+import android.os.Build
 import android.widget.EditText
 import android.widget.ListView
 import androidx.test.core.app.ActivityScenario
+import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import org.junit.Assert.assertEquals
@@ -16,6 +18,7 @@ import universe.constellation.orion.viewer.prefs.ActionListActivity
 import java.io.File
 
 /** The action picker of tap zones and keys: "None" first, groups with headers, folding and search. */
+@SdkSuppress(minSdkVersion = Build.VERSION_CODES.KITKAT)
 class ActionPickerTest {
 
     private fun ActionListActivity.rows(): List<Any> {

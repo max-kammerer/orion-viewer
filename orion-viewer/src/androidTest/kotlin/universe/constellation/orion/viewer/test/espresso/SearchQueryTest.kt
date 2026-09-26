@@ -1,6 +1,8 @@
 package universe.constellation.orion.viewer.test.espresso
 
+import android.os.Build
 import android.view.KeyEvent
+import androidx.test.filters.SdkSuppress
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
@@ -13,6 +15,7 @@ import universe.constellation.orion.viewer.test.framework.LONG_TIMEOUT
 import universe.constellation.orion.viewer.test.framework.onActivity
 
 /** The search box keeps the previous query of the book and enter searches on. */
+@SdkSuppress(minSdkVersion = Build.VERSION_CODES.KITKAT)
 class SearchQueryTest : BaseViewerActivityTest(BookDescription.SICP) {
 
     @Test
