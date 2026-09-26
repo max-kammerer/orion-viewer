@@ -87,4 +87,12 @@
     <string name="pref_size_large">Suur</string>
     <string name="pref_open_links_by_tap">Ava lingid klõpsamisega</string>
     <string name="pref_open_links_by_tap_desc">Dokumendis leiduva lingi klõpsamise avab ta</string>
+    <string name="pref_book_logical_pages">Loogilised lehed</string>
+    <string name="pref_book_pages_per_sheet">Raamatulehti skaneerimise kohta</string>
+    <string name="pref_book_pages_per_sheet_desc">Raamatu lehti ühel faili lehel: %s</string>
+    <string name="pref_book_pages_per_sheet_one">Üks leht</string>
+    <string name="pref_book_pages_per_sheet_two">Kaks lehte (laiali laotatuna)</string>
+    <string name="pref_book_page_numbering">Lehtede nummerdus</string>
+    <string name="pref_book_page_numbering_desc">Dokumendi leht %2$d on raamatu leht %1$s</string>
+    <string name="pref_book_page_numbering_message">Number trükituna praegusele lehele (esimene kahest laialilaotatud lehest). Nummerduse lähtestamiseks jäta tühjaks.</string>
 </resources>
