@@ -46,7 +46,7 @@
     <string name="outline_tab_history">Ajalugu</string>
     <string name="outline_expand_all">Laienda kõik</string>
     <string name="outline_history_empty">Sa pole veel lehti vaadanud</string>
-    <string name="outline_history_page">%1$d. leht</string>
+    <string name="outline_history_page">%1$s. leht</string>
     <string name="outline_collapse_all">Ahenda kõik</string>
     <string name="link_open_title">Kas avad lingi?</string>
     <string name="link_open">Ava</string>
