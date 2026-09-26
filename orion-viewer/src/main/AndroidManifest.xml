@@ -45,7 +45,7 @@
     <application
         android:name=".prefs.OrionApplication"
         android:allowBackup="true"
-        android:icon="@drawable/orion"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:enableOnBackInvokedCallback="true"
         android:requestLegacyExternalStorage="true">
@@ -68,7 +68,7 @@
                   android:label="@string/app_name"
                   android:theme="@style/Theme.Orion.Dark.NoActionBar"
                   android:launchMode="singleTask"
-                  android:icon="@drawable/orion" android:configChanges="orientation|locale|screenSize|keyboardHidden"
+                  android:icon="@mipmap/ic_launcher" android:configChanges="orientation|locale|screenSize|keyboardHidden"
                   android:windowSoftInputMode="adjustPan"
             android:exported="true">
 
@@ -151,18 +151,18 @@
         <activity android:name=".OrionSaveFileActivity"
                   android:label="@string/file_manager_title"
                   android:theme="@style/Theme.Orion.Dark.NoActionBar"
-                  android:icon="@drawable/orion"/>
+                  android:icon="@mipmap/ic_launcher"/>
 
         <activity android:name=".OrionFileSelectorActivity"
                   android:label="@string/file_manager_title"
                   android:theme="@style/Theme.Orion.Dark.NoActionBar"
-                  android:icon="@drawable/orion"/>
+                  android:icon="@mipmap/ic_launcher"/>
 
         <activity android:name=".prefs.OrionKeyBinderActivity" android:screenOrientation="behind"
                   android:label="@string/pref_key_binder_desc"
                   android:theme="@style/Theme.AppCompat"
                   android:launchMode="singleTask"
-                  android:icon="@drawable/orion"
+                  android:icon="@mipmap/ic_launcher"
                   android:exported="false">
         </activity>
 
@@ -170,7 +170,7 @@
                   android:theme="@style/Theme.AppCompat.NoActionBar"
                   android:label="@string/app_name"
                   android:launchMode="standard"
-                  android:icon="@drawable/orion"/>
+                  android:icon="@mipmap/ic_launcher"/>
 
         <activity android:name=".prefs.OrionPreferenceActivityX"
             android:theme="@style/Theme.AppCompat"
