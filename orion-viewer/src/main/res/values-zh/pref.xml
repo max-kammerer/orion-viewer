@@ -89,4 +89,12 @@
     <string name="pref_renderPageBorder">绘制页面边框</string>
     <string name="pref_open_links_by_tap">轻按打开链接</string>
     <string name="pref_open_links_by_tap_desc">轻按文档中链接打开它</string>
+    <string name="pref_book_logical_pages">逻辑页</string>
+    <string name="pref_book_pages_per_sheet">每次扫描的书页数</string>
+    <string name="pref_book_pages_per_sheet_desc">一个文档页面上的书页数：%s</string>
+    <string name="pref_book_pages_per_sheet_one">单页</string>
+    <string name="pref_book_pages_per_sheet_two">双页（对开页）</string>
+    <string name="pref_book_page_numbering">页面编号</string>
+    <string name="pref_book_page_numbering_desc">文档页面 %2$d 是书页 %1$s</string>
+    <string name="pref_book_page_numbering_message">印在当前页面（双页对开页的第一页）上的编号。留空重置编号。</string>
 </resources>

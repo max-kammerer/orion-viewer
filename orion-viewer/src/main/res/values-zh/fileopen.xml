@@ -29,4 +29,5 @@
     <string name="fileopen_source_unavailable">无法访问文件</string>
     <string name="fileopen_source_unavailable_info">分享该文件 (%1$s) 的应用不再提供对该文件访问权限：%2$s。请从该应用再次分享或打开该文件，或者：</string>
     <string name="fileopen_source_unavailable_message">分享该文件 (%1$s) 的应用不再提供对该文件访问权限：%2$s。请从该应用再次分享或打开该文件。</string>
+    <string name="crash_on_book_opening_no_engine_library">已安装应用，但没有用于该设备的文档引擎库（%1$s），因此无法打开书籍。请从 Google Play 重新安装本应用，或者从 GitHub 项目页安装用于你的设备的版本。</string>
 </resources>
