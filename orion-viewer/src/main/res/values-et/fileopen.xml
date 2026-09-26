@@ -29,4 +29,5 @@
     <string name="fileopen_source_unavailable">Fail pole ligipääsetav</string>
     <string name="fileopen_source_unavailable_info">Rakendus, mis algselt jagas faili (%1$s) ei võimalda failile enam ligipääsu: %2$s. Palun jaga seda faili sellest rakendusest või ava fail või hoopis:</string>
     <string name="fileopen_source_unavailable_message">Rakendus, mis algselt jagas faili (%1$s) ei võimalda failile enam ligipääsu: %2$s. Palun jaga seda faili sellest rakendusest või ava fail.</string>
+    <string name="crash_on_book_opening_no_engine_library">See rakendus on paigaldatud ilma selle seadme jaoks sobiliku dokumendimootorita (%1$s) ja seega ei saa ühtegi raamatut avada. Palun paigalda rakendus uuesti Google Playst või paigalda sinu seadmele sobiv variant GitHubist.</string>
 </resources>
