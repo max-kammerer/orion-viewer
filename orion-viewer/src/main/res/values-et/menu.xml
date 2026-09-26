@@ -27,4 +27,5 @@
     <string name="menu_open_text">Ava raamat</string>
     <string name="menu_share_file">Jaga faili</string>
     <string name="menu_share_text">Jaga teksti</string>
+    <string name="msg_share_file_failed">Sellest asukohast ei saa faili jagada</string>
 </resources>
