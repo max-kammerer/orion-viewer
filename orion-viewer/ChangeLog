@@ -1,3 +1,7 @@
+===== 0.97.2 (Sep 26, 2026) =====
+* Added logical page offsets
+* Added saving of last search query
+
 ===== 0.97.1 (Sep 16, 2026) =====
 * Added support for links in pdf and djvu files: a tap on a link follows it
 * Improved djvu file processing
