@@ -29,4 +29,5 @@
     <string name="fileopen_source_unavailable">Dosya erişilebilir değil</string>
     <string name="fileopen_source_unavailable_info">Dosyayı paylaşan uygulama (%1$s) artık bu dosyaya erişim sağlamıyor: %2$s. Lütfen dosyayı o uygulamadan tekrar paylaşın veya açın, veya:</string>
     <string name="fileopen_source_unavailable_message">Dosyayı paylaşan uygulama (%1$s) artık bu dosyaya erişim sağlamıyor: %2$s. Lütfen dosyayı o uygulamadan tekrar paylaşın veya açın.</string>
+    <string name="crash_on_book_opening_no_engine_library">Uygulama, bu aygıt (%1$s) için belge motoru kütüphanesi olmadan kuruldu, bu nedenle hiçbir kitap açılamıyor. Lütfen uygulamayı Google Play\'den yeniden kurun veya GitHub\'daki proje sayfasından aygıtınıza uygun sürümü kurun.</string>
 </resources>
