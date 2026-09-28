@@ -68,6 +68,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     private var myState: MyState = MyState.PROCESSING_INTENT
 
+    /** The provider lookup for the intent being opened; a newer intent cancels it. */
+    private var intentResolution: Job? = null
+
     @JvmField
     var _isResumed: Boolean = false
 
@@ -187,77 +190,96 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         val uri = intent.data
         if (uri != null) {
             log("Try to open file by $uri")
-            try {
-                val fileInfo = getFileInfo(this, uri, analytics)
-                val filePath = fileInfo?.path
-
-                val readError = fileInfo?.readError
-                if (readError != null) {
-                    //the provider refuses the uri: no way to read the data from it in any form
-                    FallbackDialogs().createUnreadableSourceFallbackDialog(this, intent, readError).show()
-                    destroyController()
-                    return
-                }
-
-                if (fileInfo == null || filePath.isNullOrBlank()) {
-                    FallbackDialogs().createBadIntentFallbackDialog(this, null, intent).show()
-                    destroyController()
-                    return
-                }
-
-                if (controller != null && lastPageInfo != null) {
-                    lastPageInfo?.apply {
-                        if (openingFileName == filePath) {
-                            log("Fast processing")
-                            controller!!.restorePosition(this)
-                            return
-                        }
-                    }
-                }
-                destroyController()
-
-                val fileToOpen = if (!fileInfo.file.canRead()) {
-                    val cacheFileIfExists =
-                        getStableTmpFileIfExists(fileInfo)?.takeIf { it.length() == fileInfo.size }
-
-                    if (cacheFileIfExists == null) {
-                        askReadPermissionOrOpenExisting(fileInfo, intent)
-                        log("Waiting for read permissions for $intent")
-                        return
-                    } else {
-                        cacheFileIfExists
-                    }
-                } else {
-                    fileInfo.file
-                }
-
-
-                if (fileToOpen.length() == 0L) {
+            intentResolution?.cancel()
+            val idlingRes = orionApplication.idlingRes
+            idlingRes.busy()
+            intentResolution = lifecycleScope.launch {
+                try {
+                    /* Providers are asked off the main thread: the thread's StrictMode policy
+                       travels with a binder call, so a provider over a network share (Material
+                       Files on SMB, say) resolving its server in query() would die with
+                       NetworkOnMainThreadException on our behalf; a slow one would stall the UI. */
+                    val fileInfo = withContext(Dispatchers.IO) { getFileInfo(this@OrionViewerActivity, uri, analytics) }
+                    openResolvedFile(intent, fileInfo)
+                } catch (e: Exception) {
+                    /* Rethrows only a real cancellation of this job: a newer intent took over, or
+                       the activity is gone. Any other exception, a stray CancellationException
+                       too, is an error to show rather than a silently dropped intent. */
+                    ensureActive()
                     showErrorAndErrorPanel(
-                        getString(R.string.crash_on_book_opening_title),
-                        resources.getString(
-                            R.string.fileopen_cant_open,
-                            getString(R.string.fileopen_file_is_emppty)
-                        ),
-                        intent,
-                        sendException = RuntimeException("Warning: empty file, host=" + fileInfo.uri.host)
+                        R.string.crash_on_intent_opening_title,
+                        R.string.crash_on_intent_opening_title,
+                        intent, e
                     )
-                    return
+                } finally {
+                    idlingRes.free()
                 }
-
-                openFile(fileToOpen)
-                myState = MyState.FINISHED
-            } catch (e: Exception) {
-                showErrorAndErrorPanel(
-                    R.string.crash_on_intent_opening_title,
-                    R.string.crash_on_intent_opening_title,
-                    intent, e
-                )
             }
-
         } else {
             analytics.error(RuntimeException("Unexpected state $intent"))
         }
+    }
+
+    /** The UI half of [processIntentAndCheckPermission], once the provider has been asked about the file. */
+    private fun openResolvedFile(intent: Intent, fileInfo: FileInfo?) {
+        val filePath = fileInfo?.path
+
+        val readError = fileInfo?.readError
+        if (readError != null) {
+            //the provider refuses the uri: no way to read the data from it in any form
+            FallbackDialogs().createUnreadableSourceFallbackDialog(this, intent, readError).show()
+            destroyController()
+            return
+        }
+
+        if (fileInfo == null || filePath.isNullOrBlank()) {
+            FallbackDialogs().createBadIntentFallbackDialog(this, null, intent).show()
+            destroyController()
+            return
+        }
+
+        if (controller != null && lastPageInfo != null) {
+            lastPageInfo?.apply {
+                if (openingFileName == filePath) {
+                    log("Fast processing")
+                    controller!!.restorePosition(this)
+                    return
+                }
+            }
+        }
+        destroyController()
+
+        val fileToOpen = if (!fileInfo.file.canRead()) {
+            val cacheFileIfExists =
+                getStableTmpFileIfExists(fileInfo)?.takeIf { it.length() == fileInfo.size }
+
+            if (cacheFileIfExists == null) {
+                askReadPermissionOrOpenExisting(fileInfo, intent)
+                log("Waiting for read permissions for $intent")
+                return
+            } else {
+                cacheFileIfExists
+            }
+        } else {
+            fileInfo.file
+        }
+
+
+        if (fileToOpen.length() == 0L) {
+            showErrorAndErrorPanel(
+                getString(R.string.crash_on_book_opening_title),
+                resources.getString(
+                    R.string.fileopen_cant_open,
+                    getString(R.string.fileopen_file_is_emppty)
+                ),
+                intent,
+                sendException = RuntimeException("Warning: empty file, host=" + fileInfo.uri.host)
+            )
+            return
+        }
+
+        openFile(fileToOpen)
+        myState = MyState.FINISHED
     }
 
     @Throws(Exception::class)
