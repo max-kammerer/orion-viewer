@@ -311,7 +311,8 @@ internal fun Exception.describe(): String {
 private fun Context.tmpContentFolderForFile(fileInfo: FileInfo?): File {
     val contentFolder = cacheContentFolder()
     return if (fileInfo == null) contentFolder
-    else File(contentFolder, fileInfo.uri.host + "/" + (fileInfo.id ?: ("_" + fileInfo.size)) + "/")
+    /* The id is the last uri segment: for a document it's like "primary:Download/<title>.pdf". */
+    else File(contentFolder, fileInfo.uri.host + "/" + fitFileName(fileInfo.id ?: ("_" + fileInfo.size)) + "/")
 }
 
 fun Context.cacheContentFolder(): File {
@@ -357,7 +358,7 @@ internal fun Context.createTmpFile(fileInfo: FileInfo?, extension: String): File
     val fileFolder = tmpContentFolderForFile(fileInfo)
     fileFolder.mkdirs()
     if (fileInfo?.canHasTmpFileWithStablePath() == true) {
-        return File(fileFolder, fileInfo.name!!)
+        return File(fileFolder, fitFileName(fileInfo.name!!))
     } else {
         val fullName = (fileInfo?.name ?: fileInfo?.file?.name ?: "test_book")
         val noExtName = if (fullName.lowercase(Locale.getDefault()).endsWith(".$extension")) {
@@ -366,8 +367,10 @@ internal fun Context.createTmpFile(fileInfo: FileInfo?, extension: String): File
             fullName
         }
 
+        /* createTempFile appends up to 19 random digits before the suffix. */
+        val prefix = fitFileName(noExtName, MAX_FILE_NAME_BYTES - ".$extension".utf8Size() - 19)
         return File.createTempFile(
-            if (noExtName.length < 3) "tmp$noExtName" else noExtName,
+            if (prefix.length < 3) "tmp$prefix" else prefix,
             ".$extension",
             fileFolder
         )
@@ -398,7 +401,7 @@ fun FileInfo.canHasTmpFileWithStablePath(): Boolean {
 
 fun Context.getStableTmpFileIfExists(fileInfo: FileInfo): File? {
     if (!fileInfo.canHasTmpFileWithStablePath()) return null
-    val file = File(tmpContentFolderForFile(fileInfo), fileInfo.name ?: return null)
+    val file = File(tmpContentFolderForFile(fileInfo), fitFileName(fileInfo.name ?: return null))
     return file.takeIf { it.exists() }
 }
 
