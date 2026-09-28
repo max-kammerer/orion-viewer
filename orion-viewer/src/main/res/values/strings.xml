@@ -80,4 +80,5 @@
     <string name="about_bug_reporting" translatable="false">Bug reporting: <a href="https://github.com/max-kammerer/orion-viewer/issues">GitHub Issues</a></string>
     <string name="about_discussions" translatable="false">Discussions: <a href="https://github.com/max-kammerer/orion-viewer/discussions">GitHub Discussions</a></string>
     <string name="about_discussions_ru" translatable="false">Discussions (RU): <a href="https://4pda.to/forum/index.php?showtopic=362925">4pda Forum</a></string>
+    <string name="page_cannot_be_displayed">Can\'t display page %1$d</string>
 </resources>

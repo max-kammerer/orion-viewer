@@ -6,6 +6,7 @@ import universe.constellation.orion.viewer.document.AbstractDocument
 import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.document.AbstractPage
 import universe.constellation.orion.viewer.document.LinkTarget
+import universe.constellation.orion.viewer.document.NonFatalErrorReporter
 import universe.constellation.orion.viewer.document.PageLink
 import universe.constellation.orion.viewer.document.PageText
 import universe.constellation.orion.viewer.document.PageTextBuilder
@@ -19,7 +20,11 @@ import java.util.Locale
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-class DjvuDocument(filePath: String, override val cacheLimit: Long = DEFAULT_CACHE_LIMIT) : AbstractDocument(filePath) {
+class DjvuDocument(
+    filePath: String,
+    override val cacheLimit: Long = DEFAULT_CACHE_LIMIT,
+    errorReporter: NonFatalErrorReporter = NonFatalErrorReporter.NONE
+) : AbstractDocument(filePath, errorReporter) {
 
     inner class DjvuPage(pageNum: Int) : AbstractPage(pageNum) {
         @Volatile

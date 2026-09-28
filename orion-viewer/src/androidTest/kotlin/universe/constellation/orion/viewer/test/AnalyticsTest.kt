@@ -44,6 +44,7 @@ class AnalyticsTest : BaseTest() {
         analytics.permissionEvent("test", state = true, isNewUser = false)
         analytics.logWarning("test")
         analytics.error(RuntimeException("test"), "test")
+        analytics.report("test", RuntimeException("test"))
 
         if (analytics.javaClass == Analytics::class.java) return
         val recorded = analytics.drainRecorded()

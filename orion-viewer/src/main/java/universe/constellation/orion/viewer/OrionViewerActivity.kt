@@ -274,7 +274,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             analytics.bookOpening(file, memoryBeforeOpen)
             val newDocument = try {
                 withContext(executor + rootJob) {
-                    FileUtil.openFile(file)
+                    FileUtil.openFile(file, analytics)
                 }
             } catch (e: Exception) {
                 val message = if (e is EngineLibraryMissingException) {

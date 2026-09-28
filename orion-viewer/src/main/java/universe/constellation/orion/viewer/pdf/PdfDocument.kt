@@ -37,6 +37,7 @@ import universe.constellation.orion.viewer.device.calcFZCacheSize
 import universe.constellation.orion.viewer.document.AbstractDocument
 import universe.constellation.orion.viewer.document.AbstractPage
 import universe.constellation.orion.viewer.document.LinkTarget
+import universe.constellation.orion.viewer.document.NonFatalErrorReporter
 import universe.constellation.orion.viewer.document.OutlineItem
 import universe.constellation.orion.viewer.document.PageLink
 import universe.constellation.orion.viewer.document.PageText
@@ -48,7 +49,10 @@ import universe.constellation.orion.viewer.mupdfLoaded
 import universe.constellation.orion.viewer.shrinkMupdfStore
 import universe.constellation.orion.viewer.traceTiming
 
-class PdfDocument @Throws(Exception::class) constructor(filePath: String) : AbstractDocument(filePath) {
+class PdfDocument @Throws(Exception::class) constructor(
+    filePath: String,
+    errorReporter: NonFatalErrorReporter = NonFatalErrorReporter.NONE
+) : AbstractDocument(filePath, errorReporter) {
 
     inner class PdfPage(pageNum: Int) : AbstractPage(pageNum) {
         @Volatile
@@ -61,9 +65,9 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
 
         private fun readPageDataIfNeeded() {
             if (destroyed) return errorInDebug("Page $pageNum already destroyed")
-            if (page == null) {
+            if (page == null && loadError == null) {
                 synchronized(core) {
-                    if (page == null) {
+                    if (page == null && loadError == null) {
                         try {
                             traceTiming({ "Page extraction: $pageNum" }) {
                                 page = core.doc.loadPage(pageNum)
@@ -72,6 +76,15 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
                             /* A bad index is an FZ_ERROR_ARGUMENT; its wording differs between mupdf
                                versions, so the page and the count are appended rather than matched. */
                             throw IllegalArgumentException("${e.message}: page $pageNum of ${this@PdfDocument.pageCount}", e)
+                        } catch (e: RuntimeException) {
+                            /* For comics and standalone images loading the page decodes its image,
+                               so a broken or unsupported one ("unknown image file format", a tiff
+                               without strips) fails here, and on every retry. The page is marked
+                               once and stays blank, instead of throwing again from each caller:
+                               rendering, text selection on the UI thread, search, link following. */
+                            log("Can't load page $pageNum", e)
+                            loadError = e.message ?: e.javaClass.name
+                            reportNonFatalOnce("Page ${pageNum + 1} of a .${filePath.substringAfterLast('.', "").lowercase()} book can't be loaded", e)
                         }
                     }
                 }
@@ -80,8 +93,9 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
 
         override fun readPageSize(): PageSize? {
             readPageDataIfNeeded()
-            val bbox = page?.bounds ?: return null
-                ?: errorInDebugOr("Problem extracting page dimension") { return null }
+            /* A broken page gets the stub size from the caller; any other missing page is a bug. */
+            if (loadError != null) return null
+            val bbox = page?.bounds ?: errorInDebugOr("Problem extracting page dimension") { return null }
             val pageWidth = bbox.x1 - bbox.x0
             val pageHeight = bbox.y1 - bbox.y0
             return PageSize(pageWidth.toInt(), pageHeight.toInt())
@@ -146,6 +160,7 @@ class PdfDocument @Throws(Exception::class) constructor(filePath: String) : Abst
 
         override fun searchText(text: String): Array<RectF>? {
             readPageDataIfNeeded()
+            if (loadError != null) return null
 
             return (page ?: errorInDebugOr("No page") {return null}).let {
                 core.searchPage(page, text)?.map { it.toRect().run { RectF(x0, y0, x1, y1) } }?.toTypedArray()

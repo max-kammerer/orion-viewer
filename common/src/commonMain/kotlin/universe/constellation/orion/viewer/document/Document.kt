@@ -24,6 +24,7 @@ import universe.constellation.orion.viewer.PageSize
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.geometry.RectF
 import universe.constellation.orion.viewer.log
+import java.util.concurrent.atomic.AtomicBoolean
 
 expect class OutlineItem {
     val level: Int
@@ -64,12 +65,36 @@ interface Page {
     /** The links if [getLinks] has already run, null otherwise; never touches the document. */
     fun loadedLinks(): List<PageLink>?
 
+    /**
+     * Why the page can't be shown, e.g. its image is broken or of an unsupported format; null
+     * while the page is fine or hasn't been read yet. Such a page stays blank: its size falls
+     * back to a stub and it has no text, links or search hits.
+     */
+    val loadError: String?
+        get() = null
+
     fun destroy()
 }
 
-abstract class AbstractDocument(final override val filePath: String) : Document {
+abstract class AbstractDocument(
+    final override val filePath: String,
+    private val errorReporter: NonFatalErrorReporter = NonFatalErrorReporter.NONE
+) : Document {
 
     private val shortName = filePath.substringAfterLast("/")
+
+    private val nonFatalReported = AtomicBoolean(false)
+
+    /**
+     * Hands the first problem of the document to the [errorReporter]; later ones are only logged
+     * by the caller. A comic with hundreds of broken pages would otherwise flood the reports, and
+     * a page adapter recreated on scrolling back would report the same page again.
+     */
+    protected fun reportNonFatalOnce(message: String, error: Throwable) {
+        if (nonFatalReported.compareAndSet(false, true)) {
+            errorReporter.report(message, error)
+        }
+    }
 
     private val pages = HashMap<Int, AbstractPage>()
 

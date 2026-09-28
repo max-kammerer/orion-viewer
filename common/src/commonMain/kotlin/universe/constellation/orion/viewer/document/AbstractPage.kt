@@ -27,6 +27,10 @@ abstract class AbstractPage(override val pageNum: Int) : Page {
     @Volatile
     private var links: List<PageLink>? = null
 
+    @Volatile
+    final override var loadError: String? = null
+        protected set
+
     protected abstract fun readPageSize(): PageSize?
 
     protected abstract fun readLinks(): List<PageLink>
