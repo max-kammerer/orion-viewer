@@ -44,16 +44,10 @@ fun getFileInfo(context: Context, uri: Uri, analytics: Analytics): FileInfo? {
 
     if (ContentResolver.SCHEME_CONTENT != scheme) return null
 
-    val displayName = getKeyFromCursor(MediaStore.MediaColumns.DISPLAY_NAME, context, uri, analytics = analytics)
-    val sizeOrZero = getKeyFromCursor(MediaStore.MediaColumns.SIZE, context, uri, analytics = analytics)?.toLongOrNull() ?: 0
-
-    val dataPath = getDataColumn(
-        context,
-        uri,
-        null,
-        null,
-        analytics
-    )
+    val columns = queryFileColumns(context, uri, analytics)
+    val displayName = columns[MediaStore.MediaColumns.DISPLAY_NAME]
+    val sizeOrZero = columns[MediaStore.MediaColumns.SIZE]?.toLongOrNull() ?: 0
+    val dataPath = columns[MediaStore.MediaColumns.DATA]
 
     dataPath?.let {
         val file = File(it)
@@ -107,30 +101,48 @@ private fun streamError(context: Context, uri: Uri, descriptorError: Exception, 
 }
 
 
-private fun getDataColumn(
-    context: Context, uri: Uri, selection: String?,
-    selectionArgs: Array<String>?,
-    analytics: Analytics
-): String? {
-    val column = MediaStore.Files.FileColumns.DATA
-    return getKeyFromCursor(column, context, uri, selection, selectionArgs, analytics)
+private val FILE_COLUMNS = arrayOf(
+    MediaStore.MediaColumns.DISPLAY_NAME,
+    MediaStore.MediaColumns.SIZE,
+    MediaStore.MediaColumns.DATA
+)
+
+/**
+ * Name, size and path in one query: each query is a binder call, and for a provider over a
+ * network share a trip to the server too. A provider may reject a column it doesn't serve,
+ * _data mostly, with IllegalArgumentException; then the columns are asked one by one, so the
+ * others are still known. Any other failure means no metadata at all, see [getKeyFromCursor].
+ */
+private fun queryFileColumns(context: Context, uri: Uri, analytics: Analytics): Map<String, String?> {
+    try {
+        return context.contentResolver.query(uri, FILE_COLUMNS, null, null, null)?.use { cursor ->
+            if (!cursor.moveToFirst()) return emptyMap()
+            FILE_COLUMNS.associateWith { column ->
+                cursor.getColumnIndex(column).takeIf { it >= 0 }?.let { cursor.getStringOrNull(it) }
+            }
+        } ?: emptyMap()
+    } catch (e: IllegalArgumentException) {
+        analytics.logWarning("Query of ${uri.authority} rejected the projection: $e")
+        return FILE_COLUMNS.associateWith { getKeyFromCursor(it, context, uri, analytics) }
+    } catch (e: SecurityException) {
+        analytics.logWarning("SecurityException: ${e.message}")
+        return emptyMap()
+    } catch (e: RuntimeException) {
+        analytics.logWarning("Query of ${uri.authority} failed: $e")
+        return emptyMap()
+    }
 }
 
 private fun getKeyFromCursor(
     column: String,
     context: Context,
     uri: Uri,
-    selection: String? = null,
-    selectionArgs: Array<String>? = null,
     analytics: Analytics
 ): String? {
     val projection = arrayOf(column)
 
     try {
-        return context.contentResolver.query(
-            uri, projection, selection, selectionArgs,
-            null
-        )?.use {
+        return context.contentResolver.query(uri, projection, null, null, null)?.use {
             if (!it.moveToFirst()) return null
             val columnIndex = it.getColumnIndex(column)
             if (columnIndex < 0) return null
@@ -138,6 +150,12 @@ private fun getKeyFromCursor(
         }
     } catch (e: SecurityException) {
         analytics.logWarning("SecurityException: ${e.message}")
+        return null
+    } catch (e: RuntimeException) {
+        /* Another app's provider failed in its query(), and its exception came back over binder:
+           e.g. NetworkOnMainThreadException from a provider over a network share. The metadata
+           is only a hint; the data is still tried through the descriptor or the stream. */
+        analytics.logWarning("Query of ${uri.authority} for $column failed: $e")
         return null
     }
 }
