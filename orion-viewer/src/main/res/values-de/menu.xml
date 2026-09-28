@@ -27,4 +27,5 @@
     <string name="menu_share_file">Datei teilen</string>
     <string name="menu_day_night_text">Tag/Nacht-Modus</string>
     <string name="menu_other">Sonstiges…</string>
+    <string name="msg_share_file_failed">Die Datei kann von diesem Speicherort aus nicht geteilt werden</string>
 </resources>
