@@ -23,7 +23,9 @@ fun loadBookParameters(
 ): LastPageInfo {
     val idx = filePath.lastIndexOf('/')
     val file = File(filePath)
-    val fileData = filePath.substring(idx + 1) + "." + file.length() + ".xml"
+    /* Named after the book, so a long title (as a percent-encoded uri, say) must be fitted into
+       the file name limit: over it the parameters could be neither saved nor loaded. */
+    val fileData = fitFileName(filePath.substring(idx + 1) + "." + file.length() + ".xml")
     var lastPageInfo = LastPageInfo()
     var successfull = false
     try {
