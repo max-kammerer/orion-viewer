@@ -93,4 +93,14 @@
     <string name="pref_key_linked_action_summary">Verknüpfte Aktion: `%s`</string>
     <string name="pref_renderPageBorder">Seitenrand zeichnen</string>
     <string name="pref_renderOffPage">Bereich außerhalb der Seiten darstellen</string>
+    <string name="pref_book_logical_pages">Logische Seiten</string>
+    <string name="pref_book_pages_per_sheet">Buchseiten pro Scan</string>
+    <string name="pref_book_pages_per_sheet_desc">Buchseiten je Dokumentseite: %s</string>
+    <string name="pref_book_pages_per_sheet_one">Eine Seite</string>
+    <string name="pref_book_pages_per_sheet_two">Zwei Seiten (Doppelseite)</string>
+    <string name="pref_book_page_numbering">Seitennummerierung</string>
+    <string name="pref_book_page_numbering_desc">Dokumentenseite %2$d ist Buchseite %1$s</string>
+    <string name="pref_open_links_by_tap">Links mit Antippen öffnen</string>
+    <string name="pref_open_links_by_tap_desc">Das Antippen eines Links in einem Dokument öffnet diesen</string>
+    <string name="pref_book_page_numbering_message">Nummer, die auf der aktuellen Seite gedruckt wird (die erste von zwei auf einer Doppelseite). Leer lassen, um die Zahlen zurückzusetzen.</string>
 </resources>
