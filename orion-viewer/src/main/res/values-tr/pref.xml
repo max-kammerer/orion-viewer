@@ -91,4 +91,12 @@
     <string name="pref_renderPageBorder">Sayfa kenarlığını çiz</string>
     <string name="pref_open_links_by_tap">Bağlantıları dokunarak aç</string>
     <string name="pref_open_links_by_tap_desc">Bir belgedeki bağlantıya dokunulduğunda, o bağlantıya gidilir</string>
+    <string name="pref_book_logical_pages">Mantıksal sayfalar</string>
+    <string name="pref_book_pages_per_sheet">Tarama başına kitap sayfası</string>
+    <string name="pref_book_pages_per_sheet_desc">Bir belge sayfasındaki kitap sayfaları: %s</string>
+    <string name="pref_book_pages_per_sheet_one">Bir sayfa</string>
+    <string name="pref_book_pages_per_sheet_two">İki sayfa (çift)</string>
+    <string name="pref_book_page_numbering">Sayfa numaralandırma</string>
+    <string name="pref_book_page_numbering_desc">Belge sayfası %2$d, %1$s numaralı kitap sayfasıdır</string>
+    <string name="pref_book_page_numbering_message">Geçerli sayfada (çift sayfadaki iki sayfadan ilki) yazdırılan numara. Numaralandırmayı sıfırlamak için boş bırakın.</string>
 </resources>
