@@ -53,4 +53,5 @@
     <string name="color_mode_white_on_blue">Белый на синем фоне</string>
     <string name="saveFileNameTooltip">ИмяФайла.расширение</string>
     <string name="save">Сохранить</string>
+    <string name="page_cannot_be_displayed">Не удалось показать страницу %1$d</string>
 </resources>

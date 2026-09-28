@@ -3,6 +3,7 @@ package universe.constellation.orion.viewer
 import android.os.Build
 import universe.constellation.orion.viewer.djvu.DjvuDocument
 import universe.constellation.orion.viewer.document.Document
+import universe.constellation.orion.viewer.document.NonFatalErrorReporter
 import universe.constellation.orion.viewer.filemanager.fileExtensionLC
 import universe.constellation.orion.viewer.formats.FileFormats
 import universe.constellation.orion.viewer.pdf.PdfDocument
@@ -22,15 +23,17 @@ object FileUtil {
         return filePath.fileExtensionLC in FileFormats.DJVU.extensions
     }
 
+    /** [errorReporter] gets the problems the document survives, see [NonFatalErrorReporter]. */
     @JvmStatic
+    @JvmOverloads
     @Throws(Exception::class)
-    fun openFile(file: File): Document {
+    fun openFile(file: File, errorReporter: NonFatalErrorReporter = NonFatalErrorReporter.NONE): Document {
         val absolutePath = file.absolutePath
         try {
             return if (isDjvuFile(file.name)) {
-                DjvuDocument(absolutePath, djvuCacheLimit)
+                DjvuDocument(absolutePath, djvuCacheLimit, errorReporter)
             } else {
-                PdfDocument(absolutePath)
+                PdfDocument(absolutePath, errorReporter)
             }
         } catch (e: LinkageError) {
             //the engine library is loaded in a static initializer: an apk without a library for

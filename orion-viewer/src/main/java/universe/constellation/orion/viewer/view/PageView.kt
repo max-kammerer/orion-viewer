@@ -3,6 +3,7 @@ package universe.constellation.orion.viewer.view
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
+import android.text.TextUtils
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -13,6 +14,7 @@ import kotlinx.coroutines.withContext
 import universe.constellation.orion.viewer.Controller
 import universe.constellation.orion.viewer.LayoutData
 import universe.constellation.orion.viewer.PageInfo
+import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.bitmap.FlexibleBitmap
 import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.geometry.RectF
@@ -133,7 +135,11 @@ class PageView(
         canvas.save()
         try {
             canvas.translate(layoutData.position.x, layoutData.position.y)
-            if (state == PageState.SIZE_AND_BITMAP_CREATED && bitmap != null) {
+            val loadError = page.loadError
+            if (state == PageState.SIZE_AND_BITMAP_CREATED && loadError != null) {
+                logTrace { "Draw broken page $pageNum: $loadError" }
+                drawBrokenPage(canvas, scene, loadError)
+            } else if (state == PageState.SIZE_AND_BITMAP_CREATED && bitmap != null) {
                 //draw bitmap
                 logTrace { "Draw page $pageNum in state $state ${bitmap?.width} ${bitmap?.height} " }
                 draw(canvas, bitmap!!, scene.defaultPaint!!, scene)
@@ -254,6 +260,37 @@ class PageView(
             pageRect.centerY() + size / 2
         )
         scene.loadingDrawable.draw(canvas)
+    }
+
+    private val brokenPageTitle by lazy {
+        controller.activity.getString(R.string.page_cannot_be_displayed, pageNum + 1)
+    }
+
+    /**
+     * A page the engine failed to load has nothing to render: instead of the loading indicator,
+     * which would spin forever, it says so, with the engine's own message underneath (usually
+     * about a broken or unsupported image). Both lines are shrunk to the page width.
+     */
+    private fun drawBrokenPage(canvas: Canvas, scene: OrionDrawScene, loadError: String) {
+        val pageRect = layoutData.wholePageRect
+        canvas.drawRect(pageRect, scene.stuff.blankPagePaint)
+
+        val paint = scene.stuff.errorTextPaint
+        val density = controller.activity.resources.displayMetrics.density
+        val titleSize = (pageRect.width() / 16f).coerceIn(12 * density, 24 * density)
+        val maxWidth = pageRect.width() * 0.9f
+        val centerX = pageRect.exactCenterX()
+        val centerY = pageRect.exactCenterY()
+
+        paint.textSize = titleSize
+        val title = TextUtils.ellipsize(brokenPageTitle, paint, maxWidth, TextUtils.TruncateAt.END)
+        canvas.drawText(title, 0, title.length, centerX, centerY - paint.descent(), paint)
+
+        paint.textSize = titleSize * 0.75f
+        val details = TextUtils.ellipsize(loadError, paint, maxWidth, TextUtils.TruncateAt.END)
+        canvas.drawText(details, 0, details.length, centerX, centerY - paint.ascent(), paint)
+
+        drawBorder(canvas, scene)
     }
 
     private fun calcDrawRect(scene: OrionDrawScene): Rect? {

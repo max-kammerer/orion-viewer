@@ -4,6 +4,7 @@ import android.graphics.*
 import android.graphics.Paint.FILTER_BITMAP_FLAG
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
+import android.text.TextPaint
 import android.view.View
 import androidx.core.view.ViewCompat
 import universe.constellation.orion.viewer.util.ColorUtil
@@ -24,6 +25,12 @@ class ColorStuff {
         color = Color.WHITE
     }
 
+    /** The message on a page that can't be shown, see [universe.constellation.orion.viewer.document.Page.loadError]. */
+    val errorTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.DKGRAY
+        textAlign = Paint.Align.CENTER
+    }
+
     private var colorDrawable = ColorDrawable(mainPagePaint.color)
     private var renderOffPage: Boolean = false
 
@@ -37,6 +44,7 @@ class ColorStuff {
         colorDrawable.colorFilter = filter
         borderPaint.colorFilter = filter
         blankPagePaint.colorFilter = filter
+        errorTextPaint.colorFilter = filter
         renderOffPage(view, renderOffPage)
     }
 

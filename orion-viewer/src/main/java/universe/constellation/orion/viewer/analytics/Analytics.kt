@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.provider.Settings
 import universe.constellation.orion.viewer.BuildConfig
+import universe.constellation.orion.viewer.document.NonFatalErrorReporter
 import java.io.File
 import java.util.Collections
 
@@ -12,7 +13,7 @@ const val FALLBACK_DIALOG = "FALLBACK"
 const val SHOW_ERROR_DIALOG = "SHOW_ERROR"
 const val SHOW_ERROR_PANEL_DIALOG = "SHOW_ERROR_PANEL"
 
-open class Analytics {
+open class Analytics : NonFatalErrorReporter {
 
     /** [send] false keeps the implementation working but nothing leaves the device. */
     open fun init(send: Boolean = true): Analytics {
@@ -65,6 +66,11 @@ open class Analytics {
 
     open fun error(ex: Throwable, info: String? = null) {
 
+    }
+
+    /** A problem an open document survived: reported like any other caught error, with [message] as its context. */
+    override fun report(message: String, error: Throwable) {
+        error(error, message)
     }
 
     open fun dialog(name: String, opened: Boolean) {
