@@ -43,4 +43,14 @@
     <string name="table_of_contents">Inhaltsverzeichnis</string>
     <string name="crop_auto">Automatisches Zuschneiden</string>
     <string name="crop_warning">Manuelles Zuschneiden für bessere Leistung verwenden</string>
+    <string name="outline_tab_history">Verlauf</string>
+    <string name="outline_expand_all">Alles aufklappen</string>
+    <string name="outline_collapse_all">Alles einklappen</string>
+    <string name="outline_history_page">Seite %1$s</string>
+    <string name="link_open_title">Link öffnen?</string>
+    <string name="link_open">Öffnen</string>
+    <string name="link_copy">Kopieren</string>
+    <string name="link_no_handler">Link kann durch keine App geöffnet werden</string>
+    <string name="link_copied">Link kopiert</string>
+    <string name="outline_history_empty">Noch keine Sprunganweisungen</string>
 </resources>

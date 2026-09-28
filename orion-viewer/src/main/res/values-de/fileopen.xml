@@ -26,4 +26,8 @@
     <string name="fileopen_open_in_temporary_file">Über temporäre Datei öffnen</string>
     <string name="crash_on_book_opening_message_header">Fehler beim Öffnen der Datei %1$s. Bitte melde das Problem:</string>
     <string name="error_on_file_saving_title">Fehler beim Speichern der Datei</string>
+    <string name="fileopen_source_unavailable">Datei ist nicht erreichbar</string>
+    <string name="fileopen_source_unavailable_info">Die App, welche die Datei (%1$s) geteilt hat, gewährt keinen Zugang mehr dazu: %2$s. Bitte teilen oder öffnen sie die Datei mit der App erneut oder:</string>
+    <string name="fileopen_source_unavailable_message">Die App, welche die Datei (%1$s) geteilt hat, gewährt keinen Zugang mehr dazu: %2$s. Bitte teilen oder öffnen sie die Datei mit der App erneut.</string>
+    <string name="crash_on_book_opening_no_engine_library">Die App wurde ohne Dokumenten-Engine für dieses Gerät installiert (%1$s), daher kann kein Buch geöffnet werden. Bitte installieren sie die App von Google Play erneut oder installieren sie das Build für ihr Gerät von der Projektseite auf GitHub.</string>
 </resources>
