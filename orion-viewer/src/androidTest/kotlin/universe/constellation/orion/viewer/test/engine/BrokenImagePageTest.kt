@@ -34,8 +34,13 @@ class BrokenImagePageTest(private val file: String, private val expectedError: S
         @JvmStatic
         @Parameterized.Parameters(name = "{0}")
         fun testData(): List<Array<Any>> = listOf(
-            arrayOf(BROKEN_JPEG, "unknown image file format"),
+            /* Not recognized at all: the message shows the first bytes. */
+            arrayOf(BROKEN_JPEG, "unknown image file format (header 00 00 00 00 00 10 4a 46 49 46 00 01)"),
             arrayOf(BROKEN_TIFF, "image is missing strip, tile and jpeg data"),
+            /* Formats mupdf doesn't decode, under a name it does: named in the message. */
+            arrayOf("broken/heic_photo.jpg", "unknown image file format (HEIC)"),
+            arrayOf("broken/avif_picture.jpg", "unknown image file format (AVIF)"),
+            arrayOf("broken/jpegxl_page.png", "unknown image file format (JPEG XL)"),
         )
     }
 
