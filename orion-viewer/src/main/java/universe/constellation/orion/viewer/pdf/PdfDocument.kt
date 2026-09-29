@@ -47,7 +47,7 @@ import universe.constellation.orion.viewer.document.PageTextBuilder
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.errorInDebugOr
 import universe.constellation.orion.viewer.log
-import universe.constellation.orion.viewer.readFileHeader
+import universe.constellation.orion.viewer.describeFileHeader
 import universe.constellation.orion.viewer.mupdfLoaded
 import universe.constellation.orion.viewer.shrinkMupdfStore
 import universe.constellation.orion.viewer.traceTiming
@@ -269,7 +269,7 @@ class PdfDocument @Throws(Exception::class) constructor(
     override fun describeStructure(): String = try {
         synchronized(core) {
             val doc = core.doc
-            val parts = mutableListOf("header=${readFileHeader(filePath, 8)}", "format=${doc.getMetaData(FitzDocument.META_FORMAT)}")
+            val parts = mutableListOf(describeFileHeader(filePath), "format=${doc.getMetaData(FitzDocument.META_FORMAT)}")
             val pdf = doc.asPDF()
             if (pdf == null) {
                 parts += "pdf=false"

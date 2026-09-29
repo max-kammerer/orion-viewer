@@ -18,3 +18,18 @@ fun readFileHeader(path: String, count: Int): String {
         b.toInt().toChar().let { if (it in ' '..'~') it.toString() else "." }
     }
 }
+
+/**
+ * The start of a file for a problem report: the first 8 bytes, and for an IFF file (DjVu) its
+ * form type, which follows the 4-byte size that reads as noise. Tells what arrived under a
+ * book's name: a web page, an image, a PDF named .djvu.
+ */
+fun describeFileHeader(path: String): String {
+    val header = readFileHeader(path, 16)
+    val form = when {
+        header.startsWith("AT&TFORM") && header.length >= 16 -> header.substring(12, 16)
+        header.startsWith("FORM") && header.length >= 12 -> header.substring(8, 12)
+        else -> null
+    }
+    return listOfNotNull("header=${header.take(8)}", form?.let { "form=$it" }).joinToString(", ")
+}

@@ -43,9 +43,11 @@ object FileUtil {
         } catch (e: EngineLibraryMissingException) {
             throw e
         } catch (e: Exception) {
+            /* The header tells what the engine got: DjVu errors like "Illegal chunk id" usually
+               mean another format (a PDF, an image, a web page) under a .djvu name. */
             throw RuntimeException(
                 "Error during file opening `${file.name}`: " + e.message + "\n" +
-                        "(File size: ${file.beautifiedFileSize()}, file path: ${absolutePath})", e
+                        "(File size: ${file.beautifiedFileSize()}, file path: ${absolutePath}, ${describeFileHeader(absolutePath)})", e
             )
         }
     }
