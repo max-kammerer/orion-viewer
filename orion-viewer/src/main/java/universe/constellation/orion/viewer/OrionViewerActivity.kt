@@ -27,6 +27,7 @@ import universe.constellation.orion.viewer.Permissions.hasReadStoragePermission
 import universe.constellation.orion.viewer.analytics.ProcessMemory
 import universe.constellation.orion.viewer.analytics.SHOW_ERROR_PANEL_DIALOG
 import universe.constellation.orion.viewer.analytics.TAP_HELP_DIALOG
+import universe.constellation.orion.viewer.android.describeEmptyFile
 import universe.constellation.orion.viewer.android.getFileInfo
 import universe.constellation.orion.viewer.android.isRestrictedAccessPath
 import universe.constellation.orion.viewer.device.Device
@@ -273,7 +274,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     getString(R.string.fileopen_file_is_emppty)
                 ),
                 intent,
-                sendException = RuntimeException("Warning: empty file, host=" + fileInfo.uri.host)
+                sendException = RuntimeException("Warning: empty file, " + fileInfo.describeEmptyFile(fileToOpen))
             )
             return
         }

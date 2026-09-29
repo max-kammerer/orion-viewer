@@ -12,7 +12,10 @@ data class FileInfo(
     /** Set when the content provider refused to open the uri: the file can't be read at all. */
     val readError: Exception? = null,
     /** When the source last changed, in ms, if the provider tells: a local copy is valid only while it matches. */
-    val lastModified: Long? = null
+    val lastModified: Long? = null,
+    /** Where [path] came from: "file" for a file uri, "data" for the provider's _data column,
+     *  "descriptor" for the file behind its descriptor; null when there is no path. */
+    val pathOrigin: String? = null
 ) {
 
     val file: File by lazy { File(path) }
