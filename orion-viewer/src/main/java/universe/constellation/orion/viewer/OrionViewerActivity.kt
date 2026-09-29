@@ -331,8 +331,11 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                         ),
                         intent,
                         sendException = RuntimeException(
-                            "Warning: no pages in doc, host=" + intent.data?.host +
-                                    ", size=${file.length()}, " + newDocument.describeStructure()
+                            listOfNotNull(
+                                "Warning: no pages in doc, host=" + intent.data?.host,
+                                "size=${file.length()}",
+                                newDocument.describeStructure()
+                            ).joinToString(", ")
                         )
                     )
                     newDocument.destroy()

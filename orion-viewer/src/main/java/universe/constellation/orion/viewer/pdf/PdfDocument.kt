@@ -47,10 +47,10 @@ import universe.constellation.orion.viewer.document.PageTextBuilder
 import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.errorInDebugOr
 import universe.constellation.orion.viewer.log
+import universe.constellation.orion.viewer.readFileHeader
 import universe.constellation.orion.viewer.mupdfLoaded
 import universe.constellation.orion.viewer.shrinkMupdfStore
 import universe.constellation.orion.viewer.traceTiming
-import java.io.File
 
 class PdfDocument @Throws(Exception::class) constructor(
     filePath: String,
@@ -269,7 +269,7 @@ class PdfDocument @Throws(Exception::class) constructor(
     override fun describeStructure(): String = try {
         synchronized(core) {
             val doc = core.doc
-            val parts = mutableListOf("header=${readHeader()}", "format=${doc.getMetaData(FitzDocument.META_FORMAT)}")
+            val parts = mutableListOf("header=${readFileHeader(filePath, 8)}", "format=${doc.getMetaData(FitzDocument.META_FORMAT)}")
             val pdf = doc.asPDF()
             if (pdf == null) {
                 parts += "pdf=false"
@@ -293,12 +293,6 @@ class PdfDocument @Throws(Exception::class) constructor(
         }
     } catch (e: Exception) {
         "structure unavailable: ${e.message}"
-    }
-
-    private fun readHeader(): String {
-        val bytes = ByteArray(8)
-        val read = File(filePath).inputStream().use { it.read(bytes) }.coerceAtLeast(0)
-        return bytes.take(read).joinToString("") { b -> b.toInt().toChar().let { if (it in ' '..'~') it.toString() else "." } }
     }
 
     private fun PDFObject.describeType(): String = when {
