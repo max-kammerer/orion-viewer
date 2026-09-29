@@ -14,7 +14,7 @@ import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.errorInDebugOr
 import universe.constellation.orion.viewer.geometry.RectF
 import universe.constellation.orion.viewer.log
-import universe.constellation.orion.viewer.readFileHeader
+import universe.constellation.orion.viewer.describeFileHeader
 import universe.constellation.orion.viewer.pdf.DocInfo
 import universe.constellation.orion.viewer.traceTiming
 import java.util.Locale
@@ -173,19 +173,10 @@ class DjvuDocument(
         get() = null
 
     /**
-     * The signature tells a real DjVu from another format named .djvu; the IFF form type (after
-     * the magic and the 4-byte size, which are left out as they read as noise) tells a bundled
-     * book (DJVM) from a single page (DJVU) or shared data only (DJVI).
+     * The signature tells a real DjVu from another format named .djvu; the IFF form type tells a
+     * bundled book (DJVM) from a single page (DJVU) or shared data only (DJVI).
      */
-    override fun describeStructure(): String {
-        val header = readFileHeader(filePath, 16)
-        val form = when {
-            header.startsWith("AT&TFORM") && header.length >= 16 -> header.substring(12, 16)
-            header.startsWith("FORM") && header.length >= 12 -> header.substring(8, 12)
-            else -> null
-        }
-        return listOfNotNull("header=${header.take(8)}", form?.let { "form=$it" }).joinToString(", ")
-    }
+    override fun describeStructure(): String = describeFileHeader(filePath)
 
     external override fun setContrast(contrast: Int)
     external override fun setThreshold(threshold: Int)
