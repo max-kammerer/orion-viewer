@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.app.ProgressDialog
-import android.content.ContentResolver
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -26,14 +25,12 @@ import universe.constellation.orion.viewer.Permissions.hasReadStoragePermission
 import universe.constellation.orion.viewer.analytics.FALLBACK_DIALOG
 import universe.constellation.orion.viewer.android.isAtLeastKitkat
 import universe.constellation.orion.viewer.android.isContentScheme
-import universe.constellation.orion.viewer.android.isContentUri
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
 import universe.constellation.orion.viewer.formats.FileFormats.Companion.getFileExtension
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
-import java.util.Locale
 
 class ResourceIdAndString(val id: Int, val value: String) {
     override fun toString(): String {
@@ -256,6 +253,7 @@ open class FallbackDialogs {
                     )
                 }
             },
+            afterCopy: () -> Unit = {},
             callbackAction: () -> Unit
         ) {
             val res = this.orionApplication.idlingRes
@@ -272,6 +270,7 @@ open class FallbackDialogs {
                                 input.copyTo(output)
                             } ?: error("Can't open output stream for $targetFileUri")
                         } ?: error("Can't read file data: $originalContentUri"))
+                        afterCopy()
                     }
                     callbackAction()
                 } finally {
@@ -308,17 +307,6 @@ internal fun Exception.describe(): String {
     return if (message.isNullOrBlank()) javaClass.simpleName else "${javaClass.simpleName}: $message"
 }
 
-private fun Context.tmpContentFolderForFile(fileInfo: FileInfo?): File {
-    val contentFolder = cacheContentFolder()
-    return if (fileInfo == null) contentFolder
-    /* The id is the last uri segment: for a document it's like "primary:Download/<title>.pdf". */
-    else File(contentFolder, fileInfo.uri.host + "/" + fitFileName(fileInfo.id ?: ("_" + fileInfo.size)) + "/")
-}
-
-fun Context.cacheContentFolder(): File {
-    return File(cacheDir, ContentResolver.SCHEME_CONTENT)
-}
-
 private fun saveContentInTmpFile(
     uri: Uri,
     myActivity: OrionViewerActivity,
@@ -341,7 +329,7 @@ private fun saveContentInTmpFile(
 
     val toFile = activity.createTmpFile(fileInfo, extension)
 
-    myActivity.saveFileByUri(intent, uri, toFile.toUri()) {
+    myActivity.saveFileByUri(intent, uri, toFile.toUri(), afterCopy = { myActivity.onTmpCopyComplete(toFile, fileInfo) }) {
         dialog.dismiss()
         myActivity.onNewIntentInternal(
             Intent(Intent.ACTION_VIEW).apply {
@@ -354,28 +342,6 @@ private fun saveContentInTmpFile(
     }
 }
 
-internal fun Context.createTmpFile(fileInfo: FileInfo?, extension: String): File {
-    val fileFolder = tmpContentFolderForFile(fileInfo)
-    fileFolder.mkdirs()
-    if (fileInfo?.canHasTmpFileWithStablePath() == true) {
-        return File(fileFolder, fitFileName(fileInfo.name!!))
-    } else {
-        val fullName = (fileInfo?.name ?: fileInfo?.file?.name ?: "test_book")
-        val noExtName = if (fullName.lowercase(Locale.getDefault()).endsWith(".$extension")) {
-            fullName.substringBeforeLast(".$extension")
-        } else {
-            fullName
-        }
-
-        /* createTempFile appends up to 19 random digits before the suffix. */
-        val prefix = fitFileName(noExtName, MAX_FILE_NAME_BYTES - ".$extension".utf8Size() - 19)
-        return File.createTempFile(
-            if (prefix.length < 3) "tmp$prefix" else prefix,
-            ".$extension",
-            fileFolder
-        )
-    }
-}
 
 
 
@@ -395,13 +361,4 @@ private fun sendCreateFileRequest(activity: Activity, fileInfo: FileInfo?, readI
     activity.startActivityForResult(createFileIntent, OrionViewerActivity.SAVE_FILE_RESULT)
 }
 
-fun FileInfo.canHasTmpFileWithStablePath(): Boolean {
-    return !id.isNullOrBlank() && size != 0L && !name.isNullOrBlank() && uri.isContentUri
-}
-
-fun Context.getStableTmpFileIfExists(fileInfo: FileInfo): File? {
-    if (!fileInfo.canHasTmpFileWithStablePath()) return null
-    val file = File(tmpContentFolderForFile(fileInfo), fitFileName(fileInfo.name ?: return null))
-    return file.takeIf { it.exists() }
-}
 
