@@ -39,7 +39,7 @@ fun getFileInfo(context: Context, uri: Uri, analytics: Analytics): FileInfo? {
     if (ContentResolver.SCHEME_FILE == scheme) {
         return uri.path?.let { path ->
             val file = File(path)
-            FileInfo(file.name, file.length(), file.name, path, uri)
+            FileInfo(file.name, file.length(), file.name, path, uri, pathOrigin = "file")
         }
     }
 
@@ -57,7 +57,7 @@ fun getFileInfo(context: Context, uri: Uri, analytics: Analytics): FileInfo? {
     dataPath?.let {
         val file = File(it)
         val fileSize = if (file.length() != 0L) file.length() else sizeOrZero
-        return FileInfo(displayName, fileSize, id, dataPath, uri, lastModified = lastModified)
+        return FileInfo(displayName, fileSize, id, dataPath, uri, lastModified = lastModified, pathOrigin = "data")
     }
 
     try {
@@ -70,7 +70,8 @@ fun getFileInfo(context: Context, uri: Uri, analytics: Analytics): FileInfo? {
             id,
             pathFromDescriptor,
             uri,
-            lastModified = lastModified
+            lastModified = lastModified,
+            pathOrigin = "descriptor"
         ).also {
             log("Returning descriptor file info: $it")
         }
@@ -201,4 +202,23 @@ fun FileInfo.isRestrictedAccessPath(): Boolean {
     var suffix = path.substringAfter("/storage/emulated/")
     suffix = suffix.substringAfter("/")
     return suffix.startsWith("Android/data/") || suffix.startsWith("Android/obb/")
+}
+
+/**
+ * What the report on an empty book says about the file, never naming it. The provider's size
+ * tells a truly empty file (0 there too) from a stale path or a download still being written
+ * (the provider knows the real size); the ages tell a file created seconds ago.
+ */
+internal fun FileInfo.describeEmptyFile(file: File, now: Long = System.currentTimeMillis()): String {
+    fun age(time: Long?) = time?.takeIf { it > 0 }?.let { "${(now - it) / 1000}s ago" } ?: "unknown"
+    return listOf(
+        "host=${uri.host}",
+        "path=${pathOrigin ?: "none"}",
+        "ext=${file.name.substringAfterLast('.', "").lowercase().take(10)}",
+        "providerSize=$size",
+        "providerModified=${age(lastModified)}",
+        "fileModified=${age(file.lastModified())}",
+        "exists=${file.exists()}",
+        "canRead=${file.canRead()}",
+    ).joinToString(", ")
 }
