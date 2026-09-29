@@ -113,7 +113,7 @@ task downloadLibwebp {
 }
 
 task downloadMupdf {
-    def version = "1.28.2"
+    def version = "1.28.5"
 
     doLast {
         def mupdfFolder = new File(mupdf)
