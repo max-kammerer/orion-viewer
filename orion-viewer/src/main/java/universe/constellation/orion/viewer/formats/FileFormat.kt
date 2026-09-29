@@ -36,7 +36,8 @@ enum class FileFormats(val extensions: List<String>, vararg val mimeTypes: Strin
     MD(listOf("md", "markdown"), "text/markdown", "text/x-markdown"),
 
     PNG(listOf("png"), "image/png"),
-    JPEG(listOf("jpg", "jpeg"), "image/jpeg", "image/pjpeg");
+    JPEG(listOf("jpg", "jpeg"), "image/jpeg", "image/pjpeg"),
+    WEBP(listOf("webp"), "image/webp");
 
     companion object {
         val supportedMimeTypes by lazy {

@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.4.1)
 set(MUPDF_PATH ../../mupdf)
 set(LIBARCH ../../libarchive)
 set(XZ_PATH ../../xz)
+set(WEBP_PATH ../../libwebp)
 set(BROTLI ${MUPDF_PATH}/thirdparty/brotli/c)
 
 # Thirdparty source lists are parsed out of mupdf's own Makelists so they
@@ -103,6 +104,30 @@ set(XZ_LZIP_DECODER OFF)
 set(XZ_ENCODERS "")
 set(BUILD_TESTING OFF)
 add_subdirectory(${XZ_PATH} xz)
+
+# --- libwebp (decoder only): WebP pages in comic archives and standalone WebP images ---
+
+if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${WEBP_PATH}/CMakeLists.txt)
+    message(FATAL_ERROR "libwebp sources not found in nativeLibs/libwebp: run './gradlew -b thirdparty_build.gradle downloadLibwebp' first")
+endif()
+
+set(WEBP_BUILD_ANIM_UTILS OFF)
+set(WEBP_BUILD_CWEBP OFF)
+set(WEBP_BUILD_DWEBP OFF)
+set(WEBP_BUILD_GIF2WEBP OFF)
+set(WEBP_BUILD_IMG2WEBP OFF)
+set(WEBP_BUILD_VWEBP OFF)
+set(WEBP_BUILD_WEBPINFO OFF)
+set(WEBP_BUILD_WEBPMUX OFF)
+set(WEBP_BUILD_EXTRAS OFF)
+set(WEBP_BUILD_LIBWEBPMUX OFF)
+# mupdf decodes an image on one thread; libwebp's own threads would only add pthread use.
+set(WEBP_USE_THREAD OFF)
+# Only the webpdecoder target is linked, the encoder and demux libraries are never built.
+add_subdirectory(${WEBP_PATH} libwebp EXCLUDE_FROM_ALL)
+
+target_compile_definitions(mupdf_core PRIVATE -DHAVE_WEBP)
+target_include_directories(mupdf_core PRIVATE ${WEBP_PATH}/src)
 
 # --- Build a local static library for thirdparty libraries ---
 
@@ -262,8 +287,8 @@ ${MUPDF_PATH}/include.mupdf
 target_compile_definitions(mupdf_java PRIVATE -DHAVE_ANDROID -DORION_PDF -DORION_FOR_ANDROID -DFZ_JAVA_STORE_SIZE=64<<20)
 target_compile_options(mupdf_java PRIVATE -ffunction-sections -fdata-sections)
 
-add_dependencies(mupdf_java mupdf_core mupdf_thirdparty cmark_gfm libarchive liblzma)
-target_link_libraries(mupdf_java mupdf_core mupdf_thirdparty cmark_gfm libarchive liblzma)
+add_dependencies(mupdf_java mupdf_core mupdf_thirdparty cmark_gfm libarchive liblzma webpdecoder)
+target_link_libraries(mupdf_java mupdf_core mupdf_thirdparty cmark_gfm libarchive liblzma webpdecoder)
 
 #LOCAL_LDLIBS := -ljnigraphics -llog -lm
 #
