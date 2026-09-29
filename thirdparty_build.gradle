@@ -139,6 +139,13 @@ task downloadMupdf {
             commandLine = ['git', 'checkout', version]
         }
 
+        /* checkout -f resets tracked files only: files added by a local patch (e.g. load-webp.c)
+           would stay behind and make the patch fail to apply again. */
+        exec {
+            workingDir file(mupdf)
+            commandLine = ['git', 'clean', '-fd', '--', 'source', 'include']
+        }
+
         exec {
             workingDir file(mupdf)
             commandLine 'git', 'submodule', 'init'

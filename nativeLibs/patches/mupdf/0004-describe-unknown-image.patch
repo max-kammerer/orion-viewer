@@ -1,0 +1,120 @@
+diff --git a/source/fitz/image.c b/source/fitz/image.c
+index da3d996..dcec6a4 100644
+--- a/source/fitz/image.c
++++ b/source/fitz/image.c
+@@ -1512,6 +1512,93 @@ fz_recognize_image_format_len(fz_context *ctx, const unsigned char *p, size_t le
+ 	return type;
+ }
+ 
++/*
++	Names what an unrecognized image is, for the error message: the formats
++	mupdf doesn't decode that turn up in comic archives or in files named as
++	images (an iPhone photo saved as .jpg, a web page saved as a picture), or
++	else the first bytes in hex. Returns buf.
++*/
++static int
++printable(unsigned char c)
++{
++	return c >= 0x20 && c < 0x7f ? c : '?';
++}
++
++static const char *
++describe_unknown_image(const unsigned char *p, size_t len, char *buf, size_t size)
++{
++	static const char *iso_brands[][2] = {
++		{ "avif", "AVIF" },
++		{ "avis", "AVIF sequence" },
++		{ "heic", "HEIC" },
++		{ "heix", "HEIC" },
++		{ "heim", "HEIC" },
++		{ "heis", "HEIC" },
++		{ "hevc", "HEIC sequence" },
++		{ "hevx", "HEIC sequence" },
++		{ "mif1", "HEIF" },
++		{ "msf1", "HEIF sequence" },
++	};
++	const char *name = NULL;
++	size_t i, k, n;
++
++	if (len >= 12 && !memcmp(p + 4, "ftyp", 4))
++	{
++		/* The major brand, then the compatible ones, in the ftyp box. */
++		size_t box = ((size_t)p[0] << 24) | (p[1] << 16) | (p[2] << 8) | p[3];
++		size_t end = fz_minz(fz_minz(box, len), 64);
++		for (k = 8; !name && k + 4 <= end; k += (k == 8 ? 8 : 4))
++			for (i = 0; i < nelem(iso_brands); i++)
++				if (!memcmp(p + k, iso_brands[i][0], 4))
++				{
++					name = iso_brands[i][1];
++					break;
++				}
++		if (!name)
++		{
++			fz_snprintf(buf, size, "ISO media, brand %c%c%c%c",
++				printable(p[8]), printable(p[9]), printable(p[10]), printable(p[11]));
++			return buf;
++		}
++	}
++	else if (len >= 2 && p[0] == 0xff && p[1] == 0x0a)
++		name = "JPEG XL";
++	else if (len >= 12 && !memcmp(p, "\0\0\0\x0cJXL \r\n\x87\n", 12))
++		name = "JPEG XL";
++	else if (len >= 12 && !memcmp(p, "RIFF", 4))
++	{
++		fz_snprintf(buf, size, "RIFF %c%c%c%c",
++			printable(p[8]), printable(p[9]), printable(p[10]), printable(p[11]));
++		return buf;
++	}
++	else if (len >= 4 && !memcmp(p, "PK\3\4", 4))
++		name = "ZIP archive";
++	else if (len >= 4 && !memcmp(p, "Rar!", 4))
++		name = "RAR archive";
++	else if (len >= 6 && !memcmp(p, "7z\xbc\xaf\x27\x1c", 6))
++		name = "7z archive";
++	else if (len >= 5 && !memcmp(p, "%PDF-", 5))
++		name = "PDF";
++	else if (len >= 4 && !memcmp(p, "qoif", 4))
++		name = "QOI";
++	else if (len >= 4 && !memcmp(p, "\0\0\1\0", 4))
++		name = "ICO";
++	else if (len >= 1 && p[0] == '<')
++		name = "markup: HTML, XML or SVG";
++
++	if (name)
++	{
++		fz_strlcpy(buf, name, size);
++		return buf;
++	}
++
++	fz_strlcpy(buf, "header", size);
++	n = strlen(buf);
++	for (i = 0; i < len && i < 12 && n + 4 <= size; i++)
++		n += fz_snprintf(buf + n, size - n, " %02x", p[i]);
++	return buf;
++}
++
+ fz_image *
+ fz_new_image_from_buffer(fz_context *ctx, fz_buffer *buffer)
+ {
+@@ -1526,7 +1613,7 @@ fz_new_image_from_buffer(fz_context *ctx, fz_buffer *buffer)
+ 	uint8_t orientation = 0;
+ 
+ 	if (len < 8)
+-		fz_throw(ctx, FZ_ERROR_FORMAT, "unknown image file format");
++		fz_throw(ctx, FZ_ERROR_FORMAT, "unknown image file format (%d bytes)", (int)len);
+ 
+ 	type = fz_recognize_image_format_len(ctx, buf, len);
+ 	bpc = 8;
+@@ -1567,7 +1654,11 @@ fz_new_image_from_buffer(fz_context *ctx, fz_buffer *buffer)
+ 		fz_load_webp_info(ctx, buf, len, &w, &h, &xres, &yres, &cspace);
+ 		break;
+ 	default:
+-		fz_throw(ctx, FZ_ERROR_FORMAT, "unknown image file format");
++	{
++		char description[64];
++		fz_throw(ctx, FZ_ERROR_FORMAT, "unknown image file format (%s)",
++			describe_unknown_image(buf, len, description, sizeof description));
++	}
+ 	}
+ 
+ 	fz_try(ctx)
