@@ -10,7 +10,8 @@ import universe.constellation.orion.viewer.FileInfo
 import universe.constellation.orion.viewer.MAX_FILE_NAME_BYTES
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.createTmpFile
-import universe.constellation.orion.viewer.getStableTmpFileIfExists
+import universe.constellation.orion.viewer.getValidTmpCopy
+import universe.constellation.orion.viewer.onTmpCopyComplete
 import universe.constellation.orion.viewer.loadBookParameters
 import universe.constellation.orion.viewer.save
 import universe.constellation.orion.viewer.test.framework.BaseTest
@@ -65,8 +66,9 @@ class LongFileNameTest : BaseTest() {
                 val copy = activity.createTmpFile(info, "pdf")
                 try {
                     copy.writeBytes(ByteArray(1234))
+                    activity.onTmpCopyComplete(copy, info)
                     assertTrue(copy.name, copy.name.utf8Size() <= MAX_FILE_NAME_BYTES && copy.name.endsWith(".pdf"))
-                    assertEquals(copy, activity.getStableTmpFileIfExists(info))
+                    assertEquals(copy, activity.getValidTmpCopy(info))
                 } finally {
                     copy.parentFile?.deleteRecursively()
                 }

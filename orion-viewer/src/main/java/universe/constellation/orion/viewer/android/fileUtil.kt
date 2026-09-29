@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.os.ParcelFileDescriptor
+import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.system.Os
 import androidx.core.database.getStringOrNull
@@ -44,15 +45,19 @@ fun getFileInfo(context: Context, uri: Uri, analytics: Analytics): FileInfo? {
 
     if (ContentResolver.SCHEME_CONTENT != scheme) return null
 
-    val columns = queryFileColumns(context, uri, analytics)
+    val lastModifiedColumn = lastModifiedColumn(context, uri)
+    val columns = queryFileColumns(context, uri, FILE_COLUMNS + listOfNotNull(lastModifiedColumn?.first), analytics)
     val displayName = columns[MediaStore.MediaColumns.DISPLAY_NAME]
     val sizeOrZero = columns[MediaStore.MediaColumns.SIZE]?.toLongOrNull() ?: 0
     val dataPath = columns[MediaStore.MediaColumns.DATA]
+    val lastModified = lastModifiedColumn?.let { (column, toMillis) ->
+        columns[column]?.toLongOrNull()?.takeIf { it > 0 }?.let { it * toMillis }
+    }
 
     dataPath?.let {
         val file = File(it)
         val fileSize = if (file.length() != 0L) file.length() else sizeOrZero
-        return FileInfo(displayName, fileSize, id, dataPath, uri)
+        return FileInfo(displayName, fileSize, id, dataPath, uri, lastModified = lastModified)
     }
 
     try {
@@ -64,20 +69,21 @@ fun getFileInfo(context: Context, uri: Uri, analytics: Analytics): FileInfo? {
             if (fileLength != 0L) fileLength else sizeOrZero,
             id,
             pathFromDescriptor,
-            uri
+            uri,
+            lastModified = lastModified
         ).also {
             log("Returning descriptor file info: $it")
         }
     } catch (e: FileNotFoundException) {
         //the descriptor is only a shortcut to the path, a provider may well refuse it and still serve the data
-        return FileInfo(displayName, sizeOrZero, id, "", uri, readError = streamError(context, uri, e, analytics))
+        return FileInfo(displayName, sizeOrZero, id, "", uri, readError = streamError(context, uri, e, analytics), lastModified = lastModified)
     } catch (e: SecurityException) {
-        return FileInfo(displayName, sizeOrZero, id, "", uri, readError = streamError(context, uri, e, analytics))
+        return FileInfo(displayName, sizeOrZero, id, "", uri, readError = streamError(context, uri, e, analytics), lastModified = lastModified)
     } catch (e: Throwable) {
         errorInDebugOr(e.toString()) { e.printStackTrace() }
     }
 
-    return FileInfo(displayName, sizeOrZero, id, "", uri)
+    return FileInfo(displayName, sizeOrZero, id, "", uri, lastModified = lastModified)
 }
 
 /**
@@ -101,11 +107,23 @@ private fun streamError(context: Context, uri: Uri, descriptorError: Exception, 
 }
 
 
-private val FILE_COLUMNS = arrayOf(
+private val FILE_COLUMNS = listOf(
     MediaStore.MediaColumns.DISPLAY_NAME,
     MediaStore.MediaColumns.SIZE,
     MediaStore.MediaColumns.DATA
 )
+
+/**
+ * The column with the source's modification time and its unit in ms, for the providers known to
+ * have one. Asked only there: a provider may reject a projection with a column it doesn't serve,
+ * and MediaStore does, which would cost a query per column.
+ */
+private fun lastModifiedColumn(context: Context, uri: Uri): Pair<String, Long>? = when {
+    uri.authority == MediaStore.AUTHORITY -> MediaStore.MediaColumns.DATE_MODIFIED to 1000L
+    Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(context, uri) ->
+        DocumentsContract.Document.COLUMN_LAST_MODIFIED to 1L
+    else -> null
+}
 
 /**
  * Name, size and path in one query: each query is a binder call, and for a provider over a
@@ -113,17 +131,17 @@ private val FILE_COLUMNS = arrayOf(
  * _data mostly, with IllegalArgumentException; then the columns are asked one by one, so the
  * others are still known. Any other failure means no metadata at all, see [getKeyFromCursor].
  */
-private fun queryFileColumns(context: Context, uri: Uri, analytics: Analytics): Map<String, String?> {
+private fun queryFileColumns(context: Context, uri: Uri, columns: List<String>, analytics: Analytics): Map<String, String?> {
     try {
-        return context.contentResolver.query(uri, FILE_COLUMNS, null, null, null)?.use { cursor ->
+        return context.contentResolver.query(uri, columns.toTypedArray(), null, null, null)?.use { cursor ->
             if (!cursor.moveToFirst()) return emptyMap()
-            FILE_COLUMNS.associateWith { column ->
+            columns.associateWith { column ->
                 cursor.getColumnIndex(column).takeIf { it >= 0 }?.let { cursor.getStringOrNull(it) }
             }
         } ?: emptyMap()
     } catch (e: IllegalArgumentException) {
         analytics.logWarning("Query of ${uri.authority} rejected the projection: $e")
-        return FILE_COLUMNS.associateWith { getKeyFromCursor(it, context, uri, analytics) }
+        return columns.associateWith { getKeyFromCursor(it, context, uri, analytics) }
     } catch (e: SecurityException) {
         analytics.logWarning("SecurityException: ${e.message}")
         return emptyMap()

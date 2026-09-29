@@ -7,11 +7,14 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Assume.assumeTrue
 import org.junit.Test
+import universe.constellation.orion.viewer.MAX_FILE_NAME_BYTES
+import universe.constellation.orion.viewer.bookmarks.ALL_BOOKMARKS_SUFFIX
 import universe.constellation.orion.viewer.bookmarks.BOOKMARKS_SUFFIX
 import universe.constellation.orion.viewer.bookmarks.bookmarksExportFile
 import universe.constellation.orion.viewer.cacheContentFolder
 import universe.constellation.orion.viewer.test.framework.BaseTest
 import universe.constellation.orion.viewer.test.framework.appContext
+import universe.constellation.orion.viewer.utf8Size
 import java.io.File
 
 /**
@@ -40,6 +43,23 @@ class BookmarkExportPathTest : BaseTest() {
 
         checkIsUsableExportTarget(target)
         assertEquals(BOOK_NAME + BOOKMARKS_SUFFIX, target.name)
+    }
+
+    /* A book name that fits by itself (254 bytes) goes over with the suffix: only the name is shortened. */
+    @Test
+    fun exportOfBookWithLongNameFits() {
+        assumeTrue("Book folder should be writable", testDataFolder.canWrite())
+        val book = File(testDataFolder, "Т".repeat(125) + ".pdf")
+        listOf(BOOKMARKS_SUFFIX, ALL_BOOKMARKS_SUFFIX).forEach { suffix ->
+            val target = appContext.bookmarksExportFile(book.absolutePath, suffix)
+            assertTrue(target.name, target.name.utf8Size() <= MAX_FILE_NAME_BYTES && target.name.endsWith(suffix))
+            try {
+                target.writeText("<bookmarks/>")
+                assertTrue(target.exists())
+            } finally {
+                target.delete()
+            }
+        }
     }
 
     @Test

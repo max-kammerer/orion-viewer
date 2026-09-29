@@ -50,6 +50,6 @@ private fun String.takeUtf8(maxBytes: Int): String {
     return substring(0, end)
 }
 
-private fun sha1Hex(text: String): String =
+fun sha1Hex(text: String): String =
     MessageDigest.getInstance("SHA-1").digest(text.toByteArray(Charsets.UTF_8))
         .joinToString("") { (it.toInt() and 0xff).toString(16).padStart(2, '0') }
