@@ -104,6 +104,7 @@
                 <data android:mimeType="image/png"/>
                 <data android:mimeType="image/jpeg"/>
                 <data android:mimeType="image/pjpeg"/>
+                <data android:mimeType="image/webp"/>
             </intent-filter>
 
             <intent-filter>

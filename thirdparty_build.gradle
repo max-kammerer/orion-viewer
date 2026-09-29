@@ -103,6 +103,15 @@ task downloadXz {
     }
 }
 
+/* libwebp: decoder only, for WebP pages in comic archives and standalone WebP images */
+task downloadLibwebp {
+    def version = "v1.6.0"
+
+    doLast {
+        downloadGitRepo(new File(libwebp), 'https://github.com/webmproject/libwebp.git', version)
+    }
+}
+
 task downloadMupdf {
     def version = "1.28.2"
 
@@ -172,7 +181,7 @@ task patchMupdf(dependsOn: [downloadMupdf]) {
     }
 }
 
-task downloadAndMakeMupdf(dependsOn: [patchMupdf, downloadLibArchive, downloadXz])  {
+task downloadAndMakeMupdf(dependsOn: [patchMupdf, downloadLibArchive, downloadXz, downloadLibwebp])  {
     doLast {
         /*For more details see mupdf/platform/android/viewer/ReadMe.txt*/
         exec {

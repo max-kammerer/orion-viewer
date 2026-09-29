@@ -33,6 +33,7 @@ runs:
           nativeLibs/mupdf
           nativeLibs/libarchive
           nativeLibs/xz
+          nativeLibs/libwebp
 #          nativeLibs/mupdfModule/build
 #          nativeLibs/mupdfModule/.cxx
 #          nativeLibs/djvuModule/build
