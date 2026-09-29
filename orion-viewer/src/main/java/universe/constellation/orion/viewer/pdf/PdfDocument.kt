@@ -22,10 +22,12 @@ package universe.constellation.orion.viewer.pdf
 import android.graphics.RectF
 import androidx.core.graphics.toRect
 import com.artifex.mupdf.fitz.Device
+import com.artifex.mupdf.fitz.Document as FitzDocument
 import com.artifex.mupdf.fitz.DisplayList
 import com.artifex.mupdf.fitz.Link
 import com.artifex.mupdf.fitz.Matrix
 import com.artifex.mupdf.fitz.Outline
+import com.artifex.mupdf.fitz.PDFObject
 import com.artifex.mupdf.fitz.Page
 import com.artifex.mupdf.fitz.StructuredText
 import com.artifex.mupdf.fitz.android.AndroidDrawDevice
@@ -48,6 +50,7 @@ import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.mupdfLoaded
 import universe.constellation.orion.viewer.shrinkMupdfStore
 import universe.constellation.orion.viewer.traceTiming
+import java.io.File
 
 class PdfDocument @Throws(Exception::class) constructor(
     filePath: String,
@@ -257,6 +260,68 @@ class PdfDocument @Throws(Exception::class) constructor(
         core.title
     }
 
+    /**
+     * What mupdf sees of the page tree. It takes the page count from /Root/Pages/Count as is, so a
+     * missing or wrong count, a lost catalog or pages node all give zero pages although the file
+     * has some; the leaves are counted here by walking /Kids to tell these apart. The header
+     * tells an FDF (form data, rightly without pages) or a file that isn't a pdf at all.
+     */
+    override fun describeStructure(): String = try {
+        synchronized(core) {
+            val doc = core.doc
+            val parts = mutableListOf("header=${readHeader()}", "format=${doc.getMetaData(FitzDocument.META_FORMAT)}")
+            val pdf = doc.asPDF()
+            if (pdf == null) {
+                parts += "pdf=false"
+            } else {
+                val root = pdf.trailer.get("Root")
+                val pages = root.get("Pages")
+                val kids = pages.get("Kids")
+                parts += listOf(
+                    "repaired=${pdf.wasRepaired()}",
+                    "objects=${pdf.countObjects()}",
+                    "root=${root.describeType()}",
+                    "pages=${pages.describeType()}",
+                    "count=${pages.get("Count").let { if (it.isNull) "missing" else it.toString(true, true).take(20) }}",
+                    "kids=${if (kids.isArray) kids.size().toString() else kids.describeType()}",
+                    "leaves=${countLeaves(pages)}",
+                    "producer=${doc.getMetaData(FitzDocument.META_INFO_PRODUCER).orEmpty().take(60)}",
+                    "creator=${doc.getMetaData(FitzDocument.META_INFO_CREATOR).orEmpty().take(60)}",
+                )
+            }
+            parts.joinToString(", ")
+        }
+    } catch (e: Exception) {
+        "structure unavailable: ${e.message}"
+    }
+
+    private fun readHeader(): String {
+        val bytes = ByteArray(8)
+        val read = File(filePath).inputStream().use { it.read(bytes) }.coerceAtLeast(0)
+        return bytes.take(read).joinToString("") { b -> b.toInt().toChar().let { if (it in ' '..'~') it.toString() else "." } }
+    }
+
+    private fun PDFObject.describeType(): String = when {
+        isNull -> "missing"
+        isDictionary -> get("Type").let { if (it.isName) "/" + it.asName() else "untyped" }
+        /* A reference to an absent object ends up here too, as "9 0 R". */
+        else -> "not a dictionary: " + toString(true, true).take(20)
+    }
+
+    /** Pages as a lenient reader would find them: every node without /Kids below the root is one. */
+    private fun countLeaves(node: PDFObject, visited: MutableSet<Int> = HashSet(), depth: Int = 0): Int {
+        if (node.isNull || depth > MAX_PAGE_TREE_DEPTH) return 0
+        if (node.isIndirect && !visited.add(node.asIndirect())) return 0
+        val kids = node.get("Kids")
+        if (!kids.isArray) return if (depth > 0) 1 else 0
+        var leaves = 0
+        for (i in 0 until kids.size()) {
+            leaves += countLeaves(kids.get(i), visited, depth + 1)
+            if (leaves > MAX_COUNTED_LEAVES) break
+        }
+        return leaves
+    }
+
     external override fun setContrast(contrast: Int)
     external fun updateContrast(bitmap: Bitmap, startRow: Int, startCol: Int, endRow: Int, endCol: Int, width: Int)
 
@@ -332,5 +397,10 @@ class PdfDocument @Throws(Exception::class) constructor(
         /* The store is sized once, from FZ_JAVA_STORE_SIZE read when the mupdf context is created;
          * the application sets it before the first mupdf call, the build-time default is the fallback. */
         val MUPDF_STORE_LIMIT: Long = System.getenv("FZ_JAVA_STORE_SIZE")?.toLongOrNull() ?: calcFZCacheSize(0)
+
+        private const val MAX_PAGE_TREE_DEPTH = 64
+
+        private const val MAX_COUNTED_LEAVES = 100_000
+
     }
 }

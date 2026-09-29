@@ -149,6 +149,13 @@ interface Document : ImagePostProcessor {
 
     fun destroyPage(page: Page)
 
+    /**
+     * Engine-specific details of the file for a problem report, e.g. on a document without pages;
+     * null when the engine has nothing to add. May read the document: call it while nothing else
+     * uses it. Never names the file.
+     */
+    fun describeStructure(): String? = null
+
     fun needPassword(): Boolean = false
 
     fun authenticate(password: String): Boolean = true
