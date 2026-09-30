@@ -10,6 +10,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -33,12 +34,18 @@ import universe.constellation.orion.viewer.test.framework.createContentIntentWit
 import universe.constellation.orion.viewer.test.framework.doFail
 import universe.constellation.orion.viewer.test.framework.onActivity
 
+/**
+ * An option of a fallback dialog. The dialog is shown once the content provider has answered in
+ * the background, i.e. after the activity is already on screen, and its window gets the focus a
+ * moment later still: without the root matcher Espresso may search the activity's window instead
+ * and fail at once. With it, Espresso waits for the dialog.
+ */
 fun onTextNotButtonView(stringId: Int): ViewInteraction {
     return onView(
         AllOf.allOf(
             withText(stringId),
             IsNot.not(ViewMatchers.isAssignableFrom(Button::class.java))
-        ))
+        )).inRoot(isDialog())
 }
 
 @SdkSuppress(minSdkVersion = KITKAT)

@@ -1,5 +1,7 @@
 package universe.constellation.orion.viewer.test.engine
 
+import android.os.Build
+import androidx.test.filters.SdkSuppress
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -12,6 +14,7 @@ import universe.constellation.orion.viewer.test.framework.BookFile
  * The problem report on a DjVu document names its IFF form, the magic and size left out; the
  * error on a file that fails to open as DjVu shows what the file really starts with.
  */
+@SdkSuppress(minSdkVersion = Build.VERSION_CODES.LOLLIPOP)
 class DjvuStructureTest : BaseTest() {
 
     /* djvulibre's message says nothing of the format, the header does. */

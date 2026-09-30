@@ -2,6 +2,8 @@ package universe.constellation.orion.viewer.test.espresso.contenturi
 
 import android.content.ContentResolver
 import android.net.Uri
+import android.os.Build
+import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -18,6 +20,9 @@ import universe.constellation.orion.viewer.test.framework.createContentIntentWit
  * The file metadata is asked in one query: for a provider over a network share every query is a
  * trip to the server. A provider rejecting a column still gets its other columns asked one by one.
  */
+/* The test provider generates its files with PdfDocument, which is there from KitKat: below it
+ * the provider's process dies on openFile and takes the whole instrumentation run with it. */
+@SdkSuppress(minSdkVersion = Build.VERSION_CODES.KITKAT)
 class ProviderQueryTest : BaseTest() {
 
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
