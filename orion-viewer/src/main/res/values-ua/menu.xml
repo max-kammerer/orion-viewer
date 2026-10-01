@@ -2,7 +2,7 @@
 <resources>
     <string name="menu_zoom_text">Масштаб</string>
     <string name="menu_crop_text">Обрізка полів</string>
-    <string name="menu_goto_text">Перейти до…</string>
+    <string name="menu_goto_text">Перейти</string>
     <string name="menu_bookmarks_text">Закладки</string>
     <string name="menu_add_bookmark_item">Додати закладку</string>
     <string name="menu_rotation_text">Орієнтація екрану</string>
@@ -16,7 +16,7 @@
     <string name="menu_options_text">Налаштування</string>
     <string name="menu_tap_text">Тап зони</string>
     <string name="menu_book_preferences">Налаштування книжки</string>
-    <string name="menu_outline_text">Зміст</string>
+    <string name="menu_outline_text">Опис</string>
     <string name="menu_select_text">Виділити текст</string>
     <string name="export_all_bookmarks_menu_item">Експортувати всі закладки</string>
     <string name="export_bookmarks_menu_item">Експортувати поточні закладки</string>
@@ -25,4 +25,7 @@
     <string name="menu_about_text">Про…</string>
     <string name="menu_search_item">Пошук</string>
     <string name="menu_other">Інше…</string>
+    <string name="menu_share_text">Поділитися текстом</string>
+    <string name="menu_share_file">Поділитися файлом</string>
+    <string name="msg_share_file_failed">Не можна поділитися файлом з цього місця</string>
 </resources>
