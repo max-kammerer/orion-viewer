@@ -43,4 +43,14 @@
     <string name="color_mode_black_on_yellowish">Чорний на жовтуватому тлі</string>
     <string name="color_mode_inverted">Інвертовані кольори</string>
     <string name="saveFileNameTooltip">І\'мяФайлу.розширення</string>
+    <string name="link_copy">Копіювати</string>
+    <string name="link_open">Відкрити</string>
+    <string name="outline_tab_history">Історія</string>
+    <string name="outline_expand_all">Розгорнути все</string>
+    <string name="outline_history_page">ст. %1$s</string>
+    <string name="outline_collapse_all">Згорнути все</string>
+    <string name="link_open_title">Перейти за посиланням?</string>
+    <string name="link_copied">Посилання скопійовано</string>
+    <string name="outline_history_empty">Переходів не було</string>
+    <string name="link_no_handler">Немає додатка, щоб відкрити посилання</string>
 </resources>

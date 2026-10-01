@@ -21,7 +21,7 @@
     <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Обміняти дії клавіш вперед / назад в портретному режимі</string>
     <string name="pref_dictionary">Словник</string>
     <string name="pref_dictionary_desc">Словник: %s</string>
-    <string name="pref_e_ink_optimization">E-ink</string>
+    <string name="pref_e_ink_optimization">E-ink дисплей</string>
     <string name="pref_e_ink_fast_refresh">Швидке оновлення e-ink</string>
     <string name="pref_total_refresh_after">Повне оновлення після…</string>
     <string name="pref_long_crop_value">Велика обрізка</string>
@@ -87,4 +87,18 @@
     <string name="pref_key_linked_action_summary">Повʼязана дія: `%s`</string>
     <string name="pref_renderOffPage">Намалювати простір поза сторінкою</string>
     <string name="pref_key_binder_desc">Прив\'язати дії до клавіш/кнопок</string>
+    <string name="pref_category_move">Перегортання дотиком</string>
+    <string name="pref_walk_order">Перехід між сторінками</string>
+    <string name="pref_book_logical_pages">Логічні сторінки</string>
+    <string name="pref_book_pages_per_sheet_one">Одна сторінка</string>
+    <string name="pref_book_page_numbering">Нумерація сторінок</string>
+    <string name="pref_walk_order_desc">Порядок переходів: %s</string>
+    <string name="pref_enable_touch_move">Увімкнути гортання дотиком</string>
+    <string name="pref_book_pages_per_sheet_two">Дві сторінки (розгорнуто)</string>
+    <string name="pref_open_links_by_tap">Відкривати посилання дотиком</string>
+    <string name="pref_book_pages_per_sheet">Сторінок на скан</string>
+    <string name="pref_book_pages_per_sheet_desc">Сторінок книги на одній сторінці документа: %s</string>
+    <string name="pref_book_page_numbering_desc">Сторінка документа %2$d — це сторінка %1$s в книзі</string>
+    <string name="pref_open_links_by_tap_desc">Натискання на посилання в документі відкриває його</string>
+    <string name="pref_book_page_numbering_message">Номер, надрукований на поточній сторінці (перший з двох на розвороті). Залиште порожнім, щоб скинути нумерацію.</string>
 </resources>
