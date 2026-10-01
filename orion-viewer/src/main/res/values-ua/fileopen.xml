@@ -3,7 +3,7 @@
     <string name="fileopen_save_to_file">Зберегти в новий файл…</string>
     <string name="fileopen_open_recent_files">Перейти до останніх книг…</string>
     <string name="fileopen_report_error_by_email_and_return">Повідомте про помилку електронною поштою і поверніться до діалогового вікна…</string>
-    <string name="string_intent">Намір</string>
+    <string name="string_intent">Призначення</string>
     <string name="crash_on_book_opening_message_header">Помилка при відкритті файлу %1$s. Будь ласка, повідомте про проблему:</string>
     <string name="crash_on_book_opening_encrypted">Зашифрований документ</string>
     <string name="error_on_file_saving_title">Помилка під час збереження файлу</string>
@@ -24,4 +24,10 @@
     <string name="fileopen_error_during_intent_processing">Помилка під час обробки призначення</string>
     <string name="fileopen_error_during_intent_processing_info">Не вдається витягти шлях до файлу з призначення. Будь ласка, збережіть дані призначення у файл, щоб відкрити його або:</string>
     <string name="fileopen_private_resource_access_info">Не вдається отримати прямий доступ до файлу, будь ласка, виберіть один з варіантів нижче:</string>
+    <string name="fileopen_source_unavailable">Файл недоступний</string>
+    <string name="fileopen_source_unavailable_info">Додаток, що ділився файлом (%1$s, більше не надає до нього доступ: %2$s. Будь ласка, поділіться файлом або відкрийте його через додаток заново, чи:</string>
+    <string name="fileopen_source_unavailable_message">Додаток, що ділився файлом (%1$s, більше не надає до нього доступ: %2$s. Будь ласка, поділіться файлом або відкрийте його через додаток заново.</string>
+    <string name="crash_on_intent_opening_title">Помилка обробки наміру</string>
+    <string name="string_send">Надіслати…</string>
+    <string name="crash_on_book_opening_no_engine_library">Додаток було встановлено без бібліотеки документного рушія на цей пристрій (%1$s), тому ви не можете відкрити жодної книги. Просимо перевстановити додаток з Google Play або встановити версію для вашого пристрою з GitHub.</string>
 </resources>
