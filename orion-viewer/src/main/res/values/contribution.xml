@@ -12,6 +12,11 @@
     <string name="contribution_review">\u2022 write a <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">review on Google Play</a> or any other platform</string>
 
     <string name="contribution_survey">Help to improve the application by doing the survey! (5–10 minutes)</string>
+    <string name="survey_title">User survey</string>
+    <string name="survey_purpose">The answers decide which features come next.</string>
+    <string name="survey_take">Take the survey</string>
+    <string name="survey_thanks">Thank you for taking part!</string>
+    <string name="survey_reopen">Open the survey again</string>
 
     <string name="survey_key" translatable="false">1FAIpQLSeCjLGntDv0LhsjaXH3796IBMpWTiTWTgUrCJo-oPRAXzdlqw</string>
 </resources>

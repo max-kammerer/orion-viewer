@@ -24,10 +24,12 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.graphics.drawable.GradientDrawable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -65,26 +67,7 @@ class OrionHelpActivity : OrionBaseActivity() {
             }
 
             if (isSurveyActive()) {
-                val survey = view.findViewById<TextView>(R.id.survey)
-                val key = resources.getString(R.string.survey_key)
-                val fullPath = "https://docs.google.com/forms/d/e/$key/viewform?usp=sf_link"
-
-                val spannable = SpannableStringBuilder(survey.text)
-                val onClick = object : ClickableSpan() {
-                    override fun onClick(widget: View) {
-                        /* Turns the "!" on the tab off, here and in the file manager, until the next survey. */
-                        (activity as? OrionBaseActivity)?.globalOptions?.let {
-                            it.saveStringProperty(it.OPENED_SURVEY.key, key)
-                        }
-                        val uri = Uri.parse(fullPath)
-                        val intent = Intent(Intent.ACTION_VIEW, uri)
-                        startActivity(intent)
-                    }
-                }
-                spannable.setSpan(onClick, 0, spannable.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                survey.text = spannable
-                survey.movementMethod = LinkMovementMethod.getInstance();
-                survey.visibility = View.VISIBLE
+                showSurveyCard(view)
             }
         }
     }
@@ -143,6 +126,57 @@ class OrionHelpActivity : OrionBaseActivity() {
             else R.drawable.contribution
     }
 
+}
+
+/**
+ * The survey invitation: a card with a button while the survey hasn't been opened, then a
+ * thank-you with a link to open it again. Follows the stored key, so it switches at the click.
+ */
+private fun OrionHelpActivity.ContributionFragment.showSurveyCard(view: View) {
+    val activity = requireActivity() as OrionBaseActivity
+    val key = getString(R.string.survey_key)
+    val card = view.findViewById<View>(R.id.survey_card)
+    card.background = surveyCardBackground(card)
+    card.visibility = View.VISIBLE
+
+    val open = View.OnClickListener {
+        activity.globalOptions.saveStringProperty(activity.globalOptions.OPENED_SURVEY.key, key)
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.google.com/forms/d/e/$key/viewform?usp=sf_link")))
+    }
+    val title = view.findViewById<TextView>(R.id.survey_title)
+    val description = view.findViewById<View>(R.id.survey_text)
+    val purpose = view.findViewById<View>(R.id.survey_purpose)
+    val take = view.findViewById<View>(R.id.survey_take).apply { setOnClickListener(open) }
+    val reopen = view.findViewById<TextView>(R.id.survey_reopen).apply {
+        val link = SpannableStringBuilder(text)
+        link.setSpan(object : ClickableSpan() {
+            override fun onClick(widget: View) = open.onClick(widget)
+        }, 0, link.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        this.text = link
+        movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    activity.globalOptions.OPENED_SURVEY.observe(viewLifecycleOwner) { opened ->
+        val done = opened == key
+        title.setText(if (done) R.string.survey_thanks else R.string.survey_title)
+        description.visibility = if (done) View.GONE else View.VISIBLE
+        purpose.visibility = if (done) View.GONE else View.VISIBLE
+        take.visibility = if (done) View.GONE else View.VISIBLE
+        reopen.visibility = if (done) View.VISIBLE else View.GONE
+    }
+}
+
+/* Built in code: a shape in xml can't take a theme color on Android 4. */
+private fun surveyCardBackground(card: View): GradientDrawable {
+    val value = TypedValue()
+    card.context.theme.resolveAttribute(androidx.appcompat.R.attr.colorAccent, value, true)
+    val accent = value.data
+    val density = card.resources.displayMetrics.density
+    return GradientDrawable().apply {
+        cornerRadius = 8 * density
+        setStroke((1.5f * density).toInt().coerceAtLeast(1), accent)
+        setColor((accent and 0x00ffffff) or 0x1f000000)
+    }
 }
 
 internal class HelpSimplePagerAdapter(fm: androidx.fragment.app.FragmentManager) : FragmentStatePagerAdapter(fm) {

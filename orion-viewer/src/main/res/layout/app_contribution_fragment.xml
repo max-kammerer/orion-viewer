@@ -19,6 +19,54 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!-- On top, where the "!" on the tab leads; the background is set in code from the theme's accent. -->
+        <LinearLayout
+            android:id="@+id/survey_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:orientation="vertical"
+            android:padding="12dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/survey_title"
+                style="@style/General_Contribution_TextView"
+                android:gravity="center_vertical"
+                android:text="@string/survey_title"
+                android:textSize="@dimen/text_size_large"
+                android:textStyle="bold"
+                app:drawableLeftCompat="@drawable/priority" />
+
+            <TextView
+                android:id="@+id/survey_text"
+                style="@style/General_Contribution_TextView"
+                android:layout_marginTop="4dp"
+                android:text="@string/contribution_survey" />
+
+            <TextView
+                android:id="@+id/survey_purpose"
+                style="@style/General_Contribution_TextView"
+                android:layout_marginTop="4dp"
+                android:text="@string/survey_purpose" />
+
+            <Button
+                android:id="@+id/survey_take"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp"
+                android:text="@string/survey_take" />
+
+            <TextView
+                android:id="@+id/survey_reopen"
+                style="@style/General_Contribution_TextView"
+                android:layout_marginTop="4dp"
+                android:text="@string/survey_reopen"
+                android:visibility="gone" />
+        </LinearLayout>
+
         <TextView
             android:id="@+id/intro"
             style="@style/General_Contribution_TextView"
@@ -60,14 +108,6 @@
             android:paddingLeft="20dp"
             android:text="@string/contribution_design" />
 
-        <TextView
-            android:id="@+id/survey"
-            style="@style/General_Contribution_TextView"
-            android:textSize="@dimen/text_size_large"
-            android:paddingTop="20dp"
-            android:text="@string/contribution_survey"
-            app:drawableLeftCompat="@drawable/priority"
-            android:visibility="gone"/>
 
     </LinearLayout>
 </ScrollView>
