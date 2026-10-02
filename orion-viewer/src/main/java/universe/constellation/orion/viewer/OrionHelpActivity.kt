@@ -63,8 +63,7 @@ class OrionHelpActivity : OrionBaseActivity() {
                 }
             }
 
-            val surveyEndDate = GregorianCalendar(2026, Calendar.NOVEMBER, 30).time
-            if (Date().before(surveyEndDate)) {
+            if (isSurveyActive()) {
                 val survey = view.findViewById<TextView>(R.id.survey)
                 val key = resources.getString(R.string.survey_key)
                 val fullPath = "https://docs.google.com/forms/d/e/$key/viewform?usp=sf_link"
@@ -108,7 +107,8 @@ class OrionHelpActivity : OrionBaseActivity() {
         about?.setContentDescription(R.string.menu_about_text)
 
         tabLayout.getTabAt(2)?.apply {
-            setIcon(R.drawable.contribution)
+            /* With a "!" while the survey is on: the invitation is on this tab only. */
+            setIcon(if (isSurveyActive()) R.drawable.contribution_survey else R.drawable.contribution)
             setContentDescription(R.string.menu_about_text)
         }
     }
@@ -125,6 +125,10 @@ class OrionHelpActivity : OrionBaseActivity() {
 
     companion object {
         const val OPEN_ABOUT_TAB = "OPEN_ABOUT"
+
+        private val surveyEndDate = GregorianCalendar(2026, Calendar.NOVEMBER, 30).time
+
+        fun isSurveyActive(): Boolean = Date().before(surveyEndDate)
     }
 
 }
