@@ -8,6 +8,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Debug
 import android.view.*
@@ -217,7 +218,12 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 }
             }
         } else {
-            analytics.error(RuntimeException("Unexpected state $intent"))
+            /* The activity is exported for VIEW intents, so any app may start it by name without a
+               book; the referrer names that app (usually "android-app://<package>"). */
+            val referrer = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) referrer else null
+            val error = RuntimeException("Unexpected state $intent, referrer=$referrer")
+            log(error)
+            analytics.error(error)
         }
     }
 

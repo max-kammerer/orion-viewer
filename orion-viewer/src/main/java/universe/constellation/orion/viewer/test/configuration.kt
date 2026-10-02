@@ -1,10 +1,17 @@
 package universe.constellation.orion.viewer.test
 
 import android.content.Intent
+import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.prefs.GlobalOptions
 
+/*
+ * Test-only hooks. The viewer is exported for VIEW intents, so any app can send it these extras:
+ * in a release build they would let it change the settings or wipe them all on close. They work
+ * in debug builds only, which is what the instrumentation tests run on.
+ */
 internal fun OrionViewerActivity.updateGlobalOptionsFromIntent(intent: Intent): Boolean {
+    if (!BuildConfig.DEBUG) return false
     if (!intent.hasExtra(GlobalOptions.TEST_FLAG) ||
         !intent.getBooleanExtra(GlobalOptions.TEST_FLAG, false)) {
         return false
@@ -43,6 +50,7 @@ internal fun OrionViewerActivity.updateGlobalOptionsFromIntent(intent: Intent): 
 }
 
 internal fun OrionViewerActivity.resetSettingInTest(intent: Intent) {
+    if (!BuildConfig.DEBUG) return
     if (!intent.hasExtra(GlobalOptions.TEST_FLAG) ||
         !intent.getBooleanExtra(GlobalOptions.TEST_FLAG, false)) {
         return
