@@ -246,6 +246,12 @@ class GlobalOptions(
     /** The query of the latest search in any book: what the search box offers in a book not searched yet. */
     val LAST_SEARCH_QUERY = pref("LAST_SEARCH_QUERY", "")
 
+    /**
+     * The key (R.string.survey_key) of the survey whose link was opened last: the "!" on the
+     * contribution tab is shown only for another one, so a new survey brings it back.
+     */
+    val OPENED_SURVEY = pref("OPENED_SURVEY", "")
+
     fun <T> subscribe(pref: Preference<T>) {
         registeredPreferences.put(pref.key, pref)?.also {
             errorInDebug("Pref with key ${pref.key} already registered: $pref ")

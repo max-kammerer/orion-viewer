@@ -20,6 +20,7 @@
 package universe.constellation.orion.viewer
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -71,6 +72,10 @@ class OrionHelpActivity : OrionBaseActivity() {
                 val spannable = SpannableStringBuilder(survey.text)
                 val onClick = object : ClickableSpan() {
                     override fun onClick(widget: View) {
+                        /* Turns the "!" on the tab off, here and in the file manager, until the next survey. */
+                        (activity as? OrionBaseActivity)?.globalOptions?.let {
+                            it.saveStringProperty(it.OPENED_SURVEY.key, key)
+                        }
                         val uri = Uri.parse(fullPath)
                         val intent = Intent(Intent.ACTION_VIEW, uri)
                         startActivity(intent)
@@ -106,10 +111,9 @@ class OrionHelpActivity : OrionBaseActivity() {
         about?.setIcon(R.drawable.new_info)
         about?.setContentDescription(R.string.menu_about_text)
 
-        tabLayout.getTabAt(2)?.apply {
-            /* With a "!" while the survey is on: the invitation is on this tab only. */
-            setIcon(if (isSurveyActive()) R.drawable.contribution_survey else R.drawable.contribution)
-            setContentDescription(R.string.menu_about_text)
+        tabLayout.getTabAt(2)?.let { tab ->
+            tab.setContentDescription(R.string.menu_about_text)
+            globalOptions.OPENED_SURVEY.observe(this) { tab.setIcon(contributionTabIcon(this, it)) }
         }
     }
 
@@ -129,6 +133,14 @@ class OrionHelpActivity : OrionBaseActivity() {
         private val surveyEndDate = GregorianCalendar(2026, Calendar.NOVEMBER, 30).time
 
         fun isSurveyActive(): Boolean = Date().before(surveyEndDate)
+
+        /**
+         * With a "!" while the survey is on and its link hasn't been opened yet ([openedSurvey] is
+         * the key of the last one opened): the invitation is on this tab only.
+         */
+        fun contributionTabIcon(context: Context, openedSurvey: String): Int =
+            if (isSurveyActive() && openedSurvey != context.getString(R.string.survey_key)) R.drawable.contribution_survey
+            else R.drawable.contribution
     }
 
 }

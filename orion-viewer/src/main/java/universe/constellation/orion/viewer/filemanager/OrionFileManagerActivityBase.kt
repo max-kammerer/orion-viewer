@@ -273,10 +273,11 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         }
 
         if (addSupportTab) {
-            tabLayout.getTabAt(2)?.apply {
-                /* With a "!" while the survey is on, as on the help screen. */
-                icon = getVectorDrawable(if (OrionHelpActivity.isSurveyActive()) R.drawable.contribution_survey else R.drawable.contribution)
-                setText(R.string.file_manager_contribution)
+            tabLayout.getTabAt(2)?.let { tab ->
+                tab.setText(R.string.file_manager_contribution)
+                globalOptions.OPENED_SURVEY.observe(this) {
+                    tab.icon = getVectorDrawable(OrionHelpActivity.contributionTabIcon(this, it))
+                }
             }
         }
     }
