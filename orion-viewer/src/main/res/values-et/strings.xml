@@ -53,4 +53,5 @@
     <string name="link_copy">Kopeeri</string>
     <string name="link_no_handler">Ükski rakendus ei oska seda linki avada</string>
     <string name="link_copied">Link on kopeeritud</string>
+    <string name="page_cannot_be_displayed">%1$d. lehe kuvamine ei õnnestu</string>
 </resources>
