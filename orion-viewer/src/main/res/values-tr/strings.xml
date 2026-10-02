@@ -53,4 +53,5 @@
     <string name="link_copy">Kopyala</string>
     <string name="link_no_handler">Bu bağlantıyı açabilen uygulama yok</string>
     <string name="link_copied">Bağlantı kopyalandı</string>
+    <string name="page_cannot_be_displayed">%1$d. sayfa görüntülenemiyor</string>
 </resources>
