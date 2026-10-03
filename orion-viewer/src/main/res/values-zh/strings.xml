@@ -53,4 +53,5 @@
     <string name="link_copy">复制</string>
     <string name="link_no_handler">没有应用能打开此链接</string>
     <string name="link_copied">已复制链接</string>
+    <string name="page_cannot_be_displayed">无法显示第 %1$d 页</string>
 </resources>
