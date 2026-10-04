@@ -176,7 +176,10 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
         }
         val after = ProcessMemory.snapshot()
         log("Memory trim, level $level: ${document ?: "no document"} cache kept at $keepPercent%, native heap ${before}M -> ${after.nativeHeapMb}M, $after")
-        analytics.memoryTrim(level, keepPercent, document?.javaClass?.simpleName ?: "none", before, after.nativeHeapMb, after.vmSizeMb)
+        /* Without a book there is next to nothing to trim: such events were about a quarter of all
+           and only noise (a 4 MB heap), so they aren't reported. The trim itself still runs. */
+        if (document == null) return
+        analytics.memoryTrim(level, keepPercent, document.javaClass.simpleName, before, after.nativeHeapMb, after.vmSizeMb)
     }
 
     fun updateLanguage(res: Resources) {
