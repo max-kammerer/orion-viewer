@@ -24,3 +24,14 @@ fun calcFZCacheSize(deviceMemory: Long): Long {
  * dictionaries: a scanned page takes 0.7-2 MB and the cache undercounts it by about a third.
  * A quarter of the mupdf store keeps a handful of pages without competing with the bitmaps. */
 fun calcDjvuCacheSize(deviceMemory: Long): Long = calcFZCacheSize(deviceMemory) / 2
+
+/* Limit (in bytes of the decoded pixmap, after l2factor downsampling) up to which page
+ * images are decoded and cached whole for tile reuse, see orion_image_decode in orion_bitmap.c.
+ * A 600 dpi A4 scan is ~35 MB at 1 byte/pixel, the same color page three times that. */
+fun calcFullImageDecodeBytes(deviceMemory: Long): Long {
+    return when {
+        deviceMemory <= M_1024_MB -> 16L
+        deviceMemory <= M_2048_MB -> 24L
+        else -> 40L
+    } shl 20
+}

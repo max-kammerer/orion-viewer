@@ -36,6 +36,7 @@ import com.artifex.mupdfdemo.TextWord
 import universe.constellation.orion.viewer.Bitmap
 import universe.constellation.orion.viewer.PageSize
 import universe.constellation.orion.viewer.device.calcFZCacheSize
+import universe.constellation.orion.viewer.device.calcFullImageDecodeBytes
 import universe.constellation.orion.viewer.document.AbstractDocument
 import universe.constellation.orion.viewer.document.AbstractPage
 import universe.constellation.orion.viewer.document.LinkTarget
@@ -49,6 +50,7 @@ import universe.constellation.orion.viewer.errorInDebugOr
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.describeFileHeader
 import universe.constellation.orion.viewer.mupdfLoaded
+import universe.constellation.orion.viewer.prefs.OrionApplication
 import universe.constellation.orion.viewer.shrinkMupdfStore
 import universe.constellation.orion.viewer.traceTiming
 
@@ -207,6 +209,15 @@ class PdfDocument @Throws(Exception::class) constructor(
     }
 
     private val core = MuPDFCore(filePath)
+
+    init {
+        /* After the core: the native method lives in libmupdf_java, which the core loads. */
+        if (!fullDecodeLimitSet) {
+            fullDecodeLimitSet = true
+            val memory = OrionApplication.getTotalMemory(OrionApplication.instance)
+            setFullImageDecodeBytes(calcFullImageDecodeBytes(memory ?: 0))
+        }
+    }
 
     /* Called under the core lock: mupdf link loading and destination resolving aren't thread safe. */
     private fun extractLinks(page: Page): List<PageLink> {
@@ -395,6 +406,14 @@ class PdfDocument @Throws(Exception::class) constructor(
         private const val MAX_PAGE_TREE_DEPTH = 64
 
         private const val MAX_COUNTED_LEAVES = 100_000
+
+        @Volatile
+        private var fullDecodeLimitSet = false
+
+        /* Images whose decoded pixmap (after downsampling) is up to this many bytes are
+         * decoded and cached whole, so tiles of a scanned page share one cached pixmap */
+        @JvmStatic
+        external fun setFullImageDecodeBytes(bytes: Long)
 
     }
 }

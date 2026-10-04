@@ -13,6 +13,56 @@ void orion_setContrast(JNIEnv *env, jobject thiz, jint contrast1);
 void orion_updateContrast(unsigned char *data, int startRow, int startCol, int  endRow, int endCol, int width);
 
 #ifdef ORION_PDF
+#include <stdint.h>
+#include "mupdf/fitz.h"
+
+/* Images whose decoded pixmap (after l2factor downsampling) takes up to this
+ * many bytes are decoded and cached whole, so tiled rendering reuses one cached
+ * pixmap instead of re-decoding the page image per tile. Settable from Java. */
+static volatile int64_t orion_full_decode_max_bytes = (int64_t)40 << 20;
+
+JNIEXPORT void
+JNICALL JNI_FN(PdfDocument_setFullImageDecodeBytes)(JNIEnv *env, jclass clazz, jlong bytes)
+{
+    orion_full_decode_max_bytes = bytes;
+}
+
+/* Sized image decode tuning callback (fz_tune_image_decode_sized), registered
+ * from mupdf's init_base_context; n is bytes per decoded pixel.
+ * Tiled rendering asks for a different subarea of the same image for every
+ * tile, so each tile gets its own store key and scanned pages (one huge
+ * JBIG2/JPEG per page) are re-decoded from scratch per tile. Expanding the
+ * subarea to the whole image makes the first tile decode and cache the full
+ * pixmap once; every other tile and later scrolling reuse it from the store.
+ * The limit is in bytes: a 1 byte/pixel scan may be large, a color image of
+ * the same size takes 3-4 times more. Images too large to cache keep the
+ * stock fz_default_image_decode logic. */
+void orion_image_decode(void *arg, int w, int h, int n, int l2factor, fz_irect *subarea)
+{
+	(void)arg;
+
+	if (((((int64_t)w * h) >> (2 * l2factor)) * n) <= orion_full_decode_max_bytes ||
+		(int64_t)(subarea->x1 - subarea->x0) * (subarea->y1 - subarea->y0) >= ((int64_t)w * h / 10) * 9)
+	{
+		subarea->x0 = 0;
+		subarea->y0 = 0;
+		subarea->x1 = w;
+		subarea->y1 = h;
+	}
+	else
+	{
+		/* Clip to the edges if they are within 1% */
+		if (subarea->x0 <= w/100)
+			subarea->x0 = 0;
+		if (subarea->y0 <= h/100)
+			subarea->y0 = 0;
+		if (subarea->x1 >= w*99/100)
+			subarea->x1 = w;
+		if (subarea->y1 >= h*99/100)
+			subarea->y1 = h;
+	}
+}
+
 JNIEXPORT void
 JNICALL JNI_FN(PdfDocument_setContrast)(JNIEnv * env, jobject thiz, jint contrast1)
 {

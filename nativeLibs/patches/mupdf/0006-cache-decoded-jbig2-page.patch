@@ -1,0 +1,222 @@
+diff --git a/include/mupdf/fitz/filter.h b/include/mupdf/fitz/filter.h
+index 1fe886026..9ef92a95d 100644
+--- a/include/mupdf/fitz/filter.h
++++ b/include/mupdf/fitz/filter.h
+@@ -207,6 +207,15 @@ fz_stream *fz_open_predict(fz_context *ctx, fz_stream *chain, int predictor, int
+ */
+ fz_stream *fz_open_jbig2d(fz_context *ctx, fz_stream *chain, fz_jbig2_globals *globals, int embedded);
+ 
++/**
++	jbig2 decompression filter that caches the decoded packed page
++	in the store, keyed by the raw compressed data buffer, so that
++	repeated (subarea) decodes of the same image become row copies.
++
++	raw may be NULL, disabling the caching.
++*/
++fz_stream *fz_open_jbig2d_cached(fz_context *ctx, fz_stream *chain, fz_jbig2_globals *globals, int embedded, fz_buffer *raw);
++
+ /**
+ 	Create a jbig2 globals record from a buffer.
+ 
+diff --git a/source/fitz/compressed-buffer.c b/source/fitz/compressed-buffer.c
+index f56fe3289..648d650e5 100644
+--- a/source/fitz/compressed-buffer.c
++++ b/source/fitz/compressed-buffer.c
+@@ -60,7 +60,12 @@ fz_open_image_decomp_stream_from_buffer(fz_context *ctx, fz_compressed_buffer *b
+ 
+ 	tail = fz_open_buffer(ctx, buffer->buffer);
+ 	fz_try(ctx)
+-		head = fz_open_image_decomp_stream(ctx, tail, &buffer->params, l2factor);
++	{
++		if (buffer->params.type == FZ_IMAGE_JBIG2)
++			head = fz_open_jbig2d_cached(ctx, tail, buffer->params.u.jbig2.globals, buffer->params.u.jbig2.embedded, buffer->buffer);
++		else
++			head = fz_open_image_decomp_stream(ctx, tail, &buffer->params, l2factor);
++	}
+ 	fz_always(ctx)
+ 		fz_drop_stream(ctx, tail);
+ 	fz_catch(ctx)
+diff --git a/source/fitz/filter-jbig2.c b/source/fitz/filter-jbig2.c
+index c8612e36f..b7d684df7 100644
+--- a/source/fitz/filter-jbig2.c
++++ b/source/fitz/filter-jbig2.c
+@@ -38,6 +38,79 @@ struct fz_jbig2_globals
+ 	fz_buffer *data;
+ };
+ 
++/* A decoded jbig2 page bitmap (packed 1bpp), cached in the store keyed by
++ * the raw compressed data buffer. jbig2 has no random access: any subarea or
++ * subsampled request costs a full page decode, so tiled rendering used to
++ * decode the same page once per tile. The packed page is 8 pixels per byte -
++ * 8x smaller than the expanded pixmap - and turns repeats into row copies.
++ *
++ * Memory: the page is cached on every decode, at full resolution. When the
++ * image decode tuning expands a tile request to the whole image (orion_image_decode
++ * in Orion), the downsampled full pixmap is cached too and serves all tiles, so
++ * at small zoom the packed copy is mostly redundant and can be larger than that
++ * pixmap (a 600 dpi A4 page: ~4.4 MB packed vs ~2 MB at l2factor 2, ~0.5 MB at 3).
++ * It only pays off when the l2factor changes (zoom across a power of two) or
++ * when the image is too big to be decoded whole. If the store gets tight, cache
++ * the packed page only for subarea requests (decide in compressed_image_get_pixmap,
++ * which knows the subarea) or only when it is not bigger than the pixmap at the
++ * requested l2factor. */
++typedef struct
++{
++	fz_storable storable;
++	fz_buffer *data;
++} fz_jbig2_page;
++
++static void
++fz_drop_jbig2_page_imp(fz_context *ctx, fz_storable *storable)
++{
++	fz_jbig2_page *page = (fz_jbig2_page *)storable;
++	fz_drop_buffer(ctx, page->data);
++	fz_free(ctx, page);
++}
++
++static int
++fz_jbig2_page_make_hash_key(fz_context *ctx, fz_store_hash *hash, void *key)
++{
++	hash->u.pi.ptr = key;
++	hash->u.pi.i = 0;
++	return 1;
++}
++
++static void *
++fz_jbig2_page_keep_key(fz_context *ctx, void *key)
++{
++	return fz_keep_buffer(ctx, key);
++}
++
++static void
++fz_jbig2_page_drop_key(fz_context *ctx, void *key)
++{
++	fz_drop_buffer(ctx, key);
++}
++
++static int
++fz_jbig2_page_cmp_key(fz_context *ctx, void *k0, void *k1)
++{
++	return k0 == k1;
++}
++
++static void
++fz_jbig2_page_format_key(fz_context *ctx, char *s, size_t n, void *key)
++{
++	fz_snprintf(s, n, "(jbig2 page %p)", key);
++}
++
++static const fz_store_type fz_jbig2_page_store_type =
++{
++	"fz_jbig2_page",
++	fz_jbig2_page_make_hash_key,
++	fz_jbig2_page_keep_key,
++	fz_jbig2_page_drop_key,
++	fz_jbig2_page_cmp_key,
++	fz_jbig2_page_format_key,
++	NULL
++};
++
+ typedef struct
+ {
+ 	fz_stream *chain;
+@@ -45,6 +118,8 @@ typedef struct
+ 	fz_jbig2_allocators alloc;
+ 	fz_jbig2_globals *gctx;
+ 	Jbig2Image *page;
++	fz_buffer *raw;		/* cache identity: the compressed data buffer */
++	fz_jbig2_page *cached;	/* when set, rows are served from the cache */
+ 	int idx;
+ 	unsigned char buffer[4096];
+ } fz_jbig2d;
+@@ -70,6 +145,9 @@ close_jbig2d(fz_context *ctx, void *state_)
+ 	fz_jbig2d *state = state_;
+ 	if (state->page)
+ 		jbig2_release_page(state->ctx, state->page);
++	if (state->cached)
++		fz_drop_storable(ctx, &state->cached->storable);
++	fz_drop_buffer(ctx, state->raw);
+ 	fz_drop_jbig2_globals(ctx, state->gctx);
+ 	jbig2_ctx_free(state->ctx);
+ 	fz_drop_stream(ctx, state->chain);
+@@ -92,7 +170,13 @@ next_jbig2d(fz_context *ctx, fz_stream *stm, size_t len)
+ 		len = sizeof(state->buffer);
+ 	ep = buf + len;
+ 
+-	if (!state->page)
++	if (!state->page && !state->cached)
++	{
++		if (state->raw)
++			state->cached = fz_find_item(ctx, fz_drop_jbig2_page_imp, state->raw, &fz_jbig2_page_store_type);
++	}
++
++	if (!state->page && !state->cached)
+ 	{
+ 		while (1)
+ 		{
+@@ -110,10 +194,42 @@ next_jbig2d(fz_context *ctx, fz_stream *stm, size_t len)
+ 		state->page = jbig2_page_out(state->ctx);
+ 		if (!state->page)
+ 			fz_throw(ctx, FZ_ERROR_LIBRARY, "no jbig2 image decoded");
++
++		if (state->raw)
++		{
++			/* Cache the packed page; a failure here only loses the caching. */
++			fz_jbig2_page *cache = NULL;
++			fz_try(ctx)
++			{
++				size_t size = (size_t)state->page->height * state->page->stride;
++				fz_jbig2_page *existing;
++				cache = fz_malloc_struct(ctx, fz_jbig2_page);
++				FZ_INIT_STORABLE(cache, 1, fz_drop_jbig2_page_imp);
++				cache->data = fz_new_buffer_from_copied_data(ctx, state->page->data, size);
++				existing = fz_store_item(ctx, state->raw, cache, size, &fz_jbig2_page_store_type);
++				if (existing)
++					fz_drop_storable(ctx, &existing->storable);
++				fz_drop_storable(ctx, &cache->storable);
++			}
++			fz_catch(ctx)
++			{
++				if (cache)
++					fz_drop_storable(ctx, &cache->storable);
++				fz_report_error(ctx);
++			}
++		}
+ 	}
+ 
+-	s = state->page->data;
+-	w = state->page->height * state->page->stride;
++	if (state->cached)
++	{
++		s = state->cached->data->data;
++		w = (int)state->cached->data->len;
++	}
++	else
++	{
++		s = state->page->data;
++		w = state->page->height * state->page->stride;
++	}
+ 	x = state->idx;
+ 	while (p < ep && x < w)
+ 		*p++ = s[x++] ^ 0xff;
+@@ -218,6 +334,12 @@ fz_drop_jbig2_globals_imp(fz_context *ctx, fz_storable *globals_)
+ 
+ fz_stream *
+ fz_open_jbig2d(fz_context *ctx, fz_stream *chain, fz_jbig2_globals *globals, int embedded)
++{
++	return fz_open_jbig2d_cached(ctx, chain, globals, embedded, NULL);
++}
++
++fz_stream *
++fz_open_jbig2d_cached(fz_context *ctx, fz_stream *chain, fz_jbig2_globals *globals, int embedded, fz_buffer *raw)
+ {
+ 	fz_jbig2d *state = NULL;
+ 	Jbig2Options options;
+@@ -245,6 +367,7 @@ fz_open_jbig2d(fz_context *ctx, fz_stream *chain, fz_jbig2_globals *globals, int
+ 
+ 	state->page = NULL;
+ 	state->idx = 0;
++	state->raw = fz_keep_buffer(ctx, raw);
+ 	state->chain = fz_keep_stream(ctx, chain);
+ 
+ 	return fz_new_stream(ctx, state, next_jbig2d, close_jbig2d);

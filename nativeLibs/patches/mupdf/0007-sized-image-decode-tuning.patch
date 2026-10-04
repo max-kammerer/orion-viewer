@@ -1,0 +1,98 @@
+diff --git a/include/mupdf/fitz/context.h b/include/mupdf/fitz/context.h
+index e2553b7c3..c41ecaf8f 100644
+--- a/include/mupdf/fitz/context.h
++++ b/include/mupdf/fitz/context.h
+@@ -507,6 +507,22 @@ typedef int (fz_tune_image_scale_fn)(void *arg, int dst_w, int dst_h, int src_w,
+ */
+ void fz_tune_image_decode(fz_context *ctx, fz_tune_image_decode_fn *image_decode, void *arg);
+ 
++/**
++	Like fz_tune_image_decode_fn, but also told how big the decoded
++	pixmap will be: n is the number of bytes per decoded pixel
++	(components plus alpha; 1 for an image mask). This lets a tuning
++	function bound the memory a whole-image decode would take, which
++	w, h and l2factor alone can't tell for gray vs color images.
++*/
++typedef void (fz_tune_image_decode_sized_fn)(void *arg, int w, int h, int n, int l2factor, fz_irect *subarea);
++
++/**
++	Set a sized tuning function for image decode. When set, it is
++	used instead of the one given to fz_tune_image_decode. Pass NULL
++	to go back to that one.
++*/
++void fz_tune_image_decode_sized(fz_context *ctx, fz_tune_image_decode_sized_fn *image_decode, void *arg);
++
+ /**
+ 	Set the tuning function to use for
+ 	image scaling.
+diff --git a/source/fitz/context-imp.h b/source/fitz/context-imp.h
+index 111038bcd..fa757ea84 100644
+--- a/source/fitz/context-imp.h
++++ b/source/fitz/context-imp.h
+@@ -45,6 +45,8 @@ struct fz_tuning_context
+ 	int refs;
+ 	fz_tune_image_decode_fn *image_decode;
+ 	void *image_decode_arg;
++	fz_tune_image_decode_sized_fn *image_decode_sized;
++	void *image_decode_sized_arg;
+ 	fz_tune_image_scale_fn *image_scale;
+ 	void *image_scale_arg;
+ 	int image_rendering;
+diff --git a/source/fitz/context.c b/source/fitz/context.c
+index 9549b55cf..0dabeeb0b 100644
+--- a/source/fitz/context.c
++++ b/source/fitz/context.c
+@@ -144,6 +144,12 @@ void fz_tune_image_decode(fz_context *ctx, fz_tune_image_decode_fn *image_decode
+ 	ctx->tuning->image_decode_arg = arg;
+ }
+ 
++void fz_tune_image_decode_sized(fz_context *ctx, fz_tune_image_decode_sized_fn *image_decode, void *arg)
++{
++	ctx->tuning->image_decode_sized = image_decode;
++	ctx->tuning->image_decode_sized_arg = arg;
++}
++
+ void fz_tune_image_scale(fz_context *ctx, fz_tune_image_scale_fn *image_scale, void *arg)
+ {
+ 	ctx->tuning->image_scale = image_scale ? image_scale : fz_default_image_scale;
+diff --git a/source/fitz/image.c b/source/fitz/image.c
+index 79b766c14..5e4057abf 100644
+--- a/source/fitz/image.c
++++ b/source/fitz/image.c
+@@ -387,6 +387,24 @@ static void fz_adjust_image_subarea(fz_context *ctx, fz_image *image, fz_irect *
+ 		subarea->y1 = image->h;
+ }
+ 
++/* Bytes per pixel of the pixmap a decode of this image produces: indexed
++ * images are expanded to their base space, a color key adds alpha, an image
++ * mask is alpha only. */
++static int decoded_pixel_size(fz_context *ctx, fz_image *image)
++{
++	fz_colorspace *cs = image->colorspace;
++	int n;
++
++	if (cs == NULL)
++		return 1;
++	if (fz_colorspace_is_indexed(ctx, cs))
++		cs = fz_base_colorspace(ctx, cs);
++	n = fz_colorspace_n(ctx, cs);
++	if (image->use_colorkey)
++		n++;
++	return n;
++}
++
+ static void fz_compute_image_key(fz_context *ctx, fz_image *image, fz_matrix *ctm,
+ 	fz_image_key *key, const fz_irect *subarea, int l2factor, int *w, int *h, int *dw, int *dh)
+ {
+@@ -404,7 +422,10 @@ static void fz_compute_image_key(fz_context *ctx, fz_image *image, fz_matrix *ct
+ 	else
+ 	{
+ 		key->rect = *subarea;
+-		ctx->tuning->image_decode(ctx->tuning->image_decode_arg, image->w, image->h, key->l2factor, &key->rect);
++		if (ctx->tuning->image_decode_sized)
++			ctx->tuning->image_decode_sized(ctx->tuning->image_decode_sized_arg, image->w, image->h, decoded_pixel_size(ctx, image), key->l2factor, &key->rect);
++		else
++			ctx->tuning->image_decode(ctx->tuning->image_decode_arg, image->w, image->h, key->l2factor, &key->rect);
+ 		fz_adjust_image_subarea(ctx, image, &key->rect, key->l2factor);
+ 	}
+ 

@@ -1,0 +1,24 @@
+diff --git a/platform/java/jni/context.c b/platform/java/jni/context.c
+index ef09dd5a5..9c846833d 100644
+--- a/platform/java/jni/context.c
++++ b/platform/java/jni/context.c
+@@ -114,6 +114,9 @@ static void log_callback(void *user, const char *message)
+ 	jni_detach_thread(detach);
+ }
+ 
++/* Orion: image decode tuning, implemented in orion_bitmap.c. */
++extern void orion_image_decode(void *arg, int w, int h, int n, int l2factor, fz_irect *subarea);
++
+ static int init_base_context(JNIEnv *env)
+ {
+ 	int i;
+@@ -167,6 +170,9 @@ static int init_base_context(JNIEnv *env)
+ 	fz_set_error_callback(base_context, log_callback, (void *) 1);
+ 	fz_set_warning_callback(base_context, log_callback, (void *) 0);
+ 
++	/* Shared by all cloned contexts (the tuning context is refcounted). */
++	fz_tune_image_decode_sized(base_context, orion_image_decode, NULL);
++
+ 	fz_try(base_context)
+ 		fz_register_document_handlers(base_context);
+ 	fz_catch(base_context)
