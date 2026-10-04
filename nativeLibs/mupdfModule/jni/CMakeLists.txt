@@ -84,6 +84,10 @@ ${MUPDF_PATH}/scripts/cmark-gfm
 
 target_compile_definitions(mupdf_core PRIVATE -D_FILE_OFFSET_BITS=32 -DTOFU_NOTO -DTOFU_CJK -DTOFU_SIL -DAA_BITS=8 -DOPJ_STATIC -DOPJ_HAVE_INTTYPES_H -DOPJ_HAVE_STDINT_H -DHAVE_LCMS2MT -DHAVE_LIBARCHIVE -DFZ_ENABLE_BARCODE=0 -DCMARK_GFM_STATIC_DEFINE)
 target_compile_options(mupdf_core PRIVATE -ffunction-sections -fdata-sections)
+# Glyph cache 4 MB instead of 1 MB (patch 0005 makes it overridable): with stroked
+# glyphs cached, one page of CJK text drawn with fill+stroke doesn't fit in 1 MB and
+# the LRU thrashes; 4 MB renders such books ~2x faster, 16 MB adds little.
+target_compile_definitions(mupdf_core PRIVATE -DMAX_CACHE_SIZE=4194304)
 
 # --- liblzma (decoders only): LZMA/LZMA2 for 7z support in libarchive ---
 

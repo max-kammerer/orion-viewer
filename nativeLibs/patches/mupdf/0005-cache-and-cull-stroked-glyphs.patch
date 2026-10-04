@@ -1,0 +1,189 @@
+diff --git a/source/fitz/draw-device.c b/source/fitz/draw-device.c
+index edb3c686f..c14a0f942 100644
+--- a/source/fitz/draw-device.c
++++ b/source/fitz/draw-device.c
+@@ -1192,6 +1192,7 @@ fz_draw_stroke_text(fz_context *ctx, fz_device *devp, const fz_text *text, const
+ 	int aa = fz_rasterizer_text_aa_level(dev->rast);
+ 	fz_overprint op = { { 0 } };
+ 	fz_overprint *eop;
++	float stroke_pad;
+ 
+ 	assert((color_params.ri & FZ_RI_IN_SOFTMASK) == 0);
+ 	if (state->in_smask)
+@@ -1211,11 +1212,19 @@ fz_draw_stroke_text(fz_context *ctx, fz_device *devp, const fz_text *text, const
+ 
+ 	eop = resolve_color(ctx, &op, color, colorspace, alpha, color_params, colorbv, state->dest, dev->overprint_possible);
+ 
++	/* How far a stroke can reach outside the glyph outline: half the
++	 * line width, times the miter limit for miter joins (at least 2,
++	 * which covers round and square caps and joins), plus a margin for
++	 * subpixel placement and antialiasing. */
++	stroke_pad = stroke->linewidth * fz_matrix_expansion(ctm) / 2 * fz_max(stroke->miterlimit, 2) + 2;
++
+ 	for (span = text->head; span; span = span->next)
+ 	{
+ 		fz_matrix tm, trm;
+ 		fz_glyph *glyph;
+ 		int gid;
++		/* Only trust per-glyph bounds computed from the actual outline. */
++		int cull = isfinite(stroke_pad) && span->font->ft_face && span->font->use_glyph_bbox;
+ 
+ 		tm = span->trm;
+ 
+@@ -1229,6 +1238,16 @@ fz_draw_stroke_text(fz_context *ctx, fz_device *devp, const fz_text *text, const
+ 			tm.f = span->items[i].y;
+ 			trm = fz_concat(tm, ctm);
+ 
++			/* Skip glyphs that can't touch the scissor (e.g. the rest of
++			 * a paragraph outside the current tile); stroking them is
++			 * expensive. */
++			if (cull && gid < span->font->glyph_count)
++			{
++				fz_irect bbox = fz_irect_from_rect(fz_expand_rect(fz_bound_glyph(ctx, span->font, gid, trm), stroke_pad));
++				if (fz_is_empty_irect(fz_intersect_irect(bbox, state->scissor)))
++					continue;
++			}
++
+ 			glyph = fz_render_stroked_glyph(ctx, span->font, gid, &trm, ctm, model, stroke, &state->scissor, aa);
+ 			if (glyph)
+ 			{
+diff --git a/source/fitz/draw-glyph.c b/source/fitz/draw-glyph.c
+index 8dbd8d552..aba6bbb79 100644
+--- a/source/fitz/draw-glyph.c
++++ b/source/fitz/draw-glyph.c
+@@ -27,9 +27,12 @@
+ 
+ #include <string.h>
+ #include <math.h>
++#include <limits.h>
+ 
+ #define MAX_GLYPH_SIZE 256
++#ifndef MAX_CACHE_SIZE
+ #define MAX_CACHE_SIZE (1024*1024)
++#endif
+ 
+ #define GLYPH_HASH_LEN 509
+ 
+@@ -43,6 +46,15 @@ typedef struct
+ 	uint8_t aa;
+ 	uint8_t cs;
+ 	uint16_t pad;
++	/* Stroked glyphs only, all zero for filled ones. These are the
++	 * values that reach the FreeType stroker. */
++	int stroke_width;
++	int stroke_miter;
++	uint8_t stroked;
++	uint8_t stroke_join;
++	uint8_t stroke_cap;
++	uint8_t pad2;
++	uint32_t pad3;
+ } fz_glyph_key;
+ 
+ typedef struct fz_glyph_cache_entry
+@@ -225,22 +237,6 @@ fz_subpixel_adjust(fz_context *ctx, fz_matrix *ctm, fz_matrix *subpix_ctm, unsig
+ 	return size;
+ }
+ 
+-fz_glyph *
+-fz_render_stroked_glyph(fz_context *ctx, fz_font *font, int gid, fz_matrix *trm, fz_matrix ctm, fz_colorspace *model, const fz_stroke_state *stroke, const fz_irect *scissor, int aa)
+-{
+-	if (fz_font_ft_face(ctx, font))
+-	{
+-		fz_matrix subpix_trm;
+-		unsigned char qe, qf;
+-
+-		if (stroke->dash_len > 0)
+-			return NULL;
+-		(void)fz_subpixel_adjust(ctx, trm, &subpix_trm, &qe, &qf);
+-		return fz_render_ft_stroked_glyph(ctx, font, gid, subpix_trm, ctm, stroke, aa);
+-	}
+-	return fz_render_glyph(ctx, font, gid, trm, model, scissor, 1, aa);
+-}
+-
+ static unsigned do_hash(unsigned char *s, int len)
+ {
+ 	unsigned val = 0;
+@@ -277,8 +273,8 @@ move_to_front(fz_glyph_cache *cache, fz_glyph_cache_entry *entry)
+ 	entry->lru_prev = NULL;
+ }
+ 
+-fz_glyph *
+-fz_render_glyph(fz_context *ctx, fz_font *font, int gid, fz_matrix *ctm, fz_colorspace *model, const fz_irect *scissor, int alpha, int aa)
++static fz_glyph *
++render_glyph(fz_context *ctx, fz_font *font, int gid, fz_matrix *ctm, fz_colorspace *model, const fz_irect *scissor, int aa, const fz_stroke_state *stroke, fz_matrix stroke_ctm)
+ {
+ 	fz_glyph_cache *cache;
+ 	fz_glyph_key key;
+@@ -303,6 +299,11 @@ fz_render_glyph(fz_context *ctx, fz_font *font, int gid, fz_matrix *ctm, fz_colo
+ 		scissor = &fz_infinite_irect;
+ 		do_cache = 1;
+ 	}
++	else if (stroke)
++	{
++		/* Too big to cache; render it anyway, as before. */
++		do_cache = 0;
++	}
+ 	else
+ 	{
+ 		if (is_ft_font)
+@@ -321,6 +322,22 @@ fz_render_glyph(fz_context *ctx, fz_font *font, int gid, fz_matrix *ctm, fz_colo
+ 	if (t == FZ_COLORSPACE_SEPARATION || t == FZ_COLORSPACE_INDEXED)
+ 		do_cache = 0;
+ 
++	if (stroke)
++	{
++		/* Stroked glyphs are rendered by FreeType straight to a
++		 * coverage mask, so the colorspace plays no part. Key on
++		 * exactly what fz_render_ft_stroked_glyph hands to the
++		 * stroker. */
++		float miter = stroke->miterlimit * 65536;
++		t = 0;
++		do_cache = do_cache && miter >= INT_MIN && miter <= INT_MAX;
++		key.stroked = 1;
++		key.stroke_width = stroke->linewidth * fz_matrix_expansion(stroke_ctm) * 64 / 2;
++		key.stroke_miter = do_cache ? (int)miter : 0;
++		key.stroke_join = stroke->linejoin;
++		key.stroke_cap = stroke->start_cap;
++	}
++
+ 	cache = ctx->glyph_cache;
+ 
+ 	key.font = font;
+@@ -354,7 +371,11 @@ fz_render_glyph(fz_context *ctx, fz_font *font, int gid, fz_matrix *ctm, fz_colo
+ 
+ 	fz_try(ctx)
+ 	{
+-		if (is_ft_font)
++		if (stroke)
++		{
++			val = fz_render_ft_stroked_glyph(ctx, font, gid, subpix_ctm, stroke_ctm, stroke, aa);
++		}
++		else if (is_ft_font)
+ 		{
+ 			val = fz_render_ft_glyph(ctx, font, gid, subpix_ctm, aa);
+ 		}
+@@ -458,6 +479,24 @@ unlock_and_return_val:
+ 	return val;
+ }
+ 
++fz_glyph *
++fz_render_glyph(fz_context *ctx, fz_font *font, int gid, fz_matrix *ctm, fz_colorspace *model, const fz_irect *scissor, int alpha, int aa)
++{
++	return render_glyph(ctx, font, gid, ctm, model, scissor, aa, NULL, fz_identity);
++}
++
++fz_glyph *
++fz_render_stroked_glyph(fz_context *ctx, fz_font *font, int gid, fz_matrix *trm, fz_matrix ctm, fz_colorspace *model, const fz_stroke_state *stroke, const fz_irect *scissor, int aa)
++{
++	if (fz_font_ft_face(ctx, font))
++	{
++		if (stroke->dash_len > 0)
++			return NULL;
++		return render_glyph(ctx, font, gid, trm, model, scissor, aa, stroke, ctm);
++	}
++	return fz_render_glyph(ctx, font, gid, trm, model, scissor, 1, aa);
++}
++
+ fz_pixmap *
+ fz_render_glyph_pixmap(fz_context *ctx, fz_font *font, int gid, fz_matrix *ctm, const fz_irect *scissor, int aa)
+ {
