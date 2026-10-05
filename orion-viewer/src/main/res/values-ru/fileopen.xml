@@ -30,4 +30,9 @@
     <string name="fileopen_cant_open">Невозможно открыть документ: %s.</string>
     <string name="fileopen_file_is_emppty">пустой файл</string>
     <string name="fileopen_no_pages">в документе нет страниц</string>
+    <string name="fileopen_content_unreadable">файл не в формате %1$s: его данные нечитаемы, возможно, файл повреждён или зашифрован другим приложением</string>
+    <string name="fileopen_content_zeros">файл заполнен нулями, вероятно, он не докачался или скопировался не полностью</string>
+    <string name="fileopen_content_other">файл не в формате %1$s, по содержимому это %2$s</string>
+    <string name="fileopen_content_text">обычный текст</string>
+    <string name="fileopen_content_web_page">веб-страница</string>
 </resources>

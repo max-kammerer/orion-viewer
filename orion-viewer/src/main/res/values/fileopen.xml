@@ -40,4 +40,9 @@
     <string name="fileopen_cant_open">Can\'t open the document: %s.</string>
     <string name="fileopen_file_is_emppty">file is empty</string>
     <string name="fileopen_no_pages">document has no pages</string>
+    <string name="fileopen_content_unreadable">the file isn\'t %1$s: its data is unreadable, the file may be damaged or encrypted by another app</string>
+    <string name="fileopen_content_zeros">the file is filled with zeros, probably an incomplete download or copy</string>
+    <string name="fileopen_content_other">the file isn\'t %1$s, its content is %2$s</string>
+    <string name="fileopen_content_text">plain text</string>
+    <string name="fileopen_content_web_page">a web page</string>
 </resources>

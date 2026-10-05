@@ -42,7 +42,7 @@ class DjvuStructureTest : BaseTest() {
         listOf(BookDescription.ALICE, BookDescription.DJVU_SPEC).forEach { book ->
             val document = book.openBook()
             try {
-                assertEquals(book.toString(), "header=AT&TFORM, form=DJVM", document.describeStructure())
+                assertEquals(book.toString(), "header=AT&TFORM, form=DJVM, content=djvu", document.describeStructure())
             } finally {
                 document.destroy()
             }

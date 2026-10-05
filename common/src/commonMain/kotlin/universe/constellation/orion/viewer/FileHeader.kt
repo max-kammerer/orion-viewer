@@ -20,9 +20,10 @@ fun readFileHeader(path: String, count: Int): String {
 }
 
 /**
- * The start of a file for a problem report: the first 8 bytes, and for an IFF file (DjVu) its
- * form type, which follows the 4-byte size that reads as noise. Tells what arrived under a
- * book's name: a web page, an image, a PDF named .djvu.
+ * The start of a file for a problem report: the first 8 bytes, for an IFF file (DjVu) its
+ * form type, which follows the 4-byte size that reads as noise, and what the bytes are, see
+ * [detectFileContent]. Tells what arrived under a book's name: a web page, an image, a PDF
+ * named .djvu, encrypted or zeroed data.
  */
 fun describeFileHeader(path: String): String {
     val header = readFileHeader(path, 16)
@@ -31,5 +32,10 @@ fun describeFileHeader(path: String): String {
         header.startsWith("FORM") && header.length >= 12 -> header.substring(8, 12)
         else -> null
     }
-    return listOfNotNull("header=${header.take(8)}", form?.let { "form=$it" }).joinToString(", ")
+    val content = detectFileContent(path)
+    return listOfNotNull(
+        "header=${header.take(8)}",
+        form?.let { "form=$it" },
+        content?.let { "content=${it.name.lowercase()}" }
+    ).joinToString(", ")
 }

@@ -21,6 +21,7 @@ import androidx.core.view.doOnLayout
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.*
+import universe.constellation.orion.viewer.formats.findContentMismatch
 import universe.constellation.orion.viewer.FallbackDialogs.Companion.saveFileByUri
 import universe.constellation.orion.viewer.FileUtil.beautifyFileSize
 import universe.constellation.orion.viewer.Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN
@@ -306,13 +307,22 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     FileUtil.openFile(file, analytics)
                 }
             } catch (e: Exception) {
-                val message = if (e is EngineLibraryMissingException) {
-                    //the apk, not the file: tell what to do instead of the file name
-                    getString(R.string.crash_on_book_opening_no_engine_library, e.abis)
-                } else {
-                    resources.getString(R.string.crash_on_book_opening_message_header_panel, file.name)
+                /* Something else under the book's name (a web page, an archive, encrypted or
+                   zeroed data) gets a message saying so, and a warning of its own in the reports
+                   instead of joining the engines' errors. */
+                val mismatch = if (e is EngineLibraryMissingException) null else withContext(Dispatchers.IO) {
+                    findContentMismatch(file)
                 }
-                showErrorAndErrorPanel(getString(R.string.crash_on_book_opening_title), message, intent, e)
+                val message = when {
+                    //the apk, not the file: tell what to do instead of the file name
+                    e is EngineLibraryMissingException -> getString(R.string.crash_on_book_opening_no_engine_library, e.abis)
+                    mismatch != null -> getString(R.string.fileopen_cant_open, mismatch.describe(resources))
+                    else -> resources.getString(R.string.crash_on_book_opening_message_header_panel, file.name)
+                }
+                showErrorAndErrorPanel(
+                    getString(R.string.crash_on_book_opening_title), message, intent, e,
+                    sendException = mismatch?.let { RuntimeException("Warning: $it", e) } ?: e
+                )
                 executor.close()
                 orionApplication.idlingRes.free()
                 analytics.errorDuringInitialFileOpen()
