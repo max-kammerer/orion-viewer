@@ -1,0 +1,183 @@
+diff --git a/include/mupdf/fitz/font.h b/include/mupdf/fitz/font.h
+index c60fb7ef6..0376609fa 100644
+--- a/include/mupdf/fitz/font.h
++++ b/include/mupdf/fitz/font.h
+@@ -517,6 +517,30 @@ fz_font *fz_new_font_from_buffer(fz_context *ctx, const char *name, fz_buffer *b
+ */
+ fz_font *fz_new_font_from_file(fz_context *ctx, const char *name, const char *path, int index, int use_glyph_bbox);
+ 
++/**
++	Create a new font from a font file, sharing the file data with the
++	fonts already created from the same path.
++
++	Behaves exactly like fz_new_font_from_file, but reads the file only
++	once: the data is held in the font context and handed to every font
++	made from that path. Each call still returns its own font, so callers
++	are free to decorate it - the PDF interpreter, for one, hangs a width
++	table and its own ascender and descender on every font it loads.
++
++	Intended for system font loaders. System font files are few, large and
++	stable for the lifetime of the process, and the same file is commonly
++	asked for again and again: the PDF substitute font path requests one
++	per non embedded font object, so a book with such a font on every page
++	would otherwise read the file per page. The CJK collections shipped
++	with Android are 20-130 MB each.
++
++	The data stays in the font context until it is dropped, whether fonts
++	are still using it or not.
++
++	Returns new font handle, or throws exception on error.
++*/
++fz_font *fz_new_font_from_shared_file(fz_context *ctx, const char *name, const char *path, int index, int use_glyph_bbox);
++
+ /**
+ 	Create a new font from one of the built-in fonts.
+ */
+diff --git a/platform/java/jni/android/androidfonts.c b/platform/java/jni/android/androidfonts.c
+index 8b4eb7a0a..2f9198d07 100644
+--- a/platform/java/jni/android/androidfonts.c
++++ b/platform/java/jni/android/androidfonts.c
+@@ -34,7 +34,7 @@ static fz_font *load_noto(fz_context *ctx, const char *a, const char *b, const c
+ 		if (!fz_file_exists(ctx, buf))
+ 			fz_snprintf(buf, sizeof buf, "/system/fonts/%s%s%s.ttc", a, b, c);
+ 		if (fz_file_exists(ctx, buf))
+-			font = fz_new_font_from_file(ctx, NULL, buf, idx, 0);
++			font = fz_new_font_from_shared_file(ctx, NULL, buf, idx, 0);
+ 	}
+ 	fz_catch(ctx)
+ 		return NULL;
+diff --git a/source/fitz/font.c b/source/fitz/font.c
+index 6c04e70ea..df7679ff0 100644
+--- a/source/fitz/font.c
++++ b/source/fitz/font.c
+@@ -292,6 +292,11 @@ float fz_font_descender(fz_context *ctx, fz_font *font)
+  * Freetype hooks
+  */
+ 
++/* The set of font files a system font loader can offer is small and fixed,
++   so a bounded table is enough; once it is full further files are simply
++   read again for every font. */
++#define FZ_SHARED_FONT_FILES 16
++
+ struct fz_font_context
+ {
+ 	int ctx_refs;
+@@ -308,6 +313,9 @@ struct fz_font_context
+ 	struct { fz_font *serif, *sans; } fallback[256];
+ 	fz_font *symbol1, *symbol2, *math, *music, *boxes;
+ 	fz_font *emoji;
++
++	/* Font files shared by fz_new_font_from_shared_file, keyed by path */
++	struct { char *path; fz_buffer *buffer; } file[FZ_SHARED_FONT_FILES];
+ };
+ 
+ #undef __FTERRORS_H__
+@@ -419,6 +427,11 @@ void fz_drop_font_context(fz_context *ctx)
+ 		fz_drop_font(ctx, ctx->font->music);
+ 		fz_drop_font(ctx, ctx->font->emoji);
+ 		fz_drop_font(ctx, ctx->font->boxes);
++		for (i = 0; i < (int)nelem(ctx->font->file); ++i)
++		{
++			fz_drop_buffer(ctx, ctx->font->file[i].buffer);
++			fz_free(ctx, ctx->font->file[i].path);
++		}
+ 		fz_free(ctx, ctx->font);
+ 		ctx->font = NULL;
+ 	}
+@@ -878,6 +891,96 @@ fz_new_font_from_file(fz_context *ctx, const char *name, const char *path, int i
+ 	return font;
+ }
+ 
++static fz_buffer *
++lookup_shared_font_file(fz_context *ctx, const char *path)
++{
++	fz_buffer *buffer = NULL;
++	int i;
++
++	fz_lock(ctx, FZ_LOCK_GLYPHCACHE);
++	/* Entries are only ever appended, so the first empty one ends the table. */
++	for (i = 0; i < (int)nelem(ctx->font->file) && ctx->font->file[i].buffer; ++i)
++	{
++		if (!strcmp(ctx->font->file[i].path, path))
++		{
++			buffer = fz_keep_buffer(ctx, ctx->font->file[i].buffer);
++			break;
++		}
++	}
++	fz_unlock(ctx, FZ_LOCK_GLYPHCACHE);
++
++	return buffer;
++}
++
++/* Publishes buffer under path, or adopts the one another thread published
++   meanwhile. Takes ownership of path and of the caller's reference to buffer,
++   and returns the reference the caller keeps. */
++static fz_buffer *
++publish_shared_font_file(fz_context *ctx, char *path, fz_buffer *buffer)
++{
++	fz_buffer *shared = NULL;
++	int i;
++
++	fz_lock(ctx, FZ_LOCK_GLYPHCACHE);
++	for (i = 0; i < (int)nelem(ctx->font->file); ++i)
++	{
++		if (!ctx->font->file[i].buffer)
++		{
++			ctx->font->file[i].path = path;
++			ctx->font->file[i].buffer = fz_keep_buffer(ctx, buffer);
++			path = NULL;
++			break;
++		}
++		if (!strcmp(ctx->font->file[i].path, path))
++		{
++			shared = fz_keep_buffer(ctx, ctx->font->file[i].buffer);
++			break;
++		}
++	}
++	fz_unlock(ctx, FZ_LOCK_GLYPHCACHE);
++
++	fz_free(ctx, path);
++	if (shared)
++	{
++		fz_drop_buffer(ctx, buffer);
++		return shared;
++	}
++
++	return buffer;
++}
++
++fz_font *
++fz_new_font_from_shared_file(fz_context *ctx, const char *name, const char *path, int index, int use_glyph_bbox)
++{
++	fz_buffer *buffer;
++	fz_font *font = NULL;
++
++	buffer = lookup_shared_font_file(ctx, path);
++	if (!buffer)
++	{
++		char *key = fz_strdup(ctx, path);
++
++		fz_try(ctx)
++			buffer = fz_read_file(ctx, path);
++		fz_catch(ctx)
++		{
++			fz_free(ctx, key);
++			fz_rethrow(ctx);
++		}
++
++		buffer = publish_shared_font_file(ctx, key, buffer);
++	}
++
++	fz_try(ctx)
++		font = fz_new_font_from_buffer(ctx, name, buffer, index, use_glyph_bbox);
++	fz_always(ctx)
++		fz_drop_buffer(ctx, buffer);
++	fz_catch(ctx)
++		fz_rethrow(ctx);
++
++	return font;
++}
++
+ void fz_set_font_embedding(fz_context *ctx, fz_font *font, int embed)
+ {
+ 	if (!font)

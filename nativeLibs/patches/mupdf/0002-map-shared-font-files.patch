@@ -1,0 +1,158 @@
+diff --git a/include/mupdf/fitz/buffer.h b/include/mupdf/fitz/buffer.h
+index 549065792..878a6c57b 100644
+--- a/include/mupdf/fitz/buffer.h
++++ b/include/mupdf/fitz/buffer.h
+@@ -44,6 +44,7 @@ typedef struct
+ 	size_t cap, len;
+ 	int unused_bits;
+ 	int shared;
++	int mapped;
+ } fz_buffer;
+ 
+ /**
+@@ -99,6 +100,23 @@ fz_buffer *fz_new_buffer_from_data(fz_context *ctx, unsigned char *data, size_t
+ */
+ fz_buffer *fz_new_buffer_from_shared_data(fz_context *ctx, const unsigned char *data, size_t size);
+ 
++/**
++	Make a new buffer backed by a read-only mapping of a file.
++
++	The mapping is shared with the OS page cache: the pages cost
++	almost no private memory and remain evictable by the kernel.
++	The buffer is immutable, like a shared-data buffer; the mapping
++	is released when the buffer is dropped.
++
++	Only for files that are not truncated while mapped (reading a
++	page past a shrunken end raises SIGBUS), such as system fonts.
++
++	Returns NULL if mapping is not supported on this platform or if
++	the file cannot be mapped; callers are expected to fall back to
++	fz_read_file.
++*/
++fz_buffer *fz_new_buffer_from_mapped_file(fz_context *ctx, const char *filename);
++
+ /**
+ 	Create a new buffer containing a copy of the passed data.
+ */
+diff --git a/include/mupdf/fitz/font.h b/include/mupdf/fitz/font.h
+index 9981e208d..ee15cae06 100644
+--- a/include/mupdf/fitz/font.h
++++ b/include/mupdf/fitz/font.h
+@@ -535,7 +535,9 @@ fz_font *fz_new_font_from_file(fz_context *ctx, const char *name, const char *pa
+ 	with Android are 20-130 MB each.
+ 
+ 	The data stays in the font context until it is dropped, whether fonts
+-	are still using it or not.
++	are still using it or not. Where the platform supports it the file is
++	mapped rather than read, so that copy lives in the page cache instead
++	of the heap; the file must therefore not be truncated while in use.
+ 
+ 	Returns new font handle, or throws exception on error.
+ */
+diff --git a/source/fitz/buffer.c b/source/fitz/buffer.c
+index ecdf9e768..636011c89 100644
+--- a/source/fitz/buffer.c
++++ b/source/fitz/buffer.c
+@@ -25,6 +25,13 @@
+ #include <string.h>
+ #include <stdarg.h>
+ 
++#ifndef _WIN32
++#include <sys/mman.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++#include <unistd.h>
++#endif
++
+ fz_buffer *
+ fz_new_buffer(fz_context *ctx, size_t size)
+ {
+@@ -220,12 +227,67 @@ fz_drop_buffer(fz_context *ctx, fz_buffer *buf)
+ {
+ 	if (fz_drop_imp(ctx, buf, &buf->refs))
+ 	{
++#ifndef _WIN32
++		if (buf->mapped)
++			munmap(buf->data, buf->cap);
++		else
++#endif
+ 		if (!buf->shared)
+ 			fz_free(ctx, buf->data);
+ 		fz_free(ctx, buf);
+ 	}
+ }
+ 
++#ifdef _WIN32
++/* Not implemented yet: would use CreateFileMapping/MapViewOfFile,
++ * with UnmapViewOfFile in the drop path above. */
++fz_buffer *
++fz_new_buffer_from_mapped_file(fz_context *ctx, const char *filename)
++{
++	return NULL;
++}
++#else
++fz_buffer *
++fz_new_buffer_from_mapped_file(fz_context *ctx, const char *filename)
++{
++	fz_buffer *b;
++	int fd;
++	struct stat st;
++	void *map;
++
++	fd = open(filename, O_RDONLY);
++	if (fd < 0)
++		return NULL;
++	if (fstat(fd, &st) < 0 || st.st_size <= 0)
++	{
++		close(fd);
++		return NULL;
++	}
++	map = mmap(NULL, (size_t)st.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
++	close(fd);
++	if (map == MAP_FAILED)
++		return NULL;
++
++	fz_try(ctx)
++		b = fz_malloc_struct(ctx, fz_buffer);
++	fz_catch(ctx)
++	{
++		munmap(map, (size_t)st.st_size);
++		fz_rethrow(ctx);
++	}
++	b->refs = 1;
++	b->data = map;
++	b->cap = (size_t)st.st_size;
++	b->len = (size_t)st.st_size;
++	b->unused_bits = 0;
++	/* Marked shared so no existing code path writes to or frees the
++	 * data; the unmap on drop is the only new behaviour. */
++	b->shared = 1;
++	b->mapped = 1;
++	return b;
++}
++#endif
++
+ void
+ fz_resize_buffer(fz_context *ctx, fz_buffer *buf, size_t size)
+ {
+diff --git a/source/fitz/font.c b/source/fitz/font.c
+index f6708fc19..b85bd10a9 100644
+--- a/source/fitz/font.c
++++ b/source/fitz/font.c
+@@ -964,7 +964,15 @@ fz_new_font_from_shared_file(fz_context *ctx, const char *name, const char *path
+ 		char *key = fz_strdup(ctx, path);
+ 
+ 		fz_try(ctx)
+-			buffer = fz_read_file(ctx, path);
++		{
++			/* Map rather than read: the one shared copy then lives in
++			 * the page cache, shared with the platform text stack and
++			 * evictable, instead of in the heap. Shared font files are
++			 * system fonts, which are not truncated under us. */
++			buffer = fz_new_buffer_from_mapped_file(ctx, path);
++			if (!buffer)
++				buffer = fz_read_file(ctx, path);
++		}
+ 		fz_catch(ctx)
+ 		{
+ 			fz_free(ctx, key);
