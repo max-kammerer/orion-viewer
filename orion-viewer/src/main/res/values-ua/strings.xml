@@ -53,4 +53,5 @@
     <string name="link_copied">Посилання скопійовано</string>
     <string name="outline_history_empty">Переходів не було</string>
     <string name="link_no_handler">Немає додатка, щоб відкрити посилання</string>
+    <string name="page_cannot_be_displayed">Не вдалося показати сторінку %1$d</string>
 </resources>
