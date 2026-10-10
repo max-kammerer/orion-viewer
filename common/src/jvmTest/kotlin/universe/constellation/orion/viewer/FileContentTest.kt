@@ -107,6 +107,22 @@ class FileContentTest {
     }
 
     @Test
+    fun tailMarker() {
+        val file = File.createTempFile("tail", ".pdf")
+        try {
+            file.writeBytes("%PDF-1.4\n".toByteArray() + ByteArray(5000) { 0x20 } + "startxref\n9\n%%EOF\n".toByteArray())
+            assertEquals(true, fileTailContains(file.path, "%%EOF"))
+            file.writeBytes("%PDF-1.4\n".toByteArray() + ByteArray(5000) { 0x20 })
+            assertEquals(false, fileTailContains(file.path, "%%EOF"), "truncated")
+            file.writeBytes("%%EOF".toByteArray())
+            assertEquals(true, fileTailContains(file.path, "%%EOF"), "file shorter than the window")
+        } finally {
+            file.delete()
+        }
+        assertEquals(null, fileTailContains(file.path, "%%EOF"), "missing file")
+    }
+
+    @Test
     fun fileIsReadUpToTheSample() {
         val file = File.createTempFile("content", ".pdf")
         try {

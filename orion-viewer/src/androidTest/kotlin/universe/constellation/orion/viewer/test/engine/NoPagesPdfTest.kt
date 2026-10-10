@@ -24,7 +24,9 @@ class NoPagesPdfTest(private val file: String, private val expected: List<String
             arrayOf("broken/zero_page_count.pdf", listOf("pages=/Pages", "count=0", "kids=1", "leaves=1")),
             arrayOf("broken/no_root.pdf", listOf("root=missing", "leaves=0")),
             /* /Pages points to an object the file doesn't have. */
-            arrayOf("broken/missing_pages_node.pdf", listOf("root=/Catalog", "pages=not a dictionary: 9 0 R", "leaves=0")),
+            arrayOf("broken/missing_pages_node.pdf", listOf("root=/Catalog", "pages=not a dictionary: 9 0 R", "leaves=0", "pageObjects=1", "eof=yes")),
+            /* Cut off inside the page tree, as the reports show: no xref, no %%EOF, the page is still there. */
+            arrayOf("broken/truncated_pages_node.pdf", listOf("repaired=true", "root=/Catalog", "pages=not a dictionary: 2 0 R", "leaves=0", "pageObjects=1", "eof=no")),
             /* Form data: no pages by design, told apart by the header. */
             arrayOf("broken/form_data.pdf", listOf("header=%FDF-1.2")),
         )
