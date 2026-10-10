@@ -30,4 +30,9 @@
     <string name="fileopen_source_unavailable_info">Rakendus, mis algselt jagas faili (%1$s) ei võimalda failile enam ligipääsu: %2$s. Palun jaga seda faili sellest rakendusest või ava fail või hoopis:</string>
     <string name="fileopen_source_unavailable_message">Rakendus, mis algselt jagas faili (%1$s) ei võimalda failile enam ligipääsu: %2$s. Palun jaga seda faili sellest rakendusest või ava fail.</string>
     <string name="crash_on_book_opening_no_engine_library">See rakendus on paigaldatud ilma selle seadme jaoks sobiliku dokumendimootorita (%1$s) ja seega ei saa ühtegi raamatut avada. Palun paigalda rakendus uuesti Google Playst või paigalda sinu seadmele sobiv variant GitHubist.</string>
+    <string name="fileopen_content_unreadable">see fail pole %1$s: tema andmed on loetamatud, fail võib olla katki või krüptitud muu rakenduse poolt</string>
+    <string name="fileopen_content_zeros">see fail on täidetud nullidega, ilmselt on tegemist poolelijäänud allalaadimisega või katkise koopiaga</string>
+    <string name="fileopen_content_other">see fail pole %1$s, tema sisu on %2$s</string>
+    <string name="fileopen_content_text">vormindamata tekst</string>
+    <string name="fileopen_content_web_page">veebileht</string>
 </resources>
