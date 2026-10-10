@@ -8,4 +8,9 @@
     <string name="contribution_survey">本应用程序可以怎么改进 - 参与调查! (5–10 分钟)</string>
     <string name="contribution_ways">您有很多方式给这个软件项目帮忙：</string>
     <string name="contribution_intro">Orion Viewer 是开源项目，您可以给软件帮忙!</string>
+    <string name="survey_title">用户调查</string>
+    <string name="survey_purpose">答案决定未来的功能。</string>
+    <string name="survey_take">接受调查</string>
+    <string name="survey_thanks">感谢参与！</string>
+    <string name="survey_reopen">再次打开调查</string>
 </resources>
