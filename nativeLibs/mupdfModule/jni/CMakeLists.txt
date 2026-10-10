@@ -82,6 +82,10 @@ ${MUPDF_PATH}/scripts/cmark-gfm
 #-DOPJ_STATIC -DOPJ_HAVE_INTTYPES_H -DOPJ_HAVE_STDINT_H \
 #-DHAVE_LCMS2MT \
 
+# _FILE_OFFSET_BITS=32: stream-open.c and output.c default it to 64, which on 32 bit Android
+# maps fseeko/ftello to fseeko64/ftello64, available only from API 24 - below our minSdk. On
+# 64 bit ABIs it is ignored (off_t is 64 bit anyway). Files over 2 GB on 32 bit are handled by
+# the read/lseek64 fallback in stream-open.c (mupdf patch 0011).
 target_compile_definitions(mupdf_core PRIVATE -D_FILE_OFFSET_BITS=32 -DTOFU_NOTO -DTOFU_CJK -DTOFU_SIL -DAA_BITS=8 -DOPJ_STATIC -DOPJ_HAVE_INTTYPES_H -DOPJ_HAVE_STDINT_H -DHAVE_LCMS2MT -DHAVE_LIBARCHIVE -DFZ_ENABLE_BARCODE=0 -DCMARK_GFM_STATIC_DEFINE)
 target_compile_options(mupdf_core PRIVATE -ffunction-sections -fdata-sections)
 # Glyph cache 4 MB instead of 1 MB (patch 0005 makes it overridable): with stroked

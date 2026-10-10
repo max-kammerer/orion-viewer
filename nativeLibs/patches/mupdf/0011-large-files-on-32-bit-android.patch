@@ -1,0 +1,92 @@
+diff --git a/source/fitz/stream-open.c b/source/fitz/stream-open.c
+index 1770e46b5..20519e8f6 100644
+--- a/source/fitz/stream-open.c
++++ b/source/fitz/stream-open.c
+@@ -38,6 +38,15 @@
+ #include <unistd.h>
+ #endif
+ 
++/* 32 bit Android: before API 24 there is no fseeko64/ftello64, so builds for
++ * older versions keep a 32 bit off_t and stdio can't seek past 2 GB. Files
++ * that big are read with read() and lseek64() on the descriptor instead,
++ * bypassing stdio and its buffer; smaller files keep the stdio path. */
++#if defined(__ANDROID__) && !defined(__LP64__)
++#define FZ_FILE_LARGE_FALLBACK
++#include <sys/stat.h>
++#endif
++
+ int
+ fz_file_exists(fz_context *ctx, const char *path)
+ {
+@@ -117,6 +126,9 @@ typedef struct
+ 	wchar_t *filename_w;
+ #endif
+ 	int del_on_drop;
++#ifdef FZ_FILE_LARGE_FALLBACK
++	int large; /* over 2 GB: read and seek through the descriptor */
++#endif
+ 	unsigned char buffer[4096];
+ } fz_file_stream;
+ 
+@@ -125,9 +137,24 @@ static int next_file(fz_context *ctx, fz_stream *stm, size_t n)
+ 	fz_file_stream *state = stm->state;
+ 
+ 	/* n is only a hint, that we can safely ignore */
+-	n = fread(state->buffer, 1, sizeof(state->buffer), state->file);
+-	if (n < sizeof(state->buffer) && ferror(state->file))
+-		fz_throw(ctx, FZ_ERROR_SYSTEM, "read error: %s", strerror(errno));
++#ifdef FZ_FILE_LARGE_FALLBACK
++	if (state->large)
++	{
++		ssize_t r;
++		do
++			r = read(fileno(state->file), state->buffer, sizeof(state->buffer));
++		while (r < 0 && errno == EINTR);
++		if (r < 0)
++			fz_throw(ctx, FZ_ERROR_SYSTEM, "read error: %s", strerror(errno));
++		n = (size_t)r;
++	}
++	else
++#endif
++	{
++		n = fread(state->buffer, 1, sizeof(state->buffer), state->file);
++		if (n < sizeof(state->buffer) && ferror(state->file))
++			fz_throw(ctx, FZ_ERROR_SYSTEM, "read error: %s", strerror(errno));
++	}
+ 	stm->rp = state->buffer;
+ 	stm->wp = state->buffer + n;
+ 	stm->pos += (int64_t)n;
+@@ -140,6 +167,18 @@ static int next_file(fz_context *ctx, fz_stream *stm, size_t n)
+ static void seek_file(fz_context *ctx, fz_stream *stm, int64_t offset, int whence)
+ {
+ 	fz_file_stream *state = stm->state;
++#ifdef FZ_FILE_LARGE_FALLBACK
++	if (state->large)
++	{
++		off64_t pos = lseek64(fileno(state->file), (off64_t)offset, whence);
++		if (pos < 0)
++			fz_throw(ctx, FZ_ERROR_SYSTEM, "cannot seek: %s", strerror(errno));
++		stm->pos = pos;
++		stm->rp = state->buffer;
++		stm->wp = state->buffer;
++		return;
++	}
++#endif
+ #ifdef _WIN32
+ 	int64_t n = _fseeki64(state->file, offset, whence);
+ #else
+@@ -204,6 +243,14 @@ fz_open_file_ptr(fz_context *ctx, FILE *file, const char *name, int wide, int de
+ 	{
+ 		state_to_free = state = fz_malloc_struct(ctx, fz_file_stream);
+ 		state->file = file;
++#ifdef FZ_FILE_LARGE_FALLBACK
++		{
++			/* The file was just opened, stdio hasn't buffered anything. */
++			struct stat64 st;
++			if (fstat64(fileno(file), &st) == 0 && st.st_size > 0x7fffffff)
++				state->large = 1;
++		}
++#endif
+ #ifdef _WIN32
+ 		if (wide)
+ 		{
