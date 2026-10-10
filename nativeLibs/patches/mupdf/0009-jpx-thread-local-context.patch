@@ -1,0 +1,48 @@
+diff --git a/source/fitz/load-jpx.c b/source/fitz/load-jpx.c
+index 2219481b4..41f20693a 100644
+--- a/source/fitz/load-jpx.c
++++ b/source/fitz/load-jpx.c
+@@ -99,7 +99,23 @@ typedef struct
+  * threading systems.
+  */
+ 
++/* With thread local storage each thread keeps its own context, so
++ * images decode in parallel and need no lock. Without it the one
++ * global context is guarded by the FreeType lock, which also stalls
++ * glyph rendering on other threads for the length of a decode.
++ * OpenJPEG is built without its own worker threads, so all of its
++ * allocations happen on the calling thread. */
++#if defined(__GNUC__) || defined(__clang__)
++#define FZ_OPJ_THREAD_LOCAL __thread
++#elif defined(_MSC_VER)
++#define FZ_OPJ_THREAD_LOCAL __declspec(thread)
++#endif
++
++#ifdef FZ_OPJ_THREAD_LOCAL
++static FZ_OPJ_THREAD_LOCAL fz_context *fz_opj_secret = NULL;
++#else
+ static fz_context *fz_opj_secret = NULL;
++#endif
+ 
+ static void set_opj_context(fz_context *ctx)
+ {
+@@ -113,7 +129,9 @@ static fz_context *get_opj_context(void)
+ 
+ void fz_opj_lock(fz_context *ctx)
+ {
++#ifndef FZ_OPJ_THREAD_LOCAL
+ 	fz_ft_lock(ctx);
++#endif
+ 
+ 	set_opj_context(ctx);
+ }
+@@ -122,7 +140,9 @@ void fz_opj_unlock(fz_context *ctx)
+ {
+ 	set_opj_context(NULL);
+ 
++#ifndef FZ_OPJ_THREAD_LOCAL
+ 	fz_ft_unlock(ctx);
++#endif
+ }
+ 
+ void *fz_opj_malloc(size_t size)

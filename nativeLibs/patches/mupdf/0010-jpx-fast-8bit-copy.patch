@@ -1,0 +1,92 @@
+diff --git a/source/fitz/load-jpx.c b/source/fitz/load-jpx.c
+index 41f20693a..1868563d9 100644
+--- a/source/fitz/load-jpx.c
++++ b/source/fitz/load-jpx.c
+@@ -430,6 +430,73 @@ copy_jpx_to_pixmap(fz_context *ctx, fz_pixmap *img, opj_image_t *jpx)
+ 	}
+ }
+ 
++/* The usual case for scanned pages: every component is 8 bit unsigned,
++ * the size of the image, neither subsampled nor offset. Then each row is
++ * filled in one pass over all components, in loops the compiler turns into
++ * SIMD, instead of one strided pass per component with the subsampling and
++ * clipping logic of template_copy_comp for every sample. The bytes are the
++ * same: the generic path also stores the samples truncated to a byte.
++ * Returns 0, leaving the pixmap untouched, if the image doesn't qualify. */
++static int
++copy_jpx_to_pixmap_fast(fz_context *ctx, fz_pixmap *img, opj_image_t *jpx)
++{
++	int comps = fz_pixmap_components(ctx, img);
++	int w = img->w;
++	int h = img->h;
++	ptrdiff_t stride = fz_pixmap_stride(ctx, img);
++	int indexed = fz_colorspace_is_indexed(ctx, img->colorspace);
++	unsigned char *dst = fz_pixmap_samples(ctx, img);
++	const OPJ_INT32 *src[FZ_MAX_COLORS + 1];
++	int k, x, y;
++
++	if (comps < 1 || comps > (int)nelem(src))
++		return 0;
++	for (k = 0; k < comps; k++)
++	{
++		opj_image_comp_t *comp = &jpx->comps[k];
++		if (comp->data == NULL || comp->dx != 1 || comp->dy != 1 ||
++			comp->w != (OPJ_UINT32)w || comp->h != (OPJ_UINT32)h ||
++			comp->x0 != jpx->x0 || comp->y0 != jpx->y0)
++			return 0;
++		/* indexed samples are copied as they are, like the generic path does */
++		if (!indexed && (comp->prec != 8 || comp->sgnd))
++			return 0;
++		src[k] = comp->data;
++	}
++
++	for (y = 0; y < h; y++)
++	{
++		unsigned char *d = dst + y * stride;
++		size_t row = (size_t)y * w;
++		if (comps == 1)
++		{
++			const OPJ_INT32 *s0 = src[0] + row;
++			for (x = 0; x < w; x++)
++				d[x] = (unsigned char)s0[x];
++		}
++		else if (comps == 3)
++		{
++			const OPJ_INT32 *s0 = src[0] + row;
++			const OPJ_INT32 *s1 = src[1] + row;
++			const OPJ_INT32 *s2 = src[2] + row;
++			for (x = 0; x < w; x++)
++			{
++				d[0] = (unsigned char)s0[x];
++				d[1] = (unsigned char)s1[x];
++				d[2] = (unsigned char)s2[x];
++				d += 3;
++			}
++		}
++		else
++		{
++			for (x = 0; x < w; x++)
++				for (k = 0; k < comps; k++)
++					*d++ = (unsigned char)src[k][row + x];
++		}
++	}
++	return 1;
++}
++
+ static fz_pixmap *
+ jpx_read_image(fz_context *ctx, fz_jpxd *state, const unsigned char *data, size_t size, fz_colorspace *defcs, int onlymeta)
+ {
+@@ -639,8 +706,11 @@ jpx_read_image(fz_context *ctx, fz_jpxd *state, const unsigned char *data, size_
+ 	{
+ 		a = !!a; /* ignore any superfluous alpha channels */
+ 		img = fz_new_pixmap(ctx, state->cs, w, h, NULL, a);
+-		fz_clear_pixmap_with_value(ctx, img, 0);
+-		copy_jpx_to_pixmap(ctx, img, jpx);
++		if (!copy_jpx_to_pixmap_fast(ctx, img, jpx))
++		{
++			fz_clear_pixmap_with_value(ctx, img, 0);
++			copy_jpx_to_pixmap(ctx, img, jpx);
++		}
+ 
+ 		if (jpx->color_space == OPJ_CLRSPC_SYCC && n == 3 && a == 0)
+ 			jpx_ycc_to_rgb(ctx, img, 1, 1);
