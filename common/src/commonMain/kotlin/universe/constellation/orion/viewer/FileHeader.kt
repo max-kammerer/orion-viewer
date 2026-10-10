@@ -39,3 +39,21 @@ fun describeFileHeader(path: String): String {
         content?.let { "content=${it.name.lowercase()}" }
     ).joinToString(", ")
 }
+
+/**
+ * Whether [marker] occurs in the last [window] bytes of the file: true, false, or null when the
+ * file can't be read. For a PDF, a missing `%%EOF` there means the end of the file is gone, an
+ * incomplete download or copy, as the cross-reference table and often the page tree sit last.
+ */
+fun fileTailContains(path: String, marker: String, window: Int = 1024): Boolean? = try {
+    java.io.RandomAccessFile(path, "r").use { file ->
+        val length = file.length()
+        val size = minOf(window.toLong(), length).toInt()
+        val bytes = ByteArray(size)
+        file.seek(length - size)
+        file.readFully(bytes)
+        String(bytes, Charsets.ISO_8859_1).contains(marker)
+    }
+} catch (e: Exception) {
+    null
+}

@@ -27,6 +27,7 @@ import com.artifex.mupdf.fitz.DisplayList
 import com.artifex.mupdf.fitz.Link
 import com.artifex.mupdf.fitz.Matrix
 import com.artifex.mupdf.fitz.Outline
+import com.artifex.mupdf.fitz.PDFDocument
 import com.artifex.mupdf.fitz.PDFObject
 import com.artifex.mupdf.fitz.Page
 import com.artifex.mupdf.fitz.StructuredText
@@ -49,6 +50,7 @@ import universe.constellation.orion.viewer.errorInDebug
 import universe.constellation.orion.viewer.errorInDebugOr
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.describeFileHeader
+import universe.constellation.orion.viewer.fileTailContains
 import universe.constellation.orion.viewer.mupdfLoaded
 import universe.constellation.orion.viewer.prefs.OrionApplication
 import universe.constellation.orion.viewer.shrinkMupdfStore
@@ -275,7 +277,9 @@ class PdfDocument @Throws(Exception::class) constructor(
      * What mupdf sees of the page tree. It takes the page count from /Root/Pages/Count as is, so a
      * missing or wrong count, a lost catalog or pages node all give zero pages although the file
      * has some; the leaves are counted here by walking /Kids to tell these apart. The header
-     * tells an FDF (form data, rightly without pages) or a file that isn't a pdf at all.
+     * tells an FDF (form data, rightly without pages) or a file that isn't a pdf at all; the page
+     * objects found anywhere in the file tell whether the pages are still there when the tree is
+     * lost, and a missing %%EOF at the end tells a truncated file (incomplete download or copy).
      */
     override fun describeStructure(): String = try {
         synchronized(core) {
@@ -296,6 +300,8 @@ class PdfDocument @Throws(Exception::class) constructor(
                     "count=${pages.get("Count").let { if (it.isNull) "missing" else it.toString(true, true).take(20) }}",
                     "kids=${if (kids.isArray) kids.size().toString() else kids.describeType()}",
                     "leaves=${countLeaves(pages)}",
+                    "pageObjects=${countPageObjects(pdf)}",
+                    "eof=${when (fileTailContains(filePath, "%%EOF")) { true -> "yes"; false -> "no"; null -> "unknown" }}",
                     "producer=${doc.getMetaData(FitzDocument.META_INFO_PRODUCER).orEmpty().take(60)}",
                     "creator=${doc.getMetaData(FitzDocument.META_INFO_CREATOR).orEmpty().take(60)}",
                 )
@@ -311,6 +317,26 @@ class PdfDocument @Throws(Exception::class) constructor(
         isDictionary -> get("Type").let { if (it.isName) "/" + it.asName() else "untyped" }
         /* A reference to an absent object ends up here too, as "9 0 R". */
         else -> "not a dictionary: " + toString(true, true).take(20)
+    }
+
+    /**
+     * Page objects in the whole file, reachable from the page tree or not: how many pages a
+     * rebuilt page list would get back when the tree is lost. Objects that fail to load (broken,
+     * in a damaged object stream) are skipped. Only runs for a document that showed no pages.
+     */
+    private fun countPageObjects(pdf: PDFDocument): String {
+        val total = pdf.countObjects()
+        val scanned = minOf(total, MAX_SCANNED_OBJECTS)
+        var pages = 0
+        for (num in 1 until scanned) {
+            try {
+                val type = pdf.newIndirect(num, 0).get("Type")
+                if (type.isName && type.asName() == "Page") pages++
+            } catch (e: RuntimeException) {
+                /* broken object */
+            }
+        }
+        return if (scanned < total) "$pages+" else pages.toString()
     }
 
     /** Pages as a lenient reader would find them: every node without /Kids below the root is one. */
@@ -406,6 +432,8 @@ class PdfDocument @Throws(Exception::class) constructor(
         private const val MAX_PAGE_TREE_DEPTH = 64
 
         private const val MAX_COUNTED_LEAVES = 100_000
+
+        private const val MAX_SCANNED_OBJECTS = 300_000
 
         @Volatile
         private var fullDecodeLimitSet = false
