@@ -1,3 +1,7 @@
+===== 0.97.4 (Oct 11, 2026) =====
+* Optimization in caching fonts, glyphs, images
+* Optimization in jpeg rendering
+
 ===== 0.97.3 (Oct 02, 2026) =====
 * Added experimental support of webp format
 * Updated icons
