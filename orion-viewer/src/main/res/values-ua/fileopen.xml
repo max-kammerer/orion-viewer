@@ -30,4 +30,9 @@
     <string name="crash_on_intent_opening_title">Помилка обробки наміру</string>
     <string name="string_send">Надіслати…</string>
     <string name="crash_on_book_opening_no_engine_library">Додаток було встановлено без бібліотеки документного рушія на цей пристрій (%1$s), тому ви не можете відкрити жодної книги. Просимо перевстановити додаток з Google Play або встановити версію для вашого пристрою з GitHub.</string>
+    <string name="fileopen_content_unreadable">цей файл не %1$s: дані не читаються, можливо, файл пошкоджений або зашифрований іншим додатком</string>
+    <string name="fileopen_content_zeros">файл заповнено нулями, імовірно, це незавершене завантаження або неповна копія</string>
+    <string name="fileopen_content_other">цей файл не %1$s, його вміст нагадує %2$s</string>
+    <string name="fileopen_content_text">простий текст</string>
+    <string name="fileopen_content_web_page">вебсторінка</string>
 </resources>
