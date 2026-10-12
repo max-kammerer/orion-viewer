@@ -8,4 +8,9 @@
     <string name="contribution_do_translation">• перекласти <a href="https://github.com/max-kammerer/orion-viewer/wiki/Translations">додаток іншими мовами</a> або покращити існуючий переклад</string>
     <string name="contribution_code">• реалізувати <a href="https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-build-project">нову функцію</a> або <a href="https://github.com/max-kammerer/orion-viewer/issues">виправити помилку</a></string>
     <string name="contribution_review">• написати <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">відгук на Google Play</a> або будь-яку іншу платформу</string>
+    <string name="survey_title">Опитування користувачів</string>
+    <string name="survey_purpose">Відповіді вирішують, що ми далі додамо в програму.</string>
+    <string name="survey_take">Пройти опитування</string>
+    <string name="survey_thanks">Дякуємо за участь!</string>
+    <string name="survey_reopen">Відкрити опитування знову</string>
 </resources>
