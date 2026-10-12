@@ -37,6 +37,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.multidex.MultiDex
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
@@ -59,6 +60,7 @@ import universe.constellation.orion.viewer.android.isAtJellyBean
 import universe.constellation.orion.viewer.android.isAtLeastLollipop
 import universe.constellation.orion.viewer.bookmarks.BookmarkAccessor
 import universe.constellation.orion.viewer.device.AndroidDevice
+import universe.constellation.orion.viewer.document.Document
 import universe.constellation.orion.viewer.device.MagicBookBoeyeDevice
 import universe.constellation.orion.viewer.device.OnyxDevice
 import universe.constellation.orion.viewer.device.OnyxUtil
@@ -148,12 +150,20 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
             level >= TRIM_MEMORY_MODERATE -> 0
             level >= TRIM_MEMORY_BACKGROUND -> 25
             level >= TRIM_MEMORY_UI_HIDDEN -> 50
-            level >= TRIM_MEMORY_RUNNING_CRITICAL -> 0
-            level >= TRIM_MEMORY_RUNNING_LOW -> 25
+            /* RUNNING_* come while the app is on screen: the visible pages' images would be
+               decoded again on the next scroll, so part of the store is always kept. */
+            level >= TRIM_MEMORY_RUNNING_CRITICAL -> 35
             else -> 50
         }
-        trimDocumentCache(level, keepPercent)
+        /* Off the main thread: emptying a big mupdf store takes long enough to cause an ANR
+           (seen in fz_shrink_store on a phone), and RUNNING_* levels arrive while a book is on
+           screen. The document is taken here, on the main thread; trims run one at a time. */
+        val document = viewActivity?.controller?.document
+        trimScope.launch { trimDocumentCache(level, keepPercent, document) }
     }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val trimScope = CoroutineScope(SupervisorJob() + Dispatchers.IO.limitedParallelism(1))
 
     /**
      * The engine caches are the only sizeable memory the app can give back without losing the
@@ -163,9 +173,17 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
      * good. So it is trimmed whatever is on screen (a no-op when empty), then the current
      * engine's own cache, which for djvu lives in the document's context.
      */
-    private fun trimDocumentCache(level: Int, keepPercent: Int) {
-        val document = viewActivity?.controller?.document
+    private fun trimDocumentCache(level: Int, keepPercent: Int, document: Document?) {
         val before = Debug.getNativeHeapAllocatedSize() shr 20
+        /* In the background the system repeats a level about once a minute (seen: COMPLETE every
+           minute on a 1 GB KitKat tablet, a 10 MB heap each time). If nothing has been decoded
+           since the last trim and this one isn't stricter, there is nothing to give back: skip
+           it, snapshot, log and report included. */
+        if (lastTrimHeapMb >= 0 && before <= lastTrimHeapMb + TRIM_GROWTH_MB && keepPercent >= lastTrimKeepPercent) {
+            skippedTrims++
+            return
+        }
+        val start = System.nanoTime()
         try {
             if (document !is PdfDocument) shrinkMupdfStore(keepPercent, "trim")
             document?.trimCache(keepPercent)
@@ -174,13 +192,33 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
             analytics.error(e)
             return
         }
+        val tookMs = (System.nanoTime() - start) / 1_000_000
         val after = ProcessMemory.snapshot()
-        log("Memory trim, level $level: ${document ?: "no document"} cache kept at $keepPercent%, native heap ${before}M -> ${after.nativeHeapMb}M, $after")
+        lastTrimHeapMb = after.nativeHeapMb
+        lastTrimKeepPercent = keepPercent
+        log("Memory trim, level $level: ${document ?: "no document"} cache kept at $keepPercent% in ${tookMs}ms, native heap ${before}M -> ${after.nativeHeapMb}M, $after, since last report: skipped $skippedTrims, unreported $unreportedTrims")
         /* Without a book there is next to nothing to trim: such events were about a quarter of all
            and only noise (a 4 MB heap), so they aren't reported. The trim itself still runs. */
         if (document == null) return
-        analytics.memoryTrim(level, keepPercent, document.javaClass.simpleName, before, after.nativeHeapMb, after.vmSizeMb)
+        /* A trim that gave back next to nothing isn't reported either, only counted; the counts
+           go with the next reported trim. A slow one is reported whatever it freed. */
+        if (before - after.nativeHeapMb < TRIM_REPORT_MIN_MB && tookMs < TRIM_REPORT_SLOW_MS) {
+            unreportedTrims++
+            return
+        }
+        analytics.memoryTrim(
+            level, keepPercent, document.javaClass.simpleName, before, after.nativeHeapMb, after.vmSizeMb,
+            tookMs, skippedTrims, unreportedTrims
+        )
+        skippedTrims = 0
+        unreportedTrims = 0
     }
+
+    /* Trim bookkeeping, touched only on the trim thread (trimScope runs one at a time). */
+    private var lastTrimHeapMb = -1L
+    private var lastTrimKeepPercent = 100
+    private var skippedTrims = 0
+    private var unreportedTrims = 0
 
     fun updateLanguage(res: Resources) {
         try {
@@ -378,6 +416,12 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
 
         @JvmField
         val version: String = Build.VERSION.INCREMENTAL
+
+        /* Native heap growth since the last trim below which a trim is skipped, MB. */
+        private const val TRIM_GROWTH_MB = 10
+        /* A trim is reported if it freed at least this much (MB) or took at least this long (ms). */
+        private const val TRIM_REPORT_MIN_MB = 5
+        private const val TRIM_REPORT_SLOW_MS = 300
 
         @Volatile
         private var djvuResources: Job? = null
