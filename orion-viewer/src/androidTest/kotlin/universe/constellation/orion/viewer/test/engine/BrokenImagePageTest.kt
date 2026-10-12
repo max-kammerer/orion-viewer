@@ -37,6 +37,9 @@ class BrokenImagePageTest(private val file: String, private val expectedError: S
             /* Not recognized at all: the message shows the first bytes. */
             arrayOf(BROKEN_JPEG, "unknown image file format (header 00 00 00 00 00 10 4a 46 49 46 00 01)"),
             arrayOf(BROKEN_TIFF, "image is missing strip, tile and jpeg data"),
+            /* A 125-byte tiff claiming 40000x40000 RGB: over mupdf's size limit, the message
+               names the size (patch 0012), so a report tells a huge scan from garbage. */
+            arrayOf("broken/huge_dimensions.tiff", "image too large (40000x40000, 8 bits x 3 samples)"),
             /* Formats mupdf doesn't decode, under a name it does: named in the message. */
             arrayOf("broken/heic_photo.jpg", "unknown image file format (HEIC)"),
             arrayOf("broken/avif_picture.jpg", "unknown image file format (AVIF)"),
