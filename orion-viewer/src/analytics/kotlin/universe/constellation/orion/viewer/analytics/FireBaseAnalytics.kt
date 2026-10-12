@@ -151,7 +151,10 @@ class FireBaseAnalytics : Analytics() {
         }
     }
 
-    override fun memoryTrim(level: Int, keepPercent: Int, engine: String, nativeBeforeMb: Long, nativeAfterMb: Long, vmSizeMb: Long) {
+    override fun memoryTrim(
+        level: Int, keepPercent: Int, engine: String, nativeBeforeMb: Long, nativeAfterMb: Long, vmSizeMb: Long,
+        tookMs: Long, skipped: Int, unreported: Int
+    ) {
         key("vm_size_mb", vmSizeMb)
         key("native_heap_mb", nativeAfterMb)
         logEvent("memoryTrim") {
@@ -161,6 +164,9 @@ class FireBaseAnalytics : Analytics() {
             param("nativeBeforeMb", nativeBeforeMb)
             param("nativeAfterMb", nativeAfterMb)
             param("vm_size_mb", vmSizeMb)
+            param("tookMs", tookMs)
+            param("skipped", skipped.toLong())
+            param("unreported", unreported.toLong())
         }
     }
 

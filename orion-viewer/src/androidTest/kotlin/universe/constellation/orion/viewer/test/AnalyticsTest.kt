@@ -36,7 +36,7 @@ class AnalyticsTest : BaseTest() {
         analytics.bookOpening(book, memory)
         analytics.fileOpenedSuccessfully(book, "PdfDocument", 64, 0, memory)
         analytics.errorDuringInitialFileOpen()
-        analytics.memoryTrim(40, 25, "DjvuDocument", memory.nativeHeapMb, memory.nativeHeapMb, memory.vmSizeMb)
+        analytics.memoryTrim(40, 25, "DjvuDocument", memory.nativeHeapMb, memory.nativeHeapMb, memory.vmSizeMb, 3, 2, 1)
         analytics.outOfMemory("test", 128L shl 20, memory)
         analytics.dialog("test", true)
         analytics.action("test")

@@ -90,7 +90,11 @@ open class Analytics : NonFatalErrorReporter {
     }
 
     /** A system memory trim reached the open document: [level] is the ComponentCallbacks2 value. */
-    open fun memoryTrim(level: Int, keepPercent: Int, engine: String, nativeBeforeMb: Long, nativeAfterMb: Long, vmSizeMb: Long) {
+    /** [skipped] and [unreported]: trims since the last reported one that weren't run, and that ran but weren't reported. */
+    open fun memoryTrim(
+        level: Int, keepPercent: Int, engine: String, nativeBeforeMb: Long, nativeAfterMb: Long, vmSizeMb: Long,
+        tookMs: Long, skipped: Int, unreported: Int
+    ) {
 
     }
 

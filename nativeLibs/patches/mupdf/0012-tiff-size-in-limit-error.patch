@@ -1,0 +1,25 @@
+diff --git a/source/fitz/load-tiff.c b/source/fitz/load-tiff.c
+index 4604e24e8..9d24fda4f 100644
+--- a/source/fitz/load-tiff.c
++++ b/source/fitz/load-tiff.c
+@@ -295,7 +295,7 @@ tiff_expand_colormap(fz_context *ctx, struct tiff *tiff)
+ 		fz_throw(ctx, FZ_ERROR_LIMIT, "image too wide");
+ 
+ 	if (fz_ckd_mul_uint(&size, stride, tiff->imagelength))
+-		fz_throw(ctx, FZ_ERROR_LIMIT, "image too large");
++		fz_throw(ctx, FZ_ERROR_LIMIT, "image too large (%ux%u, palette)", tiff->imagewidth, tiff->imagelength);
+ 
+ 	samples = Memento_label(fz_malloc(ctx, size), "tiff_samples");
+ 
+@@ -1356,9 +1356,9 @@ tiff_decode_ifd(fz_context *ctx, struct tiff *tiff)
+ 		fz_throw(ctx, FZ_ERROR_FORMAT, "components per pixel out of range when compared to extra samples");
+ 	/* Bug 706071: Check for overflow in the stride calculation separately. */
+ 	if (tiff->imagewidth > (UINT_MAX - 7) / tiff->samplesperpixel / tiff->bitspersample)
+-		fz_throw(ctx, FZ_ERROR_LIMIT, "image too large");
++		fz_throw(ctx, FZ_ERROR_LIMIT, "image too large (%ux%u, %u bits x %u samples)", tiff->imagewidth, tiff->imagelength, tiff->bitspersample, tiff->samplesperpixel);
+ 	if (tiff->imagelength > UINT_MAX / tiff->imagewidth / (tiff->samplesperpixel + 2) / (tiff->bitspersample / 8 + 1))
+-		fz_throw(ctx, FZ_ERROR_LIMIT, "image too large");
++		fz_throw(ctx, FZ_ERROR_LIMIT, "image too large (%ux%u, %u bits x %u samples)", tiff->imagewidth, tiff->imagelength, tiff->bitspersample, tiff->samplesperpixel);
+ 	if (tiff->tilewidth & 0xf)
+ 		fz_throw(ctx, FZ_ERROR_FORMAT, "tile width not a multiple of 16");
+ 	if (tiff->tilelength & 0xf)

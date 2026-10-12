@@ -149,7 +149,7 @@ class DjvuDocument(
     }
 
     /* Guards the native context against a concurrent close: destroy() runs in the background
-     * after the controller is gone, trimCache() comes from a memory trim on the main thread. */
+     * after the controller is gone, trimCache() comes from a memory trim on its own thread. */
     private val lifecycle = ReentrantLock()
 
     override fun destroy() = lifecycle.withLock {

@@ -95,6 +95,9 @@ var mupdfLoaded = false
 
 fun shrinkMupdfStore(percent: Int, tag: String) {
     if (!mupdfLoaded) return
+    /* One pass over the store: shrinkStore(0) rescans the whole store for every item it evicts,
+       quadratic in the number of items. */
+    if (percent == 0) return emptyMupdfStore(tag)
     try {
         if (com.artifex.mupdf.fitz.Context.shrinkStore(percent)) {
             log("MUPDF_STORE [$tag]: shrunk to $percent%")
