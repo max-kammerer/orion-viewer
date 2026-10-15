@@ -13,6 +13,11 @@ enum class FileContent(val shortName: String) {
     /** Forms Data Format: form field values for a PDF, a PDF syntax file without pages. */
     FDF("FDF"),
     DJVU("DjVu"),
+
+    /* Reflowable books: mupdf opens them, by the content too, the app doesn't list them yet. */
+    EPUB("EPUB"),
+    FB2("FB2"),
+    MOBI("MOBI"),
     ZIP("ZIP"),
     RAR("RAR"),
     SEVEN_ZIP("7z"),
@@ -29,6 +34,12 @@ enum class FileContent(val shortName: String) {
     ISO_MEDIA("HEIC/AVIF/MP4"),
     HTML("HTML"),
     XML("XML"),
+
+    /** An Adobe Digital Editions loan token (.acsm): ADE downloads the book itself by it. */
+    ACSM("ACSM"),
+
+    /** A web page saved with its pictures in one file (.mht, .mhtml): a MIME message. */
+    MHT("MHT"),
 
     /** Text without a signature: markdown, plain text, any encoding. See [looksLikeText]. */
     TEXT("text"),
@@ -85,6 +96,8 @@ fun detectFileContent(bytes: ByteArray, size: Int = bytes.size): FileContent? {
         b.pdfMarker(within = 1024) == 'P' -> FileContent.PDF
         b.pdfMarker(within = 1024) == 'F' -> FileContent.FDF
         b.startsWith("AT&TFORM") -> FileContent.DJVU
+        /* the first entry of an EPUB is "mimetype", stored, holding the media type */
+        b.startsWith("PK\u0003\u0004") && b.at(30, "mimetype") && b.at(38, "application/epub+zip") -> FileContent.EPUB
         b.startsWith("PK\u0003\u0004") || b.startsWith("PK\u0005\u0006") || b.startsWith("PK\u0007\u0008") -> FileContent.ZIP
         b.startsWith("Rar!\u001A\u0007") -> FileContent.RAR
         b.startsWith(0x37, 0x7A, 0xBC, 0xAF, 0x27, 0x1C) -> FileContent.SEVEN_ZIP
@@ -98,6 +111,8 @@ fun detectFileContent(bytes: ByteArray, size: Int = bytes.size): FileContent? {
         b.startsWith("BM") && size >= 10 && (6 until 10).all { b[it] == 0 } -> FileContent.BMP
         b.startsWith(0x00, 0x00, 0x00, 0x0C, 0x6A, 0x50, 0x20, 0x20) || b.startsWith(0xFF, 0x4F, 0xFF, 0x51) -> FileContent.JPEG2000
         b.at(4, "ftyp") -> FileContent.ISO_MEDIA
+        /* the Palm database type after the 60-byte header: Mobipocket and its Kindle variants, PalmDoc */
+        b.at(60, "BOOKMOBI") || b.at(60, "TEXtREAd") -> FileContent.MOBI
         (0 until size).all { b[it] == 0 } -> FileContent.ZEROS
         looksLikeText(bytes, size) -> textKind(b)
         else -> FileContent.BINARY
@@ -128,10 +143,17 @@ private fun textKind(b: Sample): FileContent {
     val start = b.skipBomAndSpaces()
     return when {
         b.atIgnoreCase(start, "<!doctype html") || b.atIgnoreCase(start, "<html") -> FileContent.HTML
+        /* the root element, with or without an XML declaration before it */
+        b.contains("<fulfillmentToken") -> FileContent.ACSM
+        b.contains("<FictionBook") -> FileContent.FB2
         b.at(start, "<?xml") -> FileContent.XML
+        MHT_HEADERS.any { b.atIgnoreCase(start, it) } && b.containsIgnoreCase("multipart/related") -> FileContent.MHT
         else -> FileContent.TEXT
     }
 }
+
+/* The header lines a saved web page starts with: "From: <Saved by Blink>", "MIME-Version: 1.0", ... */
+private val MHT_HEADERS = listOf("from:", "mime-version:", "content-type:", "subject:", "date:", "snapshot-content-location:")
 
 private class Sample(private val bytes: ByteArray, val size: Int) {
     operator fun get(i: Int): Int = bytes[i].toInt() and 0xFF
@@ -157,6 +179,10 @@ private class Sample(private val bytes: ByteArray, val size: Int) {
                 else -> null
             }
         }
+
+    fun contains(text: String): Boolean = (0..size - text.length).any { at(it, text) }
+
+    fun containsIgnoreCase(text: String): Boolean = (0..size - text.length).any { atIgnoreCase(it, text) }
 
     fun skipBomAndSpaces(): Int {
         var i = if (startsWith(0xEF, 0xBB, 0xBF)) 3 else 0

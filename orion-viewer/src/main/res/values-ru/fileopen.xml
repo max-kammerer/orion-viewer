@@ -35,4 +35,8 @@
     <string name="fileopen_content_other">файл не в формате %1$s, по содержимому это %2$s</string>
     <string name="fileopen_content_text">обычный текст</string>
     <string name="fileopen_content_web_page">веб-страница</string>
+    <string name="fileopen_content_unsupported">формат файла не поддерживается, по содержимому это %1$s</string>
+    <string name="fileopen_content_archive">файл — архив %1$s: если внутри книга, сначала распакуйте её</string>
+    <string name="fileopen_content_acsm">это ключ для загрузки книги через Adobe Digital Editions (ACSM), а не сама книга: откройте его в Adobe Digital Editions, чтобы скачать книгу</string>
+    <string name="fileopen_content_mht">это сохранённая веб-страница (MHT)</string>
 </resources>

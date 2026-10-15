@@ -19,8 +19,18 @@ object FileUtil {
     @JvmStatic
     var djvuCacheLimit: Long = DjvuDocument.DEFAULT_CACHE_LIMIT
 
-    private fun isDjvuFile(filePath: String): Boolean {
-        return filePath.fileExtensionLC in FileFormats.DJVU.extensions
+    /**
+     * By the content first, the extension only when the first bytes don't tell: a PDF or an image
+     * named .djvu fails in djvulibre ("IFFByteStream not ready", "Illegal chunk id"), a DjVu book
+     * under another name or under none (a cloud provider's hash, WhatsApp's "DOC-...-WA0001.")
+     * fails in mupdf ("cannot find document handler"). Text, zeros and unrecognized bytes go by
+     * the extension, so their error comes from the engine the name asks for.
+     */
+    private fun isDjvuFile(file: File): Boolean = when (detectFileContent(file.path)) {
+        FileContent.DJVU -> true
+        null, FileContent.TEXT, FileContent.ZEROS, FileContent.BINARY ->
+            file.name.fileExtensionLC in FileFormats.DJVU.extensions
+        else -> false
     }
 
     /** [errorReporter] gets the problems the document survives, see [NonFatalErrorReporter]. */
@@ -30,7 +40,7 @@ object FileUtil {
     fun openFile(file: File, errorReporter: NonFatalErrorReporter = NonFatalErrorReporter.NONE): Document {
         val absolutePath = file.absolutePath
         try {
-            return if (isDjvuFile(file.name)) {
+            return if (isDjvuFile(file)) {
                 DjvuDocument(absolutePath, djvuCacheLimit, errorReporter)
             } else {
                 PdfDocument(absolutePath, errorReporter)

@@ -339,12 +339,17 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 }
 
                 if (newDocument.pageCount == 0) {
+                    /* mupdf opens a .zip or .tar without pictures inside as a comic book of no
+                       pages: usually a book packed for sending, to be extracted first. */
+                    val content = withContext(Dispatchers.IO) { detectFileContent(file.path) }
+                    val reason = if (content?.isArchive == true) {
+                        getString(R.string.fileopen_content_archive, content.shortName)
+                    } else {
+                        getString(R.string.fileopen_no_pages)
+                    }
                     showErrorAndErrorPanel(
                         getString(R.string.crash_on_book_opening_title),
-                        resources.getString(
-                            R.string.fileopen_cant_open,
-                            getString(R.string.fileopen_no_pages)
-                        ),
+                        resources.getString(R.string.fileopen_cant_open, reason),
                         intent,
                         sendException = RuntimeException(
                             listOfNotNull(

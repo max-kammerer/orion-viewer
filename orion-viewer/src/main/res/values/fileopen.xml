@@ -45,4 +45,8 @@
     <string name="fileopen_content_other">the file isn\'t %1$s, its content is %2$s</string>
     <string name="fileopen_content_text">plain text</string>
     <string name="fileopen_content_web_page">a web page</string>
+    <string name="fileopen_content_unsupported">the file isn\'t in a format the app opens, its content is %1$s</string>
+    <string name="fileopen_content_archive">the file is a %1$s archive: if there is a book inside, extract it first</string>
+    <string name="fileopen_content_acsm">the file is an Adobe Digital Editions loan token (ACSM), not the book itself: open it in Adobe Digital Editions to download the book</string>
+    <string name="fileopen_content_mht">the file is a saved web page (MHT)</string>
 </resources>
