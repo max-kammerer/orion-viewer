@@ -70,7 +70,29 @@ class FileContentTest {
     fun markupIsTextOfItsOwnKind() {
         assertEquals(FileContent.HTML, detect("﻿  \n<!DOCTYPE html><html><body>Not found</body></html>"))
         assertEquals(FileContent.HTML, detect("<HTML><HEAD><TITLE>Error</TITLE>"))
-        assertEquals(FileContent.XML, detect("<?xml version=\"1.0\" encoding=\"UTF-8\"?><FictionBook>"))
+        assertEquals(FileContent.XML, detect("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\">"))
+    }
+
+    @Test
+    fun loanTokenAndSavedPage() {
+        /* the starts of an .acsm and an .mht from the reports, with and without an XML declaration */
+        assertEquals(FileContent.ACSM, detect("<fulfillmentToken fulfillmentType=\"loan\" xmlns=\"http://ns.adobe.com/adept\">"))
+        assertEquals(FileContent.ACSM, detect("<?xml version=\"1.0\"?>\n<fulfillmentToken xmlns=\"http://ns.adobe.com/adept\">"))
+        assertEquals(FileContent.MHT, detect("From: <Saved by Blink>\r\nSnapshot-Content-Location: https://example.com/\r\nMIME-Version: 1.0\r\nContent-Type: multipart/related;\r\n"))
+        assertEquals(FileContent.MHT, detect("MIME-Version: 1.0\r\nContent-Type: multipart/related; boundary=\"x\"\r\n"))
+        /* a mail-like text without the parts of a saved page stays text */
+        assertEquals(FileContent.TEXT, detect("From: someone\nSubject: notes\n\nplain text"))
+    }
+
+    @Test
+    fun reflowableBooks() {
+        val epub = "PK\u0003\u0004".toByteArray() + ByteArray(26) + "mimetypeapplication/epub+zip".toByteArray()
+        assertEquals(FileContent.EPUB, detectFileContent(epub))
+        /* another first entry: an ordinary archive */
+        assertEquals(FileContent.ZIP, detectFileContent("PK\u0003\u0004".toByteArray() + ByteArray(26) + "page1.jpg".toByteArray()))
+        assertEquals(FileContent.MOBI, detectFileContent(ByteArray(60) { 'n'.code.toByte() } + "BOOKMOBI".toByteArray() + ByteArray(16)))
+        assertEquals(FileContent.FB2, detect("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<FictionBook xmlns=\"http://www.gribuser.ru/xml/fictionbook/2.0\">"))
+        assertEquals(FileContent.FB2, detect("<FictionBook xmlns=\"http://www.gribuser.ru/xml/fictionbook/2.0\">"))
     }
 
     @Test
