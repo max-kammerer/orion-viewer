@@ -15,11 +15,11 @@
     <string name="menu_exit_text">Выйти</string>
     <string name="menu_key_binder_text">Назначение клавиш</string>
     <string name="menu_options_text">Настройки</string>
-    <string name="menu_tap_text">Тап зоны</string>
+    <string name="menu_tap_text">Тап-зоны</string>
     <string name="menu_search_item">Поиск</string>
     <string name="menu_other">Прочее…</string>
     <string name="menu_book_preferences">Настройки книги</string>
-    <string name="menu_outline_text">Cодержание</string>
+    <string name="menu_outline_text">Содержание</string>
     <string name="menu_select_text">Выделить текст</string>
     <string name="export_all_bookmarks_menu_item">Экспортировать все закладки</string>
     <string name="export_bookmarks_menu_item">Экспортировать текущие закладки</string>
@@ -27,4 +27,5 @@
     <string name="import_current_bookmarks_menu_item">Дополнить из…</string>
     <string name="menu_share_text">Поделиться текстом</string>
     <string name="menu_share_file">Поделиться файлом</string>
+    <string name="msg_share_file_failed">Невозможно поделиться файлом из этого места</string>
 </resources>

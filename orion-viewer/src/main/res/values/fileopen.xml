@@ -16,7 +16,7 @@
     <string name="fileopen_save_to_file">Save to new file…</string>
     <string name="fileopen_open_in_temporary_file">Open via temporary file</string>
     <string name="fileopen_open_recent_files">Go to recent books…</string>
-    <string name="fileopen_report_error_by_github_and_return">Report issue on github and return to dialog…</string>
+    <string name="fileopen_report_error_by_github_and_return">Report issue on GitHub and return to dialog…</string>
     <string name="fileopen_report_error_by_email_and_return">Report error by email and return to dialog…</string>
 
     <string name="string_exception">Exception</string>

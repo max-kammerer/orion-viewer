@@ -35,7 +35,7 @@
     <string name="pref_close_dialog_on_apply">Закрывать диалог при применении настроек</string>
     <string name="pref_close_page_option_dialog_on_apply">Закрывать диалог параметров страницы при применении настроек</string>
     <string name="pref_swap_prev_next_keys">Обменять клавиши местами</string>
-    <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Обменять действия клавиш вперед/назад в портретном режиме</string>
+    <string name="pref_swap_prev_next_keys_on_90_degree_rotation">Поменять местами клавиши вперёд/назад в альбомной ориентации</string>
     <string name="pref_dictionary">Словарь</string>
     <string name="pref_dictionary_desc">Словарь: %s</string>
     <string name="pref_e_ink_optimization">E-ink</string>
@@ -47,7 +47,7 @@
     <string name="pref_screen_overlapping_horizontal_desc">Горизонтальный нахлест отображаемых частей страницы (0–90%)</string>
     <string name="pref_screen_overlapping_vertical">Вертикальный нахлест</string>
     <string name="pref_screen_overlapping_vertical_desc">Вертикальный нахлест отображаемых частей страницы (0–90%)</string>
-    <string name="pref_custom_brightness">Регулировка Яркости</string>
+    <string name="pref_custom_brightness">Регулировка яркости</string>
     <string name="pref_brightness">Яркость</string>
     <string name="pref_brightness_desc">Яркость (1–100%)</string>
     <string name="pref_application_theme">Тема приложения</string>
@@ -84,8 +84,8 @@
     <string name="pref_app_language_desc">Язык приложения: %s. (Необходим перезапуск при изменении)</string>
     <string name="pref_tap_zones_desc">Привязка операции к зонам экрана</string>
     <string name="pref_key_binder_desc">Привязка операции к клавишам</string>
-    <string name="pref_key_double_tap">Действие по двойному клику</string>
-    <string name="pref_key_long_tap">Действие по долгому клику</string>
+    <string name="pref_key_double_tap">Действие при двойном нажатии</string>
+    <string name="pref_key_long_tap">Действие при долгом нажатии</string>
     <string name="pref_key_linked_action_summary">Связанное действие: `%s`</string>
     <string name="pref_book_threshold">Порог для водяных знаков</string>
     <string name="pref_book_threshold_desc">Порог удаления водяных знаков (по умолчанию 255): %s</string>
