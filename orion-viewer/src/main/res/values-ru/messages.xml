@@ -14,9 +14,9 @@
     <string name="msg_specify_keyword_for_search">Не задано слово для поиска</string>
     <string name="recent_book_not_found">Не могу найти файл книги!</string>
     <string name="tap_zones_header">Навигация с помощью касаний: действия по-умолчанию</string>
-    <string name="permission_directory_warning">Пожалуйста, предоставте права на чтение данных диска</string>
+    <string name="permission_directory_warning">Чтобы показывать книги в списке папок, приложению нужен доступ к файлам на устройстве. Он используется только для поиска и чтения книг.\n\nБез него любую книгу можно открыть из другого приложения или через «Выбрать файл в системе» в боковом меню.</string>
     <string name="permission_grant">Предоставить…</string>
-    <string name="permission_cancel">Отмена</string>
+    <string name="permission_cancel">Не сейчас</string>
     <string name="string_cancel">Отмена</string>
     <string name="string_close">Закрыть</string>
     <string name="string_apply">Применить</string>

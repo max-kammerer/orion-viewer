@@ -5,7 +5,7 @@
     <string name="fileopen_private_resource_access">Доступ к приватному файлу</string>
     <string name="fileopen_private_resource_access_info">Невозможно получить прямой доступ к файлу, пожалуйста, выберите один из вариантов ниже:</string>
     <string name="fileopen_permission_dialog">Нет прямого доступа к файлу</string>
-    <string name="fileopen_permission_dialog_info">Пожалуйста, предоставте права на чтение файла напрямую или выберите опцию ниже:</string>
+    <string name="fileopen_permission_dialog_info">Пожалуйста, предоставьте права на чтение файла напрямую или выберите опцию ниже:</string>
     <string name="fileopen_source_unavailable">Файл недоступен</string>
     <string name="fileopen_source_unavailable_info">Приложение, поделившееся файлом (%1$s), больше не даёт к нему доступ: %2$s. Пожалуйста, откройте или отправьте файл из того приложения ещё раз, или:</string>
     <string name="fileopen_source_unavailable_message">Приложение, поделившееся файлом (%1$s), больше не даёт к нему доступ: %2$s. Пожалуйста, откройте или отправьте файл из того приложения ещё раз.</string>

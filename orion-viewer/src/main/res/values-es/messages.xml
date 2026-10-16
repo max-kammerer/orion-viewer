@@ -12,9 +12,9 @@
     <string name="msg_specify_keyword_for_search">Ingresa una palabra clave para buscar</string>
     <string name="recent_book_not_found">¡No encuentro el archivo del libro!</string>
     <string name="tap_zones_header">Navegación táctil: acciones predeterminadas</string>
-    <string name="permission_directory_warning">Por favor, proporcione permiso de lectura para acceder a los datos de almacenamiento</string>
+    <string name="permission_directory_warning">Para mostrar tus libros en la lista de carpetas, Orion Viewer necesita acceso a los archivos del dispositivo. Solo se usa para buscar y leer libros.\n\nSin él, puedes abrir cualquier libro desde otra aplicación o con «Seleccionar archivo en el sistema» en el menú lateral.</string>
     <string name="permission_grant">Proporcionar…</string>
-    <string name="permission_cancel">Cancelar</string>
+    <string name="permission_cancel">Ahora no</string>
     <string name="string_cancel">Cancelar</string>
     <string name="string_close">Cerrar</string>
     <string name="string_apply">Aplicar</string>

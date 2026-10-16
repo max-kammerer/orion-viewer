@@ -11,9 +11,9 @@
     <string name="msg_select_word">Натисніть на слово!</string>
     <string name="msg_warning">Попередження</string>
     <string name="msg_specify_keyword_for_search">Вкажіть ключове слово для пошуку</string>
-    <string name="permission_directory_warning">Будь ласка, надайте дозвіл на читання для доступу до даних сховища</string>
+    <string name="permission_directory_warning">Щоб показувати книги у списку тек, застосунку потрібен доступ до файлів на пристрої. Він використовується лише для пошуку та читання книг.\n\nБез нього будь-яку книгу можна відкрити з іншого застосунку або через «Виберіть файл у системі» в бічному меню.</string>
     <string name="permission_grant">Надати…</string>
-    <string name="permission_cancel">Скасовано</string>
+    <string name="permission_cancel">Не зараз</string>
     <string name="string_cancel">Скасувати</string>
     <string name="string_close">Закрити</string>
     <string name="string_apply">Застосувати</string>

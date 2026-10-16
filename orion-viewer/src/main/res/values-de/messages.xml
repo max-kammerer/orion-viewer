@@ -16,9 +16,9 @@
     <string name="msg_select_text">Text auswählen!</string>
     <string name="recent_book_not_found">Kann die Buchdatei nicht finden!</string>
     <string name="tap_zones_header">Navigation über Tippzonen: Standardzonenaktionen</string>
-    <string name="permission_directory_warning">Bitte gewähre die Leseberechtigung für den Zugriff auf die Speicherdaten</string>
+    <string name="permission_directory_warning">Damit deine Bücher in der Ordnerliste angezeigt werden, braucht Orion Viewer Zugriff auf die Dateien des Geräts. Er wird nur zum Finden und Lesen von Büchern verwendet.\n\nAuch ohne ihn kannst du jedes Buch aus einer anderen App oder über „Datei im System auswählen“ im Seitenmenü öffnen.</string>
     <string name="permission_grant">Gewähren…</string>
-    <string name="permission_cancel">Abbrechen</string>
+    <string name="permission_cancel">Nicht jetzt</string>
     <string name="string_cancel">Abbrechen</string>
     <string name="string_close">Schließen</string>
     <string name="string_apply">Anwenden</string>

@@ -4,7 +4,7 @@
     <string name="msg_searching">Söker…</string>
     <string name="msg_error">Fel</string>
     <string name="msg_warning">Varning</string>
-    <string name="permission_cancel">Avbryt</string>
+    <string name="permission_cancel">Inte nu</string>
     <string name="string_cancel">Avbryt</string>
     <string name="string_close">Stäng</string>
     <string name="string_apply">Verkställ</string>

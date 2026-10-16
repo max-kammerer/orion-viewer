@@ -11,7 +11,7 @@
     <string name="msg_select_word">Націсніце на слова!</string>
     <string name="recent_book_not_found">Не магу знайсці файл кнігі!</string>
     <string name="permission_grant">Дазволы…</string>
-    <string name="permission_cancel">Адмена</string>
+    <string name="permission_cancel">Не зараз</string>
     <string name="string_cancel">Адмена</string>
     <string name="string_close">Зачыніць</string>
     <string name="string_apply">Ўжываць</string>
@@ -20,7 +20,7 @@
     <string name="wrong_outline_item">Няправільная старонка: %s</string>
     <string name="msg_error">Памылка</string>
     <string name="msg_specify_keyword_for_search">Пакажыце ключавое слова для пошуку</string>
-    <string name="permission_directory_warning">Калі ласка, падайце дазвол на чытанне для доступу да дадзеных сховішчы</string>
+    <string name="permission_directory_warning">Каб паказваць кнігі ў спісе папак, праграме патрэбны доступ да файлаў на прыладзе. Ён выкарыстоўваецца толькі для пошуку і чытання кніг.\n\nБез яго любую кнігу можна адкрыць з іншай праграмы або праз «Выбраць файл у сістэме» ў бакавым меню.</string>
     <string name="msg_warning">Папярэджанне</string>
     <string name="tap_zones_header">Навігацыя па зонах дотыку: дзеянні ў зонах па змаўчанні</string>
 </resources>

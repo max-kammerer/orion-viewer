@@ -8,9 +8,9 @@
     <string name="msg_specify_keyword_for_search">Palun vali otsingusõna</string>
     <string name="recent_book_not_found">Raamatu faili ei leidu!</string>
     <string name="tap_zones_header">Liikumine määratud puutealade abil: vaikimisi valikud</string>
-    <string name="permission_directory_warning">Andmekandjalt lugemiseks palun luba vajalikud lugemisõigused</string>
+    <string name="permission_directory_warning">Raamatute näitamiseks kaustade loendis vajab Orion Viewer ligipääsu seadme failidele. Seda kasutatakse ainult raamatute leidmiseks ja lugemiseks.\n\nIlma selleta saad iga raamatu avada mõnest teisest rakendusest või külgmenüü valikuga „Vali fail nutiseadmest”.</string>
     <string name="permission_grant">Anna õigused…</string>
-    <string name="permission_cancel">Katkesta</string>
+    <string name="permission_cancel">Mitte praegu</string>
     <string name="string_cancel">Katkesta</string>
     <string name="string_close">Sulge</string>
     <string name="string_apply">Rakenda</string>

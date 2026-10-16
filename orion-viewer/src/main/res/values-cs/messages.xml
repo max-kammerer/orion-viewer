@@ -14,9 +14,9 @@
     <string name="msg_specify_keyword_for_search">Zadejte klíčové slovo pro vyhledávání</string>
     <string name="recent_book_not_found">Nelze najít soubor s knihou!</string>
     <string name="tap_zones_header">Navigace pomocí dotykových zón: výchozí akce zóny</string>
-    <string name="permission_directory_warning">Poskytněte prosím oprávnění ke čtení pro přístup k datům úložiště</string>
+    <string name="permission_directory_warning">Aby se knihy zobrazovaly v seznamu složek, potřebuje Orion Viewer přístup k souborům v zařízení. Používá se jen k vyhledání a čtení knih.\n\nI bez něj můžete otevřít jakoukoli knihu z jiné aplikace nebo pomocí „Vyberte soubor v systému“ v postranní nabídce.</string>
     <string name="permission_grant">Poskytnout…</string>
-    <string name="permission_cancel">Zrušit</string>
+    <string name="permission_cancel">Teď ne</string>
     <string name="string_cancel">Zrušit</string>
     <string name="string_close">Zavřít</string>
     <string name="string_apply">Použít</string>
