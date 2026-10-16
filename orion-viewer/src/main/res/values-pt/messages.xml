@@ -14,9 +14,9 @@
     <string name="msg_specify_keyword_for_search">Informe a palavra-chave para pesquisa</string>
     <string name="recent_book_not_found">Não foi possível encontrar o ficheiro do livro!</string>
     <string name="tap_zones_header">Navegação por zonas de toque: ações padrão</string>
-    <string name="permission_directory_warning">Conceda permissão de leitura para aceder os dados de armazenamento</string>
+    <string name="permission_directory_warning">Para mostrar os seus livros na lista de pastas, o Orion Viewer precisa de acesso aos ficheiros do dispositivo. É usado apenas para encontrar e ler livros.\n\nSem ele, pode abrir qualquer livro a partir de outra aplicação ou com “Select file in system” no menu lateral.</string>
     <string name="permission_grant">Permitir…</string>
-    <string name="permission_cancel">Cancelar</string>
+    <string name="permission_cancel">Agora não</string>
     <string name="string_cancel">Cancelar</string>
     <string name="string_close">Fechar</string>
     <string name="string_apply">Aplicar</string>

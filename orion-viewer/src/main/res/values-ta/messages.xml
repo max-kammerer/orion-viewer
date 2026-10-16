@@ -15,8 +15,8 @@
     <string name="msg_warning">எச்சரிக்கை</string>
     <string name="recent_book_not_found">புத்தகக் கோப்பைக் கண்டுபிடிக்க முடியவில்லை!</string>
     <string name="tap_zones_header">தட்டு மண்டலங்கள் வழியாக வழிசெலுத்தல்: இயல்புநிலை மண்டல செயல்கள்</string>
-    <string name="permission_directory_warning">சேமிப்பக தரவை அணுக வாசிப்பு இசைவு வழங்கவும்</string>
-    <string name="permission_cancel">ரத்துசெய்</string>
+    <string name="permission_directory_warning">கோப்புறை பட்டியலில் உங்கள் புத்தகங்களைக் காட்ட, Orion Viewer-க்கு சாதனத்தில் உள்ள கோப்புகளை அணுகும் அனுமதி தேவை. இது புத்தகங்களைக் கண்டறியவும் படிக்கவும் மட்டுமே பயன்படுத்தப்படும்.\n\nஅனுமதி இல்லாமலும், வேறு ஒரு செயலியிலிருந்து அல்லது பக்க மெனுவில் உள்ள “கணினியில் கோப்பைத் தேர்ந்தெடுக்கவும்” மூலம் எந்தப் புத்தகத்தையும் திறக்கலாம்.</string>
+    <string name="permission_cancel">இப்போது வேண்டாம்</string>
     <string name="string_cancel">ரத்துசெய்</string>
     <string name="string_close">மூடு</string>
     <string name="string_apply">இடு</string>

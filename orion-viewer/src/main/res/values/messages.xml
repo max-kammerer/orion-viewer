@@ -19,9 +19,9 @@
     <string name="recent_book_not_found">Can\'t find book file!</string>
     <string name="tap_zones_header">Navigation via Tap Zones: default zone actions</string>
 
-    <string name="permission_directory_warning">Please provide read permission to access storage data</string>
+    <string name="permission_directory_warning">To show your books in the folder list, Orion Viewer needs access to the files on the device. It is used only to find and read books.\n\nWithout it, you can still open any book from another app or with “Select file in system” in the side menu.</string>
     <string name="permission_grant">Grant…</string>
-    <string name="permission_cancel">Cancel</string>
+    <string name="permission_cancel">Not now</string>
 
     <string name="string_cancel">Cancel</string>
     <string name="string_close">Close</string>

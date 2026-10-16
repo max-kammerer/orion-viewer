@@ -17,9 +17,9 @@
     <string name="msg_error">Erro</string>
     <string name="msg_warning">Aviso</string>
     <string name="tap_zones_header">Navegação por zonas de toque: ações padrão</string>
-    <string name="permission_directory_warning">Conceda permissão de leitura para acessar os dados de armazenamento</string>
+    <string name="permission_directory_warning">Para mostrar seus livros na lista de pastas, o Orion Viewer precisa de acesso aos arquivos do dispositivo. Ele é usado apenas para encontrar e ler livros.\n\nSem ele, você ainda pode abrir qualquer livro a partir de outro app ou com “Selecionar arquivo no sistema” no menu lateral.</string>
     <string name="permission_grant">Permitir…</string>
-    <string name="permission_cancel">Cancelar</string>
+    <string name="permission_cancel">Agora não</string>
     <string name="string_cancel">Cancelar</string>
     <string name="string_close">Fechar</string>
     <string name="string_apply">Aplicar</string>

@@ -9,7 +9,7 @@
     <string name="msg_warning">警告</string>
     <string name="recent_book_not_found">没找着书籍文件！</string>
     <string name="permission_grant">授权…</string>
-    <string name="permission_cancel">取消</string>
+    <string name="permission_cancel">以后再说</string>
     <string name="string_close">关闭</string>
     <string name="string_cancel">取消</string>
     <string name="string_apply">确认</string>
@@ -21,6 +21,6 @@
     <string name="warn_no_further_occurrences_found">没有找到其他匹配搜索词的地方</string>
     <string name="msg_specify_keyword_for_search">指定搜索关键词</string>
     <string name="tap_zones_header">通过轻触区域导肮：默认区域操作</string>
-    <string name="permission_directory_warning">请提供读取权限来访问存储数据</string>
+    <string name="permission_directory_warning">为了在文件夹列表中显示您的书籍，Orion Viewer 需要访问设备上的文件。此权限仅用于查找和阅读书籍。\n\n不授予权限，您仍可以从其他应用或通过侧边菜单中的“在系统中选择文件”打开任何书籍。</string>
     <string name="msg_select_word">单击选中单词！</string>
 </resources>

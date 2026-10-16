@@ -13,9 +13,9 @@
     <string name="msg_warning">Avís</string>
     <string name="msg_specify_keyword_for_search">Especifica la paraula que vols cercar</string>
     <string name="recent_book_not_found">No trobo el fitxer del document!</string>
-    <string name="permission_directory_warning">Concedeix permisos de lectura per accedir a les dades d\'emmagatzematge</string>
+    <string name="permission_directory_warning">Per mostrar els llibres a la llista de carpetes, Orion Viewer necessita accés als fitxers del dispositiu. Només s\'utilitza per cercar i llegir llibres.\n\nSense aquest accés, pots obrir qualsevol llibre des d\'una altra aplicació o amb «Selecciona un fitxer al sistema» al menú lateral.</string>
     <string name="permission_grant">Concedir…</string>
-    <string name="permission_cancel">Cancel·lar</string>
+    <string name="permission_cancel">Ara no</string>
     <string name="string_cancel">Cancel·lar</string>
     <string name="string_close">Tancar</string>
     <string name="string_apply">Aplicar</string>
