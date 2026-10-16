@@ -28,9 +28,9 @@
     <string name="crop_manual_auto">Manual and auto</string>
     <string name="crop_warning">Use manual crop for better performance</string>
 
-    <string name="rotate_0">0 degree</string>
-    <string name="rotate_90">90 degree</string>
-    <string name="rotate_270">270 degree</string>
+    <string name="rotate_0">0 degrees</string>
+    <string name="rotate_90">90 degrees</string>
+    <string name="rotate_270">270 degrees</string>
     <string name="long_click">On long click</string>
     <string name="short_click">On short click</string>
     <string name="binding_click">On binding</string>
@@ -49,7 +49,7 @@
     <string name="fit_page">Fit Page</string>
     <string name="fit_custom">Custom…</string>
 
-    <string name="key_binder_message">Push any key and select action to bind them!</string>
+    <string name="key_binder_message">Press any key and select an action to bind to it!</string>
     <string name="key_binder_warning">Couldn\'t bind key with zero keycode, try another key!</string>
     <string name="table_of_contents">Table of Contents</string>
 

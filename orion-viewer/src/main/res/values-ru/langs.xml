@@ -11,4 +11,6 @@
     <string name="lang_ukrainian_user">Украинский</string>
     <string name="lang_german_user">Немецкий</string>
     <string name="lang_french_user">Французский</string>
+    <string name="lang_turkish_user">Турецкий</string>
+    <string name="lang_czech_user">Чешский</string>
 </resources>

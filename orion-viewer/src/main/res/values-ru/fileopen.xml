@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="fileopen_error_during_intent_processing">Ошибка при обработке запроса</string>
-    <string name="fileopen_error_during_intent_processing_info">Не извлечь путь к файлу из запроса. Пожалуйста, сохраните данные запроса в файл, чтобы открыть или:</string>
+    <string name="fileopen_error_during_intent_processing_info">Не удалось извлечь путь к файлу из запроса. Пожалуйста, сохраните данные запроса в файл, чтобы открыть или:</string>
     <string name="fileopen_private_resource_access">Доступ к приватному файлу</string>
     <string name="fileopen_private_resource_access_info">Невозможно получить прямой доступ к файлу, пожалуйста, выберите один из вариантов ниже:</string>
     <string name="fileopen_permission_dialog">Нет прямого доступа к файлу</string>
@@ -14,19 +14,19 @@
     <string name="fileopen_save_to_file">Сохранить в новый файл…</string>
     <string name="fileopen_open_in_temporary_file">Открыть через временный файл</string>
     <string name="fileopen_open_recent_files">Перейти к недавно открытым книгам…</string>
-    <string name="fileopen_report_error_by_github_and_return">Создать ошибку на github и вернуться к диалогу…</string>
+    <string name="fileopen_report_error_by_github_and_return">Сообщить об ошибке на GitHub и вернуться к диалогу…</string>
     <string name="fileopen_report_error_by_email_and_return">Отправить ошибку по e-mail и вернуться к диалогу…</string>
     <string name="string_intent">Интент</string>
     <string name="string_exception">Исключение</string>
     <string name="string_cause">Причина</string>
     <string name="crash_on_book_opening_title">Ошибка при открытии файла</string>
     <string name="crash_on_intent_opening_title">Ошибка при обработке интента</string>
-    <string name="crash_on_book_opening_message_header">Ошибка при открытии \`%1$s\` файла. Пожалуйста, отправьте сообщение об ошибке:</string>
-    <string name="crash_on_book_opening_message_header_panel">Ошибка при открытии \`%1$s\` файла:</string>
+    <string name="crash_on_book_opening_message_header">Ошибка при открытии файла \`%1$s\`. Пожалуйста, отправьте сообщение об ошибке:</string>
+    <string name="crash_on_book_opening_message_header_panel">Ошибка при открытии файла \`%1$s\`:</string>
     <string name="crash_on_book_opening_encrypted">Зашифрованный документ</string>
     <string name="string_send">Отправить…</string>
     <string name="send_report_header">[Пожалуйста, укажите дополнительную информацию (как воспроизвести проблему)]</string>
-    <string name="error_on_file_saving_title">Ошибка при cохранинии файла</string>
+    <string name="error_on_file_saving_title">Ошибка при сохранении файла</string>
     <string name="fileopen_cant_open">Невозможно открыть документ: %s.</string>
     <string name="fileopen_file_is_emppty">пустой файл</string>
     <string name="fileopen_no_pages">в документе нет страниц</string>
@@ -39,4 +39,5 @@
     <string name="fileopen_content_archive">файл — архив %1$s: если внутри книга, сначала распакуйте её</string>
     <string name="fileopen_content_acsm">это ключ для загрузки книги через Adobe Digital Editions (ACSM), а не сама книга: откройте его в Adobe Digital Editions, чтобы скачать книгу</string>
     <string name="fileopen_content_mht">это сохранённая веб-страница (MHT)</string>
+    <string name="crash_on_book_opening_no_engine_library">Приложение установлено без библиотеки движка документов для этого устройства (%1$s), поэтому книги не открываются. Переустановите приложение из Google Play или установите сборку для своего устройства со страницы проекта на GitHub.</string>
 </resources>

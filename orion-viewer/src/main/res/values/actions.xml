@@ -11,7 +11,7 @@
     <string name="action_search_hint">Search actions</string>
     <string name="action_menu">Main menu</string>
     <string name="action_next_page">Next page</string>
-    <string name="action_prev_page">Prev page</string>
+    <string name="action_prev_page">Previous page</string>
     <string name="action_first_page">First page</string>
     <string name="action_last_page">Last page</string>
     <string name="action_crop_page">Crop dialog</string>
@@ -46,8 +46,8 @@
     <string name="action_next_10">Forward 10 pages</string>
     <string name="action_prev_10">Backward 10 pages</string>
 
-    <string name="action_rotate_90">Rotate 90/-90 degree</string>
-    <string name="action_rotate_270">Rotate 270/-270 degree</string>
+    <string name="action_rotate_90">Rotate 90/-90 degrees</string>
+    <string name="action_rotate_270">Rotate 270/-270 degrees</string>
 
     <string name="action_select_text">@string/menu_select_text</string>
     <string name="action_select_word">Select word</string>

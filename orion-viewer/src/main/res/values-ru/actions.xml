@@ -49,4 +49,14 @@
     <string name="action_navigate_back">Назад к предыдущему месту</string>
     <string name="action_navigate_forward">Вперёд к следующему месту</string>
     <string name="action_fit_width">Масштабировать по ширине страницы</string>
+    <string name="action_group_navigation">Навигация</string>
+    <string name="action_group_view">Вид</string>
+    <string name="action_group_crop_keys">Обрезка полей клавишами</string>
+    <string name="action_group_text">Текст</string>
+    <string name="action_group_book">Книга</string>
+    <string name="action_group_application">Приложение</string>
+    <string name="action_search_hint">Поиск действий</string>
+    <string name="action_switch_touch_move">Вкл./выкл. сдвиг одним пальцем</string>
+    <string name="msg_touch_move_enabled">Сдвиг одним пальцем включён</string>
+    <string name="msg_touch_move_disabled">Сдвиг одним пальцем выключен</string>
 </resources>

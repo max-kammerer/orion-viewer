@@ -8,12 +8,12 @@
     <string name="warn_no_further_occurrences_found">Совпадений не найдено</string>
     <string name="msg_searching">Поиск…</string>
     <string name="msg_select_text">Выделите текст!</string>
-    <string name="msg_select_word">Кликните по слову!</string>
+    <string name="msg_select_word">Нажмите на слово!</string>
     <string name="msg_error">Ошибка</string>
     <string name="msg_warning">Предупреждение</string>
     <string name="msg_specify_keyword_for_search">Не задано слово для поиска</string>
     <string name="recent_book_not_found">Не могу найти файл книги!</string>
-    <string name="tap_zones_header">Навигация с помощью касаний: действия по-умолчанию</string>
+    <string name="tap_zones_header">Навигация с помощью касаний: действия по умолчанию</string>
     <string name="permission_directory_warning">Чтобы показывать книги в списке папок, приложению нужен доступ к файлам на устройстве. Он используется только для поиска и чтения книг.\n\nБез него любую книгу можно открыть из другого приложения или через «Выбрать файл в системе» в боковом меню.</string>
     <string name="permission_grant">Предоставить…</string>
     <string name="permission_cancel">Не сейчас</string>
