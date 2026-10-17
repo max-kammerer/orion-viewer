@@ -23,6 +23,7 @@ import universe.constellation.orion.viewer.FallbackDialogs.Companion.saveFileByU
 import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAccessPermissionOrReadOne
 import universe.constellation.orion.viewer.Permissions.hasReadStoragePermission
 import universe.constellation.orion.viewer.analytics.FALLBACK_DIALOG
+import universe.constellation.orion.viewer.analytics.PERMISSION_ASKED
 import universe.constellation.orion.viewer.android.isAtLeastKitkat
 import universe.constellation.orion.viewer.android.isContentScheme
 import universe.constellation.orion.viewer.filemanager.OrionFileManagerActivity
@@ -175,6 +176,7 @@ open class FallbackDialogs {
     ) {
         when (id) {
             R.string.fileopen_permissions_grant_read -> {
+                activity.reportPermission(PERMISSION_ASKED)
                 activity.checkAndRequestStorageAccessPermissionOrReadOne(Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN)
                 alertDialog.dismiss()
             }

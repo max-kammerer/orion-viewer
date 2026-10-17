@@ -26,6 +26,9 @@ import universe.constellation.orion.viewer.FallbackDialogs.Companion.saveFileByU
 import universe.constellation.orion.viewer.FileUtil.beautifyFileSize
 import universe.constellation.orion.viewer.Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN
 import universe.constellation.orion.viewer.Permissions.hasReadStoragePermission
+import universe.constellation.orion.viewer.analytics.PERMISSION_FROM_BOOK
+import universe.constellation.orion.viewer.analytics.PERMISSION_RESULT
+import universe.constellation.orion.viewer.analytics.PERMISSION_SHOWN
 import universe.constellation.orion.viewer.analytics.ProcessMemory
 import universe.constellation.orion.viewer.analytics.SHOW_ERROR_PANEL_DIALOG
 import universe.constellation.orion.viewer.analytics.TAP_HELP_DIALOG
@@ -152,6 +155,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (ASK_READ_PERMISSION_FOR_BOOK_OPEN == requestCode) {
             log("Permission callback $requestCode...")
+            reportPermission(PERMISSION_RESULT)
             processIntentAndCheckPermission(intent ?: return)
         }
     }
@@ -171,12 +175,18 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         if (fileInfo.isRestrictedAccessPath() || hasReadStoragePermission(this)) {
             FallbackDialogs().createPrivateResourceFallbackDialog(this, fileInfo, intent).show()
         } else {
+            reportPermission(PERMISSION_SHOWN)
             FallbackDialogs().createGrantReadPermissionsDialog(
                 this@OrionViewerActivity,
                 fileInfo,
                 intent
             ).show()
         }
+    }
+
+    /** A step of asking for the storage access to open a book, see [universe.constellation.orion.viewer.analytics.Analytics.permissionEvent]. */
+    internal fun reportPermission(step: String) {
+        analytics.permissionEvent(javaClass.name, hasReadStoragePermission(this), isNewUI, step, PERMISSION_FROM_BOOK)
     }
 
     internal fun processIntentAndCheckPermission(intent: Intent, isUserIntent: Boolean = false) {
@@ -933,8 +943,10 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 processIntentAndCheckPermission(intent ?: return)
             }
 
-            PERMISSION_READ_RESULT ->
+            PERMISSION_READ_RESULT -> {
+                reportPermission(PERMISSION_RESULT)
                 processIntentAndCheckPermission(intent ?: return)
+            }
         }
     }
 

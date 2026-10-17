@@ -9,6 +9,8 @@ import org.junit.Test
 import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.OrionViewerActivity
 import universe.constellation.orion.viewer.analytics.Analytics
+import universe.constellation.orion.viewer.analytics.PERMISSION_FROM_START
+import universe.constellation.orion.viewer.analytics.PERMISSION_RESULT
 import universe.constellation.orion.viewer.analytics.ProcessMemory
 import universe.constellation.orion.viewer.prefs.OrionApplication
 import universe.constellation.orion.viewer.test.framework.BaseTest
@@ -41,7 +43,7 @@ class AnalyticsTest : BaseTest() {
         analytics.dialog("test", true)
         analytics.action("test")
         analytics.onStartStop("test", isStart = true, isNewUser = false)
-        analytics.permissionEvent("test", state = true, isNewUser = false)
+        analytics.permissionEvent("test", state = true, isNewUser = false, step = PERMISSION_RESULT, source = PERMISSION_FROM_START, first = true)
         analytics.logWarning("test")
         analytics.error(RuntimeException("test"), "test")
         analytics.report("test", RuntimeException("test"))
@@ -49,11 +51,15 @@ class AnalyticsTest : BaseTest() {
         if (analytics.javaClass == Analytics::class.java) return
         val recorded = analytics.drainRecorded()
         val expected = listOf(
-            "event fileOpened ", "event memoryTrim ", "event oom ", "event Dialog ", "event action ",
+            "event fileOpened ", "event memoryTrim ", "event oom ", "event Dialog ", "event action ", "event permissionResult ",
             "key process_64bit ", "key book_size_mb ", "key engine ", "key vm_size_mb ", "key cache_limit_mb ", "key book_vm_growth_mb "
         )
         expected.forEach { prefix ->
             assertTrue("$prefix missing in:\n${recorded.joinToString("\n")}", recorded.any { it.startsWith(prefix) })
+        }
+        val permission = recorded.first { it.startsWith("event permissionResult ") }
+        listOf("step=result", "source=start", "first=true", "state=true").forEach {
+            assertTrue("$it missing in $permission", it in permission)
         }
         val fileOpened = recorded.first { it.startsWith("event fileOpened ") }
         listOf("engine=PdfDocument", "cache_limit_mb=64", "vm_size_mb=${memory.vmSizeMb}", "process_64bit=${ProcessMemory.is64Bit}").forEach {

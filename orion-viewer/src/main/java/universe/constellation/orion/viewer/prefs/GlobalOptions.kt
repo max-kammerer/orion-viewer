@@ -252,6 +252,9 @@ class GlobalOptions(
      */
     val OPENED_SURVEY = pref("OPENED_SURVEY", "")
 
+    /** Whether the start dialog asking for the storage access was ever shown: the first sight apart from the repeats in analytics. */
+    val PERMISSION_DIALOG_SHOWN = pref("PERMISSION_DIALOG_SHOWN", false)
+
     fun <T> subscribe(pref: Preference<T>) {
         registeredPreferences.put(pref.key, pref)?.also {
             errorInDebug("Pref with key ${pref.key} already registered: $pref ")

@@ -13,6 +13,17 @@ const val FALLBACK_DIALOG = "FALLBACK"
 const val SHOW_ERROR_DIALOG = "SHOW_ERROR"
 const val SHOW_ERROR_PANEL_DIALOG = "SHOW_ERROR_PANEL"
 
+const val PERMISSION_SHOWN = "shown"
+const val PERMISSION_DISMISSED = "dismissed"
+const val PERMISSION_CANCELLED = "cancelled"
+const val PERMISSION_ASKED = "asked"
+const val PERMISSION_RESULT = "result"
+
+const val PERMISSION_FROM_START = "start"
+const val PERMISSION_FROM_FOLDER = "folder"
+const val PERMISSION_FROM_MENU = "menu"
+const val PERMISSION_FROM_BOOK = "book"
+
 open class Analytics : NonFatalErrorReporter {
 
     /** [send] false keeps the implementation working but nothing leaves the device. */
@@ -81,7 +92,13 @@ open class Analytics : NonFatalErrorReporter {
 
     }
 
-    open fun permissionEvent(screen: String, state: Boolean, isNewUser: Boolean) {
+    /**
+     * A step of asking for the storage access, [step] one of PERMISSION_*: the funnel from the dialog
+     * shown to the access granted. [source] is where it was asked from (PERMISSION_FROM_*), [state]
+     * whether the access is there after the step, [first] the first start dialog on this install.
+     * [isNewUser] carries the new UI flag, as it always has.
+     */
+    open fun permissionEvent(screen: String, state: Boolean, isNewUser: Boolean, step: String, source: String, first: Boolean = false) {
 
     }
 
