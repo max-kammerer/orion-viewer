@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import universe.constellation.orion.viewer.Action
 import universe.constellation.orion.viewer.R
+import universe.constellation.orion.viewer.analytics.PERMISSION_FROM_MENU
 import universe.constellation.orion.viewer.android.isAtLeastKitkat
 
 class ActionBarDrawerToggle(
@@ -27,7 +28,7 @@ class ActionBarDrawerToggle(
                 return true
             }
             R.id.nav_permissions ->  {
-                activity.requestPermissions()
+                activity.requestPermissions(PERMISSION_FROM_MENU)
                 return true
             }
             R.id.help_menu_item, R.id.about_menu_item -> {

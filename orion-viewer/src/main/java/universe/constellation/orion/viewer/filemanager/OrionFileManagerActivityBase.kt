@@ -27,6 +27,12 @@ import universe.constellation.orion.viewer.Permissions
 import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAccessPermissionOrReadOne
 import universe.constellation.orion.viewer.Permissions.hasReadStoragePermission
 import universe.constellation.orion.viewer.R
+import universe.constellation.orion.viewer.analytics.PERMISSION_ASKED
+import universe.constellation.orion.viewer.analytics.PERMISSION_CANCELLED
+import universe.constellation.orion.viewer.analytics.PERMISSION_DISMISSED
+import universe.constellation.orion.viewer.analytics.PERMISSION_FROM_START
+import universe.constellation.orion.viewer.analytics.PERMISSION_RESULT
+import universe.constellation.orion.viewer.analytics.PERMISSION_SHOWN
 import universe.constellation.orion.viewer.android.isAtLeastKitkat
 import universe.constellation.orion.viewer.formats.FileFormats
 import universe.constellation.orion.viewer.getVectorDrawable
@@ -52,6 +58,9 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
     var prefs: SharedPreferences? = null
         private set
 
+    /** Where the pending storage access request came from, for its result event; kept while the system settings recreate the activity. */
+    private var permissionSource: String? = null
+
     val selectDocumentInSystem = if (isAtLeastKitkat()) registerForActivityResult(
         ActivityResultContracts.OpenDocument()
         ) { result ->
@@ -68,9 +77,11 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
 
         prefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
+        permissionSource = savedInstanceState?.getString(PERMISSION_SOURCE)
         initFileManager()
         initDrawer()
-        showPermissionRequestDialog()
+        //a recreation shows the dialog again, but it's the same sight of it
+        showPermissionRequestDialog(isNewSight = savedInstanceState == null)
 
         onNewIntent(intent)
     }
@@ -171,29 +182,56 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(PERMISSION_SOURCE, permissionSource)
+    }
+
     private fun actualizePermissions() {
         val hasReadStoragePermission = hasReadStoragePermission(this)
         if (hasReadStoragePermission) {
             refreshFolder()
         }
         navView.menu.findItem(R.id.nav_permissions)?.setVisible(!hasReadStoragePermission(this))
-        analytics.permissionEvent(this.javaClass.name, hasReadStoragePermission, globalOptions.isNewUI)
+        reportPermission(PERMISSION_RESULT, permissionSource ?: "unknown", hasReadStoragePermission)
+        permissionSource = null
     }
 
-    private fun showPermissionRequestDialog() {
+    /**
+     * The dialog is shown on every start without the access. [isNewSight] false is a recreation
+     * of the one already reported. It counts as the first one until it's answered.
+     */
+    private fun showPermissionRequestDialog(isNewSight: Boolean) {
         if (!hasReadStoragePermission(this)) {
+            val first = !globalOptions.PERMISSION_DIALOG_SHOWN.value
+            fun answered(step: String) {
+                globalOptions.saveBooleanProperty(globalOptions.PERMISSION_DIALOG_SHOWN.key, true)
+                reportPermission(step, PERMISSION_FROM_START, false, first)
+            }
+            if (isNewSight) reportPermission(PERMISSION_SHOWN, PERMISSION_FROM_START, false, first)
             AlertDialog.Builder(this).setMessage(R.string.permission_directory_warning)
                 .setPositiveButton(R.string.permission_grant) { _, _ ->
-                    requestPermissions()
+                    globalOptions.saveBooleanProperty(globalOptions.PERMISSION_DIALOG_SHOWN.key, true)
+                    requestPermissions(PERMISSION_FROM_START, first)
                 }.setNegativeButton(R.string.permission_cancel) { d, _ ->
                     d.dismiss()
-                    analytics.permissionEvent(this.javaClass.name, false, globalOptions.isNewUI)
+                    answered(PERMISSION_DISMISSED)
+                }.setOnCancelListener {
+                    //back or a tap outside
+                    answered(PERMISSION_CANCELLED)
                 }.show()
         }
     }
 
-    internal fun requestPermissions() {
+    /** [source] is one of PERMISSION_FROM_*: the start dialog, the button over the folders, the side menu. */
+    internal fun requestPermissions(source: String, first: Boolean = false) {
+        permissionSource = source
+        reportPermission(PERMISSION_ASKED, source, false, first)
         checkAndRequestStorageAccessPermissionOrReadOne(Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER)
+    }
+
+    private fun reportPermission(step: String, source: String, granted: Boolean, first: Boolean = false) {
+        analytics.permissionEvent(javaClass.name, granted, globalOptions.isNewUI, step, source, first)
     }
 
     /**
@@ -293,6 +331,7 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
     companion object {
         const val DONT_OPEN_RECENT_FILE = "DONT_OPEN_RECENT_FILE"
         const val SYSTEM_FILE_MANAGER = "SYSTEM_FILE_MANAGER"
+        private const val PERMISSION_SOURCE = "PERMISSION_SOURCE"
     }
 }
 

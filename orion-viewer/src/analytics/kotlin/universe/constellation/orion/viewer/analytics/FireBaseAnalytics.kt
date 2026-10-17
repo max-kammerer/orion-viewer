@@ -137,11 +137,14 @@ class FireBaseAnalytics : Analytics() {
         }
     }
 
-    override fun permissionEvent(screen: String, state: Boolean, isNewUser: Boolean) {
+    override fun permissionEvent(screen: String, state: Boolean, isNewUser: Boolean, step: String, source: String, first: Boolean) {
         logEvent("permissionResult") {
             param("screen", screen)
             param("state", state.toString())
             param("isNewUser", isNewUser.toString())
+            param("step", step)
+            param("source", source)
+            param("first", first.toString())
         }
     }
 

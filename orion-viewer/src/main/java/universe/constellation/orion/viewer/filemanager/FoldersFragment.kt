@@ -18,8 +18,8 @@ import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import universe.constellation.orion.viewer.Permissions
-import universe.constellation.orion.viewer.Permissions.checkAndRequestStorageAccessPermissionOrReadOne
 import universe.constellation.orion.viewer.R
+import universe.constellation.orion.viewer.analytics.PERMISSION_FROM_FOLDER
 import java.io.File
 
 class FoldersFragment : Fragment(R.layout.folder_view) {
@@ -87,7 +87,7 @@ class FoldersFragment : Fragment(R.layout.folder_view) {
 
         val grant = requireView().findViewById<Button>(R.id.file_manager_grant)
         grant.setOnClickListener {
-            requireActivity().checkAndRequestStorageAccessPermissionOrReadOne(Permissions.ASK_READ_PERMISSION_FOR_FILE_MANAGER)
+            myActivity.requestPermissions(PERMISSION_FROM_FOLDER)
         }
     }
 
