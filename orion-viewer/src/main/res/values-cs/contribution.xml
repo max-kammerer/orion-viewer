@@ -2,7 +2,7 @@
 <resources>
     <string name="contribution_intro">Orion Viewer je projekt s otevřeným zdrojovým kódem a i vy ho můžete vylepšit!</string>
     <string name="contribution_ways">Existuje mnoho věcí, které můžete do projektu přinést:</string>
-    <string name="contribution_report_bug">\u2022 navrhněte funkci nebo nahlaste problém do <a href="https://github.com/max-kammerer/orion-viewer/issues">nástroje pro sledování problémů</a></string>
+    <string name="contribution_report_bug">• navrhněte funkci nebo nahlaste problém do <a href="https://github.com/max-kammerer/orion-viewer/issues">nástroje pro sledování problémů</a></string>
     <string name="contribution_do_translation">• přeložte <a href="https://github.com/max-kammerer/orion-viewer/wiki/Translations">aplikaci do jiných jazyků</a> nebo vylepšete stávající překlad</string>
     <string name="contribution_code">• implementujte <a href="https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-build-project">novou funkci</a> nebo <a href="https://github.com/max-kammerer/orion-viewer/issues">opravte chyby</a></string>
     <string name="contribution_design">• navrhněte nové téma aplikace nebo/a nové uživatelské rozhraní UI/UX</string>
