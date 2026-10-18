@@ -61,6 +61,30 @@ object Permissions {
         return false
     }
 
+    /**
+     * The storage access as analytics sees it: "all" (the all files access, or the read permission
+     * before Android 11), "media" (the read permission on Android 11+: pictures, no documents),
+     * "none".
+     */
+    fun storageAccess(activity: Activity): String = when {
+        isAtLeastAndroidR() && Environment.isExternalStorageManager() -> "all"
+        !isAtLeastAndroidM() -> "all"
+        activity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED -> "none"
+        isAtLeastAndroidR() -> "media"
+        else -> "all"
+    }
+
+    /**
+     * Which settings screen grants the all files access on Android 11+: "app" (the one for this
+     * app), "list" (only the list of all apps, as on some firmwares), "none"; "-" before Android 11.
+     */
+    fun allFilesAccessScreen(activity: Activity): String = when {
+        !isAtLeastAndroidR() -> "-"
+        activity.createManageAppStorageIntent().resolveActivity(activity.packageManager) != null -> "app"
+        Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION).resolveActivity(activity.packageManager) != null -> "list"
+        else -> "none"
+    }
+
     @RequiresApi(Build.VERSION_CODES.R)
     private fun Activity.createManageAppStorageIntent(): Intent {
         val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)

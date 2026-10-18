@@ -186,7 +186,10 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     /** A step of asking for the storage access to open a book, see [universe.constellation.orion.viewer.analytics.Analytics.permissionEvent]. */
     internal fun reportPermission(step: String) {
-        analytics.permissionEvent(javaClass.name, hasReadStoragePermission(this), isNewUI, step, PERMISSION_FROM_BOOK)
+        analytics.permissionEvent(
+            javaClass.name, hasReadStoragePermission(this), isNewUI, step, PERMISSION_FROM_BOOK, false,
+            Permissions.storageAccess(this), Permissions.allFilesAccessScreen(this)
+        )
     }
 
     internal fun processIntentAndCheckPermission(intent: Intent, isUserIntent: Boolean = false) {
