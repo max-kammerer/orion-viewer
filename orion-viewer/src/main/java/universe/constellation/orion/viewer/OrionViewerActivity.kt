@@ -21,7 +21,7 @@ import androidx.core.view.doOnLayout
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.*
-import universe.constellation.orion.viewer.formats.findContentMismatch
+import universe.constellation.orion.viewer.formats.OpenProblem
 import universe.constellation.orion.viewer.FallbackDialogs.Companion.saveFileByUri
 import universe.constellation.orion.viewer.FileUtil.beautifyFileSize
 import universe.constellation.orion.viewer.Permissions.ASK_READ_PERMISSION_FOR_BOOK_OPEN
@@ -287,15 +287,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
 
         if (fileToOpen.length() == 0L) {
-            showErrorAndErrorPanel(
-                getString(R.string.crash_on_book_opening_title),
-                resources.getString(
-                    R.string.fileopen_cant_open,
-                    getString(R.string.fileopen_file_is_emppty)
-                ),
-                intent,
-                sendException = RuntimeException("Warning: empty file, " + fileInfo.describeEmptyFile(fileToOpen))
-            )
+            showOpenProblem(OpenProblem.Empty(fileInfo.describeEmptyFile(fileToOpen)), intent)
             return
         }
 
@@ -315,40 +307,15 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             val executor = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
             val memoryBeforeOpen = ProcessMemory.snapshot()
             analytics.bookOpening(file, memoryBeforeOpen)
-            val newDocument = try {
-                withContext(executor + rootJob) {
-                    FileUtil.openFile(file, analytics)
-                }
-            } catch (e: Exception) {
-                /* Something else under the book's name (a web page, an archive, encrypted or
-                   zeroed data) gets a message saying so, and a warning of its own in the reports
-                   instead of joining the engines' errors. */
-                val mismatch = if (e is EngineLibraryMissingException) null else withContext(Dispatchers.IO) {
-                    findContentMismatch(file)
-                }
-                val message = when {
-                    //the apk, not the file: tell what to do instead of the file name
-                    e is EngineLibraryMissingException -> getString(R.string.crash_on_book_opening_no_engine_library, e.abis)
-                    mismatch != null -> getString(R.string.fileopen_cant_open, mismatch.describe(resources))
-                    else -> resources.getString(R.string.crash_on_book_opening_message_header_panel, file.name)
-                }
-                showErrorAndErrorPanel(
-                    getString(R.string.crash_on_book_opening_title), message, intent, e,
-                    sendException = mismatch?.let { RuntimeException("Warning: $it", e) } ?: e
-                )
-                executor.close()
-                orionApplication.idlingRes.free()
-                analytics.errorDuringInitialFileOpen()
-                return@launch
-            }
 
+            var openedDocument: Document? = null
             /* Set once the controller exists: from then on it owns the document and the executor. */
             var newController: Controller? = null
             /* The document and the executor of a book that won't be shown, on any way out. */
             fun abandon() {
                 when (val created = newController) {
                     null -> {
-                        newDocument.destroy()
+                        openedDocument?.destroy()
                         executor.close()
                     }
                     controller -> destroyController()
@@ -356,7 +323,17 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 }
             }
 
+            fun fail(problem: OpenProblem) {
+                abandon()
+                analytics.errorDuringInitialFileOpen()
+                showOpenProblem(problem, intent)
+            }
+
             try {
+                val newDocument = withContext(executor + rootJob) {
+                    FileUtil.openFile(file, analytics)
+                }.also { openedDocument = it }
+
                 if (!askPassword(newDocument)) {
                     abandon()
                     showErrorOnFallbackPanel(
@@ -367,27 +344,8 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 }
 
                 if (newDocument.pageCount == 0) {
-                    /* mupdf opens a .zip or .tar without pictures inside as a comic book of no
-                       pages: usually a book packed for sending, to be extracted first. */
                     val content = withContext(Dispatchers.IO) { detectFileContent(file.path) }
-                    val reason = if (content?.isArchive == true) {
-                        getString(R.string.fileopen_content_archive, content.shortName)
-                    } else {
-                        getString(R.string.fileopen_no_pages)
-                    }
-                    showErrorAndErrorPanel(
-                        getString(R.string.crash_on_book_opening_title),
-                        resources.getString(R.string.fileopen_cant_open, reason),
-                        intent,
-                        sendException = RuntimeException(
-                            listOfNotNull(
-                                "Warning: no pages in doc, host=" + intent.data?.host,
-                                "size=${file.length()}",
-                                newDocument.describeStructure()
-                            ).joinToString(", ")
-                        )
-                    )
-                    abandon()
+                    fail(OpenProblem.NoPages(content, file, newDocument.describeStructure(), intent.data?.host))
                     return@launch
                 }
 
@@ -427,16 +385,18 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     memory
                 )
             } catch (e: Exception) {
-                abandon()
                 /* Cancelled, not failed: the password dialog's coroutine, or the book's job by the
                    controller destroyed for another book. Nothing to tell or report. */
-                if (e is CancellationException) throw e
-                analytics.errorDuringInitialFileOpen()
-                showErrorAndErrorPanel(
-                    R.string.crash_on_book_opening_title,
-                    R.string.crash_on_book_opening_title,
-                    intent,
-                    e
+                if (e is CancellationException) {
+                    abandon()
+                    throw e
+                }
+                fail(
+                    if (openedDocument == null) {
+                        withContext(Dispatchers.IO) { OpenProblem.ofOpenError(file, e) }
+                    } else {
+                        OpenProblem.Failed(e)
+                    }
                 )
             } finally {
                 orionApplication.idlingRes.free()
@@ -1130,6 +1090,13 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             resources.getString(messageTitle),
             intent,
             exception
+        )
+    }
+
+    private fun showOpenProblem(problem: OpenProblem, intent: Intent) {
+        showErrorAndErrorPanel(
+            getString(R.string.crash_on_book_opening_title), problem.describe(resources), intent,
+            problem.error, sendException = problem.report
         )
     }
 
