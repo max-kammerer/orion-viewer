@@ -77,13 +77,19 @@ object Permissions {
     /**
      * Which settings screen grants the all files access on Android 11+: "app" (the one for this
      * app), "list" (only the list of all apps, as on some firmwares), "none"; "-" before Android 11.
+     * Both actions are in the manifest's queries, else Android 11+ hides the settings from us. The
+     * answer can't change while the process lives, so the package manager is asked once.
      */
-    fun allFilesAccessScreen(activity: Activity): String = when {
-        !isAtLeastAndroidR() -> "-"
-        activity.createManageAppStorageIntent().resolveActivity(activity.packageManager) != null -> "app"
-        Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION).resolveActivity(activity.packageManager) != null -> "list"
-        else -> "none"
-    }
+    fun allFilesAccessScreen(activity: Activity): String =
+        allFilesAccessScreen ?: when {
+            !isAtLeastAndroidR() -> "-"
+            activity.createManageAppStorageIntent().resolveActivity(activity.packageManager) != null -> "app"
+            Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION).resolveActivity(activity.packageManager) != null -> "list"
+            else -> "none"
+        }.also { allFilesAccessScreen = it }
+
+    @Volatile
+    private var allFilesAccessScreen: String? = null
 
     @RequiresApi(Build.VERSION_CODES.R)
     private fun Activity.createManageAppStorageIntent(): Intent {
