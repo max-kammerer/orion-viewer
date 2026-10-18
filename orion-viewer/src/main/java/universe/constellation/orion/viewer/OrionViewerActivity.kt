@@ -342,8 +342,23 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 return@launch
             }
 
+            /* Set once the controller exists: from then on it owns the document and the executor. */
+            var newController: Controller? = null
+            /* The document and the executor of a book that won't be shown, on any way out. */
+            fun abandon() {
+                when (val created = newController) {
+                    null -> {
+                        newDocument.destroy()
+                        executor.close()
+                    }
+                    controller -> destroyController()
+                    else -> created.destroy()
+                }
+            }
+
             try {
                 if (!askPassword(newDocument)) {
+                    abandon()
                     showErrorOnFallbackPanel(
                         getString(R.string.crash_on_book_opening_encrypted),
                         intent
@@ -372,12 +387,13 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                             ).joinToString(", ")
                         )
                     )
-                    newDocument.destroy()
+                    abandon()
                     return@launch
                 }
 
                 val layoutStrategy = SimpleLayoutStrategy.create()
                 val controller1 = Controller(this@OrionViewerActivity, newDocument, layoutStrategy, rootJob, context = executor)
+                newController = controller1
 
 
                 val lastPageInfo1 = loadBookParameters(rootJob, file)
@@ -411,11 +427,10 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     memory
                 )
             } catch (e: Exception) {
-                if (controller != null) {
-                    destroyController()
-                } else {
-                    newDocument.destroy()
-                }
+                abandon()
+                /* Cancelled, not failed: the password dialog's coroutine, or the book's job by the
+                   controller destroyed for another book. Nothing to tell or report. */
+                if (e is CancellationException) throw e
                 analytics.errorDuringInitialFileOpen()
                 showErrorAndErrorPanel(
                     R.string.crash_on_book_opening_title,
