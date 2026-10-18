@@ -63,7 +63,8 @@ class NewTouchProcessorWithScale(view: OrionDrawScene, activity: OrionViewerActi
         val newX = MoveUtil.calcOffset(startFocus.x, endFocus.x, curScale, enableTouchMoveOnPinchZoom)
         val newY = MoveUtil.calcOffset(startFocus.y, endFocus.y, curScale, enableTouchMoveOnPinchZoom)
         if (activity.controller === startController) {
-            activity.controller?.translateAndZoom(curScale, startFocus, endFocus, newX, newY)
+            view.freezeFrame()
+            activity.controller?.translateAndZoom(curScale, endFocus, newX, newY)
         }
         view.disableScalingMode()
     }

@@ -158,6 +158,15 @@ class PageView(
         readPageDataFromUI()
     }
 
+    /** Whether the page shows its final picture: laid out and its visible part rendered, or broken. */
+    val isVisiblePartRendered: Boolean
+        get() {
+            if (state != PageState.SIZE_AND_BITMAP_CREATED) return false
+            if (page.loadError != null) return true
+            val visible = visibleRect() ?: return true
+            return bitmap?.isRendered(visible) == true
+        }
+
     fun visibleRect(): Rect? {
         return layoutData.visibleOnScreenPart(pageLayoutManager.sceneRect)
     }
@@ -167,7 +176,7 @@ class PageView(
         val sceneWidth = pageLayoutManager.sceneRect.width()
 
         if (pageWidth <= sceneWidth) {
-            layoutData.position.x = (sceneWidth - pageWidth) / 2.0f
+            layoutData.position.x = ((sceneWidth - pageWidth) / 2).toFloat()
         } else {
             if (operation != Operation.PINCH_ZOOM || oldState == PageState.STUB) {
                 layoutData.position.x = -layoutInfo.x.offset.toFloat()

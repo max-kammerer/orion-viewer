@@ -248,10 +248,11 @@ class Controller(
         return pageLayoutManager.renderNextOrPrev(false, isTapNavigation = true)
     }
 
-    fun translateAndZoom(zoomScaling: Float, startFocus: PointF, endFocus: PointF, deltaX: Float, deltaY: Float) {
+    /** Applies a finished pinch: [offsetX], [offsetY] are those the scene drew it with, see [universe.constellation.orion.viewer.util.MoveUtil.calcOffset]. */
+    fun translateAndZoom(zoomScaling: Float, endFocus: PointF, offsetX: Float, offsetY: Float) {
         layoutInfo?.let {
             layoutStrategy.changeZoom((10000.0f * zoomScaling * it.docZoom).toInt())
-            pageLayoutManager.performTouchZoom(zoomScaling, startFocus, endFocus)
+            pageLayoutManager.performTouchZoom(zoomScaling, endFocus, offsetX, offsetY)
             //TODO split notification into page geometry and book info
             //sendViewChangeNotification()
         }

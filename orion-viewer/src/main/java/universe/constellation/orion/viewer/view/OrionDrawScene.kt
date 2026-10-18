@@ -20,7 +20,9 @@
 package universe.constellation.orion.viewer.view
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.os.SystemClock
 import android.graphics.Paint
 import android.graphics.PointF
 import android.graphics.drawable.Drawable
@@ -61,6 +63,13 @@ class OrionDrawScene : View {
 
     private var inited = false
 
+    /*
+     * The last frame of a pinch, shown until the pages are rendered at the new zoom: after the
+     * gesture they are laid out again and their tiles freed, so they would be blank meanwhile.
+     */
+    private var frozenFrame: Bitmap? = null
+    private var frozenUntil = 0L
+
     lateinit var stuff: ColorStuff
 
     val scroller = Scroller(context)
@@ -85,6 +94,7 @@ class OrionDrawScene : View {
         if (!inited) {
             return
         }
+        val frame = frozenFrameToShow()
 
         canvas.save()
         val myScale = scale
@@ -109,7 +119,12 @@ class OrionDrawScene : View {
             canvas.scale(myScale, myScale)
         }
 
-        pageLayoutManager?.renderVisiblePages(canvas, this)
+        if (frame != null) {
+            //a pinch over a frozen frame scales the frame as it would the pages
+            canvas.drawBitmap(frame, 0f, 0f, null)
+        } else {
+            pageLayoutManager?.renderVisiblePages(canvas, this)
+        }
 
         if (inScalingMode) {
             canvas.restore()
@@ -156,6 +171,53 @@ class OrionDrawScene : View {
         inScalingMode = true
     }
 
+    /**
+     * The frozen frame while the visible pages aren't rendered yet, otherwise null, the frame
+     * dropped. A pinch started over it keeps it however long it lasts: it is what the gesture
+     * scales, the pages behind it may be blank.
+     */
+    private fun frozenFrameToShow(): Bitmap? {
+        val frame = frozenFrame ?: return null
+        val manager = pageLayoutManager
+        if (manager != null && !manager.areVisiblePagesRendered() &&
+            (inScalingMode || SystemClock.uptimeMillis() < frozenUntil)
+        ) {
+            return frame
+        }
+        frozenFrame = null
+        return null
+    }
+
+    /**
+     * Keeps showing what is on the screen now, until the visible pages are rendered again or
+     * [FREEZE_LIMIT_MS] pass: call right before the layout changes under a finished pinch.
+     */
+    fun freezeFrame() {
+        if (width <= 0 || height <= 0) return
+        val frame = try {
+            Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        } catch (e: OutOfMemoryError) {
+            return
+        }
+        //over the previous frozen frame, if the pages are still being rendered after an earlier pinch
+        draw(Canvas(frame))
+        frozenFrame = frame
+        frozenUntil = SystemClock.uptimeMillis() + FREEZE_LIMIT_MS
+        /* Right away: until the scene draws again, the system may redraw its last recorded
+           frame, which refers to the tile bitmaps that the new layout is about to clear and
+           hand to other tiles. */
+        invalidate()
+        //redraws when the limit passes, should the rendering never finish
+        postInvalidateDelayed(FREEZE_LIMIT_MS)
+    }
+
+    /** Back to the live pages: the user moved them, the frame is out of date. */
+    fun unfreeze() {
+        if (frozenFrame == null) return
+        frozenFrame = null
+        invalidate()
+    }
+
     fun disableScalingMode() {
         this.inScalingMode = false
     }
@@ -180,3 +242,5 @@ class OrionDrawScene : View {
     val sceneYLocationOnScreen: Int
         get() = IntArray(2).run { getLocationOnScreen(this); this[1] }
 }
+
+private const val FREEZE_LIMIT_MS = 1500L

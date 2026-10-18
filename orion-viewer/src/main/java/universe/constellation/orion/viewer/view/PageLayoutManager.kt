@@ -22,8 +22,13 @@ import universe.constellation.orion.viewer.offsetAtFraction
 import universe.constellation.orion.viewer.selection.PageAndSelection
 import kotlin.math.abs
 import kotlin.math.max
+import kotlin.math.round
+import kotlin.math.truncate
 
 private const val VISIBLE_PAGE_LIMIT = 5
+
+/** Pixels between consecutive pages in the continuous mode. */
+const val PAGE_GAP = 2
 
 class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
 
@@ -103,7 +108,12 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         activePages.clear()
     }
 
-    fun performTouchZoom(zoom: Float, startFocus: PointF, endFocus: PointF) {
+    /**
+     * Lays the pages out where the pinch left them: the scene drew them scaled by [zoom] and
+     * moved back by ([offsetX], [offsetY]), see [OrionDrawScene.onDraw], so the same here keeps
+     * the picture in place, a finger move included. [endFocus] is where the fingers ended.
+     */
+    fun performTouchZoom(zoom: Float, endFocus: PointF, offsetX: Float, offsetY: Float) {
         activePages.forEach {
             it.invalidateAndDecreaseToCalcGeom()
         }
@@ -111,18 +121,47 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         val tmp = PointF()
         activePages.forEach {
             tmp.set(it.layoutData.position)
-            tmp.minusOffset(startFocus)
             tmp.zoom(zoom)
-            tmp.offset(startFocus)
+            tmp.offset(-offsetX, -offsetY)
             it.layoutData.position.set(tmp)
             it.wholePageRect.zoom(zoom)
         }
+        alignPages(endFocus)
 
         //TODO delete pages
         activePages.forEach {
             it.reinit(operation = Operation.PINCH_ZOOM)
         }
     }
+
+    /**
+     * Puts the pages back at whole pixels with exactly [PAGE_GAP] between consecutive ones, the
+     * page nearest to [focus] keeping its place: a zoom rounds the page sizes apart from their
+     * positions, which leaves gaps of other widths, or holes when they should touch. Nearest,
+     * not under: a pinch in a gap or past the first or the last page has none under it, and
+     * aligning from a page off the screen would shift the visible ones.
+     */
+    private fun alignPages(focus: PointF) {
+        if (activePages.isEmpty()) return
+        val anchorIndex = activePages.indices.minBy { activePages[it].distanceY(focus.y) }
+        activePages.forEach { it.layoutData.position.x = round(it.layoutData.position.x) }
+        val anchor = activePages[anchorIndex].layoutData.position
+        anchor.y = round(anchor.y)
+        for (i in anchorIndex + 1 until activePages.size) {
+            activePages[i].layoutData.position.y = activePages[i - 1].pageEndY + PAGE_GAP
+        }
+        for (i in anchorIndex - 1 downTo 0) {
+            val page = activePages[i]
+            page.layoutData.position.y = activePages[i + 1].layoutData.position.y - page.height - PAGE_GAP
+        }
+    }
+
+    /*
+     * Pages move by whole pixels only: at a fractional position the filtered page bitmap is
+     * blurred, and the page borders fall differently on every boundary.
+     */
+    private val scrollX = WholePixels()
+    private val scrollY = WholePixels()
 
     fun currentPageLayout(): LayoutPosition? {
         val page = if (isSinglePageMode) {
@@ -145,6 +184,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
     }
 
     fun doScroll(xPos: Float, yPos: Float, distanceX: Float, distanceY: Float) {
+        scene.unfreeze()
         setSinglePageMode(false, -1)
         doScrollAndDoRendering(xPos, yPos, distanceX, distanceY)
         scene.postInvalidate()
@@ -153,11 +193,15 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
     private fun doScrollAndDoRendering(
         xPos: Float,
         yPos: Float,
-        distanceX: Float,
-        distanceY: Float,
+        rawDistanceX: Float,
+        rawDistanceY: Float,
         isTapNavigation: Boolean = false
     ) {
-        val distanceY2 = if (isTapNavigation) distanceY else clampLimits(distanceY)
+        val wholeY = scrollY.take(rawDistanceY)
+        val distanceY2 = if (isTapNavigation) wholeY else clampLimits(wholeY)
+        //stopped at the first or the last page: nothing left to scroll that way
+        if (distanceY2 != wholeY) scrollY.reset()
+        val distanceX = scrollX.take(rawDistanceX)
         if (distanceY2 == 0f && distanceX == 0f) {
             scene.invalidate()
             return
@@ -305,7 +349,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
             addPageInPosition(
                 newView,
                 0f,
-                page.layoutData.position.y - newView.layoutData.wholePageRect.height() - 2,
+                page.layoutData.position.y - newView.layoutData.wholePageRect.height() - PAGE_GAP,
                 0
             )
             return newView
@@ -321,7 +365,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
             return existingPage
         }
 
-        val pageEnd = page.pageEndY + 2
+        val pageEnd = page.pageEndY + PAGE_GAP
         if (pageEnd < sceneHeight || addIfAbsent) {
             return addPageInPosition(nextPageNum, pageEnd)
         }
@@ -362,6 +406,22 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
             log("selection: " + it.pageNum + " " + pageSelection)
             PageAndSelection(it, pageSelection)
         }
+    }
+
+    /** Whether every page on the screen shows its final picture, see [PageView.isVisiblePartRendered]. */
+    fun areVisiblePagesRendered(): Boolean {
+        if (isSinglePageMode) {
+            return activePages.firstOrNull { it.pageNum == activePage }?.isVisiblePartRendered ?: true
+        }
+        val onScreen = activePages.filter { it.isOnScreen }
+        if (onScreen.isEmpty()) return activePages.isEmpty()
+        /* the screen must be covered too: the pages coming into view are added only once the
+           sizes of their neighbours are known, and would show up blank */
+        val first = onScreen.first()
+        val last = onScreen.last()
+        if (first.pageNum > 0 && first.layoutData.position.y > sceneRect.top) return false
+        if (last.pageNum < controller.pageCount - 1 && last.pageEndY < sceneRect.bottom) return false
+        return onScreen.all { it.isVisiblePartRendered }
     }
 
     fun renderVisiblePages(canvas: Canvas, scene: OrionDrawScene) {
@@ -463,7 +523,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
     fun getCenteredYInSinglePageMode(y: Float, pageHeight: Int): Float {
         if (isSinglePageMode) {
             if (pageHeight <= sceneHeight) {
-                return (sceneHeight - pageHeight) / 2.0f
+                return ((sceneHeight - pageHeight) / 2).toFloat()
             }
         }
         return y
@@ -510,6 +570,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         doScroll: (PageView, PageInfo) -> Unit = { page, _ -> scrollLaidOutPageTo(page, x, y, isTapNavigation) }
     ): PageView? {
         logTrace { "RenderPageAt page=$pageNum x=$x y=$y isTapNavigation=$isTapNavigation" }
+        scene.unfreeze()
         setSinglePageMode(isTapNavigation, pageNum)
 
         val index = activePages.binarySearch { it.pageNum.compareTo(pageNum) }
@@ -665,6 +726,33 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
 
     fun serialize(info: LastPageInfo) {
         info.isSinglePageMode = isSinglePageMode
+    }
+}
+
+/** How far [y] is from the page vertically, 0 inside it. */
+private fun PageView.distanceY(y: Float): Float = when {
+    y < layoutData.position.y -> layoutData.position.y - y
+    y > pageEndY -> y - pageEndY
+    else -> 0f
+}
+
+/**
+ * Splits scroll distances into whole pixels: the part short of a pixel is kept and added to the
+ * next distance, so a page lags the finger by less than a pixel and catches up on the next move.
+ */
+private class WholePixels {
+    private var remainder = 0f
+
+    /** The whole pixels of [distance] plus what was left from before; the rest is kept. */
+    fun take(distance: Float): Float {
+        val total = distance + remainder
+        val whole = truncate(total)
+        remainder = total - whole
+        return whole
+    }
+
+    fun reset() {
+        remainder = 0f
     }
 }
 

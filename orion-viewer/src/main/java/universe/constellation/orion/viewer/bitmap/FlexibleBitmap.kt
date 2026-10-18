@@ -92,6 +92,16 @@ data class PagePart(val absPartRect: Rect) {
         }
     }
 
+    /** Takes the rendered part of this tile out of [area]. */
+    internal fun subtractRendered(area: Region) {
+        synchronized(this) {
+            if (!isActive || bitmapInfo == null) return
+            val rendered = Region(absPartRect)
+            rendered.op(nonRenderedPart, Region.Op.DIFFERENCE)
+            area.op(rendered, Region.Op.DIFFERENCE)
+        }
+    }
+
     fun draw(canvas: Canvas, pageVisiblePart: Rect, defaultPaint: Paint) {
         if (!isActive || bitmapInfo == null) return
         if (Rect.intersects(absPartRect, pageVisiblePart)) {
@@ -267,6 +277,13 @@ class FlexibleBitmap(width: Int, height: Int, val partWidth: Int, val partHeight
 
     fun draw(canvas: Canvas, srcRect: Rect, defaultPaint: Paint) {
         forEach { draw(canvas, srcRect, defaultPaint) }
+    }
+
+    /** Whether the tiles hold the rendered page for all of [area], in page coordinates. */
+    fun isRendered(area: Rect): Boolean {
+        val rest = Region(area)
+        forEach { subtractRendered(rest) }
+        return rest.isEmpty
     }
 
     fun free(cache: BitmapCache) {
