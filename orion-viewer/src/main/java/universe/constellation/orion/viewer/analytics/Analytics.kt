@@ -1,7 +1,9 @@
 package universe.constellation.orion.viewer.analytics
 
+import android.app.ActivityManager
 import android.content.ContentResolver
 import android.content.Intent
+import android.os.Build
 import android.provider.Settings
 import universe.constellation.orion.viewer.BuildConfig
 import universe.constellation.orion.viewer.document.NonFatalErrorReporter
@@ -96,9 +98,13 @@ open class Analytics : NonFatalErrorReporter {
      * A step of asking for the storage access, [step] one of PERMISSION_*: the funnel from the dialog
      * shown to the access granted. [source] is where it was asked from (PERMISSION_FROM_*), [state]
      * whether the access is there after the step, [first] the first start dialog on this install.
-     * [isNewUser] carries the new UI flag, as it always has.
+     * [isNewUser] carries the new UI flag, as it always has. [access] and [settingsScreen] are
+     * Permissions.storageAccess and Permissions.allFilesAccessScreen.
      */
-    open fun permissionEvent(screen: String, state: Boolean, isNewUser: Boolean, step: String, source: String, first: Boolean = false) {
+    open fun permissionEvent(
+        screen: String, state: Boolean, isNewUser: Boolean, step: String, source: String, first: Boolean,
+        access: String, settingsScreen: String
+    ) {
 
     }
 
@@ -129,9 +135,17 @@ open class Analytics : NonFatalErrorReporter {
         @Volatile
         var dryRun: Boolean = false
 
+        /**
+         * Robots that don't mark the device as Test Lab: the monkey, and a device set up as a test
+         * harness (Android 10+), as the farms of automated runs are.
+         */
+        private fun isAutomatedRun(): Boolean =
+            ActivityManager.isUserAMonkey() ||
+                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && ActivityManager.isRunningInUserTestHarness())
+
         fun initialize(contentResolver: ContentResolver, analytics: Analytics): Analytics {
             if (dryRun) return analytics.init(send = false)
-            val isTestLabOrDebug = BuildConfig.DEBUG || Settings.System.getString(contentResolver, "firebase.test.lab").toBoolean()
+            val isTestLabOrDebug = BuildConfig.DEBUG || Settings.System.getString(contentResolver, "firebase.test.lab").toBoolean() || isAutomatedRun()
             if (!isTestLabOrDebug) {
                 return analytics.init()
             }

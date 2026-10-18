@@ -231,7 +231,10 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
     }
 
     private fun reportPermission(step: String, source: String, granted: Boolean, first: Boolean = false) {
-        analytics.permissionEvent(javaClass.name, granted, globalOptions.isNewUI, step, source, first)
+        analytics.permissionEvent(
+            javaClass.name, granted, globalOptions.isNewUI, step, source, first,
+            Permissions.storageAccess(this), Permissions.allFilesAccessScreen(this)
+        )
     }
 
     /**

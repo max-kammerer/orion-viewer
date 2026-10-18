@@ -43,7 +43,7 @@ class AnalyticsTest : BaseTest() {
         analytics.dialog("test", true)
         analytics.action("test")
         analytics.onStartStop("test", isStart = true, isNewUser = false)
-        analytics.permissionEvent("test", state = true, isNewUser = false, step = PERMISSION_RESULT, source = PERMISSION_FROM_START, first = true)
+        analytics.permissionEvent("test", state = true, isNewUser = false, step = PERMISSION_RESULT, source = PERMISSION_FROM_START, first = true, access = "all", settingsScreen = "app")
         analytics.logWarning("test")
         analytics.error(RuntimeException("test"), "test")
         analytics.report("test", RuntimeException("test"))
@@ -58,7 +58,7 @@ class AnalyticsTest : BaseTest() {
             assertTrue("$prefix missing in:\n${recorded.joinToString("\n")}", recorded.any { it.startsWith(prefix) })
         }
         val permission = recorded.first { it.startsWith("event permissionResult ") }
-        listOf("step=result", "source=start", "first=true", "state=true").forEach {
+        listOf("step=result", "source=start", "first=true", "state=true", "access=all", "settingsScreen=app").forEach {
             assertTrue("$it missing in $permission", it in permission)
         }
         val fileOpened = recorded.first { it.startsWith("event fileOpened ") }
