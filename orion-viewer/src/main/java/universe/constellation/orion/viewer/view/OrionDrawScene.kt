@@ -102,20 +102,7 @@ class OrionDrawScene : View {
         if (inScalingMode) {
             log("in scaling")
             canvas.save()
-            canvas.translate(
-                -MoveUtil.calcOffset(
-                    startFocus!!.x,
-                    endFocus!!.x,
-                    myScale,
-                    enableMoveOnPinchZoom
-                ),
-                -MoveUtil.calcOffset(
-                    startFocus!!.y,
-                    endFocus!!.y,
-                    myScale,
-                    enableMoveOnPinchZoom
-                )
-            )
+            canvas.translate(-gestureOffsetX(), -gestureOffsetY())
             canvas.scale(myScale, myScale)
         }
 
@@ -133,6 +120,13 @@ class OrionDrawScene : View {
         //TODO move to page
         canvas.restore()
     }
+
+    private fun gestureOffsetX() = MoveUtil.calcOffset(startFocus!!.x, endFocus!!.x, scale, enableMoveOnPinchZoom)
+
+    private fun gestureOffsetY() = MoveUtil.calcOffset(startFocus!!.y, endFocus!!.y, scale, enableMoveOnPinchZoom)
+
+    /** Where scene coordinate [x] is on the screen: moved by a pinch while one is drawn. */
+    fun screenX(x: Float): Float = if (inScalingMode) x * scale - gestureOffsetX() else x
 
     fun runAdditionalTaskInPageCanvasAndCoord(canvas: Canvas, page: Int) {
         for (drawTask in tasks) {

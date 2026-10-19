@@ -323,15 +323,32 @@ class PageView(
         return null
     }
 
+    private val borderRect = RectF()
+
+    /*
+     * A hairline on a whole coordinate falls between two pixels and is drawn half dark in both:
+     * half a pixel out, it takes the pixels right outside the page, one dark pixel wide, and
+     * leaves the page itself whole. In the gap between pages the borders of both fill it; with no
+     * gap the next page covers this one's bottom line and its own top line remains, one pixel.
+     * The side lines go in pairs: a page as wide as the screen or 1 px narrower has no room for
+     * both, and a single one would make it look shifted; the screen edges bound it then.
+     */
     private fun drawBorder(
         canvas: Canvas,
         scene: OrionDrawScene,
     ) {
-        if (scene.inScalingMode || controller.drawBorder.value) {
-            canvas.drawRect(
-                layoutData.wholePageRect,
-                scene.borderPaint!!
-            )
+        if (!controller.drawBorder.value) return
+        val paint = scene.borderPaint!!
+        borderRect.set(layoutData.wholePageRect)
+        borderRect.inset(-0.5f, -0.5f)
+        //on the screen, as a pinch shows the page: a page shrinking off the edges gets its sides
+        val left = scene.screenX(layoutData.position.x + layoutData.wholePageRect.left)
+        val right = scene.screenX(layoutData.position.x + layoutData.wholePageRect.right)
+        if (left >= 1 && right <= pageLayoutManager.sceneRect.right - 1) {
+            canvas.drawRect(borderRect, paint)
+        } else {
+            canvas.drawLine(borderRect.left, borderRect.top, borderRect.right, borderRect.top, paint)
+            canvas.drawLine(borderRect.left, borderRect.bottom, borderRect.right, borderRect.bottom, paint)
         }
     }
 
