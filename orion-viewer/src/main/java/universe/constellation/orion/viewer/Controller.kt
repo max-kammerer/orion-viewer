@@ -90,6 +90,11 @@ class Controller(
 
     lateinit var pageLayoutManager: PageLayoutManager
 
+    /* Before init() the page layout manager doesn't exist yet: it takes the current gap itself. */
+    fun changePageGap(gapDp: Int) {
+        if (::pageLayoutManager.isInitialized) pageLayoutManager.changePageGap(gapDp)
+    }
+
     var cropPadding = 5
 
     init {

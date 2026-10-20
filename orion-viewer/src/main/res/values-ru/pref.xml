@@ -19,6 +19,8 @@
     <string name="pref_new_ui_summary">Требуется перезапуск приложения</string>
     <string name="pref_renderOffPage">Отрисовывать внестраничное пространство</string>
     <string name="pref_renderPageBorder">Отрисовывать границу страницы</string>
+    <string name="pref_page_gap">Расстояние между страницами</string>
+    <string name="pref_page_gap_desc">При непрерывной прокрутке, в dp (0–50). 0 — страницы встык, как нужно для вебтунов</string>
     <string name="pref_showActionBar">Показывать панель действий</string>
     <string name="pref_showActionBar_desc">Показывать панель действий (необходим перезапуск)</string>
     <string name="pref_showOffsetOnStatusBar">Показывать смещение на странице</string>

@@ -121,6 +121,9 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         openAsTempTestBook = updateGlobalOptionsFromIntent(intent)
         isNewUI = globalOptions.isNewUI
         orionApplication.viewActivity = this
+        globalOptions.PAGE_GAP.observe(this) { gap ->
+            controller?.changePageGap(gap)
+        }
         globalOptions.FULL_SCREEN.observe(this) { flag ->
             OptionActions.FULL_SCREEN.doAction(this, flag)
         }

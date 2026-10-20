@@ -238,6 +238,9 @@ class GlobalOptions(
 
     val DRAW_PAGE_BORDER = pref("DRAW_PAGE_BORDER", true)
 
+    /** Between consecutive pages in the continuous mode, in dp: 0 joins them, as webtoons need. */
+    val PAGE_GAP = pref("PAGE_GAP", 2, stringAsInt = true)
+
     //read by the touch processors on every gesture, so a change applies without a restart
     val ENABLE_TOUCH_MOVE = pref(Companion.ENABLE_TOUCH_MOVE, true)
 

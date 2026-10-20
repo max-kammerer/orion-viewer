@@ -27,10 +27,25 @@ import kotlin.math.truncate
 
 private const val VISIBLE_PAGE_LIMIT = 5
 
-/** Pixels between consecutive pages in the continuous mode. */
-const val PAGE_GAP = 2
-
 class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
+
+    /** Pixels between consecutive pages in the continuous mode, see [changePageGap]. */
+    var pageGap: Int = gapInPixels(controller.activity.globalOptions.PAGE_GAP.value)
+        private set
+
+    /** The PAGE_GAP option, in dp, to whole pixels: pages stand at whole pixels, see [alignPages]. */
+    private fun gapInPixels(gapDp: Int): Int =
+        round(gapDp.coerceAtLeast(0) * controller.activity.resources.displayMetrics.density).toInt()
+
+    /** Applies the PAGE_GAP option to the open book: the first page on the screen keeps its place. */
+    fun changePageGap(gapDp: Int) {
+        val gap = gapInPixels(gapDp)
+        if (gap == pageGap) return
+        pageGap = gap
+        chainPages(activePages.indexOfFirst { it.isOnScreen }.coerceAtLeast(0))
+        updateCacheAndRender()
+        scene.invalidate()
+    }
 
     class Callback(val page: Int, val job: CompletableJob, val body: (PageInfo) -> Unit)
 
@@ -135,7 +150,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
     }
 
     /**
-     * Puts the pages back at whole pixels with exactly [PAGE_GAP] between consecutive ones, the
+     * Puts the pages back at whole pixels with exactly [pageGap] between consecutive ones, the
      * page nearest to [focus] keeping its place: a zoom rounds the page sizes apart from their
      * positions, which leaves gaps of other widths, or holes when they should touch. Nearest,
      * not under: a pinch in a gap or past the first or the last page has none under it, and
@@ -147,12 +162,17 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
         activePages.forEach { it.layoutData.position.x = round(it.layoutData.position.x) }
         val anchor = activePages[anchorIndex].layoutData.position
         anchor.y = round(anchor.y)
+        chainPages(anchorIndex)
+    }
+
+    /** Lays the pages out above and below the one at [anchorIndex], [pageGap] apart. */
+    private fun chainPages(anchorIndex: Int) {
         for (i in anchorIndex + 1 until activePages.size) {
-            activePages[i].layoutData.position.y = activePages[i - 1].pageEndY + PAGE_GAP
+            activePages[i].layoutData.position.y = activePages[i - 1].pageEndY + pageGap
         }
         for (i in anchorIndex - 1 downTo 0) {
             val page = activePages[i]
-            page.layoutData.position.y = activePages[i + 1].layoutData.position.y - page.height - PAGE_GAP
+            page.layoutData.position.y = activePages[i + 1].layoutData.position.y - page.height - pageGap
         }
     }
 
@@ -349,7 +369,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
             addPageInPosition(
                 newView,
                 0f,
-                page.layoutData.position.y - newView.layoutData.wholePageRect.height() - PAGE_GAP,
+                page.layoutData.position.y - newView.layoutData.wholePageRect.height() - pageGap,
                 0
             )
             return newView
@@ -365,7 +385,7 @@ class PageLayoutManager(val controller: Controller, val scene: OrionDrawScene) {
             return existingPage
         }
 
-        val pageEnd = page.pageEndY + PAGE_GAP
+        val pageEnd = page.pageEndY + pageGap
         if (pageEnd < sceneHeight || addIfAbsent) {
             return addPageInPosition(nextPageNum, pageEnd)
         }

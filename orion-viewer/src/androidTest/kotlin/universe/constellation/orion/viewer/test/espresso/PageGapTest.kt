@@ -2,6 +2,7 @@ package universe.constellation.orion.viewer.test.espresso
 
 import android.graphics.PointF
 import androidx.test.espresso.Espresso
+import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -10,13 +11,13 @@ import universe.constellation.orion.viewer.test.framework.BaseTest
 import universe.constellation.orion.viewer.util.MoveUtil
 import universe.constellation.orion.viewer.test.framework.BookFile
 import universe.constellation.orion.viewer.test.framework.onActivity
-import universe.constellation.orion.viewer.view.PAGE_GAP
+import universe.constellation.orion.viewer.view.isOnScreen
 import universe.constellation.orion.viewer.view.pageEndY
 import kotlin.math.floor
 import kotlin.math.round
 
 /**
- * Pages in the continuous mode stand at whole pixels with exactly [PAGE_GAP] between them, after
+ * Pages in the continuous mode stand at whole pixels with exactly the page gap between them, after
  * any scroll and zoom: a page at a fractional position is blurred by the bitmap filter and its
  * border falls differently on every boundary; a zoom rounding page sizes apart from their
  * positions leaves gaps of other widths, or a 1 px hole showing the background when the gap is 0.
@@ -31,10 +32,12 @@ class PageGapTest : BaseViewerActivityTest(BookFile(BaseTest.SICP)) {
         return offsetY
     }
 
-    private fun assertLayout(step: String) {
+    private fun assertLayout(step: String, expectedGap: Int? = null) {
         Espresso.onIdle()
         onActivity {
-            val pages = it.controller!!.pageLayoutManager.activePages.sortedBy { page -> page.pageNum }
+            val manager = it.controller!!.pageLayoutManager
+            expectedGap?.let { gap -> assertEquals("$step: gap", gap, manager.pageGap) }
+            val pages = manager.activePages.sortedBy { page -> page.pageNum }
             assertTrue("$step: ${pages.size} pages", pages.size >= 2)
             pages.forEach { page ->
                 val y = page.layoutData.position.y
@@ -44,7 +47,7 @@ class PageGapTest : BaseViewerActivityTest(BookFile(BaseTest.SICP)) {
                 if (b.pageNum == a.pageNum + 1) {
                     assertEquals(
                         "$step: gap between ${a.pageNum} and ${b.pageNum}",
-                        PAGE_GAP.toFloat(), b.layoutData.position.y - a.pageEndY, 0f
+                        manager.pageGap.toFloat(), b.layoutData.position.y - a.pageEndY, 0f
                     )
                 }
             }
@@ -93,6 +96,35 @@ class PageGapTest : BaseViewerActivityTest(BookFile(BaseTest.SICP)) {
         onActivity {
             val page = it.controller!!.pageLayoutManager.activePages.first { page -> page.pageNum == pageNum }
             assertEquals("page $pageNum under the pinch", expected, page.layoutData.position.y, 0f)
+        }
+    }
+
+    /* The option applies to the open book, in dp rounded to whole pixels; 0 joins the pages. */
+    @Test
+    fun gapOptionAppliesToTheOpenBook() {
+        Espresso.onIdle()
+        onActivity {
+            repeat(9) { _ -> it.controller!!.pageLayoutManager.doScroll(0f, 0f, 0f, -137f) }
+        }
+        try {
+            listOf(0, 5, 1).forEach { gapDp ->
+                val firstOnScreen = onActivity {
+                    //on the main thread the listener of the options applies it right in commit()
+                    it.globalOptions.prefs.edit().putString("PAGE_GAP", gapDp.toString()).commit()
+                    it.controller!!.pageLayoutManager.activePages.first { page -> page.isOnScreen }
+                        .let { page -> page.pageNum to page.layoutData.position.y }
+                }
+                val density = InstrumentationRegistry.getInstrumentation().targetContext.resources.displayMetrics.density
+                assertLayout("gap $gapDp dp", round(gapDp * density).toInt())
+                onActivity {
+                    val page = it.controller!!.pageLayoutManager.activePages.first { page -> page.pageNum == firstOnScreen.first }
+                    assertEquals("gap $gapDp dp: the first page on the screen stays", firstOnScreen.second, page.layoutData.position.y, 0f)
+                }
+            }
+        } finally {
+            onActivity {
+                it.globalOptions.prefs.edit().remove("PAGE_GAP").commit()
+            }
         }
     }
 }
