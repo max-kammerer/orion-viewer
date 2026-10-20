@@ -45,6 +45,28 @@ class FileContentTest {
         assertEquals(FileContent.TAR, detectFileContent(header))
     }
 
+    /* The first ZIP entry's name starts at 30; the bytes before it don't matter here. */
+    private fun zip(vararg entries: String) = "PK\u0003\u0004" + "\u0001".repeat(26) + entries.joinToString("\u0001")
+
+    @Test
+    fun documentsOfOtherProgramsAreNamed() {
+        assertEquals(FileContent.OFFICE_OPEN_XML, detect(zip("[Content_Types].xml", "_rels/.rels", "word/document.xml")))
+        assertEquals(FileContent.OFFICE_OPEN_XML, detect(zip("[Content_Types].xml", "xl/workbook.xml")))
+        assertEquals(FileContent.OPEN_DOCUMENT, detect(zip("mimetypeapplication/vnd.oasis.opendocument.text")))
+        assertEquals(FileContent.MS_OFFICE, detect(0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1))
+        assertEquals(FileContent.CHM, detect("ITSF\u0003\u0000\u0000\u0000"))
+        assertEquals(FileContent.LIT, detect("ITOLITLS\u0001\u0000"))
+        assertEquals(FileContent.RTF, detect("{\\rtf1\\ansi\\deff0 {\\fonttbl}"))
+    }
+
+    @Test
+    fun otherZipsStayArchives() {
+        /* XPS is a package with [Content_Types].xml as well, opened by mupdf */
+        assertEquals(FileContent.ZIP, detect(zip("[Content_Types].xml", "FixedDocumentSequence.fdseq", "Documents/1/FixedDocument.fdoc")))
+        assertEquals(FileContent.ZIP, detect(zip("page001.jpg", "page002.jpg")))
+        assertEquals(FileContent.EPUB, detect(zip("mimetypeapplication/epub+zip")))
+    }
+
     @Test
     fun formDataIsNotPdf() {
         assertEquals(FileContent.FDF, detect("%FDF-1.2\n1 0 obj <</FDF <</Fields []>>>>"))

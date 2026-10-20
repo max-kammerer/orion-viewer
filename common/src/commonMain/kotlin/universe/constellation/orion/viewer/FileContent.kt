@@ -41,6 +41,28 @@ enum class FileContent(val shortName: String) {
     /** A web page saved with its pictures in one file (.mht, .mhtml): a MIME message. */
     MHT("MHT"),
 
+    /*
+     * Documents of other programs, which the app doesn't open: named, so the user isn't told an
+     * Office document is an archive to extract or unknown data.
+     */
+    /** Microsoft Office 2007+: a ZIP with [Content_Types].xml and a word/, xl/ or ppt/ folder. */
+    OFFICE_OPEN_XML("DOCX/XLSX/PPTX"),
+
+    /** OpenDocument (LibreOffice): a ZIP whose first entry, "mimetype", names it. */
+    OPEN_DOCUMENT("ODT/ODS/ODP"),
+
+    /** Microsoft Office 97–2003: an OLE2 compound file. */
+    MS_OFFICE("DOC/XLS/PPT"),
+
+    /** Compiled Windows help (.chm), also used for e-books. */
+    CHM("CHM"),
+
+    /** Microsoft Reader e-book. */
+    LIT("LIT"),
+
+    /** Rich Text Format: text, told by its header. */
+    RTF("RTF"),
+
     /** Text without a signature: markdown, plain text, any encoding. See [looksLikeText]. */
     TEXT("text"),
 
@@ -98,6 +120,10 @@ fun detectFileContent(bytes: ByteArray, size: Int = bytes.size): FileContent? {
         b.startsWith("AT&TFORM") -> FileContent.DJVU
         /* the first entry of an EPUB is "mimetype", stored, holding the media type */
         b.startsWith("PK\u0003\u0004") && b.at(30, "mimetype") && b.at(38, "application/epub+zip") -> FileContent.EPUB
+        b.startsWith("PK\u0003\u0004") && b.at(30, "mimetype") && b.at(38, "application/vnd.oasis.opendocument") -> FileContent.OPEN_DOCUMENT
+        /* XPS has [Content_Types].xml too, but none of these folders */
+        b.startsWith("PK\u0003\u0004") && b.contains("[Content_Types].xml") &&
+                (b.contains("word/") || b.contains("xl/") || b.contains("ppt/")) -> FileContent.OFFICE_OPEN_XML
         b.startsWith("PK\u0003\u0004") || b.startsWith("PK\u0005\u0006") || b.startsWith("PK\u0007\u0008") -> FileContent.ZIP
         b.startsWith("Rar!\u001A\u0007") -> FileContent.RAR
         b.startsWith(0x37, 0x7A, 0xBC, 0xAF, 0x27, 0x1C) -> FileContent.SEVEN_ZIP
@@ -111,6 +137,10 @@ fun detectFileContent(bytes: ByteArray, size: Int = bytes.size): FileContent? {
         b.startsWith("BM") && size >= 10 && (6 until 10).all { b[it] == 0 } -> FileContent.BMP
         b.startsWith(0x00, 0x00, 0x00, 0x0C, 0x6A, 0x50, 0x20, 0x20) || b.startsWith(0xFF, 0x4F, 0xFF, 0x51) -> FileContent.JPEG2000
         b.at(4, "ftyp") -> FileContent.ISO_MEDIA
+        b.startsWith(0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1) -> FileContent.MS_OFFICE
+        b.startsWith("ITSF") -> FileContent.CHM
+        b.startsWith("ITOLITLS") -> FileContent.LIT
+        b.startsWith("{\\rtf") -> FileContent.RTF
         /* the Palm database type after the 60-byte header: Mobipocket and its Kindle variants, PalmDoc */
         b.at(60, "BOOKMOBI") || b.at(60, "TEXtREAd") -> FileContent.MOBI
         (0 until size).all { b[it] == 0 } -> FileContent.ZEROS

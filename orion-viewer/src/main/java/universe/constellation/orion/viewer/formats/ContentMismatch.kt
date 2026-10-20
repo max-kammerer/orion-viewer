@@ -85,5 +85,7 @@ private val MUPDF_CONTENTS = setOf(
 
 private val UNOPENED_CONTENTS = setOf(
     FileContent.TEXT, FileContent.HTML, FileContent.XML, FileContent.ACSM, FileContent.MHT,
-    FileContent.ISO_MEDIA, FileContent.ZEROS
+    FileContent.ISO_MEDIA, FileContent.ZEROS,
+    FileContent.OFFICE_OPEN_XML, FileContent.OPEN_DOCUMENT, FileContent.MS_OFFICE,
+    FileContent.CHM, FileContent.LIT, FileContent.RTF
 )
