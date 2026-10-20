@@ -94,9 +94,9 @@ abstract class BaseInstrumentationTest : BaseTest() {
         }
     }
 
+    /** The check mark applies and closes the dialog. */
     protected fun applyZoom() {
         Espresso.onView(ViewMatchers.withId(R.id.option_dialog_bottom_apply)).perform(ViewActions.click())
-        Espresso.onView(ViewMatchers.withId(R.id.option_dialog_bottom_close)).perform(ViewActions.click())
     }
 
     protected fun ActivityScenario<OrionViewerActivity>.applyGoTo() {
@@ -128,11 +128,11 @@ abstract class BaseInstrumentationTest : BaseTest() {
 
     fun applyCrop() {
         Espresso.onView(ViewMatchers.withId(R.id.option_dialog_bottom_apply)).perform(ViewActions.click())
-        closeDialog()
     }
 
+    /** Closes a dialog keeping what it previewed: the crop and zoom dialogs have no close button. */
     fun closeDialog() {
-        Espresso.onView(ViewMatchers.withId(R.id.option_dialog_bottom_close)).perform(ViewActions.click())
+        Espresso.pressBack()
     }
 
     /**

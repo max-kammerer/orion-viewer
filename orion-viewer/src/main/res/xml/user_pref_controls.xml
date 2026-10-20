@@ -68,13 +68,6 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="APPLY_AND_CLOSE"
-            android:summary="@string/pref_close_page_option_dialog_on_apply"
-            android:title="@string/pref_close_dialog_on_apply"
-            app:iconSpaceReserved="false" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
             android:key="SWAP_KEYS"
             android:summary="@string/pref_swap_prev_next_keys_on_90_degree_rotation"
             android:title="@string/pref_swap_prev_next_keys"

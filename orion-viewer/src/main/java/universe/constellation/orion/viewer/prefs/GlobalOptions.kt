@@ -167,8 +167,6 @@ class GlobalOptions(
     private fun defaultCrop(key: String): Int =
         prefs.getInt(key, 0).coerceIn(CropDialog.CROP_RESTRICTION_MIN, DEFAULT_CROP_MAX)
 
-    val isApplyAndClose: Boolean
-        get() = getBooleanProperty(APPLY_AND_CLOSE, false)
 
     val isDrawOffPage: Boolean
         get() = getBooleanProperty(DRAW_OFF_PAGE, instance.device !is EInkDevice)

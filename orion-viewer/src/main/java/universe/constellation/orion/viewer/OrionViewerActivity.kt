@@ -1,5 +1,6 @@
 package universe.constellation.orion.viewer
 
+import universe.constellation.orion.viewer.dialog.initOptionDialogPanel
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
@@ -473,13 +474,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
         initPageNavigationValues(controller, pageSeeker, pageNumberText)
         controller?.let { pageNumberText.text = it.pageNumbering.label(it.currentPageNumbers().first) }
 
-        val closePagePeeker = findMyViewById(R.id.option_dialog_bottom_close) as ImageButton
-        closePagePeeker.setOnClickListener {
-            dismiss()
-        }
-
-        val pagePreview = findMyViewById(R.id.option_dialog_bottom_apply) as ImageButton
-        pagePreview.setOnClickListener {
+        initOptionDialogPanel(apply = {
             val controller = controller
             if (pageNumberText.text.isNotEmpty() && controller != null) {
                 try {
@@ -496,7 +491,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                     showAndLogError(this@OrionViewerActivity, "Couldn't parse " + pageNumberText.text, ex)
                 }
             }
-        }
+        })
         pageNumberText.requestFocus()
     }
 
@@ -529,17 +524,23 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
             }
         }
 
-        val closeZoomPicker = findMyViewById(R.id.option_dialog_bottom_close) as ImageButton
-        closeZoomPicker.setOnClickListener {
-            dismiss()
-        }
-
-        val zoomPreview = findMyViewById(R.id.option_dialog_bottom_apply) as ImageButton
-        zoomPreview.setOnClickListener {
-            onApplyAction()
+        //what the dialog opened with, for the revert button
+        val initialZoom = controller!!.zoom10000Factor
+        fun preview() {
             val index = spinner.selectedItemPosition
             controller!!.changeZoom(if (index == 0) (java.lang.Float.parseFloat(zoomValueAsText.text.toString()) * 100).toInt() else -1 * (index - 1))
         }
+        initOptionDialogPanel(
+            apply = {
+                preview()
+                dismiss()
+            },
+            preview = ::preview,
+            revert = {
+                controller!!.changeZoom(initialZoom)
+                actualizeZoomOptions()
+            }
+        )
 
         spinner.adapter = MyArrayAdapter(context)
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -591,15 +592,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
     }
 
     private fun AppCompatDialog.initAddBookmarkScreen() {
-        val close = findMyViewById(R.id.option_dialog_bottom_close) as ImageButton
-        close.setOnClickListener {
-            //main menu
-            dismiss()
-        }
-
-
-        val view = findMyViewById(R.id.option_dialog_bottom_apply) as ImageButton
-        view.setOnClickListener {
+        initOptionDialogPanel(apply = {
             val text = findMyViewById(R.id.add_bookmark_text) as EditText
             try {
                 insertBookmark(controller!!.currentPage, text.text.toString())
@@ -617,8 +610,7 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
                 buider.setNeutralButton("OK") { dialog, _ -> dialog.dismiss() }
                 buider.create().show()
             }
-        }
-
+        })
     }
 
     override fun onResume() {
@@ -838,12 +830,6 @@ class OrionViewerActivity : OrionBaseActivity(viewerType = Device.VIEWER_ACTIVIT
 
     fun AppCompatDialog.findMyViewById(id: Int): View {
         return findViewById<View>(id) as View
-    }
-
-    fun AppCompatDialog.onApplyAction() {
-        if (globalOptions.isApplyAndClose) {
-            dismiss()
-        }
     }
 
     private fun updateBrightness() {

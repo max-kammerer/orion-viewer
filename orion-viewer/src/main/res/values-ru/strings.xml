@@ -54,4 +54,8 @@
     <string name="saveFileNameTooltip">ИмяФайла.расширение</string>
     <string name="save">Сохранить</string>
     <string name="page_cannot_be_displayed">Не удалось показать страницу %1$d</string>
+    <string name="option_dialog_revert">Отменить</string>
+    <string name="option_dialog_preview">Предпросмотр</string>
+    <string name="option_dialog_close">Закрыть</string>
+    <string name="option_dialog_apply">Применить и закрыть</string>
 </resources>

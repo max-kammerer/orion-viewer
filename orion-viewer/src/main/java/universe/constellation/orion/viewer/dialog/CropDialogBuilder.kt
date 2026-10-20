@@ -18,6 +18,9 @@ fun IntArray.toMargins(evenCrop: Boolean, cropMode: Int) =
 
 class CropDialog(cropMargins: CropMargins, val activity: OrionViewerActivity) : AppCompatDialog(activity) {
 
+    /** What the dialog opened with, for the revert button. */
+    private val initialMargins = cropMargins
+
     private val cropMargins = cropMargins.toDialogMargins()
     private val evenCrop = cropMargins.evenCrop
     private val cropMode = cropMargins.cropMode
@@ -94,24 +97,28 @@ class CropDialog(cropMargins: CropMargins, val activity: OrionViewerActivity) : 
             }
         }
 
-        val preview = findViewById<View>(R.id.option_dialog_bottom_apply) as ImageButton
         val radioGroup = findViewById<View>(R.id.crop_mode) as RadioGroup
 
-        preview.setOnClickListener {
-            with(activity) {
-                this@CropDialog.onApplyAction()
-            }
-
+        fun preview() {
             val radioButtonId = radioGroup.checkedRadioButtonId
             val radioButton = radioGroup.findViewById<View>(radioButtonId)
             val mode = radioGroup.indexOfChild(radioButton)
             activity.controller?.changeCropMargins(cropMargins.toMargins(checkBox.isChecked, mode))
         }
 
-        val close = findViewById<View>(R.id.option_dialog_bottom_close) as ImageButton
-        close.setOnClickListener {
-            dismiss()
-        }
+        initOptionDialogPanel(
+            apply = {
+                preview()
+                dismiss()
+            },
+            preview = ::preview,
+            revert = {
+                initialMargins.toDialogMargins().copyInto(cropMargins)
+                //the even flag and the mode come back from the values the dialog opened with
+                updateView()
+                activity.controller?.changeCropMargins(initialMargins)
+            }
+        )
 
         updateView()
     }

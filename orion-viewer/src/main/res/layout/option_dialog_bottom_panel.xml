@@ -1,27 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
+<!-- The buttons of an option dialog, set up by initOptionDialogPanel: revert and preview are shown
+     only by the dialogs that can preview, close only by those that can't. A line and borderless
+     buttons set the panel apart from the dialog's own controls. Revert stands apart on the left,
+     the actions that go forward on the right, the check mark, the main one, in the accent color. -->
 <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_weight="0"
-    android:gravity="right"
-    android:orientation="horizontal"
+    android:layout_marginTop="8dp"
+    android:orientation="vertical"
     tools:showIn="@layout/add_bookmark_dialog">
 
-    <ImageButton
-        android:id="@+id/option_dialog_bottom_close"
-        style="@style/Viewer_Dialog_Icon"
-        android:layout_gravity="right"
-        app:srcCompat="@drawable/new_revert"
-        android:layout_marginRight="10dp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
 
-    <ImageButton
-        android:id="@+id/option_dialog_bottom_apply"
-        style="@style/Viewer_Dialog_Icon"
-        android:layout_gravity="right"
-        app:srcCompat="@drawable/new_apply" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="4dp">
+
+        <ImageButton
+            android:id="@+id/option_dialog_bottom_revert"
+            style="@style/Viewer_Dialog_Panel_Icon"
+            android:contentDescription="@string/option_dialog_revert"
+            android:visibility="gone"
+            app:srcCompat="@drawable/new_revert" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/option_dialog_bottom_preview"
+            style="@style/Viewer_Dialog_Panel_Icon"
+            android:contentDescription="@string/option_dialog_preview"
+            android:visibility="gone"
+            app:srcCompat="@drawable/new_preview" />
+
+        <ImageButton
+            android:id="@+id/option_dialog_bottom_close"
+            style="@style/Viewer_Dialog_Panel_Icon"
+            android:contentDescription="@string/option_dialog_close"
+            app:srcCompat="@drawable/new_close" />
+
+        <ImageButton
+            android:id="@+id/option_dialog_bottom_apply"
+            style="@style/Viewer_Dialog_Panel_Icon"
+            android:contentDescription="@string/option_dialog_apply"
+            app:srcCompat="@drawable/new_apply"
+            app:tint="?attr/colorAccent" />
+
+    </LinearLayout>
 
 </LinearLayout>

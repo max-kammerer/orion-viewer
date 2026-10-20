@@ -81,4 +81,8 @@
     <string name="about_discussions" translatable="false">Discussions: <a href="https://github.com/max-kammerer/orion-viewer/discussions">GitHub Discussions</a></string>
     <string name="about_discussions_ru" translatable="false">Discussions (RU): <a href="https://4pda.to/forum/index.php?showtopic=362925">4pda Forum</a></string>
     <string name="page_cannot_be_displayed">Can\'t display page %1$d</string>
+    <string name="option_dialog_revert">Cancel</string>
+    <string name="option_dialog_preview">Preview</string>
+    <string name="option_dialog_close">Close</string>
+    <string name="option_dialog_apply">Apply and close</string>
 </resources>

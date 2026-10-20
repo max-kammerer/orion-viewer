@@ -105,7 +105,7 @@
         <TextView
             style="@style/General_Help_TextView"
             android:text="@string/escape"
-            app:drawableLeftCompat="@drawable/new_revert"
+            app:drawableLeftCompat="@drawable/new_close"
             />
 
     </LinearLayout>
