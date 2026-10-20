@@ -1,3 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="contribution_intro">Orion Viewer açık kaynaklı bir projedir ve siz de bu projenin daha iyi hale gelmesine katkıda bulunabilirsiniz!</string>
+    <string name="contribution_ways">Bu projeye katkıda bulunabileceğiniz birçok şey var:</string>
+    <string name="contribution_report_bug">• <a href="https://github.com/max-kammerer/orion-viewer/issues">sorun izleme sayfasında</a> bir özellik önerin veya bir sorunu bildirin</string>
+    <string name="contribution_do_translation">• <a href="https://github.com/max-kammerer/orion-viewer/wiki/Translations">uygulamayı diğer dillere çevirin</a> veya var olan bir çeviriyi iyileştirin</string>
+    <string name="contribution_code">• <a href="https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-build-project">yeni bir özellik</a> geliştirin veya <a href="https://github.com/max-kammerer/orion-viewer/issues">bir hatayı düzeltin</a></string>
+    <string name="contribution_design">• yeni bir uygulama teması ve/veya yeni bir kullanıcı arayüzü/deneyimi tasarlayın</string>
+    <string name="contribution_review">• <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">Google Play</a> veya başka bir yerde yorum yazın</string>
+    <string name="contribution_survey">Ankete katılarak uygulamanın iyileştirilmesine yardımcı olun! (5–10 dakika)</string>
+    <string name="survey_title">Kullanıcı anketi</string>
+    <string name="survey_purpose">Yanıtlar, hangi özelliklerin geleceğine karar verir.</string>
+    <string name="survey_take">Ankete katılın</string>
+    <string name="survey_thanks">Katıldığınız için teşekkür ederiz!</string>
+    <string name="survey_reopen">Anketi tekrar aç</string>
 </resources>
