@@ -1,3 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="warn_msg_no_dictionary">Sözlük bulunamadı</string>
+    <string name="ex_msg_operation_failed">İşlem başarısız oldu</string>
+    <string name="msg_dialog_search">Arama İletişim Kutusu</string>
+    <string name="msg_dialog_dismis">Kapat</string>
+    <string name="warn_text_not_found">Metin yok</string>
+    <string name="warn_no_further_occurrences_found">Başka örnek bulunamadı</string>
+    <string name="msg_searching">Aranıyor…</string>
+    <string name="msg_select_text">Metin seçin!</string>
+    <string name="msg_select_word">Bir sözcüğe dokunun!</string>
+    <string name="msg_error">Hata</string>
+    <string name="msg_warning">Uyarı</string>
+    <string name="msg_specify_keyword_for_search">Arama için anahtar sözcük belirtin</string>
+    <string name="recent_book_not_found">Kitap dosyası bulunamıyor!</string>
+    <string name="tap_zones_header">Dokunma Bölgeleriyle Gezinme: varsayılan bölge eylemleri</string>
+    <string name="permission_directory_warning">Kitaplarınızı klasör listesinde görüntüleyebilmek için Orion Viewer’ın aygıttaki dosyalara erişimi gerekir. Bu erişim yalnızca kitapları bulmak ve okumak amacıyla kullanılır.\n\nBu erişim olmadan da, başka bir uygulamadan veya yan menüdeki “Sistemden dosya seç” seçeneğiyle herhangi bir kitabı açabilirsiniz.</string>
+    <string name="permission_grant">İzin ver…</string>
+    <string name="permission_cancel">Şimdi değil</string>
+    <string name="string_cancel">İptal</string>
+    <string name="string_close">Kapat</string>
+    <string name="string_apply">Uygula</string>
+    <string name="string_wrong_password">Yanlış parola</string>
+    <string name="password_for_file">Dosya parolası</string>
+    <string name="wrong_outline_item">Yanlış sayfa: %s</string>
 </resources>
