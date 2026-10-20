@@ -19,6 +19,7 @@
 
 package universe.constellation.orion.viewer.view
 
+import universe.constellation.orion.viewer.analytics.ProcessMemory
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -191,6 +192,9 @@ class OrionDrawScene : View {
         val frame = try {
             Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         } catch (e: OutOfMemoryError) {
+            log("freezeFrame: no memory for ${width}x$height")
+            pageLayoutManager?.controller?.activity?.analytics
+                ?.outOfMemory("freeze frame", width.toLong() * height * 4, ProcessMemory.snapshot())
             return
         }
         //over the previous frozen frame, if the pages are still being rendered after an earlier pinch
