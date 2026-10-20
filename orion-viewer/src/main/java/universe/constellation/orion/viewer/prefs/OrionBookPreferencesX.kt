@@ -14,6 +14,7 @@ import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.R.array.*
 import universe.constellation.orion.viewer.R.string.*
 import universe.constellation.orion.viewer.android.DSLPreferenceFragment
+import universe.constellation.orion.viewer.dialog.CropDialog
 import universe.constellation.orion.viewer.prefs.BookPreferenceKeyX.*
 import universe.constellation.orion.viewer.prefs.GlobalOptions.Companion.DEFAULT_DICTIONARY
 
@@ -39,10 +40,10 @@ class OrionBookPreferencesFragment : DSLPreferenceFragment() {
             if (preference == null) return@OnSharedPreferenceChangeListener
             if (BookPreferenceKeyX.key2Operation[key] != null) {
                 val dataStore = createDataStore(context)
-                if (key == THRESHOLD.prefKey || key == PAGE_LAYOUT.prefKey) {
-                    dataStore.putInt(key, preference.getInt(key, 0))
-                } else {
-                    dataStore.putString(key, preference.getString(key, null))
+                //seek bars and the page layout store ints, lists strings
+                when (val value = preference.all[key]) {
+                    is Int -> dataStore.putInt(key, value)
+                    else -> dataStore.putString(key, value as String?)
                 }
             }
         }
@@ -269,6 +270,29 @@ class OrionBookPreferencesFragment : DSLPreferenceFragment() {
                         min = 1
                         max = 255
                         setDefaultValue(255)
+                    }
+                }
+            }
+
+            if (isGeneral) {
+                preferenceScreen.category {
+                    title = pref_default_crop.stringRes
+                    isIconSpaceReserved = false
+
+                    listOf(
+                        GlobalOptions.DEFAULT_CROP_LEFT to crop_left,
+                        GlobalOptions.DEFAULT_CROP_RIGHT to crop_right,
+                        GlobalOptions.DEFAULT_CROP_TOP to crop_top,
+                        GlobalOptions.DEFAULT_CROP_BOTTOM to crop_bottom,
+                    ).forEach { (cropKey, name) ->
+                        seekBar {
+                            key = cropKey
+                            title = name.stringRes
+                            showSeekBarValue = true
+                            min = CropDialog.CROP_RESTRICTION_MIN
+                            max = GlobalOptions.DEFAULT_CROP_MAX
+                            setDefaultValue(0)
+                        }
                     }
                 }
             }

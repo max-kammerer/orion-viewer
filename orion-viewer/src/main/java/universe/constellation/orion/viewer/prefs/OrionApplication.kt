@@ -293,6 +293,10 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
                 "zoom" -> changeZoom(value as Int)
                 "logicalPageOffset" -> changeLogicalPageOffset(value as Int)
                 "pagesPerSheet" -> changePagesPerSheet(value as Int)
+                "leftMargin" -> changeCropMargins(margins.copy(left = value as Int))
+                "rightMargin" -> changeCropMargins(margins.copy(right = value as Int))
+                "topMargin" -> changeCropMargins(margins.copy(top = value as Int))
+                "bottomMargin" -> changeCropMargins(margins.copy(bottom = value as Int))
             }
         }
     }

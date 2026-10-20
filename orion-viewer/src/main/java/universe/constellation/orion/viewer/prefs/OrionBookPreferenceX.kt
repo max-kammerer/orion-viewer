@@ -17,7 +17,11 @@ enum class BookPreferenceKeyX(
     THRESHOLD("THRESHOLD", LastPageInfo::threshold.name),
     LOGICAL_PAGE_OFFSET("LOGICAL_PAGE_OFFSET", LastPageInfo::logicalPageOffset.name),
     PAGES_PER_SHEET("PAGES_PER_SHEET", LastPageInfo::pagesPerSheet.name),
-    DICTIONARY(GlobalOptions.DICTIONARY, LastPageInfo::dictionary.name);
+    DICTIONARY(GlobalOptions.DICTIONARY, LastPageInfo::dictionary.name),
+    CROP_LEFT(GlobalOptions.DEFAULT_CROP_LEFT, LastPageInfo::leftMargin.name),
+    CROP_RIGHT(GlobalOptions.DEFAULT_CROP_RIGHT, LastPageInfo::rightMargin.name),
+    CROP_TOP(GlobalOptions.DEFAULT_CROP_TOP, LastPageInfo::topMargin.name),
+    CROP_BOTTOM(GlobalOptions.DEFAULT_CROP_BOTTOM, LastPageInfo::bottomMargin.name);
 
     companion object {
         val key2Operation = entries.associateBy { it.prefKey }
