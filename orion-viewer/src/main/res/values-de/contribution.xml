@@ -8,4 +8,9 @@
     <string name="contribution_design">• eine neues Theme und/oder eine neue UI/UX für die App entwerfen</string>
     <string name="contribution_review">• eine <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">Bewertung der App auf Google Play</a> oder einer anderen Plattform abgeben</string>
     <string name="contribution_survey">Helfen sie mit, die App besser zu machen - nehmen sie dazu an der Umfrage teil! (5–10 Minuten)</string>
+    <string name="survey_title">Benutzerumfrage</string>
+    <string name="survey_purpose">Die Antworten entscheiden über die nächsten Funktionen.</string>
+    <string name="survey_take">An der Umfrage teilnehmen</string>
+    <string name="survey_thanks">Danke für die Teilnahme!</string>
+    <string name="survey_reopen">Die Umfrage erneut öffnen</string>
 </resources>
