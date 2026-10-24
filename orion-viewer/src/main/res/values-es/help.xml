@@ -2,7 +2,7 @@
 <resources>
     <string name="zoom">Abre la ventana Zoom. Un valor igual a cero adapta el zoom a la anchura de la página.</string>
     <string name="rotation">Rota el documento 90 grados en el sentido horario. Un click largo rota el documento en el sentido antihorario.</string>
-    <string name="crop">Abre la ventana Recortar márgenes. Los valores son relativos al tamaño de la página. Un click largo cambia el valor del recorte en un +/-10%. Valores negativos aumentan el margen. </string>
+    <string name="crop">Abre la ventana Recortar márgenes. Los valores son relativos al tamaño de la página. Un click largo cambia el valor del recorte en un +/-10%. Valores negativos aumentan el margen.</string>
     <string name="apply">Aplica las modificaciones en las diferentes opciones.</string>
     <string name="escape">Volver/Salir.</string>
     <string name="general_usage">Modo de empleo:</string>
@@ -11,9 +11,7 @@
     <string name="general_usage_step2">
         2. Seleccionar la orientación apropiada: vertical o apaisada
         </string>
-    <string name="general_usage_step3">
-        3. Recortar los márgenes; el tamaño del texto se adapta a ellos (si se especifica el zoom a la anchura de la página)
-	</string>
+    <string name="general_usage_step3">3. Recortar los márgenes; el tamaño del texto se adapta a ellos (si se especifica el zoom a la anchura de la página)</string>
     <string name="general_usage_step4">
         4. ¡Disfrute leyendo!</string>
     <!--<string name="help_taps">-->
