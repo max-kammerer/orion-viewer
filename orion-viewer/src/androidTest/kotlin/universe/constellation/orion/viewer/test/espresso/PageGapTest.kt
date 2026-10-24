@@ -83,9 +83,13 @@ class PageGapTest : BaseViewerActivityTest(BookFile(BaseTest.SICP)) {
         Espresso.onIdle()
         /* big enough for the gap to change by more than the rounding: 2 px become 6 */
         val zoom = 3f
+        onActivity {
+            repeat(9) { _ -> it.controller!!.pageLayoutManager.doScroll(0f, 0f, 0f, -137f) }
+        }
+        //the pages the scroll brought in get their sizes, moving the ones above, before positions are taken
+        Espresso.onIdle()
         val (pageNum, expected) = onActivity {
             val manager = it.controller!!.pageLayoutManager
-            repeat(9) { manager.doScroll(0f, 0f, 0f, -137f) }
             val page = manager.activePages.first { page -> page.layoutData.position.y > 0 }
             val y = page.layoutData.position.y
             val focus = PointF(301f, y - 0.5f)
@@ -106,6 +110,8 @@ class PageGapTest : BaseViewerActivityTest(BookFile(BaseTest.SICP)) {
         onActivity {
             repeat(9) { _ -> it.controller!!.pageLayoutManager.doScroll(0f, 0f, 0f, -137f) }
         }
+        //the pages the scroll brought in get their sizes, moving the ones above, before positions are taken
+        Espresso.onIdle()
         try {
             listOf(0, 5, 1).forEach { gapDp ->
                 val firstOnScreen = onActivity {
