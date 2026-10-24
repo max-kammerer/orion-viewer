@@ -1,1 +1,1 @@
-Orion Viewer is pdf, djvu, xps, tiff and comic books (cbr, cbz, cbt) file viewer
+Fast PDF, DjVu, XPS, TIFF and comic book (CBZ, CBR, CB7, CBT) viewer
