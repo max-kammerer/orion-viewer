@@ -11,7 +11,7 @@
     <string name="fileopen_permission_dialog_info">Doğrudan erişmek için lütfen dosya okuma izni verin veya aşağıdaki seçeneklerden birini seçin:</string>
     <string name="fileopen_open_in_temporary_file">Geçici dosya aracılığıyla aç</string>
     <string name="fileopen_no_pages">belgede sayfa yok</string>
-    <string name="fileopen_report_error_by_github_and_return">Sorunu github\'da bildir ve iletişim kutusuna geri dön…</string>
+    <string name="fileopen_report_error_by_github_and_return">Sorunu GitHub\'da bildir ve iletişim kutusuna geri dön…</string>
     <string name="fileopen_report_error_by_email_and_return">Sorunu e-posta ile bildir ve iletişim kutusuna geri dön…</string>
     <string name="string_exception">İstisna</string>
     <string name="string_intent">Amaç</string>
@@ -35,4 +35,8 @@
     <string name="fileopen_content_other">dosya %1$s değil, içeriği %2$s</string>
     <string name="fileopen_content_text">düz metin</string>
     <string name="fileopen_content_web_page">web sayfası</string>
+    <string name="fileopen_content_unsupported">dosya uygulamanın açabileceği bir biçimde değil, içeriği %1$s</string>
+    <string name="fileopen_content_archive">dosya bir %1$s arşivi: içinde bir kitap varsa, önce onu çıkarın</string>
+    <string name="fileopen_content_acsm">dosya, kitabın kendisi değil, bir Adobe Digital Editions kira belirtecidir (ACSM): kitabı indirmek için dosyayı Adobe Digital Editions\'da açın</string>
+    <string name="fileopen_content_mht">dosya, kaydedilmiş bir web sayfası (MHT)</string>
 </resources>
