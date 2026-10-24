@@ -36,7 +36,7 @@
     <string name="fileopen_content_text">Nur-Text</string>
     <string name="fileopen_content_web_page">eine Webseite</string>
     <string name="fileopen_content_unsupported">die Datei ist nicht in einem Format, das die App öffnen kann; ihr Inhalt ist %1$s</string>
-    <string name="fileopen_content_archive">die Datei ist ein %1$s Archiv: Wenn es ein Buch enthält entpacken sie es zuerst</string>
-    <string name="fileopen_content_acsm">die Datei ist ein Adobe Digital Editions loan token (ACSM), nicht das Buch selbst: öffnen sie die Datei in Adobe Digital Editions, um das Buch herunterzuladen</string>
+    <string name="fileopen_content_archive">die Datei ist ein %1$s-Archiv: Wenn es ein Buch enthält, entpacken sie es zuerst</string>
+    <string name="fileopen_content_acsm">die Datei ist ein Ausleih-Token von Adobe Digital Editions (ACSM), nicht das Buch selbst: öffnen sie die Datei in Adobe Digital Editions, um das Buch herunterzuladen</string>
     <string name="fileopen_content_mht">die Datei ist eine gespeicherte Webseite (MHT)</string>
 </resources>

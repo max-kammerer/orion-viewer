@@ -2,7 +2,7 @@
 <resources>
     <string name="zoom">Ouvre la fenêtre zoom. Une valeur égale à zéro adapte le zoom à la largeur de la page.</string>
     <string name="rotation">Tourne le document de 90° dans le sens horaire. Une longue tape tourne le document dans le sens antihoraire.</string>
-    <string name="crop">Ouvre la fenêtre rognage. Les valeurs sont relatives à la grandeur de la page. Une longue tape change la valeur du rpgnage en un +/-10%. Les valeurs négatives augmentent la marge.</string>
+    <string name="crop">Ouvre la fenêtre rognage. Les valeurs sont relatives à la grandeur de la page. Une longue tape change la valeur du rognage en un +/-10%. Les valeurs négatives augmentent la marge.</string>
     <string name="apply">Applique les modifications dans les différentes options.</string>
     <string name="escape">Retour/Échap.</string>
     <string name="general_usage">Mode d\'emploi :</string>

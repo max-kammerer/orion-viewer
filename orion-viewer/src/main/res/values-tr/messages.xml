@@ -14,7 +14,7 @@
     <string name="msg_specify_keyword_for_search">Arama için anahtar sözcük belirtin</string>
     <string name="recent_book_not_found">Kitap dosyası bulunamıyor!</string>
     <string name="tap_zones_header">Dokunma Bölgeleriyle Gezinme: varsayılan bölge eylemleri</string>
-    <string name="permission_directory_warning">Kitaplarınızı klasör listesinde görüntüleyebilmek için Orion Viewer’ın aygıttaki dosyalara erişimi gerekir. Bu erişim yalnızca kitapları bulmak ve okumak amacıyla kullanılır.\n\nBu erişim olmadan da, başka bir uygulamadan veya yan menüdeki “Sistemden dosya seç” seçeneğiyle herhangi bir kitabı açabilirsiniz.</string>
+    <string name="permission_directory_warning">Kitaplarınızı klasör listesinde görüntüleyebilmek için Orion Viewer’ın aygıttaki dosyalara erişimi gerekir. Bu erişim yalnızca kitapları bulmak ve okumak amacıyla kullanılır.\n\nBu erişim olmadan da, başka bir uygulamadan veya yan menüdeki “Sistemde dosya seçin” seçeneğiyle herhangi bir kitabı açabilirsiniz.</string>
     <string name="permission_grant">İzin ver…</string>
     <string name="permission_cancel">Şimdi değil</string>
     <string name="string_cancel">İptal</string>

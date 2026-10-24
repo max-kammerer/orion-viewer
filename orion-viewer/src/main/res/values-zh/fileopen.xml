@@ -38,5 +38,5 @@
     <string name="fileopen_content_unsupported">本应用不支持打开该文件的格式，其内容是 %1$s</string>
     <string name="fileopen_content_archive">该文件是 %1$s 压缩包：如果其中有一本书，请先将它解压出来</string>
     <string name="fileopen_content_acsm">该文件是 Adobe Digital Editions loan token (ACSM)，不是书籍本身：在 Adobe Digital Editions 中打开它来下载这本书</string>
-    <string name="fileopen_content_mht">这个文件是已保存的网页 （MHT）</string>
+    <string name="fileopen_content_mht">这个文件是已保存的网页（MHT）</string>
 </resources>

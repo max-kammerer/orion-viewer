@@ -4,7 +4,7 @@
     <string name="rotation">Ruota il documento di 90 gradi in senso orario. Un tap lungo ruota in senso antiorario.</string>
     <string name="crop">Apre la finestra Ritaglia margini. I valori sono relativi alle dimensioni della pagina. Un tap lungo cambia i valori di ritaglio del 10%. Valori negativi aumentano i margini.</string>
     <string name="apply">Applica le modifiche alle impostazioni.</string>
-    <string name="escape">Chiude l\'applicazione.</string>
+    <string name="escape">Indietro/Chiudi.</string>
     <string name="general_usage">Utilizzo:</string>
     <string name="general_usage_step1">1. Aprire il documento (adatta lo zoom alla larghezza di pagina)
         </string>
