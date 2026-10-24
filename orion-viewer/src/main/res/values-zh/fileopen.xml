@@ -6,7 +6,7 @@
     <string name="fileopen_permissions_grant_read">授予读取存储空间的权限…</string>
     <string name="fileopen_open_in_temporary_file">通过临时文件打开</string>
     <string name="fileopen_open_recent_files">跳转到最近打开的书籍…</string>
-    <string name="fileopen_report_error_by_github_and_return">在 github 里告知开发者问题，返回到对话框…</string>
+    <string name="fileopen_report_error_by_github_and_return">在 GitHub 里告知开发者问题，返回到对话框…</string>
     <string name="fileopen_report_error_by_email_and_return">写 email 告知开发者问题，返回到对话框…</string>
     <string name="crash_on_book_opening_title">打开文件出错</string>
     <string name="crash_on_book_opening_message_header">打开文件 %1$s 出错。请告知开发者问题:</string>
@@ -35,4 +35,8 @@
     <string name="fileopen_content_other">文件不是 %1$s，其内容是 %2$s</string>
     <string name="fileopen_content_text">纯文本</string>
     <string name="fileopen_content_web_page">网页</string>
+    <string name="fileopen_content_unsupported">本应用不支持打开该文件的格式，其内容是 %1$s</string>
+    <string name="fileopen_content_archive">该文件是 %1$s 压缩包：如果其中有一本书，请先将它解压出来</string>
+    <string name="fileopen_content_acsm">该文件是 Adobe Digital Editions loan token (ACSM)，不是书籍本身：在 Adobe Digital Editions 中打开它来下载这本书</string>
+    <string name="fileopen_content_mht">这个文件是已保存的网页 （MHT）</string>
 </resources>
