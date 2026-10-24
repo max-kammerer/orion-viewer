@@ -35,4 +35,8 @@
     <string name="fileopen_content_other">see fail pole %1$s, tema sisu on %2$s</string>
     <string name="fileopen_content_text">vormindamata tekst</string>
     <string name="fileopen_content_web_page">veebileht</string>
+    <string name="fileopen_content_unsupported">see fail pole vormingus, mida rakendus suudab avada, tema sisu on %1$s</string>
+    <string name="fileopen_content_archive">see fail on %1$s-tüüpi arhiivifail: kui seal sees peaks olema raamat, siis paki ta esmalt lahti</string>
+    <string name="fileopen_content_acsm">see fail pole raamat, vaid on Adobe Digital Editionsi laenutuse tunnusluba (ACSM): raamatu allalaadimiseks ava ta teenuses Adobe Digital Editions</string>
+    <string name="fileopen_content_mht">see fail on MHT-vormingus salvestatud veebileht</string>
 </resources>

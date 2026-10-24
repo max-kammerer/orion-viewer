@@ -2,7 +2,7 @@
 <resources>
     <string name="zoom">Avab suumitud vaate. Kui suumi väärtus on null, siis suumitakse laiuse alusel.</string>
     <string name="rotation">Pöörab dokumenti 90 kraadi päripäeva. Pikk vajutus pöörab vastupäeva.</string>
-    <string name="crop">Avab veeriste/äärejoonte kadreerimise vaate. Väärtused on suhtelised lehekülje suuruse suhtes. Selles vaates pikk vajutus plussil või miinusel muudab kadreerimist 10%. Negatiivne väärtus laiendab veeriseid/äärejooni.</string>
+    <string name="crop">Avab kadreerimisvaate. Väärtused on suhtelised lehekülje suuruse suhtes. Selles vaates pikk vajutus plussil või miinusel muudab kadreerimist 10%. Negatiivne väärtus laiendab veeriseid/äärejooni.</string>
     <string name="apply">Kasuta praegust valikut.</string>
     <string name="escape">Tagasi/Välju.</string>
     <string name="general_usage">Kasutamine toimib nii:</string>
