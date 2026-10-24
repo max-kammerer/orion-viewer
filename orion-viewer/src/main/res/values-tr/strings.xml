@@ -28,7 +28,7 @@
     <string name="fit_height">Yüksekliği sığdır</string>
     <string name="fit_page">Sayfayı sığdır</string>
     <string name="fit_custom">Özel…</string>
-    <string name="key_binder_message">Herhangi bir tuşa basın ve bunları bağlamak için eylemi seçin!</string>
+    <string name="key_binder_message">Herhangi bir tuşa basın ve ona atamak için bir eylem seçin!</string>
     <string name="key_binder_warning">Sıfır anahtar koduyla anahtar bağlanamadı, başka bir anahtar deneyin!</string>
     <string name="table_of_contents">İçindekiler</string>
     <string name="warn_no_text_in_selection">Seçimde metin yok!</string>
