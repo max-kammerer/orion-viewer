@@ -14,7 +14,6 @@ import universe.constellation.orion.viewer.R
 import universe.constellation.orion.viewer.R.array.*
 import universe.constellation.orion.viewer.R.string.*
 import universe.constellation.orion.viewer.android.DSLPreferenceFragment
-import universe.constellation.orion.viewer.dialog.CropDialog
 import universe.constellation.orion.viewer.prefs.BookPreferenceKeyX.*
 import universe.constellation.orion.viewer.prefs.GlobalOptions.Companion.DEFAULT_DICTIONARY
 
@@ -289,7 +288,7 @@ class OrionBookPreferencesFragment : DSLPreferenceFragment() {
                             key = cropKey
                             title = name.stringRes
                             showSeekBarValue = true
-                            min = CropDialog.CROP_RESTRICTION_MIN
+                            min = 0
                             max = GlobalOptions.DEFAULT_CROP_MAX
                             setDefaultValue(0)
                         }

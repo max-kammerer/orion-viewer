@@ -18,7 +18,6 @@
  */
 package universe.constellation.orion.viewer.prefs
 
-import universe.constellation.orion.viewer.dialog.CropDialog
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import universe.constellation.orion.viewer.OptionActions
@@ -149,7 +148,7 @@ class GlobalOptions(
         get() = getIntFromStringProperty(DEFAULT_CONTRAST, 100)
 
     /**
-     * The default manual crop margins, in percent of the page as in the crop dialog: a new book
+     * The default manual crop margins, in percent of the page (0..[DEFAULT_CROP_MAX]): a new book
      * starts with them, a change applies to the open book too (BookPreferenceKeyX.CROP_LEFT...).
      */
     val defaultCropLeft: Int
@@ -165,7 +164,7 @@ class GlobalOptions(
         get() = defaultCrop(DEFAULT_CROP_BOTTOM)
 
     private fun defaultCrop(key: String): Int =
-        prefs.getInt(key, 0).coerceIn(CropDialog.CROP_RESTRICTION_MIN, DEFAULT_CROP_MAX)
+        prefs.getInt(key, 0).coerceIn(0, DEFAULT_CROP_MAX)
 
 
     val isDrawOffPage: Boolean
@@ -295,8 +294,11 @@ class GlobalOptions(
 
         const val DEFAULT_CONTRAST: String = "DEFAULT_CONTRAST_3"
 
-        /** A default for every book needs less than the crop dialog's 40% for one. */
-        const val DEFAULT_CROP_MAX: Int = 20
+        /**
+         * The default crop margins go from 0 to this: a default for every book only crops, and
+         * needs less than the crop dialog's -10..40% for one book.
+         */
+        const val DEFAULT_CROP_MAX: Int = 15
 
         const val DEFAULT_CROP_LEFT: String = "DEFAULT_CROP_LEFT"
 
