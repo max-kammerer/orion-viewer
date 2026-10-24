@@ -30,4 +30,13 @@
     <string name="fileopen_source_unavailable_info">Die App, welche die Datei (%1$s) geteilt hat, gewährt keinen Zugang mehr dazu: %2$s. Bitte teilen oder öffnen sie die Datei mit der App erneut oder:</string>
     <string name="fileopen_source_unavailable_message">Die App, welche die Datei (%1$s) geteilt hat, gewährt keinen Zugang mehr dazu: %2$s. Bitte teilen oder öffnen sie die Datei mit der App erneut.</string>
     <string name="crash_on_book_opening_no_engine_library">Die App wurde ohne Dokumenten-Engine für dieses Gerät installiert (%1$s), daher kann kein Buch geöffnet werden. Bitte installieren sie die App von Google Play erneut oder installieren sie das Build für ihr Gerät von der Projektseite auf GitHub.</string>
+    <string name="fileopen_content_unreadable">die Datei ist nicht %1$s: die Daten sind unleserlich, die Datei ist vielleicht beschädigt oder durch eine andere App verschlüsselt</string>
+    <string name="fileopen_content_zeros">die Datei ist mit Nullen gefüllt, vielleicht wegen unvollständigen Downloads oder Kopie</string>
+    <string name="fileopen_content_other">die Datei ist nicht %1$s, ihr Inhalt ist %2$s</string>
+    <string name="fileopen_content_text">Nur-Text</string>
+    <string name="fileopen_content_web_page">eine Webseite</string>
+    <string name="fileopen_content_unsupported">die Datei ist nicht in einem Format, das die App öffnen kann; ihr Inhalt ist %1$s</string>
+    <string name="fileopen_content_archive">die Datei ist ein %1$s Archiv: Wenn es ein Buch enthält entpacken sie es zuerst</string>
+    <string name="fileopen_content_acsm">die Datei ist ein Adobe Digital Editions loan token (ACSM), nicht das Buch selbst: öffnen sie die Datei in Adobe Digital Editions, um das Buch herunterzuladen</string>
+    <string name="fileopen_content_mht">die Datei ist eine gespeicherte Webseite (MHT)</string>
 </resources>
