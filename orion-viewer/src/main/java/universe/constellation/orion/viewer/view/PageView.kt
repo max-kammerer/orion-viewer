@@ -1,5 +1,6 @@
 package universe.constellation.orion.viewer.view
 
+import kotlin.math.abs
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
@@ -330,8 +331,9 @@ class PageView(
      * half a pixel out, it takes the pixels right outside the page, one dark pixel wide, and
      * leaves the page itself whole. In the gap between pages the borders of both fill it; with no
      * gap the next page covers this one's bottom line and its own top line remains, one pixel.
-     * The side lines go in pairs: a page as wide as the screen or 1 px narrower has no room for
-     * both, and a single one would make it look shifted; the screen edges bound it then.
+     * A side off the screen is simply not seen. The one exception: a centered page as wide as the
+     * screen or 1 px narrower has room for one side only, which would make it look shifted; it
+     * gets the top and the bottom lines alone, the screen edges bound it.
      */
     private fun drawBorder(
         canvas: Canvas,
@@ -341,14 +343,16 @@ class PageView(
         val paint = scene.borderPaint!!
         borderRect.set(layoutData.wholePageRect)
         borderRect.inset(-0.5f, -0.5f)
-        //on the screen, as a pinch shows the page: a page shrinking off the edges gets its sides
+        //on the screen, as a pinch shows the page
         val left = scene.screenX(layoutData.position.x + layoutData.wholePageRect.left)
         val right = scene.screenX(layoutData.position.x + layoutData.wholePageRect.right)
-        if (left >= 1 && right <= pageLayoutManager.sceneRect.right - 1) {
-            canvas.drawRect(borderRect, paint)
-        } else {
+        val screenRight = pageLayoutManager.sceneRect.right
+        val oneSideOnly = (left >= 1) != (right <= screenRight - 1)
+        if (oneSideOnly && abs(left - (screenRight - right)) <= 1) {
             canvas.drawLine(borderRect.left, borderRect.top, borderRect.right, borderRect.top, paint)
             canvas.drawLine(borderRect.left, borderRect.bottom, borderRect.right, borderRect.bottom, paint)
+        } else {
+            canvas.drawRect(borderRect, paint)
         }
     }
 
