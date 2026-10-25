@@ -39,6 +39,14 @@ class ActionBarDrawerToggle(
                 Action.OPTIONS.doAction(activity)
                 return true
             }
+            R.id.nav_export_settings -> {
+                activity.settingsTransfer.export()
+                return true
+            }
+            R.id.nav_import_settings -> {
+                activity.settingsTransfer.import()
+                return true
+            }
             R.id.nav_exit -> {
                 Action.CLOSE_ACTION.doAction(activity)
                 return true

@@ -34,7 +34,6 @@
             app:fragment="universe.constellation.orion.viewer.prefs.OrionBookPreferencesFragment"
             app:iconSpaceReserved="false" />
 
-
         <ListPreference
             android:defaultValue="DEFAULT"
             android:dialogTitle="@string/pref_app_language"
@@ -149,7 +148,6 @@
 
     </PreferenceCategory>
 
-
     <PreferenceCategory
         android:key="SYSTEM"
         android:title="@string/pref_category_system"
@@ -162,4 +160,26 @@
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="SETTINGS_TRANSFER"
+        android:title="@string/pref_category_settings_transfer"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:key="EXPORT_SETTINGS"
+            android:persistent="false"
+            android:summary="@string/pref_export_settings_desc"
+            android:title="@string/pref_export_settings"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:key="IMPORT_SETTINGS"
+            android:persistent="false"
+            android:summary="@string/pref_import_settings_desc"
+            android:title="@string/pref_import_settings"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

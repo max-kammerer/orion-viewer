@@ -1,5 +1,6 @@
 package universe.constellation.orion.viewer.filemanager
 
+import universe.constellation.orion.viewer.prefs.SettingsTransferUi
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
@@ -60,6 +61,8 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
 
     /** Where the pending storage access request came from, for its result event; kept while the system settings recreate the activity. */
     private var permissionSource: String? = null
+
+    val settingsTransfer = SettingsTransferUi(this, this) { this }
 
     val selectDocumentInSystem = if (isAtLeastKitkat()) registerForActivityResult(
         ActivityResultContracts.OpenDocument()
@@ -131,6 +134,8 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
         }
         menu.findItem(R.id.nav_system_select)?.setVisible(enableSystemOptionAction && isAtLeastKitkat())
         menu.findItem(R.id.nav_permissions)?.setVisible(!hasReadStoragePermission(this))
+        menu.findItem(R.id.nav_export_settings)?.setVisible(settingsTransfer.isAvailable)
+        menu.findItem(R.id.nav_import_settings)?.setVisible(settingsTransfer.isAvailable)
 
         drawerLayoutListener.syncState()
     }

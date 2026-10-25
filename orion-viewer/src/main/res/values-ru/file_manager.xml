@@ -17,4 +17,5 @@
     <string name="file_manager_nav_exit">Выход</string>
     <string name="file_manager_internal_storage">Внутренний накопитель</string>
     <string name="file_manager_primary_storage">Главный накопитель</string>
+    <string name="file_manager_nav_open">Открыть</string>
 </resources>

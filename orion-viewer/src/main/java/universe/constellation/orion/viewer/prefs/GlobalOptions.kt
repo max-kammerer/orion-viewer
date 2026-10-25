@@ -284,7 +284,7 @@ class GlobalOptions(
     companion object {
         const val MAX_RECENT_ENTRIES: Int = 20
 
-        private const val RECENT_PREFIX = "recent_"
+        internal const val RECENT_PREFIX = "recent_"
 
         const val DISABLE = "DISABLE"
 

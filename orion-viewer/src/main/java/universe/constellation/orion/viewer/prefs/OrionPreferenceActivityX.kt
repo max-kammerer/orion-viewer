@@ -1,5 +1,7 @@
 package universe.constellation.orion.viewer.prefs
 
+import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
@@ -26,6 +28,8 @@ class OrionPreferenceActivityX : OrionBaseActivity() {
 class OrionPreferenceFragmentX : DSLPreferenceFragment()
 {
 
+    private val settingsTransfer = SettingsTransferUi(this, this) { activity as? OrionBaseActivity }
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.userpreferences, rootKey)
 
@@ -33,6 +37,19 @@ class OrionPreferenceFragmentX : DSLPreferenceFragment()
         if (orionApplication.device !is EInkDevice) {
             screen.findPreference<androidx.preference.PreferenceCategory>("NOOK2_EINK")?.let {
                 screen.removePreference(it)
+            }
+        }
+
+        if (!settingsTransfer.isAvailable) {
+            screen.findPreference<PreferenceCategory>("SETTINGS_TRANSFER")?.let { screen.removePreference(it) }
+        } else {
+            screen.findPreference<Preference>("EXPORT_SETTINGS")?.setOnPreferenceClickListener {
+                settingsTransfer.export()
+                true
+            }
+            screen.findPreference<Preference>("IMPORT_SETTINGS")?.setOnPreferenceClickListener {
+                settingsTransfer.import()
+                true
             }
         }
     }

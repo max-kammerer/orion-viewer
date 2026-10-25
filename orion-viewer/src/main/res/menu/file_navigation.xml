@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:title="@string/file_manager_nav_open">
+        <menu>
+            <item
+                android:id="@+id/nav_system_select"
+                android:icon="@drawable/new_folder_open"
+                android:title="@string/file_manager_nav_system_select" />
+        </menu>
+    </item>
+
     <item
         android:id="@+id/nav_locations"
         android:title="@string/file_manager_nav_locations">
@@ -20,15 +29,21 @@
                 android:id="@+id/nav_settings"
                 android:icon="@drawable/new_settings"
                 android:title="@string/file_manager_nav_settings"/>
+
+            <item
+                android:id="@+id/nav_export_settings"
+                android:icon="@drawable/new_settings_export"
+                android:title="@string/pref_export_settings"/>
+
+            <item
+                android:id="@+id/nav_import_settings"
+                android:icon="@drawable/new_settings_import"
+                android:title="@string/pref_import_settings"/>
         </menu>
     </item>
 
     <item android:title="@string/file_manager_nav_other">
         <menu>
-            <item
-                android:id="@+id/nav_system_select"
-                android:icon="@drawable/new_folder_open"
-                android:title="@string/file_manager_nav_system_select" />
             <item
                 android:id="@+id/help_menu_item"
                 android:icon="@drawable/new_help"

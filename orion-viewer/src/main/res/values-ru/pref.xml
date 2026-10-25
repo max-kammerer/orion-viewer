@@ -105,4 +105,14 @@
     <string name="pref_size_medium">Средний</string>
     <string name="pref_size_large">Большой</string>
     <string name="pref_category_behavior">Поведение по умолчанию</string>
+    <string name="pref_category_settings_transfer">Резервная копия настроек</string>
+    <string name="pref_export_settings">Экспорт настроек</string>
+    <string name="pref_export_settings_desc">Сохранить настройки, тап-зоны и привязки клавиш в файл, чтобы перенести их на другое устройство</string>
+    <string name="pref_import_settings">Импорт настроек</string>
+    <string name="pref_import_settings_desc">Заменить настройки сохранёнными в файле</string>
+    <string name="settings_import_confirm">Заменить текущие настройки, тап-зоны и привязки клавиш настройками из файла?</string>
+    <string name="settings_exported">Настройки экспортированы</string>
+    <string name="settings_imported">Настройки импортированы. Часть из них применится после перезапуска приложения</string>
+    <string name="settings_import_failed">Файл не является файлом настроек Orion Viewer</string>
+    <string name="settings_transfer_failed">Не удалось открыть файл: %1$s</string>
 </resources>

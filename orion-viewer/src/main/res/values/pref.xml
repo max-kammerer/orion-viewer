@@ -133,4 +133,14 @@
     <string name="pref_size_small">Small</string>
     <string name="pref_size_medium">Medium</string>
     <string name="pref_size_large">Large</string>
+    <string name="pref_category_settings_transfer">Settings backup</string>
+    <string name="pref_export_settings">Export settings</string>
+    <string name="pref_export_settings_desc">Save the settings, tap zones and key bindings to a file, to move them to another device</string>
+    <string name="pref_import_settings">Import settings</string>
+    <string name="pref_import_settings_desc">Replace the settings with those saved in a file</string>
+    <string name="settings_import_confirm">Replace the current settings, tap zones and key bindings with those from the file?</string>
+    <string name="settings_exported">Settings exported</string>
+    <string name="settings_imported">Settings imported. Some of them apply after the app is restarted</string>
+    <string name="settings_import_failed">The file isn\'t an Orion Viewer settings file</string>
+    <string name="settings_transfer_failed">Couldn\'t access the file: %1$s</string>
 </resources>
