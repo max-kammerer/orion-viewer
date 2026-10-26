@@ -54,4 +54,8 @@
     <string name="link_copied">Link kopiert</string>
     <string name="outline_history_empty">Noch keine Sprunganweisungen</string>
     <string name="page_cannot_be_displayed">Anzeige von Seite %1$d nicht möglich</string>
+    <string name="option_dialog_revert">Abbrechen</string>
+    <string name="option_dialog_preview">Voransicht</string>
+    <string name="option_dialog_close">Schließen</string>
+    <string name="option_dialog_apply">Anwenden und schließen</string>
 </resources>

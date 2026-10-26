@@ -2,7 +2,7 @@
 <!--Translated by Johannes Römer--><resources>
     <!--Categories-->
     <string name="pref_category_general">Allgemein</string>
-    <string name="pref_category_device_parameters">Geräte-Einstellungen</string>
+    <string name="pref_category_device_parameters">Geräteeinstellungen</string>
     <string name="pref_category_key_manager">Tastenverknüpfungen</string>
     <string name="pref_category_add_parameters">Andere Einstellungen</string>
     <string name="pref_category_system">System</string>
@@ -65,7 +65,7 @@
     <string name="pref_color_mode">Farbmodus</string>
     <string name="pref_book_threshold">Wasserzeichen</string>
     <string name="pref_book_threshold_desc">Schwellwert zur Entfernung von Wasserzeichen (Voreinstellung: 255): %s</string>
-    <string name="application_settings_title">Anwendungs-Einstellungen</string>
+    <string name="application_settings_title">Anwendungseinstellungen</string>
     <string name="pref_category_status_bar">Statusleiste</string>
     <string name="pref_value">Wert: %s</string>
     <string name="pref_category_quick_actions">Schnellaktionen</string>
@@ -103,4 +103,7 @@
     <string name="pref_open_links_by_tap">Links mit Antippen öffnen</string>
     <string name="pref_open_links_by_tap_desc">Das Antippen eines Links in einem Dokument öffnet diesen</string>
     <string name="pref_book_page_numbering_message">Nummer, die auf der aktuellen Seite gedruckt wird (die erste von zwei auf einer Doppelseite). Leer lassen, um die Zahlen zurückzusetzen.</string>
+    <string name="pref_page_gap">Lücke zwischen den Seiten</string>
+    <string name="pref_page_gap_desc">Im kontinuierlichen Modus in dp (0-50). 0 verbindet die Seiten, so wie es Webtoons brauchen</string>
+    <string name="pref_default_crop">Ränder zuschneiden, % der Seite</string>
 </resources>
