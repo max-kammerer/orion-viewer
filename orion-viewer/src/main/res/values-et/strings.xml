@@ -54,4 +54,8 @@
     <string name="link_no_handler">Ükski rakendus ei oska seda linki avada</string>
     <string name="link_copied">Link on kopeeritud</string>
     <string name="page_cannot_be_displayed">%1$d. lehe kuvamine ei õnnestu</string>
+    <string name="option_dialog_revert">Katkesta</string>
+    <string name="option_dialog_preview">Eelvaade</string>
+    <string name="option_dialog_close">Sulge</string>
+    <string name="option_dialog_apply">Rakenda ja sulge</string>
 </resources>
