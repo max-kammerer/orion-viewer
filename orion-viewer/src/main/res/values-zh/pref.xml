@@ -97,4 +97,7 @@
     <string name="pref_book_page_numbering">页面编号</string>
     <string name="pref_book_page_numbering_desc">文档页面 %2$d 是书页 %1$s</string>
     <string name="pref_book_page_numbering_message">印在当前页面（双页对开页的第一页）上的编号。留空重置编号。</string>
+    <string name="pref_page_gap">页面间距</string>
+    <string name="pref_page_gap_desc">连续模式下，dp 值在 0 到 50 之间。0 表示页面连接，因为网络漫画需要这样</string>
+    <string name="pref_default_crop">裁剪边距，占页面百分比</string>
 </resources>

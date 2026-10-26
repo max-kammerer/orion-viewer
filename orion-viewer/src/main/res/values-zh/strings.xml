@@ -54,4 +54,8 @@
     <string name="link_no_handler">没有应用能打开此链接</string>
     <string name="link_copied">已复制链接</string>
     <string name="page_cannot_be_displayed">无法显示第 %1$d 页</string>
+    <string name="option_dialog_revert">取消</string>
+    <string name="option_dialog_preview">预览</string>
+    <string name="option_dialog_close">关闭</string>
+    <string name="option_dialog_apply">应用并关闭</string>
 </resources>
