@@ -95,4 +95,7 @@
     <string name="pref_book_page_numbering">Lehtede nummerdus</string>
     <string name="pref_book_page_numbering_desc">Dokumendi leht %2$d on raamatu leht %1$s</string>
     <string name="pref_book_page_numbering_message">Number trükituna praegusele lehele (esimene kahest laialilaotatud lehest). Nummerduse lähtestamiseks jäta tühjaks.</string>
+    <string name="pref_default_crop">Veeriste kadreerimine, % lehest</string>
+    <string name="pref_page_gap">Vahe lehtede vahel</string>
+    <string name="pref_page_gap_desc">Toimib järjestikvaates, mõõtühikuks on (0–50). 0 kuvab lehed ilma vaheta, näiteks Webtoonsi veebikoomiksid eeldavad seda</string>
 </resources>
