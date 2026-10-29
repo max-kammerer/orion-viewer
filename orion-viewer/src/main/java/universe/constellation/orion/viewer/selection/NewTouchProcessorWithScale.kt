@@ -25,9 +25,29 @@ class NewTouchProcessorWithScale(view: OrionDrawScene, activity: OrionViewerActi
 
     private var startController: Controller? = null
 
+    /*
+     * From a pinch till the last finger is up. The fingers are rarely lifted together: the pinch
+     * ends with the first one, and the one left would scroll the page from where the pinch put it,
+     * dropping the frozen frame of the pinch while the pages are still being laid out (a blank
+     * page with the loading sign flashed). The rest of the touch is ignored.
+     */
+    private var afterPinch = false
+
     override fun onTouch(e: MotionEvent): Boolean {
         scaleDetector.onTouchEvent(e)
         if (scaleDetector.isInProgress) {
+            return true
+        }
+        if (afterPinch) {
+            val action = e.actionMasked
+            if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
+                afterPinch = false
+                //the gesture detectors saw this touch begin: they see it end as cancelled, no tap or fling
+                val cancel = MotionEvent.obtain(e)
+                cancel.action = MotionEvent.ACTION_CANCEL
+                super.onTouch(cancel)
+                cancel.recycle()
+            }
             return true
         }
         return super.onTouch(e)
@@ -49,6 +69,7 @@ class NewTouchProcessorWithScale(view: OrionDrawScene, activity: OrionViewerActi
         startFocus.set(detector.focusX, detector.focusY)
         nextState = State.SCALE
         startController = activity.controller
+        afterPinch = true
         return true
     }
 
