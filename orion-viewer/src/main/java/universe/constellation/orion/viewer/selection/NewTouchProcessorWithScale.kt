@@ -1,5 +1,7 @@
 package universe.constellation.orion.viewer.selection
 
+import universe.constellation.orion.viewer.prefs.GlobalOptions
+import androidx.core.view.ScaleGestureDetectorCompat
 import android.graphics.PointF
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
@@ -14,6 +16,15 @@ class NewTouchProcessorWithScale(view: OrionDrawScene, activity: OrionViewerActi
         ScaleGestureDetector.OnScaleGestureListener {
 
     private val scaleDetector = ScaleGestureDetector(activity, this)
+
+    init {
+        /* Quick scale, a double tap held and dragged, zooms with one finger. Only while the double
+           tap has no action of its own: after a double tap that selects a word the finger still
+           on the screen would zoom at the slightest move (issue #77). */
+        activity.globalOptions.DOUBLE_TAP_ACTION.observe(activity) {
+            ScaleGestureDetectorCompat.setQuickScaleEnabled(scaleDetector, it == GlobalOptions.DISABLE)
+        }
+    }
 
     //read per gesture: the option applies without a restart
     private val enableTouchMoveOnPinchZoom: Boolean
