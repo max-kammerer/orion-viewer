@@ -12,7 +12,7 @@
     <string name="msg_error">Ошибка</string>
     <string name="msg_warning">Предупреждение</string>
     <string name="msg_specify_keyword_for_search">Не задано слово для поиска</string>
-    <string name="recent_book_not_found">Не могу найти файл книги!</string>
+    <string name="recent_book_not_found">Файл не найден: возможно, он перемещён или удалён</string>
     <string name="tap_zones_header">Навигация с помощью касаний: действия по умолчанию</string>
     <string name="permission_directory_warning">Чтобы показывать книги в списке папок, приложению нужен доступ к файлам на устройстве. Он используется только для поиска и чтения книг.\n\nБез него любую книгу можно открыть из другого приложения или через «Выбрать файл в системе» в боковом меню.</string>
     <string name="permission_grant">Предоставить…</string>
