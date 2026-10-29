@@ -1,3 +1,10 @@
+===== 0.97.5 (Oct 29, 2026) =====
+* Added page gap setting for continuous scrolling (0 for seamless webtoons)
+* Added default crop margins for books
+* Added settings export/import
+* Reworked crop and zoom dialogs: cancel, preview, apply and close
+* Smoother pinch zoom: no blank pages after zooming, sharper text, exact page gaps
+
 ===== 0.97.4 (Oct 11, 2026) =====
 * Optimization in caching fonts, glyphs, images
 * Optimization in jpeg processing
