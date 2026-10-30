@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="contribution_intro">Orion Viewer - проект с открытым исходным кодом и вы можете помочь сделать его лучше!</string>
+    <string name="contribution_intro">Orion Viewer - проект с открытым исходным кодом, и вы можете помочь сделать его лучше!</string>
     <string name="contribution_ways">Есть много вещей, которые вы можете привнести в проект:</string>
     <string name="contribution_report_bug">• предложить новую фичу или сообщить об ошибке <a href="https://github.com/max-kammerer/orion-viewer/issues">в issue трекере</a></string>
     <string name="contribution_do_translation">• перевести <a href="https://github.com/max-kammerer/orion-viewer/wiki/Translations">приложение на другие языки</a> или улучшить существующий перевод</string>

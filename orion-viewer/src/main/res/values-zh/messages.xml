@@ -7,7 +7,7 @@
     <string name="msg_error">出错</string>
     <string name="msg_dialog_search">查找对话框</string>
     <string name="msg_warning">警告</string>
-    <string name="recent_book_not_found">没找着书籍文件！</string>
+    <string name="recent_book_not_found">未找到文件：可能已被移动或删除</string>
     <string name="permission_grant">授权…</string>
     <string name="permission_cancel">以后再说</string>
     <string name="string_close">关闭</string>
