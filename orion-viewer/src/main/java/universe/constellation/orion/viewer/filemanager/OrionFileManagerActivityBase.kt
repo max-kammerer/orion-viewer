@@ -271,7 +271,8 @@ abstract class OrionFileManagerActivityBase @JvmOverloads constructor(
      * on some devices), so it is accepted too: the format is checked on opening anyway.
      */
     open val systemSelectMimeTypes: Array<String>
-        get() = FileFormats.supportedMimeTypes + "application/octet-stream"
+        get() = FileFormats.supportedMimeTypes + "application/octet-stream" +
+                if (globalOptions.OPEN_ARCHIVES_AS_COMICS.value) FileFormats.archiveMimeTypes else emptySet()
 
     open fun openFile(uri: Uri, isFromSystemFM: Boolean = false) {
         log("Opening new book: $uri")

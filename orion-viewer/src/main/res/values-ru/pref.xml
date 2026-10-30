@@ -56,6 +56,8 @@
     <string name="pref_application_theme">Тема приложения</string>
     <string name="pref_application_theme_desc">Тема: %s. (При изменении необходимо перезапустить приложение)</string>
     <string name="pref_open_recent_book">Открывать последнюю книгу при старте</string>
+    <string name="pref_open_archives_as_comics">Открывать ZIP и RAR как комиксы</string>
+    <string name="pref_open_archives_as_comics_desc">Показывает эти архивы в файловом менеджере и предлагает приложение для их открытия из других приложений</string>
     <!--book preferences-->
     <string name="pref_book_contrast">Контрастность</string>
     <string name="pref_book_contrast_desc">Контрастность (по умолчанию 100): %s</string>

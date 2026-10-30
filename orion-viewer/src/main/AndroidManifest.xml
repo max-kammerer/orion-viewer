@@ -137,6 +137,37 @@
             </intent-filter>
         </activity>
 
+        <!--Enabled by the option: see ArchivesAsComics.kt-->
+        <activity-alias android:name=".ArchivesAsComicsAlias"
+                  android:targetActivity=".OrionViewerActivity"
+                  android:label="@string/app_name"
+                  android:icon="@mipmap/ic_launcher"
+                  android:enabled="false"
+                  android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+
+                <data android:scheme="file"/>
+                <data android:scheme="content"/>
+                <data android:mimeType="application/zip"/>
+                <data android:mimeType="application/x-zip-compressed"/>
+                <data android:mimeType="application/vnd.rar"/>
+                <data android:mimeType="application/x-rar-compressed"/>
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:host="*"/>
+                <data android:scheme="file"/>
+                <data android:scheme="content"/>
+                <data android:pathPattern=".*\\.zip"/>
+                <data android:pathPattern=".*\\.rar"/>
+            </intent-filter>
+        </activity-alias>
+
         <!--Important: use app label-->
         <activity android:name=".filemanager.OrionFileManagerActivity"
                   android:theme="@style/Theme.Orion.Dark.NoActionBar"

@@ -28,7 +28,9 @@ import android.widget.TextView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import universe.constellation.orion.viewer.R
+import universe.constellation.orion.viewer.formats.FileFormats.Companion.isArchiveFileExt
 import universe.constellation.orion.viewer.formats.FileFormats.Companion.isSupportedFileExt
+import universe.constellation.orion.viewer.prefs.OrionApplication
 import universe.constellation.orion.viewer.log
 import java.io.File
 import java.io.FilenameFilter
@@ -126,7 +128,9 @@ class FileChooserAdapter(
                 return@FilenameFilter false
             }
 
-            filename.fileExtension.lowercase(Locale.getDefault()).isSupportedFileExt
+            val extension = filename.fileExtension.lowercase(Locale.getDefault())
+            extension.isSupportedFileExt ||
+                    extension.isArchiveFileExt && OrionApplication.instance.options.OPEN_ARCHIVES_AS_COMICS.value
         }
     }
 }
