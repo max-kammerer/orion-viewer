@@ -52,9 +52,19 @@ class ContentMismatch(val format: FileFormats?, val content: FileContent) {
         else -> content.shortName
     }
 
-    /** For the problem report: names the case without the file name. */
-    override fun toString() =
-        "not a ${format?.name?.lowercase() ?: "supported"} file, content=${content.name.lowercase()}"
+    /** For the problem report: the case [describe] tells the user, without the file name. */
+    override fun toString(): String {
+        val case = when {
+            content == FileContent.ACSM -> "loan token"
+            content == FileContent.MHT -> "saved web page"
+            content == FileContent.ZEROS -> "filled with zeros"
+            format == null && content.isArchive -> "archive"
+            format == null -> "unsupported format"
+            content == FileContent.BINARY -> "unreadable data"
+            else -> "another format"
+        }
+        return "$case, name=${format?.name?.lowercase() ?: "unknown"}, content=${content.name.lowercase()}"
+    }
 }
 
 /**

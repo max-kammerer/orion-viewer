@@ -4,6 +4,7 @@ import android.content.res.Resources
 import universe.constellation.orion.viewer.EngineLibraryMissingException
 import universe.constellation.orion.viewer.FileContent
 import universe.constellation.orion.viewer.R
+import universe.constellation.orion.viewer.fileTailContains
 import java.io.File
 
 /**
@@ -55,12 +56,23 @@ sealed class OpenProblem {
     class NoPages(private val content: FileContent?, file: File, structure: String?, host: String?) : OpenProblem() {
         private val details = listOfNotNull("host=$host", "size=${file.length()}", structure).joinToString(", ")
 
+        /* The start of a PDF without its end: the page tree is usually in the lost part. */
+        private val isTruncatedPdf = content == FileContent.PDF && fileTailContains(file.path, "%%EOF") == false
+
         override fun describe(resources: Resources) = if (content?.isArchive == true) {
             resources.getString(R.string.fileopen_cant_open, resources.getString(R.string.fileopen_content_archive, content.shortName))
+        } else if (isTruncatedPdf) {
+            resources.cantOpen(R.string.fileopen_incomplete_file)
         } else {
             resources.cantOpen(R.string.fileopen_no_pages)
         }
-        override val report get() = RuntimeException("Warning: no pages in doc, $details")
+        override val report get() = RuntimeException(
+            when {
+                content?.isArchive == true -> "Warning: archive without pages, $details"
+                isTruncatedPdf -> "Warning: incomplete file, $details"
+                else -> "Warning: no pages in doc, $details"
+            }
+        )
     }
 
     /** Opened, but failed while being shown. */

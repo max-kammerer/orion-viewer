@@ -31,7 +31,7 @@ class OpenProblemTest {
         val error = RuntimeException("no objects found")
         val problem = OpenProblem.ofOpenError(file("page.pdf", "<!DOCTYPE html><html>".toByteArray()), error)
         assertTrue(problem.toString(), problem is OpenProblem.Mismatch)
-        assertEquals("Warning: not a pdf file, content=html", problem.report.message)
+        assertEquals("Warning: another format, name=pdf, content=html", problem.report.message)
         assertSame(error, problem.report.cause)
         assertSame(error, problem.error)
         assertTrue(problem.describe(resources).contains(context.getString(R.string.fileopen_content_web_page)))
@@ -67,9 +67,24 @@ class OpenProblemTest {
     fun archiveWithoutPicturesIsNamed() {
         val book = file("book.zip", byteArrayOf(0x50, 0x4B, 0x03, 0x04))
         val problem = OpenProblem.NoPages(FileContent.ZIP, book, "header=PK..", "media")
-        assertEquals("Warning: no pages in doc, host=media, size=4, header=PK..", problem.report.message)
+        assertEquals("Warning: archive without pages, host=media, size=4, header=PK..", problem.report.message)
         assertTrue(problem.describe(resources).contains("ZIP"))
         assertTrue(OpenProblem.NoPages(null, book, null, null).describe(resources)
             .contains(context.getString(R.string.fileopen_no_pages)))
+    }
+
+    /* A report: 131072 bytes of a PDF without the end, the page tree in the lost part. */
+    @Test
+    fun pdfWithoutItsEndIsCalledIncomplete() {
+        val incomplete = context.getString(R.string.fileopen_incomplete_file)
+        val cut = file("cut.pdf", "%PDF-1.6\n1 0 obj\n<</Type/Catalog/Pages 642 0 R>>\nendobj\n".toByteArray())
+        val cutProblem = OpenProblem.NoPages(FileContent.PDF, cut, null, "media")
+        assertTrue(cutProblem.describe(resources).contains(incomplete))
+        assertEquals("Warning: incomplete file, host=media, size=${cut.length()}", cutProblem.report.message)
+
+        val whole = file("whole.pdf", "%PDF-1.6\n1 0 obj\n<<>>\nendobj\n%%EOF\n".toByteArray())
+        val wholeProblem = OpenProblem.NoPages(FileContent.PDF, whole, null, "media")
+        assertTrue(wholeProblem.describe(resources).contains(context.getString(R.string.fileopen_no_pages)))
+        assertEquals("Warning: no pages in doc, host=media, size=${whole.length()}", wholeProblem.report.message)
     }
 }
