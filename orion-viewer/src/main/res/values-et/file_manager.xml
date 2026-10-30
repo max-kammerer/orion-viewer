@@ -17,4 +17,5 @@
     <string name="file_manager_internal_storage">Sisemine andmehoidla</string>
     <string name="file_manager_nav_exit">Välju</string>
     <string name="file_manager_primary_storage">Esmane andmeruum</string>
+    <string name="file_manager_nav_open">Ava</string>
 </resources>

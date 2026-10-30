@@ -98,4 +98,14 @@
     <string name="pref_default_crop">Veeriste kadreerimine, % lehest</string>
     <string name="pref_page_gap">Vahe lehtede vahel</string>
     <string name="pref_page_gap_desc">Toimib järjestikvaates, mõõtühikuks on (0–50). 0 kuvab lehed ilma vaheta, näiteks Webtoonsi veebikoomiksid eeldavad seda</string>
+    <string name="pref_category_settings_transfer">Seadistuste varundus</string>
+    <string name="pref_export_settings">Ekspordi seadistused</string>
+    <string name="pref_export_settings_desc">Salvesta seadistused, klõpsamistsoonid ja klahvikombinatsioonid failina, et need teise seadmesse üle tõsta</string>
+    <string name="pref_import_settings">Impordi seadistused</string>
+    <string name="pref_import_settings_desc">Saad senised seadistused asendada failist laaditutega</string>
+    <string name="settings_import_confirm">Kas asendad praegused seadistused, klõpsamise tsoonid ja klahvide seosed varukoopia failis leiduvatega?</string>
+    <string name="settings_exported">Seadistused on eksporditud</string>
+    <string name="settings_imported">Seadistused on imporditud. Mõned neist jõustuvad peale rakenduse uuesti käivitamist</string>
+    <string name="settings_import_failed">See fail pole Orion Vieweri seadistuste fail</string>
+    <string name="settings_transfer_failed">Ligipääs failile puudub: %1$s</string>
 </resources>
