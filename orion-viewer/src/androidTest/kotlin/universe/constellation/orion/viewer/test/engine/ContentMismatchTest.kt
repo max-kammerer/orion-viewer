@@ -34,7 +34,7 @@ class ContentMismatchTest {
         val mismatch = findContentMismatch(file("book.pdf", Random(1).nextBytes(64 * 1024).also { it[1] = 0 }))!!
         assertEquals(FileFormats.PDF, mismatch.format)
         assertEquals(FileContent.BINARY, mismatch.content)
-        assertEquals("not a pdf file, content=binary", mismatch.toString())
+        assertEquals("unreadable data, name=pdf, content=binary", mismatch.toString())
         assertTrue(mismatch.describe(context.resources), mismatch.describe(context.resources).contains("PDF"))
     }
 
@@ -61,18 +61,18 @@ class ContentMismatchTest {
     /* From the reports of files picked through the system dialog, which lets any file through. */
     @Test
     fun filesOfOtherKindsWithTheirOwnNames() {
-        fun check(name: String, bytes: ByteArray, content: FileContent, says: String) {
+        fun check(name: String, bytes: ByteArray, content: FileContent, says: String, case: String) {
             val mismatch = findContentMismatch(file(name, bytes))!!
             assertNull(mismatch.format)
             assertEquals(content, mismatch.content)
-            assertEquals("not a supported file, content=${content.name.lowercase()}", mismatch.toString())
+            assertEquals("$case, name=unknown, content=${content.name.lowercase()}", mismatch.toString())
             val text = mismatch.describe(context.resources)
             assertTrue(text, text.contains(says))
         }
-        check("URLLink.acsm", "<fulfillmentToken fulfillmentType=\"buy\" xmlns=\"http://ns.adobe.com/adept\">".toByteArray(), FileContent.ACSM, "Adobe Digital Editions")
-        check("page.mht", "From: <Saved by Blink>\r\nMIME-Version: 1.0\r\nContent-Type: multipart/related;\r\n".toByteArray(), FileContent.MHT, "MHT")
-        check("book.rar", "Rar!\u001A\u0007\u0000".toByteArray() + ByteArray(64) { 1 }, FileContent.RAR, "RAR")
-        check("F60B97B35F7C07C14D335C77690DCE8E3E558E8A", "<!DOCTYPE html><html>".toByteArray(), FileContent.HTML, context.getString(R.string.fileopen_content_web_page))
+        check("URLLink.acsm", "<fulfillmentToken fulfillmentType=\"buy\" xmlns=\"http://ns.adobe.com/adept\">".toByteArray(), FileContent.ACSM, "Adobe Digital Editions", "loan token")
+        check("page.mht", "From: <Saved by Blink>\r\nMIME-Version: 1.0\r\nContent-Type: multipart/related;\r\n".toByteArray(), FileContent.MHT, "MHT", "saved web page")
+        check("book.rar", "Rar!\u001A\u0007\u0000".toByteArray() + ByteArray(64) { 1 }, FileContent.RAR, "RAR", "archive")
+        check("F60B97B35F7C07C14D335C77690DCE8E3E558E8A", "<!DOCTYPE html><html>".toByteArray(), FileContent.HTML, context.getString(R.string.fileopen_content_web_page), "unsupported format")
     }
 
     /* mupdf opens these by the content: under their own names a failure is a damaged book, not
