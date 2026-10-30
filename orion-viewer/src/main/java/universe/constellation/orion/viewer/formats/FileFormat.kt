@@ -40,6 +40,21 @@ enum class FileFormats(val extensions: List<String>, vararg val mimeTypes: Strin
     WEBP(listOf("webp"), "image/webp");
 
     companion object {
+        /* Comic books under the archives' names, opened when the option asks: mupdf goes by the content. */
+        private val archiveExtensions = setOf("zip", "rar")
+
+        private val archiveMimeType2Extension = mapOf(
+            "application/zip" to "cbz",
+            "application/x-zip-compressed" to "cbz",
+            "application/vnd.rar" to "cbr",
+            "application/x-rar-compressed" to "cbr",
+        )
+
+        val archiveMimeTypes: Set<String> get() = archiveMimeType2Extension.keys
+
+        val String?.isArchiveFileExt: Boolean
+            get() = this != null && lowercase(Locale.getDefault()) in archiveExtensions
+
         val supportedMimeTypes by lazy {
             FileFormats.entries.flatMap { it.mimeTypes.toList() }.toTypedArray()
         }
@@ -57,8 +72,8 @@ enum class FileFormats(val extensions: List<String>, vararg val mimeTypes: Strin
         }
 
         fun ContentResolver.getFileExtension(intent: Intent): String? {
-            return intent.getFileExtFromPath()?.takeIf { it.isSupportedFileExt }
-                ?: mimeType2Extension[getMimeType(intent) ?: return null]
+            return intent.getFileExtFromPath()?.takeIf { it.isSupportedFileExt || it.isArchiveFileExt }
+                ?: getMimeType(intent)?.let { mimeType2Extension[it] ?: archiveMimeType2Extension[it] }
         }
 
         fun ContentResolver.getMimeType(intent: Intent): String? {

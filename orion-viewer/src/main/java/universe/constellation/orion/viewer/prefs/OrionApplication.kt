@@ -66,6 +66,7 @@ import universe.constellation.orion.viewer.device.OnyxDevice
 import universe.constellation.orion.viewer.device.OnyxUtil
 import universe.constellation.orion.viewer.device.calcDjvuCacheSize
 import universe.constellation.orion.viewer.device.calcFZCacheSize
+import universe.constellation.orion.viewer.formats.setArchivesAsComics
 import universe.constellation.orion.viewer.isTraceEnabled
 import universe.constellation.orion.viewer.log
 import universe.constellation.orion.viewer.logger
@@ -133,6 +134,7 @@ class OrionApplication : Application(), DefaultLifecycleObserver {
         instance = this
         super<Application>.onCreate()
         setLanguage(options.appLanguage)
+        options.OPEN_ARCHIVES_AS_COMICS.observeForever { setArchivesAsComics(it) }
         val totalMemory = getTotalMemory(this)
         setMupdfCacheLimit(totalMemory)
         FileUtil.djvuCacheLimit = calcDjvuCacheSize(totalMemory ?: 0)

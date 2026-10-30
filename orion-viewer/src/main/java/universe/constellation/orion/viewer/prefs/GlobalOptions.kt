@@ -255,6 +255,8 @@ class GlobalOptions(
 
     val DRAW_PAGE_BORDER = pref("DRAW_PAGE_BORDER", true)
 
+    val OPEN_ARCHIVES_AS_COMICS = pref("OPEN_ARCHIVES_AS_COMICS", false)
+
     /** Between consecutive pages in the continuous mode, in dp: 0 joins them, as webtoons need. */
     val PAGE_GAP = pref("PAGE_GAP", 2, stringAsInt = true)
 
