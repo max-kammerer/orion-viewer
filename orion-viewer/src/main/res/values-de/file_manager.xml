@@ -17,4 +17,5 @@
     <string name="file_manager_documents">Dokumente</string>
     <string name="file_manager_history">Verlauf</string>
     <string name="file_manager_title">Dateimanager</string>
+    <string name="file_manager_nav_open">Öffnen</string>
 </resources>
