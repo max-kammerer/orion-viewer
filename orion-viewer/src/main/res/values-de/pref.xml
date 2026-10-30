@@ -106,4 +106,14 @@
     <string name="pref_page_gap">Lücke zwischen den Seiten</string>
     <string name="pref_page_gap_desc">Im kontinuierlichen Modus in dp (0-50). 0 verbindet die Seiten, so wie es Webtoons brauchen</string>
     <string name="pref_default_crop">Ränder zuschneiden, % der Seite</string>
+    <string name="pref_category_settings_transfer">Einstellungen sichern</string>
+    <string name="pref_export_settings">Einstellungen exportieren</string>
+    <string name="pref_export_settings_desc">Sichert die Einstellungen, Tipp-Zonen und Tastenbelegungen in eine Datei, um sie auf ein anderes Gerät zu übertragen</string>
+    <string name="settings_import_confirm">Die aktuellen Einstellungen, Tipp-Zonen und Tastenbelegungen durch diejenigen aus der Datei ersetzen?</string>
+    <string name="pref_import_settings">Einstellungen importieren</string>
+    <string name="pref_import_settings_desc">Einstellungen mit denen aus der Datei ersetzen</string>
+    <string name="settings_exported">Einstellungen wurden exportiert</string>
+    <string name="settings_imported">Einstellungen wurden importiert. Einige werden erst mit einem Neustart der App angewendet</string>
+    <string name="settings_import_failed">Die Datei ist keine Einstellungsdatei für Orion Viewer</string>
+    <string name="settings_transfer_failed">Konnte auf die Datei nicht zugreifen: %1$s</string>
 </resources>
