@@ -100,4 +100,14 @@
     <string name="pref_page_gap">页面间距</string>
     <string name="pref_page_gap_desc">连续模式下，dp 值在 0 到 50 之间。0 表示页面连接，因为网络漫画需要这样</string>
     <string name="pref_default_crop">裁剪边距，占页面百分比</string>
+    <string name="pref_category_settings_transfer">应用设置备份</string>
+    <string name="pref_export_settings">导出设置</string>
+    <string name="pref_export_settings_desc">将应用设置、轻按区域和按键绑定保存到一个文件来把它们移动到另一台设备</string>
+    <string name="pref_import_settings">导入设置</string>
+    <string name="pref_import_settings_desc">用文件中保存的内容替换设置</string>
+    <string name="settings_import_confirm">用来自文件的内容替换当前的应用设置、轻按区域和按键绑定？</string>
+    <string name="settings_exported">已导出设置</string>
+    <string name="settings_imported">导入了设置。其中一些将在重启应用后生效</string>
+    <string name="settings_import_failed">文件不是 Orion Viewer 设置文件</string>
+    <string name="settings_transfer_failed">无法访问该文件：%1$s</string>
 </resources>
