@@ -1,3 +1,11 @@
+===== 0.97.6 (Nov 02, 2026) =====
+* New option "Open ZIP and RAR as comic books": archives appear in the file manager and the app is offered for them in other apps (off by default)
+* One-finger zoom (double tap, hold and drag) now works only when no action is set for the double tap, so selecting a word no longer zooms the page
+* Clearer messages: for a PDF that is damaged or incompletely downloaded, and for a recent book whose file was moved or deleted
+* Fixed building from source: the settings export and import icons were missing
+* Updated translations
+
+
 ===== 0.97.5 (Oct 29, 2026) =====
 * Added page gap setting for continuous scrolling (0 for seamless webtoons)
 * Added default crop margins for books
