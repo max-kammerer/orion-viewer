@@ -110,4 +110,6 @@
     <string name="settings_imported">已导入设置。其中一些将在重启应用后生效</string>
     <string name="settings_import_failed">文件不是 Orion Viewer 设置文件</string>
     <string name="settings_transfer_failed">无法访问该文件：%1$s</string>
+    <string name="pref_open_archives_as_comics">将 ZIP 和 RAR 作为漫画书打开</string>
+    <string name="pref_open_archives_as_comics_desc">在文件管理器中显示这些压缩包并允许用本应用在其他应用中打开它们</string>
 </resources>
