@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="file_manager_title">Trình quản lý tệp tin</string>
+    <string name="file_manager_fodlers">Thư mục</string>
+    <string name="file_manager_history">Lịch sử</string>
+    <string name="file_manager_contribution">Đóng góp</string>
+    <string name="file_manager_select_tip">Vui lòng chọn một tệp tin để mở trong Orion Viewer</string>
+    <string name="file_manager_path">Đường dẫn:</string>
+    <string name="file_manager_documents">Tài liệu</string>
+    <string name="file_manager_downloads">Tải xuống</string>
+    <string name="file_manager_sdcard">Thẻ SD</string>
+    <string name="file_manager_grant_read_permissions">Cấp quyền đọc</string>
+    <string name="file_manager_nav_locations">Vị trí</string>
+    <string name="file_manager_nav_settings">Cài đặt</string>
+    <string name="file_manager_nav_other">Khác</string>
+    <string name="file_manager_nav_system_select">Chọn tệp trong hệ thống</string>
+    <string name="file_manager_nav_exit">Thoát</string>
+    <string name="file_manager_internal_storage">Bộ nhớ trong</string>
+    <string name="file_manager_primary_storage">Bộ nhớ chính</string>
+    <string name="file_manager_nav_open">Mở</string>
+</resources>
