@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="apply">Áp dụng tùy chọn hiện tại.</string>
+    <string name="escape">Quay trở lại/Thoát.</string>
+    <string name="general_usage">Cách sử dụng:</string>
+    <string name="general_usage_step1">1. Mở tài liệu (mặc định phóng theo chiều rộng)</string>
+    <string name="general_usage_step2">2. Chọn hướng xoay phù hợp: dọc hoặc ngang</string>
+    <string name="general_usage_step3">3. Cắt lề, kích thước chữ sẽ thay đổi tùy vào lề (nếu phóng to theo chiều rộng đã chỉ định)</string>
+    <string name="general_usage_step4">4. Thưởng thức việc đọc!</string>
+    <string name="option_help">Các tham số ứng dụng</string>
+    <string name="dictionary_help">Mở Từ điển Bên ngoài, Chọn ứng dụng Từ điển phù hợp trong Cài đặt.</string>
+</resources>

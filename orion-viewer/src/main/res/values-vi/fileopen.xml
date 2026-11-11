@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fileopen_private_resource_access">Truy cập tệp riêng tư</string>
+    <string name="fileopen_private_resource_access_info">Không thể truy cập tệp trực tiếp, vui lòng chọn một trong các tùy chọn bên dưới:</string>
+    <string name="fileopen_permission_dialog">Không thể truy cập tệp trực tiếp</string>
+    <string name="fileopen_permission_dialog_info">Vui lòng cấp quyền đọc tệp tin để truy cập trực tiếp hoặc chọn vào tùy chọn bên dưới:</string>
+    <string name="fileopen_source_unavailable">Tệp tin không thể truy cập</string>
+    <string name="fileopen_source_unavailable_info">Ứng dụng chia sẻ tệp (%1$s) không còn cung cấp nó: %2$s. Vui lòng chia sẻ hoặc mở lại tệp từ ứng dụng đó, hoặc:</string>
+    <string name="fileopen_source_unavailable_message">Ứng dụng chia sẻ tệp (%1$s) không còn cung cấp nó: %2$s. Vui lòng chia sẻ hoặc mở lại tệp từ ứng dụng đó.</string>
+    <string name="fileopen_permissions_grant_read">Cấp quyền đọc bộ nhớ…</string>
+    <string name="fileopen_save_to_file">Lưu thành tệp mới…</string>
+    <string name="fileopen_open_in_temporary_file">Mở bằng tệp tạm thời</string>
+    <string name="fileopen_open_recent_files">Đi đến sách gần đây…</string>
+    <string name="fileopen_report_error_by_github_and_return">Báo cáo vấn đề lên Github và quay lại đoạn hội thoại…</string>
+    <string name="fileopen_report_error_by_email_and_return">Báo cáo lỗi bằng email và quay lại đoạn hội thoại…</string>
+    <string name="string_exception">Ngoại lệ</string>
+    <string name="crash_on_book_opening_title">Lỗi khi mở tệp</string>
+    <string name="crash_on_book_opening_message_header">Lỗi không mở tệp %1$s. Vui lòng báo cáo vấn đề:</string>
+    <string name="crash_on_book_opening_message_header_panel">Lỗi khi mở tệp %1$s:</string>
+    <string name="crash_on_book_opening_encrypted">Tài liệu bị mã hóa</string>
+    <string name="string_send">Gửi…</string>
+    <string name="send_report_header">[Vui lòng cung cấp thêm thông tin(các bước để tái thiết lập vấn đề)]</string>
+    <string name="error_on_file_saving_title">Lỗi khi lưu tệp</string>
+    <string name="fileopen_cant_open">Không mở được tài liệu: %s.</string>
+    <string name="fileopen_file_is_emppty">tệp trống</string>
+    <string name="fileopen_no_pages">tài liệu không có trang nào</string>
+    <string name="fileopen_incomplete_file">tệp đã bị hư hại, hoặc được tải về không hoàn chỉnh</string>
+    <string name="fileopen_content_unreadable">tệp không phải là %1$s: dữ liệu của nó không đọc được, tệp có thể đã bị hư hại hoặc mã hóa bởi ứng dụng khác</string>
+    <string name="fileopen_content_other">tệp không phải là %1$s, nội dung của nó là %2$s</string>
+    <string name="fileopen_content_text">văn bản dạng rõ</string>
+    <string name="fileopen_content_web_page">một trang web</string>
+    <string name="fileopen_content_unsupported">tệp không đúng định dạng ứng dụng mở ra, nội dung của nó là %1$s</string>
+    <string name="fileopen_content_archive">tệp là một tệp lưu trữ %1$s: nếu có một cuốn sách bên trong, giải nén nó ra trước</string>
+    <string name="fileopen_content_mht">tệp là một trang wev được lưu (MHT)</string>
+</resources>
