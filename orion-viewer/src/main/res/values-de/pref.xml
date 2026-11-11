@@ -116,4 +116,6 @@
     <string name="settings_imported">Einstellungen wurden importiert. Einige werden erst mit einem Neustart der App angewendet</string>
     <string name="settings_import_failed">Die Datei ist keine Einstellungsdatei für Orion Viewer</string>
     <string name="settings_transfer_failed">Konnte auf die Datei nicht zugreifen: %1$s</string>
+    <string name="pref_open_archives_as_comics_desc">Zeigt diese Archive im Dateimanager und ermöglicht dieser App, die Archive mit anderen Apps zu öffnen</string>
+    <string name="pref_open_archives_as_comics">ZIP und RAR als Comic-Buch öffnen</string>
 </resources>
