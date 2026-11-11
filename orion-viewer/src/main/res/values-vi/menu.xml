@@ -1,3 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_zoom_text">Thu phóng</string>
+    <string name="menu_crop_text">Cắt</string>
+    <string name="menu_goto_text">Đi tới</string>
+    <string name="menu_bookmarks_text">Dấu trang</string>
+    <string name="menu_add_bookmark_item">Thêm dấu trang</string>
+    <string name="menu_select_text">Chọn văn bản</string>
+    <string name="menu_rotation_text">Xoay màn hình</string>
+    <string name="menu_navigation_text">Bố cục trang</string>
+    <string name="menu_help_text">Giúp đỡ</string>
+    <string name="menu_about_text">Giới thiệu…</string>
+    <string name="menu_open_text">Mở sách</string>
+    <string name="menu_outline_text">Phác thảo</string>
+    <string name="menu_open_dictionary_text">Mở từ điển</string>
+    <string name="menu_day_night_text">Chế độ Ngày/Đêm</string>
+    <string name="menu_exit_text">Thoát</string>
+    <string name="menu_key_binder_text">Gán Phím</string>
+    <string name="menu_options_text">Cài đặt</string>
+    <string name="menu_tap_text">Khu vực nhấn</string>
+    <string name="menu_search_item">Tìm kiếm</string>
+    <string name="menu_other">Khác…</string>
+    <string name="menu_book_preferences">Tùy chọn Sách</string>
+    <string name="menu_share_text">Chia sẻ văn bản</string>
+    <string name="menu_share_file">Chia sẻ tệp tin</string>
+    <string name="msg_share_file_failed">Không thể chia sẻ tệp tin từ vị trí này</string>
+    <string name="export_all_bookmarks_menu_item">Xuất tất cả dấu trang</string>
+    <string name="export_bookmarks_menu_item">Xuất dấu trang hiện tại</string>
+    <string name="import_all_bookmarks_menu_item">Nhập…</string>
+    <string name="import_current_bookmarks_menu_item">Thêm từ…</string>
 </resources>
