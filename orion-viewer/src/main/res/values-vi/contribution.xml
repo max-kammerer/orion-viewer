@@ -1,3 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="contribution_intro">Orion Viewer là một dự án mã nguồn mở, và bạn có thể giúp nó trở nên tốt hơn!</string>
+    <string name="contribution_ways">Có nhiều điều bạn có thể làm cho dự án:</string>
+    <string name="contribution_report_bug">• Đề nghị một tính năng hoặc báo cáo một vấn đề trong <a href="https://github.com/max-kammerer/orion-viewer/issues"> bộ theo dõi vấn đề </a></string>
+    <string name="contribution_do_translation">• dịch <a href="https://github.com/max-kammerer/orion-viewer/wiki/Translations">ứng dụng sang ngôn ngữ khác</a> hoặc cải thiện bản dịch hiện có</string>
+    <string name="contribution_code">• bổ sung <a href="https://github.com/max-kammerer/orion-viewer/?tab=readme-ov-file#how-to-build-project">tính năng mới</a> hoặc <a href="https://github.com/max-kammerer/orion-viewer/issues">sửa lỗi</a></string>
+    <string name="contribution_design">• thiết kế chủ đề ứng dụng mới và/hoặc UI/UX mới</string>
+    <string name="contribution_review">• viết một <a href="https://play.google.com/store/apps/details?id=universe.constellation.orion.viewer">bình luận trên Google Play</a> hoặc nền tảng khác</string>
+    <string name="contribution_survey">Giúp cải thiện ứng dụng bằng cách làm khảo sát (5-10 phút)</string>
+    <string name="survey_title">Khảo sát người dùng</string>
+    <string name="survey_purpose">Câu trả lời quyết định tính năng nào sẽ ra mắt tiếp theo.</string>
+    <string name="survey_take">Làm khảo sát</string>
+    <string name="survey_thanks">Cảm ơn vì đã tham gia!</string>
+    <string name="survey_reopen">Mở lại khảo sát</string>
 </resources>
